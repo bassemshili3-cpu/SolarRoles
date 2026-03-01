@@ -2,6 +2,7 @@
 import { createClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
+import JobAlertForm from '@/components/JobAlertForm'
 
 export default function CandidateDashboard() {
   const supabase = createClient()

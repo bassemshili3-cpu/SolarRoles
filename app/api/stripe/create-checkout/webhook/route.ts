@@ -1,5 +1,5 @@
 import { stripe } from '@/lib/stripe'
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase } from '@/lib/supabase-server'
 import { NextRequest } from 'next/server'
 import { headers } from 'next/headers'
 

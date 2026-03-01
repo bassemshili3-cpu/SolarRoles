@@ -1,6 +1,7 @@
 import { searchJobs } from '@/lib/adzuna'
 import { NextRequest } from 'next/server'
 
+export const dynamic = 'force-dynamic' // 👈 ajoutez cette ligne
 export const revalidate = 60
 
 export async function GET(request: NextRequest) {
