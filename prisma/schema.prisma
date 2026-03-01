@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CANDIDATE
+  EMPLOYER
+  ADMIN
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+  userId      String   @unique // supabase uid
+  email       String
+  fullName    String?
+  role        UserRole @default(CANDIDATE)
+  avatarUrl   String?
+  resumeUrl   String?
+  skills      String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  savedJobs   SavedJob[]
+  applications Application[]
+}
+
+model SavedJob {
+  id        String  @id @default(cuid())
+  profileId String
+  adzunaId  String
+  profile   Profile @relation(fields: [profileId], references: [id])
+  @@unique([profileId, adzunaId])
+}
+
+model Application {
+  id          String   @id @default(cuid())
+  profileId   String
+  adzunaId    String
+  status      String   @default("applied")
+  coverLetter String?
+  appliedAt   DateTime @default(now())
+  profile     Profile  @relation(fields: [profileId], references: [id])
+}

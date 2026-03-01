@@ -1,0 +1,18 @@
+# env
+.env
+.env.local
+.env.*.local
+
+# Next.js
+.next/
+out/
+
+# Node
+node_modules/
+
+# Prisma
+prisma/*.db
+
+# OS
+.DS_Store
+Thumbs.db
