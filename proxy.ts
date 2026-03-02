@@ -1,10 +1,9 @@
-// middleware.ts (à la racine de oh-my-job10)
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import type { CookieOptions } from '@supabase/ssr'   // ← type officiel Supabase
+import type { CookieOptions } from '@supabase/ssr'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) { // 👈 middleware → proxy
   let response = NextResponse.next({
     request,
   })
@@ -23,13 +22,8 @@ export async function middleware(request: NextRequest) {
           options?: CookieOptions 
         }>) {
           cookiesToSet.forEach(({ name, value, options }) => {
-            // Mise à jour pour la requête entrante
             request.cookies.set(name, value)
-            
-            // Création d'une nouvelle réponse avec les cookies mis à jour
-            response = NextResponse.next({
-              request,
-            })
+            response = NextResponse.next({ request })
             response.cookies.set(name, value, options)
           })
         },
@@ -37,7 +31,6 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // IMPORTANT : rafraîchit la session (obligatoire)
   await supabase.auth.getUser()
 
   return response
