@@ -3,10 +3,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import type { CookieOptions } from '@supabase/ssr'
 
-export async function proxy(request: NextRequest) { // 👈 middleware → proxy
-  let response = NextResponse.next({
-    request,
-  })
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({ request })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,11 +14,7 @@ export async function proxy(request: NextRequest) { // 👈 middleware → proxy
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet: Array<{ 
-          name: string
-          value: string
-          options?: CookieOptions 
-        }>) {
+        setAll(cookiesToSet: Array<{ name: string; value: string; options?: CookieOptions }>) {
           cookiesToSet.forEach(({ name, value, options }) => {
             request.cookies.set(name, value)
             response = NextResponse.next({ request })
@@ -32,7 +26,6 @@ export async function proxy(request: NextRequest) { // 👈 middleware → proxy
   )
 
   await supabase.auth.getUser()
-
   return response
 }
 
