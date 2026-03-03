@@ -72,3 +72,14 @@
   border-radius: 16px;
   border: 1px solid hsl(var(--border));
 }
+
+
+
+body {
+    font-feature-settings: "kern" 1, "tnum" 1;
+    overflow-x: hidden; /* ← ajoute ça */
+  }
+
+  html {
+    overflow-x: hidden; /* ← et ça */
+  }

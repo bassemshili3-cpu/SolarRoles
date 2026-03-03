@@ -8,7 +8,8 @@ interface JobCardProps {
     id: string
     title: string
     company: string
-    apply_url: string           // ← le vrai lien externe (Lensa ou Adzuna)
+    url?: string
+    apply_url?: string
     source?: 'lensa' | 'adzuna'
     location?: string | { display_name?: string }
     salary_min?: number
@@ -46,16 +47,16 @@ export default function JobCard({ job }: JobCardProps) {
 
   const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
   const logoSrc = job.company_logo ?? null
+  const jobUrl = job.apply_url || job.url || '#'
 
-  // Location handling (compatible avec UnifiedJob)
   const locationLabel =
     typeof job.location === 'string'
       ? job.location
       : job.location?.display_name || 'United States'
 
   return (
-    <a
-      href={job.apply_url}
+    
+      <a href={jobUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="group block bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300 hover:-translate-y-1"
@@ -88,7 +89,7 @@ export default function JobCard({ job }: JobCardProps) {
           </p>
           {job.source === 'lensa' && (
             <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-blue-50 text-blue-600 font-medium mt-1">
-              Featured • Lensa
+              Featured
             </span>
           )}
         </div>
