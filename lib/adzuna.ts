@@ -1,11 +1,17 @@
 const BASE = 'https://api.adzuna.com/v1/api/jobs/us/search'
 
-export async function searchJobs(params: Record<string, string | number>) {
+export async function searchJobs(params: {
+  what?: string
+  where?: string
+  page?: number
+  results_per_page?: number
+  salary_min?: string
+  [key: string]: string | number | undefined
+}) {
   const { page = 1, results_per_page = 30, ...rest } = params
 
   const filteredParams = Object.fromEntries(
     Object.entries(rest).filter(([_, v]) => v !== '' && v !== undefined && v !== null)
-    // ✅ Supprimé : v !== 'United States' — on laisse passer le where
   )
 
   const query = new URLSearchParams({
@@ -22,7 +28,7 @@ export async function searchJobs(params: Record<string, string | number>) {
 
   const res = await fetch(url, {
     headers: { 'User-Agent': 'Mozilla/5.0' },
-    next: { revalidate: 60 }
+    next: { revalidate: 10800 },
   })
 
   if (!res.ok) {
@@ -32,7 +38,6 @@ export async function searchJobs(params: Record<string, string | number>) {
 
   const data = await res.json()
 
-  // ✅ Adzuna renvoie `count` et `results` — on s'assure que c'est bien retourné
   return {
     results: data.results ?? [],
     count: data.count ?? 0,
