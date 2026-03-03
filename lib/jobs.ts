@@ -54,46 +54,44 @@ export async function searchAllJobs(params: {
   salary_min?: string
 }): Promise<UnifiedSearchResult> {
   const page = Number(params.page) || 1
-  const limitEach = Math.floor((Number(params.results_per_page) || 30) / 2) // 15 chacun = 30 total
+  const totalLimit = Number(params.results_per_page) || 30
+  const lensaOffset = Math.min((page - 1) * totalLimit, 150)
 
-  const lensaOffset = Math.min((page - 1) * limitEach, 150) // hard limit 180
+  // Lensa tente de remplir tous les slots
+  const lensaData = await searchLensaJobs({
+    job_title: params.what,
+    offset: lensaOffset,
+    limit: totalLimit,
+  }).catch(() => null)
 
-  const [lensaData, adzunaData] = await Promise.allSettled([
-    searchLensaJobs({
-      job_title: params.what,
-      offset: lensaOffset,
-      limit: limitEach,
-    }),
-    searchAdzunaJobs({
+  const lensaJobs: UnifiedJob[] = lensaData
+    ? lensaData.job_adverts.map(normalizeLensa)
+    : []
+
+  const lensaCount = lensaData?.count ?? 0
+  const remaining = totalLimit - lensaJobs.length
+
+  let adzunaJobs: UnifiedJob[] = []
+  let adzunaCount = 0
+
+  // Adzuna complète seulement si Lensa n'a pas rempli les 30 slots
+  if (remaining > 0) {
+    const adzunaData = await searchAdzunaJobs({
       what: params.what || '',
       where: params.where || '',
       page,
-      results_per_page: limitEach,
+      results_per_page: remaining,
       ...(params.salary_min && { salary_min: params.salary_min }),
-    }),
-  ])
+    }).catch(() => null)
 
-  const lensaJobs: UnifiedJob[] = lensaData.status === 'fulfilled'
-    ? lensaData.value.job_adverts.map(normalizeLensa)
-    : []
-
-  const adzunaJobs: UnifiedJob[] = adzunaData.status === 'fulfilled'
-    ? adzunaData.value.results.map(normalizeAdzuna)
-    : []
-
-  const lensaCount = lensaData.status === 'fulfilled' ? lensaData.value.count : 0
-  const adzunaCount = adzunaData.status === 'fulfilled' ? adzunaData.value.count : 0
-
-  // Lensa en premier, puis Adzuna — intercalés pour un mix naturel
-  const interleaved: UnifiedJob[] = []
-  const maxLen = Math.max(lensaJobs.length, adzunaJobs.length)
-  for (let i = 0; i < maxLen; i++) {
-    if (lensaJobs[i]) interleaved.push(lensaJobs[i])
-    if (adzunaJobs[i]) interleaved.push(adzunaJobs[i])
+    if (adzunaData) {
+      adzunaJobs = adzunaData.results.map(normalizeAdzuna)
+      adzunaCount = adzunaData.count
+    }
   }
 
   return {
-    results: interleaved,
+    results: [...lensaJobs, ...adzunaJobs],
     count: lensaCount + adzunaCount,
   }
 }
