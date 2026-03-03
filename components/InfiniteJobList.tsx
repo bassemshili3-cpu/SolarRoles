@@ -7,8 +7,8 @@ import { useState } from 'react'
 
 export default function JobList({ what, where, salary_min }: { what: string; where: string; salary_min?: string }) {
   const [page, setPage] = useState(1)
-  const resolvedWhat = what || 'developer'
-  const resolvedWhere = where || 'New York'
+  const resolvedWhat = what || ''
+  const resolvedWhere = where || ''
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['jobs', resolvedWhat, resolvedWhere, salary_min, page],
