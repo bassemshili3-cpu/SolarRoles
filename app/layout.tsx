@@ -26,7 +26,6 @@ export default function RootLayout({
           {children}
           <Footer />
           <DoNotSellBanner />
-          {/* ← SUPPRIME LA LIGNE <Toaster ... /> ICI */}
         </Providers>
       </body>
     </html>

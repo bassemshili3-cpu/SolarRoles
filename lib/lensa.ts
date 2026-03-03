@@ -1,5 +1,3 @@
-// lib/lensa.ts
-
 const LENSA_SDK_KEY = process.env.LENSA_SDK_KEY!
 const LENSA_CAMPAIGN_ID = process.env.LENSA_CAMPAIGN_ID!
 const LENSA_BASE_URL = 'https://connect.lensa.com/jobs-api'
@@ -30,7 +28,7 @@ export interface LensaSearchParams {
   postal_code?: string
   remote_only?: boolean
   offset?: number
-  limit?: number  // max 180
+  limit?: number
 }
 
 export async function searchLensaJobs(params: LensaSearchParams): Promise<LensaSearchResult> {
@@ -57,7 +55,5 @@ export async function searchLensaJobs(params: LensaSearchParams): Promise<LensaS
     throw new Error(`Lensa API error ${res.status}: ${JSON.stringify(error)}`)
   }
 
-  const data: LensaSearchResult = await res.json()
-  return data
+  return await res.json()
 }
-

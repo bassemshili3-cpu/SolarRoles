@@ -1,3 +1,4 @@
+// app/api/jobs/route.ts
 import { searchAllJobs } from '@/lib/jobs'
 import { NextRequest } from 'next/server'
 
@@ -19,6 +20,6 @@ export async function GET(request: NextRequest) {
     return Response.json(data)
   } catch (e) {
     console.error('API route error:', e)
-    return Response.json({ results: [], count: 0 }, { status: 500 })
+    return Response.json({ results: [], count: 0, lensa_count: 0, adzuna_count: 0 }, { status: 500 })
   }
 }
