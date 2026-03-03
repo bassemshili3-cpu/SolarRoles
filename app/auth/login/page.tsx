@@ -4,25 +4,19 @@ import { createClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 export default function Login() {
   const supabase = createClient()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') || '/'
+  const redirectTo = searchParams.get('redirectTo') || '/dashboard'
   
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') router.push(redirectTo)
-    })
-  }, [])
 
   const loginWithGoogle = async () => {
     setIsLoading(true)
@@ -48,6 +42,9 @@ export default function Login() {
     if (error) {
       setError(error.message)
       setIsLoading(false)
+    } else {
+      router.push('/dashboard')
+      router.refresh()
     }
   }
 
@@ -59,7 +56,6 @@ export default function Login() {
     <div className="min-h-screen flex">
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-        {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -67,15 +63,8 @@ export default function Login() {
         </div>
         
         <div className="relative z-10 flex flex-col justify-center px-16 xl:px-24">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-16">
-            
-              
-            
-            
-          </div>
+          <div className="flex items-center gap-3 mb-16" />
 
-          {/* Main Headline */}
           <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
             Find your next<br />
             <span className="text-blue-400">dream career</span>
@@ -85,7 +74,6 @@ export default function Login() {
             Join thousands of professionals who found their perfect job through Oh My Job
           </p>
 
-          {/* Testimonial */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
             <div className="flex items-center gap-1 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -108,7 +96,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="flex gap-12 mt-12">
             <div>
               <p className="text-3xl font-bold text-white">6M+</p>
@@ -125,7 +112,6 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Decorative Elements */}
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl" />
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl" />
       </div>
@@ -133,7 +119,6 @@ export default function Login() {
       {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12 lg:p-12 xl:p-16 bg-white">
         <div className="w-full max-w-md">
-          {/* Mobile Header */}
           <div className="lg:hidden mb-10">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
@@ -145,13 +130,11 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Desktop Hidden Header */}
           <div className="hidden lg:block mb-10">
             <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome back</h2>
             <p className="text-slate-500">Please enter your details to sign in</p>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
               <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +144,6 @@ export default function Login() {
             </div>
           )}
 
-          {/* Google Login Button */}
           <Button
             variant="outline"
             className="w-full flex items-center justify-center gap-3 h-14 text-base font-medium border-2 border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 rounded-xl mb-6"
@@ -184,14 +166,12 @@ export default function Login() {
             Continue with Google
           </Button>
 
-          {/* Divider */}
           <div className="flex items-center gap-4 mb-8">
             <div className="flex-1 h-px bg-slate-200" />
             <span className="text-sm text-slate-400 font-medium">or sign in with email</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
-          {/* Email Form */}
           <div className="space-y-5">
             <div>
               <label className="text-sm font-semibold text-slate-700 mb-2.5 block">Email address</label>
@@ -241,7 +221,6 @@ export default function Login() {
             </Button>
           </div>
 
-          {/* Sign Up Link */}
           <p className="text-center text-slate-500 mt-8">
             New to Oh My Job?{' '}
             <Link href="/auth/signup" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
@@ -249,7 +228,6 @@ export default function Login() {
             </Link>
           </p>
 
-          {/* Terms */}
           <p className="text-center text-xs text-slate-400 mt-6">
             By signing in, you agree to our{' '}
             <Link href="/terms" className="underline hover:text-slate-600">Terms</Link>
