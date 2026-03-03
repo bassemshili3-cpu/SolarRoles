@@ -25,22 +25,35 @@ export default function Navbar() {
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-8">
           <Link href="/" className="flex items-center gap-3">
-  <img src="/logo.svg" alt="Oh My Job" className="h-11 w-auto" />
-</Link>
-          <Link href="/jobs" className="font-medium hover:text-primary">Find Jobs</Link>
+            <img src="/logo.svg" alt="Oh My Job" className="h-11 w-auto" />
+          </Link>
+          
+          {/* Find Jobs → 20% plus petit + une seule ligne sur mobile uniquement */}
+          <Link 
+            href="/jobs" 
+            className="font-medium hover:text-primary text-sm sm:text-base whitespace-nowrap transition-colors"
+          >
+            Find Jobs
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          >
             {theme === 'dark' ? <Sun /> : <Moon />}
           </Button>
 
           {user ? (
             <>
               <Link href="/dashboard">
-                <Button variant="outline" className="gap-2"><User className="w-4 h-4" /> Dashboard</Button>
+                <Button variant="outline" className="gap-2">
+                  <User className="w-4 h-4" /> Dashboard
+                </Button>
               </Link>
               <Button variant="ghost" onClick={signOut}>Log out</Button>
             </>
