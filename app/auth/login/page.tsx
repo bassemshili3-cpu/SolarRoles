@@ -216,7 +216,7 @@ export default function Login() {
                   Signing in...
                 </span>
               ) : (
-                'Sign In'
+                <span className="text-white">Sign In</span>
               )}
             </Button>
           </div>
