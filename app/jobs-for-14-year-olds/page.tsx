@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: 'Ready to earn your own money? Find 500+ jobs for 14 year olds near you. Safe, legal, and teen-friendly positions available now.',
   },
   alternates: {
-    canonical: 'https://oh-my-job.com/jobs-for-14-year-olds',
+    canonical: 'https://www.oh-my-job.com/jobs-for-14-year-olds',
   },
 }
 
@@ -30,7 +30,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Jobs for 14 Year Olds',
   description: 'Find legal jobs for 14 year olds hiring near you. Browse hundreds of teen-friendly positions with flexible hours.',
-  url: 'https://oh-my-job.com/jobs-for-14-year-olds',
+  url: 'https://www.oh-my-job.com/jobs-for-14-year-olds',
   mainEntity: {
     '@type': 'ItemList',
     name: 'Available Jobs for 14 Year Olds',
@@ -118,11 +118,9 @@ export default async function JobsFor14YearOldsPage({ searchParams }: any) {
         {/* Simple Header */}
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Jobs for 14 Year Olds Available Now
+            Jobs for 14 Year Olds Available Now Across the United States
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Find your first job today. Browse hundreds of legal, teen friendly positions hiring 14 year olds across the United States.
-          </p>
+       
         </header>
 
         {/* Job Board Section */}
@@ -135,7 +133,7 @@ export default async function JobsFor14YearOldsPage({ searchParams }: any) {
             {/* ✅ Count ici, à droite, au-dessus de la map */}
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> jobs available right now
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
               </p>
             )}
 

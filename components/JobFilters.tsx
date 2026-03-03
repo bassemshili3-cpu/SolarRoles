@@ -45,7 +45,7 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
   const [keywords, setKeywords] = useState(searchParams.get('what') || '')
   const [location, setLocation] = useState(searchParams.get('where') || '')
   const [salary, setSalary] = useState(
-    Number(searchParams.get('salary_min')) || 80000
+    Number(searchParams.get('salary_min')) || 0
   )
   const [jobTypes, setJobTypes] = useState<string[]>([])
 
@@ -192,12 +192,12 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
         {/* Enhanced Salary Slider */}
         <div className="py-4 px-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl">
           <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground whitespace-nowrap">$30k</span>
+            <span className="text-xs text-muted-foreground whitespace-nowrap">$0k</span>
             <div className="flex-1">
               <Slider
                 value={[salary]}
                 onValueChange={(value) => setSalary(value[0])}
-                min={30000}
+                min={0}
                 max={300000}
                 step={5000}
                 className="py-2"

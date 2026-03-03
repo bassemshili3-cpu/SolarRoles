@@ -153,11 +153,11 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Jobs for 16 Year Olds Available Now
+            Jobs for 16 Year Olds Available Across the United States
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Find your first job today. Employers across the United States are actively hiring 16 year olds for flexible, legal positions that work around your school schedule and require no prior experience.
+          <p className="text-lg text-gray-600 max-w-3xl"> 
           </p>
+        
         </header>
 
         {/* Job Board Section */}
@@ -168,7 +168,7 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
           <div className="flex-1">
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available for 16 year olds right now
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
               </p>
             )}
             <JobMap jobs={[]} />

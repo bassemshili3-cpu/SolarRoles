@@ -141,11 +141,9 @@ export default async function FifoJobsPage({ searchParams }: any) {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            FIFO Jobs Available Now
+            Fly In Fly Out Jobs Available Now
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Browse fly in fly out job openings across the United States. Mining, oil, gas and construction employers are actively hiring FIFO workers with competitive salaries and fully covered travel.
-          </p>
+          
         </header>
 
         {/* Job Board Section */}
@@ -156,7 +154,7 @@ export default async function FifoJobsPage({ searchParams }: any) {
           <div className="flex-1">
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> FIFO positions available right now
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
               </p>
             )}
             <JobMap jobs={[]} />

@@ -36,11 +36,7 @@ export default async function JobDetailPage({
               <span className="text-lg">{job.company?.display_name}</span>
             </div>
           </div>
-          <Button asChild size="lg" className="shrink-0">
-            <a href={job.redirect_url} target="_blank" rel="noopener noreferrer">
-              Apply on Adzuna <ExternalLink className="w-4 h-4 ml-2" />
-            </a>
-          </Button>
+          
         </div>
 
         <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
@@ -71,7 +67,7 @@ export default async function JobDetailPage({
         <div className="mt-8">
           <Button asChild size="lg" className="w-full md:w-auto">
             <a href={job.redirect_url} target="_blank" rel="noopener noreferrer">
-              Apply now <ExternalLink className="w-4 h-4 ml-2" />
+              Apply now on Adzuna <ExternalLink className="w-4 h-4 ml-2" />
             </a>
           </Button>
         </div>

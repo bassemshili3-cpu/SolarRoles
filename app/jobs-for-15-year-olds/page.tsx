@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: 'Ready to earn your own money? Find hundreds of jobs for 15 year olds near you. Safe, legal, and teen-friendly positions available now.',
   },
   alternates: {
-    canonical: 'https://oh-my-job.com/jobs-for-15-year-olds',
+    canonical: 'https://www.oh-my-job.com/jobs-for-15-year-olds',
   },
 }
 
@@ -30,7 +30,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Jobs for 15 Year Olds',
   description: 'Find legal jobs for 15 year olds hiring near you. Browse teen-friendly positions with flexible hours and competitive pay.',
-  url: 'https://oh-my-job.com/jobs-for-15-year-olds',
+  url: 'https://www.oh-my-job.com/jobs-for-15-year-olds',
   mainEntity: {
     '@type': 'ItemList',
     name: 'Available Jobs for 15 Year Olds',
@@ -124,14 +124,12 @@ export default async function JobsFor15YearOldsPage({ searchParams }: any) {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            {count > 0 ? count.toLocaleString() : 'Hundreds of'} Jobs for 15 Year Olds Available
+            {count > 0 ? count.toLocaleString() : 'Hundreds of'} Jobs for 15 Year Olds Available Across the United States
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Find your perfect job today. Browse thousands of legal, teen friendly positions hiring 15 year olds across the United States. Start earning and gaining valuable work experience now.
-          </p>
+        
           {count > 0 && (
             <p className="mt-3 text-sm text-gray-500">
-              <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> jobs available right now
+              <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
             </p>
           )}
         </header>
