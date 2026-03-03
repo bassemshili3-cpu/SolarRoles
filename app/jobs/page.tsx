@@ -19,7 +19,7 @@ export default async function JobsPage({ searchParams }: any) {
     <div className="max-w-7xl mx-auto px-6 py-12">
       <div className="flex flex-col lg:flex-row gap-10">
         <aside className="lg:w-80"><JobFilters /></aside>
-        <div className="flex-1">
+        <div className="flex-1min-w-0"> {/* ← ajoute min-w-0 ici */}
           <p className="text-sm text-gray-500 mb-4">
             {count > 0
               ? <><span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available{params.what ? ` pour "${params.what}"` : ''}</>
