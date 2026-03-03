@@ -1,5 +1,5 @@
-import { searchLensaJobs, LensaJobAdvert } from '@/lensa'
-import { searchJobs as searchAdzunaJobs } from '@/adzuna'
+import { searchLensaJobs, LensaJobAdvert } from './lensa'
+import { searchJobs as searchAdzunaJobs } from './adzuna'
 
 export interface UnifiedJob {
   id: string
