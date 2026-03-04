@@ -71,19 +71,12 @@ export default function AIJobMatcher({ onFiltersChange }: Props) {
               </div>
               {/* text-sm → text-base */}
               <h3 className="text-base font-semibold text-gray-800 tracking-wide">
-                Describe your dream job
+                Describe your job
               </h3>
             </div>
 
             {/* Badge px-2 py-0.5 → px-2.5 py-1 */}
-            <div className="flex items-center   bg-indigo-50 px-2 py-1  ring-indigo-200/50">
-              <span className="relative flex h-2 w-2">
-                </span>
-              {/* text-[10px] → text-xs */}
-              <span className="text-xs font-medium text-indigo-600">
-                New: Try our AI
-              </span>
-            </div>
+           
           </div>
 
           {/* text-xs → text-sm */}
@@ -137,41 +130,35 @@ export default function AIJobMatcher({ onFiltersChange }: Props) {
         </div>
 
         {/* Button mt-2.5 → mt-3, px-3.5 py-1.5 text-xs → px-4 py-2 text-sm */}
-        <div className="mt-3 flex items-center justify-end">
-          <button
-            onClick={handleSearch}
-            disabled={loading || description.trim().length < 5}
-            className={`
-              relative overflow-hidden rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all duration-200
-              ${loading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 hover:shadow-md hover:shadow-blue-500/20'
-              }
-              disabled:opacity-50 disabled:cursor-not-allowed
-            `}
-          >
-            <span className="relative flex items-center gap-2">
-              {loading ? (
-                <>
-                  {/* h-3 w-3 → h-4 w-4 */}
-                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  <span>Searching...</span>
-                </>
-              ) : (
-                <>
-                  {/* h-3.5 w-3.5 → h-4 w-4 */}
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <span>Find matches</span>
-                </>
-              )}
-            </span>
-          </button>
-        </div>
+    <div className="mt-3 text-right">
+  <button
+    onClick={handleSearch}
+    disabled={loading || description.trim().length < 5}
+    className={`
+      inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all duration-200
+      ${loading
+        ? 'bg-gray-400 cursor-not-allowed'
+        : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 hover:shadow-md hover:shadow-blue-500/20'
+      }
+      disabled:opacity-50 disabled:cursor-not-allowed
+    `}
+  >
+    {loading ? (
+      <>
+        <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+        <span>Searching...</span>
+      </>
+    ) : (
+      <>
+        
+        <span>Find matches</span>
+      </>
+    )}
+  </button>
+</div>
       </div>
     </div>
   )

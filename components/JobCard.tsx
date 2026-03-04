@@ -21,6 +21,13 @@ interface JobCardProps {
   }
 }
 
+function getCompanyDomain(companyName: string): string {
+  return companyName
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+    + '.com'
+}
+
 export default function JobCard({ job }: JobCardProps) {
   const formatSalary = (min?: number, max?: number, period?: string) => {
     if (!min && !max) return null
@@ -46,7 +53,7 @@ export default function JobCard({ job }: JobCardProps) {
   }
 
   const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
-  const logoSrc = job.company_logo ?? null
+  const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
   const jobUrl = job.apply_url || job.url || '#'
 
   const locationLabel =
@@ -56,7 +63,7 @@ export default function JobCard({ job }: JobCardProps) {
 
   return (
     
-     <a href={jobUrl}
+     <a  href={jobUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="group block bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300 hover:-translate-y-1"
@@ -64,26 +71,31 @@ export default function JobCard({ job }: JobCardProps) {
       {/* Header */}
       <div className="flex items-start gap-3 mb-3">
         <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
-          {logoSrc ? (
-            <Image
-              src={logoSrc}
-              alt={job.company}
-              width={48}
-              height={48}
-              className="w-full h-full object-contain"
-              unoptimized
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                target.style.display = 'none'
-              }}
-            />
-          ) : (
-            <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          )}
-        </div>
-
+          <img
+            src={logoSrc}
+            alt={job.company}
+            width={48}
+            height={48}
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              const target = e.currentTarget
+              target.style.display = 'none'
+              const fallback = target.nextElementSibling as HTMLElement | null
+              fallback?.removeAttribute('hidden')
+            }}
+          />
+         {/* Fallback SVG si logo introuvable */}
+<div hidden className="w-5 h-5 md:w-6 md:h-6">
+  <svg
+    className="w-full h-full text-slate-400"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+  </svg>
+</div>
+</div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500 truncate">
@@ -95,7 +107,7 @@ export default function JobCard({ job }: JobCardProps) {
               </span>
             )}
           </div>
-          {/* Location affiché ici sur mobile pour gagner de la place */}
+          {/* Location sur mobile */}
           <div className="flex items-center gap-1 text-slate-400 mt-1 md:hidden">
             <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -111,7 +123,7 @@ export default function JobCard({ job }: JobCardProps) {
         {job.title}
       </h3>
 
-      {/* Location — caché sur mobile, affiché sur desktop */}
+      {/* Location desktop */}
       <div className="hidden md:flex items-center gap-1.5 text-slate-500 mb-4">
         <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
