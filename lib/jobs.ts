@@ -1,4 +1,4 @@
-import { searchLensaJobs, LensaJobAdvert } from './lensa'
+import { getCachedLensaJobs, LensaJobAdvert } from './lensa'
 import { searchJobs as searchAdzuna, AdzunaJob } from './adzuna'
 
 export interface UnifiedJob {
@@ -96,7 +96,7 @@ export async function searchAllJobs(params: {
     const lensaParams = { job_title: params.what, city, state, remote_only, offset: lensaOffset, limit: totalLimit }
     console.log("Params envoyés à Lensa :", lensaParams)
 
-    lensaData = await searchLensaJobs(lensaParams)
+    lensaData = await getCachedLensaJobs(lensaParams)
 
     console.log(`✅ Lensa SUCCESS : ${lensaData?.job_adverts?.length || 0} jobs (count total: ${lensaData?.count || 0})`)
   } catch (e: any) {
@@ -118,7 +118,7 @@ export async function searchAllJobs(params: {
   if (!lensaDisabled && lensaJobs.length === 0 && params.what) {
     console.log("⚠️ Aucun job Lensa → Tentative sans filtre localisation...")
     try {
-      const lensaData2 = await searchLensaJobs({ job_title: params.what, limit: totalLimit })
+      const lensaData2 = await getCachedLensaJobs({ job_title: params.what, limit: totalLimit })
       const extra = lensaData2?.job_adverts?.map(normalizeLensa) || []
       lensaJobs.push(...extra)
       console.log(`✅ Lensa fallback : ${extra.length} jobs`)
@@ -128,7 +128,6 @@ export async function searchAllJobs(params: {
   }
 
   // === 2. Adzuna en complément ===
-  // Si Lensa est disabled, tout le quota va à Adzuna
   const remaining = lensaDisabled ? totalLimit : totalLimit - lensaJobs.length
   let adzunaJobs: UnifiedJob[] = []
   let adzunaCount = 0

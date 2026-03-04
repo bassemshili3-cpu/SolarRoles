@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache'
+
 const LENSA_SDK_KEY = process.env.LENSA_SDK_KEY!
 const LENSA_CAMPAIGN_ID = process.env.LENSA_CAMPAIGN_ID!
 const LENSA_BASE_URL = 'https://connect.lensa.com/jobs-api'
@@ -57,3 +59,11 @@ export async function searchLensaJobs(params: LensaSearchParams): Promise<LensaS
 
   return await res.json()
 }
+
+export const getCachedLensaJobs = unstable_cache(
+  async (params: LensaSearchParams) => {
+    return searchLensaJobs(params)
+  },
+  ['lensa-jobs'],
+  { revalidate: 10800, tags: ['jobs'] }
+)
