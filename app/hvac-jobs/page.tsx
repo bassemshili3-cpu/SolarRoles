@@ -96,14 +96,30 @@ const applicationTips = [
   },
 ]
 
-export default async function HVACJobsPage({ searchParams }: any) {
-  const params = await searchParams
+
+
+  export default async function HVACJobsPage(props: {
+  searchParams: Promise<{
+    what?: string
+    where?: string
+    salary_min?: string   // ← uniquement string | undefined (natif Next.js)
+  }>
+}) {
+  const params = await props.searchParams
+
+  // 2. Conversion parseInt sécurisée UNIQUEMENT pour getCachedJobCount
+  let salaryMinNum: number | undefined = undefined
+  if (params.salary_min) {
+    const parsed = Number.parseInt(params.salary_min, 10)
+    salaryMinNum = Number.isNaN(parsed) ? undefined : parsed
+  }
 
   const { count } = await getCachedJobCount(
     params.what || 'hvac-jobs',
     params.where || '',
-    params.salary_min
+    salaryMinNum
   )
+  
 
   return (
     <>
