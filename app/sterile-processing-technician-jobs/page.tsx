@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import JobMap from '@/components/JobMap'
+import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Wrench } from 'lucide-react'
 import { searchJobs } from '@/lib/adzuna'
 
@@ -195,7 +195,10 @@ export default async function SterileProcessingTechnicianJobsPage({ searchParams
                 <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
               </p>
             )}
-            <JobMap jobs={[]} />
+            
+            {/* Client wrapper isolé — pas de use client sur la page */}
+                       <AIJobMatcherWrapper />
+
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'sterile processing technician'}

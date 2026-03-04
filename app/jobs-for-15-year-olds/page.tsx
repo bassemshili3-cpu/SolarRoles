@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import JobMap from '@/components/JobMap'
+import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, TrendingUp } from 'lucide-react'
 import { searchJobs } from '@/lib/adzuna'
 
@@ -139,7 +139,10 @@ export default async function JobsFor15YearOldsPage({ searchParams }: any) {
             <JobFilters />
           </aside>
           <div className="flex-1">
-            <JobMap jobs={[]} />
+
+             {/* Client wrapper isolé — pas de use client sur la page */}
+                        <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'jobs for 15 year olds'}

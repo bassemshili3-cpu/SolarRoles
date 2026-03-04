@@ -2,9 +2,12 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import JobMap from '@/components/JobMap'
+import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, CheckCircle, ShieldCheck, BookOpen, Users, TrendingUp, FileText, AlertTriangle } from 'lucide-react'
 import { searchJobs } from '@/lib/adzuna'
+
+
+
 
 export const metadata: Metadata = {
   title: 'Jobs for 16 Year Olds Hiring Immediately | Start Working This Week',
@@ -171,7 +174,10 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
                 <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
               </p>
             )}
-            <JobMap jobs={[]} />
+
+             {/* Client wrapper isolé — pas de use client sur la page */}
+                        <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'youth employment'}

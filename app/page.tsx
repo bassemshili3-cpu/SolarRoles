@@ -93,7 +93,7 @@ function CategoryCard({ label, icon: Icon, bg, text, what, image }: (typeof cate
 const stats = [
   { value: '6M+', label: 'Active job listings' },
   { value: '50K+', label: 'Partner companies' },
-  { value: '2M+', label: 'Job seekers helped' },
+  { value: '200k+', label: 'Job seekers helped' },
   { value: '50', label: 'States covered' },
 ]
 

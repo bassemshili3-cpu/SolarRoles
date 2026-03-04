@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import JobMap from '@/components/JobMap'
+import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
 import { searchJobs } from '@/lib/adzuna'
 
@@ -143,7 +143,6 @@ export default async function FifoJobsPage({ searchParams }: any) {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Fly In Fly Out Jobs Available Now
           </h1>
-          
         </header>
 
         {/* Job Board Section */}
@@ -157,7 +156,10 @@ export default async function FifoJobsPage({ searchParams }: any) {
                 <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
               </p>
             )}
-            <JobMap jobs={[]} />
+
+            {/* Client wrapper isolé — pas de use client sur la page */}
+            <AIJobMatcherWrapper />
+
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'fly in fly out jobs'}

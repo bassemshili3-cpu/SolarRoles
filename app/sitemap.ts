@@ -81,10 +81,47 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
-      url: 'https://www.oh-my-job.com/sterile-processing-technician-jobs',
+      url: 'https://www.oh-my-job.com/amgen-jobs',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+    {
+      url: 'https://www.oh-my-job.com/armed-security-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: 'https://www.oh-my-job.com/city-of-reno-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: 'https://www.oh-my-job.com/healthcare-administration-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: 'https://www.oh-my-job.com/press-association-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: 'https://www.oh-my-job.com/substitute-teacher-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: 'https://www.oh-my-job.com/ucsd-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    
   ]
 }

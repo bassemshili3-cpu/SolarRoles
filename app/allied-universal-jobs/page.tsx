@@ -1,10 +1,21 @@
+
+
+
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import JobMap from '@/components/JobMap'
+
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Users } from 'lucide-react'
 import { searchJobs } from '@/lib/adzuna'
+import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
+
+
+
+
+    
+      
+
 
 export const metadata: Metadata = {
   title: 'Allied Universal Jobs Hiring Now | Security Positions Open Across the US',
@@ -193,7 +204,10 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
                 <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
               </p>
             )}
-            <JobMap jobs={[]} />
+
+             {/* Client wrapper isolé — pas de use client sur la page */}
+                        <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'allied universal'}
@@ -201,7 +215,10 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
                 salary_min={params.salary_min}
               />
             </Suspense>
+
+            
           </div>
+          
         </div>
 
         {/* Job Categories */}
@@ -284,6 +301,7 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
             </p>
           </div>
         </section>
+       
 
         {/* State Licensing Requirements */}
         <section className="mt-20">

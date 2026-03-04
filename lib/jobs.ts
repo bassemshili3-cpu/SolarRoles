@@ -71,6 +71,8 @@ export async function searchAllJobs(params: {
 
   // === 1. LENSA EN PRIORITÉ ===
   let lensaData: any = null
+  let lensaDisabled = false
+
   try {
     let city: string | undefined
     let state: string | undefined
@@ -99,16 +101,21 @@ export async function searchAllJobs(params: {
     console.log(`✅ Lensa SUCCESS : ${lensaData?.job_adverts?.length || 0} jobs (count total: ${lensaData?.count || 0})`)
   } catch (e: any) {
     console.error("❌ Lensa FAILED :", e.message)
-    if (e.message.includes('401') || e.message.includes('403')) {
+
+    if (e.message.includes('422') || e.message.toLowerCase().includes('inactive')) {
+      console.warn("⚠️ Campaign Lensa inactive → skip fallback, 100% Adzuna")
+      lensaDisabled = true
+    } else if (e.message.includes('401') || e.message.includes('403')) {
       console.error("→ Problème probable : LENSA_SDK_KEY ou LENSA_CAMPAIGN_ID invalide")
+      lensaDisabled = true
     }
   }
 
   const lensaJobs: UnifiedJob[] = lensaData?.job_adverts?.map(normalizeLensa) || []
   const lensaCount = lensaData?.count || 0
 
-  // Fallback si zéro job Lensa
-  if (lensaJobs.length === 0 && params.what) {
+  // Fallback Lensa uniquement si l'échec n'est PAS une campaign inactive
+  if (!lensaDisabled && lensaJobs.length === 0 && params.what) {
     console.log("⚠️ Aucun job Lensa → Tentative sans filtre localisation...")
     try {
       const lensaData2 = await searchLensaJobs({ job_title: params.what, limit: totalLimit })
@@ -121,7 +128,8 @@ export async function searchAllJobs(params: {
   }
 
   // === 2. Adzuna en complément ===
-  const remaining = totalLimit - lensaJobs.length
+  // Si Lensa est disabled, tout le quota va à Adzuna
+  const remaining = lensaDisabled ? totalLimit : totalLimit - lensaJobs.length
   let adzunaJobs: UnifiedJob[] = []
   let adzunaCount = 0
 
