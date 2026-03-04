@@ -79,6 +79,44 @@ export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSear
 }
 
 // ──────────────────────────────────────────────────────────────
+// GET JOB BY ID
+// ──────────────────────────────────────────────────────────────
+export async function getJobById(id: string): Promise<AdzunaJob | null> {
+  const appId = process.env.ADZUNA_APP_ID
+  const appKey = process.env.ADZUNA_APP_KEY
+
+  if (!appId || !appKey) {
+    console.error('❌ Adzuna credentials missing')
+    return null
+  }
+
+  // Tentative via endpoint direct
+  try {
+    const url = `${BASE}/jobs/${id}?app_id=${appId}&app_key=${appKey}`
+    const response = await fetch(url, {
+      headers: { 'User-Agent': 'OhMyJob/1.0' },
+      next: { revalidate: 10800 },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data ?? null
+    }
+  } catch (error) {
+    console.error('❌ Adzuna getJobById direct error:', error)
+  }
+
+  // Fallback : recherche par id et filtre
+  try {
+    const result = await searchJobs({ what: id, results_per_page: 10 })
+    return result.results.find(job => job.id === id) ?? null
+  } catch (error) {
+    console.error('❌ Adzuna getJobById fallback error:', error)
+    return null
+  }
+}
+
+// ──────────────────────────────────────────────────────────────
 // NOUVELLE FONCTION CACHÉE (celle que tu vas utiliser partout)
 // ──────────────────────────────────────────────────────────────
 export const getCachedJobCount = unstable_cache(
@@ -87,17 +125,17 @@ export const getCachedJobCount = unstable_cache(
       what,
       where,
       salary_min,
-      results_per_page: 1,   // on ne veut QUE le count
+      results_per_page: 1,
     })
   },
-  ['adzuna-job-count'],           // clé de cache unique
+  ['adzuna-job-count'],
   {
-    revalidate: 7200,             // 2 heures (tu peux mettre 3600 si tu veux plus frais)
-    tags: ['jobs'],               // pour purger manuellement si besoin
+    revalidate: 7200,
+    tags: ['jobs'],
   }
 )
 
-// Optionnel : version complète pour InfiniteJobList (si tu veux aussi la cacher plus tard)
+// Optionnel : version complète pour InfiniteJobList
 export const getCachedJobs = unstable_cache(
   async (params: AdzunaSearchParams) => {
     return searchJobs(params)
