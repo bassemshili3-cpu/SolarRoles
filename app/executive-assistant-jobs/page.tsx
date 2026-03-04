@@ -61,7 +61,7 @@ const salaryData = [
 const faqs = [
   {
     question: 'Do I need a degree for executive assistant jobs?',
-    answer: 'According to the U.S. Bureau of Labor Statistics, most executive assistant positions require only a high school diploma or equivalent. However, many employers prefer candidates with an associate or bachelor s degree in business administration or a related field, plus several years of administrative experience.',
+    answer: 'According to the U.S. Bureau of Labor Statistics, most executive assistant positions require only a high school diploma or equivalent. However, many employers prefer candidates with an associate or bachelor\'s degree in business administration or a related field, plus several years of administrative experience.',
   },
   {
     question: 'What is the average salary for executive assistant jobs?',
@@ -100,13 +100,26 @@ const applicationTips = [
   },
 ]
 
-export default async function ExecutiveAssistantJobsPage({ searchParams }: any) {
+interface PageProps {
+  searchParams: Promise<{
+    what?: string
+    where?: string
+    salary_min?: string   // ← Correction : toujours string (ou undefined) dans Next.js
+  }>
+}
+
+export default async function ExecutiveAssistantJobsPage({ searchParams }: PageProps) {
   const params = await searchParams
+
+  // Conversion sécurisée pour getCachedJobCount (qui attend un number)
+  const salaryMinNumber = params.salary_min 
+    ? parseInt(params.salary_min, 10) 
+    : undefined
 
   const { count } = await getCachedJobCount(
     params.what || 'executive assistant',
     params.where || '',
-    params.salary_min
+    salaryMinNumber   // ← maintenant number | undefined
   )
 
   return (
@@ -145,7 +158,7 @@ export default async function ExecutiveAssistantJobsPage({ searchParams }: any) 
               <InfiniteJobList
                 what={params.what || 'executive assistant'}
                 where={params.where || ''}
-                salary_min={params.salary_min}
+                salary_min={params.salary_min}   // ← reste en string (comme attendu par le composant)
               />
             </Suspense>
           </div>
