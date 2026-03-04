@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, CheckCircle, ShieldCheck, BookOpen, Users, TrendingUp, FileText, AlertTriangle } from 'lucide-react'
-import { searchJobs } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
 
 
 
@@ -139,12 +139,12 @@ const tips = [
 export default async function JobsFor16YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await searchJobs({
-    what: params.what || 'youth employment',
-    where: params.where || '',
-    ...(params.salary_min && { salary_min: params.salary_min }),
-    results_per_page: 1,
-  })
+   const { count } = await getCachedJobCount(
+    params.what || 'youth employment',
+    params.where || '',
+    params.salary_min
+  )
+  
 
   return (
     <>

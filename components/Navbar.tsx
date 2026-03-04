@@ -27,7 +27,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-4 sm:gap-8">
           <Link href="/" className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Oh My Job" className="h-11 w-auto" />
+            <img src="/logo.svg" alt="Oh My Job" className="h-[3.3rem] sm:h-11 w-auto" />
           </Link>
           
           {/* Find Jobs → 20% plus petit + une seule ligne sur mobile uniquement */}

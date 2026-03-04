@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
-import { searchJobs } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'FIFO Jobs Hiring Immediately | Fly In Fly Out Positions Open Now',
@@ -124,12 +124,12 @@ const tips = [
 export default async function FifoJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await searchJobs({
-    what: params.what || 'fly in fly out jobs',
-    where: params.where || '',
-    ...(params.salary_min && { salary_min: params.salary_min }),
-    results_per_page: 1,
-  })
+   const { count } = await getCachedJobCount(
+    params.what || 'Fly in fly out',
+    params.where || '',
+    params.salary_min
+  )
+  
 
   return (
     <>

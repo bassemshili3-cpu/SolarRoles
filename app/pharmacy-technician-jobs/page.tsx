@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Pill } from 'lucide-react'
-import { searchJobs } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Pharmacy Technician Jobs Hiring Immediately | Apply Now Before Positions Fill',
@@ -152,12 +152,12 @@ const tips = [
 export default async function PharmacyTechnicianJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await searchJobs({
-    what: params.what || 'pharmacy technician',
-    where: params.where || '',
-    ...(params.salary_min && { salary_min: params.salary_min }),
-    results_per_page: 1,
-  })
+  const { count } = await getCachedJobCount(
+   params.what || 'Pharmacy technician',
+   params.where || '',
+   params.salary_min
+ )
+ 
 
   return (
     <>

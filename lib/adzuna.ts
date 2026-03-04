@@ -1,4 +1,6 @@
 // lib/adzuna.ts
+import { unstable_cache } from 'next/cache'
+
 const BASE = 'https://api.adzuna.com/v1/api/jobs/us'
 
 export interface AdzunaJob {
@@ -29,6 +31,9 @@ export interface AdzunaSearchParams {
   page?: number
 }
 
+// ──────────────────────────────────────────────────────────────
+// FONCTION ORIGINALE (inchangée, on la garde pour d'autres usages)
+// ──────────────────────────────────────────────────────────────
 export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSearchResult> {
   const appId = process.env.ADZUNA_APP_ID
   const appKey = process.env.ADZUNA_APP_KEY
@@ -49,7 +54,6 @@ export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSear
   if (params.salary_min) searchParams.set('salary_min', String(params.salary_min))
 
   const url = `${BASE}/search/${params.page || 1}?${searchParams}`
-  console.log('🔍 Adzuna search URL appelée:', url)
 
   try {
     const response = await fetch(url, {
@@ -64,7 +68,6 @@ export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSear
     }
 
     const data = await response.json()
-    console.log(`✅ Adzuna: ${data.results?.length || 0} jobs (total: ${data.count})`)
     return {
       count: data.count || 0,
       results: data.results || [],
@@ -75,44 +78,30 @@ export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSear
   }
 }
 
-export async function getJobById(id: string): Promise<AdzunaJob | null> {
-  const appId = process.env.ADZUNA_APP_ID
-  const appKey = process.env.ADZUNA_APP_KEY
-
-  console.log('🔑 [getJobById] ID demandé :', id)
-  console.log('   APP_ID présent ?', !!appId)
-  console.log('   APP_KEY présent ?', !!appKey)
-
-  if (!appId || !appKey) {
-    console.error('❌ Adzuna credentials missing in getJobById')
-    return null
-  }
-
-  try {
-    const params = new URLSearchParams({ app_id: appId, app_key: appKey })
-    const url = `${BASE}/ads/${id}?${params}`
-    console.log('🔍 Fetch single Adzuna job URL :', url)
-
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'OhMyJob/1.0' },
-      next: { revalidate: 10800 },
+// ──────────────────────────────────────────────────────────────
+// NOUVELLE FONCTION CACHÉE (celle que tu vas utiliser partout)
+// ──────────────────────────────────────────────────────────────
+export const getCachedJobCount = unstable_cache(
+  async (what: string, where: string = '', salary_min?: number) => {
+    return searchJobs({
+      what,
+      where,
+      salary_min,
+      results_per_page: 1,   // on ne veut QUE le count
     })
-
-    console.log('   Status HTTP :', res.status)
-
-    if (!res.ok) {
-      const errorText = await res.text().catch(() => '(no body)')
-      console.error('❌ Adzuna single job failed:', res.status, errorText)
-      return null
-    }
-
-    const job = await res.json()
-    console.log('🎉 Adzuna JOB TROUVÉ ! Titre :', job.title)
-    console.log('   redirect_url :', job.redirect_url || '(aucun)')
-
-    return job
-  } catch (error: any) {
-    console.error('💥 Exception dans getJobById :', error.message || error)
-    return null
+  },
+  ['adzuna-job-count'],           // clé de cache unique
+  {
+    revalidate: 7200,             // 2 heures (tu peux mettre 3600 si tu veux plus frais)
+    tags: ['jobs'],               // pour purger manuellement si besoin
   }
-}
+)
+
+// Optionnel : version complète pour InfiniteJobList (si tu veux aussi la cacher plus tard)
+export const getCachedJobs = unstable_cache(
+  async (params: AdzunaSearchParams) => {
+    return searchJobs(params)
+  },
+  ['adzuna-jobs'],
+  { revalidate: 3600, tags: ['jobs'] }
+)

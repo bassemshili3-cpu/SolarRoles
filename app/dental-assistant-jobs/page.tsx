@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Heart } from 'lucide-react'
-import { searchJobs } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Dental Assistant Jobs Hiring Immediately | Positions Open Across the US',
@@ -163,12 +163,12 @@ const tips = [
 export default async function DentalAssistantJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await searchJobs({
-    what: params.what || 'dental assistant',
-    where: params.where || '',
-    ...(params.salary_min && { salary_min: params.salary_min }),
-    results_per_page: 1,
-  })
+  const { count } = await getCachedJobCount(
+   params.what || 'Dental assistant',
+   params.where || '',
+   params.salary_min
+ )
+ 
 
   return (
     <>

@@ -128,7 +128,7 @@ export default function Home() {
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white pt-24 pb-32">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <h1 className="text-7xl font-bold tracking-tighter mb-6">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
             Your next big opportunity<br />is one click away
           </h1>
          

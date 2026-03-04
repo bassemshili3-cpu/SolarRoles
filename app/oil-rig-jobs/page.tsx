@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Wrench } from 'lucide-react'
-import { searchJobs } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Oil Rig Jobs Hiring Now | Offshore and Onshore Positions Open Immediately',
@@ -161,12 +161,12 @@ const tips = [
 export default async function OilRigJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await searchJobs({
-    what: params.what || 'oil rig jobs',
-    where: params.where || '',
-    ...(params.salary_min && { salary_min: params.salary_min }),
-    results_per_page: 1,
-  })
+  const { count } = await getCachedJobCount(
+   params.what || 'Oil rig',
+   params.where || '',
+   params.salary_min
+ )
+ 
 
   return (
     <>

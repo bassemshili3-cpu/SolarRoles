@@ -1,13 +1,10 @@
-
-
-
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Users } from 'lucide-react'
-import { searchJobs } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 
 
@@ -171,13 +168,14 @@ const stateRequirements = [
 
 export default async function AlliedUniversalJobsPage({ searchParams }: any) {
   const params = await searchParams
+  
 
-  const { count } = await searchJobs({
-    what: params.what || 'allied universal',
-    where: params.where || '',
-    ...(params.salary_min && { salary_min: params.salary_min }),
-    results_per_page: 1,
-  })
+ const { count } = await getCachedJobCount(
+  params.what || 'Allied Universal',
+  params.where || '',
+  params.salary_min
+)
+
 
   return (
     <>
