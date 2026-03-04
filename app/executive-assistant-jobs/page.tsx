@@ -61,7 +61,7 @@ const salaryData = [
 const faqs = [
   {
     question: 'Do I need a degree for executive assistant jobs?',
-    answer: "According to the U.S. Bureau of Labor Statistics, most executive assistant positions require only a high school diploma or equivalent. However, many employers prefer candidates with an associate or bachelor\s degree in business administration or a related field, plus several years of administrative experience.",
+    answer: 'According to the U.S. Bureau of Labor Statistics, most executive assistant positions require only a high school diploma or equivalent. However, many employers prefer candidates with an associate or bachelor s degree in business administration or a related field, plus several years of administrative experience.',
   },
   {
     question: 'What is the average salary for executive assistant jobs?',
