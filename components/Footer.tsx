@@ -27,10 +27,7 @@ export default function Footer() {
           <div className="font-semibold mb-3">For Employers</div>
           <Link href="/dashboard/employer" className="text-sm hover:underline">Post a Job • Sponsored</Link>
         </div>
-        <div className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Oh My Job, Inc. All rights reserved.<br />
-          Made with ❤️ for American job seekers.
-        </div>
+        
       </div>
     </footer>
   )

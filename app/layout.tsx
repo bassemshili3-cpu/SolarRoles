@@ -2,8 +2,8 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import DoNotSellBanner from '@/components/DoNotSellBanner'
 import { Providers } from './providers'
+import CookieBanner from '@/components/CookieBanner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,10 +22,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
+          <CookieBanner />
           <Navbar />
           {children}
           <Footer />
-          <DoNotSellBanner />
+         
+          
         </Providers>
       </body>
     </html>
