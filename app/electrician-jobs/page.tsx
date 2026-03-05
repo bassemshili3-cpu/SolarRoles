@@ -225,7 +225,7 @@ export default async function ElectricianJobsPage({ searchParams }: any) {
         {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="electrician" />
           </aside>
           <div className="flex-1">
             {count > 0 && (

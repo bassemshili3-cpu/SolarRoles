@@ -173,7 +173,7 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         {/* Job Board */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="cintas company" />
           </aside>
           <div className="flex-1">
 

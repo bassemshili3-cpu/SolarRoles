@@ -187,7 +187,7 @@ export default async function CnaJobsPage({ searchParams }: any) {
         {/* Job Board */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="certified nursing assistant" />
           </aside>
           <div className="flex-1">
             {count > 0 && (

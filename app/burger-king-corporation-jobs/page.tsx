@@ -96,14 +96,31 @@ const applicationTips = [
   },
 ]
 
-export default async function BurgerKingCorporationJobsPage({ searchParams }: any) {
-  const params = await searchParams
+
+
+
+  export default async function BurgerKingCorporationJobsPage(props: {
+  searchParams: Promise<{
+    what?: string
+    where?: string
+    salary_min?: string   // ← uniquement string | undefined (natif Next.js)
+  }>
+}) {
+  const params = await props.searchParams
+
+  // 2. Conversion parseInt sécurisée UNIQUEMENT pour getCachedJobCount
+  let salaryMinNum: number | undefined = undefined
+  if (params.salary_min) {
+    const parsed = Number.parseInt(params.salary_min, 10)
+    salaryMinNum = Number.isNaN(parsed) ? undefined : parsed
+  }
 
   const { count } = await getCachedJobCount(
     params.what || 'burger-king-corporation-jobs',
     params.where || '',
-    params.salary_min
+    salaryMinNum
   )
+  
 
   return (
     <>
@@ -123,7 +140,7 @@ export default async function BurgerKingCorporationJobsPage({ searchParams }: an
         {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="burger-king-corporation-jobs" />
           </aside>
           <div className="flex-1">
             {count > 0 && (

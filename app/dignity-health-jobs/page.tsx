@@ -183,7 +183,7 @@ export default async function DignityHealthJobsPage({ searchParams }: any) {
         {/* Job Board */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="dignity health" />
           </aside>
           <div className="flex-1">
             {count > 0 && (

@@ -136,7 +136,7 @@ export default async function JobsFor15YearOldsPage({ searchParams }: any) {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="jobs for 15 year olds" />
           </aside>
           <div className="flex-1">
 

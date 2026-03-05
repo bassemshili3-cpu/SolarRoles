@@ -129,7 +129,7 @@ export default async function SubstituteTeacherJobsPage({ searchParams }: any) {
         {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="substitute teacher" />
           </aside>
           <div className="flex-1">
 

@@ -178,7 +178,7 @@ export default async function DaycareJobsPage({ searchParams }: any) {
         {/* Job Board */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+           <JobFilters defaultWhat="daycare jobs" />
           </aside>
           <div className="flex-1">
 

@@ -140,7 +140,7 @@ export default async function HeavyEquipmentOperatorJobsPage({ searchParams }: P
         {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="heavy equipment operator" />
           </aside>
           <div className="flex-1">
 

@@ -32,13 +32,14 @@ const US_LOCATIONS = [
 
 interface JobFiltersProps {
   initialParams?: any
+  defaultWhat?: string
 }
 
-export default function JobFilters({ initialParams }: JobFiltersProps) {
+export default function JobFilters({ initialParams, defaultWhat = '' }: JobFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const [keywords, setKeywords] = useState(searchParams.get('what') || '')
+  const [keywords, setKeywords] = useState(searchParams.get('what') || defaultWhat)
   const [location, setLocation] = useState(searchParams.get('where') || '')
   const [salary, setSalary] = useState(Number(searchParams.get('salary_min')) || 0)
   const [jobTypes, setJobTypes] = useState<string[]>([])
@@ -89,17 +90,20 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
   }
 
   const clearFilters = () => {
-    setKeywords('')
+    setKeywords(defaultWhat)
     setLocation('')
     setSalary(0)
     setJobTypes([])
-    router.push('/jobs')
+    if (defaultWhat) {
+      router.push(`/jobs?what=${encodeURIComponent(defaultWhat)}`)
+    } else {
+      router.push('/jobs')
+    }
   }
 
   return (
     <div className="sticky top-20 space-y-3 md:space-y-6 bg-card p-3 md:p-6 rounded-2xl border shadow-lg">
 
-      {/* Search Bar */}
       <div className="space-y-2 md:space-y-4">
         <h2 className="text-base md:text-lg font-bold text-foreground">Search Jobs</h2>
 
@@ -152,8 +156,8 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
           )}
         </div>
 
-        <Button 
-          onClick={applyFilters} 
+        <Button
+          onClick={applyFilters}
           className="w-full py-2 md:py-3 text-sm md:text-base font-semibold active:bg-primary/90 active:scale-[0.97] transition-all duration-150"
         >
           <Search className="h-4 w-4 mr-2" />
@@ -163,7 +167,6 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
 
       <div className="border-t" />
 
-      {/* Salary Range */}
       <div className="space-y-2 md:space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-base md:text-lg">Minimum Salary</h3>
@@ -211,7 +214,6 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
 
       <div className="border-t" />
 
-      {/* Job Type */}
       <div className="space-y-2 md:space-y-3">
         <h3 className="font-semibold text-base md:text-lg">Job Type</h3>
         <div className="grid grid-cols-2 gap-1.5 md:gap-2">
@@ -238,9 +240,9 @@ export default function JobFilters({ initialParams }: JobFiltersProps) {
         </div>
       </div>
 
-      <Button 
-        variant="outline" 
-        onClick={clearFilters} 
+      <Button
+        variant="outline"
+        onClick={clearFilters}
         className="w-full text-sm active:bg-destructive/10 active:scale-[0.97] transition-all duration-150"
       >
         Clear All Filters

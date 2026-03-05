@@ -175,7 +175,7 @@ export default async function FrontDeskJobsPage({ searchParams }: any) {
         {/* Job Board */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters />
+            <JobFilters defaultWhat="front desk jobs" />
           </aside>
           <div className="flex-1">
 
