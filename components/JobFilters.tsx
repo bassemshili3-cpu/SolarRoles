@@ -31,25 +31,39 @@ const US_LOCATIONS = [
 ]
 
 interface JobFiltersProps {
-  initialParams?: any
   defaultWhat?: string
 }
 
-export default function JobFilters({ initialParams, defaultWhat = '' }: JobFiltersProps) {
+export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const [keywords, setKeywords] = useState(searchParams.get('what') || defaultWhat)
-  const [location, setLocation] = useState(searchParams.get('where') || '')
-  const [salary, setSalary] = useState(Number(searchParams.get('salary_min')) || 0)
+  const [keywords, setKeywords] = useState('')
+  const [location, setLocation] = useState('')
+  const [salary, setSalary] = useState(0)
   const [jobTypes, setJobTypes] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([])
   const locationInputRef = useRef<HTMLInputElement>(null)
 
+  // ✅ SYNCHRO COMPLETE DEPUIS L'URL
+  useEffect(() => {
+    setKeywords(searchParams.get('what') || defaultWhat || '')
+    setLocation(searchParams.get('where') || '')
+    setSalary(Number(searchParams.get('salary_min')) || 0)
+
+    const jobTypeParam = searchParams.get('job_type')
+    setJobTypes(
+      jobTypeParam
+        ? jobTypeParam.split(',').map((t) => t.trim()).filter(Boolean)
+        : []
+    )
+  }, [searchParams, defaultWhat])
+
+  // Suggestions pour la localisation
   useEffect(() => {
     if (location.length > 0) {
-      const filtered = US_LOCATIONS.filter(loc =>
+      const filtered = US_LOCATIONS.filter((loc) =>
         loc.toLowerCase().includes(location.toLowerCase())
       ).slice(0, 8)
       setFilteredSuggestions(filtered)
@@ -59,6 +73,7 @@ export default function JobFilters({ initialParams, defaultWhat = '' }: JobFilte
     }
   }, [location])
 
+  // Fermer les suggestions en cliquant dehors
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (locationInputRef.current && !locationInputRef.current.contains(e.target as Node)) {
@@ -75,18 +90,35 @@ export default function JobFilters({ initialParams, defaultWhat = '' }: JobFilte
   }
 
   const toggleJobType = (type: string) => {
-    setJobTypes(prev =>
-      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    setJobTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     )
   }
 
   const applyFilters = () => {
-    const params = new URLSearchParams()
-    if (keywords) params.set('what', keywords)
-    if (location) params.set('where', location)
-    if (salary > 30000) params.set('salary_min', salary.toString())
-    if (jobTypes.length > 0) params.set('job_type', jobTypes.join(','))
-    router.push(`/jobs?${params.toString()}`)
+    const params = new URLSearchParams(searchParams.toString())
+
+    keywords?.trim()
+      ? params.set('what', keywords.trim())
+      : params.delete('what')
+
+    location?.trim()
+      ? params.set('where', location.trim())
+      : params.delete('where')
+
+    salary > 0
+      ? params.set('salary_min', salary.toString())
+      : params.delete('salary_min')
+
+    jobTypes.length > 0
+      ? params.set('job_type', jobTypes.join(','))
+      : params.delete('job_type')
+
+    const queryString = params.toString()
+    const newUrl = `/jobs${queryString ? `?${queryString}` : ''}`
+
+    router.push(newUrl)
+    router.refresh() // ← FIX : recharge les données serveur
   }
 
   const clearFilters = () => {
@@ -94,11 +126,13 @@ export default function JobFilters({ initialParams, defaultWhat = '' }: JobFilte
     setLocation('')
     setSalary(0)
     setJobTypes([])
+
     if (defaultWhat) {
       router.push(`/jobs?what=${encodeURIComponent(defaultWhat)}`)
     } else {
       router.push('/jobs')
     }
+    router.refresh() // ← aussi ici
   }
 
   return (

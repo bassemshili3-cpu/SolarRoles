@@ -250,6 +250,78 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+     {
+      url: 'https://www.oh-my-job.com/assisted-reproductive-technology-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/chick-fil-a-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/exelon-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/housekeeping-jobs-near-you',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/honda-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/school-nurse-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/paraprofessional-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/sonic-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/national-grid-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/cardinal-health-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/patient-transporter-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/doordash-careers',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
     
   ]
 }
