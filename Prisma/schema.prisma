@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Frequency {
+  WEEKLY
+  TWICE
+}
+
+model JobAlert {
+  id         String    @id @default(cuid())
+  email      String
+  what       String
+  where      String
+  salaryMin  String?
+  frequency  Frequency @default(WEEKLY)
+  lastSentAt DateTime  @default(now())
+  active     Boolean   @default(true)
+
+  @@unique([email, what, where])
+  @@map("job_alerts")
+}

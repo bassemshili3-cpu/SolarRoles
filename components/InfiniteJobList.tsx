@@ -4,9 +4,14 @@ import { useQuery } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
+import { Bell, Check } from 'lucide-react'   // ← ajout
 
 export default function JobList({ what, where, salary_min }: { what: string; where: string; salary_min?: string }) {
   const [page, setPage] = useState(1)
+  const [email, setEmail] = useState('')
+  const [subscribed, setSubscribed] = useState(false)
+  const [frequency, setFrequency] = useState<'weekly' | 'twice'>('weekly')
+
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
 
@@ -28,6 +33,8 @@ export default function JobList({ what, where, salary_min }: { what: string; whe
   })
 
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
+
+  const jobType = resolvedWhat ? `${resolvedWhat} ` : ''
 
   // Loading state
   if (isLoading) {
@@ -58,13 +65,14 @@ export default function JobList({ what, where, salary_min }: { what: string; whe
 
   return (
     <div>
-      {/* ← ICI LA MAGIE */}
+      {/* ← TES JOBS */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
         {(data?.results || []).map((job: any) => (
           <JobCard key={job.id} job={job} />
         ))}
       </div>
 
+      {/* Pagination */}
       <div className="flex items-center justify-center gap-4 mt-10">
         <Button
           variant="outline"
@@ -81,6 +89,143 @@ export default function JobList({ what, where, salary_min }: { what: string; whe
         >
           Next →
         </Button>
+      </div>
+
+      {/* ← NOUVELLE SECTION NEWSLETTER (identique à l’image) */}
+      <div className="mt-16 bg-black text-white rounded-3xl p-10">
+        <div className="flex items-center gap-5 mb-8">
+          <Bell className="w-12 h-12 flex-shrink-0" />
+          <div>
+            <h3 className="text-3xl font-bold tracking-tight">
+              Get the newest {jobType}jobs in your inbox 📧
+            </h3>
+            <p className="text-zinc-400 mt-1">Weekly updates delivered straight to you.</p>
+          </div>
+        </div>
+
+        {/* Pills de fréquence + filtres */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          <button
+            onClick={() => setFrequency('weekly')}
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
+              frequency === 'weekly'
+                ? 'bg-white text-black'
+                : 'bg-zinc-800 hover:bg-zinc-700'
+            }`}
+          >
+            Weekly
+          </button>
+
+          <button
+            onClick={() => setFrequency('twice')}
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
+              frequency === 'twice'
+                ? 'bg-white text-black'
+                : 'bg-zinc-800 hover:bg-zinc-700'
+            }`}
+          >
+            2x / Week
+          </button>
+
+          <div className="px-6 py-2.5 rounded-full text-sm font-semibold bg-zinc-800 flex items-center gap-2">
+            All jobs <span className="text-xs opacity-70">⌄</span>
+          </div>
+          <div className="px-6 py-2.5 rounded-full text-sm font-semibold bg-zinc-800 flex items-center gap-2">
+            All locations <span className="text-xs opacity-70">⌄</span>
+          </div>
+          <div className="px-6 py-2.5 rounded-full text-sm font-semibold bg-zinc-800 flex items-center gap-2">
+            All categories <span className="text-xs opacity-70">⌄</span>
+          </div>
+        </div>
+
+      {/* Formulaire */}
+
+<form
+
+  onSubmit={async (e) => {
+
+    e.preventDefault()
+
+    if (!email) return
+
+
+
+
+    const res = await fetch('/api/alerts/subscribe', {
+
+      method: 'POST',
+
+      headers: { 'Content-Type': 'application/json' },
+
+      body: JSON.stringify({
+
+        email,
+
+        frequency,
+
+        what: resolvedWhat,
+
+        where: resolvedWhere,
+
+        salaryMin: salary_min,
+
+      }),
+
+    })
+
+
+
+
+    if (res.ok) {
+
+      setSubscribed(true)
+
+    } else {
+
+      alert("Erreur lors de l'inscription")
+
+    }
+
+  }}
+
+  className="flex gap-1.5"
+
+>
+
+  <input
+
+    type="email"
+
+    value={email}
+
+    onChange={(e) => setEmail(e.target.value)}
+
+    placeholder="2drockstar@gmail.com"
+
+    className="flex-1 bg-white border border-gray-300 focus:border-emerald-500 rounded-lg px-2 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none"
+
+  />
+
+  <button
+
+    type="submit"
+
+    className="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-3 rounded-lg flex items-center gap-1.5 transition-all active:scale-95"
+
+  >
+
+    Subscribe
+
+    <Check className="w-3.5 h-3.5" />
+
+  </button>
+
+</form>
+        {subscribed && (
+          <p className="mt-4 text-emerald-400 flex items-center gap-2 text-sm font-medium">
+            ✅ Merci ! Tu es maintenant abonné.
+          </p>
+        )}
       </div>
     </div>
   )
