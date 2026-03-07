@@ -3,9 +3,11 @@ import { PrismaClient } from '@prisma/client'
 import { Resend } from 'resend'
 
 const prisma = new PrismaClient()
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function GET(req: Request) {
+  // ✅ Déplacé ici, à l'intérieur de la fonction
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   const authHeader = req.headers.get('authorization')
   const secret = authHeader?.replace('Bearer ', '')
 
@@ -36,9 +38,9 @@ export async function GET(req: Request) {
 
     const unsubscribeUrl = `${process.env.NEXT_PUBLIC_URL}/api/alerts/unsubscribe?id=${alert.id}`
 
-    await resend.emails.send({
-      from: 'alerts@yourdomain.com', // ← change to your domain
-      to: alert.email,
+   await resend.emails.send({
+    from: 'Oh My Job <noreply@oh-my-job.com>', // ✅ Format correct
+    to: alert.email,
       subject,
       html: `
         <!DOCTYPE html>
