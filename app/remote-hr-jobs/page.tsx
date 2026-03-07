@@ -123,7 +123,7 @@ export default async function RemoteHRJobsPage({ searchParams }: any) {
   const params = await searchParams
 
   const { count } = await getCachedJobCount(
-    params.what || 'remote hr',
+    params.what || 'remote human resources',
     params.where || '',
     params.salary_min
   )
