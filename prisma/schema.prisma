@@ -17,4 +17,7 @@ model JobAlert {
   active     Boolean   @default(true)
   lastSentAt DateTime?
   createdAt  DateTime  @default(now())
+
+
+  @@unique([email, what, where], name: "email_what_where")
 }
