@@ -1,12 +1,11 @@
 
 {
-  
   "name": "oh-my-job",
   "version": "1.0.0",
   "private": true,
  "scripts": {
   "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next dev",
-  "build": "prisma generate --schema=./prisma/schema.prisma && cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
+  "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
   "start": "next start",
   "lint": "next lint",
   "db:push": "prisma db push",
