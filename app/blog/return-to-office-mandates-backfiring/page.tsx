@@ -10,7 +10,7 @@ const ARTICLE_DATA = {
   readTime: "10 min read",
   category: "Remote Work",
   canonicalUrl: "https://www.oh-my-job.com/blog/return-to-office-mandates-backfiring",
-  heroImage: "https://images.unsplash.com/photo-1521898284481-a5ec348cb555?w=1200&h=600&fit=crop",
+  heroImage: "/remote.jpg",
 };
 
 const styles = `

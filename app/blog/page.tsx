@@ -9,9 +9,9 @@ const FEATURED_ARTICLE = {
   subtitle: "Walking away from a paycheck is never just about the job. It's about your family, your health coverage, your financial safety net, and everything that depends on you. Here's how to quit without putting any of it at risk.",
   author: "Eleanor M. Bishop",
   date: "March 8, 2026",
-  readTime: "14 min read",
+  
   url: "/blog/how-to-quit-a-job",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&h=600&fit=crop",
+  image: "/howtoquit.png/w=400&h=300&fit=crop",
 };
 
 const EDITOR_PICKS = [
@@ -20,24 +20,34 @@ const EDITOR_PICKS = [
     title: "What Six Figures Really Means in New York, San Francisco, and Austin",
     author: "James Whitfield",
     date: "March 7, 2026",
-    readTime: "8 min read",
+    
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop",
   },
+
+  {
+    category: "Interview Tips",
+    title: "Job Interview Questions in 2026: What Employers Are Really Asking and How to Prepare",
+    author: "Gregory S.",
+    date: "March 7, 2026",
+    
+    image: "/interview.jpg/w=400&h=300&fit=crop",
+  },
+
   {
     category: "Interview Tips",
     title: "The 30-Second Rule: How First Impressions Still Decide Who Gets the Offer",
     author: "Priya Nair",
     date: "March 6, 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop",
+    
+    image: "/30sec.jpg/w=400&h=300&fit=crop",
   },
   {
     category: "Remote Work",
     title: "Return-to-Office Mandates Are Backfiring. Here's the Data.",
     author: "David Rosenthal",
     date: "March 5, 2026",
-    readTime: "10 min read",
-    image: "https://images.unsplash.com/photo-1521898284481-a5ec348cb555?w=400&h=300&fit=crop",
+    
+    image: "/remote.jpg/w=400&h=300&fit=crop",
   },
 ];
 
@@ -47,42 +57,42 @@ const LATEST_ARTICLES = [
     title: "Inside the AI Talent War: How Startups Are Luring Engineers Away From Big Tech",
     author: "Michael Chen",
     date: "March 7, 2026",
-    readTime: "9 min read",
+    
   },
   {
     category: "Industry Trends",
     title: "Healthcare Hiring Is Booming — But Not Where You'd Expect",
     author: "Sarah Abrams",
     date: "March 6, 2026",
-    readTime: "7 min read",
+    
   },
   {
     category: "Career Advice",
     title: "You Don't Need a Personal Brand. You Need a Personal Practice.",
     author: "Tomás Rivera",
     date: "March 5, 2026",
-    readTime: "5 min read",
+    
   },
   {
     category: "Salary Insights",
     title: "The Hidden Cost of Stock Options: A Cautionary Tale for Job Hoppers",
     author: "Angela Wu",
     date: "March 4, 2026",
-    readTime: "11 min read",
+    
   },
   {
     category: "Remote Work",
     title: "Digital Nomad Visas: Which Countries Are Actually Worth It in 2026?",
     author: "Lukas Bauer",
     date: "March 3, 2026",
-    readTime: "8 min read",
+    
   },
   {
     category: "Interview Tips",
     title: "When the Interviewer Asks 'Why Should We Hire You?' — The Only Answer That Works",
     author: "Rachel Simmons",
     date: "March 2, 2026",
-    readTime: "4 min read",
+    
   },
 ];
 
@@ -499,7 +509,7 @@ export default function OhMyJobHome() {
                 <span>·</span>
                 <span>{FEATURED_ARTICLE.date}</span>
                 <span>·</span>
-                <span>{FEATURED_ARTICLE.readTime}</span>
+                
               </div>
             </div>
           </div>
@@ -519,7 +529,7 @@ export default function OhMyJobHome() {
                 <div className="pick-card-cat">{pick.category}</div>
                 <div className="pick-card-title">{pick.title}</div>
                 <div className="pick-card-meta">
-                  <strong>{pick.author}</strong> · {pick.date} · {pick.readTime}
+                  <strong>{pick.author}</strong> · {pick.date} 
                 </div>
               </div>
             ))}
@@ -552,7 +562,7 @@ export default function OhMyJobHome() {
                     <div className="article-item-cat">{article.category}</div>
                     <div className="article-item-title">{article.title}</div>
                     <div className="article-item-meta">
-                      <strong>{article.author}</strong> · {article.date} · {article.readTime}
+                      <strong>{article.author}</strong> · {article.date} 
                     </div>
                   </div>
                 ))}

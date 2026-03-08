@@ -10,7 +10,7 @@ const ARTICLE_DATA = {
   readTime: "6 min read",
   category: "Interview Tips",
   canonicalUrl: "https://www.oh-my-job.com/blog/the-30-second-rule",
-  heroImage: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&h=600&fit=crop",
+  heroImage: "/30sec.jpg",
 };
 
 const styles = `
