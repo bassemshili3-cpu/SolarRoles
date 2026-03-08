@@ -17,10 +17,10 @@ const styles = `
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500;8..60,600&family=Libre+Franklin:wght@300;400;500;600;700&display=swap');
 
 *{margin:0;padding:0;box-sizing:border-box}
-::selection{background:#1A1A1A;color:#FAFAF7}
+::selection{background:#1A1A1A;color:#FFFFFF}
 
 .pbar{position:fixed;top:0;left:0;height:3px;background:#2B4ACB;z-index:1000;transition:width .1s linear}
-.anav{position:sticky;top:0;z-index:99;background:rgba(250,250,247,.95);backdrop-filter:blur(12px);border-bottom:1px solid #E0DDD5;padding:14px 32px;display:flex;justify-content:space-between;align-items:center}
+.anav{position:sticky;top:0;z-index:99;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid #E0DDD5;padding:14px 32px;display:flex;justify-content:space-between;align-items:center}
 .anav-brand{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-decoration:none;color:#1A1A1A}
 .anav-brand span{color:#2B4ACB}
 .anav-links{display:flex;gap:24px;align-items:center;font-family:'Libre Franklin',sans-serif;font-size:12px;font-weight:500;letter-spacing:.6px;text-transform:uppercase}
@@ -144,7 +144,7 @@ export default function HowToQuitAJob() {
   const v = vis ? " v" : "";
 
   return (
-    <div style={{ fontFamily: "'Playfair Display', Georgia, serif", background: "#FAFAF7", color: "#1A1A1A", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Playfair Display', Georgia, serif", background: "#FFFFFF", color: "#1A1A1A", minHeight: "100vh" }}>
       <style>{styles}</style>
 
       <div className="pbar" style={{ width: sp + "%" }} />

@@ -117,17 +117,17 @@ export default function OhMyJobHome() {
     : LATEST_ARTICLES.filter((a) => a.category === activeCategory);
 
   return (
-    <div style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif", background: "#FAFAF7", color: "#1A1A1A", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif", background: "#FFFFFF", color: "#1A1A1A", minHeight: "100vh" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Libre+Franklin:wght@300;400;500;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        ::selection { background: #1A1A1A; color: #FAFAF7; }
+        ::selection { background: #1A1A1A; color: #FFFFFF; }
 
         .nav-bar {
           position: sticky; top: 0; z-index: 100;
-          background: rgba(250, 250, 247, 0.92);
+          background: rgba(255, 255, 255, 0.92);
           backdrop-filter: blur(12px);
           border-bottom: 1px solid #E0DDD5;
           transition: box-shadow 0.3s ease;
