@@ -10,7 +10,7 @@ const ARTICLE_DATA = {
   readTime: "14 min read",
   category: "Career Advice",
   canonicalUrl: "https://www.oh-my-job.com/blog/how-to-quit-a-job",
-  heroImage: "./howtoquit.png",
+  heroImage: "/howtoquit.png",
 };
 
 const styles = `
