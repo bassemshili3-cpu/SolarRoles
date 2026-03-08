@@ -9,7 +9,7 @@ const ARTICLE_DATA = {
   date: "March 8, 2026",
   readTime: "14 min read",
   category: "Career Advice",
-  canonicalUrl: "https://www.oh-my-job.com/how-to-quit-a-job",
+  canonicalUrl: "https://www.oh-my-job.com/blog/how-to-quit-a-job",
   heroImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop",
 };
 
