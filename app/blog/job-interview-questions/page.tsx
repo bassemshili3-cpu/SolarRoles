@@ -10,7 +10,7 @@ const ARTICLE_DATA = {
   
   category: "Interview Tips",
   canonicalUrl: "https://www.oh-my-job.com/blog/job-interview-questions",
-  heroImage: "/interview.jpg",
+  heroImage: "/interview.png",
 };
 
 const styles = `
@@ -149,14 +149,7 @@ export default function JobInterviewQuestionsArticle() {
 
       <div className="pbar" style={{ width: sp + "%" }} />
 
-      <nav className="anav">
-        <a className="anav-brand" href="https://www.oh-my-job.com">Oh My <span>Job</span></a>
-        <div className="anav-links">
-          <a href="https://www.oh-my-job.com/blog">Blog</a>
-          <a href="https://www.oh-my-job.com/jobs">Career Advice</a>
-          <a className="ncta" href="https://www.oh-my-job.com/jobs">Find Jobs</a>
-        </div>
-      </nav>
+     
 
       <header className="ahdr">
         <div className={"ac fi" + v}>

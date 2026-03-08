@@ -30,7 +30,7 @@ const EDITOR_PICKS = [
     author: "Gregory S.",
     date: "March 7, 2026",
     
-    image: "/interview.jpg?w=400&h=300&fit=crop",
+    image: "/interview.png?w=400&h=300&fit=crop",
   },
 
   {
@@ -473,23 +473,18 @@ export default function OhMyJobHome() {
       {/* Breaking Bar */}
       <div className="breaking-bar">
         <span>TRENDING</span>
-        Tech layoffs slow as AI hiring surges across 14 major U.S. metros — Full Report →
+        Tech layoffs slow as AI hiring surges across 14 major U.S. metros 
       </div>
 
       {/* Navigation */}
       <nav className={`nav-bar ${scrolled ? "scrolled" : ""}`}>
-        <div className="masthead">
-          <h1>Oh My <span>Job</span></h1>
-          <div className="masthead-date">Sunday, March 8, 2026 · Your career, examined.</div>
-        </div>
+        
         <div className="nav-links">
           <a>Find Jobs</a>
           <a>Career Advice</a>
-          <a>Salary Data</a>
+          
           <a>Remote Work</a>
-          <a>Industry Reports</a>
-          <a>Opinion</a>
-          <a>Newsletter</a>
+         
         </div>
       </nav>
 

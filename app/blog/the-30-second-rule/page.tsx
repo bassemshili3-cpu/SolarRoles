@@ -135,14 +135,7 @@ export default function ThirtySecondRuleArticle() {
 
       <div className="pbar" style={{ width: sp + "%" }} />
 
-      <nav className="anav">
-        <a className="anav-brand" href="https://www.oh-my-job.com">Oh My <span>Job</span></a>
-        <div className="anav-links">
-          <a href="https://www.oh-my-job.com/blog">Blog</a>
-          <a href="https://www.oh-my-job.com/jobs">Career Advice</a>
-          <a className="ncta" href="https://www.oh-my-job.com/jobs">Find Jobs</a>
-        </div>
-      </nav>
+    
 
       <header className="ahdr">
         <div className={"ac fi" + v}>
