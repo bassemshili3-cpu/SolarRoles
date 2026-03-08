@@ -11,7 +11,7 @@ const FEATURED_ARTICLE = {
   date: "March 8, 2026",
   
   url: "/blog/how-to-quit-a-job",
-  image: "/howtoquit.png/w=400&h=300&fit=crop",
+  image: "/howtoquit.png?w=400&h=300&fit=crop",
 };
 
 const EDITOR_PICKS = [
@@ -30,7 +30,7 @@ const EDITOR_PICKS = [
     author: "Gregory S.",
     date: "March 7, 2026",
     
-    image: "/interview.jpg/w=400&h=300&fit=crop",
+    image: "/interview.jpg?w=400&h=300&fit=crop",
   },
 
   {
@@ -39,7 +39,7 @@ const EDITOR_PICKS = [
     author: "Priya Nair",
     date: "March 6, 2026",
     
-    image: "/30sec.jpg/w=400&h=300&fit=crop",
+    image: "/30sec.jpg?w=400&h=300&fit=crop",
   },
   {
     category: "Remote Work",
@@ -47,7 +47,7 @@ const EDITOR_PICKS = [
     author: "David Rosenthal",
     date: "March 5, 2026",
     
-    image: "/remote.jpg/w=400&h=300&fit=crop",
+    image: "/remote.jpg?w=400&h=300&fit=crop",
   },
 ];
 
