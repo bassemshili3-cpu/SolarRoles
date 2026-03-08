@@ -383,7 +383,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
-      url: 'https://www.oh-my-job.com/blog/how-to-quit-a-job',
+      url: 'https://www.oh-my-job.com/how-to-quit-a-job',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.3,
