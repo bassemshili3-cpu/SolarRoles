@@ -178,7 +178,7 @@ export default function HowToQuitAJob() {
       <div className="adiv" />
 
       <div className={"himgw fi d1" + v}>
-        <img className="himg" src={ARTICLE_DATA.heroImage} alt="Manhattan skyline at dawn" />
+        <img className="himg" src={ARTICLE_DATA.heroImage} alt="illustration of a person quitting their job" />
         <div className="hcap">Manhattan, New York. For millions of Americans, the decision to quit carries consequences far beyond the paycheck. Photo: Unsplash</div>
       </div>
 
