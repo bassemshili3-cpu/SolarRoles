@@ -10,7 +10,7 @@ const FEATURED_ARTICLE = {
   author: "Eleanor M. Bishop",
   date: "March 8, 2026",
   readTime: "14 min read",
-  url: "https://www.oh-my-job.com/blog/how-to-quit-a-job",
+  url: "https://www.oh-my-job.com/how-to-quit-a-job",
   image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&h=600&fit=crop",
 };
 
