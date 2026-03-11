@@ -163,7 +163,7 @@ export default function JobCard({ job }: JobCardProps) {
             onClick={(e) => e.stopPropagation()}
             className="inline-flex items-center px-3 py-1 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
           >
-            Apply →
+            Apply 
           </a>
         </div>
       </div>
