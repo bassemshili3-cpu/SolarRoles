@@ -195,9 +195,7 @@ export default async function JobDetailPage({
         </Link>
 
         <div className="bg-card border rounded-2xl p-8 shadow-sm">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary rounded-full text-sm mb-6">
-            {job.source === 'adzuna' ? 'Via Adzuna' : 'Via Lensa'}
-          </div>
+          
 
           <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
 
