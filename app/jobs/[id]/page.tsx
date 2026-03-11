@@ -115,18 +115,28 @@ function buildJobPostingSchema(job: JobDetail) {
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
 
-  // employmentType — mappé depuis contract_time
-  if (job.contract_time) {
-    const typeMap: Record<string, string> = {
-      full_time: 'FULL_TIME',
-      part_time: 'PART_TIME',
-      contract: 'CONTRACTOR',
-      temporary: 'TEMPORARY',
-      intern: 'INTERN',
-    }
-    const mapped = typeMap[job.contract_time.toLowerCase()]
-    if (mapped) schema.employmentType = mapped
-  }
+  // employmentType — contract_time en priorité, fallback sur contract_type
+const contractTimeMap: Record<string, string> = {
+  full_time: 'FULL_TIME',
+  part_time: 'PART_TIME',
+  contract: 'CONTRACTOR',
+  temporary: 'TEMPORARY',
+  intern: 'INTERN',
+}
+
+const contractTypeMap: Record<string, string> = {
+  permanent: 'FULL_TIME',
+  contract: 'CONTRACTOR',
+  temporary: 'TEMPORARY',
+  part_time: 'PART_TIME',
+}
+
+const employmentType =
+  (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()]) ||
+  (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
+
+if (employmentType) schema.employmentType = employmentType
+  
 
   // baseSalary — uniquement si dispo (Adzuna seulement)
   if (job.salary_min && job.salary_max) {
