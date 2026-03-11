@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 
 interface JobCardProps {
@@ -54,7 +54,7 @@ export default function JobCard({ job }: JobCardProps) {
 
   const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
   const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
-  const jobUrl = job.apply_url || job.url || '#'
+  const externalApplyUrl = job.apply_url || job.url || '#'
 
   const locationLabel =
     typeof job.location === 'string'
@@ -62,10 +62,8 @@ export default function JobCard({ job }: JobCardProps) {
       : job.location?.display_name || 'United States'
 
   return (
-    
-     <a  href={jobUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/jobs/${job.id}`}
       className="group block bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300 hover:-translate-y-1"
     >
       {/* Header */}
@@ -84,18 +82,19 @@ export default function JobCard({ job }: JobCardProps) {
               fallback?.removeAttribute('hidden')
             }}
           />
-         {/* Fallback SVG si logo introuvable */}
-<div hidden className="w-5 h-5 md:w-6 md:h-6">
-  <svg
-    className="w-full h-full text-slate-400"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-  </svg>
-</div>
-</div>
+          {/* Fallback SVG si logo introuvable */}
+          <div hidden className="w-5 h-5 md:w-6 md:h-6">
+            <svg
+              className="w-full h-full text-slate-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+        </div>
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500 truncate">
@@ -145,6 +144,7 @@ export default function JobCard({ job }: JobCardProps) {
             </span>
           )}
         </div>
+
         <div className="flex items-center gap-2">
           {job.category?.label && (
             <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
@@ -154,8 +154,19 @@ export default function JobCard({ job }: JobCardProps) {
           <span className="text-xs text-slate-400">
             {formatDate(job.created)}
           </span>
+
+          {/* Bouton Apply externe — stopPropagation pour ne pas déclencher le Link */}
+          <a
+            href={externalApplyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center px-3 py-1 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
+          >
+            Apply →
+          </a>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }

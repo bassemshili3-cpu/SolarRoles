@@ -1,4 +1,5 @@
 // app/jobs/[id]/page.tsx
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
@@ -14,12 +15,15 @@ type JobDetail = {
   company?: string
   location?: string
   salary?: string
+  salary_min?: number
+  salary_max?: number
   description?: string
   created?: string
   contract_type?: string
   contract_time?: string
   source: 'lensa' | 'adzuna'
   externalApplyUrl?: string | null
+  apply_url?: string
 }
 
 async function getJobDetail(id: string): Promise<JobDetail | null> {
@@ -59,6 +63,8 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
         ...normalizeAdzuna(jobRaw),
         source: 'adzuna' as const,
         externalApplyUrl: jobRaw.redirect_url || null,
+        salary_min: jobRaw.salary_min,
+        salary_max: jobRaw.salary_max,
       }
     }
 
@@ -69,6 +75,93 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
   }
 }
 
+// ─── JobPosting Schema ────────────────────────────────────────────────────────
+function buildJobPostingSchema(job: JobDetail) {
+  const schema: Record<string, any> = {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: job.title,
+    description: job.description || '',
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: job.company || 'Unknown',
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: job.location || '',
+        addressCountry: 'US',
+      },
+    },
+    url: `https://www.oh-my-job.com/jobs/${job.id}`,
+    datePosted: job.created
+      ? new Date(job.created).toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0],
+  }
+
+  // validThrough : +60 jours après datePosted
+  const base = job.created ? new Date(job.created) : new Date()
+  base.setDate(base.getDate() + 60)
+  schema.validThrough = base.toISOString().split('T')[0]
+
+  // baseSalary — uniquement si dispo (Adzuna seulement)
+  if (job.salary_min && job.salary_max) {
+    schema.baseSalary = {
+      '@type': 'MonetaryAmount',
+      currency: 'USD',
+      value: {
+        '@type': 'QuantitativeValue',
+        minValue: job.salary_min,
+        maxValue: job.salary_max,
+        unitText: 'YEAR',
+      },
+    }
+  }
+
+  // Remote detection automatique sur le champ location
+  const locationLower = (job.location || '').toLowerCase()
+  if (locationLower.includes('remote')) {
+    schema.jobLocationType = 'TELECOMMUTE'
+    schema.applicantLocationRequirements = {
+      '@type': 'Country',
+      name: 'US',
+    }
+  }
+
+  return schema
+}
+
+// ─── Metadata dynamiques ─────────────────────────────────────────────────────
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await params
+  const job = await getJobDetail(id)
+
+  if (!job) return { title: 'Job Not Found | Oh My Job' }
+
+  const salaryStr =
+    job.salary_min && job.salary_max
+      ? ` – $${job.salary_min.toLocaleString()} to $${job.salary_max.toLocaleString()}`
+      : ''
+
+  return {
+    title: `${job.title} at ${job.company || 'Company'} | Oh My Job`,
+    description: `${job.title} position at ${job.company || 'a top employer'} in ${job.location || 'United States'}${salaryStr}. Apply now on Oh My Job.`,
+    alternates: {
+      canonical: `https://www.oh-my-job.com/jobs/${id}`,
+    },
+    openGraph: {
+      title: `${job.title} at ${job.company || 'Company'}`,
+      description: `${job.title} in ${job.location || 'United States'}${salaryStr}. Apply today.`,
+      type: 'website',
+      url: `https://www.oh-my-job.com/jobs/${id}`,
+    },
+  }
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default async function JobDetailPage({
   params,
 }: {
@@ -86,76 +179,86 @@ export default async function JobDetailPage({
 
   console.log('🎉 JOB AFFICHÉ AVEC SUCCÈS →', job.title)
 
+  const schema = buildJobPostingSchema(job)
+
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
-      <Link href="/jobs" className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8">
-        <ArrowLeft className="w-4 h-4" /> Back to jobs
-      </Link>
+    <>
+      {/* ✅ JobPosting Schema injecté pour Google Jobs */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
 
-      <div className="bg-card border rounded-2xl p-8 shadow-sm">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary rounded-full text-sm mb-6">
-          {job.source === 'adzuna' ? 'Via Adzuna' : 'Via Lensa'}
-        </div>
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <Link href="/jobs" className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8">
+          <ArrowLeft className="w-4 h-4" /> Back to jobs
+        </Link>
 
-        <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
-
-        {job.company && (
-          <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-            <Building2 className="w-4 h-4" />
-            <span className="text-lg">{job.company}</span>
+        <div className="bg-card border rounded-2xl p-8 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary rounded-full text-sm mb-6">
+            {job.source === 'adzuna' ? 'Via Adzuna' : 'Via Lensa'}
           </div>
-        )}
 
-        <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
-          {job.location && (
-            <div className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" /> {job.location}
+          <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+
+          {job.company && (
+            <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+              <Building2 className="w-4 h-4" />
+              <span className="text-lg">{job.company}</span>
             </div>
           )}
-          {job.created && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" /> {new Date(job.created).toLocaleDateString('fr-FR')}
+
+          <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
+            {job.location && (
+              <div className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" /> {job.location}
+              </div>
+            )}
+            {job.created && (
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" /> {new Date(job.created).toLocaleDateString('fr-FR')}
+              </div>
+            )}
+            <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
+              <DollarSign className="w-4 h-4" /> {job.salary || 'Salary not listed'}
             </div>
-          )}
-          <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
-            <DollarSign className="w-4 h-4" /> {job.salary || 'Salary not listed'}
+            {job.contract_type && (
+              <span className="bg-secondary px-3 py-1 rounded-full capitalize">{job.contract_type}</span>
+            )}
+            {job.contract_time && (
+              <span className="bg-secondary px-3 py-1 rounded-full capitalize">
+                {job.contract_time.replace('_', ' ')}
+              </span>
+            )}
           </div>
-          {job.contract_type && (
-            <span className="bg-secondary px-3 py-1 rounded-full capitalize">{job.contract_type}</span>
-          )}
-          {job.contract_time && (
-            <span className="bg-secondary px-3 py-1 rounded-full capitalize">
-              {job.contract_time.replace('_', ' ')}
-            </span>
-          )}
-        </div>
 
-        <hr className="my-8" />
+          <hr className="my-8" />
 
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Job Description</h2>
-          <div
-            className="prose max-w-none text-muted-foreground leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: job.description || '' }}
-          />
-        </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Job Description</h2>
+            <div
+              className="prose max-w-none text-muted-foreground leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: job.description || '' }}
+            />
+          </div>
 
-        <div className="mt-10">
-          {job.source === 'adzuna' && job.externalApplyUrl ? (
-            <Button asChild size="lg" className="w-full md:w-auto">
-              <a href={job.externalApplyUrl} target="_blank" rel="noopener noreferrer">
-                Apply now on Adzuna <ExternalLink className="w-4 h-4 ml-2" />
-              </a>
-            </Button>
-          ) : (
-            <Button asChild size="lg" className="w-full md:w-auto bg-green-600 hover:bg-green-700">
-              <a href="#" onClick={(e) => { e.preventDefault(); alert('Postuler via Lensa (à implémenter)') }}>
-                Apply on Lensa
-              </a>
-            </Button>
-          )}
+          <div className="mt-10">
+            {job.source === 'adzuna' && job.externalApplyUrl ? (
+              <Button asChild size="lg" className="w-full md:w-auto">
+                <a href={job.externalApplyUrl} target="_blank" rel="noopener noreferrer">
+                  Apply now on Adzuna <ExternalLink className="w-4 h-4 ml-2" />
+                </a>
+              </Button>
+            ) : (
+              <Button asChild size="lg" className="w-full md:w-auto bg-green-600 hover:bg-green-700">
+                <a href={job.apply_url || '#'} target="_blank" rel="noopener noreferrer">
+                  Apply on Lensa <ExternalLink className="w-4 h-4 ml-2" />
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
