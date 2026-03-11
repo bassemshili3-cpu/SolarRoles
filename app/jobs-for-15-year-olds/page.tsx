@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, TrendingUp } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgent Jobs for 15 Year Olds Hiring Now | Earn Up to $15/Hour',
@@ -36,6 +36,54 @@ const jsonLd = {
     name: 'Available Jobs for 15 Year Olds',
     description: 'Current job listings suitable for 15 year old workers',
   },
+}
+
+// ✅ FAQPage schema — active les rich snippets dépliables dans Google
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Can a 15 year old legally work in the United States?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, according to the U.S. Department of Labor, 15 year olds may be employed outside school hours in non hazardous occupations under the Fair Labor Standards Act (FLSA). The law permits teens aged 14 and 15 to work in retail, food service, and various other positions with specific hour restrictions designed to protect their education and well being.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How many hours can a 15 year old work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'According to the official website of the United States Government, during school weeks, 15 year olds may work up to 23 hours per week, with no more than 3 hours on school days. During non school periods such as summer vacation, they can work up to 8 hours per day and 40 hours per week.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What jobs can a 15 year old do?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The U.S. Department of Labor allows 15 year olds to work in offices, retail stores, restaurants (not involving open flame cooking), grocery stores, movie theaters, libraries, and camp counseling. They cannot work in manufacturing, mining, construction, or any hazardous occupations as defined by the Fair Labor Standards Act.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do 15 year olds need a work permit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Work permit requirements vary significantly by state. According to the U.S. Department of Labor, while federal law does not mandate work permits, individual states have the authority to establish their own requirements. Many states including California, New York, and Massachusetts require work permits for minors under 18.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the minimum wage for a 15 year old?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Under federal law, employers must pay at least $7.25 per hour, which is the federal minimum wage. However, according to the official wage and hour division, many states have established higher minimum wages that supersede federal law. Additionally, employers may pay $4.25 per hour during the first 90 consecutive calendar days of employment for workers under 20.',
+      },
+    },
+  ],
 }
 
 const jobOpportunities = [
@@ -107,12 +155,11 @@ const applicationTips = [
 export default async function JobsFor15YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
+  const { count } = await getCachedJobCount(
     params.what || 'Jobs for 15 year olds',
     params.where || '',
     params.salary_min
   )
-  
 
   return (
     <>
@@ -120,13 +167,17 @@ export default async function JobsFor15YearOldsPage({ searchParams }: any) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* ✅ FAQPage schema — active les rich snippets dépliables dans Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             {count > 0 ? count.toLocaleString() : 'Hundreds of'} Jobs for 15 Year Olds Available Across the United States
           </h1>
-        
           {count > 0 && (
             <p className="mt-3 text-sm text-gray-500">
               <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
@@ -139,10 +190,7 @@ export default async function JobsFor15YearOldsPage({ searchParams }: any) {
             <JobFilters defaultWhat="jobs for 15 year olds" />
           </aside>
           <div className="flex-1">
-
-             {/* Client wrapper isolé — pas de use client sur la page */}
-                        <AIJobMatcherWrapper />
-            
+            <AIJobMatcherWrapper />
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'jobs for 15 year olds'}

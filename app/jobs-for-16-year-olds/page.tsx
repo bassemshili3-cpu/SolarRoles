@@ -4,10 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, CheckCircle, ShieldCheck, BookOpen, Users, TrendingUp, FileText, AlertTriangle } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
-
-
-
+import { getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Jobs for 16 Year Olds Hiring Immediately | Start Working This Week',
@@ -39,6 +36,54 @@ const jsonLd = {
     name: 'Available Jobs for 16 Year Olds',
     description: 'Current job listings suitable for 16 year old workers across the United States',
   },
+}
+
+// ✅ FAQPage schema — active les rich snippets dépliables dans Google
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Can a 16 year old legally work in the United States?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. According to the U.S. Department of Labor, 16 and 17 year olds may work in any non hazardous occupation for unlimited hours under federal law. Unlike younger teens, workers aged 16 and above are not subject to federal restrictions on daily or weekly working hours under the Fair Labor Standards Act (FLSA). However, individual states may set stricter rules, so always check your state labor department for local requirements.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does a 16 year old need a work permit to get a job?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Work permit requirements vary by state. According to the U.S. Department of Labor, there is no federal requirement for a work permit for 16 year olds, but many states do require an employment certificate or age verification document before a minor can begin working. Contact your school guidance counselor or your state labor department website to find out what is required in your area.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the minimum wage for a 16 year old?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Under the Fair Labor Standards Act, most 16 year olds are entitled to the federal minimum wage of $7.25 per hour. However, the U.S. Department of Labor does allow a youth minimum wage of $4.25 per hour for the first 90 consecutive calendar days of employment with a new employer. Many states have set their own higher minimum wages that apply to all workers including teens. Check your state labor department for the current rate where you live.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What jobs are 16 year olds not allowed to do?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Fair Labor Standards Act prohibits workers under 18 from employment in occupations declared hazardous by the Secretary of Labor. According to Child Labor Bulletin 101 published by the U.S. Department of Labor, prohibited occupations include operating many power driven machines, roofing work, excavation, working with explosives, logging, and driving motor vehicles as a primary job duty. A complete list of hazardous occupations is available at dol.gov.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can a 16 year old work full time during summer?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Under federal law, yes. The Fair Labor Standards Act does not restrict the number of hours 16 and 17 year olds may work, including during summer. Many teens choose to work full time hours during school vacation periods to save money. State laws may still apply, so check with your state labor department for any local restrictions on summer hours for minors.',
+      },
+    },
+  ],
 }
 
 const jobSectors = [
@@ -139,12 +184,11 @@ const tips = [
 export default async function JobsFor16YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
+  const { count } = await getCachedJobCount(
     params.what || 'youth employment',
     params.where || '',
     params.salary_min
   )
-  
 
   return (
     <>
@@ -152,15 +196,19 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* ✅ FAQPage schema — active les rich snippets dépliables dans Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Jobs for 16 Year Olds Available Across the United States
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl"> 
+          <p className="text-lg text-gray-600 max-w-3xl">
           </p>
-        
         </header>
 
         {/* Job Board Section */}
@@ -171,13 +219,12 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
           <div className="flex-1">
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
               </p>
             )}
 
-             {/* Client wrapper isolé — pas de use client sur la page */}
-                        <AIJobMatcherWrapper />
-            
+            <AIJobMatcherWrapper />
+
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'youth employment 16 year olds'}

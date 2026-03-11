@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgent Jobs for 14 Year Olds Hiring Now | Start Earning Today',
@@ -36,6 +36,54 @@ const jsonLd = {
     name: 'Available Jobs for 14 Year Olds',
     description: 'Current job listings suitable for 14 year old workers',
   },
+}
+
+// ✅ FAQPage schema — génère les questions dépliables dans Google
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Can a 14 year old legally work in the United States?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, according to the U.S. Department of Labor, 14 and 15 year olds may be employed outside school hours in certain occupations under specific conditions outlined in the Fair Labor Standards Act (FLSA). Federal law permits employment in retail, food service, and gasoline service establishments, as well as various other non hazardous jobs.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What jobs are 14 year olds NOT allowed to do?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Fair Labor Standards Act prohibits 14 year olds from working in manufacturing, mining, or any occupation declared hazardous by the Secretary of Labor. This includes operating power driven machinery, working in construction, and jobs involving exposure to dangerous substances. A complete list is available on the official DOL website.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do 14 year olds need a work permit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Work permit requirements vary by state. Most states require minors under 16 to obtain an employment certificate or work permit before starting a job. Contact your school counselor or local Department of Labor office to learn about your state specific requirements.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the minimum wage for a 14 year old?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Under federal law, 14 year olds must be paid at least the federal minimum wage, which is $7.25 per hour as of 2024. However, many states have higher minimum wages that apply. Some employers may pay a youth minimum wage of $4.25 per hour during the first 90 consecutive calendar days of employment.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can 14 year olds work during summer vacation?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, 14 year olds can work during summer vacation with extended hours. According to the Department of Labor, during non school periods, teens aged 14 and 15 may work up to 8 hours per day and 40 hours per week. Work hours can also extend until 9:00 PM from June 1 through Labor Day.',
+      },
+    },
+  ],
 }
 
 const allowedJobs = [
@@ -100,27 +148,31 @@ const tips = [
 export default async function JobsFor14YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
+  const { count } = await getCachedJobCount(
     params.what || 'Jobs for 14 year olds',
     params.where || '',
     params.salary_min
   )
-  
 
   return (
     <>
+      {/* WebPage schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
+      {/* ✅ FAQPage schema — active les rich snippets dépliables dans Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Simple Header */}
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Jobs for 14 Year Olds Available Now Across the United States
           </h1>
-       
         </header>
 
         {/* Job Board Section */}
@@ -129,18 +181,14 @@ export default async function JobsFor14YearOldsPage({ searchParams }: any) {
             <JobFilters defaultWhat="jobs for 14 year olds" />
           </aside>
           <div className="flex-1">
-
-            {/* ✅ Count ici, à droite, au-dessus de la map */}
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
               </p>
             )}
 
-             {/* Client wrapper isolé — pas de use client sur la page */}
-                        <AIJobMatcherWrapper />
+            <AIJobMatcherWrapper />
 
-            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'jobs for 14 year olds'}
