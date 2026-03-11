@@ -14,6 +14,7 @@ export interface UnifiedJob {
   salary_max?: number
   created?: string
   revenue_per_click?: number
+  addressRegion?: string // ← extrait depuis location.area[1] (Adzuna uniquement)
 }
 
 export interface UnifiedSearchResult {
@@ -41,6 +42,11 @@ export function normalizeLensa(job: LensaJobAdvert): UnifiedJob {
 }
 
 export function normalizeAdzuna(job: AdzunaJob): UnifiedJob {
+  // area = ["US", "Maryland", "Baltimore", "Downtown"]
+  // On extrait l'état (index 1) pour le schema Google Jobs addressRegion
+  const area = job.location?.area || []
+  const addressRegion = area[1] || ''
+
   return {
     id: `adzuna-${job.id}`,
     title: job.title,
@@ -53,6 +59,7 @@ export function normalizeAdzuna(job: AdzunaJob): UnifiedJob {
     salary_min: job.salary_min,
     salary_max: job.salary_max,
     created: job.created,
+    addressRegion, // ← ex: "Maryland", "California", "New York"
   }
 }
 

@@ -14,6 +14,7 @@ type JobDetail = {
   title: string
   company?: string
   location?: string
+  addressRegion?: string  // ← ajouté
   salary?: string
   salary_min?: number
   salary_max?: number
@@ -59,12 +60,15 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
 
       console.log('🎉 Job Adzuna trouvé ! Titre :', jobRaw.title)
 
+      const normalized = normalizeAdzuna(jobRaw)
+
       return {
-        ...normalizeAdzuna(jobRaw),
+        ...normalized,
         source: 'adzuna' as const,
         externalApplyUrl: jobRaw.redirect_url || null,
         salary_min: jobRaw.salary_min,
         salary_max: jobRaw.salary_max,
+        addressRegion: normalized.addressRegion, // ← récupéré depuis normalizeAdzuna
       }
     }
 
@@ -75,13 +79,18 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
   }
 }
 
+// ─── Strip HTML pour la description dans le schema ───────────────────────────
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
 // ─── JobPosting Schema ────────────────────────────────────────────────────────
 function buildJobPostingSchema(job: JobDetail) {
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: job.title,
-    description: job.description || '',
+    description: stripHtml(job.description || ''), // ← texte brut, sans HTML
     hiringOrganization: {
       '@type': 'Organization',
       name: job.company || 'Unknown',
@@ -91,6 +100,7 @@ function buildJobPostingSchema(job: JobDetail) {
       address: {
         '@type': 'PostalAddress',
         addressLocality: job.location || '',
+        addressRegion: job.addressRegion || '',   // ← ex: "Maryland", "California"
         addressCountry: 'US',
       },
     },
@@ -104,6 +114,19 @@ function buildJobPostingSchema(job: JobDetail) {
   const base = job.created ? new Date(job.created) : new Date()
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
+
+  // employmentType — mappé depuis contract_time
+  if (job.contract_time) {
+    const typeMap: Record<string, string> = {
+      full_time: 'FULL_TIME',
+      part_time: 'PART_TIME',
+      contract: 'CONTRACTOR',
+      temporary: 'TEMPORARY',
+      intern: 'INTERN',
+    }
+    const mapped = typeMap[job.contract_time.toLowerCase()]
+    if (mapped) schema.employmentType = mapped
+  }
 
   // baseSalary — uniquement si dispo (Adzuna seulement)
   if (job.salary_min && job.salary_max) {
@@ -195,7 +218,6 @@ export default async function JobDetailPage({
         </Link>
 
         <div className="bg-card border rounded-2xl p-8 shadow-sm">
-          
 
           <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
 
