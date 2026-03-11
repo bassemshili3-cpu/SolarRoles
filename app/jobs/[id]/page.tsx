@@ -62,14 +62,15 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
 
       const normalized = normalizeAdzuna(jobRaw)
 
-      return {
-        ...normalized,
-        source: 'adzuna' as const,
-        externalApplyUrl: jobRaw.redirect_url || null,
-        salary_min: jobRaw.salary_min,
-        salary_max: jobRaw.salary_max,
-        addressRegion: normalized.addressRegion, // ← récupéré depuis normalizeAdzuna
-      }
+     return {
+  ...normalized,
+  source: 'adzuna' as const,
+  externalApplyUrl: jobRaw.redirect_url || null,
+  salary_min: jobRaw.salary_min,
+  salary_max: jobRaw.salary_max,
+  addressRegion: normalized.addressRegion,
+  contract_type: jobRaw.contract_type,  // ← ajouter cette ligne
+}
     }
 
     return null
