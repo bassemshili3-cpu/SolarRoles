@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Users, Award, MapPin, Phone, Star } from 'lucide-react'
-import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Immediate Hire: Front Desk Jobs Near You | Apply Today',
@@ -153,7 +154,8 @@ export default async function FrontDeskJobsPage({ searchParams }: any) {
 
  const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'front desk jobs', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'front desk jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'front desk jobs', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

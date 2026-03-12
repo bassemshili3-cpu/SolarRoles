@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, Clock, Users, Target, Zap, Award, MapPin, CheckCircle, Smartphone, Package, BookOpen } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent: DoorDash Careers & Jobs Hiring Now | 1000+ Positions Available',
@@ -124,7 +125,8 @@ export default async function DoorDashCareersPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'doordash careers', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'doordash careers', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'doordash careers', where: params.where || '', results_per_page: 30, page: 1 })
+    .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

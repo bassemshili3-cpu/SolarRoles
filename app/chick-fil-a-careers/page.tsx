@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Heart, DollarSign, GraduationCap, CheckCircle, Users, Award, Coffee, Calendar, Star, HelpCircle } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent: Chick-fil-A Careers Hiring Now | Apply Today',
@@ -115,7 +116,8 @@ export default async function ChickFilACareersPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'chick-fil-a', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'chick-fil-a', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'chick-fil-a', where: params.where || '', results_per_page: 30, page: 1 })
+  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

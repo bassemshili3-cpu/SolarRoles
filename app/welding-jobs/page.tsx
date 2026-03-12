@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Award, MapPin, AlertTriangle, Flame, Wrench } from 'lucide-react'
-import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgently Hiring: Welding Jobs Near You | Apply Today',
@@ -173,7 +174,8 @@ export default async function WeldingJobsPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'welding jobs', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'welding jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'welding jobs', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

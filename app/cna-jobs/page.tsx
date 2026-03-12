@@ -15,7 +15,8 @@ import {
   TrendingUp,
   AlertCircle,
 } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'CNA Jobs Hiring Immediately | Certified Nursing Assistant Positions Open Now',
@@ -165,7 +166,8 @@ export default async function CnaJobsPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'certified nursing assistant', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'certified nursing assistant', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'certified nursing assistant', where: params.where || '', results_per_page: 30, page: 1 })
+  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
   
 

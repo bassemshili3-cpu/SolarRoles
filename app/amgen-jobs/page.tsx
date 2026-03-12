@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent Amgen Jobs Needed Right Now | Apply Today',
@@ -106,7 +107,8 @@ export default async function AmgenJobsPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'Amgen jobs', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'Amgen jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'Amgen jobs', where: params.where || '', results_per_page: 30, page: 1 })
+  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
   
 

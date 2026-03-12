@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, FileText, CheckCircle, Award, Users, Shield } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent EKG Technician Jobs Hiring Now | Start Earning $67k+ Today',
@@ -118,6 +119,7 @@ const applicationTips = [
   const [{ count }, initialData] = await Promise.all([
     getCachedJobCount(params.what || 'ekg technician jobs', params.where || '', salaryMinNum),
     searchJobs({ what: params.what || 'ekg technician jobs', where: params.where || '', results_per_page: 30, page: 1 })
+      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
   ])
 
   return (

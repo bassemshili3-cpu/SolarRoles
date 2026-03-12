@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, Heart, Award, TrendingUp, Building2, GraduationCap, Microscope } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent: Assisted Reproductive Technology Jobs Available Now | Apply Today',
@@ -121,7 +122,8 @@ export default async function AssistedReproductiveTechnologyJobsPage({ searchPar
 
  const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'Assisted Reproductive Technology', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'Assisted Reproductive Technology', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'Assisted Reproductive Technology', where: params.where || '', results_per_page: 30, page: 1 })
+  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

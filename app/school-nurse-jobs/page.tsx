@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, Heart, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Stethoscope, HelpCircle, TrendingUp, Calendar, BookOpen, FileText } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent Demand for School Nurse Professionals | Apply Now',
@@ -140,7 +141,8 @@ export default async function SchoolNurseJobsPage({ searchParams }: any) {
 
  const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'school nurse', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'school nurse', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'school nurse', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

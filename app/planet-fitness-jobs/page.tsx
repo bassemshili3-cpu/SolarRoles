@@ -17,7 +17,8 @@ import {
   Users,
   MapPin,
 } from 'lucide-react'
-import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Now Hiring: Planet Fitness Jobs Near You | Apply Today',
@@ -218,7 +219,8 @@ export default async function PlanetFitnessJobsPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'planet fitness', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'planet fitness', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'planet fitness', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, CheckCircle, ShieldCheck, BookOpen, Users, TrendingUp, FileText, AlertTriangle } from 'lucide-react'
-import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Jobs for 16 Year Olds Hiring Immediately | Start Working This Week',
@@ -186,7 +187,8 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'jobs for 16 year olds', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'jobs for 16 year olds', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'jobs for 16 year olds', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

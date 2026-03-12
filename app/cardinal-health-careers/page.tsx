@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Heart, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Truck, HelpCircle, TrendingUp, Shield, Package, Pill } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent: Cardinal Health Careers Hiring Now | Apply Today',
@@ -130,7 +131,8 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
 
  const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'cardinal health', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'cardinal health', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'cardinal health', where: params.where || '', results_per_page: 30, page: 1 })
+  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

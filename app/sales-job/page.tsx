@@ -15,7 +15,8 @@ import {
   GraduationCap,
   BarChart2,
 } from 'lucide-react'
-import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Sales Jobs Needed ASAP | Immediate Openings Across the US',
@@ -233,7 +234,8 @@ export default async function SalesJobPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'sales', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'sales', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'sales', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
 
   return (

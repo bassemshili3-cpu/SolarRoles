@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Users, DollarSign, MapPin, CheckCircle, BookOpen, Award, TrendingUp, FileText, Briefcase, Shield, Laptop, Globe, Clock, GraduationCap } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Now Hiring Remote HR Jobs – Urgent Need | Apply Today',
@@ -124,7 +125,8 @@ export default async function RemoteHRJobsPage({ searchParams }: any) {
 
 const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'remote hr', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'remote hr', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'remote hr', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
   return (
     <>

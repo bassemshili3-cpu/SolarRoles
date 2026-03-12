@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, Award } from 'lucide-react'
-import { searchJobs, getCachedJobCount } from '@/lib/adzuna'
+import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+import { normalizeAdzuna } from '@/lib/jobs'
 
 export const metadata: Metadata = {
   title: 'Urgent UCSD Jobs Hiring Now | University of California San Diego Careers',
@@ -137,7 +138,8 @@ export default async function UCSDJobsPage({ searchParams }: any) {
 
  const [{ count }, initialData] = await Promise.all([
   getCachedJobCount(params.what || 'University of California, San Diego', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'University of California, San Diego', where: params.where || '', results_per_page: 30, page: 1 }),
+  searchJobs({ what: params.what || 'University of California, San Diego', where: params.where || '', results_per_page: 30, page: 1 })
+   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
 ])
   
 
