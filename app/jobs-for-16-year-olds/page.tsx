@@ -185,7 +185,7 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
   const { count } = await getCachedJobCount(
-    params.what || 'youth employment 16 year olds',
+    params.what || 'Jobs for 16 year olds',
     params.where || '',
     params.salary_min
   )
@@ -214,7 +214,7 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
         {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters defaultWhat="youth employment 16 year olds" />
+            <JobFilters defaultWhat="Jobs for 16 year olds" />
           </aside>
           <div className="flex-1">
             {count > 0 && (
@@ -227,7 +227,7 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
 
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
-                what={params.what || 'youth employment 16 year olds'}
+                what={params.what || 'Jobs for 16 year olds'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
               />
