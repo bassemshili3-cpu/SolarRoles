@@ -6,6 +6,9 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, CheckCircle, ShieldCheck, BookOpen, Users, TrendingUp, FileText, AlertTriangle } from 'lucide-react'
 import { getCachedJobCount } from '@/lib/adzuna'
 
+// ─── Keyword utilisé partout de manière cohérente ────────────────────────────
+const DEFAULT_WHAT = 'part time jobs'
+
 export const metadata: Metadata = {
   title: 'Jobs for 16 Year Olds Hiring Immediately | Start Working This Week',
   description: 'Hundreds of jobs for 16 year olds available right now near you. Retail, food service, and outdoor roles with flexible hours around school. No experience needed for most positions. Apply today before spots fill up.',
@@ -38,7 +41,6 @@ const jsonLd = {
   },
 }
 
-// ✅ FAQPage schema — active les rich snippets dépliables dans Google
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -185,7 +187,7 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
   const { count } = await getCachedJobCount(
-    params.what || 'youth employment',
+    params.what || DEFAULT_WHAT,
     params.where || '',
     params.salary_min
   )
@@ -196,7 +198,6 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* ✅ FAQPage schema — active les rich snippets dépliables dans Google */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -208,13 +209,14 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
             Jobs for 16 Year Olds Available Across the United States
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl">
+            Browse hundreds of part time and entry level openings suitable for 16 year olds. Flexible hours, no experience required for most roles, and positions available nationwide.
           </p>
         </header>
 
         {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters defaultWhat="youth employment 16 year olds" />
+            <JobFilters defaultWhat={DEFAULT_WHAT} />
           </aside>
           <div className="flex-1">
             {count > 0 && (
@@ -227,7 +229,7 @@ export default async function JobsFor16YearOldsPage({ searchParams }: any) {
 
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
-                what={params.what || 'youth employment 16 year olds'}
+                what={params.what || DEFAULT_WHAT}
                 where={params.where || ''}
                 salary_min={params.salary_min}
               />
