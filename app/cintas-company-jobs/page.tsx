@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Users, Award, MapPin, FileText } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Hiring Immediately: Cintas Company Jobs | Apply Today',
@@ -149,12 +149,10 @@ const applicationTips = [
 export default async function CintasCompanyJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'cintas company',
-    params.where || '',
-    params.salary_min
-  )
-
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'cintas company', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'cintas company', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   return (
     <>
       <script
@@ -190,6 +188,7 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
                 what={params.what || 'cintas company'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

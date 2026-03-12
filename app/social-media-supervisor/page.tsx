@@ -15,7 +15,7 @@ import {
   Star,
   GraduationCap,
 } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Social Media Supervisor Positions Needed ASAP | Apply Today',
@@ -235,11 +235,10 @@ const faqs = [
 export default async function SocialMediaSupervisorPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'social media supervisor',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'social media supervisor', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'social media supervisor', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -279,6 +278,7 @@ export default async function SocialMediaSupervisorPage({ searchParams }: any) {
                 what={params.what || 'social media supervisor'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

@@ -122,11 +122,10 @@ const applicationTips = [
 export default async function DoorDashCareersPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'doordash careers',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'doordash careers', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'doordash careers', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -162,6 +161,7 @@ export default async function DoorDashCareersPage({ searchParams }: any) {
                 what={params.what || 'doordash careers'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

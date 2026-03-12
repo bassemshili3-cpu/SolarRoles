@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users, TrendingUp } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgent Executive Assistant Jobs Needed Right Now | Apply Today',
@@ -116,12 +116,10 @@ export default async function ExecutiveAssistantJobsPage({ searchParams }: PageP
     ? parseInt(params.salary_min, 10) 
     : undefined
 
-  const { count } = await getCachedJobCount(
-    params.what || 'executive assistant',
-    params.where || '',
-    salaryMinNumber   // ← maintenant number | undefined
-  )
-
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'executive assistant', params.where || '', salaryMinNumber),
+  searchJobs({ what: params.what || 'executive assistant', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   return (
     <>
       <script
@@ -159,6 +157,7 @@ export default async function ExecutiveAssistantJobsPage({ searchParams }: PageP
                 what={params.what || 'executive assistant'}
                 where={params.where || ''}
                 salary_min={params.salary_min}   // ← reste en string (comme attendu par le composant)
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

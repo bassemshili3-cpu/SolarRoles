@@ -15,7 +15,7 @@ import {
   Building2,
   FileText,
 } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgent: Chase Bank Jobs Available Now | Immediate Openings 2025',
@@ -227,11 +227,10 @@ const faqs = [
 export default async function ChaseBankJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'chase bank',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'chase bank', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'chase bank', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -271,6 +270,7 @@ export default async function ChaseBankJobsPage({ searchParams }: any) {
                 what={params.what || 'chase bank'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

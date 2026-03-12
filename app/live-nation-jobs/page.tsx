@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, FileText, Shield, CheckCircle } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgent Live Nation Jobs Needed Right Now | Apply Today',
@@ -119,11 +119,10 @@ export default async function LiveNationJobsPage({
     salaryMinNum = Number.isNaN(parsed) ? undefined : parsed
   }
 
-  const { count } = await getCachedJobCount(
-    params.what || 'live nation',
-    params.where || '',
-    salaryMinNum
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'live nation', params.where || '', salaryMinNum),
+  searchJobs({ what: params.what || 'live nation', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -161,7 +160,8 @@ export default async function LiveNationJobsPage({
               <InfiniteJobList
                 what={params.what || 'live nation'}
                 where={params.where || ''}
-                salary_min={params.salary_min}   
+                salary_min={params.salary_min}  
+                initialData={initialData} // ← ajouter 
               />
             </Suspense>
           </div>

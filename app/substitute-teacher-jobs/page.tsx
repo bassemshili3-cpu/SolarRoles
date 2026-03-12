@@ -104,11 +104,10 @@ const tips = [
 export default async function SubstituteTeacherJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
-    params.what || 'substitute teacher',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'substitute teacher', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'substitute teacher', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   
 
   return (
@@ -146,6 +145,7 @@ export default async function SubstituteTeacherJobsPage({ searchParams }: any) {
                 what={params.what || 'substitute teacher'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

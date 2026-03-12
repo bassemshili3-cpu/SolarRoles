@@ -115,11 +115,10 @@ const applicationTips = [
     salaryMinNum = Number.isNaN(parsed) ? undefined : parsed
   }
 
-  const { count } = await getCachedJobCount(
-    params.what || 'burger-king-corporation-jobs',
-    params.where || '',
-    salaryMinNum
-  )
+  const [{ count }, initialData] = await Promise.all([
+    getCachedJobCount(params.what || 'burger-king-corporation-jobs', params.where || '', salaryMinNum),
+    searchJobs({ what: params.what || 'burger-king-corporation-jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+  ])
   
 
   return (
@@ -156,6 +155,7 @@ const applicationTips = [
                 what={params.what || 'burger-king-corporation-jobs'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

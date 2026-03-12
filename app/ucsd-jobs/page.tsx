@@ -135,11 +135,10 @@ const tips = [
 export default async function UCSDJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
-    params.what || 'university of california san diego',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'University of California, San Diego', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'University of California, San Diego', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   
 
   return (
@@ -177,6 +176,7 @@ export default async function UCSDJobsPage({ searchParams }: any) {
                 what={params.what || 'University of California, San Diego'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

@@ -121,11 +121,10 @@ const faqs = [
 export default async function SurgicalTechJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'surgical tech',
-    params.where || '',
-    params.salary_min
-  )
+  const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'surgical tech', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'surgical tech', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -162,6 +161,7 @@ export default async function SurgicalTechJobsPage({ searchParams }: any) {
                 what={params.what || 'surgical tech'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

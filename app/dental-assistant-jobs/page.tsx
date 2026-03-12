@@ -163,11 +163,10 @@ const tips = [
 export default async function DentalAssistantJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-   params.what || 'Dental assistant',
-   params.where || '',
-   params.salary_min
- )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'dental assistant', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'dental assistant', where: params.where || '', results_per_page: 30, page: 1 }),
+])
  
 
   return (
@@ -204,6 +203,7 @@ export default async function DentalAssistantJobsPage({ searchParams }: any) {
                 what={params.what || 'dental assistant'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

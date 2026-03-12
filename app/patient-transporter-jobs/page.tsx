@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, AlertTriangle } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs, } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Patient Transporter Jobs Needed ASAP | Hospitals Hiring Now',
@@ -171,11 +171,10 @@ const applicationTips = [
 export default async function PatientTransporterJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'patient transporter',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'patient transporter', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'patient transporter', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -211,6 +210,7 @@ export default async function PatientTransporterJobsPage({ searchParams }: any) 
                 what={params.what || 'patient transporter'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

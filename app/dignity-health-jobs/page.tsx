@@ -159,12 +159,10 @@ const tips = [
 export default async function DignityHealthJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
-    params.what || 'Dignity Health',
-    params.where || '',
-    params.salary_min
-  )
-  
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'dignity health', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'dignity health', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -200,6 +198,7 @@ export default async function DignityHealthJobsPage({ searchParams }: any) {
                 what={params.what || 'dignity health'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, Zap } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Now Hiring: National Grid Careers | Urgent Need for Energy Professionals',
@@ -186,11 +186,10 @@ const applicationTips = [
 export default async function NationalGridCareersPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'national grid',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'national Grid', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'national Grid', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -226,6 +225,7 @@ export default async function NationalGridCareersPage({ searchParams }: any) {
                 what={params.what || 'national grid'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

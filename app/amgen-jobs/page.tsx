@@ -104,11 +104,10 @@ const tips = [
 export default async function AmgenJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const { count } = await getCachedJobCount(
-    params.what || 'Amgen jobs',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'Amgen jobs', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'Amgen jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   
 
   return (
@@ -146,6 +145,7 @@ export default async function AmgenJobsPage({ searchParams }: any) {
                 what={params.what || 'amgen jobs'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

@@ -170,11 +170,13 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
   const params = await searchParams
   
 
- const { count } = await getCachedJobCount(
-  params.what || 'Allied Universal',
-  params.where || '',
-  params.salary_min
-)
+// Après
+
+
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'Allied Universal', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'Allied Universal', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
 
   return (
@@ -194,7 +196,7 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
         {/* Job Board */}
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters defaultWhat="allied universal" />
+            <JobFilters defaultWhat="Allied Universal" />
           </aside>
           <div className="flex-1">
             {count > 0 && (
@@ -208,9 +210,10 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
-                what={params.what || 'allied universal'}
+                what={params.what || 'Allied Universal'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
 

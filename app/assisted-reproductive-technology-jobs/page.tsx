@@ -119,11 +119,10 @@ const tips = [
 export default async function AssistedReproductiveTechnologyJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'assisted reproductive technology',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'Assisted Reproductive Technology', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'Assisted Reproductive Technology', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -160,6 +159,7 @@ export default async function AssistedReproductiveTechnologyJobsPage({ searchPar
                 what={params.what || 'assisted reproductive technology'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

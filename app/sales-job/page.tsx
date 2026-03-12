@@ -15,7 +15,7 @@ import {
   GraduationCap,
   BarChart2,
 } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Sales Jobs Needed ASAP | Immediate Openings Across the US',
@@ -231,11 +231,10 @@ const faqs = [
 export default async function SalesJobPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'sales',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'sales', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'sales', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -275,6 +274,7 @@ export default async function SalesJobPage({ searchParams }: any) {
                 what={params.what || 'sales'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

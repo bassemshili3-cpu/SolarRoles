@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Evening Jobs Hiring Now | Immediate Openings for Night Shift Workers',
@@ -161,11 +161,10 @@ const applicationTips = [
 export default async function EveningJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'evening jobs',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'evening jobs', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'evening jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -201,6 +200,7 @@ export default async function EveningJobsPage({ searchParams }: any) {
                 what={params.what || 'evening jobs'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

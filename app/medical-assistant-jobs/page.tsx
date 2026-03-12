@@ -17,7 +17,7 @@ import {
   Stethoscope,
   FileText,
 } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgently Hiring: Medical Assistant Jobs Near You | Apply Today',
@@ -200,12 +200,10 @@ const tips = [
 export default async function MedicalAssistantJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'medical assistant',
-    params.where || '',
-    params.salary_min
-  )
-
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'medical assistant', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'medical assistant', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   return (
     <>
       <script
@@ -240,6 +238,7 @@ export default async function MedicalAssistantJobsPage({ searchParams }: any) {
                 what={params.what || 'medical assistant'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

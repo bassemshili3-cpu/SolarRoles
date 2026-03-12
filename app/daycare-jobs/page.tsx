@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Users, Award, FileText, Heart, BookOpen } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgently Hiring: Daycare Jobs Near You | Apply Today',
@@ -154,11 +154,10 @@ const faqs = [
 export default async function DaycareJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'daycare jobs',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'daycare jobs', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'daycare jobs', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -195,6 +194,7 @@ export default async function DaycareJobsPage({ searchParams }: any) {
                 what={params.what || 'daycare jobs'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

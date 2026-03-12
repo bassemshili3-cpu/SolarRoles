@@ -412,5 +412,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+     {
+      url: 'https://www.oh-my-job.com/chase-bank-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/dog-walking-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/emt-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/sales-job',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/social-media-supervisor',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+     {
+      url: 'https://www.oh-my-job.com/weekend-jobs',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
   ]
 }

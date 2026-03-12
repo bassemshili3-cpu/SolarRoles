@@ -15,7 +15,7 @@ import {
   TrendingUp,
   AlertTriangle,
 } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Dog Walking Jobs Hiring Now | Immediate Openings Near You',
@@ -224,11 +224,10 @@ const faqs = [
 export default async function DogWalkingJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'dog walking',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'dog walking', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'dog walking', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -268,6 +267,7 @@ export default async function DogWalkingJobsPage({ searchParams }: any) {
                 what={params.what || 'dog walking'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

@@ -142,11 +142,10 @@ const careerGrowth = [
 export default async function SonicCareersPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'sonic',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'sonic', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'sonic', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -182,6 +181,7 @@ export default async function SonicCareersPage({ searchParams }: any) {
                 what={params.what || 'sonic'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

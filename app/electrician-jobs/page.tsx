@@ -17,7 +17,7 @@ import {
   Zap,
   HardHat,
 } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Immediate Hire: Electrician Jobs Near You | Apply Today',
@@ -201,11 +201,10 @@ const tips = [
 export default async function ElectricianJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'electrician',
-    params.where || '',
-    params.salary_min
-  )
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'electrician', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'electrician', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -241,6 +240,7 @@ export default async function ElectricianJobsPage({ searchParams }: any) {
                 what={params.what || 'electrician'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

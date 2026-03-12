@@ -106,11 +106,10 @@ const topStates = [
 export default async function ArtTeacherJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'art teacher',
-    params.where || '',
-    params.salary_min
-  )
+ const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'Art Teacher', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'Art Teacher', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
   return (
     <>
@@ -147,6 +146,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
                 what={params.what || 'art teacher'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

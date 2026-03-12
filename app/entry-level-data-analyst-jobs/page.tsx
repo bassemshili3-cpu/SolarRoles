@@ -121,12 +121,10 @@ const faqs = [
 export default async function EntryLevelDataAnalystJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const { count } = await getCachedJobCount(
-    params.what || 'entry level data analyst',
-    params.where || '',
-    params.salary_min
-  )
-
+const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'entry level data analyst', params.where || '', params.salary_min),
+  searchJobs({ what: params.what || 'entry level data analyst', where: params.where || '', results_per_page: 30, page: 1 }),
+])
   return (
     <>
       <script
@@ -162,6 +160,7 @@ export default async function EntryLevelDataAnalystJobsPage({ searchParams }: an
                 what={params.what || 'entry level data analyst'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>

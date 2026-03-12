@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users, TrendingUp } from 'lucide-react'
-import { getCachedJobCount } from '@/lib/adzuna'
+import { getCachedJobCount, searchJobs } from '@/lib/adzuna'
 
 export const metadata: Metadata = {
   title: 'Urgent Engineering Jobs Needed Right Now | Apply Today',
@@ -120,11 +120,10 @@ const applicationTips = [
     salaryMinNum = Number.isNaN(parsed) ? undefined : parsed
   }
 
-  const { count } = await getCachedJobCount(
-    params.what || 'engineering',
-    params.where || '',
-    salaryMinNum
-  )
+  const [{ count }, initialData] = await Promise.all([
+  getCachedJobCount(params.what || 'engineering', params.where || '', salaryMinNum),
+  searchJobs({ what: params.what || 'engineering', where: params.where || '', results_per_page: 30, page: 1 }),
+])
 
 
 
@@ -165,6 +164,7 @@ const applicationTips = [
                 what={params.what || 'engineering'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                initialData={initialData} // ← ajouter
               />
             </Suspense>
           </div>
