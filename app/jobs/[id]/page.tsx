@@ -14,7 +14,7 @@ type JobDetail = {
   title: string
   company?: string
   location?: string
-  addressRegion?: string  // ← ajouté
+  addressRegion?: string
   salary?: string
   salary_min?: number
   salary_max?: number
@@ -59,18 +59,19 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
       }
 
       console.log('🎉 Job Adzuna trouvé ! Titre :', jobRaw.title)
+      console.log('📋 contract_type reçu depuis Adzuna:', jobRaw.contract_type)
 
       const normalized = normalizeAdzuna(jobRaw)
 
-     return {
-  ...normalized,
-  source: 'adzuna' as const,
-  externalApplyUrl: jobRaw.redirect_url || null,
-  salary_min: jobRaw.salary_min,
-  salary_max: jobRaw.salary_max,
-  addressRegion: normalized.addressRegion,
-  contract_type: jobRaw.contract_type,  // ← ajouter cette ligne
-}
+      return {
+        ...normalized,
+        source: 'adzuna' as const,
+        externalApplyUrl: jobRaw.redirect_url || null,
+        salary_min: jobRaw.salary_min,
+        salary_max: jobRaw.salary_max,
+        addressRegion: normalized.addressRegion,
+        contract_type: jobRaw.contract_type, // récupéré directement depuis jobRaw
+      }
     }
 
     return null
@@ -91,7 +92,7 @@ function buildJobPostingSchema(job: JobDetail) {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: job.title,
-    description: stripHtml(job.description || ''), // ← texte brut, sans HTML
+    description: stripHtml(job.description || ''),
     hiringOrganization: {
       '@type': 'Organization',
       name: job.company || 'Unknown',
@@ -101,7 +102,7 @@ function buildJobPostingSchema(job: JobDetail) {
       address: {
         '@type': 'PostalAddress',
         addressLocality: job.location || '',
-        addressRegion: job.addressRegion || '',   // ← ex: "Maryland", "California"
+        addressRegion: job.addressRegion || '',
         addressCountry: 'US',
       },
     },
@@ -116,30 +117,47 @@ function buildJobPostingSchema(job: JobDetail) {
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
 
-  // employmentType — contract_time en priorité, fallback sur contract_type
-const contractTimeMap: Record<string, string> = {
-  full_time: 'FULL_TIME',
-  part_time: 'PART_TIME',
-  contract: 'CONTRACTOR',
-  temporary: 'TEMPORARY',
-  intern: 'INTERN',
-}
+  // ─── employmentType ───────────────────────────────────────────────────────
+  // Étape 1 : mapping explicite depuis contract_time
+  const contractTimeMap: Record<string, string> = {
+    full_time: 'FULL_TIME',
+    part_time: 'PART_TIME',
+    contract: 'CONTRACTOR',
+    temporary: 'TEMPORARY',
+    intern: 'INTERN',
+  }
 
-const contractTypeMap: Record<string, string> = {
-  permanent: 'FULL_TIME',
-  contract: 'CONTRACTOR',
-  temporary: 'TEMPORARY',
-  part_time: 'PART_TIME',
-}
+  // Étape 2 : fallback sur contract_type (ex: "permanent" → FULL_TIME)
+  const contractTypeMap: Record<string, string> = {
+    permanent: 'FULL_TIME',
+    contract: 'CONTRACTOR',
+    temporary: 'TEMPORARY',
+    part_time: 'PART_TIME',
+  }
 
-const employmentType =
-  (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()]) ||
-  (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
+  let employmentType =
+    (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()]) ||
+    (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
 
-if (employmentType) schema.employmentType = employmentType
-  
+  // Étape 3 : heuristique sur titre + description si toujours pas trouvé
+  if (!employmentType) {
+    const text = (job.title + ' ' + (job.description || '')).toLowerCase()
+    if (text.includes('part-time') || text.includes('part time')) {
+      employmentType = 'PART_TIME'
+    } else if (text.includes('contract')) {
+      employmentType = 'CONTRACTOR'
+    } else if (text.includes('intern')) {
+      employmentType = 'INTERN'
+    } else if (text.includes('temporary') || text.includes('temp ')) {
+      employmentType = 'TEMPORARY'
+    } else {
+      employmentType = 'FULL_TIME' // défaut raisonnable — couvre ~80% des offres
+    }
+  }
 
-  // baseSalary — uniquement si dispo (Adzuna seulement)
+  schema.employmentType = employmentType
+
+  // ─── baseSalary ───────────────────────────────────────────────────────────
   if (job.salary_min && job.salary_max) {
     schema.baseSalary = {
       '@type': 'MonetaryAmount',
@@ -153,7 +171,7 @@ if (employmentType) schema.employmentType = employmentType
     }
   }
 
-  // Remote detection automatique sur le champ location
+  // ─── Remote detection ─────────────────────────────────────────────────────
   const locationLower = (job.location || '').toLowerCase()
   if (locationLower.includes('remote')) {
     schema.jobLocationType = 'TELECOMMUTE'
