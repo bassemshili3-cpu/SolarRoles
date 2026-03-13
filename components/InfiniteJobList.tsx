@@ -160,7 +160,7 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
             if (res.ok) {
               setSubscribed(true)
             } else {
-              alert("Erreur lors de l'inscription")
+              alert("Error subscribing. Please try again.")
             }
           }}
           className="flex gap-1"
