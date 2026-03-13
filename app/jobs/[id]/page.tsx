@@ -70,7 +70,7 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
         salary_min: jobRaw.salary_min,
         salary_max: jobRaw.salary_max,
         addressRegion: normalized.addressRegion,
-        contract_type: jobRaw.contract_type, // récupéré directement depuis jobRaw
+        contract_type: jobRaw.contract_type,
       }
     }
 
@@ -118,7 +118,6 @@ function buildJobPostingSchema(job: JobDetail) {
   schema.validThrough = base.toISOString().split('T')[0]
 
   // ─── employmentType ───────────────────────────────────────────────────────
-  // Étape 1 : mapping explicite depuis contract_time
   const contractTimeMap: Record<string, string> = {
     full_time: 'FULL_TIME',
     part_time: 'PART_TIME',
@@ -127,7 +126,6 @@ function buildJobPostingSchema(job: JobDetail) {
     intern: 'INTERN',
   }
 
-  // Étape 2 : fallback sur contract_type (ex: "permanent" → FULL_TIME)
   const contractTypeMap: Record<string, string> = {
     permanent: 'FULL_TIME',
     contract: 'CONTRACTOR',
@@ -139,7 +137,6 @@ function buildJobPostingSchema(job: JobDetail) {
     (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()]) ||
     (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
 
-  // Étape 3 : heuristique sur titre + description si toujours pas trouvé
   if (!employmentType) {
     const text = (job.title + ' ' + (job.description || '')).toLowerCase()
     if (text.includes('part-time') || text.includes('part time')) {
@@ -151,7 +148,7 @@ function buildJobPostingSchema(job: JobDetail) {
     } else if (text.includes('temporary') || text.includes('temp ')) {
       employmentType = 'TEMPORARY'
     } else {
-      employmentType = 'FULL_TIME' // défaut raisonnable — couvre ~80% des offres
+      employmentType = 'FULL_TIME'
     }
   }
 
@@ -247,6 +244,28 @@ export default async function JobDetailPage({
         </Link>
 
         <div className="bg-card border rounded-2xl p-8 shadow-sm">
+
+          {/* ✅ Attribution Adzuna — haut à droite de la carte */}
+          {job.source === 'adzuna' && (
+            <div className="flex justify-end mb-4">
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                
+                <a
+                  href="https://www.adzuna.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src="../adzuna-logo.png"
+                    alt="Adzuna"
+                    width={116}
+                    height={23}
+                    className="inline-block"
+                  />
+                </a>
+              </div>
+            </div>
+          )}
 
           <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
 
