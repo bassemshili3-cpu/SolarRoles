@@ -49,7 +49,7 @@ export async function searchLensaJobs(params: LensaSearchParams): Promise<LensaS
 
   const res = await fetch(`${LENSA_BASE_URL}/v1/job-adverts?${query}`, {
     headers: { 'User-Agent': 'Mozilla/5.0' },
-    next: { revalidate: 10800 },
+    next: { revalidate: 3600 },
   })
 
   if (!res.ok) {
@@ -65,5 +65,5 @@ export const getCachedLensaJobs = unstable_cache(
     return searchLensaJobs(params)
   },
   ['lensa-jobs'],
-  { revalidate: 10800, tags: ['jobs'] }
+  { revalidate: 3600, tags: ['jobs'] }
 )

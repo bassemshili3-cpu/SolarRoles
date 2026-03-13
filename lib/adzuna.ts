@@ -58,7 +58,7 @@ export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSear
   try {
     const response = await fetch(url, {
       headers: { 'User-Agent': 'OhMyJob/1.0' },
-      next: { revalidate: 10800 },
+      next: { revalidate: 3600 },
     })
 
     if (!response.ok) {
@@ -95,7 +95,7 @@ export async function getJobById(id: string): Promise<AdzunaJob | null> {
     const url = `${BASE}/jobs/${id}?app_id=${appId}&app_key=${appKey}`
     const response = await fetch(url, {
       headers: { 'User-Agent': 'OhMyJob/1.0' },
-      next: { revalidate: 10800 },
+      next: { revalidate: 3600 },
     })
 
     if (response.ok) {
@@ -130,7 +130,7 @@ export const getCachedJobCount = unstable_cache(
   },
   ['adzuna-job-count'],
   {
-    revalidate: 7200,
+    revalidate: 3600,
     tags: ['jobs'],
   }
 )

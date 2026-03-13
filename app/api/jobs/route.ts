@@ -3,7 +3,7 @@ import { searchAllJobs } from '@/lib/jobs'
 import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 10800
+export const revalidate = 3600 // 1h
 
 export async function GET(request: NextRequest) {
   try {
