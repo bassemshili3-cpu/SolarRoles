@@ -17,7 +17,7 @@ import { searchJobs } from '@/lib/adzuna'
 import { notifyGoogleBatch } from '@/lib/google-indexing'
 
 const BASE_URL = 'https://www.oh-my-job.com'
-const MAX_URLS_PER_RUN = 8 // 8 × 24h = 192/jour (sous la limite de 200)
+const MAX_URLS_PER_RUN = 16 // 16 × 24h = 384/jour (sous la limite de 400)
 
 export async function GET(req: NextRequest) {
   // ─── Sécurité : vérifie le header Vercel Cron ─────────────────────────────
