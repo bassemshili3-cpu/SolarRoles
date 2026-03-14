@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Heart } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Dignity Health Jobs Hiring Now | Clinical and Non-Clinical Positions Open Across the US',
   description: 'Dignity Health is actively hiring across its hospitals, medical foundations, and care centers right now. Nursing, allied health, administrative, and technical positions available with competitive pay and full benefits. Browse open roles and apply today before positions in your area are filled.',

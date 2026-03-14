@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Car, Shield, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Wrench, HelpCircle, TrendingUp, Clock, Cog, Leaf } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgently Hiring Honda Careers | Apply Today',
   description: 'Discover 500+ Honda careers hiring now across the U.S. Join a top automotive manufacturer with competitive pay, excellent benefits, and career growth. Engineers, technicians, and professionals needed. Apply now!',

@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Heart, DollarSign, GraduationCap, CheckCircle, Users, Award, Coffee, Calendar, Star, HelpCircle } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent: Chick-fil-A Careers Hiring Now | Apply Today',
   description: 'Discover 500+ Chick-fil-A careers hiring immediately near you. Join a company ranked #1 in customer satisfaction. Flexible schedules, scholarships, and growth opportunities. Apply in minutes!',

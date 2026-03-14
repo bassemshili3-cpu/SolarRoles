@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, FileText, Shield, CheckCircle, Users } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Nanny Jobs Needed Right Now | Apply Today',
   description: 'Discover thousands of nanny jobs hiring immediately across the United States. Flexible full-time, part-time and live-in roles with great pay. Background-checked families actively hiring. Apply in minutes and start earning today!',

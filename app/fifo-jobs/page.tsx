@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'FIFO Jobs Hiring Immediately | Fly In Fly Out Positions Open Now',
   description: 'Hundreds of FIFO jobs available right now. Fly in fly out positions in mining, oil, gas and construction with top pay and rotation schedules. No experience required for some roles. Apply today before positions fill up.',

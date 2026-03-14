@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'CNA Jobs Hiring Immediately | Certified Nursing Assistant Positions Open Now',
   description: 'Thousands of CNA jobs are hiring right now across the United States. Certified Nursing Assistant positions available in hospitals, nursing homes, and home health agencies. Competitive pay, flexible shifts, and benefits. Apply today before these roles are filled.',

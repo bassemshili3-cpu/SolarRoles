@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Clock, Users, Award, MapPin, Star } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Now Hiring: Part Time Jobs Near You | Apply Today',
   description: 'Find part time jobs hiring immediately across the United States. Flexible schedules, competitive pay, and openings in retail, food service, healthcare, and more. No degree required for many roles. Apply in minutes and start earning this week!',

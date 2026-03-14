@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Users, DollarSign, MapPin, CheckCircle, BookOpen, Award, TrendingUp, FileText, Briefcase, Shield, Laptop, Globe, Clock, GraduationCap } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Now Hiring Remote HR Jobs – Urgent Need | Apply Today',
   description: 'Hundreds of remote HR jobs hiring immediately. Work from home as a recruiter, HR generalist, benefits specialist and more. Full time and part time positions with top companies. Browse openings and apply now!',

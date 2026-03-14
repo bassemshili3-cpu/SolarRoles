@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Star, Shield, Clock, Users, TrendingUp, FileText, Award } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent: Housekeeping Jobs Near You Hiring Now | Apply Today',
   description: 'Housekeeping jobs are urgently needed near you! Browse 500+ immediate openings at hotels, resorts, hospitals & private homes. Competitive pay, flexible shifts, no degree required. Start your housekeeping career today!',

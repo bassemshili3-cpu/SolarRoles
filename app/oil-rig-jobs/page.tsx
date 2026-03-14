@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Wrench } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Oil Rig Jobs Hiring Now | Offshore and Onshore Positions Open Immediately',
   description: 'Oil and gas companies across the United States are urgently hiring for oil rig positions right now. Roughnecks, drillers, roustabouts, and engineers needed immediately. No experience required for entry-level roles. Top pay, rotational schedules, and full benefits. Apply before these positions are gone.',

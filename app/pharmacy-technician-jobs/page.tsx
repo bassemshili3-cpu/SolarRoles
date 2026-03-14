@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Pill } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Pharmacy Technician Jobs Hiring Immediately | Apply Now Before Positions Fill',
   description: 'Thousands of pharmacy technician jobs are open right now across the United States. Retail, hospital, and compounding pharmacies are actively hiring. Competitive pay, benefits, and flexible shifts. Submit your application today before these positions are gone.',

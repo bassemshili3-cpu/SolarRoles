@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Heart, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Truck, HelpCircle, TrendingUp, Shield, Package, Pill } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent: Cardinal Health Careers Hiring Now | Apply Today',
   description: 'Discover 500+ Cardinal Health careers hiring immediately. Join a Fortune 500 healthcare leader with competitive pay, excellent benefits, and growth opportunities. Warehouse, pharmacy, IT, and corporate roles available. Apply now!',

@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Zap, Shield, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Leaf, HelpCircle, TrendingUp, Clock } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Immediate Openings for Exelon Careers | Apply Now',
   description: 'Discover 500+ Exelon careers hiring now. Join America\'s leading energy company with competitive salaries, excellent benefits, and growth opportunities. Engineers, technicians, and professionals needed. Apply today!',

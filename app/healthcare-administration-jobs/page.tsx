@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Healthcare Administration Jobs Needed Right Now | Apply Today',
   description: 'Discover thousands of healthcare administration jobs hiring immediately across the United States. Competitive salaries up to $117k+. Entry level and experienced roles available in hospitals, clinics and more. Start your high impact career today!',

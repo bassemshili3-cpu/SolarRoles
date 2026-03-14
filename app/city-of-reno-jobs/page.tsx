@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent City of Reno Jobs Needed Right Now | Apply Today',
   description: 'Discover hundreds of City of Reno jobs hiring immediately. Stable government positions with excellent benefits, pensions and competitive pay. Public service roles in police, fire, administration and more. Start your career in local government today!',

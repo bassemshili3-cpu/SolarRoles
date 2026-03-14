@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Wrench } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Sterile Processing Technician Jobs Hiring Now | SPT Positions Open Across the US',
   description: 'Hospitals and surgical centers across the United States are urgently hiring sterile processing technicians right now. Entry-level and certified SPT positions available with competitive pay and full benefits. No degree required for many roles. Apply today before these positions are filled.',

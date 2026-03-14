@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Palette, Clock, GraduationCap, DollarSign, MapPin, CheckCircle, BookOpen, Users, Award, TrendingUp, FileText, Briefcase } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent: Art Teacher Jobs Available Now | Apply Today',
   description: 'Hundreds of art teacher jobs hiring immediately across the United States. Full time, part time and substitute positions in schools and studios. No lengthy process. Browse openings and apply in minutes!',

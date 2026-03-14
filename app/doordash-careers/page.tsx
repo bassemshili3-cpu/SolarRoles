@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, Clock, Users, Target, Zap, Award, MapPin, CheckCircle, Smartphone, Package, BookOpen } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzunas
 export const metadata: Metadata = {
   title: 'Urgent: DoorDash Careers & Jobs Hiring Now | 1000+ Positions Available',
   description: 'DoorDash is urgently hiring nationwide! Explore 1000+ career opportunities as a Dasher, in corporate roles, engineering, operations & more. Flexible schedules, competitive pay. Apply today and start earning immediately!',

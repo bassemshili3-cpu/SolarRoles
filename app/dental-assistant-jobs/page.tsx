@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Heart } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Dental Assistant Jobs Hiring Immediately | Positions Open Across the US',
   description: 'Dental offices across the United States are urgently hiring dental assistants right now. Chairside, orthodontic, and oral surgery positions available with competitive pay and benefits. No degree required for many roles. Apply today before these positions are filled.',

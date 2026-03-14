@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Users } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Project Manager Jobs Hiring Now | PM Positions Open Across the US',
   description: 'Companies across the United States are urgently hiring project managers right now. IT, construction, healthcare, and finance PM roles available with six-figure salaries and remote options. PMP certification preferred but not always required. Apply today before these positions are filled.',

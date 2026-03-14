@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, Heart, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Stethoscope, HelpCircle, TrendingUp, Calendar, BookOpen, FileText } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Demand for School Nurse Professionals | Apply Now',
   description: 'Discover 500+ school nurse jobs hiring immediately across the U.S. Enjoy summers off, school schedules, and competitive benefits. RNs and LPNs needed. No nights or weekends. Apply today!',

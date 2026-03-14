@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, FileText, CheckCircle, Award, Users, Shield } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent HVAC Jobs Hiring Now | Earn $60k+ Starting Today',
   description: 'Hundreds of HVAC jobs open immediately across the United States. High pay up to $60k+, benefits, paid training and fast hiring. No experience needed for many entry-level positions. Apply today and start your high-demand career!',

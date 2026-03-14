@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Star, Coffee, Award } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Now Hiring: Barista Jobs Near You | Apply Today',
   description: 'Thousands of barista jobs hiring immediately across the United States. Top coffee chains and independent cafés actively recruiting. Competitive pay, flexible hours, and tips. Apply in minutes and start your coffee career today!',

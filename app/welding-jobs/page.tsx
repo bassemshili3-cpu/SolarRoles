@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Award, MapPin, AlertTriangle, Flame, Wrench } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgently Hiring: Welding Jobs Near You | Apply Today',
   description: 'Find welding jobs hiring immediately across the United States. MIG, TIG, stick, and structural welding positions at top manufacturers, shipyards, and construction firms. Competitive pay up to $35/hr and beyond. Apply in minutes and start your welding career today!',

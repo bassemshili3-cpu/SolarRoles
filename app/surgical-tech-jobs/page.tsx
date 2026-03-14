@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Heart, DollarSign, MapPin, CheckCircle, BookOpen, Users, Award, TrendingUp, FileText, Briefcase, Shield, Clock, GraduationCap, Stethoscope, AlertTriangle } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgently Hiring Surgical Tech Roles | Apply Today',
   description: 'Hundreds of surgical tech jobs hiring immediately in hospitals and surgical centers across the U.S. Competitive pay, sign on bonuses, and full benefits. Browse openings and start your operating room career now!',

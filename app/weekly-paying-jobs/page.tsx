@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Zap, Star, AlertTriangle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Weekly Paying Jobs Hiring Now | Get Paid Every Week Starting Immediately',
   description: 'Find 1,000+ jobs that pay weekly near you. Get your paycheck every Friday with positions in warehousing, construction, healthcare, delivery, and more. No waiting two weeks. Apply today and start earning fast!',

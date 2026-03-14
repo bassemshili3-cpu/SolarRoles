@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, AlertTriangle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Immediate Openings for Paraprofessional Jobs | Schools Hiring Now',
   description: 'Paraprofessional positions are urgently needed across the US! Browse 1,000+ openings in schools, special education, and healthcare settings. Competitive pay, meaningful work, and career growth. Apply today and make a difference in students\' lives!',

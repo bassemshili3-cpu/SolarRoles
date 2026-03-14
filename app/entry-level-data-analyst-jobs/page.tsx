@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { BarChart3, DollarSign, MapPin, CheckCircle, BookOpen, Users, Award, TrendingUp, FileText, Briefcase, Code, GraduationCap, Layers } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Immediate Openings for Entry Level Data Analysts | Apply Now',
   description: 'Hundreds of entry level data analyst jobs hiring right now across the U.S. No experience required for many roles. Learn SQL, Excel, Python on the job. Browse openings and launch your data career today!',

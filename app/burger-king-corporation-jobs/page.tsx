@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, Users, Award } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Burger King Corporation Jobs Hiring Now | Apply Today',
   description: 'Hundreds of Burger King Corporation jobs open right now across the United States. Flexible shifts, free meals, paid training and fast career growth. No experience needed for most positions. Start earning this week!',

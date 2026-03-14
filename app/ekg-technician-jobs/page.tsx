@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, FileText, CheckCircle, Award, Users, Shield } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent EKG Technician Jobs Hiring Now | Start Earning $67k+ Today',
   description: 'Hundreds of EKG technician jobs open immediately across the United States. High pay up to $67k+, benefits, paid training and fast hiring. No experience needed for many entry-level positions. Apply today and launch your healthcare career!',

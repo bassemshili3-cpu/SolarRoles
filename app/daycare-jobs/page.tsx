@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Users, Award, FileText, Heart, BookOpen } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgently Hiring: Daycare Jobs Near You | Apply Today',
   description: 'Find daycare jobs hiring immediately across the United States. Childcare teacher, assistant, and director roles at top centers. Competitive pay, benefits, and a rewarding career working with children. Apply in minutes and start making a difference today!',

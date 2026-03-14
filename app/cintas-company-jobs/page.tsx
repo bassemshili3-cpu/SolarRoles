@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Users, Award, MapPin, FileText } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Hiring Immediately: Cintas Company Jobs | Apply Today',
   description: 'Browse Cintas Company jobs hiring now across the United States. Route drivers, service sales reps, production associates and more. Competitive pay, full benefits, and real career growth. Apply in minutes and join one of America\'s most admired companies!',

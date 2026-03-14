@@ -9,7 +9,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 
 
 
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
     
       
 

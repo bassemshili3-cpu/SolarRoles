@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Evening Jobs Hiring Now | Immediate Openings for Night Shift Workers',
   description: 'Evening jobs are urgently available across the US! Browse 1,000+ immediate openings in retail, healthcare, food service, security, and more. Perfect for students, parents, and anyone seeking extra income after hours. Apply today and start earning this week!',

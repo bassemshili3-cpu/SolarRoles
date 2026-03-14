@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, AlertTriangle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Respiratory Therapist Jobs Needed ASAP | Hospitals Urgently Hiring RT Professionals',
   description: 'Respiratory therapist positions are critically needed at hospitals and healthcare facilities across the US! Browse 800+ immediate openings for RTs, CRTs, and RRTs. Competitive salaries, sign-on bonuses, and strong career growth. Apply today!',

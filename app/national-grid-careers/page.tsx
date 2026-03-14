@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, Zap } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Now Hiring: National Grid Careers | Urgent Need for Energy Professionals',
   description: 'National Grid is urgently hiring across the US! Explore 500+ career opportunities in electrical engineering, gas operations, field services, IT, and corporate roles. Competitive salaries, strong benefits, and union positions available. Apply today!',

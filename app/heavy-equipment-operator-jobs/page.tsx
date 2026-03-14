@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users, TrendingUp } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Heavy Equipment Operator Jobs Hiring Now | Apply Today',
   description: 'Discover thousands of heavy equipment operator jobs hiring immediately across the United States. Drive bulldozers, excavators, loaders and more with high-paying roles. CDL and union opportunities available. Apply in minutes and start your next construction career today!',

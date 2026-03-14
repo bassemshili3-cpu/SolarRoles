@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, AlertTriangle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Quality Assurance Jobs Needed ASAP | QA Professionals Urgently Hiring',
   description: 'Quality assurance positions are critically needed across the US! Browse 1,000+ immediate openings in software, manufacturing, pharma, and food production. Competitive salaries, remote options, and strong career growth. Apply today!',

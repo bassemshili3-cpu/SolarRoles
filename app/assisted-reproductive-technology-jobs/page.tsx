@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, Heart, Award, TrendingUp, Building2, GraduationCap, Microscope } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent: Assisted Reproductive Technology Jobs Available Now | Apply Today',
   description: 'Explore 500+ assisted reproductive technology jobs hiring immediately. IVF specialists, embryologists, fertility nurses and more. Top clinics are urgently hiring ART professionals. Apply now!',

@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, FileText, Shield, CheckCircle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Live Nation Jobs Needed Right Now | Apply Today',
   description: 'Discover thousands of Live Nation jobs hiring immediately across the United States. Work in concerts, events, venue operations, marketing and more with one of the world’s biggest live entertainment companies. Competitive pay and exciting perks. Apply in minutes and join the show today!',

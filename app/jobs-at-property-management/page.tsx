@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, FileText, Shield, CheckCircle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Property Management Jobs Needed Right Now | Apply Today',
   description: 'Discover thousands of property management jobs hiring immediately across the United States. Manage residential, commercial and HOA properties with competitive salaries. Entry-level roles available. Apply in minutes and start your next career today!',

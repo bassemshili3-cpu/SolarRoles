@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star, AlertTriangle } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs, } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Patient Transporter Jobs Needed ASAP | Hospitals Hiring Now',
   description: 'Patient transporter positions are urgently needed at hospitals and healthcare facilities across the US! Browse 800+ immediate openings. No degree required, paid training available, and benefits from day one. Apply today and start your healthcare career!',

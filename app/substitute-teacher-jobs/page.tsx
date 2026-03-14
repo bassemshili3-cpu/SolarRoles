@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Substitute Teacher Jobs Needed Right Now | Start Teaching Today',
   description: 'Discover thousands of substitute teacher jobs hiring immediately across the United States. Flexible schedules, pay up to $200 per day, many positions need no prior experience. Apply in minutes and make a real difference in classrooms!',

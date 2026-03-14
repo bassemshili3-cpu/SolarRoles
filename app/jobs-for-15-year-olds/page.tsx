@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, TrendingUp } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Jobs for 15 Year Olds Hiring Now | Earn Up to $15/Hour',
   description: 'Discover hundreds of jobs for 15 year olds hiring immediately near you. Legal, safe positions with flexible hours. Apply today and start earning your first paycheck with top employers actively recruiting teens!',
