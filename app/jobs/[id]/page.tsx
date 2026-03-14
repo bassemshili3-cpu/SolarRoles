@@ -9,6 +9,8 @@ import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
 import { searchLensaJobs } from '@/lib/lensa'
 import { getJobById } from '@/lib/adzuna'
 
+export const revalidate = 3600 // Cache ISR 1h — évite les 429 Adzuna
+
 type JobDetail = {
   id: string
   title: string
