@@ -304,7 +304,8 @@ export default async function JobDetailPage({
               </div>
             )}
             <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
-              <DollarSign className="w-4 h-4" /> {job.salary || 'Salary not listed'}
+               <DollarSign className="w-4 h-4" />
+  {(job.salary || 'Salary not listed').replace(/^\$/, '')}
             </div>
             {job.contract_type && (
               <span className="bg-secondary px-3 py-1 rounded-full capitalize">
