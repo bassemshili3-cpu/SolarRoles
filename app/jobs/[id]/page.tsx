@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 
+import { extractSalaryFromText } from '@/lib/extractSalary'
+import { formatJobDescription } from '@/lib/formatJobDescription'
 import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
 import { searchLensaJobs } from '@/lib/lensa'
 import { getJobById } from '@/lib/adzuna'
@@ -30,38 +32,19 @@ type JobDetail = {
 }
 
 async function getJobDetail(id: string): Promise<JobDetail | null> {
-  console.log('🔍 === getJobDetail START for ID:', id, '===')
-
   try {
     if (id.startsWith('lensa-')) {
-      console.log('→ Mode LENSA')
       const originalId = id.replace('lensa-', '')
       const lensaData = await searchLensaJobs({ limit: 180 })
       const job = lensaData.job_adverts?.find(j => j.unique_id === originalId)
-      console.log('   Job Lensa trouvé ?', !!job)
       if (!job) return null
       return { ...normalizeLensa(job), source: 'lensa' as const }
     }
 
     if (id.startsWith('adzuna-')) {
-      console.log('→ Mode ADZUNA')
       const originalId = id.replace('adzuna-', '')
-      console.log('   originalId extrait :', originalId)
-
       const jobRaw = await getJobById(originalId)
-
-      console.log('   === RÉSULTAT getJobById ===')
-      console.log('   Type     :', typeof jobRaw)
-      console.log('   Valeur complète :', JSON.stringify(jobRaw, null, 2))
-      console.log('   Est truthy ?', !!jobRaw)
-
-      if (!jobRaw) {
-        console.error('❌ getJobById a retourné null → job introuvable ou credentials manquants')
-        return null
-      }
-
-      console.log('🎉 Job Adzuna trouvé ! Titre :', jobRaw.title)
-      console.log('📋 contract_type reçu depuis Adzuna:', jobRaw.contract_type)
+      if (!jobRaw) return null
 
       const normalized = normalizeAdzuna(jobRaw)
 
@@ -78,9 +61,34 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
 
     return null
   } catch (error: any) {
-    console.error('💥 ERREUR EXCEPTION dans getJobDetail :', error.message || error)
+    console.error('Error in getJobDetail:', error.message || error)
     return null
   }
+}
+
+/** Wrapper: fetches job + extracts salary from text when API fields are empty or estimated */
+async function getJobDetailWithSalary(id: string): Promise<JobDetail | null> {
+  const job = await getJobDetail(id)
+  if (!job) return null
+
+  // Real salary = both fields present AND different (not an Adzuna estimate)
+  const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
+
+  if (!hasRealSalary) {
+    const extracted = extractSalaryFromText(job.title, job.description || '')
+    if (extracted) {
+      job.salary = extracted.display
+      job.salary_min = extracted.min
+      job.salary_max = extracted.max
+    }
+    // No extraction found but Adzuna gave an estimate (min === max)
+    // Show it as estimate rather than a fake range
+    else if (job.salary_min && job.salary_min === job.salary_max) {
+      job.salary = `~$${job.salary_min.toLocaleString('en-US')}/year (est.)`
+    }
+  }
+
+  return job
 }
 
 // ─── Strip HTML pour la description dans le schema ───────────────────────────
@@ -88,7 +96,7 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-// ─── JobPosting Schema ────────────────────────────────────────────────────────
+// ─── JobPosting Schema (Google Jobs optimized) ───────────────────────────────
 function buildJobPostingSchema(job: JobDetail) {
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
@@ -112,14 +120,26 @@ function buildJobPostingSchema(job: JobDetail) {
     datePosted: job.created
       ? new Date(job.created).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0],
+
+    // Adzuna compliance: users are redirected to Adzuna to apply
+    directApply: false,
   }
 
-  // validThrough : +60 jours après datePosted
+  // Unique identifier — helps Google deduplicate listings
+  if (job.id) {
+    schema.identifier = {
+      '@type': 'PropertyValue',
+      name: job.source === 'adzuna' ? 'Adzuna' : 'Lensa',
+      value: job.id,
+    }
+  }
+
+  // validThrough: +60 days after datePosted
   const base = job.created ? new Date(job.created) : new Date()
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
 
-  // ─── employmentType ───────────────────────────────────────────────────────
+  // ─── employmentType ─────────────────────────────────────────────────────
   const contractTimeMap: Record<string, string> = {
     full_time: 'FULL_TIME',
     part_time: 'PART_TIME',
@@ -156,7 +176,7 @@ function buildJobPostingSchema(job: JobDetail) {
 
   schema.employmentType = employmentType
 
-  // ─── baseSalary ───────────────────────────────────────────────────────────
+  // ─── baseSalary ─────────────────────────────────────────────────────────
   if (job.salary_min && job.salary_max) {
     schema.baseSalary = {
       '@type': 'MonetaryAmount',
@@ -170,7 +190,7 @@ function buildJobPostingSchema(job: JobDetail) {
     }
   }
 
-  // ─── Remote detection ─────────────────────────────────────────────────────
+  // ─── Remote detection ───────────────────────────────────────────────────
   const locationLower = (job.location || '').toLowerCase()
   if (locationLower.includes('remote')) {
     schema.jobLocationType = 'TELECOMMUTE'
@@ -188,7 +208,7 @@ export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
   const { id } = await params
-  const job = await getJobDetail(id)
+  const job = await getJobDetailWithSalary(id)
 
   if (!job) return { title: 'Job Not Found | Oh My Job' }
 
@@ -219,22 +239,15 @@ export default async function JobDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  console.log('📌 Page chargée avec ID :', id)
+  const job = await getJobDetailWithSalary(id)
 
-  const job = await getJobDetail(id)
-
-  if (!job) {
-    console.error('❌ Job final non trouvé → 404')
-    notFound()
-  }
-
-  console.log('🎉 JOB AFFICHÉ AVEC SUCCÈS →', job.title)
+  if (!job) notFound()
 
   const schema = buildJobPostingSchema(job)
 
   return (
     <>
-      {/* ✅ JobPosting Schema injecté pour Google Jobs */}
+      {/* JobPosting Schema for Google Jobs */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -247,25 +260,21 @@ export default async function JobDetailPage({
 
         <div className="bg-card border rounded-2xl p-8 shadow-sm">
 
-          {/* ✅ Attribution Adzuna — haut à droite de la carte */}
+          {/* Adzuna attribution — required by partnership terms */}
           {job.source === 'adzuna' && (
             <div className="flex justify-end mb-4">
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                
-                <a
-                  href="https://www.adzuna.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    src="../adzuna-logo.png"
-                    alt="Adzuna"
-                    width={116}
-                    height={23}
-                    className="inline-block"
-                  />
-                </a>
-              </div>
+              <a
+                href="https://www.adzuna.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/adzuna-logo.png"
+                  alt="Powered by Adzuna"
+                  width={116}
+                  height={23}
+                />
+              </a>
             </div>
           )}
 
@@ -286,14 +295,21 @@ export default async function JobDetailPage({
             )}
             {job.created && (
               <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4" /> {new Date(job.created).toLocaleDateString('fr-FR')}
+                <Clock className="w-4 h-4" />{' '}
+                {new Date(job.created).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
               </div>
             )}
             <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
               <DollarSign className="w-4 h-4" /> {job.salary || 'Salary not listed'}
             </div>
             {job.contract_type && (
-              <span className="bg-secondary px-3 py-1 rounded-full capitalize">{job.contract_type}</span>
+              <span className="bg-secondary px-3 py-1 rounded-full capitalize">
+                {job.contract_type}
+              </span>
             )}
             {job.contract_time && (
               <span className="bg-secondary px-3 py-1 rounded-full capitalize">
@@ -304,14 +320,22 @@ export default async function JobDetailPage({
 
           <hr className="my-8" />
 
+          {/* Job description — formatted for readability */}
           <div>
             <h2 className="text-xl font-semibold mb-4">Job Description</h2>
             <div
-              className="prose max-w-none text-muted-foreground leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: job.description || '' }}
+              className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed
+                prose-h3:text-lg prose-h3:font-semibold prose-h3:text-foreground prose-h3:mt-10 prose-h3:mb-4 prose-h3:border-b prose-h3:border-border prose-h3:pb-2
+                prose-p:my-4
+                prose-ul:my-4 prose-ul:pl-6 prose-ul:list-disc
+                prose-li:text-muted-foreground prose-li:my-2 prose-li:leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: formatJobDescription(job.description || ''),
+              }}
             />
           </div>
 
+          {/* Apply CTA */}
           <div className="mt-10">
             {job.source === 'adzuna' && job.externalApplyUrl ? (
               <Button asChild size="lg" className="w-full md:w-auto">
