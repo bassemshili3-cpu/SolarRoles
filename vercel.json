@@ -2,7 +2,7 @@
   "buildCommand": "npx prisma generate --schema=prisma/schema.prisma && next build",
   "crons": [
     {
-      "path": "/api/cron/send-job-alerts",
+      "path": "/api/cron/sync-jobs",
       "schedule": "0 * * * *"
     },
     {
@@ -11,3 +11,5 @@
     }
   ]
 }
+
+

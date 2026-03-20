@@ -21,3 +21,28 @@ model JobAlert {
 
   @@unique([email, what, where], name: "email_what_where")
 }
+model Job {
+  id            String   @id
+  source        String
+  title         String
+  company       String   @default("")
+  location      String   @default("")
+  addressRegion String   @default("")
+  description   String   @db.Text
+  url           String
+  applyUrl      String   @default("")
+  salaryMin     Int?
+  salaryMax     Int?
+  salary        String?
+  contractType  String?
+  contractTime  String?
+  postedAt      DateTime?
+  fetchedAt     DateTime @default(now())
+  expiresAt     DateTime
+  active        Boolean  @default(true)
+
+  @@index([source])
+  @@index([active])
+  @@index([fetchedAt])
+  @@index([title, company])
+}
