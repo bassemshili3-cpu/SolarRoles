@@ -81,16 +81,24 @@ export async function getJobFromDb(id: string): Promise<DbJob | null> {
   return job as DbJob
 }
 
-// ─── Récupère les jobs actifs pour l'Indexing API ────────────────────────────
 export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
-  const jobs = await prisma.job.findMany({
-    where: { active: true },
+  // Jooble d'abord, puis le reste
+  const joobleJobs = await prisma.job.findMany({
+    where: { active: true, source: 'jooble' },
     select: { url: true },
     orderBy: { fetchedAt: 'desc' },
-    take: limit,
+    take: Math.floor(limit * 0.7), // 70% du quota pour Jooble
   })
 
-  return jobs.map((j) => `https://www.oh-my-job.com${j.url}`)
+  const otherJobs = await prisma.job.findMany({
+    where: { active: true, source: { not: 'jooble' } },
+    select: { url: true },
+    orderBy: { fetchedAt: 'desc' },
+    take: limit - joobleJobs.length, // Le reste pour Adzuna/Lensa
+  })
+
+  const all = [...joobleJobs, ...otherJobs]
+  return all.map((j) => `https://www.oh-my-job.com${j.url}`)
 }
 
 // ─── Stats pour le dashboard ─────────────────────────────────────────────────
