@@ -41,12 +41,16 @@ export async function searchJooble(params: JoobleSearchParams): Promise<JoobleSe
 
   console.log('🔵 Jooble API call:', JSON.stringify(body))
 
-  const res = await fetch(JOOBLE_API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-    next: { revalidate: 300 }, // cache 5 min
-  })
+const res = await fetch(JOOBLE_API_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept': 'application/json',
+    'Accept-Language': 'en-US,en;q=0.9',
+  },
+  body: JSON.stringify(body),
+})
 
   if (!res.ok) {
     const text = await res.text()
