@@ -2,7 +2,7 @@ import { getCachedLensaJobs, LensaJobAdvert } from './lensa'
 import { searchJobs as searchAdzuna, AdzunaJob } from './adzuna'
 import { searchJooble, JoobleJob } from './jooble'
 import { cacheJoobleJobs } from './jooble-cache'
-
+import { prisma } from './prisma'
 export interface UnifiedJob {
   id: string
   title: string
@@ -94,6 +94,47 @@ export function normalizeJooble(job: JoobleJob): UnifiedJob {
     salary_min,
     salary_max,
     created: job.updated || undefined,
+  }
+}
+
+async function upsertJobsBackground(jobs: UnifiedJob[]) {
+  for (const job of jobs) {
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + 30)
+
+    await prisma.job.upsert({
+      where: { id: job.id },
+      update: {
+        title: job.title,
+        company: job.company,
+        location: job.location,
+        description: job.description,
+        applyUrl: job.apply_url,
+        salaryMin: job.salary_min || null,
+        salaryMax: job.salary_max || null,
+        addressRegion: job.addressRegion || '',
+        fetchedAt: new Date(),
+        expiresAt,
+        active: true,
+      },
+      create: {
+        id: job.id,
+        source: job.source,
+        title: job.title,
+        company: job.company,
+        location: job.location,
+        addressRegion: job.addressRegion || '',
+        description: job.description,
+        url: job.url,
+        applyUrl: job.apply_url,
+        salaryMin: job.salary_min || null,
+        salaryMax: job.salary_max || null,
+        postedAt: job.created ? new Date(job.created) : null,
+        fetchedAt: new Date(),
+        expiresAt,
+        active: true,
+      },
+    }).catch(() => {})
   }
 }
 
@@ -238,6 +279,7 @@ cacheJoobleJobs(dedupedJooble)
   console.log(`📦 TOTAL RETOURNÉ : ${dedupedJooble.length} Jooble + ${dedupedLensa.length} Lensa + ${dedupedAdzuna.length} Adzuna (${allResults.length} après dédup)`)
   console.log("=== DEBUG END ===")
 
+  upsertJobsBackground(allResults).catch(console.error)
   return {
     results: allResults,
     count: Math.max(joobleCount, lensaCount, adzunaCount),

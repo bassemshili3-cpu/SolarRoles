@@ -1,6 +1,8 @@
 // app/jobs/[id]/page.tsx
-// ─── Page détail job v2 : lecture depuis la base PostgreSQL ──────────────────
-// Plus d'appel API en temps réel. Tout vient de Prisma.
+// ─── Page détail job HYBRIDE ─────────────────────────────────────────────────
+// 1. Essaie l'API en temps réel (Adzuna, Lensa)
+// 2. Si l'API échoue (404, 429, timeout) → lit depuis la base Prisma
+// 3. Jooble toujours depuis la base (pas d'endpoint par ID)
 
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -10,9 +12,111 @@ import Link from 'next/link'
 
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
-import { getJobFromDb, DbJob } from '@/lib/job-db'
+import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
+import { searchLensaJobs } from '@/lib/lensa'
+import { getJobById } from '@/lib/adzuna'
+import { prisma } from '@/lib/prisma'
 
 export const revalidate = 3600
+
+type JobDetail = {
+  id: string
+  title: string
+  company?: string
+  location?: string
+  addressRegion?: string
+  salary?: string
+  salary_min?: number
+  salary_max?: number
+  description?: string
+  created?: string
+  contract_type?: string
+  contract_time?: string
+  source: 'lensa' | 'adzuna' | 'jooble'
+  externalApplyUrl?: string | null
+  apply_url?: string
+}
+
+// ─── Essaie l'API, sinon la base ────────────────────────────────────────────
+
+async function getJobDetail(id: string): Promise<JobDetail | null> {
+  // ─── Tentative API d'abord ───────────────────────────────────────────────
+  try {
+    if (id.startsWith('lensa-')) {
+      const originalId = id.replace('lensa-', '')
+      const lensaData = await searchLensaJobs({ limit: 180 })
+      const job = lensaData.job_adverts?.find(j => j.unique_id === originalId)
+      if (job) return { ...normalizeLensa(job), source: 'lensa' as const }
+    }
+
+    if (id.startsWith('adzuna-')) {
+      const originalId = id.replace('adzuna-', '')
+      const jobRaw = await getJobById(originalId)
+      if (jobRaw) {
+        const normalized = normalizeAdzuna(jobRaw)
+        return {
+          ...normalized,
+          source: 'adzuna' as const,
+          externalApplyUrl: jobRaw.redirect_url || null,
+          salary_min: jobRaw.salary_min,
+          salary_max: jobRaw.salary_max,
+          addressRegion: normalized.addressRegion,
+          contract_type: jobRaw.contract_type,
+        }
+      }
+    }
+  } catch (error: any) {
+    console.warn(`⚠️ API failed for ${id}, falling back to DB:`, error.message)
+  }
+
+  // ─── Fallback : lecture depuis la base Prisma ────────────────────────────
+  // Couvre : Jooble (pas d'API par ID), Adzuna 429/404, Lensa down
+  try {
+    const dbJob = await prisma.job.findUnique({ where: { id } })
+    if (dbJob && dbJob.active) {
+      return {
+        id: dbJob.id,
+        title: dbJob.title,
+        company: dbJob.company,
+        location: dbJob.location,
+        addressRegion: dbJob.addressRegion,
+        description: dbJob.description,
+        salary_min: dbJob.salaryMin || undefined,
+        salary_max: dbJob.salaryMax || undefined,
+        salary: dbJob.salary || undefined,
+        created: dbJob.postedAt?.toISOString(),
+        source: dbJob.source as 'adzuna' | 'lensa' | 'jooble',
+        externalApplyUrl: dbJob.applyUrl,
+        apply_url: dbJob.applyUrl,
+        contract_type: dbJob.contractType || undefined,
+        contract_time: dbJob.contractTime || undefined,
+      }
+    }
+  } catch (dbError: any) {
+    console.error('❌ DB fallback also failed:', dbError.message)
+  }
+
+  return null
+}
+
+// ─── Enrichissement salaire ──────────────────────────────────────────────────
+
+function getJobDetailWithSalary(job: JobDetail): JobDetail {
+  const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
+
+  if (!hasRealSalary) {
+    const extracted = extractSalaryFromText(job.title, job.description || '')
+    if (extracted) {
+      job.salary = extracted.display
+      job.salary_min = extracted.min
+      job.salary_max = extracted.max
+    } else if (job.salary_min && job.salary_min === job.salary_max) {
+      job.salary = `~$${job.salary_min.toLocaleString('en-US')}/year (est.)`
+    }
+  }
+
+  return job
+}
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -20,26 +124,7 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-function enrichSalary(job: DbJob): DbJob {
-  const hasRealSalary = job.salaryMin && job.salaryMax && job.salaryMin !== job.salaryMax
-
-  if (!hasRealSalary) {
-    const extracted = extractSalaryFromText(job.title, job.description || '')
-    if (extracted) {
-      job.salary = extracted.display
-      job.salaryMin = extracted.min ?? null
-      job.salaryMax = extracted.max ?? null
-    } else if (job.salaryMin && job.salaryMin === job.salaryMax) {
-      job.salary = `~$${job.salaryMin.toLocaleString('en-US')}/year (est.)`
-    }
-  }
-
-  return job
-}
-
-// ─── JobPosting Schema (Google Jobs) ─────────────────────────────────────────
-
-function buildJobPostingSchema(job: DbJob) {
+function buildJobPostingSchema(job: JobDetail) {
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
@@ -59,17 +144,14 @@ function buildJobPostingSchema(job: DbJob) {
       },
     },
     url: `https://www.oh-my-job.com/jobs/${job.id}`,
-    datePosted: job.postedAt
-      ? new Date(job.postedAt).toISOString().split('T')[0]
-      : new Date(job.fetchedAt).toISOString().split('T')[0],
+    datePosted: job.created
+      ? new Date(job.created).toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0],
     directApply: false,
   }
 
-  // Identifier
   const sourceNames: Record<string, string> = {
-    adzuna: 'Adzuna',
-    lensa: 'Lensa',
-    jooble: 'Jooble',
+    adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble',
   }
   schema.identifier = {
     '@type': 'PropertyValue',
@@ -77,52 +159,51 @@ function buildJobPostingSchema(job: DbJob) {
     value: job.id,
   }
 
-  // validThrough
-  const base = job.postedAt ? new Date(job.postedAt) : new Date(job.fetchedAt)
+  const base = job.created ? new Date(job.created) : new Date()
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
 
   // employmentType
-  const text = (job.title + ' ' + (job.description || '')).toLowerCase()
-  let employmentType = 'FULL_TIME'
-
-  if (job.contractTime) {
-    const map: Record<string, string> = {
-      full_time: 'FULL_TIME', part_time: 'PART_TIME',
-      contract: 'CONTRACTOR', temporary: 'TEMPORARY', intern: 'INTERN',
-    }
-    employmentType = map[job.contractTime.toLowerCase()] || employmentType
-  } else if (job.contractType) {
-    const map: Record<string, string> = {
-      permanent: 'FULL_TIME', contract: 'CONTRACTOR',
-      temporary: 'TEMPORARY', part_time: 'PART_TIME',
-    }
-    employmentType = map[job.contractType.toLowerCase()] || employmentType
-  } else if (text.includes('part-time') || text.includes('part time')) {
-    employmentType = 'PART_TIME'
-  } else if (text.includes('contract')) {
-    employmentType = 'CONTRACTOR'
-  } else if (text.includes('intern')) {
-    employmentType = 'INTERN'
+  const contractTimeMap: Record<string, string> = {
+    full_time: 'FULL_TIME', part_time: 'PART_TIME',
+    contract: 'CONTRACTOR', temporary: 'TEMPORARY', intern: 'INTERN',
+  }
+  const contractTypeMap: Record<string, string> = {
+    permanent: 'FULL_TIME', contract: 'CONTRACTOR',
+    temporary: 'TEMPORARY', part_time: 'PART_TIME',
   }
 
+  let employmentType =
+    (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()]) ||
+    (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
+
+  if (!employmentType) {
+    const text = (job.title + ' ' + (job.description || '')).toLowerCase()
+    if (text.includes('part-time') || text.includes('part time')) {
+      employmentType = 'PART_TIME'
+    } else if (text.includes('contract')) {
+      employmentType = 'CONTRACTOR'
+    } else if (text.includes('intern')) {
+      employmentType = 'INTERN'
+    } else {
+      employmentType = 'FULL_TIME'
+    }
+  }
   schema.employmentType = employmentType
 
-  // baseSalary
-  if (job.salaryMin && job.salaryMax) {
+  if (job.salary_min && job.salary_max) {
     schema.baseSalary = {
       '@type': 'MonetaryAmount',
       currency: 'USD',
       value: {
         '@type': 'QuantitativeValue',
-        minValue: job.salaryMin,
-        maxValue: job.salaryMax,
+        minValue: job.salary_min,
+        maxValue: job.salary_max,
         unitText: 'YEAR',
       },
     }
   }
 
-  // Remote
   if ((job.location || '').toLowerCase().includes('remote')) {
     schema.jobLocationType = 'TELECOMMUTE'
     schema.applicantLocationRequirements = { '@type': 'Country', name: 'US' }
@@ -137,15 +218,15 @@ export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
   const { id } = await params
-  const raw = await getJobFromDb(id)
+  const raw = await getJobDetail(id)
 
   if (!raw) return { title: 'Job Not Found | Oh My Job' }
 
-  const job = enrichSalary(raw)
+  const job = getJobDetailWithSalary(raw)
 
   const salaryStr =
-    job.salaryMin && job.salaryMax
-      ? ` – $${job.salaryMin.toLocaleString()} to $${job.salaryMax.toLocaleString()}`
+    job.salary_min && job.salary_max
+      ? ` – $${job.salary_min.toLocaleString()} to $${job.salary_max.toLocaleString()}`
       : ''
 
   return {
@@ -171,14 +252,13 @@ export default async function JobDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const raw = await getJobFromDb(id)
+  const raw = await getJobDetail(id)
 
   if (!raw) notFound()
 
-  const job = enrichSalary(raw)
+  const job = getJobDetailWithSalary(raw)
   const schema = buildJobPostingSchema(job)
 
-  // Config par source
   const applyConfig: Record<string, { label: string; className: string }> = {
     adzuna: { label: 'Apply now on Adzuna', className: '' },
     lensa: { label: 'Apply on Lensa', className: 'bg-green-600 hover:bg-green-700' },
@@ -186,6 +266,7 @@ export default async function JobDetailPage({
   }
 
   const apply = applyConfig[job.source] || applyConfig.adzuna
+  const applyUrl = job.externalApplyUrl || job.apply_url
 
   return (
     <>
@@ -230,10 +311,10 @@ export default async function JobDetailPage({
                 <MapPin className="w-4 h-4" /> {job.location}
               </div>
             )}
-            {job.postedAt && (
+            {job.created && (
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />{' '}
-                {new Date(job.postedAt).toLocaleDateString('en-US', {
+                {new Date(job.created).toLocaleDateString('en-US', {
                   month: 'short', day: 'numeric', year: 'numeric',
                 })}
               </div>
@@ -242,14 +323,14 @@ export default async function JobDetailPage({
               <DollarSign className="w-4 h-4" />
               {(job.salary || 'Salary not listed').replace(/^\$/, '')}
             </div>
-            {job.contractType && (
+            {job.contract_type && (
               <span className="bg-secondary px-3 py-1 rounded-full capitalize">
-                {job.contractType}
+                {job.contract_type}
               </span>
             )}
-            {job.contractTime && (
+            {job.contract_time && (
               <span className="bg-secondary px-3 py-1 rounded-full capitalize">
-                {job.contractTime.replace('_', ' ')}
+                {job.contract_time.replace('_', ' ')}
               </span>
             )}
           </div>
@@ -272,9 +353,9 @@ export default async function JobDetailPage({
 
           {/* Apply CTA */}
           <div className="mt-10">
-            {job.applyUrl ? (
+            {applyUrl ? (
               <Button asChild size="lg" className={`w-full md:w-auto ${apply.className}`}>
-                <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
+                <a href={applyUrl} target="_blank" rel="noopener noreferrer">
                   {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
                 </a>
               </Button>
