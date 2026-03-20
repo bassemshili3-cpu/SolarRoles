@@ -10,8 +10,9 @@ import { formatJobDescription } from '@/lib/formatJobDescription'
 import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
 import { searchLensaJobs } from '@/lib/lensa'
 import { getJobById } from '@/lib/adzuna'
+import { getCachedJoobleJob } from '@/lib/jooble-cache'
 
-export const revalidate = 3600 // Cache ISR 1h — évite les 429 Adzuna
+export const revalidate = 3600
 
 type JobDetail = {
   id: string
@@ -26,13 +27,25 @@ type JobDetail = {
   created?: string
   contract_type?: string
   contract_time?: string
-  source: 'lensa' | 'adzuna'
+  source: 'lensa' | 'adzuna' | 'jooble'
   externalApplyUrl?: string | null
   apply_url?: string
 }
 
 async function getJobDetail(id: string): Promise<JobDetail | null> {
   try {
+    // ─── Jooble ────────────────────────────────────────────────────────────
+    if (id.startsWith('jooble-')) {
+      const cached = getCachedJoobleJob(id)
+      if (!cached) return null
+      return {
+        ...cached,
+        source: 'jooble' as const,
+        externalApplyUrl: cached.apply_url,
+      }
+    }
+
+    // ─── Lensa ─────────────────────────────────────────────────────────────
     if (id.startsWith('lensa-')) {
       const originalId = id.replace('lensa-', '')
       const lensaData = await searchLensaJobs({ limit: 180 })
@@ -41,6 +54,7 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
       return { ...normalizeLensa(job), source: 'lensa' as const }
     }
 
+    // ─── Adzuna ────────────────────────────────────────────────────────────
     if (id.startsWith('adzuna-')) {
       const originalId = id.replace('adzuna-', '')
       const jobRaw = await getJobById(originalId)
@@ -66,12 +80,10 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
   }
 }
 
-/** Wrapper: fetches job + extracts salary from text when API fields are empty or estimated */
 async function getJobDetailWithSalary(id: string): Promise<JobDetail | null> {
   const job = await getJobDetail(id)
   if (!job) return null
 
-  // Real salary = both fields present AND different (not an Adzuna estimate)
   const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
 
   if (!hasRealSalary) {
@@ -80,10 +92,7 @@ async function getJobDetailWithSalary(id: string): Promise<JobDetail | null> {
       job.salary = extracted.display
       job.salary_min = extracted.min
       job.salary_max = extracted.max
-    }
-    // No extraction found but Adzuna gave an estimate (min === max)
-    // Show it as estimate rather than a fake range
-    else if (job.salary_min && job.salary_min === job.salary_max) {
+    } else if (job.salary_min && job.salary_min === job.salary_max) {
       job.salary = `~$${job.salary_min.toLocaleString('en-US')}/year (est.)`
     }
   }
@@ -91,12 +100,10 @@ async function getJobDetailWithSalary(id: string): Promise<JobDetail | null> {
   return job
 }
 
-// ─── Strip HTML pour la description dans le schema ───────────────────────────
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-// ─── JobPosting Schema (Google Jobs optimized) ───────────────────────────────
 function buildJobPostingSchema(job: JobDetail) {
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
@@ -120,26 +127,26 @@ function buildJobPostingSchema(job: JobDetail) {
     datePosted: job.created
       ? new Date(job.created).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0],
-
-    // Adzuna compliance: users are redirected to Adzuna to apply
     directApply: false,
   }
 
-  // Unique identifier — helps Google deduplicate listings
   if (job.id) {
+    const sourceNames: Record<string, string> = {
+      adzuna: 'Adzuna',
+      lensa: 'Lensa',
+      jooble: 'Jooble',
+    }
     schema.identifier = {
       '@type': 'PropertyValue',
-      name: job.source === 'adzuna' ? 'Adzuna' : 'Lensa',
+      name: sourceNames[job.source] || job.source,
       value: job.id,
     }
   }
 
-  // validThrough: +60 days after datePosted
   const base = job.created ? new Date(job.created) : new Date()
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
 
-  // ─── employmentType ─────────────────────────────────────────────────────
   const contractTimeMap: Record<string, string> = {
     full_time: 'FULL_TIME',
     part_time: 'PART_TIME',
@@ -176,7 +183,6 @@ function buildJobPostingSchema(job: JobDetail) {
 
   schema.employmentType = employmentType
 
-  // ─── baseSalary ─────────────────────────────────────────────────────────
   if (job.salary_min && job.salary_max) {
     schema.baseSalary = {
       '@type': 'MonetaryAmount',
@@ -190,7 +196,6 @@ function buildJobPostingSchema(job: JobDetail) {
     }
   }
 
-  // ─── Remote detection ───────────────────────────────────────────────────
   const locationLower = (job.location || '').toLowerCase()
   if (locationLower.includes('remote')) {
     schema.jobLocationType = 'TELECOMMUTE'
@@ -203,7 +208,6 @@ function buildJobPostingSchema(job: JobDetail) {
   return schema
 }
 
-// ─── Metadata dynamiques ─────────────────────────────────────────────────────
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
@@ -232,7 +236,6 @@ export async function generateMetadata(
   }
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default async function JobDetailPage({
   params,
 }: {
@@ -245,9 +248,17 @@ export default async function JobDetailPage({
 
   const schema = buildJobPostingSchema(job)
 
+  // ─── Label + couleur du bouton Apply par source ────────────────────────
+  const applyConfig = {
+    adzuna: { label: 'Apply now on Adzuna', className: '', url: job.externalApplyUrl },
+    lensa: { label: 'Apply on Lensa', className: 'bg-green-600 hover:bg-green-700', url: job.apply_url },
+    jooble: { label: 'Apply on Company Site', className: 'bg-blue-600 hover:bg-blue-700', url: job.externalApplyUrl || job.apply_url },
+  }
+
+  const apply = applyConfig[job.source]
+
   return (
     <>
-      {/* JobPosting Schema for Google Jobs */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -260,21 +271,17 @@ export default async function JobDetailPage({
 
         <div className="bg-card border rounded-2xl p-8 shadow-sm">
 
-          {/* Adzuna attribution — required by partnership terms */}
+          {/* Attribution logos */}
           {job.source === 'adzuna' && (
             <div className="flex justify-end mb-4">
-              <a
-                href="https://www.adzuna.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="/adzuna-logo.png"
-                  alt="Powered by Adzuna"
-                  width={116}
-                  height={23}
-                />
+              <a href="https://www.adzuna.com" target="_blank" rel="noopener noreferrer">
+                <img src="/adzuna-logo.png" alt="Powered by Adzuna" width={116} height={23} />
               </a>
+            </div>
+          )}
+          {job.source === 'jooble' && (
+            <div className="flex justify-end mb-4">
+              <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
             </div>
           )}
 
@@ -304,8 +311,8 @@ export default async function JobDetailPage({
               </div>
             )}
             <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
-               <DollarSign className="w-4 h-4" />
-  {(job.salary || 'Salary not listed').replace(/^\$/, '')}
+              <DollarSign className="w-4 h-4" />
+              {(job.salary || 'Salary not listed').replace(/^\$/, '')}
             </div>
             {job.contract_type && (
               <span className="bg-secondary px-3 py-1 rounded-full capitalize">
@@ -321,7 +328,6 @@ export default async function JobDetailPage({
 
           <hr className="my-8" />
 
-          {/* Job description — formatted for readability */}
           <div>
             <h2 className="text-xl font-semibold mb-4">Job Description</h2>
             <div
@@ -338,17 +344,15 @@ export default async function JobDetailPage({
 
           {/* Apply CTA */}
           <div className="mt-10">
-            {job.source === 'adzuna' && job.externalApplyUrl ? (
-              <Button asChild size="lg" className="w-full md:w-auto">
-                <a href={job.externalApplyUrl} target="_blank" rel="noopener noreferrer">
-                  Apply now on Adzuna <ExternalLink className="w-4 h-4 ml-2" />
+            {apply.url ? (
+              <Button asChild size="lg" className={`w-full md:w-auto ${apply.className}`}>
+                <a href={apply.url} target="_blank" rel="noopener noreferrer">
+                  {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
                 </a>
               </Button>
             ) : (
-              <Button asChild size="lg" className="w-full md:w-auto bg-green-600 hover:bg-green-700">
-                <a href={job.apply_url || '#'} target="_blank" rel="noopener noreferrer">
-                  Apply on Lensa <ExternalLink className="w-4 h-4 ml-2" />
-                </a>
+              <Button disabled size="lg" className="w-full md:w-auto">
+                Apply link unavailable
               </Button>
             )}
           </div>

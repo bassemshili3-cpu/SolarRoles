@@ -1,5 +1,7 @@
 import { getCachedLensaJobs, LensaJobAdvert } from './lensa'
 import { searchJobs as searchAdzuna, AdzunaJob } from './adzuna'
+import { searchJooble, JoobleJob } from './jooble'
+import { cacheJoobleJobs } from './jooble-cache'
 
 export interface UnifiedJob {
   id: string
@@ -9,12 +11,12 @@ export interface UnifiedJob {
   description: string
   url: string
   apply_url: string
-  source: 'lensa' | 'adzuna'
+  source: 'lensa' | 'adzuna' | 'jooble'
   salary_min?: number
   salary_max?: number
   created?: string
   revenue_per_click?: number
-  addressRegion?: string // ← extrait depuis location.area[1] (Adzuna uniquement)
+  addressRegion?: string
 }
 
 export interface UnifiedSearchResult {
@@ -22,6 +24,7 @@ export interface UnifiedSearchResult {
   count: number
   lensa_count: number
   adzuna_count: number
+  jooble_count: number
 }
 
 // Cooldown en mémoire — évite de recontacter Lensa si il est down
@@ -42,8 +45,6 @@ export function normalizeLensa(job: LensaJobAdvert): UnifiedJob {
 }
 
 export function normalizeAdzuna(job: AdzunaJob): UnifiedJob {
-  // area = ["US", "Maryland", "Baltimore", "Downtown"]
-  // On extrait l'état (index 1) pour le schema Google Jobs addressRegion
   const area = job.location?.area || []
   const addressRegion = area[1] || ''
 
@@ -59,7 +60,40 @@ export function normalizeAdzuna(job: AdzunaJob): UnifiedJob {
     salary_min: job.salary_min,
     salary_max: job.salary_max,
     created: job.created,
-    addressRegion, // ← ex: "Maryland", "California", "New York"
+    addressRegion,
+  }
+}
+
+export function normalizeJooble(job: JoobleJob): UnifiedJob {
+  // Parse salary string "$50,000 - $70,000" en min/max
+  let salary_min: number | undefined
+  let salary_max: number | undefined
+
+  if (job.salary) {
+    const nums = job.salary.match(/[\d,]+/g)
+    if (nums && nums.length >= 1) {
+      salary_min = parseInt(nums[0].replace(/,/g, ''))
+      if (nums.length >= 2) {
+        salary_max = parseInt(nums[1].replace(/,/g, ''))
+      }
+    }
+  }
+
+  // Génère un ID stable à partir du lien (Jooble n'a pas toujours un ID unique fiable)
+  const stableId = job.id || Buffer.from(job.link).toString('base64').slice(0, 16)
+
+  return {
+    id: `jooble-${stableId}`,
+    title: job.title,
+    company: job.company || '',
+    location: job.location || '',
+    description: job.snippet || '',
+    url: `/jobs/jooble-${stableId}`,
+    apply_url: job.link || '',
+    source: 'jooble',
+    salary_min,
+    salary_max,
+    created: job.updated || undefined,
   }
 }
 
@@ -103,20 +137,40 @@ export async function searchAllJobs(params: {
     results_per_page: totalLimit,
     ...(params.salary_min && { salary_min: Number(params.salary_min) }),
   }
+  const joobleParams = {
+    keywords: params.what || '',
+    location: params.where || '',
+    page,
+    resultsOnPage: totalLimit,
+    ...(params.salary_min && { salary: Number(params.salary_min) }),
+  }
 
   // === Cooldown check ===
   const lensaSkipped = lensaDownUntil !== null && Date.now() < lensaDownUntil
   if (lensaSkipped) {
-    console.warn("⚠️ Lensa en cooldown → skip, 100% Adzuna")
+    console.warn("⚠️ Lensa en cooldown → skip")
   }
 
-  // === Appels parallèles ===
-  const [lensaResult, adzunaResult] = await Promise.allSettled([
+  // === Appels parallèles (3 sources) ===
+  const [joobleResult, lensaResult, adzunaResult] = await Promise.allSettled([
+    searchJooble(joobleParams),
     lensaSkipped ? Promise.reject(new Error('Lensa en cooldown')) : getCachedLensaJobs(lensaParams),
     searchAdzuna(adzunaParams),
   ])
 
-  // === Traitement Lensa ===
+  // === Traitement Jooble (priorité #1) ===
+  let joobleJobs: UnifiedJob[] = []
+  let joobleCount = 0
+
+  if (joobleResult.status === 'fulfilled' && joobleResult.value) {
+    joobleJobs = joobleResult.value.jobs.map(normalizeJooble)
+    joobleCount = joobleResult.value.totalCount
+    console.log(`✅ Jooble : ${joobleJobs.length} jobs (total: ${joobleCount})`)
+  } else {
+    console.error("❌ Jooble error:", joobleResult.status === 'rejected' ? joobleResult.reason?.message : 'unknown')
+  }
+
+  // === Traitement Lensa (priorité #2) ===
   let lensaData: any = null
 
   if (lensaResult.status === 'fulfilled') {
@@ -127,7 +181,7 @@ export async function searchAllJobs(params: {
     if (!lensaSkipped) {
       console.error("❌ Lensa FAILED :", msg)
       if (msg.includes('422') || msg.toLowerCase().includes('inactive') || msg.includes('401') || msg.includes('403')) {
-        lensaDownUntil = Date.now() + 2 * 60 * 60 * 1000 // cooldown 2h
+        lensaDownUntil = Date.now() + 2 * 60 * 60 * 1000
         console.warn("⚠️ Lensa mis en cooldown 2h")
       }
     }
@@ -136,7 +190,7 @@ export async function searchAllJobs(params: {
   let lensaJobs: UnifiedJob[] = lensaData?.job_adverts?.map(normalizeLensa) || []
   const lensaCount = lensaData?.count || 0
 
-  // Fallback Lensa sans localisation si aucun résultat mais pas en cooldown
+  // Fallback Lensa sans localisation
   if (!lensaSkipped && lensaData && lensaJobs.length === 0 && params.what) {
     console.log("⚠️ Aucun job Lensa → Tentative sans filtre localisation...")
     try {
@@ -149,7 +203,7 @@ export async function searchAllJobs(params: {
     }
   }
 
-  // === Traitement Adzuna ===
+  // === Traitement Adzuna (priorité #3) ===
   let adzunaJobs: UnifiedJob[] = []
   let adzunaCount = 0
 
@@ -161,14 +215,34 @@ export async function searchAllJobs(params: {
     console.error("❌ Adzuna error:", adzunaResult.status === 'rejected' ? adzunaResult.reason?.message : 'unknown')
   }
 
-  // Priorité Lensa maintenue : lensaJobs toujours en premier
-  console.log(`📦 TOTAL RETOURNÉ : ${lensaJobs.length} Lensa + ${adzunaJobs.length} Adzuna`)
+  // === Déduplications par titre + company ===
+  const seen = new Set<string>()
+  const dedup = (jobs: UnifiedJob[]): UnifiedJob[] => {
+    return jobs.filter((job) => {
+      const key = `${job.title.toLowerCase().trim()}|${job.company.toLowerCase().trim()}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+  }
+
+  // Ordre de priorité : Jooble → Lensa → Adzuna
+  const dedupedJooble = dedup(joobleJobs)
+ 
+cacheJoobleJobs(dedupedJooble)
+  const dedupedLensa = dedup(lensaJobs)
+  const dedupedAdzuna = dedup(adzunaJobs)
+
+  const allResults = [...dedupedJooble, ...dedupedLensa, ...dedupedAdzuna]
+
+  console.log(`📦 TOTAL RETOURNÉ : ${dedupedJooble.length} Jooble + ${dedupedLensa.length} Lensa + ${dedupedAdzuna.length} Adzuna (${allResults.length} après dédup)`)
   console.log("=== DEBUG END ===")
 
   return {
-    results: [...lensaJobs, ...adzunaJobs],
-    count: Math.max(lensaCount, adzunaCount),
+    results: allResults,
+    count: Math.max(joobleCount, lensaCount, adzunaCount),
     lensa_count: lensaCount,
     adzuna_count: adzunaCount,
+    jooble_count: joobleCount,
   }
 }
