@@ -111,11 +111,14 @@ export async function syncAllJobs(page: number = 1, limit: number = 50): Promise
     result.adzuna.errors = 1
   }
 
-  // ─── Fetch Jooble ────────────────────────────────────────────────────────
+// ─── Fetch Jooble ────────────────────────────────────────────────────────
   try {
+    const joobleKeywords = ['developer', 'nurse', 'accountant', 'manager', 'sales', 'engineer', 'teacher', 'analyst', 'driver', 'marketing']
+    const keyword = joobleKeywords[page % joobleKeywords.length]
+
     const joobleData = await searchJooble({
-      keywords: '',
-      location: '',
+      keywords: keyword,
+      location: 'USA',
       page,
       resultsOnPage: limit,
     })
