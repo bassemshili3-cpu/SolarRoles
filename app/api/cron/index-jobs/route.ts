@@ -43,12 +43,15 @@ export async function GET(req: NextRequest) {
 
   try {
     // ─── Récupère les dernières offres ────────────────────────────────────────
-    const data = await searchJobs({
-      what: '',
-      where: '',
-      results_per_page: MAX_URLS_PER_RUN,
-      page: 1,
-    })
+   const currentHour = new Date().getUTCHours()
+const page = (currentHour % 12) + 1
+
+const data = await searchJobs({
+  what: '',
+  where: '',
+  results_per_page: MAX_URLS_PER_RUN,
+  page,
+})
 
     if (!data.results || data.results.length === 0) {
       console.log('⚠️ Aucun job récent trouvé')
