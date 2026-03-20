@@ -16,6 +16,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchJobs } from '@/lib/adzuna'
 import { notifyGoogleBatch } from '@/lib/google-indexing'
+import { submitToIndexNow } from '@/lib/indexnow'
 
 const BASE_URL = 'https://www.oh-my-job.com'
 const MAX_URLS_PER_RUN = 16 // 16 × 24h = 384/jour (sous la limite de 400)
@@ -85,6 +86,11 @@ export async function GET(req: NextRequest) {
       })
     }
 
+    // ─── Envoi à IndexNow (Bing, Yandex) ──────────────────────────────
+const aliveUrls = alive.map((c) => c.url)
+const indexNowResult = await submitToIndexNow(aliveUrls)
+console.log(`🔔 IndexNow: ${indexNowResult.success ? 'OK' : 'Failed'}`)
+
     // ─── Envoi à Google (uniquement les URLs vivantes) ───────────────────────
     const urls = alive.map((c) => ({
       url: c.url,
@@ -115,3 +121,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
+
