@@ -274,7 +274,17 @@ cacheJoobleJobs(dedupedJooble)
   const dedupedLensa = dedup(lensaJobs)
   const dedupedAdzuna = dedup(adzunaJobs)
 
-  const allResults = [...dedupedJooble, ...dedupedLensa, ...dedupedAdzuna]
+  // ── Interleave Adzuna + Jooble (1:1 alternance) ──
+const interleaved: UnifiedJob[] = []
+const maxLen = Math.max(dedupedAdzuna.length, dedupedJooble.length)
+
+for (let i = 0; i < maxLen; i++) {
+  if (i < dedupedAdzuna.length) interleaved.push(dedupedAdzuna[i])
+  if (i < dedupedJooble.length) interleaved.push(dedupedJooble[i])
+}
+
+// Lensa en fin de liste (inactif pour l'instant, mais prêt)
+const allResults = [...interleaved, ...dedupedLensa]
 
   console.log(`📦 TOTAL RETOURNÉ : ${dedupedJooble.length} Jooble + ${dedupedLensa.length} Lensa + ${dedupedAdzuna.length} Adzuna (${allResults.length} après dédup)`)
   console.log("=== DEBUG END ===")
