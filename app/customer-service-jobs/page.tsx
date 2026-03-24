@@ -19,24 +19,26 @@ import {
 } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
+
+export const revalidate = 3600
+
 export const metadata: Metadata = {
-  title: 'Hiring Immediately: Customer Service Jobs | Apply Today',
+  title: 'Customer Service Jobs Hiring Now | Apply Today',
   description:
-    'Browse hundreds of customer service jobs hiring now near you. Full-time, part-time and remote openings at top companies. No degree required for many roles. Competitive pay and benefits. Apply in minutes!',
+    'Browse customer service jobs open right now across the US. Remote, hybrid, and on-site roles at companies hiring immediately. Entry-level to senior positions. Filter by pay, location, and shift type.',
   keywords:
     'customer service jobs, customer service jobs near me, customer service representative jobs, remote customer service jobs, call center jobs, customer support jobs hiring now, entry level customer service jobs',
   openGraph: {
-    title: 'Immediate Opening: Customer Service Jobs | Apply Now',
+    title: 'Customer Service Jobs Hiring Now | Find Openings Near You',
     description:
-      'Find customer service jobs hiring immediately in your area and remotely. Entry-level to senior roles at leading companies. Great pay, benefits, and growth opportunities. Start your application today.',
+      'Customer service positions available today. Remote and on-site options across retail, tech, healthcare, and finance. Apply in minutes.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgently Hiring: Customer Service Jobs | Find Yours Now',
+    title: 'Customer Service Jobs | Hundreds of Openings Right Now',
     description:
-      'Hundreds of customer service positions open right now. Remote and on-site options. No experience required for some roles. Apply today and get hired fast.',
+      'Find customer service roles hiring immediately. No degree required for most positions. Remote-friendly. Competitive pay.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/customer-service-jobs',
@@ -61,37 +63,37 @@ const customerServiceRoles = [
   {
     title: 'Customer Service Representative',
     description:
-      'The most common entry point. Handle inbound inquiries, resolve issues, and assist customers via phone, email, or chat.',
+      'The default entry point for most people. You answer phones, respond to emails, and resolve issues. The role teaches you how to stay calm when someone is upset, how to navigate internal systems under pressure, and how to turn a complaint into a save. Every other role on this list builds on what you learn here.',
     icon: Headphones,
   },
   {
     title: 'Call Center Agent',
     description:
-      'Work in a dedicated call center environment, managing high volumes of inbound or outbound calls for a company or third-party client.',
+      'Higher volume, tighter metrics. Call centers track your average handle time, first-call resolution rate, and customer satisfaction score after every interaction. The pace is intense, but the structure is clear: you know exactly what is expected and exactly how you are performing at all times.',
     icon: Headphones,
   },
   {
     title: 'Remote Customer Support Specialist',
     description:
-      'Provide customer assistance entirely from home. One of the fastest-growing job categories in the U.S., with flexible scheduling options.',
+      'Same responsibilities as an on-site rep, minus the commute. You work from home handling tickets, chats, or calls through a company-provided laptop. The catch is that remote roles attract more applicants, so the hiring bar tends to be slightly higher. Reliable internet and a quiet workspace are non-negotiable.',
     icon: Briefcase,
   },
   {
     title: 'Technical Support Representative',
     description:
-      'Help customers troubleshoot products or software. Often pays more than standard CSR roles and values technical aptitude over formal education.',
+      'This is where customer service meets problem-solving. You walk people through software bugs, hardware failures, and configuration issues. You do not need a computer science degree, but you do need the patience to explain a reboot sequence to someone who is already frustrated. Pay is noticeably higher than standard CSR roles.',
     icon: Award,
   },
   {
     title: 'Client Success Manager',
     description:
-      'Focus on retaining and growing relationships with existing clients. A more senior role with higher compensation and business development responsibilities.',
+      'Less about fixing problems and more about preventing them. You own a portfolio of accounts and your job is to make sure those clients keep paying. The role blends relationship management with light sales and requires you to understand the product deeply enough to spot opportunities the client has not considered yet.',
     icon: TrendingUp,
   },
   {
     title: 'Retail Customer Service Associate',
     description:
-      'Assist shoppers in-store, handle returns, manage complaints, and maintain a positive brand experience on the sales floor.',
+      'Face-to-face service on a sales floor. You handle returns, answer product questions, de-escalate complaints, and occasionally restock shelves between customers. The work is physical and social in a way that phone-based roles are not. Some people love that. Others discover they prefer a headset.',
     icon: Users,
   },
 ]
@@ -100,32 +102,32 @@ const keySkills = [
   {
     skill: 'Active Listening',
     detail:
-      'Understanding what a customer truly needs, beyond what they say, is the foundation of effective service.',
+      'Most customers do not articulate their real problem on the first try. The ability to hear past the frustration and identify what actually needs fixing is what separates adequate reps from the ones who get promoted.',
   },
   {
     skill: 'Clear Communication',
     detail:
-      'Both written and verbal clarity reduce misunderstandings, shorten resolution times, and improve customer satisfaction scores.',
+      'Saying the right thing in too many words is almost as bad as saying the wrong thing. Whether you are writing an email or explaining a policy over the phone, clarity and brevity reduce callbacks and escalations.',
   },
   {
-    skill: 'Problem Solving',
+    skill: 'Problem Solving Under Constraints',
     detail:
-      'Employers look for candidates who can think on their feet and resolve issues without always escalating to a supervisor.',
+      'You rarely have the power to give customers exactly what they want. The skill is finding a resolution that satisfies them within the boundaries your company sets. That middle ground is where the best reps operate.',
   },
   {
-    skill: 'Patience and Empathy',
+    skill: 'Emotional Steadiness',
     detail:
-      'Handling frustrated or upset customers professionally is one of the most valued and tested competencies in any interview.',
+      'You will be yelled at. Not occasionally. Regularly. The people who last in this field are not the ones who do not feel it. They are the ones who feel it and still respond professionally. That is a skill, not a personality trait, and it can be developed.',
   },
   {
-    skill: 'CRM Software Proficiency',
+    skill: 'CRM and Ticketing Tools',
     detail:
-      'Familiarity with tools such as Salesforce, Zendesk, or HubSpot is increasingly expected, even at entry level.',
+      'Salesforce, Zendesk, Freshdesk, HubSpot, Intercom. You will use at least one of these daily. You do not need to be an expert before you start, but knowing your way around a ticketing dashboard makes your first week dramatically less overwhelming.',
   },
   {
-    skill: 'Multitasking',
+    skill: 'Managing Multiple Conversations',
     detail:
-      'Managing simultaneous chats, open tickets, and phone calls without dropping quality is critical in high-volume environments.',
+      'Chat support agents routinely handle three to five conversations simultaneously. That requires a specific kind of focus: the ability to context-switch without dropping the thread of any single interaction.',
   },
 ]
 
@@ -141,100 +143,100 @@ const salaryData = [
 const industryBreakdown = [
   {
     industry: 'Retail and E-Commerce',
-    notes: 'Highest volume of openings. Amazon, Walmart, and Target are among the largest hirers nationwide.',
+    notes: 'The largest hiring pool by volume. Seasonal spikes around Q4 create thousands of temporary roles that frequently convert to permanent positions.',
   },
   {
     industry: 'Banking and Financial Services',
-    notes: 'Often requires a background check. Competitive pay and strong benefits packages are common.',
+    notes: 'Expect a background check and potentially a credit check. In return, you get above-average pay, strong benefits, and a structured promotion ladder.',
   },
   {
     industry: 'Healthcare',
     notes:
-      'Patient service and insurance support roles are growing rapidly. HIPAA awareness is a plus.',
+      'Patient-facing service roles and insurance support desks are expanding as the system digitizes. HIPAA awareness is often required but typically taught during onboarding.',
   },
   {
     industry: 'Technology and SaaS',
     notes:
-      'Technical support and customer success roles pay above average. Product knowledge training is typically provided.',
+      'Technical support and customer success roles pay the most in this category. Companies invest heavily in onboarding because product knowledge takes time to build.',
   },
   {
     industry: 'Telecommunications',
     notes:
-      'High call volume environments with strong onboarding programs and clear opportunities for advancement.',
+      'High volume, high structure. Telecom companies run some of the most sophisticated training programs in the industry and promote aggressively from within.',
   },
 ]
 
 const remoteWorkFacts = [
-  'According to the U.S. Bureau of Labor Statistics, business support and customer service occupations are among the top categories for remote and hybrid work arrangements.',
-  'A significant share of customer service job postings now list remote or work-from-home as an option, particularly in tech, insurance, and e-commerce sectors.',
-  'Remote customer service roles typically require a reliable internet connection, a quiet workspace, and a personal computer meeting minimum specifications.',
-  'The Equal Employment Opportunity Commission (EEOC) clarifies that remote workers hold the same workplace rights as on-site employees, including protections against discrimination and the right to reasonable accommodations.',
+  'Customer service is one of the job categories with the highest share of fully remote positions in the country. Insurance, fintech, and SaaS companies lead the way.',
+  'Most remote roles ship you a laptop and headset. Some also provide a monthly stipend for internet. The expectation in return is a dedicated workspace and consistent availability during your scheduled shift.',
+  'Remote does not mean flexible hours for most companies. You are typically assigned a fixed schedule, including breaks, and your availability is tracked through the same workforce management tools used in physical call centers.',
+  'The legal protections you have as a remote worker are identical to those of on-site employees. Wage laws, anti-discrimination protections, and overtime rules apply regardless of where your desk sits.',
 ]
 
 const faqs = [
   {
     question: 'What qualifications do I need to get a customer service job?',
     answer:
-      'Most entry-level customer service positions require only a high school diploma or GED. According to the U.S. Bureau of Labor Statistics Occupational Outlook Handbook, employers typically value communication skills, a positive attitude, and basic computer literacy above formal education. Some industries, such as financial services or healthcare, may require additional background checks or sector-specific knowledge.',
+      'A high school diploma is enough for the majority of entry-level positions. What actually gets you hired is how you communicate during the interview. Employers care far more about your ability to stay composed under pressure and explain things clearly than about your educational background. Some sectors like finance or healthcare layer on additional requirements like background checks or industry-specific training, but those are provided after you are hired.',
   },
   {
     question: 'Are customer service jobs available remotely?',
     answer:
-      'Yes. Remote customer service roles have expanded significantly. The BLS notes that business support occupations, which include customer service, rank among the most common work-from-home job categories in the U.S. Many employers provide equipment and paid training entirely online, making these roles accessible regardless of geographic location.',
+      'Yes, and the number of remote openings has grown substantially since 2020 with no sign of contracting. Insurance companies, SaaS businesses, and e-commerce platforms are the most active remote hirers. Most provide equipment and run their entire onboarding process virtually. Geography matters less than it used to, though some companies still restrict hiring to specific states for tax and compliance reasons.',
   },
   {
     question: 'What is the average salary for a customer service representative?',
     answer:
-      'According to the U.S. Bureau of Labor Statistics, the median annual wage for customer service representatives was approximately $37,780 in May 2023. Salaries vary based on industry, location, and experience. Technical support and client success roles in the technology sector tend to pay considerably more, often exceeding $60,000 per year.',
+      'The national median lands around $37,800 per year, but that figure blurs a wide range. A chat support agent at a small e-commerce company might earn $15 an hour while a technical support specialist at a SaaS company in a major metro clears $60,000 or more. The biggest pay levers are industry, technical complexity, and whether the role involves revenue retention or upselling.',
   },
   {
-    question: 'What is the job outlook for customer service roles?',
+    question: 'Is customer service a dying field because of AI and automation?',
     answer:
-      'The BLS projects a modest decline in traditional call-center-style customer service roles due to automation. However, demand for skilled customer-facing professionals in healthcare, technology, and financial services remains strong. Workers who combine service skills with technical knowledge or industry specialization are well-positioned in the current labor market.',
+      'Chatbots have absorbed a chunk of simple, repetitive inquiries like order tracking and password resets. But every time automation handles the easy questions, the remaining ones that reach a human get harder. Companies still need people who can navigate complex situations, show genuine empathy, and make judgment calls that a script cannot cover. The role is evolving, not disappearing.',
   },
   {
     question: 'Can customer service experience lead to career advancement?',
     answer:
-      'Absolutely. Customer service is a recognized gateway into roles such as team lead, operations manager, account executive, and sales representative. Many Fortune 500 companies actively promote from within their customer service departments. Skills gained in these roles, including communication, conflict resolution, and product knowledge, are directly transferable across industries.',
+      'It is one of the most reliable on-ramps into a professional career. Customer service teaches you how to communicate under pressure, how to use CRM systems, how to negotiate within constraints, and how to manage difficult personalities. Those skills translate directly into sales, operations, account management, and people leadership. A significant number of operations managers and sales directors started by answering phones.',
   },
   {
-    question: 'Do customer service employees have protected rights under federal law?',
+    question: 'What rights do I have as a customer service employee?',
     answer:
-      'Yes. According to the U.S. Department of Labor, all employees including customer service workers are protected by the Fair Labor Standards Act (FLSA), which governs minimum wage, overtime pay, and recordkeeping. The Equal Employment Opportunity Commission (EEOC) also prohibits workplace discrimination based on race, color, religion, sex, national origin, age, disability, or genetic information.',
+      'Every right that any other employee has. Federal minimum wage and overtime protections apply. Discrimination based on race, gender, age, disability, or religion is illegal. If you work remotely, those protections follow you home. If your employer asks you to perform work off the clock, such as finishing call notes after your shift ends without pay, that is a wage violation you can report to your state labor board or the federal Department of Labor.',
   },
 ]
 
 const tips = [
   {
-    title: 'Tailor Your Resume to the Role',
+    title: 'Lead Your Resume With Numbers, Not Adjectives',
     description:
-      'Highlight measurable outcomes where possible, such as customer satisfaction scores, resolution rates, or volume of calls handled. Generic resumes are less competitive in high-applicant pools.',
+      'Every applicant writes "excellent communicator" and "team player." What stands out is specificity: "Handled 80+ inbound calls per shift with a 94% satisfaction rating." Even if your numbers are approximate, they signal that you understand what the job actually measures.',
   },
   {
-    title: 'Prepare for Scenario-Based Interview Questions',
+    title: 'Prepare Three Stories Before the Interview',
     description:
-      'Most customer service interviews include situational questions such as "Tell me about a time you handled a difficult customer" Prepare two or three specific examples using the STAR method (Situation, Task, Action, Result).',
+      'Customer service interviews run on scenario questions. "Tell me about a time you dealt with an angry customer." "Describe a situation where you went above and beyond." Have three concrete stories ready, structured as situation, action, result. Rehearse them out loud until they sound natural, not memorized.',
   },
   {
-    title: 'Get Familiar with Common CRM Tools',
+    title: 'Learn One CRM Tool Before You Apply',
     description:
-      'Free online tutorials for Salesforce, Zendesk, and Freshdesk are widely available. Even basic familiarity with these platforms can set your application apart from others at the same experience level.',
+      'Zendesk and Freshdesk both offer free tiers or sandbox environments. Spend two hours clicking around, creating fake tickets, and learning the interface. When your interviewer asks if you have CRM experience, "I taught myself Zendesk last week" is a better answer than "No, but I am a fast learner."',
   },
   {
-    title: 'Consider Industry Certifications',
+    title: 'Target Companies That Promote From Within',
     description:
-      'Programs such as the Customer Service Institute of America (CSIA) certification or HDI Customer Service Representative certification can strengthen your profile, particularly when targeting technical support or enterprise roles.',
+      'Some companies treat customer service as a cost center and staff it with contractors. Others treat it as a talent pipeline and actively promote into sales, operations, and management. Before you apply, check Glassdoor reviews or LinkedIn profiles of current managers at the company. If multiple managers started as reps, that tells you something.',
   },
 ]
 
 export default async function CustomerServiceJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'customer service', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'customer service', where: params.where || '', results_per_page: 30, page: 1 })
-  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-])
+  const [{ count }, initialData] = await Promise.all([
+    getCachedJobCount(params.what || 'customer service', params.where || '', params.salary_min),
+    searchJobs({ what: params.what || 'customer service', where: params.where || '', results_per_page: 30, page: 1 })
+      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  ])
 
   return (
     <>
@@ -244,7 +246,6 @@ const [{ count }, initialData] = await Promise.all([
       />
 
       <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Simple Header */}
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Customer Service Jobs Hiring Now Across the United States
@@ -270,7 +271,7 @@ const [{ count }, initialData] = await Promise.all([
                 what={params.what || 'customer service'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
-                initialData={initialData} // ← ajouter
+                initialData={initialData}
               />
             </Suspense>
           </div>
@@ -283,7 +284,7 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">Types of Customer Service Jobs Available</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Customer service is one of the broadest employment categories in the United States. From entry-level call center roles to senior client success positions, the field offers opportunities across virtually every industry. Here is an overview of the most common types of customer service jobs you will find listed on this page.
+            Customer service is not one job. It is a category that spans everything from answering phones at a local insurance office to managing a portfolio of enterprise software accounts worth seven figures. The title stays the same but the day-to-day, the pay, and the ceiling look completely different depending on where you land.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {customerServiceRoles.map((role, index) => (
@@ -307,7 +308,7 @@ const [{ count }, initialData] = await Promise.all([
           </div>
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              According to the U.S. Bureau of Labor Statistics (BLS), the median annual wage for customer service representatives was $37,780 in May 2023. Compensation varies widely depending on the industry, level of technical complexity, and whether the role is fully remote. The figures below reflect typical ranges observed across current U.S. job postings.
+              The pay gap within customer service is wider than most people realize. An entry-level phone rep at a retail chain and a client success manager at a SaaS company both fall under "customer service" on paper, but the compensation difference can be $40,000 or more. Geography, industry, shift timing, and whether the role involves any form of revenue responsibility are the biggest variables. The figures below reflect ranges currently observed across U.S. job postings.
             </p>
             <div className="space-y-3">
               {salaryData.map((row, index) => (
@@ -318,7 +319,7 @@ const [{ count }, initialData] = await Promise.all([
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-5">
-              Source: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS), May 2023. Ranges are illustrative and vary by location, employer, and experience level.
+              Ranges are approximate and reflect current market conditions. Actual compensation varies by employer, location, and experience level.
             </p>
           </div>
         </section>
@@ -330,7 +331,7 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">Skills That Make You Stand Out as a Candidate</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            According to the U.S. Bureau of Labor Statistics Occupational Outlook Handbook, customer service representatives must possess strong communication and listening skills, be able to handle stressful situations calmly, and work well both under supervision and independently. The following competencies are consistently cited by employers in their job postings.
+            Every job posting lists "strong communication skills" as a requirement, which tells you almost nothing. Here is what actually separates the candidates who get callbacks from the ones who do not.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {keySkills.map((item, index) => (
@@ -349,7 +350,7 @@ const [{ count }, initialData] = await Promise.all([
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Industries Actively Hiring Customer Service Professionals</h2>
               <p className="text-gray-700 mb-6">
-                Customer service roles exist across virtually every sector of the U.S. economy. According to the BLS, industries with the highest concentration of customer service workers include retail trade, insurance carriers, and business support services. The table below highlights key industries and what to expect when applying.
+                Customer service exists in every industry, but the experience of doing it varies enormously depending on the sector. The pace, the tools, the type of customer you interact with, and the upward mobility all change based on where you work. Here is what to expect from the sectors hiring the most right now.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -369,9 +370,6 @@ const [{ count }, initialData] = await Promise.all([
                   </tbody>
                 </table>
               </div>
-              <p className="text-xs text-gray-500 mt-4">
-                Source: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS).
-              </p>
             </div>
           </div>
         </section>
@@ -383,7 +381,7 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">Remote Customer Service Jobs: What You Need to Know</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Remote customer service positions are among the most accessible work-from-home opportunities in the U.S. labor market. Here is what current data and official sources say about working remotely in this field.
+            Working from home in customer service sounds like freedom until you realize the metrics are the same, the schedule is fixed, and your manager can see your screen activity in real time. That said, cutting the commute and working in your own space is a genuine quality-of-life upgrade for a lot of people. Here is what the reality looks like.
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             {remoteWorkFacts.map((fact, index) => (
@@ -402,14 +400,14 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">Where Can a Customer Service Job Take You?</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Customer service is widely recognized as one of the most effective entry points into a professional career. Many of the skills developed in these roles, including negotiation, data entry, product expertise, and cross-functional collaboration, translate directly into higher-paying positions.
+            Nobody dreams of answering phones forever. The real value of a customer service role is what it teaches you and where it leads. You learn how a company actually works by sitting at the point where every broken process, confusing policy, and product flaw surfaces first. That knowledge is career capital, and it transfers into roles most people do not associate with customer service.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: 'Team Lead or Supervisor', detail: 'Manage a group of CSRs, monitor performance metrics, and handle escalations.' },
-              { title: 'Sales Representative', detail: 'Customer service experience is a recognized pipeline into inside and outside sales roles.' },
-              { title: 'Operations Manager', detail: 'Oversee workflows, staffing, and service quality at a department or company level.' },
-              { title: 'Account Manager', detail: 'Maintain and grow relationships with specific business accounts, typically with a higher salary ceiling.' },
+              { title: 'Team Lead or Supervisor', detail: 'The first promotion most CSRs aim for. You manage a small team, handle escalations, and start learning workforce management.' },
+              { title: 'Sales Representative', detail: 'If you can de-escalate a complaint, you can close a deal. Customer service to sales is one of the most common lateral moves in the corporate world.' },
+              { title: 'Operations Manager', detail: 'Understanding frontline workflows from the inside gives you credibility that outside hires lack. Many ops managers started by doing the work they now oversee.' },
+              { title: 'Account Manager', detail: 'Client-facing, revenue-tied, and relationship-driven. If you enjoy the relationship side of service but want a higher ceiling, account management is the natural next step.' },
             ].map((role, index) => (
               <div key={index} className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
                 <p className="font-semibold text-blue-700 mb-1">{role.title}</p>
@@ -446,18 +444,18 @@ const [{ count }, initialData] = await Promise.all([
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Know Your Rights as a Customer Service Worker</h2>
                 <p className="text-gray-700 mb-4">
-                  According to the U.S. Department of Labor and the Equal Employment Opportunity Commission (EEOC), all employees in the United States, including those in customer service roles, are protected by federal law. The following practices by employers are prohibited:
+                  Customer service workers are covered by the same federal and state labor protections as every other employee. That includes remote workers. If any of the following are happening at your workplace, you have legal grounds to act.
                 </p>
                 <div className="grid md:grid-cols-2 gap-3">
                   {[
-                    'Paying below the applicable federal or state minimum wage',
-                    'Denying overtime pay for hours worked over 40 per week (FLSA)',
-                    'Discriminating in hiring or promotion based on race, sex, age, disability, or religion',
-                    'Requiring unpaid off-the-clock work such as call wrap-up time',
-                    'Misclassifying employees as independent contractors to avoid benefits',
-                    'Retaliating against employees who file wage complaints with the DOL',
-                    'Failing to provide legally required rest or meal breaks (varies by state)',
-                    'Denying reasonable accommodations to employees with disabilities (ADA)',
+                    'Being paid below federal or state minimum wage for all hours worked',
+                    'Working more than 40 hours per week without receiving overtime compensation',
+                    'Being asked to perform tasks off the clock, including post-shift call documentation',
+                    'Experiencing hiring or promotion decisions based on race, gender, age, disability, or religion',
+                    'Being classified as an independent contractor while working a fixed schedule with company equipment',
+                    'Facing retaliation for reporting wage violations or unsafe working conditions',
+                    'Being denied legally required breaks during your shift (rules vary by state)',
+                    'Having a request for reasonable disability accommodation ignored or denied',
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2 text-gray-700">
                       <span className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
@@ -499,7 +497,7 @@ const [{ count }, initialData] = await Promise.all([
         {/* Legal Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> The information provided on this page is for general informational purposes only and does not constitute legal or professional advice. Wage rates, labor laws, and remote work policies vary by state, employer, and role type. Always consult the U.S. Department of Labor at dol.gov, the Equal Employment Opportunity Commission at eeoc.gov, or your state labor department for the most current regulations applicable to your situation. Oh My Job is a job aggregation platform and is not responsible for the accuracy of individual job listings.
+            <strong>Disclaimer:</strong> The information on this page is for general reference only and does not constitute legal or professional advice. Wage rates, labor protections, and remote work policies vary by state and employer. For current regulations applicable to your situation, consult the U.S. Department of Labor at dol.gov, the Equal Employment Opportunity Commission at eeoc.gov, or your state labor department. Oh My Job is a job search platform and is not responsible for the accuracy of individual job listings.
           </p>
         </section>
       </div>
