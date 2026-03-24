@@ -6,7 +6,9 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
+
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'FIFO Jobs Hiring Immediately | Fly In Fly Out Positions Open Now',
   description: 'Hundreds of FIFO jobs available right now. Fly in fly out positions in mining, oil, gas and construction with top pay and rotation schedules. No experience required for some roles. Apply today before positions fill up.',
@@ -21,9 +23,7 @@ export const metadata: Metadata = {
     title: 'FIFO Jobs | Fly In Fly Out Positions Hiring Now',
     description: 'Ready to earn more with FIFO work? Browse hundreds of fly in fly out jobs paying top wages. Apply now before these positions are filled.',
   },
-  alternates: {
-    canonical: 'https://www.oh-my-job.com/fifo-jobs',
-  },
+  alternates: { canonical: 'https://www.oh-my-job.com/fifo-jobs' },
 }
 
 const jsonLd = {
@@ -42,83 +42,87 @@ const jsonLd = {
 const fifoSectors = [
   {
     title: 'Mining & Resources',
-    description: 'Underground and surface mining roles including drill operators, blasters, and site supervisors with premium FIFO pay.',
+    description: "Surface and underground roles — drill and blast operators, shot firers, dump truck drivers, and shift supervisors. Pay premiums are real here, particularly on sites without road access. Most employers run 2/1 or 8/6 rotations, though longer swings exist on newer projects still ramping up.",
     icon: HardHat,
   },
   {
     title: 'Oil & Gas',
-    description: 'Offshore and onshore drilling, pipeline inspection, and rig maintenance positions with competitive rotation schedules.',
+    description: "Offshore platform work and onshore rig positions are the bulk of openings. Roustabouts and roughnecks are entry points; experienced derrickmen and toolpushers command significantly higher rates. Offshore rotations are typically 2/2, but that can shift depending on the operator and production phase.",
     icon: TrendingUp,
   },
   {
     title: 'Construction',
-    description: 'Large scale infrastructure and civil construction projects in remote areas requiring skilled tradespeople and laborers.',
+    description: "Remote civil and infrastructure builds — pipelines, access roads, mine processing plants — need tradespeople who can handle fly-in logistics and extended stints away. Concrete workers, riggers, scaffolders, and crane operators are consistently in demand. These projects often pay site allowances on top of base rates.",
     icon: Briefcase,
   },
   {
     title: 'Camp Services',
-    description: 'Catering, cleaning, administration and logistics roles supporting FIFO work camps across remote project sites.',
+    description: "Every large FIFO site needs people to run it — cooks, camp attendants, cleaners, store hands, and logistics coordinators. These roles are often overlooked by applicants chasing the big trade rates, which means less competition and faster hiring. Some catering companies run their own FIFO rosters across multiple sites.",
     icon: MapPin,
   },
   {
     title: 'Engineering & Technical',
-    description: 'Mechanical, electrical, and process engineers required on mine sites and processing plants with fly in fly out arrangements.',
+    description: "Mechanical and electrical engineers, metallurgists, process control specialists — technical roles on remote sites typically attract salary packages well above what the same title earns in an office. Most positions require relevant qualifications and prior site exposure. Some employers offer graduate placements with FIFO arrangements from year one.",
     icon: ShieldCheck,
   },
   {
     title: 'Health & Safety',
-    description: 'Site medics, safety officers and occupational health professionals managing workforce wellbeing in remote locations.',
+    description: "Remote medics, HSE officers, and OHS advisors are required on any site above a certain headcount — and regulations have tightened considerably. Site medic roles in particular are hard to fill, which keeps rates high. Paramedic or nursing backgrounds with industrial experience are the most competitive profiles.",
     icon: CheckCircle,
   },
 ]
 
 const rotationSchedules = [
-  { schedule: '2 weeks on / 1 week off', description: 'Most common rotation in mining and oil sectors' },
-  { schedule: '2 weeks on / 2 weeks off', description: 'Popular in offshore oil and gas positions' },
-  { schedule: '4 weeks on / 1 week off', description: 'Typical for remote construction projects' },
-  { schedule: '8 days on / 6 days off', description: 'Frequently used in surface mining operations' },
-  { schedule: '3 weeks on / 3 weeks off', description: 'Common in long haul infrastructure projects' },
+  { schedule: '2 weeks on / 1 week off', description: 'The most widely used roster in Australian-style mining operations that have spread to US remote sites. Tiring over time, but the income-to-days-off ratio is hard to beat.' },
+  { schedule: '2 weeks on / 2 weeks off', description: 'Standard in offshore oil and gas. More sustainable for family life — two weeks home is genuinely time off, not just recovery.' },
+  { schedule: '4 weeks on / 1 week off', description: 'Common on remote construction projects in early build phases. The 1-week break feels short after a month on site. Usually compensated with higher daily rates.' },
+  { schedule: '8 days on / 6 days off', description: 'Popular in surface mining. The shorter swing means more flight cycles but steadier income rhythm. Works well for people within 2–3 hours of a regional airport.' },
+  { schedule: '3 weeks on / 3 weeks off', description: 'Preferred by workers with young children or secondary income sources. Found mostly on long-duration infrastructure and LNG projects.' },
 ]
 
 const faqs = [
   {
-    question: 'What does FIFO stand for in employment?',
-    answer: 'FIFO stands for Fly In Fly Out. It refers to a work arrangement where employees are flown to a remote job site for a set number of days or weeks, then flown back home for their rostered time off. This model is widely used in industries like mining, oil and gas, and large scale construction where project sites are located far from major population centers.',
+    question: 'What does FIFO actually mean in a job context?',
+    answer: "FIFO — Fly In Fly Out — is a work arrangement where the employer flies you to a remote site for a fixed roster period, then flies you home for your time off. You don't relocate. Housing and meals on site are covered. The appeal is that your home life stays where it is — your work just happens somewhere else entirely.",
   },
   {
-    question: 'How much do FIFO workers typically earn?',
-    answer: 'FIFO workers generally earn significantly more than equivalent roles based in cities, largely due to the remote location allowance, site allowances, and the nature of the work. According to the U.S. Bureau of Labor Statistics, workers in extraction and mining occupations earn a median annual wage well above the national average, with experienced FIFO workers in oil and gas often earning between $80,000 and $180,000 per year depending on the role and employer.',
+    question: 'How much do FIFO workers actually earn?',
+    answer: "It varies more than the headline numbers suggest. Entry roles in camp services or as a laborer might clear $75,000 to $90,000 all-in. Experienced tradespeople — boilermakers, electricians, instrumentation techs — routinely earn $120,000 to $160,000. Engineering and supervisory roles push higher. The numbers look better than comparable city jobs partly because your living costs drop to near zero during on-swing.",
   },
   {
-    question: 'Do employers pay for flights in FIFO jobs?',
-    answer: 'Yes, in the vast majority of FIFO arrangements, the employer covers all travel costs including flights to and from the site, as well as accommodation and meals while on site. This is one of the key financial advantages of FIFO work, as employees effectively have no living expenses during their rostered on period.',
+    question: 'Who pays for flights and accommodation?',
+    answer: "The employer covers all of it during your rostered on-period — flights from the agreed point of hire, accommodation, and three meals a day. Some employers are strict about the point of hire (meaning they fly you from a specific city, not your actual home). If you live outside that catchment, factor in the travel cost to the departure point.",
   },
   {
-    question: 'What qualifications do I need for a FIFO job?',
-    answer: 'Qualifications vary widely depending on the role. Entry level positions such as laborers or camp services roles may require only a valid drivers license and a willingness to pass a pre employment medical. Skilled trade roles typically require relevant certifications, while engineering and supervisory positions require formal qualifications. Many employers also require a valid medical clearance and, for mining roles, a site safety induction card.',
+    question: 'What do I actually need to get hired?',
+    answer: "For entry-level camp services or labouring roles, a White Card (construction safety induction), a valid ID, and a clean medical are often enough to get started. Trades roles need a current ticket. Any site-facing role will require a pre-employment medical — some companies are stricter than others on blood pressure, BMI, and hearing. Get yours done early; it's the most common thing that delays start dates.",
   },
   {
-    question: 'Are FIFO jobs regulated in the United States?',
-    answer: 'Yes. FIFO workers in the United States are protected under federal and state labor law. The Occupational Safety and Health Administration (OSHA), part of the U.S. Department of Labor, sets and enforces workplace safety standards that apply to all remote and fly in fly out job sites. Employers are legally required to provide safe working conditions, appropriate personal protective equipment, and emergency response capabilities on all FIFO sites.',
+    question: 'Are FIFO workers covered by standard employment law?',
+    answer: "Yes. OSHA standards, federal wage protections, and state labor law all apply regardless of how remote the site is. Your employer is still responsible for safe working conditions, PPE, and minimum entitlements. Some FIFO workers are also covered by enterprise agreements that set conditions above the legal minimum — worth checking before you sign.",
+  },
+  {
+    question: 'Is FIFO work sustainable long-term?',
+    answer: "For some people, yes — especially those who use the off-swing strategically and keep their finances in order. For others, the relationship and mental health toll adds up over years. Most experienced FIFO workers say the first few rotations are the hardest adjustment. After that, it tends to either click or it doesn't. There's no middle ground after a few years.",
   },
 ]
 
 const tips = [
   {
-    title: 'Get Your Medical Clearance Early',
-    description: 'Most FIFO employers require a pre employment medical before you can start on site. Book this in advance as it can take time to schedule and receive results.',
+    title: 'Book your pre-employment medical before you even apply',
+    description: "Almost every FIFO employer requires one, and they don't accept results from your GP. You need to use their approved provider. Wait times can run 2–3 weeks in some areas. Getting this done speculatively — before you have an offer — means you can move fast when one comes through.",
   },
   {
-    title: 'Research the Rotation Before You Apply',
-    description: 'Different rotations suit different lifestyles. A 2 on 1 off schedule works well for some, while others prefer longer breaks. Make sure the roster aligns with your family and personal commitments.',
+    title: 'Pick your rotation based on your life, not the pay rate',
+    description: "A 4/1 roster pays more per year than a 2/2, but spending four weeks straight on a remote site with one week to decompress is brutal if you have kids, a partner, or any life admin to manage. Be honest about what schedule you can actually sustain. Burning out after six months and quitting helps no one.",
   },
   {
-    title: 'Obtain Relevant Safety Certifications',
-    description: 'Certificates such as first aid, confined space entry, and working at heights significantly increase your employability for FIFO roles and may be required before site access is granted.',
+    title: 'Stack your certifications before you start looking',
+    description: "White Card is the baseline. First aid and CPR push you ahead of unqualified candidates. Working at heights, confined space entry, and forklift tickets each open a different category of role. None of these take long to obtain and most cost under $300. They pay for themselves on the first paycheck.",
   },
   {
-    title: 'Understand Your Entitlements',
-    description: 'According to the U.S. Department of Labor, remote workers are entitled to the same minimum wage, overtime protections, and workplace safety standards as any other employee. Always review your contract carefully before signing.',
+    title: 'Understand what \"point of hire\" actually means',
+    description: "Employers fly you from a designated city — Perth, Darwin, Townsville, Houston, depending on the project. If that's not where you live, the travel to get there is usually on you. Some employers are flexible on this and some aren't. Clarify before you accept, not after.",
   },
 ]
 
@@ -126,60 +130,38 @@ export default async function FifoJobsPage({ searchParams }: any) {
   const params = await searchParams
 
   const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'fly in fly out jobs', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'fly in fly out jobs', where: params.where || '', results_per_page: 30, page: 1 })
-   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-])
-  
+    getCachedJobCount(params.what || 'fly in fly out jobs', params.where || '', params.salary_min),
+    searchJobs({ what: params.what || 'fly in fly out jobs', where: params.where || '', results_per_page: 30, page: 1 })
+      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  ])
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Fly In Fly Out Jobs Available Now
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Fly In Fly Out Jobs Available Now</h1>
+          <p className="text-gray-700">
+            FIFO work isn't for everyone — but for the right person, it's one of the fastest ways to earn well without relocating. Mining, oil and gas, remote construction, and camp services are all hiring. Rotations, pay structures, and requirements vary significantly by industry and employer. The listings below are updated regularly.
+          </p>
         </header>
 
-        {/* Job Board Section */}
         <div className="flex flex-col lg:flex-row gap-10">
-          <aside className="lg:w-80">
-            <JobFilters defaultWhat="fly in fly out jobs" />
-          </aside>
+          <aside className="lg:w-80"><JobFilters defaultWhat="fly in fly out jobs" /></aside>
           <div className="flex-1">
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
-              </p>
-            )}
-
-            {/* Client wrapper isolé — pas de use client sur la page */}
+            {count > 0 && <p className="text-sm text-gray-500 mb-4"><span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available</p>}
             <AIJobMatcherWrapper />
-
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList
-                what={params.what || 'fly in fly out jobs'}
-                where={params.where || ''}
-                salary_min={params.salary_min}
-                initialData={initialData} // ← ajouter
-              />
+              <InfiniteJobList what={params.what || 'fly in fly out jobs'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>
           </div>
         </div>
 
-        {/* FIFO Sectors */}
         <section className="mt-20">
-          <div className="flex items-center gap-3 mb-6">
-            <Plane className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Industries Hiring FIFO Workers Right Now</h2>
-          </div>
+          <div className="flex items-center gap-3 mb-6"><Plane className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Industries Hiring FIFO Workers</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Fly in fly out employment spans a wide range of industries operating in remote locations across the United States. Whether you are a tradesperson, engineer, or looking for your first site role, there is a FIFO position suited to your background.
+            Most people think FIFO means mining. It does — but that's maybe half the picture. Oil and gas, remote construction, and the support services keeping those sites running all hire on fly-in arrangements, often with less competition than the headline mining roles.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {fifoSectors.map((sector, index) => (
@@ -192,14 +174,10 @@ export default async function FifoJobsPage({ searchParams }: any) {
           </div>
         </section>
 
-        {/* Rotation Schedules */}
         <section className="mt-20">
-          <div className="flex items-center gap-3 mb-6">
-            <Clock className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Common FIFO Rotation Schedules</h2>
-          </div>
+          <div className="flex items-center gap-3 mb-6"><Clock className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Common FIFO Rotation Schedules</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            FIFO jobs operate on a roster system that alternates between time on site and time at home. Understanding the different rotation schedules helps you find an arrangement that fits your lifestyle before you apply.
+            The roster you work matters as much as the pay rate. Some schedules look great on paper and wreck your personal life. Others feel slow but are actually more sustainable over years. Here's what each rotation looks like in practice.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {rotationSchedules.map((item, index) => (
@@ -211,48 +189,36 @@ export default async function FifoJobsPage({ searchParams }: any) {
           </div>
         </section>
 
-        {/* Salary Section */}
         <section className="mt-20">
-          <div className="flex items-center gap-3 mb-6">
-            <DollarSign className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">How Much Can You Earn in a FIFO Job?</h2>
-          </div>
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
-            <p className="text-gray-700 mb-6">
-              According to the U.S. Bureau of Labor Statistics, workers in extraction and resource industries consistently rank among the highest paid occupational groups in the country. FIFO workers benefit from site allowances, remote location bonuses, and the absence of day to day living costs while on roster, which significantly increases effective take home pay.
-            </p>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-3xl font-bold text-green-600 mb-2">$75K+</p>
-                <p className="text-sm text-gray-600">Entry Level Annual Salary</p>
-              </div>
-              <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-3xl font-bold text-blue-600 mb-2">$120K+</p>
-                <p className="text-sm text-gray-600">Skilled Trades Average</p>
-              </div>
-              <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-3xl font-bold text-purple-600 mb-2">$180K+</p>
-                <p className="text-sm text-gray-600">Engineering and Supervisory</p>
-              </div>
+          <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">FIFO Job Salary Ranges</h2></div>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            These figures reflect total package including allowances, not base rate alone. On-site living costs being covered means take-home income goes further than the same number would in a city role.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
+              <p className="text-3xl font-bold text-green-600 mb-2">$75K+</p>
+              <p className="text-sm font-semibold text-gray-700 mb-1">Entry Level</p>
+              <p className="text-xs text-gray-500">Camp services, labouring, general site support</p>
             </div>
-            <p className="text-sm text-gray-500 mt-6">
-              Note: Salaries vary by employer, location, experience, and role. The figures above are indicative ranges based on industry data. Always verify compensation details directly with the hiring employer.
-            </p>
+            <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
+              <p className="text-3xl font-bold text-blue-600 mb-2">$120K+</p>
+              <p className="text-sm font-semibold text-gray-700 mb-1">Skilled Trades</p>
+              <p className="text-xs text-gray-500">Electricians, boilermakers, instrumentation techs</p>
+            </div>
+            <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
+              <p className="text-3xl font-bold text-purple-600 mb-2">$180K+</p>
+              <p className="text-sm font-semibold text-gray-700 mb-1">Engineering & Supervisory</p>
+              <p className="text-xs text-gray-500">Process engineers, shift supervisors, project leads</p>
+            </div>
           </div>
         </section>
 
-        {/* Tips Section */}
         <section className="mt-20">
-          <div className="flex items-center gap-3 mb-6">
-            <CheckCircle className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">How to Land Your First FIFO Job</h2>
-          </div>
+          <div className="flex items-center gap-3 mb-6"><CheckCircle className="w-7 h-7 text-purple-600" /><h2 className="text-2xl font-bold text-gray-900">Tips for Landing a FIFO Job</h2></div>
           <div className="grid md:grid-cols-2 gap-6">
             {tips.map((tip, index) => (
               <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-purple-300 transition-colors">
-                <span className="inline-flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-700 font-bold rounded-full text-sm mb-4">
-                  {index + 1}
-                </span>
+                <span className="inline-flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-700 font-bold rounded-full text-sm mb-4">{index + 1}</span>
                 <h3 className="font-semibold text-gray-900 text-lg mb-2">{tip.title}</h3>
                 <p className="text-gray-600 text-sm">{tip.description}</p>
               </div>
@@ -260,38 +226,26 @@ export default async function FifoJobsPage({ searchParams }: any) {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <section className="mt-20">
-          <div className="flex items-center gap-3 mb-6">
-            <ShieldCheck className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions About FIFO Jobs</h2>
-          </div>
+          <div className="flex items-center gap-3 mb-6"><ShieldCheck className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">FIFO Job FAQ</h2></div>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <details
-                key={index}
-                className="group bg-white border border-gray-200 rounded-xl overflow-hidden"
-              >
+              <details key={index} className="group bg-white border border-gray-200 rounded-xl overflow-hidden">
                 <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
                   <h3 className="font-semibold text-gray-900 pr-4">{faq.question}</h3>
                   <span className="text-gray-400 group-open:rotate-180 transition-transform">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </span>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600">
-                  {faq.answer}
-                </div>
+                <div className="px-6 pb-6 text-gray-600">{faq.answer}</div>
               </details>
             ))}
           </div>
         </section>
 
-        {/* Legal Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> The salary figures and employment information provided on this page are for general informational purposes only and do not constitute financial or legal advice. Compensation and working conditions vary by employer, location, and role. Always review your employment contract carefully and consult the U.S. Department of Labor at dol.gov or OSHA at osha.gov for current workplace regulations applicable to remote and FIFO work arrangements.
+            <strong>Disclaimer:</strong> Salaries, rotations, and employment conditions vary by employer, location, and experience. Verify all details with the hiring company and consult OSHA and the U.S. Department of Labor for regulations applicable to remote and FIFO work.
           </p>
         </section>
       </div>
