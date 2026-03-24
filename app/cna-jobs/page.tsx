@@ -17,20 +17,22 @@ import {
 } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
+
+export const revalidate = 3600
+
 export const metadata: Metadata = {
-  title: 'CNA Jobs Hiring Immediately | Certified Nursing Assistant Positions Open Now',
-  description: 'Thousands of CNA jobs are hiring right now across the United States. Certified Nursing Assistant positions available in hospitals, nursing homes, and home health agencies. Competitive pay, flexible shifts, and benefits. Apply today before these roles are filled.',
+  title: 'CNA Jobs Hiring Now | Find Certified Nursing Assistant Openings Near You',
+  description: 'Browse CNA jobs open right now in all 50 states. Hospitals, nursing homes, and home health agencies are actively hiring Certified Nursing Assistants. Filter by location, pay, and shift type.',
   keywords: 'cna jobs, certified nursing assistant jobs, cna jobs near me, cna hiring now, cna positions, nursing assistant jobs, cna jobs hospital, cna jobs nursing home',
   openGraph: {
-    title: 'CNA Jobs Hiring Now | Certified Nursing Assistant Positions Needed Urgently',
-    description: 'Hospitals and care facilities across the US are urgently hiring CNAs. Browse hundreds of Certified Nursing Assistant jobs with competitive pay and immediate start dates.',
+    title: 'CNA Jobs Hiring Now | Certified Nursing Assistant Openings',
+    description: 'Certified Nursing Assistants are needed across the country. Search CNA positions by state, salary, and facility type.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CNA Jobs | Certified Nursing Assistant Positions Hiring Now',
-    description: 'Ready to make a difference? Find CNA jobs hiring immediately near you. Full-time, part-time, and per diem shifts available across all 50 states.',
+    title: 'CNA Jobs | Certified Nursing Assistant Positions Open Now',
+    description: 'Find CNA jobs hiring today. Full-time, part-time, and per diem shifts in every state.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/cna-jobs',
@@ -53,32 +55,32 @@ const jsonLd = {
 const workSettings = [
   {
     title: 'Hospitals',
-    description: 'Acute care CNAs assist nurses and physicians in fast-paced hospital units including medical-surgical, ICU step-down, and emergency departments.',
+    description: 'Hospital CNAs rotate between units that move fast and demand quick thinking. You might start a Monday in post-op recovery and finish the week floating to the ER. The learning curve is steep, but so is the experience you walk away with.',
     icon: Heart,
   },
   {
     title: 'Nursing Homes',
-    description: 'Long-term care facilities consistently employ the largest share of CNAs, offering stable schedules and ongoing patient relationships.',
+    description: 'Long-term care is where most CNAs build their foundation. The pace is steadier than a hospital, but the emotional weight is real. You get to know residents by name, by habit, by the way they take their coffee. That continuity is what keeps many CNAs in this setting for years.',
     icon: ShieldCheck,
   },
   {
     title: 'Home Health Agencies',
-    description: 'Home health CNAs provide one-on-one care to patients in their residences, offering flexible scheduling and meaningful personal connections.',
+    description: 'Home health flips the dynamic. Instead of patients coming to you, you go to them. One patient per visit, no overhead pages, no shared rooms. The trade-off is independence balanced with isolation. If you thrive working autonomously, this setting fits.',
     icon: MapPin,
   },
   {
     title: 'Assisted Living',
-    description: 'Assisted living communities hire CNAs to support residents with daily activities while fostering independence and quality of life.',
+    description: 'Assisted living sits between full independence and skilled nursing. Residents here need support with meals, medication reminders, and mobility, but most are cognitively present and socially active. The work feels less clinical and more relational.',
     icon: Briefcase,
   },
   {
     title: 'Rehabilitation Centers',
-    description: 'Short-term rehab facilities require CNAs to support patients recovering from surgery, stroke, or injury under the direction of physical and occupational therapists.',
+    description: 'Short-term rehab means short-term patients. Most are recovering from hip replacements, strokes, or cardiac events and will discharge within weeks. The energy is goal-oriented: every shift, you can measure progress in real time.',
     icon: TrendingUp,
   },
   {
     title: 'Hospice Care',
-    description: 'Hospice CNAs provide compassionate end-of-life support to patients and their families, working within interdisciplinary care teams.',
+    description: 'Hospice CNAs provide care when cure is no longer the goal. The work is quiet, deliberate, and emotionally demanding. It is also, for many who do it, the most meaningful work they have ever done. Comfort replaces recovery as the metric that matters.',
     icon: Heart,
   },
 ]
@@ -86,23 +88,23 @@ const workSettings = [
 const certificationSteps = [
   {
     step: '1',
-    title: 'Complete a State-Approved Training Program',
-    description: 'Federal law under the Omnibus Budget Reconciliation Act (OBRA) requires a minimum of 75 hours of training, though many states require significantly more. Programs are offered at community colleges, vocational schools, and healthcare facilities.',
+    title: 'Enroll in a State-Approved Program',
+    description: 'Every state sets its own training hour minimums, ranging from 75 hours (the federal floor) to over 175 in states like California and Maine. Programs run at community colleges, Red Cross chapters, and inside healthcare facilities themselves. Many nursing homes will train you for free if you commit to working there after certification.',
   },
   {
     step: '2',
-    title: 'Pass the Competency Evaluation',
-    description: 'After training, candidates must pass a state competency exam consisting of a written or oral knowledge test and a hands-on skills evaluation. The National Nurse Aide Assessment Program (NNAAP) is used in most states.',
+    title: 'Pass the Two-Part Competency Exam',
+    description: 'The exam has a written portion (or oral, depending on the state) and a hands-on skills test where a proctor watches you perform tasks like taking blood pressure, repositioning a patient, and performing hand hygiene. Most states use the NNAAP format. First-attempt pass rates typically sit around 85 to 90 percent for candidates who completed accredited programs.',
   },
   {
     step: '3',
-    title: 'Get Listed on the State Registry',
-    description: 'Upon passing the exam, your name is entered into your state Nurse Aide Registry. According to the Centers for Medicare and Medicaid Services (CMS), this registry is required for CNAs working in Medicare or Medicaid-certified facilities.',
+    title: 'Get Added to Your State Registry',
+    description: 'Once you pass, your name goes on your state Nurse Aide Registry. This is not optional. Any facility that accepts Medicare or Medicaid funding is legally required to verify your registry status before they can put you on the floor. The listing confirms your certification is active, your exam results, and whether any disciplinary findings exist.',
   },
   {
     step: '4',
-    title: 'Maintain Your Certification',
-    description: 'CNA certifications must be renewed every two years in most states. Renewal typically requires proof of active employment as a CNA for at least eight hours during the renewal period.',
+    title: 'Renew Every Two Years',
+    description: 'Certification lapses if you do not renew on time. Most states require proof that you worked at least eight paid hours as a CNA during the renewal window. Some states also require continuing education credits. If your certification does lapse, many states let you reinstate by retaking the skills exam rather than repeating the full training program.',
   },
 ]
 
@@ -118,58 +120,57 @@ const salaryByState = [
 const faqs = [
   {
     question: 'How long does it take to become a CNA?',
-    answer: 'Most CNA training programs take between four and twelve weeks to complete, depending on the state and whether you attend full-time or part-time. According to the U.S. Department of Labor, federal law mandates a minimum of 75 hours of combined classroom and clinical training before you can sit for the certification exam.',
+    answer: 'The classroom and clinical portion takes between four and twelve weeks depending on your state and whether you attend full-time or part-time. After that, you need to schedule and pass the competency exam, which can add another one to three weeks depending on testing availability in your area. From enrollment to first paycheck, most people are working as a certified CNA within two to three months.',
   },
   {
-    question: 'What does a Certified Nursing Assistant do every day?',
-    answer: 'CNAs provide direct patient care under the supervision of licensed nurses. Daily responsibilities typically include assisting patients with bathing, dressing, grooming, and eating; measuring and recording vital signs; turning and repositioning bedridden patients to prevent pressure sores; and reporting changes in patient condition to nursing staff.',
+    question: 'What does a typical CNA shift actually look like?',
+    answer: 'You clock in, get your patient assignment, and hit the floor. The first round is usually vital signs and morning care: helping patients wash, dress, eat, and get positioned for the day. Between rounds, you are answering call lights, documenting intake and output, turning patients on schedule, and reporting anything unusual to the nurse on duty. The work is physical, repetitive, and unpredictable in equal measure. No two shifts are identical even when the routine is the same.',
   },
   {
-    question: 'How much do CNAs earn on average in the United States?',
-    answer: 'According to the U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics, the median annual wage for nursing assistants was $38,200 in May 2023. The highest-paid CNAs work in government settings and general medical and surgical hospitals, where median wages can exceed $45,000 per year.',
+    question: 'How much can I realistically expect to earn as a new CNA?',
+    answer: 'Entry-level CNA pay clusters between $15 and $20 per hour in most of the country, with the coasts and major metros pushing above that. The federal median is roughly $38,200 annually. Night shift and weekend differentials are common and can add $2 to $5 per hour. Per diem and agency CNAs often earn 20 to 40 percent more per hour than their staff counterparts, though without benefits.',
   },
   {
-    question: 'Is CNA certification valid across all states?',
-    answer: 'CNA certification is issued at the state level, meaning your certification is technically tied to the state where you tested. However, most states offer a reciprocity process that allows CNAs to transfer their certification without retesting, provided their registry status is in good standing and they have no substantiated findings of abuse, neglect, or misappropriation on their record.',
+    question: 'Can I transfer my CNA certification to another state?',
+    answer: 'Most states allow it through a reciprocity process. You apply to the new state registry, provide proof of your current certification and good standing, and in many cases you can start working before the transfer is finalized. The main disqualifier is any substantiated finding on your record. A few states require additional steps like a background check or a short bridge course, but full retesting is rare.',
   },
   {
-    question: 'Can a CNA work while studying to become an LPN or RN?',
-    answer: 'Yes, and this is actually one of the most common career pathways in nursing. Many healthcare employers offer tuition reimbursement or education assistance programs specifically for CNAs who are pursuing LPN or RN licensure. Working as a CNA while in nursing school provides invaluable clinical experience and can make you a stronger candidate for nursing programs.',
+    question: 'Is it realistic to work as a CNA while in nursing school?',
+    answer: 'It is one of the most common paths into nursing. Many LPN and RN programs are designed around the assumption that their students are working, which is why evening and weekend class schedules exist. Several hospital systems run tuition reimbursement programs specifically for CNAs pursuing nursing degrees. The clinical experience you gain as a CNA also gives you a meaningful edge over classmates who enter nursing school without patient care hours.',
   },
   {
-    question: 'Are CNA jobs expected to grow in the coming years?',
-    answer: 'According to the U.S. Bureau of Labor Statistics Occupational Outlook Handbook, employment of nursing assistants is projected to grow 4 percent from 2022 to 2032, roughly in line with the average for all occupations. An aging U.S. population and the resulting demand for long-term care services are key drivers of sustained hiring demand for CNAs nationwide.',
+    question: 'Are CNA jobs going to stay in demand?',
+    answer: 'The short answer is yes. Federal projections put job growth for nursing assistants at roughly 4 percent through the early 2030s, but that number understates the actual hiring volume because it does not account for turnover. CNA turnover rates in long-term care run between 50 and 80 percent annually, which means facilities are perpetually recruiting even when overall employment levels are flat. An aging population adds structural demand on top of that churn.',
   },
 ]
 
 const tips = [
   {
-    title: 'Get CPR and First Aid Certified Before You Apply',
-    description: 'Most employers require current CPR and Basic Life Support (BLS) certification before your first day. Having it ready when you apply makes you a more competitive candidate and can speed up your start date.',
+    title: 'Get Your BLS Card Before You Apply',
+    description: 'Almost every employer requires current Basic Life Support certification on day one. Having it ready when you submit your application eliminates a delay that knocks other candidates out of the running. The American Heart Association BLS course takes one day and costs around $60.',
   },
   {
-    title: 'Highlight Soft Skills on Your Resume',
-    description: 'Empathy, patience, attention to detail, and the ability to work under pressure are qualities hiring managers look for in CNAs. Even without clinical experience, examples from caregiving, volunteer work, or customer-facing roles demonstrate these qualities.',
+    title: 'Write a Resume That Sounds Like a Person, Not a Template',
+    description: 'Hiring managers at care facilities read dozens of identical resumes every week. If yours opens with "compassionate and dedicated CNA seeking a rewarding opportunity," it is going straight to the bottom. Lead with something specific: a patient interaction, a skill you developed during clinicals, or the reason you chose this work in the first place.',
   },
   {
-    title: 'Consider Per Diem or Agency Work to Build Experience',
-    description: 'Per diem and staffing agency CNA positions allow you to work in multiple care settings, build a broader skill set, and often earn a higher hourly rate. Many CNAs use agency work to find facilities they eventually join permanently.',
+    title: 'Try Agency Work to Find the Right Fit',
+    description: 'Staffing agencies let you work shifts at multiple facilities before committing to one. The hourly rate is usually higher than staff positions, and you get exposure to different care settings, management styles, and patient populations. Many CNAs use agency work as a paid audition before accepting a permanent role.',
   },
   {
-    title: 'Ask About Employer-Paid Training',
-    description: 'Many hospitals and nursing homes offer free CNA training programs in exchange for a commitment to work at the facility for a set period. According to the American Health Care Association, this is one of the most common recruitment strategies in long-term care.',
+    title: 'Ask About Free Training Programs',
+    description: 'If you are not yet certified, do not pay for training out of pocket without checking alternatives first. Many nursing homes and hospital systems run employer-sponsored CNA programs that cover tuition, textbooks, and exam fees in exchange for a six-to-twelve-month work commitment after certification. The programs are competitive but widely available.',
   },
 ]
 
 export default async function CnaJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'certified nursing assistant', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'certified nursing assistant', where: params.where || '', results_per_page: 30, page: 1 })
-  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-])
-  
+  const [{ count }, initialData] = await Promise.all([
+    getCachedJobCount(params.what || 'certified nursing assistant', params.where || '', params.salary_min),
+    searchJobs({ what: params.what || 'certified nursing assistant', where: params.where || '', results_per_page: 30, page: 1 })
+      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  ])
 
   return (
     <>
@@ -181,7 +182,7 @@ const [{ count }, initialData] = await Promise.all([
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            CNA Jobs Available Now Across the United States
+            CNA Jobs Open Now Across the United States
           </h1>
         </header>
 
@@ -197,15 +198,14 @@ const [{ count }, initialData] = await Promise.all([
               </p>
             )}
 
-            {/* Client wrapper isolé — pas de use client sur la page */}
-                       <AIJobMatcherWrapper />
-           
+            <AIJobMatcherWrapper />
+
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'certified nursing assistant'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
-                initialData={initialData} // ← ajouter
+                initialData={initialData}
               />
             </Suspense>
           </div>
@@ -218,7 +218,7 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">Where CNAs Work Across the United States</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            According to the U.S. Bureau of Labor Statistics, over 1.4 million nursing assistants are employed across a wide range of care settings in the United States. Whether you prefer the fast pace of a hospital or the relationship-focused environment of home health, there is a CNA role suited to your strengths.
+            Healthcare runs on CNAs. They are the most hands-on role in every care setting, and the environment they work in shapes their daily experience more than almost any other variable in the job. The same certification opens doors to radically different workdays depending on where you choose to use it.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {workSettings.map((setting, index) => (
@@ -238,7 +238,7 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">How to Become a Certified Nursing Assistant</h2>
           </div>
           <p className="text-gray-600 mb-8 max-w-4xl">
-            CNA certification is governed at the state level but must meet federal minimum standards established by the Centers for Medicare and Medicaid Services (CMS). The pathway is straightforward and can be completed in a matter of weeks.
+            Becoming a CNA is one of the fastest ways to enter the healthcare workforce with a recognized credential. The process is regulated at the state level but follows a consistent pattern across the country. Most people complete the full pathway, from enrollment to registry listing, in under three months.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             {certificationSteps.map((item, index) => (
@@ -261,12 +261,12 @@ const [{ count }, initialData] = await Promise.all([
           </div>
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              According to the U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics program, the median annual wage for nursing assistants in the United States was $38,200 in May 2023, equivalent to approximately $18.37 per hour. Pay varies significantly by state, employer type, and shift differential.
+              CNA pay varies more by geography and facility type than by experience level. A CNA working nights in a Bay Area hospital can out-earn a five-year veteran doing day shifts in rural Florida by $15,000 or more. The national median sits around $38,200 per year based on the most recent federal wage data, but that number hides enormous variation. Government-run facilities and metropolitan hospitals consistently pay at the top of the range, while smaller assisted living communities and rural nursing homes tend to fall below the median. Night and weekend differentials can add $2 to $5 per hour on top of base pay.
             </p>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white rounded-xl p-5 text-center">
                 <p className="text-3xl font-bold text-green-600 mb-2">$38,200</p>
-                <p className="text-sm text-gray-600">Median Annual Wage (BLS 2023)</p>
+                <p className="text-sm text-gray-600">National Median Annual Wage</p>
               </div>
               <div className="bg-white rounded-xl p-5 text-center">
                 <p className="text-3xl font-bold text-blue-600 mb-2">$18.37</p>
@@ -287,7 +287,7 @@ const [{ count }, initialData] = await Promise.all([
               ))}
             </div>
             <p className="text-sm text-gray-500 mt-6">
-              Source: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics, May 2023. Figures are approximations and vary by employer, shift, and experience level.
+              Wage data reflects the most recent figures published by the Bureau of Labor Statistics. State-level estimates are rounded approximations and will vary by employer, shift differential, and years of experience.
             </p>
           </div>
         </section>
@@ -300,7 +300,7 @@ const [{ count }, initialData] = await Promise.all([
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">CNA as a Stepping Stone in Nursing</h2>
                 <p className="text-gray-700 mb-4">
-                  Working as a CNA is one of the most recognized entry points into a nursing career. Many employers offer tuition reimbursement and scheduling flexibility to support CNAs pursuing further education. The career ladder from CNA to licensed nurse is well-established across the U.S. healthcare system.
+                  CNA is the most common starting point for people who eventually become licensed nurses. The clinical hours you accumulate on the job count as real-world patient care experience, which nursing school admissions committees weigh heavily. Many hospital systems and long-term care employers offer tuition assistance specifically for CNAs enrolled in LPN or RN programs, and some will adjust your work schedule around your class hours.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-6">
                   {['CNA', 'LPN / LVN', 'RN (ADN or BSN)', 'RN Specialist / NP'].map((level, index, arr) => (
@@ -326,7 +326,7 @@ const [{ count }, initialData] = await Promise.all([
             <h2 className="text-2xl font-bold text-gray-900">CNA Shift Types and Scheduling</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            CNA positions are available across a full range of shift types, making this one of the most schedule-flexible roles in healthcare. The shift you work will depend on the facility type and your personal availability.
+            One reason CNA work fits such a wide range of lifestyles is the scheduling variety. Day, evening, night, and per diem shifts exist at nearly every facility type, and many employers let you lock in a consistent schedule rather than rotating. The shift you work affects your pay, your workload, and the kind of care you provide.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
@@ -352,7 +352,7 @@ const [{ count }, initialData] = await Promise.all([
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Understanding the Nurse Aide Registry</h2>
                 <p className="text-gray-700 mb-4">
-                  Every state maintains a Nurse Aide Registry as required by federal law under the Nursing Home Reform Act. According to the Centers for Medicare and Medicaid Services, employers at Medicare or Medicaid-certified facilities are legally required to check this registry before hiring a CNA.
+                  Your Nurse Aide Registry listing is your professional record. Every facility that participates in Medicare or Medicaid must verify it before bringing you on board. Keeping your registry status current and clean is not a bureaucratic formality. It is the single document that determines whether you can work.
                 </p>
                 <div className="grid md:grid-cols-2 gap-4 mt-6">
                   <div className="bg-white rounded-lg p-4">
@@ -438,7 +438,7 @@ const [{ count }, initialData] = await Promise.all([
         {/* Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> The salary figures, employment projections, and regulatory information provided on this page are for general informational purposes only and do not constitute legal or career advice. CNA certification requirements, scope of practice, and wage rates vary by state and employer. Always consult your state Nurse Aide Registry, the Centers for Medicare and Medicaid Services at cms.gov, and the U.S. Bureau of Labor Statistics at bls.gov for the most current and applicable information.
+            <strong>Disclaimer:</strong> The information on this page is for general reference only and does not constitute legal, medical, or career advice. Certification requirements, wage ranges, and scope of practice rules differ by state and employer. Consult your state Nurse Aide Registry and the Bureau of Labor Statistics for the most current data applicable to your situation.
           </p>
         </section>
       </div>
