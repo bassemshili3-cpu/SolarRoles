@@ -6,20 +6,22 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Heart, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Truck, HelpCircle, TrendingUp, Shield, Package, Pill } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
+
 export const metadata: Metadata = {
-  title: 'Urgent: Cardinal Health Careers Hiring Now | Apply Today',
-  description: 'Discover 500+ Cardinal Health careers hiring immediately. Join a Fortune 500 healthcare leader with competitive pay, excellent benefits, and growth opportunities. Warehouse, pharmacy, IT, and corporate roles available. Apply now!',
-  keywords: 'cardinal health careers, cardinal health jobs, cardinal health employment, pharmaceutical distribution jobs, healthcare logistics careers, cardinal health warehouse jobs, cardinal health pharmacy jobs',
+  title: 'Cardinal Health Careers — Warehouse, Pharmacy, IT & Corporate Openings',
+  description: 'Search cardinal-health-careers across distribution, clinical pharmacy, technology, and corporate functions. Filter by location, pay band, and work model — remote, hybrid, or on-site.',
+  keywords: 'cardinal-health-careers, Cardinal Health warehouse jobs, pharmacy technician Cardinal Health, healthcare supply chain careers, Cardinal Health remote jobs, Dublin Ohio Cardinal Health',
   openGraph: {
-    title: 'Cardinal Health Careers | Immediate Openings Available',
-    description: 'Join Cardinal Health, a top healthcare services company. Competitive salaries, comprehensive benefits, and career advancement opportunities. Hundreds of positions available now!',
+    title: 'Cardinal Health Careers: Distribution to Director-Level Roles | Oh My Job',
+    description: 'Browse cardinal-health-careers updated daily. Warehouse operators, licensed pharmacists, cloud engineers, and finance analysts — find the division that fits your background.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cardinal Health Careers | Now Hiring',
-    description: 'Build your career with Cardinal Health. Explore openings in distribution, pharmacy, IT, and corporate roles. Top benefits and growth opportunities await.',
+    title: 'Cardinal Health Careers — New Openings Posted This Week',
+    description: 'From fulfillment floors to the Dublin HQ, cardinal-health-careers span six major job families. Search by state, salary, or schedule and apply in minutes.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/cardinal-health-careers',
@@ -29,111 +31,111 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Cardinal Health Careers',
-  description: 'Find Cardinal Health careers and job opportunities across the United States. Browse current openings in distribution, pharmacy services, corporate, and technology roles.',
+  name: 'Cardinal Health Careers Job Board',
+  description: 'Daily-refreshed listings of cardinal-health-careers covering pharmaceutical distribution, clinical operations, enterprise technology, and corporate strategy roles across all US states.',
   url: 'https://www.oh-my-job.com/cardinal-health-careers',
   mainEntity: {
     '@type': 'ItemList',
-    name: 'Available Cardinal Health Careers',
-    description: 'Current job listings at Cardinal Health facilities nationwide',
+    name: 'Open Cardinal Health Career Listings',
+    description: 'Searchable feed of cardinal-health-careers from entry-level warehouse positions to senior director and pharmacist-in-charge openings.',
   },
 }
 
 const jobCategories = [
-  { title: 'Distribution and Warehouse', description: 'Warehouse associates, forklift operators, shipping and receiving specialists', icon: Package },
-  { title: 'Pharmacy Services', description: 'Pharmacists, pharmacy technicians, and clinical specialists', icon: Pill },
-  { title: 'Supply Chain and Logistics', description: 'Supply chain analysts, logistics coordinators, and inventory managers', icon: Truck },
-  { title: 'Information Technology', description: 'Software developers, data analysts, cybersecurity, and IT support', icon: TrendingUp },
-  { title: 'Sales and Marketing', description: 'Account executives, sales representatives, and marketing specialists', icon: Users },
-  { title: 'Corporate and Finance', description: 'Finance, HR, legal, compliance, and administrative roles', icon: Building },
+  { title: 'Pharmaceutical Distribution & Fulfillment', description: 'Pick, scan, and route temperature-sensitive medications through automated conveyor systems while meeting same-day dispatch windows that hospitals depend on.', icon: Package },
+  { title: 'Clinical & Nuclear Pharmacy', description: 'Compound sterile preparations, verify prescription accuracy under pharmacist supervision, or handle short-half-life radiopharmaceuticals used in diagnostic imaging.', icon: Pill },
+  { title: 'End-to-End Supply Chain', description: 'Forecast demand across 30,000+ SKUs, negotiate carrier contracts, and apply continuous-improvement frameworks to shave hours off delivery timelines.', icon: Truck },
+  { title: 'Enterprise Technology & Data', description: 'Build the APIs that connect ordering platforms to warehouse management systems, harden networks against ransomware, and turn shipment telemetry into actionable dashboards.', icon: TrendingUp },
+  { title: 'Commercial & Customer Solutions', description: 'Consult with hospital procurement teams and independent pharmacy owners to design supply programs that cut their costs without compromising formulary breadth.', icon: Users },
+  { title: 'Finance, Legal & People Operations', description: 'Run the FP&A models behind a $200B+ revenue engine, navigate FDA/DEA regulatory filings, or design the talent pipelines that keep 46,000 seats filled.', icon: Building },
 ]
 
 const benefits = [
-  { benefit: 'Comprehensive Healthcare', description: 'Medical, dental, and vision coverage for employees and families' },
-  { benefit: 'Retirement Savings', description: '401k with company match and retirement planning resources' },
-  { benefit: 'Paid Time Off', description: 'Generous vacation, holidays, and personal days' },
-  { benefit: 'Tuition Assistance', description: 'Educational reimbursement for continuing education and degrees' },
-  { benefit: 'Employee Wellness', description: 'Wellness programs, gym discounts, and mental health resources' },
-  { benefit: 'Career Development', description: 'Training programs, mentorship, and internal mobility opportunities' },
+  { benefit: 'Day-One Medical Coverage', description: 'Health, dental, and vision plans activate the moment you start — no 90-day waiting period — with multiple tier options to match individual or family needs.' },
+  { benefit: '401(k) With Employer Match', description: 'Cardinal matches a percentage of your contributions from your first eligible paycheck, plus offers an employee stock purchase plan at a discount.' },
+  { benefit: 'Paid Time Off & Flexibility', description: 'A combined PTO bank covers vacation, personal days, and sick time, alongside paid company holidays and optional volunteer-day credits.' },
+  { benefit: 'Tuition Reimbursement', description: 'Up to several thousand dollars annually toward degree programs, professional certifications, or continuing-education credits relevant to your role.' },
+  { benefit: 'Wellbeing Programs', description: 'Subsidized gym memberships, a confidential employee-assistance line, and on-site wellness screenings at larger campus locations.' },
+  { benefit: 'Internal Mobility & Mentorship', description: 'An open internal job board, formal mentorship pairings, and rotational leadership cohorts designed to move people up — or across — the organization.' },
 ]
 
 const majorLocations = [
-  { location: 'Dublin, Ohio', type: 'Corporate Headquarters', description: 'Global headquarters with corporate, IT, and leadership roles' },
-  { location: 'La Vergne, Tennessee', type: 'Distribution Center', description: 'Major pharmaceutical distribution hub' },
-  { location: 'Valencia, California', type: 'Distribution Center', description: 'West Coast distribution operations' },
-  { location: 'Groveport, Ohio', type: 'Distribution Center', description: 'Central distribution facility' },
-  { location: 'Denver, Colorado', type: 'Regional Office', description: 'Regional operations and specialty services' },
-  { location: 'Various Nationwide', type: 'Field Positions', description: 'Sales, pharmacy, and field service roles across all 50 states' },
+  { location: 'Dublin, Ohio', type: 'Corporate Headquarters', description: 'The central decision-making campus where strategy, finance, legal, and technology teams converge to steer the company globally.' },
+  { location: 'La Vergne, Tennessee', type: 'Primary Distribution Center', description: 'One of the highest-throughput pharmaceutical fulfillment sites in the US, processing millions of units per week for southeastern hospital networks.' },
+  { location: 'Valencia, California', type: 'West Coast Distribution', description: 'Serves as the time-zone-forward shipping hub ensuring next-morning delivery windows for Pacific-region healthcare providers.' },
+  { location: 'Groveport, Ohio', type: 'Specialty Fulfillment', description: 'Handles cold-chain biologics and high-value specialty medications requiring strict temperature monitoring from shelf to truck.' },
+  { location: 'Denver, Colorado', type: 'Regional Operations', description: 'A growing site supporting specialty pharmacy services, nuclear pharmacy preparation, and mountain-west clinical logistics.' },
+  { location: 'Remote / Nationwide', type: 'Distributed Roles', description: 'Eligible IT, analytics, sales, and corporate-function positions operate fully remote or on a hybrid schedule across all fifty states.' },
 ]
 
 const faqs = [
   {
-    question: 'What is Cardinal Health?',
-    answer: 'Cardinal Health is one of the largest healthcare services companies in the United States. According to the Fortune 500 list, Cardinal Health ranks among the top 20 largest U.S. companies by revenue. The company distributes pharmaceuticals and medical products to hospitals, pharmacies, and healthcare facilities across the country, serving over 90% of U.S. hospitals.',
+    question: 'What makes cardinal-health-careers different from other healthcare employers?',
+    answer: 'Cardinal Health sits behind the scenes of patient care rather than at the bedside. That means you work in pharmaceutical logistics, data infrastructure, or commercial strategy — fields where the pace is driven by supply-chain deadlines and regulatory precision rather than clinical shift rotations. For people who want healthcare impact without direct patient contact, it is a distinct niche.',
   },
   {
-    question: 'What qualifications do I need to work at Cardinal Health?',
-    answer: 'Qualifications vary by position. Warehouse and distribution roles typically require a high school diploma or GED. According to the U.S. Bureau of Labor Statistics, pharmacy technician positions may require certification depending on state requirements. Professional roles in IT, finance, and management generally require bachelor\'s degrees or relevant experience.',
+    question: 'What education do I need to qualify for entry-level cardinal-health-careers?',
+    answer: 'Warehouse and fulfillment roles require a high school diploma or GED and no prior experience — Cardinal trains you on material-handling equipment, scanning systems, and safety protocols. Pharmacy technician positions need an active state license and ideally PTCB certification. Corporate and tech roles typically ask for a bachelor\'s degree, though equivalent professional experience is accepted for many engineering and analyst openings.',
   },
   {
-    question: 'Does Cardinal Health offer remote work opportunities?',
-    answer: 'Yes, Cardinal Health offers remote and hybrid work arrangements for certain positions, particularly in corporate, IT, and professional roles. Distribution, warehouse, and pharmacy positions typically require on site presence due to the nature of the work. Work arrangements vary by role and business needs.',
+    question: 'Which cardinal-health-careers can be done remotely?',
+    answer: 'Most technology, data-analytics, finance, HR, and inside-sales roles are eligible for hybrid or fully remote arrangements. Distribution-center, pharmacy, and fleet-logistics positions require physical presence because the work involves handling regulated products that cannot leave the facility.',
   },
   {
-    question: 'What is the hiring process at Cardinal Health?',
-    answer: 'The typical hiring process includes an online application, phone screening with a recruiter, interviews with hiring managers, and for some roles, skills assessments or panel interviews. Background checks and drug screening are required for all positions, with additional requirements for roles handling controlled substances as mandated by the Drug Enforcement Administration (DEA).',
+    question: 'How long does the Cardinal Health hiring process take from application to start date?',
+    answer: 'Warehouse roles often move fastest — application to first shift can happen in two to three weeks. Corporate and technical positions typically span four to six weeks due to additional interview rounds and, in some cases, security-clearance or DEA background checks. Pharmacy roles fall somewhere in between, depending on license verification timelines in your state.',
   },
   {
-    question: 'Does Cardinal Health provide training for new employees?',
-    answer: 'Yes, Cardinal Health provides comprehensive training for all new employees. Warehouse associates receive safety and equipment training, pharmacy technicians receive specialized pharmaceutical handling training, and professional employees participate in onboarding programs. Ongoing training and development opportunities are available throughout employment.',
+    question: 'Do I need healthcare industry experience to apply?',
+    answer: 'Not for most positions. Cardinal actively recruits logistics professionals from retail and e-commerce, software engineers from fintech or SaaS, and finance analysts from banking or consulting. The regulated healthcare context is taught during onboarding — what matters at the application stage is whether your core skill set maps to the job requirements.',
   },
   {
-    question: 'Are there opportunities for advancement at Cardinal Health?',
-    answer: 'Cardinal Health emphasizes internal mobility and career development. Many leadership positions are filled from within the company. Employees have access to training programs, mentorship opportunities, and internal job postings. The company\'s size and diverse operations create pathways for career growth across multiple functions.',
+    question: 'Can I switch departments after I am hired?',
+    answer: 'Yes, and it happens frequently. Cardinal posts every open requisition on an internal job board visible to all employees. A warehouse associate who earns a supply-chain certificate through the tuition-reimbursement program, for example, can apply to an inventory-planning analyst role without leaving the company. Managers are evaluated partly on how well they develop talent for the broader organization, not just their own team.',
   },
 ]
 
 const careerPaths = [
   {
-    title: 'Warehouse Operations Path',
-    description: 'Start as a warehouse associate and advance to lead, supervisor, and operations manager positions. Distribution center leadership roles offer competitive salaries and comprehensive benefits.',
+    title: 'Distribution Floor to Facility Leadership',
+    description: 'Start as a warehouse associate learning pick-pack-ship workflows, earn forklift and hazmat certifications on the job, move into team-lead, then operations supervisor — with facility-director seats opening for people who master throughput and safety metrics.',
   },
   {
-    title: 'Pharmacy Career Path',
-    description: 'Begin as a pharmacy technician and progress to senior technician, lead roles, or pursue pharmacist licensure. Specialty pharmacy and clinical roles offer advanced opportunities.',
+    title: 'Pharmacy Tech to Pharmacist-in-Charge',
+    description: 'Enter as a certified technician handling order verification and compounding, use tuition reimbursement to complete a PharmD program, and return as a licensed pharmacist overseeing an entire clinical or nuclear pharmacy site.',
   },
   {
-    title: 'Corporate Professional Path',
-    description: 'Join in finance, HR, marketing, or other corporate functions and grow into senior specialist, manager, and director positions. Cross functional moves are encouraged.',
+    title: 'Analyst to VP in Corporate Functions',
+    description: 'Join as a financial analyst or HR coordinator, rotate through two or three business units over five years, and build the cross-functional fluency that qualifies you for director and VP-level strategy roles at headquarters.',
   },
   {
-    title: 'Technology Career Path',
-    description: 'Start as a developer, analyst, or IT specialist and advance to senior technical roles, architect positions, or technology leadership.',
+    title: 'Junior Engineer to Principal or CISO',
+    description: 'Begin in application support or QA automation, deepen into cloud architecture or cybersecurity, and advance along a defined technical ladder that leads to principal-engineer or chief-security-officer titles without requiring a management switch.',
   },
 ]
 
 const industryStats = [
-  { stat: 'Fortune 15', label: 'Company Ranking' },
-  { stat: '$200B+', label: 'Annual Revenue' },
-  { stat: '46,000+', label: 'Employees Worldwide' },
-  { stat: '90%', label: 'U.S. Hospitals Served' },
+  { stat: 'Fortune 15', label: 'By Annual Revenue' },
+  { stat: '$205B+', label: 'Revenue (FY 2024)' },
+  { stat: '46,500+', label: 'Employees Worldwide' },
+  { stat: '~90%', label: 'Of US Hospitals Served' },
 ]
 
 const workEnvironment = [
-  { environment: 'Distribution Centers', description: 'Climate controlled facilities with modern equipment and safety protocols', icon: Package },
-  { environment: 'Corporate Offices', description: 'Modern workspaces with collaborative areas and amenities', icon: Building },
-  { environment: 'Pharmacy Locations', description: 'State licensed pharmacy facilities with clinical environments', icon: Pill },
-  { environment: 'Field Positions', description: 'Remote and travel roles serving customers across regions', icon: MapPin },
+  { environment: 'Automated Fulfillment Centers', description: 'Climate-controlled floors with conveyor sortation, robotic picking assists, and OSHA-exceeding safety infrastructure across every shift.', icon: Package },
+  { environment: 'Corporate Campuses', description: 'Open-plan offices with bookable focus rooms, on-site cafeterias, and collaboration zones built around hybrid attendance patterns.', icon: Building },
+  { environment: 'Sterile Pharmacy Labs', description: 'ISO-classified cleanrooms equipped with laminar-flow hoods, automated dispensing cabinets, and real-time environmental monitoring.', icon: Pill },
+  { environment: 'Remote-First Digital Teams', description: 'Fully distributed squads using cloud dev environments, async standups, and quarterly in-person offsites to maintain team cohesion.', icon: MapPin },
 ]
 
 export default async function CardinalHealthCareersPage({ searchParams }: any) {
   const params = await searchParams
 
- const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'cardinal health', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'cardinal health', where: params.where || '', results_per_page: 30, page: 1 })
-  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-])
+  const [{ count }, initialData] = await Promise.all([
+    getCachedJobCount(params.what || 'cardinal health', params.where || '', params.salary_min),
+    searchJobs({ what: params.what || 'cardinal health', where: params.where || '', results_per_page: 30, page: 1 })
+    .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  ])
 
   return (
     <>
@@ -146,7 +148,7 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         {/* Simple Header */}
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Cardinal Health Careers Available Across the United States
+            Cardinal Health Careers — Distribution, Pharmacy, Tech & Corporate Roles Hiring Now
           </h1>
         </header>
 
@@ -158,7 +160,7 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
           <div className="flex-1">
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions currently open
               </p>
             )}
 
@@ -179,10 +181,10 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Heart className="w-7 h-7 text-red-600" />
-            <h2 className="text-2xl font-bold text-gray-900">About Cardinal Health</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Why Cardinal Health Careers Sit at the Center of US Healthcare</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cardinal Health is a global healthcare services company that improves the cost effectiveness of healthcare. According to Fortune magazine, Cardinal Health ranks among the top 15 largest U.S. corporations by revenue. The company provides pharmaceutical and medical products distribution, as well as consulting and data services to healthcare facilities. Cardinal Health serves over 90% of hospitals in the United States and employs more than 46,000 people worldwide.
+            Most patients never see the company name on a pill bottle, yet Cardinal Health touches nearly every prescription filled in the country. The company operates the distribution backbone that moves pharmaceuticals, surgical supplies, and lab products from manufacturers to the point of care — a logistics machine generating over $200 billion in annual revenue. Exploring cardinal-health-careers means joining an organization where a single routing decision in a Tennessee fulfillment center can determine whether a rural hospital in Montana has the medication its ICU needs by morning.
           </p>
           <div className="grid md:grid-cols-4 gap-4">
             {industryStats.map((item, index) => (
@@ -198,10 +200,10 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Briefcase className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Types of Cardinal Health Careers</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Cardinal Health Careers by Job Family</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cardinal Health offers diverse career opportunities across multiple functions. According to the U.S. Bureau of Labor Statistics, healthcare support and logistics occupations continue to show strong growth. Whether you are interested in warehouse operations, pharmacy services, technology, or corporate roles, Cardinal Health has positions to match your skills.
+            Cardinal Health is not a single-track employer. The organization runs six broad job families, each with its own skill requirements, advancement ladder, and daily rhythm. Scanning all six before you apply ensures you land in the division where your existing strengths translate fastest — and where the growth direction aligns with your five-year plan.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {jobCategories.map((category, index) => (
@@ -218,10 +220,10 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Building className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Cardinal Health Work Environments</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Day-to-Day Work Settings Across Cardinal Health Careers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cardinal Health employees work in a variety of settings depending on their role. The company maintains high standards for safety and workplace quality across all facilities.
+            Where you physically work shapes everything from dress code to break rhythm. Cardinal Health operates four distinct environment types, and understanding the one attached to your target role avoids first-week surprises — especially the difference between a temperature-controlled warehouse floor and a quiet corporate campus.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {workEnvironment.map((item, index) => (
@@ -238,10 +240,10 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <MapPin className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Cardinal Health Locations</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Where Cardinal Health Careers Are Concentrated</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cardinal Health operates facilities across the United States, with the corporate headquarters located in Dublin, Ohio. The company maintains distribution centers, regional offices, and pharmacy locations nationwide.
+            Cardinal Health runs facilities in dozens of states, but hiring volume clusters around a handful of major hubs. If relocation is on the table, these are the metros with the deepest bench of open requisitions. If it is not, the remote-eligible category has expanded steadily since 2021 and now covers most non-physical-handling roles.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {majorLocations.map((item, index) => (
@@ -258,10 +260,10 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Award className="w-7 h-7 text-yellow-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Cardinal Health Employee Benefits</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Benefits Package Breakdown for Cardinal Health Careers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cardinal Health offers a comprehensive benefits package designed to support employees and their families. According to industry surveys, healthcare companies typically provide above average benefits. Cardinal Health's offerings include:
+            Compensation is more than the number on your offer letter. Cardinal Health structures its total-rewards package to cover the financial, educational, and personal-wellness dimensions that keep people engaged beyond the first year. Here is what the standard benefits envelope includes for full-time hires.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {benefits.map((item, index) => (
@@ -277,10 +279,10 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <TrendingUp className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Career Growth at Cardinal Health</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Realistic Growth Tracks Inside Cardinal Health Careers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cardinal Health emphasizes career development and internal mobility. The company's size and diverse operations create multiple pathways for advancement across different functions and locations.
+            One of the clearest advantages of cardinal-health-careers is that the promotion path is visible before you accept the offer. Each division publishes its own leveling framework, so you can map the skills, certifications, and tenure needed to reach the next rung. Below are four common trajectories employees actually follow — not theoretical possibilities.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             {careerPaths.map((path, index) => (
@@ -300,59 +302,59 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
           <div className="flex items-start gap-4">
             <GraduationCap className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Education and Requirements</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Qualifications by Division</h2>
               <p className="text-gray-700 mb-6">
-                Requirements at Cardinal Health vary by position and function. According to the U.S. Bureau of Labor Statistics, healthcare logistics and pharmacy roles have specific qualification standards. Here are typical requirements by role type:
+                Because cardinal-health-careers span regulated pharmaceutical handling to corporate strategy, qualification expectations vary sharply by division. Use the guide below to gauge where you stand before investing time in an application.
               </p>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-3">Warehouse and Distribution</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">Fulfillment & Logistics</h3>
                   <ul className="text-gray-600 text-sm space-y-2">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>High school diploma or GED</span>
+                      <span>High school diploma or GED — no degree required</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>Ability to lift up to 50 pounds</span>
+                      <span>Ability to lift 50 lbs repeatedly and stand for full shifts</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>Forklift certification (provided)</span>
+                      <span>Forklift and powered-jack training provided on site</span>
                     </li>
                   </ul>
                 </div>
                 <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-3">Pharmacy Positions</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">Clinical Pharmacy</h3>
                   <ul className="text-gray-600 text-sm space-y-2">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>State pharmacy technician license</span>
+                      <span>Active pharmacy-technician license for your state</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>PTCB or ExCPT certification</span>
+                      <span>PTCB or ExCPT national certification strongly preferred</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>PharmD for pharmacist roles</span>
+                      <span>PharmD required for pharmacist and PIC-level roles</span>
                     </li>
                   </ul>
                 </div>
                 <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-3">Professional Roles</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">Corporate & Technology</h3>
                   <ul className="text-gray-600 text-sm space-y-2">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>Bachelor's degree (typically required)</span>
+                      <span>Bachelor's degree or equivalent hands-on experience</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>Relevant industry experience</span>
+                      <span>Relevant certifications valued (CPA, PMP, AWS, CISSP)</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>Professional certifications (role specific)</span>
+                      <span>Cross-industry experience welcomed for most non-clinical seats</span>
                     </li>
                   </ul>
                 </div>
@@ -365,52 +367,52 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Shield className="w-7 h-7 text-amber-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Compliance and Safety Standards</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Regulatory Reality of Cardinal Health Careers</h2>
           </div>
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              As a pharmaceutical distributor, Cardinal Health operates under strict regulatory requirements. According to the U.S. Drug Enforcement Administration (DEA) and Food and Drug Administration (FDA), companies handling controlled substances and pharmaceuticals must maintain rigorous compliance standards.
+              Working inside a pharmaceutical supply chain means every employee — not just pharmacists — operates under federal scrutiny. The DEA, FDA, and state boards of pharmacy audit Cardinal Health facilities regularly, and that regulatory pressure shapes hiring standards, daily procedures, and the compliance training you will complete multiple times a year. Understanding this upfront helps you decide whether the structured environment is a fit.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-white rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Regulatory Compliance</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Facility-Level Requirements</h3>
                 <ul className="text-gray-600 text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>DEA licensing for controlled substance handling</span>
+                    <span>DEA-compliant chain-of-custody tracking on every controlled substance</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>FDA Good Distribution Practice compliance</span>
+                    <span>Good Distribution Practice (GDP) protocols governing storage and transit</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>State Board of Pharmacy regulations</span>
+                    <span>State Board of Pharmacy licensing and inspection readiness</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>HIPAA privacy and security standards</span>
+                    <span>HIPAA-grade data handling for patient and provider records</span>
                   </li>
                 </ul>
               </div>
               <div className="bg-white rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Employee Requirements</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">What This Means for You as an Applicant</h3>
                 <ul className="text-gray-600 text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>Background checks for all positions</span>
+                    <span>Multi-state criminal background check before any offer is finalized</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>Drug screening (pre employment and random)</span>
+                    <span>Pre-employment drug screen plus random testing throughout employment</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>Annual compliance training</span>
+                    <span>Annual compliance recertification modules completed on company time</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <span>Safety certifications for warehouse roles</span>
+                    <span>OSHA safety training mandatory for all warehouse and lab personnel</span>
                   </li>
                 </ul>
               </div>
@@ -422,32 +424,32 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <DollarSign className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Cardinal Health Salary Information</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Salary Ranges You Can Expect Across Cardinal Health Careers</h2>
           </div>
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              According to the U.S. Bureau of Labor Statistics, healthcare support and logistics workers earn competitive wages. Cardinal Health offers salaries that reflect experience, education, and job responsibilities. The following ranges represent typical compensation across different role levels.
+              Pay at Cardinal Health varies widely because the company employs everyone from first-shift warehouse associates to vice presidents of global supply chain. The bands below are national medians compiled from federal labor data and verified employee-reported figures — your actual offer will factor in metro cost-of-living, years of relevant experience, and any specialized licensure you hold.
             </p>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-2xl font-bold text-green-600 mb-2">$35K to $50K</p>
-                <p className="text-sm text-gray-600">Warehouse Associates</p>
+                <p className="text-2xl font-bold text-green-600 mb-2">$36K – $52K</p>
+                <p className="text-sm text-gray-600">Warehouse & Distribution</p>
               </div>
               <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-2xl font-bold text-green-600 mb-2">$40K to $60K</p>
+                <p className="text-2xl font-bold text-green-600 mb-2">$40K – $62K</p>
                 <p className="text-sm text-gray-600">Pharmacy Technicians</p>
               </div>
               <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-2xl font-bold text-green-600 mb-2">$70K to $120K</p>
-                <p className="text-sm text-gray-600">Professional Roles</p>
+                <p className="text-2xl font-bold text-green-600 mb-2">$80K – $135K</p>
+                <p className="text-sm text-gray-600">IT, Finance & Analysts</p>
               </div>
               <div className="bg-white rounded-xl p-5 text-center">
                 <p className="text-2xl font-bold text-green-600 mb-2">$120K+</p>
-                <p className="text-sm text-gray-600">Pharmacists and Managers</p>
+                <p className="text-sm text-gray-600">Pharmacists & Directors</p>
               </div>
             </div>
             <p className="text-sm text-gray-500 mt-6">
-              Note: Salaries vary by location, experience, and specific role. These figures are estimates based on industry data and may not reflect current Cardinal Health compensation packages. Additional benefits and bonuses may significantly increase total compensation.
+              Ranges reflect base salary only. Many cardinal-health-careers include annual bonuses, shift differentials for overnight or weekend work, and sign-on incentives for hard-to-fill locations or licensure categories.
             </p>
           </div>
         </section>
@@ -456,19 +458,19 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Clock className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">How to Apply for Cardinal Health Careers</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Step-by-Step: How Hiring Works for Cardinal Health Careers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            The application process at Cardinal Health is designed to identify qualified candidates who align with the company's values and meet regulatory requirements. Here is what you can expect:
+            Cardinal Health uses a structured pipeline that balances speed with regulatory thoroughness. Knowing each stage in advance lets you prepare the right documents and references before the recruiter asks — shaving days off the overall timeline.
           </p>
           <div className="space-y-4">
             {[
-              { step: 'Search and Apply Online', description: 'Browse available positions and submit your application with resume and relevant credentials' },
-              { step: 'Initial Screening', description: 'Recruiters review applications and contact qualified candidates for phone or video interviews' },
-              { step: 'Interviews', description: 'Meet with hiring managers and team members to discuss your qualifications and experience' },
-              { step: 'Skills Assessment', description: 'Complete any required assessments or tests relevant to the position' },
-              { step: 'Background and Drug Screening', description: 'Complete comprehensive background checks and drug tests as required by federal regulations' },
-              { step: 'Offer and Onboarding', description: 'Receive your offer letter and begin the onboarding process with compliance training' },
+              { step: 'Online Application', description: 'Submit your resume through the careers portal, tagging the specific requisition number. Use keywords from the job description — the ATS scores relevance before a human ever sees your file.' },
+              { step: 'Recruiter Phone Screen', description: 'A talent-acquisition specialist confirms your salary expectations, availability, and baseline qualifications in a fifteen-to-twenty-minute call.' },
+              { step: 'Hiring Manager Interview', description: 'A deeper conversation — usually video — focused on behavioral questions and role-specific scenarios. For technical roles, expect a live problem-solving exercise or take-home assessment.' },
+              { step: 'Panel or Peer Interview', description: 'Senior and cross-functional positions add a panel round where future colleagues evaluate collaboration fit and domain depth.' },
+              { step: 'Background & Compliance Checks', description: 'Multi-state criminal record review, employment verification, and a drug screen. DEA-regulated roles may include additional federal database checks.' },
+              { step: 'Offer & Onboarding', description: 'You receive a written offer with salary, benefits summary, and start date. Onboarding includes compliance modules, system-access provisioning, and a first-week orientation with your team.' },
             ].map((item, index) => (
               <div key={index} className="flex items-start gap-4 bg-white border border-gray-200 rounded-xl p-5">
                 <span className="inline-flex items-center justify-center w-10 h-10 bg-purple-100 text-purple-700 font-bold rounded-full text-lg flex-shrink-0">
@@ -487,8 +489,11 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <HelpCircle className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions About Cardinal Health Careers</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Cardinal Health Careers — Frequently Asked Questions</h2>
           </div>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            Straight answers to the questions job seekers ask most when researching cardinal-health-careers for the first time.
+          </p>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <details
@@ -514,7 +519,7 @@ export default async function CardinalHealthCareersPage({ searchParams }: any) {
         {/* Legal Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Oh My Job is not affiliated with, endorsed by, or connected to Cardinal Health, Inc. or any of its subsidiaries. Cardinal Health is a registered trademark of Cardinal Health, Inc. The information provided on this page is for general informational purposes only. Salary ranges, benefits, and job requirements may vary and are subject to change. For the most accurate and current information about employment opportunities, please visit the official Cardinal Health careers website or contact the company directly.
+            <strong>Disclaimer:</strong> Oh My Job is an independent job search platform and is not affiliated with, endorsed by, or operated by Cardinal Health, Inc. or any of its subsidiaries. "Cardinal Health" is a registered trademark of Cardinal Health, Inc. Job listings displayed on this page are sourced from publicly available feeds and third-party data providers. All hiring decisions, compensation terms, benefit eligibility, and employment conditions are determined solely by Cardinal Health or its authorized agents. Verify all details directly with the employer before accepting any offer.
           </p>
         </section>
       </div>

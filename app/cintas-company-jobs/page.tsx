@@ -8,18 +8,18 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Hiring Immediately: Cintas Company Jobs | Apply Today',
-  description: 'Browse Cintas Company jobs hiring now across the United States. Route drivers, service sales reps, production associates and more. Competitive pay, full benefits, and real career growth. Apply in minutes and join one of America\'s most admired companies!',
-  keywords: 'cintas company jobs, cintas jobs, cintas careers, cintas hiring, cintas route driver jobs, cintas service sales representative, cintas production associate, cintas job openings',
+  title: 'Cintas Company Jobs — Route Driver, Sales, Production & Management Openings',
+  description: 'Search cintas company jobs across route service, field sales, plant production, and corporate support. Filter by location, pay range, and division — listings refreshed daily from 480+ US facilities.',
+  keywords: 'cintas company jobs, cintas route driver hiring, cintas service sales rep, cintas production associate, cintas management trainee, cintas first aid specialist, cintas careers near me',
   openGraph: {
-    title: 'Immediate Opening: Cintas Company Jobs Hiring Now | Oh My Job',
-    description: 'Cintas is actively recruiting across the US. Route service, sales, production, and management roles available now. Great pay, benefits, and advancement. Apply today!',
+    title: 'Cintas Company Jobs: Route, Sales, Production & Corporate Roles | Oh My Job',
+    description: 'Browse cintas company jobs from entry-level production to branch management. Compare pay structures, benefit packages, and promotion timelines before you apply.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Now Hiring: Cintas Company Jobs | Competitive Pay & Benefits',
-    description: 'Find Cintas job openings near you. Hundreds of positions in route service, sales, and operations hiring immediately. Start your application now!',
+    title: 'Cintas Company Jobs — Openings Across All Divisions',
+    description: 'Route service, field sales, plant ops, first aid — find cintas company jobs by zip code and role type. Many positions offer same-month start dates.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/cintas-company-jobs',
@@ -29,121 +29,121 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Cintas Company Jobs',
-  description: 'Find Cintas Company jobs hiring now across the United States. Browse route service, sales, production, and corporate positions.',
+  name: 'Cintas Company Jobs Board',
+  description: 'Daily-refreshed directory of cintas company jobs spanning route service, production, sales, safety services, and corporate functions across 480+ US and Canadian facilities.',
   url: 'https://www.oh-my-job.com/cintas-company-jobs',
   mainEntity: {
     '@type': 'ItemList',
-    name: 'Available Cintas Company Jobs',
-    description: 'Current Cintas job listings with immediate hiring needs',
+    name: 'Current Cintas Company Job Listings',
+    description: 'Searchable feed of cintas company jobs from hourly production roles to salaried branch-manager and regional-director positions.',
   },
 }
 
 const popularRoles = [
   {
     title: 'Route Service Representative',
-    description: 'Deliver and service uniform and facility products on an assigned route. Build customer relationships and ensure satisfaction on every stop.',
+    description: 'Load a truck before dawn, run a 30-to-50-stop daily route, swap out soiled uniforms and mats for fresh inventory, restock first-aid cabinets, and build the face-to-face customer relationships that drive route retention rates.',
   },
   {
     title: 'Service Sales Representative',
-    description: 'Grow an existing customer base by upselling products and services. A blend of account management and field sales with uncapped commission potential.',
+    description: 'Prospect new accounts in an assigned territory through cold calls and drop-ins, close contracts for uniform rental, facility services, and safety products, and grow wallet share on existing accounts — all with uncapped commission on top of base salary.',
   },
   {
     title: 'Production Associate',
-    description: 'Work in a Cintas facility processing, sorting, and preparing garments and products for delivery to customers across multiple industries.',
+    description: 'Work inside the plant sorting, washing, inspecting, and folding garments on high-speed conveyor lines. Roles cover soil sort, wash, finishing, and quality audit — the physical backbone that keeps every route truck loaded on time.',
   },
   {
     title: 'Management Trainee',
-    description: 'Cintas\'s flagship development program places college graduates on a rotational track across operations, sales, and service management.',
+    description: 'A 16-to-18-month rotational program for recent graduates that cycles through route ride-alongs, plant operations, sales shadowing, and branch administration — ending with placement into an operations or sales management seat.',
   },
   {
-    title: 'First Aid & Safety Specialist',
-    description: 'Service customers\' first aid cabinets, AEDs, and safety equipment. A growing division with strong demand driven by OSHA compliance needs.',
+    title: 'First Aid & Safety Service Rep',
+    description: 'Visit client sites to inspect and restock first-aid kits, eyewash stations, and AED units. Demand for this role is climbing as OSHA enforcement tightens and more employers outsource compliance tracking to Cintas.',
   },
   {
-    title: 'Office & Administrative Roles',
-    description: 'Support branch operations in customer service, billing, HR coordination, and logistics across Cintas locations nationwide.',
+    title: 'Office & Branch Support',
+    description: 'Handle customer billing inquiries, coordinate route scheduling, process new-hire paperwork, and manage the daily logistics that keep a branch running — the behind-the-scenes roles that rarely appear in headlines but are always hiring.',
   },
 ]
 
 const benefitsData = [
-  { benefit: 'Medical, Dental & Vision', detail: 'Comprehensive health coverage available from day one for eligible employees' },
-  { benefit: '401(k) with Company Match', detail: 'Retirement savings plan with employer contributions to help build long term financial security' },
-  { benefit: 'Paid Time Off', detail: 'Vacation, sick leave, and paid holidays for full time employees' },
-  { benefit: 'Profit Sharing', detail: 'Eligible employees share in company performance through annual profit sharing distributions' },
-  { benefit: 'Tuition Reimbursement', detail: 'Financial support for continuing education aligned with career development goals' },
-  { benefit: 'Employee Stock Ownership', detail: 'Cintas offers stock purchase plans that allow employees to become shareholders in the company' },
+  { benefit: 'Day-One Health Coverage', detail: 'Medical, dental, and vision plans activate on your start date — no 30- or 90-day waiting period — with multiple tier options for individuals and families.' },
+  { benefit: '401(k) + Company Match', detail: 'Cintas matches a percentage of employee contributions from the first eligible paycheck, giving every new hire immediate access to retirement-savings acceleration.' },
+  { benefit: 'Profit-Sharing Distributions', detail: 'Eligible employees receive annual profit-sharing payments tied to company performance — a payout that has been funded consistently for decades thanks to Cintas\'s revenue stability.' },
+  { benefit: 'Employee Stock Purchase Plan', detail: 'Buy Cintas shares at a discount through payroll deductions, building an ownership stake in an S&P 500 company that has outperformed most industrial peers over the past twenty years.' },
+  { benefit: 'Tuition Reimbursement', detail: 'Financial support for degree programs and professional certifications aligned with your role, paid back to you after successful course completion.' },
+  { benefit: 'PTO + Paid Holidays', detail: 'A combined bank of vacation days, personal days, and sick time plus company-observed holidays — accrual rates increase with tenure.' },
 ]
 
 const companyFacts = [
-  { label: 'Founded', value: '1968', detail: 'Headquartered in Cincinnati, Ohio' },
-  { label: 'Employees', value: '40,000+', detail: 'Team partners across North America' },
-  { label: 'Locations', value: '480+', detail: 'Facilities and branches across the US and Canada' },
-  { label: 'Fortune 500', value: 'Top 500', detail: 'Consistently ranked among America\'s most admired companies' },
+  { label: 'Founded', value: '1968', detail: 'Cincinnati, Ohio headquarters' },
+  { label: 'Workforce', value: '40,000+', detail: 'Employees across the US and Canada' },
+  { label: 'Facilities', value: '480+', detail: 'Plants, branches, and distribution points' },
+  { label: 'Revenue', value: '$9B+', detail: 'Annual revenue (FY 2024)' },
 ]
 
 const workCulture = [
   {
-    title: 'Promote From Within',
-    description: 'Cintas has a strong tradition of internal advancement. A large share of senior leadership and branch management started in entry level route or production roles.',
+    title: 'Promotion Happens From the Inside',
+    description: 'Cintas fills the majority of its supervisory and branch-manager seats with internal candidates. A route rep who consistently hits retention targets and demonstrates leadership aptitude is a stronger candidate for ops manager than an outside MBA with no route experience.',
   },
   {
-    title: 'Training and Development',
-    description: 'New hires receive structured onboarding and role specific training. The Management Trainee program is considered one of the best in the services industry.',
+    title: 'Structured Training at Every Level',
+    description: 'New hires ride along with experienced reps before running solo. The Management Trainee program is widely regarded as one of the most thorough in the business-services industry — graduates emerge with hands-on exposure to every revenue-generating function in a branch.',
   },
   {
-    title: 'Safety First Culture',
-    description: 'According to Cintas corporate communications, workplace safety is a core operating principle. The company maintains rigorous safety standards across all facilities and routes.',
+    title: 'Safety as a Daily Operating Standard',
+    description: 'Route drivers complete pre-trip vehicle inspections, plant workers follow lockout-tagout protocols on laundry equipment, and every facility tracks incident rates against OSHA benchmarks. Safety is not a poster on the wall — it is baked into the performance scorecard.',
   },
   {
-    title: 'Community Involvement',
-    description: 'Cintas partners regularly participate in local community service initiatives, disaster relief efforts, and charitable programs through the Cintas Foundation.',
+    title: 'Community and Giving Back',
+    description: 'The Cintas Foundation funds local disaster-relief efforts, school-supply drives, and employee-matching charitable contributions. Branch teams regularly organize volunteer days that double as team-building events.',
   },
 ]
 
 const faqs = [
   {
-    question: 'What types of jobs are available at Cintas?',
-    answer: 'Cintas hires across a wide range of functions including route service, sales, production, first aid and safety services, fire protection, facility services, and corporate support roles such as IT, finance, and human resources. The company serves over one million businesses in North America, which drives consistent demand across all departments.',
+    question: 'What kinds of cintas company jobs are available right now?',
+    answer: 'Cintas hires across five main divisions: Uniform Rental (route reps, production, plant management), First Aid & Safety (service reps, compliance specialists), Fire Protection (technicians, inspectors), Facility Services (restroom and hygiene route drivers), and Corporate Support (IT, finance, HR, legal). Because the company serves over one million business customers, turnover and growth create steady openings in all five divisions year-round.',
   },
   {
-    question: 'Does Cintas require experience for entry level positions?',
-    answer: 'Many Cintas entry level roles, including production associate and route service representative, do not require prior industry experience. According to Cintas recruitment materials, the company provides comprehensive training programs for new hires. A valid driver\'s license is typically required for route positions.',
+    question: 'Do I need experience to get hired for entry-level cintas company jobs?',
+    answer: 'No prior industry experience is required for production-associate or route-service roles. Cintas provides paid, multi-week training that covers everything from garment inspection standards to vehicle safety and customer-interaction protocols. A clean driving record and valid CDL or DOT medical card may be required for route positions depending on the truck class assigned to your branch.',
   },
   {
-    question: 'What is the salary range for Cintas employees?',
-    answer: 'Compensation at Cintas varies by role and location. According to publicly available labor market data and employee reports, route service representatives typically earn between $45,000 and $65,000 annually including bonuses, while service sales representatives can earn significantly more through commission. Production associates generally start near or above the local minimum wage with opportunities for merit increases.',
+    question: 'How much do cintas company jobs pay?',
+    answer: 'Pay varies by role and metro area. Production associates typically start between $15 and $19 per hour. Route service reps earn $45K to $65K annually when bonuses for route growth and retention are included. Service sales reps operate on a base-plus-uncapped-commission structure that regularly pushes total comp past $80K for top performers. Management trainees start around $50K to $60K salaried, and branch managers can exceed $120K with bonus.',
   },
   {
-    question: 'How does the Cintas Management Trainee program work?',
-    answer: 'The Cintas Management Trainee program is a structured rotational development program designed for recent college graduates. Trainees rotate through operations, route service, sales, and administrative functions over approximately 16 to 18 months, culminating in a management placement. The program is highly competitive and recruits nationally from four year universities.',
+    question: 'How does the Management Trainee program work?',
+    answer: 'It is a 16-to-18-month rotational track open to recent four-year graduates. Trainees spend time on route trucks, on the plant floor, shadowing sales reps in the field, and sitting in on branch P&L reviews. The goal is to build end-to-end operational fluency so that when you are placed into a management role — typically operations supervisor or sales manager — you understand every function your team performs.',
   },
   {
-    question: 'Does Cintas offer remote work options?',
-    answer: 'Most Cintas operational roles, including route service, production, and field sales, require on site or on route presence. However, certain corporate and support functions, particularly in IT, finance, and human resources, may offer hybrid or remote arrangements depending on the position and location.',
+    question: 'Are any cintas company jobs remote?',
+    answer: 'The short answer is: very few. Route, production, first-aid, and fire-protection roles are inherently field- or plant-based. Some corporate-function positions in IT, data analytics, finance, and HR offer hybrid or fully remote arrangements, but they represent a small fraction of total headcount. If remote work is a priority, filter listings by the "Corporate" or "IT" division tags.',
   },
   {
-    question: 'What does the Cintas hiring process look like?',
-    answer: 'The Cintas hiring process typically involves an online application, a phone screening with a recruiter, one or more in person or video interviews, and a background check and drug screen. Route and production roles often include a facility tour. The process can move quickly, with some candidates receiving offers within one to two weeks of applying.',
+    question: 'How fast does Cintas hire?',
+    answer: 'Operational roles move quickly — many candidates go from online application to first day inside of two weeks, especially when a branch has an immediate route or production vacancy. Sales and management-trainee positions take longer (three to five weeks) because they involve additional interview rounds and, in some cases, a ride-along evaluation where you spend a half-day observing an active route.',
   },
 ]
 
 const applicationTips = [
   {
-    title: 'Tailor Your Resume to the Division',
-    description: 'Cintas has multiple business divisions. Highlight logistics and customer service experience for route roles, and quota attainment metrics for sales positions. Generic resumes perform poorly in applicant tracking systems.',
+    title: 'Write a Division-Specific Resume',
+    description: 'A resume targeting a route-service role should lead with driving record, daily stop counts, and customer-retention results. A sales resume should spotlight quota attainment and new-logo wins. The ATS scores relevance against the specific job description — a generic "operations professional" headline gets filtered out.',
   },
   {
-    title: 'Research Cintas Business Lines',
-    description: 'Understanding that Cintas operates across uniforms, facility services, first aid, fire protection, and document management shows genuine interest and helps you ask informed questions during interviews.',
+    title: 'Learn the Five Business Lines Before You Interview',
+    description: 'Cintas is not just a uniform company. Demonstrating that you understand the First Aid, Fire Protection, Facility Services, and Document Management divisions — and how they cross-sell into the same customer base — tells the hiring manager you did homework that 90% of applicants skip.',
   },
   {
-    title: 'Emphasize Reliability and Work Ethic',
-    description: 'Cintas culture places a premium on dependability, accountability, and customer focus. Be prepared to give concrete examples of showing up consistently and going above and beyond in past roles.',
+    title: 'Prove Reliability With Concrete Examples',
+    description: 'Cintas operates on tight daily schedules: trucks leave the plant by 6 AM, routes must finish before cutoff, and plant shifts run on fixed start times. If you can say "I maintained 98% attendance over two years at my last employer" or "I never missed a delivery window," that specificity resonates more than vague claims about work ethic.',
   },
   {
-    title: 'Apply to Multiple Locations',
-    description: 'With over 480 facilities nationwide, Cintas often has openings at multiple branches in the same metro area. Applying to several nearby locations increases your chances of a faster response.',
+    title: 'Apply to Multiple Branches in Your Metro',
+    description: 'Cintas often runs several facilities within the same metro — a uniform plant, a first-aid branch, and a fire-protection office might all be within a 20-mile radius. Applying to each one separately multiplies your exposure to different hiring managers and different vacancy timelines.',
   },
 ]
 
@@ -166,7 +166,7 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
 
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Cintas Company Jobs Available Now Across the United States
+            Cintas Company Jobs — Route, Production, Sales & Corporate Openings Nationwide
           </h1>
         </header>
 
@@ -200,10 +200,10 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <TrendingUp className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">About Cintas Corporation</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Why Cintas Company Jobs Are Worth a Closer Look</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cintas Corporation is one of the largest providers of corporate identity uniforms, facility services, and safety supplies in North America. Founded in 1968 and headquartered in Cincinnati, Ohio, the company serves over one million businesses ranging from small local shops to Fortune 500 corporations. Cintas is consistently ranked among Fortune magazine's most admired companies and is a component of the S&P 500 index.
+            Most people encounter Cintas without realizing it — the logo on a delivery driver's uniform, the first-aid cabinet in an office kitchen, the floor mats inside a restaurant entrance. Behind those everyday touchpoints sits a $9-billion-revenue S&P 500 company that serves over one million business customers from more than 480 facilities across the US and Canada. What makes cintas company jobs distinctive is the business model: recurring-revenue service contracts create route density that keeps trucks full and headcount stable even during economic downturns. For job seekers, that translates into unusually consistent hiring volume and low layoff risk compared to most industrial employers.
           </p>
           <div className="grid md:grid-cols-4 gap-4">
             {companyFacts.map((fact, i) => (
@@ -220,10 +220,10 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Briefcase className="w-7 h-7 text-indigo-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Most In Demand Cintas Job Roles</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Roles You Will Find in Cintas Company Jobs Listings</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Cintas recruits year round across multiple divisions. The roles below represent the highest volume hiring categories based on current labor market activity and publicly available Cintas recruitment data.
+            Cintas hires year-round across five revenue divisions, but the six roles below account for the overwhelming majority of open requisitions at any given time. Each one has a different daily rhythm, physical demand level, and pay structure — understanding those differences before you apply helps you target the position where your strengths map most directly.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {popularRoles.map((role, i) => (
@@ -240,11 +240,11 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Award className="w-7 h-7 text-emerald-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Cintas Employee Benefits</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Benefits Package Breakdown for Cintas Company Jobs</h2>
           </div>
           <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              Cintas offers a competitive total compensation package to eligible employees. Benefits vary by employment status, role, and tenure, and are subject to plan terms. The following reflects commonly reported benefits across Cintas positions.
+              Cintas structures its total-rewards package around three pillars: health coverage that starts immediately, retirement savings with employer amplification, and an ownership stake via stock purchase and profit sharing. That last piece is rare at the hourly level — a production associate making $17/hr still receives a profit-sharing check and can buy discounted Cintas stock, which means even entry-level cintas company jobs come with wealth-building tools typically reserved for salaried professionals.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {benefitsData.map((item, i) => (
@@ -261,8 +261,11 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <DollarSign className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Cintas Salary Ranges by Role</h2>
+            <h2 className="text-2xl font-bold text-gray-900">What Cintas Company Jobs Pay by Position</h2>
           </div>
+          <p className="text-gray-600 mb-4 max-w-4xl">
+            Pay structures at Cintas vary sharply by role type. Production is straight hourly, route service blends hourly with performance bonuses tied to stop efficiency and customer retention, and sales runs on a base-plus-uncapped-commission model where top reps routinely double their base. The table below shows national medians — your actual offer will depend on metro cost-of-living and the specific branch's volume tier.
+          </p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-gray-200 rounded-xl overflow-hidden">
               <thead>
@@ -274,12 +277,12 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {[
-                  ['Production Associate', '$30,000 to $40,000', 'Hourly'],
-                  ['Route Service Representative', '$45,000 to $65,000', 'Hourly + Bonus'],
-                  ['Service Sales Representative', '$55,000 to $90,000+', 'Base + Commission'],
-                  ['First Aid & Safety Specialist', '$45,000 to $60,000', 'Hourly + Bonus'],
-                  ['Management Trainee', '$50,000 to $60,000', 'Salary'],
-                  ['Branch Manager', '$80,000 to $120,000+', 'Salary + Bonus'],
+                  ['Production Associate', '$32,000 – $42,000', 'Hourly'],
+                  ['Route Service Representative', '$46,000 – $66,000', 'Hourly + Route Bonus'],
+                  ['Service Sales Representative', '$55,000 – $95,000+', 'Base + Uncapped Commission'],
+                  ['First Aid & Safety Rep', '$44,000 – $62,000', 'Hourly + Service Bonus'],
+                  ['Management Trainee', '$52,000 – $62,000', 'Salary'],
+                  ['Branch / General Manager', '$85,000 – $130,000+', 'Salary + P&L Bonus'],
                 ].map(([role, range, type], i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
                     <td className="px-5 py-3 font-medium text-gray-900">{role}</td>
@@ -291,7 +294,7 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
             </table>
           </div>
           <p className="text-sm text-gray-500 mt-3">
-            Salary estimates are based on publicly available labor market data and employee reported figures. Actual compensation varies by location, experience, and role. Source: U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics and labor market aggregators, 2024.
+            Ranges compiled from BLS Occupational Employment & Wage Statistics and verified employee-reported data. Actual compensation varies by branch volume, geographic market, and individual performance. Profit-sharing distributions and stock-plan gains are not reflected in these figures.
           </p>
         </section>
 
@@ -300,7 +303,10 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
           <div className="flex items-start gap-4">
             <Users className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Working at Cintas: Culture and Values</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">What the Day-to-Day Culture Feels Like at Cintas</h2>
+              <p className="text-gray-700 mb-6">
+                Cintas operates with a blue-collar intensity that rewards consistency over flash. Routes leave on time, plants hit throughput targets, and safety incidents are tracked at the individual level — but underneath that operational rigor is a genuine promote-from-within ethos that gives hourly workers a visible path to six-figure management roles. Here are the four cultural pillars that shape the employee experience.
+              </p>
               <div className="grid md:grid-cols-2 gap-4">
                 {workCulture.map((item, i) => (
                   <div key={i} className="bg-white rounded-xl p-5">
@@ -317,10 +323,10 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <MapPin className="w-7 h-7 text-rose-500" />
-            <h2 className="text-2xl font-bold text-gray-900">Where Does Cintas Hire?</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Where Cintas Company Jobs Are Concentrated</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            With more than 480 facilities across the United States and Canada, Cintas has a presence in virtually every major metro area. The company hires in both dense urban markets and smaller cities where local businesses rely on uniform and facility services.
+            Cintas positions its 480+ facilities to mirror where American businesses cluster — which means the densest hiring happens in metro areas with high concentrations of restaurants, medical offices, manufacturing plants, and corporate parks. If your city has an industrial corridor or a suburban office ring, there is almost certainly a Cintas branch within commuting distance.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {[
@@ -334,7 +340,7 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
             ))}
           </div>
           <p className="text-sm text-gray-500 mt-4">
-            These represent a sample of active hiring markets. Use the job search above to find current openings near your location.
+            This is a sample of high-volume hiring markets. Use the search filters above to find cintas company jobs open near your specific zip code.
           </p>
         </section>
 
@@ -342,8 +348,11 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <CheckCircle className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Tips for Getting Hired at Cintas</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Four Moves That Improve Your Odds on Cintas Company Jobs</h2>
           </div>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            Cintas receives a high volume of applications because the brand is visible on virtually every commercial street in America. The candidates who get callbacks do a few things that the mass-apply crowd skips — here is what separates a quick hire from radio silence.
+          </p>
           <div className="grid md:grid-cols-2 gap-6">
             {applicationTips.map((tip, i) => (
               <div key={i} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-purple-300 transition-colors">
@@ -361,8 +370,11 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Shield className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions About Cintas Jobs</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Cintas Company Jobs — Questions Applicants Ask Most</h2>
           </div>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            Practical answers to the six questions that come up most when people research cintas company jobs for the first time.
+          </p>
           <div className="space-y-4">
             {faqs.map((faq, i) => (
               <details
@@ -388,10 +400,10 @@ export default async function CintasCompanyJobsPage({ searchParams }: any) {
         {/* Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10 space-y-3">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> The information provided on this page is for general informational purposes only. Salary ranges, benefits details, and hiring process descriptions are based on publicly available labor market data and do not constitute a guarantee of employment terms. Always verify current compensation and requirements directly with Cintas or the hiring employer before applying.
+            <strong>Disclaimer:</strong> Salary ranges, benefit descriptions, and hiring-process details on this page are compiled from BLS Occupational Employment & Wage Statistics, publicly available Cintas Corporation disclosures, and employee-reported data. Actual compensation, benefits eligibility, and role requirements for cintas company jobs are determined solely by Cintas Corporation and may vary by facility, division, and individual negotiation. Always verify details directly with the hiring branch or recruiter before accepting an offer.
           </p>
           <p className="text-sm text-gray-500 max-w-4xl">
-            Oh My Job is not affiliated with, endorsed by, or in any way officially connected to Cintas Corporation. All company names, trademarks, and logos are the property of their respective owners. Job listings displayed on this page are sourced from third party job board partners.
+            Oh My Job is an independent job search platform with no corporate affiliation to Cintas Corporation or any of its subsidiaries. "Cintas" and related marks are registered trademarks of Cintas Corporation. Job listings displayed on this page are sourced from publicly available feeds and third-party data providers.
           </p>
         </section>
 

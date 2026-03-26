@@ -6,20 +6,26 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Palette, Clock, GraduationCap, DollarSign, MapPin, CheckCircle, BookOpen, Users, Award, TrendingUp, FileText, Briefcase } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
+
+export const revalidate = 3600
+
 export const metadata: Metadata = {
-  title: 'Urgent: Art Teacher Jobs Available Now | Apply Today',
-  description: 'Hundreds of art teacher jobs hiring immediately across the United States. Full time, part time and substitute positions in schools and studios. No lengthy process. Browse openings and apply in minutes!',
-  keywords: 'art teacher jobs, art teacher positions, art education jobs, art instructor jobs, visual arts teacher, art teacher hiring, elementary art teacher, high school art teacher, art teacher openings',
+  title: 'Art Teacher Jobs Hiring Now | School, Studio and Creative Education Roles',
+  description:
+    'Explore art teacher jobs across the United States. Discover openings in schools, studios, museums, and community programs, with practical insight on certification, hiring expectations, and salary potential.',
+  keywords:
+    'art teacher jobs, art teacher positions, art education jobs, art instructor jobs, visual arts teacher, elementary art teacher, high school art teacher, museum art educator, studio art teacher',
   openGraph: {
-    title: 'Art Teacher Jobs Hiring Now | Immediate Openings Nationwide',
-    description: 'Schools and institutions urgently seeking qualified art teachers. Full time, part time and substitute roles available. Find your perfect art education position today!',
+    title: 'Art Teacher Jobs | Find Creative Teaching Roles Nationwide',
+    description:
+      'Browse art teacher jobs in schools, studios, and museums. Compare role types, understand certification pathways, and find the positions that match your teaching style.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Art Teacher Jobs | Urgently Hiring Nationwide',
-    description: 'Art teacher positions needed ASAP in schools across America. Browse hundreds of openings, from elementary to high school. Apply now and start inspiring students!',
+    title: 'Art Teacher Jobs | Creative Teaching Roles Hiring Now',
+    description:
+      'Search art teacher jobs nationwide and discover what schools and arts organizations really value beyond basic credentials.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/art-teacher-jobs',
@@ -30,7 +36,8 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Art Teacher Jobs',
-  description: 'Find art teacher jobs hiring across the United States. Browse hundreds of positions in schools, studios, and educational institutions.',
+  description:
+    'Find art teacher jobs across the United States in schools, studios, museums, and community education programs.',
   url: 'https://www.oh-my-job.com/art-teacher-jobs',
   mainEntity: {
     '@type': 'ItemList',
@@ -40,78 +47,202 @@ const jsonLd = {
 }
 
 const artTeacherTypes = [
-  { title: 'Elementary Art Teacher', description: 'Introduce young learners to drawing, painting, and creative expression in grades K through 5', icon: Palette },
-  { title: 'Middle School Art Teacher', description: 'Guide students through foundational techniques in ceramics, sculpture, and mixed media', icon: BookOpen },
-  { title: 'High School Art Teacher', description: 'Teach advanced visual arts courses including AP Studio Art, art history, and portfolio development', icon: GraduationCap },
-  { title: 'Substitute Art Teacher', description: 'Fill temporary vacancies in schools and provide continuity in visual arts education programs', icon: Users },
-  { title: 'Private Art Instructor', description: 'Offer personalized art lessons in studios, community centers, or through private tutoring sessions', icon: Award },
-  { title: 'Museum Art Educator', description: 'Develop and lead educational programs, workshops, and guided tours in museums and galleries', icon: Briefcase },
+  {
+    title: 'Elementary Art Teacher',
+    description:
+      'Help younger students build confidence through drawing, color, storytelling, and hands on creative routines that make art feel accessible.',
+    icon: Palette,
+  },
+  {
+    title: 'Middle School Art Teacher',
+    description:
+      'Guide students through technique, experimentation, critique, and personal expression as they begin shaping a stronger visual voice.',
+    icon: BookOpen,
+  },
+  {
+    title: 'High School Art Teacher',
+    description:
+      'Teach advanced studio practice, portfolio development, art analysis, and exhibition ready work for older students preparing for next steps.',
+    icon: GraduationCap,
+  },
+  {
+    title: 'Substitute Art Teacher',
+    description:
+      'Step into existing classrooms, maintain continuity, and keep students engaged while adapting quickly to school expectations and lesson plans.',
+    icon: Users,
+  },
+  {
+    title: 'Private Art Instructor',
+    description:
+      'Teach individuals or small groups in studios, after school programs, or private sessions with more flexibility in pace and artistic focus.',
+    icon: Award,
+  },
+  {
+    title: 'Museum Art Educator',
+    description:
+      'Design gallery experiences, workshops, and public programs that connect observation, discussion, and making in cultural spaces.',
+    icon: Briefcase,
+  },
 ]
 
 const certificationSteps = [
-  { step: 'Earn a Bachelor\'s Degree', detail: 'Complete a degree in art education, fine arts, or a related field from an accredited institution' },
-  { step: 'Complete a Teacher Preparation Program', detail: 'Fulfill student teaching requirements and coursework in pedagogy and classroom management' },
-  { step: 'Pass Required Examinations', detail: 'Most states require passing the Praxis II Art Content Knowledge exam or a state equivalent' },
-  { step: 'Apply for State Licensure', detail: 'Submit your application to the state Department of Education where you plan to teach' },
-  { step: 'Maintain Continuing Education', detail: 'Renew your certification through professional development credits as required by your state' },
+  {
+    step: 'Build Strong Subject Knowledge',
+    detail:
+      'Most art teacher jobs in public education start with a bachelor’s degree in art education, fine arts, studio art, or a closely related subject.',
+  },
+  {
+    step: 'Gain Real Classroom Experience',
+    detail:
+      'Student teaching and supervised classroom work matter because employers want proof that you can lead instruction, manage materials, and support different learners.',
+  },
+  {
+    step: 'Meet State Certification Rules',
+    detail:
+      'Public school art teacher jobs usually require a state license or certification, and the exact process varies depending on where you want to teach.',
+  },
+  {
+    step: 'Prepare a Teaching Portfolio',
+    detail:
+      'One important hiring gap many candidates overlook is the portfolio. Schools often respond well to sample lessons, student work, assessment ideas, and evidence of classroom exhibitions.',
+  },
+  {
+    step: 'Keep Your Practice Current',
+    detail:
+      'Strong art educators continue developing through new media, updated standards, digital tools, and professional learning that keeps instruction relevant.',
+  },
 ]
 
 const salaryData = [
-  { level: 'Entry Level Art Teacher', range: '$38,000 to $48,000', context: 'Typically 0 to 3 years of experience' },
-  { level: 'Mid Career Art Teacher', range: '$48,000 to $62,000', context: 'Typically 4 to 10 years of experience' },
-  { level: 'Senior Art Teacher', range: '$62,000 to $80,000+', context: 'Over 10 years of experience or advanced degrees' },
-  { level: 'Art Department Head', range: '$65,000 to $90,000+', context: 'Leadership role with administrative responsibilities' },
+  {
+    level: 'Elementary School Based Roles',
+    range: '$52,000 to $68,000',
+    context: 'Often shaped by district salary schedules, location, and years of experience',
+  },
+  {
+    level: 'Middle and High School Roles',
+    range: '$55,000 to $72,000',
+    context: 'Can increase with advanced credentials, larger districts, or added responsibilities',
+  },
+  {
+    level: 'Private School and Studio Roles',
+    range: '$40,000 to $65,000',
+    context: 'Compensation varies more widely depending on employer type and teaching load',
+  },
+  {
+    level: 'Museum and Specialized Education Roles',
+    range: '$45,000 to $70,000+',
+    context: 'Depends on institution size, program scope, and public engagement responsibilities',
+  },
 ]
 
 const keySkills = [
-  { skill: 'Proficiency in Multiple Art Media', description: 'Competence in drawing, painting, sculpture, printmaking, digital art, and other visual arts disciplines' },
-  { skill: 'Curriculum Development', description: 'Ability to design age appropriate lesson plans aligned with state and national visual arts standards' },
-  { skill: 'Classroom Management', description: 'Skill in maintaining a productive and safe studio environment with diverse groups of students' },
-  { skill: 'Art History Knowledge', description: 'Understanding of major art movements, cultural contexts, and contemporary art practices' },
-  { skill: 'Technology Integration', description: 'Experience with digital art tools, graphic design software, and educational technology platforms' },
-  { skill: 'Student Assessment', description: 'Ability to evaluate student work using rubrics, portfolios, and constructive critique methods' },
+  {
+    skill: 'Portfolio Led Instruction',
+    description:
+      'Strong art teachers know how to help students build work over time, reflect on progress, and present meaningful evidence of growth.',
+  },
+  {
+    skill: 'Critique and Feedback',
+    description:
+      'Effective visual arts teaching depends on thoughtful critique, specific guidance, and classroom language that helps students discuss art with confidence.',
+  },
+  {
+    skill: 'Studio Organization',
+    description:
+      'Art teacher jobs require control of materials, setup, cleanup, storage, pacing, and safety across multiple classes and projects.',
+  },
+  {
+    skill: 'Lesson Design with Purpose',
+    description:
+      'Schools value teachers who can turn standards into memorable projects instead of delivering disconnected activities.',
+  },
+  {
+    skill: 'Digital Art Readiness',
+    description:
+      'More employers now value teachers who are comfortable with digital drawing, design tools, documentation, and blended creative workflows.',
+  },
+  {
+    skill: 'Assessment That Fits Creative Work',
+    description:
+      'Good art educators know how to assess process, revision, originality, craft, and presentation without flattening student expression.',
+  },
 ]
 
 const faqs = [
   {
-    question: 'What qualifications do I need to become an art teacher in the United States?',
-    answer: 'According to the U.S. Department of Education, public school art teachers must hold at least a bachelor\'s degree and a valid state issued teaching certificate or license with an endorsement in visual arts. Requirements vary by state, but most require completion of an accredited teacher preparation program and passing scores on licensure exams such as the Praxis series. Private schools may have different requirements and sometimes hire teachers without state certification.',
+    question: 'What qualifications do I need for art teacher jobs?',
+    answer:
+      'Most public school art teacher jobs require at least a bachelor’s degree and a valid state teaching license or certification. The exact path depends on the state, the age group you want to teach, and whether the role is in public education, private education, or another creative learning setting.',
   },
   {
-    question: 'Is there a demand for art teachers right now?',
-    answer: 'Yes. According to the Bureau of Labor Statistics, the employment of kindergarten and elementary school teachers, including art specialists, is projected to remain steady with consistent openings due to retirements and enrollment changes. Many school districts across the country report difficulty filling art education positions, making this a field with strong hiring activity, especially in underserved areas.',
+    question: 'What helps candidates stand out in art teacher jobs?',
+    answer:
+      'A strong application usually goes beyond credentials. Hiring teams often respond to candidates who show a teaching portfolio, strong lesson ideas, examples of student work, exhibition experience, and the ability to balance creativity with structure.',
   },
   {
-    question: 'Can I teach art with a fine arts degree instead of an education degree?',
-    answer: 'In many states, you can teach art with a fine arts degree if you also complete an alternative certification program. According to the National Art Education Association, alternative routes to certification are available in most states and allow individuals with subject matter expertise to earn their teaching credentials while working in the classroom. Some states also offer emergency or temporary licenses for high need areas.',
+    question: 'Can I qualify for art teacher jobs with a fine arts degree?',
+    answer:
+      'In many cases, yes. Some candidates begin with a fine arts or studio art background and then complete the certification route required in their state. This varies by employer and by education system.',
   },
   {
-    question: 'What is the average salary for an art teacher in the United States?',
-    answer: 'According to the Bureau of Labor Statistics, the median annual wage for high school teachers, including art teachers, was approximately $65,220 as of the most recent data. Salaries vary significantly based on geographic location, school district, level of education, and years of experience. Teachers in states such as New York, California, and Massachusetts tend to earn higher salaries.',
+    question: 'How much do art teacher jobs usually pay?',
+    answer:
+      'Pay depends on location, school type, experience, and grade level. Public school roles often follow district salary schedules, while private, museum, studio, and community education roles can vary more significantly.',
   },
   {
-    question: 'Do art teachers work during the summer?',
-    answer: 'Most public school art teachers follow the academic calendar and do not work during summer months, though they are typically paid on a 12 month schedule. However, many art teachers choose to supplement their income by teaching summer art camps, offering private lessons, working at community arts programs, or pursuing their own artistic practice during the break.',
+    question: 'Are art teacher jobs only found in schools?',
+    answer:
+      'No. Art teacher jobs also appear in museums, galleries, community arts programs, camps, private studios, online education, and nonprofit organizations focused on creative learning.',
+  },
+  {
+    question: 'Do employers care about digital art skills?',
+    answer:
+      'Increasingly, yes. Traditional studio skills remain important, but many schools and creative organizations now value teachers who can also work with digital tools, visual communication platforms, and contemporary creative processes.',
   },
 ]
 
 const topStates = [
-  { state: 'California', detail: 'High demand in urban districts, competitive salaries above $70,000 on average' },
-  { state: 'Texas', detail: 'Rapidly growing school districts with frequent art teacher openings' },
-  { state: 'New York', detail: 'Among the highest paying states for art educators, especially in NYC metro area' },
-  { state: 'Florida', detail: 'Expanding school populations creating steady demand for visual arts teachers' },
-  { state: 'Illinois', detail: 'Strong union support and well funded arts programs in many districts' },
-  { state: 'Pennsylvania', detail: 'Consistent openings across suburban and rural school districts' },
+  {
+    state: 'California',
+    detail:
+      'Large school systems, diverse arts ecosystems, and strong demand across public education, private schools, and museum based programs.',
+  },
+  {
+    state: 'Texas',
+    detail:
+      'Frequent openings in expanding districts, with opportunities across traditional schools and community based creative programs.',
+  },
+  {
+    state: 'New York',
+    detail:
+      'A strong market for art teacher jobs thanks to dense school networks, cultural institutions, and a wide range of arts education environments.',
+  },
+  {
+    state: 'Florida',
+    detail:
+      'Steady hiring in growing districts and a broad mix of school, camp, and community arts teaching opportunities.',
+  },
+  {
+    state: 'Illinois',
+    detail:
+      'Consistent demand in urban and suburban districts, with additional opportunities in cultural and nonprofit education spaces.',
+  },
+  {
+    state: 'Pennsylvania',
+    detail:
+      'Balanced opportunities across district schools, independent schools, museums, and regional arts education programs.',
+  },
 ]
 
 export default async function ArtTeacherJobsPage({ searchParams }: any) {
   const params = await searchParams
 
- const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'Art Teacher', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'Art Teacher', where: params.where || '', results_per_page: 30, page: 1 })
-  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-])
+  const [{ count }, initialData] = await Promise.all([
+    getCachedJobCount(params.what || 'Art Teacher', params.where || '', params.salary_min),
+    searchJobs({ what: params.what || 'Art Teacher', where: params.where || '', results_per_page: 30, page: 1 })
+      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  ])
 
   return (
     <>
@@ -148,7 +279,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
                 what={params.what || 'art teacher'}
                 where={params.where || ''}
                 salary_min={params.salary_min}
-                initialData={initialData} // ← ajouter
+                initialData={initialData}
               />
             </Suspense>
           </div>
@@ -161,7 +292,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
             <h2 className="text-2xl font-bold text-gray-900">Types of Art Teacher Positions</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Art education careers span a wide range of settings and student populations. Whether you prefer working with young children discovering creativity for the first time or guiding advanced students toward portfolio development, there is a role that fits your expertise and passion.
+            Art teacher jobs do not all lead to the same classroom experience. Some focus on early creative discovery, others on advanced portfolio work, and others on public programs, workshops, or community engagement. Understanding the teaching setting is often just as important as understanding the job title.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {artTeacherTypes.map((job, index) => (
@@ -181,7 +312,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
             <h2 className="text-2xl font-bold text-gray-900">How to Become a Certified Art Teacher</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            According to the U.S. Department of Education, all public school teachers must meet state certification requirements. The National Art Education Association (NAEA) recommends the following pathway for aspiring art educators seeking licensure in the United States.
+            Most pages about art teacher jobs stop at certification basics. The bigger hiring reality is that schools want more than eligibility. They want evidence that you can teach, assess creative growth, organize a studio environment, and turn student work into visible outcomes such as displays, exhibitions, and portfolio development.
           </p>
           <div className="space-y-4">
             {certificationSteps.map((item, index) => (
@@ -197,7 +328,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
             ))}
           </div>
           <p className="text-sm text-gray-500 mt-4">
-            Source: U.S. Department of Education and the National Art Education Association (NAEA)
+            Note: Public school requirements vary by state, while private and community based roles may follow different hiring standards.
           </p>
         </section>
 
@@ -209,7 +340,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
           </div>
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              According to the Bureau of Labor Statistics (BLS), teacher salaries vary based on education level, experience, geographic location, and school district. Art teachers in public schools typically receive the same salary schedule as other certified teachers within their district.
+              Art teacher jobs are paid differently depending on employer type, grade level, and location. Public school positions often follow district pay schedules, while private schools, studios, museums, and community organizations may set compensation more independently. That means salary comparisons make more sense when you first compare the setting, not just the title.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               {salaryData.map((item, index) => (
@@ -221,7 +352,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
               ))}
             </div>
             <p className="text-sm text-gray-500 mt-6">
-              Source: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics. Figures are approximate and vary by state and district.
+              Actual pay can shift based on district contracts, years of experience, graduate credits, leadership duties, and the structure of the role.
             </p>
           </div>
         </section>
@@ -233,7 +364,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
             <h2 className="text-2xl font-bold text-gray-900">Essential Skills for Art Teachers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Successful art teachers combine artistic talent with strong educational skills. According to the National Art Education Association, the following competencies are essential for effective visual arts instruction in today's classrooms.
+            Strong art teacher jobs applications show more than artistic ability. The best candidates demonstrate that they can balance creativity with structure, manage a working studio, support reflection, and help students build confidence through both process and presentation.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {keySkills.map((item, index) => (
@@ -252,7 +383,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
             <h2 className="text-2xl font-bold text-gray-900">Top States Hiring Art Teachers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            According to the Bureau of Labor Statistics, certain states employ significantly more teachers and offer higher average salaries. The following states consistently show the highest volume of art teacher openings based on school enrollment figures and district hiring reports.
+            A useful angle often missed on competing pages is that art teacher jobs are shaped not only by school hiring, but also by the strength of a state’s wider arts ecosystem. Places with large districts, active cultural institutions, and community arts infrastructure often create more varied opportunities for visual arts educators.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {topStates.map((item, index) => (
@@ -272,31 +403,28 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
           <div className="flex items-start gap-4">
             <BookOpen className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">National Visual Arts Standards</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">What Strong Art Programs Expect From Teachers</h2>
               <p className="text-gray-700 mb-4">
-                According to the National Coalition for Core Arts Standards (NCCAS), art teachers in the United States are expected to align their instruction with the National Core Arts Standards. These standards were developed to guide quality arts education and are organized around four artistic processes.
+                Art teacher jobs increasingly reward educators who can do more than deliver isolated projects. Strong programs look for teachers who can guide creating, presenting, discussion, and connection to culture, identity, and other subjects. That broader teaching vision is one of the clearest differences between a basic application and a memorable one.
               </p>
               <div className="grid md:grid-cols-2 gap-4 mt-6">
                 <div className="bg-white rounded-lg p-4">
                   <h3 className="font-semibold text-gray-900 mb-2">Creating</h3>
-                  <p className="text-gray-600 text-sm">Generating and conceptualizing artistic ideas and work through exploration, experimentation, and revision of original artworks.</p>
+                  <p className="text-gray-600 text-sm">Helping students generate ideas, experiment with materials, revise work, and build confidence through making.</p>
                 </div>
                 <div className="bg-white rounded-lg p-4">
                   <h3 className="font-semibold text-gray-900 mb-2">Presenting</h3>
-                  <p className="text-gray-600 text-sm">Selecting, analyzing, and interpreting artistic work for presentation, including curating student exhibitions and public displays.</p>
+                  <p className="text-gray-600 text-sm">Teaching students how to prepare, curate, display, and talk about artwork in ways that give their work meaning.</p>
                 </div>
                 <div className="bg-white rounded-lg p-4">
                   <h3 className="font-semibold text-gray-900 mb-2">Responding</h3>
-                  <p className="text-gray-600 text-sm">Understanding and evaluating how the arts convey meaning, including critical analysis of artworks from diverse cultures and periods.</p>
+                  <p className="text-gray-600 text-sm">Developing thoughtful critique, observation, and interpretation so students learn to analyze visual language with confidence.</p>
                 </div>
                 <div className="bg-white rounded-lg p-4">
                   <h3 className="font-semibold text-gray-900 mb-2">Connecting</h3>
-                  <p className="text-gray-600 text-sm">Relating artistic ideas and work with personal meaning and external context, linking the visual arts to other subjects and real world applications.</p>
+                  <p className="text-gray-600 text-sm">Linking visual arts to history, culture, identity, community, and real world learning rather than teaching art in isolation.</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-4">
-                Source: National Coalition for Core Arts Standards (NCCAS), nationalartsstandards.org
-              </p>
             </div>
           </div>
         </section>
@@ -309,20 +437,20 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
           </div>
           <div className="bg-white border border-gray-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              According to the Bureau of Labor Statistics, employment for teachers is expected to remain stable over the coming decade. Several factors are driving demand for art educators specifically, as school districts and policymakers increasingly recognize the importance of arts education in student development.
+              Art teacher jobs are best understood as a steady opportunity market rather than a trend driven rush. Schools, museums, studios, and community programs continue hiring because educators retire, move, expand programming, or reshape how arts learning is delivered. The strongest edge for applicants is often not just meeting requirements, but showing clear teaching identity, flexibility, and visible student outcomes.
             </p>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center p-4">
-                <p className="text-3xl font-bold text-teal-600 mb-2">STEM to STEAM</p>
-                <p className="text-sm text-gray-600">Growing integration of arts into STEM curricula is creating new art teacher positions nationwide</p>
+                <p className="text-3xl font-bold text-teal-600 mb-2">Portfolio Value</p>
+                <p className="text-sm text-gray-600">Candidates who show how they teach often stand out more than those who only list credentials</p>
               </div>
               <div className="text-center p-4">
-                <p className="text-3xl font-bold text-teal-600 mb-2">Retirements</p>
-                <p className="text-sm text-gray-600">A large wave of experienced teachers reaching retirement age is opening thousands of positions</p>
+                <p className="text-3xl font-bold text-teal-600 mb-2">Digital Readiness</p>
+                <p className="text-sm text-gray-600">More employers value teachers who can bridge traditional studio practice with digital creative tools</p>
               </div>
               <div className="text-center p-4">
-                <p className="text-3xl font-bold text-teal-600 mb-2">Federal Funding</p>
-                <p className="text-sm text-gray-600">Increased federal and state investment in arts education programs is expanding hiring budgets</p>
+                <p className="text-3xl font-bold text-teal-600 mb-2">Broader Settings</p>
+                <p className="text-sm text-gray-600">Growth in museums, nonprofits, camps, and community programs expands the field beyond standard school jobs</p>
               </div>
             </div>
           </div>
@@ -359,7 +487,7 @@ export default async function ArtTeacherJobsPage({ searchParams }: any) {
         {/* Legal Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> The information provided on this page is for general informational purposes only and does not constitute professional or legal advice. Teaching certification requirements, salary figures, and employment regulations vary by state and school district. Always consult your state Department of Education and the U.S. Bureau of Labor Statistics at bls.gov for the most current and applicable information. Job seekers should verify all position requirements directly with the hiring institution before applying.
+            <strong>Disclaimer:</strong> The information provided on this page is for general informational purposes only and does not constitute professional or legal advice. Teaching certification requirements, salary figures, and employment regulations vary by state and school district. Job seekers should verify all position requirements directly with the hiring institution before applying.
           </p>
         </section>
       </div>

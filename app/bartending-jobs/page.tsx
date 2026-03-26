@@ -17,24 +17,26 @@ import {
 } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
+
 export const metadata: Metadata = {
-  title: 'Now Hiring Bartenders | Bartending Jobs Near You Updated Daily',
+  title: 'Top Bartending Jobs Near You | Hiring Now (Updated Daily)',
   description:
-    'Hiring immediately for bartending jobs near you. Browse hundreds of openings at bars, restaurants, hotels and clubs. Competitive pay, flexible shifts, and tips. Apply today with no experience required at some locations!',
+    'Ready to shake things up? Discover the best bartending jobs in your area. From local pubs to luxury hotels, find open roles with great tips and flexible hours. Apply today!',
   keywords:
-    'bartending jobs, bartender jobs near me, bartender hiring now, bartending jobs hiring immediately, bar jobs, nightclub bartender jobs, hotel bartender jobs, cocktail bartender jobs',
+    'bartending jobs, bartender vacancies, mixologist hiring, bar staff jobs, local bartending jobs, high volume bar jobs, cocktail bartender open roles',
   openGraph: {
-    title: 'Immediate Opening: Bartending Jobs | Apply Now',
+    title: 'Find Lucrative Bartending Jobs Today | Apply Now',
     description:
-      'Find bartending jobs hiring immediately in your area. Full-time, part-time and seasonal openings at top bars, restaurants and hotels. Start earning great tips today.',
+      'Explore top-rated bartending jobs hiring near you. Whether you are an entry-level barback or a seasoned mixologist, find your perfect shift and maximize your tips.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgently Hiring Bartenders | Find Your Next Bar Job',
+    title: 'Urgently Hiring: Bartending Jobs',
     description:
-      'Hundreds of bartending jobs hiring now near you. Competitive hourly pay plus tips. Apply in minutes and land your next shift.',
+      'Browse active bartending jobs in your city. Secure competitive wages, massive tip potential, and the ultimate flexible schedule.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/bartending-jobs',
@@ -46,182 +48,182 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Bartending Jobs',
   description:
-    'Find bartending jobs hiring near you. Browse hundreds of openings at bars, restaurants, hotels, and event venues across the United States.',
+    'Search and apply for premium bartending jobs. Discover opportunities across dive bars, upscale dining, resorts, and nightclubs nationwide.',
   url: 'https://www.oh-my-job.com/bartending-jobs',
   mainEntity: {
     '@type': 'ItemList',
     name: 'Available Bartending Jobs',
-    description: 'Current bartending job listings across the United States',
+    description: 'A curated list of active bartending jobs and mixology careers across the United States.',
   },
 }
 
 const bartendingRoles = [
   {
-    title: 'Bar Bartender',
-    description: 'Craft cocktails and serve drinks in a dedicated bar or pub environment with a steady regular clientele.',
+    title: 'Neighborhood Pub Bartender',
+    description: 'Pour drafts, mix classic drinks, and build lasting relationships with a loyal roster of regular patrons.',
     icon: Briefcase,
   },
   {
-    title: 'Restaurant Bartender',
-    description: 'Manage the bar area of a restaurant, preparing drinks for both bar guests and table service.',
+    title: 'Fine Dining Bartender',
+    description: 'Curate elevated drinking experiences, pair wines with dinner menus, and handle the bustling service bar.',
     icon: Briefcase,
   },
   {
-    title: 'Hotel Bartender',
-    description: 'Work in hotel lounges or rooftop bars, often with higher base pay and access to a diverse international clientele.',
+    title: 'Resort & Hotel Bartender',
+    description: 'Provide top-tier hospitality to travelers in hotel lobbies or pool bars, often featuring excellent benefits and steady base pay.',
     icon: Star,
   },
   {
-    title: 'Nightclub Bartender',
-    description: 'Serve high volumes of guests in a fast-paced nightclub setting, typically with strong tip potential.',
+    title: 'High-Volume Nightclub Bartender',
+    description: 'Thrive in a fast-paced, loud environment where speed and efficiency translate directly into massive tips.',
     icon: TrendingUp,
   },
   {
-    title: 'Event and Catering Bartender',
-    description: 'Work weddings, corporate events, and private parties on a flexible per-event basis.',
+    title: 'Private Event Bartender',
+    description: 'Work independently at weddings and corporate galas. Offers incredible scheduling flexibility and high hourly rates.',
     icon: Award,
   },
   {
-    title: 'Cruise Ship Bartender',
-    description: 'Serve guests onboard cruise ships, often including accommodations and the chance to travel internationally.',
+    title: 'Cruise Line Bartender',
+    description: 'Mix tropical drinks while traveling the world. These roles often include free room and board alongside your wages.',
     icon: Star,
   },
 ]
 
 const requiredCertifications = [
   {
-    name: 'TIPS Certification',
+    name: 'TIPS Certification (Training for Intervention ProcedureS)',
     description:
-      'Training for Intervention ProcedureS (TIPS) is one of the most recognized responsible alcohol service programs in the country. Many employers require or strongly prefer TIPS-certified bartenders.',
+      'Considered the gold standard for responsible pouring. It mitigates liability for the venue and is highly preferred by hiring managers for premier bartending jobs.',
     source: 'tipsglobal.org',
   },
   {
-    name: 'ServSafe Alcohol',
+    name: 'ServSafe Alcohol Certificate',
     description:
-      'Offered by the National Restaurant Association, ServSafe Alcohol trains bartenders to recognize intoxication and handle difficult situations responsibly.',
+      'Crucial for understanding blood alcohol content (BAC) limits, checking IDs accurately, and safely handling over-intoxicated patrons.',
     source: 'servsafe.com',
   },
   {
-    name: 'State Liquor License / ABC Card',
+    name: 'State-Specific ABC Licensing',
     description:
-      'Several states, including California, Nevada, and Utah, require bartenders to hold a state-issued alcohol beverage control (ABC) card or equivalent before serving alcohol legally.',
+      'Mandatory in heavily regulated regions. For instance, California requires an RBS certification, while Texas mandates a TABC card to legally mix and serve spirits.',
     source: 'State Alcohol Beverage Control Boards',
   },
   {
-    name: 'Food Handler Card',
+    name: 'Food Handler Permit',
     description:
-      'In many jurisdictions, anyone working in food and beverage service, including bartenders who prepare garnishes or food items, must hold a valid food handler certification.',
+      'Essential since modern mixology involves preparing garnishes, squeezing fresh juices, and occasionally cross-handling bar appetizers.',
     source: 'State and local health departments',
   },
 ]
 
 const salaryData = [
-  { label: 'Entry-Level Bartender', range: '$11 to $15/hr + tips' },
-  { label: 'Experienced Bartender', range: '$15 to $22/hr + tips' },
-  { label: 'Hotel / Fine Dining Bartender', range: '$18 to $28/hr + tips' },
-  { label: 'Nightclub Bartender', range: '$12 to $20/hr + significant tips' },
-  { label: 'Event / Catering Bartender', range: '$18 to $35/hr (flat rate or tips)' },
+  { label: 'Entry-Level / Barback', range: '$10 to $16/hr + partial tips' },
+  { label: 'Seasoned Mixologist', range: '$16 to $25/hr + full tips' },
+  { label: 'Luxury Hotel Bartender', range: '$20 to $30/hr + tips & benefits' },
+  { label: 'High-Volume Club Bartender', range: '$10 to $18/hr + massive tip potential' },
+  { label: 'Freelance / Event Bartender', range: '$25 to $50/hr (often fixed rate)' },
 ]
 
 const topSkills = [
   {
-    skill: 'Cocktail Knowledge',
-    detail: 'Familiarity with classic cocktails, spirits, wines, and beers is expected in most venues.',
+    skill: 'Mixology & Recipe Memorization',
+    description: 'Mastering classic ratios and trendy flavor profiles so you can pour accurately without referencing a recipe book.',
   },
   {
-    skill: 'Customer Service',
-    detail: 'Bartenders are the face of the establishment. Strong communication and a welcoming attitude drive repeat business and tips.',
+    skill: 'Guest Engagement & Charisma',
+    description: 'Building a following of regulars who boost your nightly take-home pay and elevate the atmosphere of the venue.',
   },
   {
-    skill: 'Speed and Multitasking',
-    detail: 'High-volume environments require you to manage multiple orders simultaneously without sacrificing accuracy.',
+    skill: 'High-Volume Efficiency',
+    description: 'Pouring multiple drinks accurately while simultaneously taking new orders and closing out tabs during rush hours.',
   },
   {
-    skill: 'Cash Handling',
-    detail: 'Accurate handling of payments, making change, and operating POS systems is a daily responsibility.',
+    skill: 'POS Navigation & Cash Management',
+    description: 'Flawless transaction processing, splitting complex checks, and perfectly balancing the register at closing time.',
   },
   {
-    skill: 'Responsible Service of Alcohol',
-    detail: 'Recognizing signs of intoxication and refusing service when appropriate is both a legal and ethical duty.',
+    skill: 'Situational Awareness',
+    description: 'Knowing exactly when to cut a patron off and how to de-escalate conflicts to maintain a safe environment.',
   },
   {
-    skill: 'Upselling',
-    detail: 'Suggesting premium spirits, specialty cocktails, or pairings increases revenue for the venue and tips for you.',
+    skill: 'Strategic Upselling',
+    description: 'Gently guiding guests toward top-shelf liquors or signature house cocktails to increase the check average.',
   },
 ]
 
 const legalRequirements = [
-  { state: 'California', minAge: 21, notes: 'Must hold a valid RBS (Responsible Beverage Service) certificate.' },
-  { state: 'Nevada', minAge: 21, notes: 'Work cards issued by local sheriff or police department required.' },
-  { state: 'Texas', minAge: 18, notes: 'TABC certification required before serving alcohol in licensed establishments.' },
-  { state: 'New York', minAge: 18, notes: 'No state certification required, but employer-based training is common.' },
-  { state: 'Florida', minAge: 18, notes: 'No mandatory state certification; local jurisdictions may have additional rules.' },
+  { state: 'California', minAge: 21, notes: 'Requires completion of a Responsible Beverage Service (RBS) training program.' },
+  { state: 'Nevada', minAge: 21, notes: 'Alcohol Awareness Training card (TAM card) and local police registration are mandatory.' },
+  { state: 'Texas', minAge: 18, notes: 'TABC certification is essential to legally serve or sell alcoholic beverages.' },
+  { state: 'New York', minAge: 18, notes: 'State law allows 18-year-olds to serve, though many premium venues prefer 21+.' },
+  { state: 'Florida', minAge: 18, notes: 'No statewide license, but individual counties or employers often mandate specific courses.' },
 ]
 
 const faqs = [
   {
-    question: 'What is the minimum age to work as a bartender in the United States?',
+    question: 'How old do I need to be to apply for bartending jobs?',
     answer:
-      'The minimum age to serve alcohol varies by state. According to the National Conference of State Legislatures (NCSL), most states allow 18-year-olds to serve alcohol in licensed establishments, while states such as California, Nevada, and Utah require bartenders to be at least 21. Always check your state Alcohol Beverage Control (ABC) board for current requirements before applying.',
+      'The legal age to serve alcohol fluctuates based on your location. The National Conference of State Legislatures (NCSL) indicates that many states permit 18-year-olds to pour drinks, whereas states like Nevada and California strictly enforce a 21-and-over rule. Always verify with your local Alcohol Beverage Control (ABC) board before seeking bartending jobs.',
   },
   {
-    question: 'Do I need a bartending license or certification to get hired?',
+    question: 'Are specialized bartending licenses required to get hired?',
     answer:
-      'Federal law does not mandate a national bartending license. However, many states and employers require responsible alcohol service training such as TIPS or ServSafe Alcohol certification. Some states, including California, require a state-issued Responsible Beverage Service (RBS) certificate. Check with your state liquor control authority for local requirements.',
+      'There is no nationwide bartending license. However, landing the best bartending jobs often requires a state-approved responsible alcohol service certificate (like TIPS or ServSafe). Certain states have proprietary mandates, such as the RBS in California or the TABC in Texas. Your future employer will typically guide you on their specific compliance needs.',
   },
   {
-    question: 'How much do bartenders make in tips?',
+    question: 'What is the real earning potential for a bartender?',
     answer:
-      'According to the U.S. Bureau of Labor Statistics (BLS), the median annual wage for bartenders was approximately $31,390 in 2023, but total compensation including tips can be significantly higher. In busy urban venues and nightclubs, experienced bartenders commonly earn $50,000 or more per year once tips are factored in. Tips vary greatly depending on the type of establishment, location, and shift.',
+      'While the U.S. Bureau of Labor Statistics (BLS) reported a median base wage of $31,390 in 2023, this figure rarely paints the full picture. In lucrative bartending jobs at busy nightclubs, high-end steakhouses, or popular local pubs, daily tips can easily push a bartender\'s annual income well past the $50,000 to $70,000 mark.',
   },
   {
-    question: 'Do I need prior bartending experience to get hired?',
+    question: 'Can I secure bartending jobs with zero prior experience?',
     answer:
-      'Not necessarily. Many establishments are willing to hire and train candidates who demonstrate enthusiasm, strong customer service skills, and a willingness to learn. Starting as a barback (bar assistant) is a common entry point that leads directly to bartending roles. Completing a bartending course or obtaining a TIPS certification can also make your application more competitive.',
+      'Absolutely. The hospitality industry values hustle and personality. Starting your career as a barback is the most strategic move for beginners. You will learn the inventory, master the speed of service, and eventually transition into full bartending roles. Taking an introductory mixology course can also show initiative.',
   },
   {
-    question: 'What are the typical working hours for a bartender?',
+    question: 'What kind of schedule should I expect in this industry?',
     answer:
-      'Bartending is primarily an evening and weekend profession. Most shifts run from late afternoon through the early hours of the morning, particularly in nightclubs and bars. Restaurant bartenders may also work lunch shifts. The flexibility of part-time and full-time shift options makes bartending a popular choice for students and those seeking supplemental income.',
+      'Bartending jobs are famous for their non-traditional hours. Expect to work nights, weekends, and holidays, as these are peak revenue periods. However, this structure provides incredible flexibility, making it an ideal career for students, artists, or anyone looking to avoid the standard 9-to-5 grind.',
   },
   {
-    question: 'Are bartenders considered tipped employees under federal law?',
+    question: 'How does the tipped minimum wage work for bar staff?',
     answer:
-      'Yes. According to the U.S. Department of Labor, under the Fair Labor Standards Act (FLSA), employers may pay tipped employees a lower cash wage of $2.13 per hour, provided that tips bring total compensation up to at least the federal minimum wage of $7.25 per hour. Many states have established higher tipped minimum wages. If tips do not bring earnings up to the applicable minimum wage, the employer must make up the difference.',
+      'Under the Fair Labor Standards Act (FLSA), venues can pay tipped workers a base rate of $2.13 per hour, relying on tips to bridge the gap to the federal minimum wage of $7.25. However, many states have abolished the tip credit entirely (e.g., California, Washington), meaning you receive the full state minimum wage plus all your tips.',
   },
 ]
 
 const tips = [
   {
-    title: 'Get Certified Before You Apply',
+    title: 'Secure Your Certifications Early',
     description:
-      'Complete a TIPS or ServSafe Alcohol certification before sending your first application. It signals professionalism and is required or preferred by most serious employers.',
+      'Do not wait to be hired to get your TIPS or state-mandated alcohol permit. Having it on your resume immediately moves you to the top of the applicant pile.',
   },
   {
-    title: 'Start as a Barback',
+    title: 'Embrace the Barback Route',
     description:
-      'If you have no experience, applying for a barback position is the most direct path into bartending. You will learn the workflow, earn the trust of the team, and move up quickly.',
+      'If your resume lacks mixology experience, applying to be a barback is your golden ticket. It is the undisputed best way to prove your work ethic to a bar manager.',
   },
   {
-    title: 'Know Your Classic Cocktails',
+    title: 'Master the Modern Classics',
     description:
-      'Memorizing the most common cocktails, such as an Old Fashioned, Margarita, Manhattan, and Mojito, before your interview demonstrates genuine interest and gives you a head start.',
+      'You will be tested. Know the exact specs for an Old Fashioned, a proper Martini, a Margarita, and an Espresso Martini before you walk into your first interview.',
   },
   {
-    title: 'Highlight Transferable Service Experience',
+    title: 'Showcase Hospitality Soft Skills',
     description:
-      'Experience as a server, cashier, or any customer-facing role is directly relevant. Emphasize your ability to stay calm under pressure, handle cash, and provide excellent service.',
+      'Anyone can learn to pour a beer, but not everyone can handle an angry customer or a slammed rail. Highlight your past roles in customer service, retail, or conflict resolution.',
   },
 ]
 
 export default async function BartendingJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'Bartending', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'Bartending', where: params.where || '', results_per_page: 30, page: 1 })
-  .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-])
+  const [{ count }, initialData] = await Promise.all([
+    getCachedJobCount(params.what || 'Bartending', params.where || '', params.salary_min),
+    searchJobs({ what: params.what || 'Bartending', where: params.where || '', results_per_page: 30, page: 1 })
+      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  ])
 
   return (
     <>
@@ -246,7 +248,7 @@ const [{ count }, initialData] = await Promise.all([
           <div className="flex-1">
             {count > 0 && (
               <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
+                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> open roles discovered
               </p>
             )}
 
@@ -267,10 +269,10 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Briefcase className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Types of Bartending Jobs Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Discover Diverse Bartending Jobs</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Bartending is far from a one-size-fits-all profession. From high-energy nightclubs to elegant hotel lounges, the type of establishment shapes your entire experience, schedule, and earning potential. Here is an overview of the most common bartending roles you will find posted on this page.
+            Landing the right bartending jobs means understanding that no two venues are exactly alike. Whether you thrive in the organized chaos of a dance club or prefer crafting artisanal infusions at a quiet speakeasy, the establishment dictates your shift flow, clientele, and tip ceiling. Explore the main categories below.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {bartendingRoles.map((role, index) => (
@@ -291,9 +293,9 @@ const [{ count }, initialData] = await Promise.all([
           <div className="flex items-start gap-4">
             <Shield className="w-8 h-8 text-amber-600 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Minimum Age to Bartend by State</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">State-by-State Minimum Age Limits</h2>
               <p className="text-gray-700 mb-6">
-                According to the National Conference of State Legislatures (NCSL), the legal age to serve alcohol in a licensed establishment varies significantly across the United States. Some states permit 18-year-olds to bartend, while others require workers to be at least 21. The following table highlights key states. Always verify current requirements with your state Alcohol Beverage Control (ABC) board before applying.
+                State laws heavily regulate bartending jobs. The National Conference of State Legislatures (NCSL) outlines that the legal age to mix and serve alcohol shifts dramatically depending on your zip code. Review the breakdown of major markets below, and always double-check with local authorities before applying for your next gig.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -316,7 +318,7 @@ const [{ count }, initialData] = await Promise.all([
                 </table>
               </div>
               <p className="text-xs text-gray-500 mt-4">
-                Source: National Conference of State Legislatures (NCSL) and individual state Alcohol Beverage Control boards.
+                Source: National Conference of State Legislatures (NCSL) and state-specific liquor control databases.
               </p>
             </div>
           </div>
@@ -326,10 +328,10 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Award className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Certifications That Will Get You Hired Faster</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Credentials That Elevate Your Resume</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            While no single national bartending license is required by federal law, several certifications are widely recognized across the industry and expected by employers. Holding one or more of the following credentials gives your application a measurable advantage.
+            While federal law doesn’t enforce a universal bartending license, competitive bartending jobs often require proof that you understand alcohol compliance. Holding these key certifications shows bar managers that you are a liability-conscious professional.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             {requiredCertifications.map((cert, index) => (
@@ -349,16 +351,16 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Star className="w-7 h-7 text-yellow-500" />
-            <h2 className="text-2xl font-bold text-gray-900">Key Skills Employers Look for in a Bartender</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Essential Traits for High-Earning Bartenders</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Beyond knowing how to mix a drink, today's bartending employers are looking for a specific combination of technical and interpersonal abilities. According to the U.S. Bureau of Labor Statistics Occupational Outlook Handbook, bartenders need strong communication skills, the ability to work under pressure, and a solid understanding of responsible alcohol service.
+            Succeeding in premium bartending jobs takes more than a charming smile. The modern hospitality sector demands a blend of technical mixology, intense focus, and revenue-driving sales tactics to thrive behind the stick.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {topSkills.map((item, index) => (
               <div key={index} className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
                 <p className="font-semibold text-gray-900 mb-1">{item.skill}</p>
-                <p className="text-gray-600 text-sm">{item.detail}</p>
+                <p className="text-gray-600 text-sm">{item.description}</p>
               </div>
             ))}
           </div>
@@ -368,11 +370,11 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <DollarSign className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">How Much Do Bartenders Earn?</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Salary & Tip Expectations</h2>
           </div>
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              According to the U.S. Bureau of Labor Statistics (BLS), the median annual wage for bartenders was $31,390 in May 2023, with the top 10 percent earning more than $56,000. These figures do not fully reflect total compensation, as bartenders in busy venues frequently earn substantial tips that push total income significantly higher.
+              Official BLS data puts the median annual wage for bartenders at $31,390 (May 2023), but anyone in the industry knows this excludes the cash economy. Real-world earnings from bartending jobs depend heavily on shift volume and venue prestige, with top performers frequently doubling their base pay through gratuities.
             </p>
             <div className="space-y-3">
               {salaryData.map((row, index) => (
@@ -383,7 +385,7 @@ const [{ count }, initialData] = await Promise.all([
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-5">
-              Source: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS), May 2023. Salary ranges are illustrative and vary by location, establishment type, and experience level.
+              Source: Bureau of Labor Statistics (BLS) OEWS data (May 2023), augmented with industry tip standard projections.
             </p>
           </div>
         </section>
@@ -394,20 +396,20 @@ const [{ count }, initialData] = await Promise.all([
             <div className="flex items-start gap-4">
               <AlertTriangle className="w-8 h-8 text-red-600 flex-shrink-0 mt-1" />
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Legal Obligations Every Bartender Must Know</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Critical Liability & Safety Rules</h2>
                 <p className="text-gray-700 mb-4">
-                  According to the official websites of state Alcohol Beverage Control boards and the U.S. Department of Justice, bartenders who violate responsible alcohol service laws can face personal fines, loss of their certification, and in serious cases, criminal liability. The following practices are strictly prohibited in all licensed establishments:
+                  Bartending jobs come with serious legal responsibilities. The U.S. Department of Justice and local authorities actively monitor compliance. Engaging in any of the following infractions can result in immediate termination, massive fines, or personal criminal charges:
                 </p>
                 <div className="grid md:grid-cols-2 gap-3">
                   {[
-                    'Serving alcohol to anyone under the age of 21',
-                    'Serving a visibly intoxicated individual',
-                    'Allowing a minor to remain in an adults-only area unaccompanied',
-                    'Accepting an expired or fraudulent ID',
-                    'Serving alcohol outside of state-mandated hours',
-                    'Providing free alcohol as an incentive without proper authorization',
-                    'Allowing customers to leave with open containers (varies by state)',
-                    'Operating without a valid liquor license on the premises',
+                    'Pouring for guests under the legal drinking age (21+)',
+                    'Overserving patrons displaying visible signs of intoxication',
+                    'Permitting minors to linger in restricted bar spaces',
+                    'Failing to spot or confiscate fake identification',
+                    'Serving drinks past the state\'s mandatory last call',
+                    'Comping drinks off the books (theft of inventory)',
+                    'Violating open-container laws when guests exit',
+                    'Working shifts without a current, valid venue liquor permit',
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-2 text-gray-700">
                       <span className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
@@ -424,17 +426,17 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <TrendingUp className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Career Growth in Bartending</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Climbing the Hospitality Ladder</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Bartending is not simply an entry-level position. According to the U.S. Bureau of Labor Statistics Occupational Outlook Handbook, employment of bartenders is projected to grow 5 percent from 2022 to 2032, faster than the average for all occupations. Experienced bartenders commonly advance into the following roles:
+            Securing entry-level bartending jobs is just the beginning. The BLS projects steady growth in this sector through 2032. Those who excel at inventory management, team leadership, and cocktail innovation frequently graduate to higher-paying administrative and creative roles.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: 'Head Bartender', detail: 'Lead a team, manage bar inventory, and train new staff.' },
-              { title: 'Bar Manager', detail: 'Oversee operations, staffing, ordering, and profitability.' },
-              { title: 'Beverage Director', detail: 'Curate the drink menu for an entire restaurant group or hotel.' },
-              { title: 'Bar Owner', detail: 'Many successful bar owners started behind the stick.' },
+              { title: 'Lead Mixologist', detail: 'Design signature cocktail menus and guide the creative direction of the bar.' },
+              { title: 'General Bar Manager', detail: 'Control labor costs, order inventory, and ensure seamless daily operations.' },
+              { title: 'Corporate Beverage Director', detail: 'Standardize drink programs across multiple restaurant or hotel locations.' },
+              { title: 'Venue Owner', detail: 'Leverage your front-of-house expertise to launch your own successful concept.' },
             ].map((role, index) => (
               <div key={index} className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
                 <p className="font-semibold text-blue-700 mb-1">{role.title}</p>
@@ -448,7 +450,7 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <BookOpen className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Tips for Landing Your First Bartending Job</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Strategies to Win Your First Interview</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {tips.map((tip, index) => (
@@ -467,7 +469,7 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Clock className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions About Bartending Jobs</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Common Queries About Bartending Jobs</h2>
           </div>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
@@ -492,7 +494,7 @@ const [{ count }, initialData] = await Promise.all([
         {/* Legal Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> The information provided on this page is for general informational purposes only and does not constitute legal advice. Alcohol service laws, minimum age requirements, and certification obligations vary by state and locality. Always consult your state Alcohol Beverage Control (ABC) board, the U.S. Department of Labor at dol.gov, or a qualified legal professional for guidance specific to your situation. Oh My Job is a job aggregation platform and is not responsible for the accuracy of individual job listings.
+            <strong>Disclaimer:</strong> This content is strictly for informational purposes and should not be construed as legal counsel. Regulations regarding bartending jobs, tipped minimum wages, and alcohol certifications are subject to rapid legislative changes. We urge you to verify all requirements with your local Department of Labor (dol.gov) and your state\'s liquor control board. Oh My Job aggregates postings and assumes no liability for the details within individual job descriptions.
           </p>
         </section>
       </div>

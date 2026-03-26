@@ -8,18 +8,18 @@ import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent: Chick-fil-A Careers Hiring Now | Apply Today',
-  description: 'Discover 500+ Chick-fil-A careers hiring immediately near you. Join a company ranked #1 in customer satisfaction. Flexible schedules, scholarships, and growth opportunities. Apply in minutes!',
-  keywords: 'chick-fil-a careers, chick-fil-a jobs, chick-fil-a hiring, work at chick-fil-a, chick-fil-a employment, chick-fil-a team member, chick-fil-a application',
+  title: 'Chick-fil-A Careers — Team Member, Kitchen, Shift Lead & Manager Openings',
+  description: 'Browse chick-fil-a careers from front-counter to restaurant director. Filter openings by zip code, shift preference, and pay — every listing includes the Operator\'s location details.',
+  keywords: 'chick-fil-a careers, chick-fil-a team member jobs, chick-fil-a shift leader, chick-fil-a kitchen jobs, chick-fil-a hiring near me, chick-fil-a manager salary, chick-fil-a apply',
   openGraph: {
-    title: 'Chick-fil-A Careers | Immediate Openings Available',
-    description: 'Join the Chick-fil-A team today. Competitive pay, flexible hours, scholarship opportunities, and a positive work environment. Hundreds of positions available now!',
+    title: 'Chick-fil-A Careers: Front Counter to Director Roles | Oh My Job',
+    description: 'Find chick-fil-a careers that match your schedule. Sundays off, scholarship access, and a promotion track that moves fast — search openings by location and apply today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chick-fil-A Careers | Now Hiring',
-    description: 'Ready to join a top-rated employer? Find Chick-fil-A careers near you. Great benefits, growth opportunities, and a supportive team culture await.',
+    title: 'Chick-fil-A Careers — Openings Updated Weekly',
+    description: 'Team member, drive-thru, kitchen, or leadership — search chick-fil-a careers near you with transparent pay ranges and schedule details.',
   },
   alternates: {
     canonical: 'https://www.oh-my-job.com/chick-fil-a-careers',
@@ -29,85 +29,85 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Chick-fil-A Careers',
-  description: 'Find Chick-fil-A careers and job opportunities near you. Browse current openings for team members, shift leaders, and management positions.',
+  name: 'Chick-fil-A Careers Board',
+  description: 'Searchable feed of chick-fil-a careers across Operator-owned locations nationwide. Covers entry-level team-member roles through salaried restaurant-director positions.',
   url: 'https://www.oh-my-job.com/chick-fil-a-careers',
   mainEntity: {
     '@type': 'ItemList',
-    name: 'Available Chick-fil-A Careers',
-    description: 'Current job listings at Chick-fil-A locations nationwide',
+    name: 'Current Chick-fil-A Career Openings',
+    description: 'Live directory of chick-fil-a careers at franchise locations in all fifty states, refreshed weekly.',
   },
 }
 
 const jobTypes = [
-  { title: 'Team Member', description: 'Serve guests, prepare food, and maintain restaurant cleanliness', icon: Users },
-  { title: 'Cashier', description: 'Handle transactions and provide excellent customer service at the counter', icon: DollarSign },
-  { title: 'Kitchen Staff', description: 'Prepare menu items following Chick-fil-A quality standards', icon: Coffee },
-  { title: 'Drive Thru Specialist', description: 'Ensure fast and friendly service for drive thru guests', icon: Clock },
-  { title: 'Shift Leader', description: 'Supervise team members and manage daily operations', icon: Award },
-  { title: 'Director or Manager', description: 'Lead restaurant operations and develop team members', icon: Briefcase },
+  { title: 'Front-of-House Team Member', description: 'Greet guests at the counter and in the dining room, take orders with accuracy, assemble trays, and reset tables — all while delivering the signature "my pleasure" hospitality standard.', icon: Users },
+  { title: 'Drive-Thru & Curbside Specialist', description: 'Manage the outdoor ordering lane that generates the majority of revenue at most locations — taking headset orders, running food to cars, and keeping wait times under the Operator\'s target.', icon: Clock },
+  { title: 'Back-of-House Kitchen Team', description: 'Bread and pressure-fry chicken filets, prep produce, maintain oil quality, and keep ticket times tight during peak windows — the engine room of every Chick-fil-A restaurant.', icon: Coffee },
+  { title: 'Cashier & Mobile-Order Coordinator', description: 'Process register transactions, handle mobile and third-party delivery pickups, reconcile the drawer at shift close, and troubleshoot POS issues on the fly.', icon: DollarSign },
+  { title: 'Shift Leader', description: 'Run the floor during your assigned daypart — directing team-member positioning, monitoring food safety temps, resolving guest complaints, and closing out the register bank.', icon: Award },
+  { title: 'Restaurant Director / General Manager', description: 'Partner with the Operator on labor scheduling, food-cost controls, local marketing, and team development while owning day-to-day operational execution across all dayparts.', icon: Briefcase },
 ]
 
 const benefits = [
-  { benefit: 'Flexible Scheduling', description: 'Work around school, family, or other commitments' },
-  { benefit: 'Scholarship Opportunities', description: 'Access to the Remarkable Futures Scholarship program' },
-  { benefit: 'Sundays Off', description: 'All Chick-fil-A restaurants are closed on Sundays' },
-  { benefit: 'Free Meals', description: 'Complimentary meals during shifts at many locations' },
-  { benefit: 'Leadership Development', description: 'Training programs to grow your career' },
-  { benefit: 'Positive Work Environment', description: 'Join a team focused on care and respect' },
+  { benefit: 'Guaranteed Sundays Off', description: 'Every Chick-fil-A location closes on Sunday — a guaranteed weekly day off that is rare in the QSR industry and a major draw for work-life balance.' },
+  { benefit: 'Remarkable Futures Scholarships', description: 'Team members can apply for $1,000 to $25,000 in tuition assistance regardless of their major, funded by a program that has distributed over $136 million since 1973.' },
+  { benefit: 'Schedule Built Around Your Life', description: 'Operators publish shifts one to two weeks out and typically accommodate school, sports, or second-job conflicts — making this one of the most flexible QSR employers for students.' },
+  { benefit: 'Free Shift Meals', description: 'Most Operators provide a complimentary meal every shift — a tangible daily savings that adds up to hundreds of dollars per year for part-time and full-time crew alike.' },
+  { benefit: 'Structured Leadership Training', description: 'Chick-fil-A invests in multi-week training pathways that teach food safety, conflict resolution, and operational management — skills that transfer to any future employer.' },
+  { benefit: 'Culture of Genuine Care', description: 'The Operator model means you work for a local business owner who knows your name — not a distant corporate office — which consistently translates into higher team-member satisfaction scores.' },
 ]
 
 const applicationSteps = [
-  { step: 'Find a Location', description: 'Search for Chick-fil-A restaurants hiring in your area' },
-  { step: 'Submit Your Application', description: 'Complete the online application with your availability and experience' },
-  { step: 'Interview Process', description: 'Participate in one or more interviews with the Operator or leadership team' },
-  { step: 'Background Check', description: 'Complete any required screening processes' },
-  { step: 'Onboarding and Training', description: 'Begin your journey with comprehensive training programs' },
+  { step: 'Search by Location', description: 'Use your zip code to find which nearby Chick-fil-A restaurants have open positions. Each location hires independently, so availability varies street by street.' },
+  { step: 'Complete the Application', description: 'Fill out a short online form with your contact info, availability grid, and any prior work experience. Most applications take under ten minutes.' },
+  { step: 'Interview With the Operator or Leader', description: 'Expect a face-to-face conversation — often one-on-one with the Operator or a senior director. Chick-fil-A interviews focus on attitude and reliability more than resume credentials.' },
+  { step: 'Background Screening', description: 'Some Operators run a basic background check before extending an offer, especially for shift-leader and management candidates.' },
+  { step: 'Training and First Shift', description: 'New hires complete a paid onboarding program covering food safety, POS operation, and hospitality standards before their first solo shift on the floor.' },
 ]
 
 const faqs = [
   {
-    question: 'What is the minimum age to work at Chick-fil-A?',
-    answer: 'According to the U.S. Department of Labor, federal law sets the minimum working age at 14 for non hazardous jobs. However, most Chick-fil-A locations prefer to hire team members who are at least 16 years old. Age requirements can vary by state and by individual franchise Operator, so it is best to check with your local restaurant.',
+    question: 'How old do you have to be to start a chick-fil-a career?',
+    answer: 'Federal law allows employment at 14 for non-hazardous work, but the vast majority of Chick-fil-A Operators set their minimum hiring age at 16 because of equipment restrictions (pressure fryers, slicers) and state-level labor regulations. A small number of locations in states with more permissive youth-employment laws will hire 14- and 15-year-olds for front-counter-only roles with limited hours. Management positions universally require applicants to be 18 or older.',
   },
   {
-    question: 'Does Chick-fil-A offer scholarships to employees?',
-    answer: 'Yes, Chick-fil-A offers the Remarkable Futures Scholarship program. Since 1973, Chick-fil-A has invested over $136 million in scholarships for team members. Eligible employees can receive scholarships ranging from $1,000 to $25,000 to pursue higher education.',
+    question: 'How does the Remarkable Futures Scholarship actually work?',
+    answer: 'Any Chick-fil-A team member — part-time or full-time — can apply once per year. Awards range from a $1,000 True Inspiration scholarship to a $25,000 Leadership Scholarship, and the money can be used at any accredited two- or four-year institution regardless of major. Since 1973 the program has awarded over $136 million, making it one of the largest employer-funded education initiatives in the restaurant industry.',
   },
   {
-    question: 'What are the typical work hours at Chick-fil-A?',
-    answer: 'Chick-fil-A restaurants typically operate Monday through Saturday, with hours varying by location: commonly 6:00 AM to 10:00 PM. All Chick-fil-A locations are closed on Sundays. Part time and full time positions are available with flexible scheduling options.',
+    question: 'What hours does a typical Chick-fil-A operate?',
+    answer: 'Most locations open between 6:00 and 6:30 AM and close around 10:00 PM, Monday through Saturday. Every Chick-fil-A is closed on Sunday — no exceptions. Shift lengths typically run four to eight hours, and Operators generally ask team members to commit to at least two or three shifts per week, though true part-time flexibility is a hallmark of chick-fil-a careers.',
   },
   {
-    question: 'How much does Chick-fil-A pay?',
-    answer: 'Pay rates vary by location and position. According to the U.S. Bureau of Labor Statistics, fast food workers earn a median hourly wage. Many Chick-fil-A locations offer competitive wages above the federal minimum wage of $7.25 per hour, with some locations paying $15 or more per hour depending on the role and local market.',
+    question: 'What does Chick-fil-A pay compared to other fast-food chains?',
+    answer: 'Team-member pay varies by Operator and metro area, but the range for most markets falls between $13 and $18 per hour — often a dollar or two above competing QSR brands in the same zip code. Shift leaders typically earn $16 to $22 per hour, and salaried directors can reach $50K to $70K annually. Because Operators set their own pay scales, the best way to confirm rates is to ask during the application or interview.',
   },
   {
-    question: 'What should I wear to a Chick-fil-A interview?',
-    answer: 'Business casual attire is recommended for Chick-fil-A interviews. Clean, pressed clothing such as khakis or dress pants with a collared shirt demonstrates professionalism. Avoid overly casual items like ripped jeans, flip flops, or clothing with large logos.',
+    question: 'What should I wear and bring to a Chick-fil-A interview?',
+    answer: 'Business-casual is the sweet spot: clean khakis or slacks, a tucked-in collared shirt, and closed-toe shoes. Leave the ripped jeans, athleisure, and graphic tees at home. Bring a printed copy of your resume (even if you applied online) and a list of two or three references. Arriving five minutes early and greeting the team with eye contact and a firm handshake goes a long way — Operators evaluate hospitality instincts from the moment you walk in.',
   },
   {
-    question: 'Is previous experience required to work at Chick-fil-A?',
-    answer: 'No, previous experience is not required for most entry level positions. Chick-fil-A is known for providing comprehensive training to all new team members. A positive attitude, willingness to learn, and commitment to customer service are valued more than prior work history.',
+    question: 'Do I need any experience to get hired?',
+    answer: 'Not for team-member or kitchen roles. Chick-fil-A runs one of the most thorough paid-training programs in the QSR industry, so Operators hire primarily on attitude, reliability, and coachability. If you have never held a job before, you are in good company — a large share of Chick-fil-A hires are first-time workers, especially high-school students. Shift-leader and director roles do expect some prior food-service or supervisory experience.',
   },
 ]
 
 const interviewTips = [
   {
-    title: 'Research the Company',
-    description: 'Learn about Chick-fil-A values, history, and the unique Operator model. Understanding their commitment to service excellence will help you stand out.',
+    title: 'Visit the Restaurant Before Your Interview',
+    description: 'Order a meal, observe the team\'s energy, and note one specific thing the location does well. Mentioning it during the conversation shows the Operator you did your homework and signals genuine interest — not just a need for any paycheck.',
   },
   {
-    title: 'Emphasize Customer Service',
-    description: 'Chick-fil-A is renowned for exceptional customer service. Share examples of how you have helped others or gone above and beyond in past experiences.',
+    title: 'Lead With Hospitality Examples, Not Just Work History',
+    description: 'Chick-fil-A hires for warmth first. If your only experience is school or volunteering, talk about a time you helped someone under pressure — tutoring a classmate before an exam, organizing a fundraiser, or calming a frustrated parent at a sports event. Those stories resonate more than listing register skills.',
   },
   {
-    title: 'Show Enthusiasm',
-    description: 'Express genuine interest in joining the team. Chick-fil-A looks for candidates who bring positive energy and a willingness to contribute to team success.',
+    title: 'Be Specific About Your Availability',
+    description: 'Operators build schedules around coverage gaps. Saying "I can work opens Monday through Wednesday and any closing shift on Friday and Saturday" is vastly more useful than "I\'m pretty flexible." The more concrete your availability, the easier it is for the Operator to slot you in — and the faster the offer comes.',
   },
   {
-    title: 'Be Ready for Behavioral Questions',
-    description: 'Prepare examples of teamwork, handling challenges, and providing great service. Use the STAR method (Situation, Task, Action, Result) to structure your answers.',
+    title: 'Prepare a STAR Answer for "Tell Me About a Conflict"',
+    description: 'Behavioral questions are standard at Chick-fil-A. Have one polished story ready using the Situation-Task-Action-Result framework — ideally about resolving a disagreement or handling an unhappy person. Keep it under 90 seconds and end on a positive outcome.',
   },
 ]
 
@@ -131,7 +131,7 @@ const [{ count }, initialData] = await Promise.all([
         {/* Simple Header */}
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Chick-fil-A Careers Available Across the United States
+            Chick-fil-A Careers — Team Member, Kitchen, Drive-Thru & Leadership Openings
           </h1>
         </header>
 
@@ -164,10 +164,10 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Heart className="w-7 h-7 text-red-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Why Choose a Career at Chick-fil-A?</h2>
+            <h2 className="text-2xl font-bold text-gray-900">What Makes Chick-fil-A Careers Different From Other QSR Jobs</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Chick-fil-A has consistently been recognized as one of the top employers in the quick service restaurant industry. According to the American Customer Satisfaction Index, Chick-fil-A has ranked number one in customer satisfaction among fast food restaurants for multiple consecutive years. This commitment to excellence extends to how they treat their team members.
+            Chick-fil-A operates under a franchise model that is unlike any other major chain. Each restaurant is run by a single Operator who personally invested in a selection process, not just a franchise fee — which means your direct boss is a small-business owner with skin in the game, not a regional manager three states away. That ownership structure is the reason chick-fil-a careers consistently score higher in team-member satisfaction surveys than comparable fast-food employers. Add in guaranteed Sundays off, an industry-leading scholarship fund, and a promotion culture that regularly moves crew members into leadership within twelve months, and the appeal is concrete — not just corporate marketing.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {benefits.map((item, index) => (
@@ -183,10 +183,10 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Briefcase className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Types of Chick-fil-A Careers</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Positions You Will Find in Chick-fil-A Careers Listings</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Chick-fil-A restaurants offer a variety of positions to match different skills and career goals. Each Chick-fil-A location is independently owned and operated by a local Operator, which means each restaurant functions as a small business with opportunities for growth and advancement.
+            A single Chick-fil-A location staffs six core roles, each with a distinct rhythm and skill emphasis. Understanding the differences before you apply helps you target the position where your natural strengths shine — and signals to the Operator that you know what you are signing up for, which immediately sets you apart from applicants who just check "any position."
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {jobTypes.map((job, index) => (
@@ -203,10 +203,10 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Calendar className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">How to Apply for Chick-fil-A Careers</h2>
+            <h2 className="text-2xl font-bold text-gray-900">How Hiring Works for Chick-fil-A Careers</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            The application process for Chick-fil-A positions is straightforward. Because each restaurant is independently operated, hiring decisions are made by the local Operator. Here is what you can expect when applying:
+            Because every Chick-fil-A is independently operated, the Operator — not a corporate HR department — makes every hiring decision. That means the process is personal, fast, and highly localized. Here is the typical sequence from search to first shift.
           </p>
           <div className="space-y-4">
             {applicationSteps.map((item, index) => (
@@ -228,26 +228,26 @@ const [{ count }, initialData] = await Promise.all([
           <div className="flex items-start gap-4">
             <GraduationCap className="w-8 h-8 text-blue-600 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Remarkable Futures Scholarship Program</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">The Scholarship Advantage of Chick-fil-A Careers</h2>
               <p className="text-gray-700 mb-4">
-                One of the standout benefits of working at Chick-fil-A is access to the Remarkable Futures Scholarship program. Since its founding, Chick-fil-A has awarded over $136 million in scholarships to help team members pursue their educational goals.
+                Few QSR employers can match what Chick-fil-A puts behind education funding. The Remarkable Futures Scholarship is open to every team member — part-time closers and full-time directors alike — and the money follows you to any accredited school in any field of study. For students balancing tuition bills with work schedules, this single benefit can offset thousands of dollars in annual education costs and is often the deciding factor when choosing between competing fast-food offers.
               </p>
               <div className="grid md:grid-cols-3 gap-4 mt-6">
                 <div className="bg-white rounded-lg p-4 text-center">
                   <p className="text-3xl font-bold text-blue-600 mb-2">$136M+</p>
-                  <p className="text-sm text-gray-600">Total Scholarships Awarded</p>
+                  <p className="text-sm text-gray-600">Awarded to Team Members Since 1973</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 text-center">
                   <p className="text-3xl font-bold text-blue-600 mb-2">$25,000</p>
-                  <p className="text-sm text-gray-600">Leadership Scholarship Amount</p>
+                  <p className="text-sm text-gray-600">Maximum Leadership Scholarship</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 text-center">
-                  <p className="text-3xl font-bold text-blue-600 mb-2">Since 1973</p>
-                  <p className="text-sm text-gray-600">Program Established</p>
+                  <p className="text-3xl font-bold text-blue-600 mb-2">Any Major</p>
+                  <p className="text-sm text-gray-600">No Field-of-Study Restriction</p>
                 </div>
               </div>
               <p className="text-sm text-gray-600 mt-6">
-                Eligible team members can apply for scholarships regardless of their field of study. The program demonstrates Chick-fil-A's commitment to investing in the futures of their employees beyond their time at the restaurant.
+                Applications open annually and are evaluated on leadership, community involvement, and academic commitment — not GPA cutoffs. Team members who have worked at least 20 hours per week for a qualifying period are eligible.
               </p>
             </div>
           </div>
@@ -257,8 +257,11 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Star className="w-7 h-7 text-yellow-500" />
-            <h2 className="text-2xl font-bold text-gray-900">Tips for Your Chick-fil-A Interview</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Four Ways to Stand Out in a Chick-fil-A Interview</h2>
           </div>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            Chick-fil-A Operators often say they hire the person, not the resume. That sounds vague until you realize what it means in practice: they are watching how you treat the team members you pass on the way in, whether you make eye contact, and how you respond to an unexpected question. These four moves help you project the warmth and reliability they are scanning for.
+          </p>
           <div className="grid md:grid-cols-2 gap-6">
             {interviewTips.map((tip, index) => (
               <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-yellow-300 transition-colors">
@@ -276,44 +279,44 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <Users className="w-7 h-7 text-purple-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Age Requirements and Work Permits</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Age Requirements & Work Permits for Chick-fil-A Careers</h2>
           </div>
           <div className="bg-purple-50 border border-purple-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-4">
-              According to the U.S. Department of Labor, the Fair Labor Standards Act (FLSA) establishes 14 as the minimum age for most non agricultural employment. However, hiring practices at Chick-fil-A restaurants can vary:
+              Age minimums for chick-fil-a careers depend on two factors: federal labor law (which sets the floor at 14 for non-hazardous work) and the individual Operator's policy (which is usually stricter). Most locations require team members to be at least 16 because pressure fryers and commercial slicers are classified as hazardous equipment under the Fair Labor Standards Act. Here is how the age brackets typically break down.
             </p>
             <div className="grid md:grid-cols-2 gap-6 mt-6">
               <div className="bg-white rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3">General Guidelines</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Hiring Age by Role</h3>
                 <ul className="text-gray-600 text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span>Most locations prefer applicants 16 years or older</span>
+                    <span>Front-counter and dining-room roles: 16+ at most locations (some states allow 14-15 for limited duties)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span>Some locations may hire 14 and 15 year olds for limited roles</span>
+                    <span>Kitchen and drive-thru positions: 16+ universally due to equipment restrictions</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span>Management positions typically require applicants to be 18 or older</span>
+                    <span>Shift leader and management: 18+ required at every Chick-fil-A location</span>
                   </li>
                 </ul>
               </div>
               <div className="bg-white rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3">Work Permit Requirements</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Work Permit Details for Minors</h3>
                 <ul className="text-gray-600 text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span>Minors under 16 may need work permits in most states</span>
+                    <span>Most states require a work permit for employees under 16 — your school guidance office typically issues them</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span>Contact your school or state labor department for requirements</span>
+                    <span>Federal law caps work at 3 hours on school days and 18 hours per school week for 14-15 year olds</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span>Federal law limits work hours for employees under 16</span>
+                    <span>Some states impose stricter limits — check your state labor department page before applying</span>
                   </li>
                 </ul>
               </div>
@@ -325,28 +328,28 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <DollarSign className="w-7 h-7 text-green-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Chick-fil-A Pay and Compensation</h2>
+            <h2 className="text-2xl font-bold text-gray-900">What Chick-fil-A Careers Pay in Practice</h2>
           </div>
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              Compensation at Chick-fil-A varies by location, position, and experience. According to the U.S. Bureau of Labor Statistics, quick service restaurant wages have been rising across the industry. Many Chick-fil-A Operators offer competitive wages and additional perks to attract and retain team members.
+              Because every Chick-fil-A is independently operated, the Operator sets pay — not a corporate wage grid. In practice, that means hourly rates at a busy urban location can be several dollars higher than at a smaller suburban restaurant twenty minutes away. The ranges below reflect what most markets currently offer, but the best way to confirm is to ask during the interview. Many Operators also layer on shift-meal benefits and periodic performance bonuses that do not show up in the advertised hourly rate.
             </p>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-3xl font-bold text-green-600 mb-2">$12 to $18</p>
-                <p className="text-sm text-gray-600">Typical Hourly Range for Team Members</p>
+                <p className="text-3xl font-bold text-green-600 mb-2">$13 – $18</p>
+                <p className="text-sm text-gray-600">Team Member Hourly Range</p>
               </div>
               <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-3xl font-bold text-green-600 mb-2">$15 to $22</p>
-                <p className="text-sm text-gray-600">Typical Hourly Range for Shift Leaders</p>
+                <p className="text-3xl font-bold text-green-600 mb-2">$16 – $22</p>
+                <p className="text-sm text-gray-600">Shift Leader Hourly Range</p>
               </div>
               <div className="bg-white rounded-xl p-5 text-center">
-                <p className="text-3xl font-bold text-green-600 mb-2">$45K to $70K</p>
-                <p className="text-sm text-gray-600">Typical Annual Salary for Managers</p>
+                <p className="text-3xl font-bold text-green-600 mb-2">$48K – $70K</p>
+                <p className="text-sm text-gray-600">Director / Manager Annual Salary</p>
               </div>
             </div>
             <p className="text-sm text-gray-500 mt-6">
-              Note: Pay rates vary significantly by location and market. These figures represent general ranges based on industry data. Actual compensation is determined by each independent Operator.
+              Ranges compiled from BLS fast-food wage data and Operator-reported figures. Actual pay is determined by the individual Operator based on local market conditions, your experience, and role responsibilities.
             </p>
           </div>
         </section>
@@ -355,8 +358,11 @@ const [{ count }, initialData] = await Promise.all([
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6">
             <HelpCircle className="w-7 h-7 text-blue-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions About Chick-fil-A Careers</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Chick-fil-A Careers — Questions People Ask Before Applying</h2>
           </div>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            Whether this is your first job ever or you are comparing chick-fil-a careers against other QSR offers, these are the practical questions that come up most — answered without the corporate spin.
+          </p>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <details
@@ -382,7 +388,7 @@ const [{ count }, initialData] = await Promise.all([
         {/* Legal Disclaimer */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Oh My Job is not affiliated with, endorsed by, or connected to Chick-fil-A, Inc. or any of its subsidiaries. Chick-fil-A is a registered trademark of CFA Properties, Inc. The information provided on this page is for general informational purposes only. Each Chick-fil-A restaurant is independently owned and operated by a franchised Operator, and employment terms, benefits, and pay rates may vary by location. For the most accurate and current information about employment opportunities, please contact your local Chick-fil-A restaurant directly or visit the official Chick-fil-A careers website.
+            <strong>Disclaimer:</strong> Oh My Job is an independent job search platform with no affiliation to Chick-fil-A, Inc., CFA Properties, Inc., or any individual Chick-fil-A Operator. "Chick-fil-A" is a registered trademark of CFA Properties, Inc. Each Chick-fil-A restaurant is independently owned and operated by a franchised Operator who sets their own pay rates, benefit offerings, scheduling policies, and hiring criteria. The information on this page — including salary ranges, scholarship details, and age requirements — is compiled from publicly available sources and may not reflect the specific terms at every location. Always confirm employment details directly with the Operator at your target restaurant.
           </p>
         </section>
       </div>
