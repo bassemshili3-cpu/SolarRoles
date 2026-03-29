@@ -2,10 +2,6 @@
   "buildCommand": "npx prisma generate --schema=prisma/schema.prisma && next build",
   "crons": [
     {
-      "path": "/api/cron/sync-jobs",
-      "schedule": "0 * * * *"
-    },
-    {
       "path": "/api/cron/index-jobs",
       "schedule": "30 * * * *"
     }
