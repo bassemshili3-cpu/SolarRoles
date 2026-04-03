@@ -179,14 +179,16 @@ function buildJobPostingSchema(job: JobDetail) {
       name: job.company || 'Unknown',
     },
     jobLocation: {
-      '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: job.location || '',
-        addressRegion: job.addressRegion || '',
-        addressCountry: 'US',
-      },
-    },
+  '@type': 'Place',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: job.location || '',
+    addressRegion: job.addressRegion || '',
+    addressCountry: 'US',
+    streetAddress: job.location || '',  
+    postalCode: '',                       
+  },
+},
     url: `https://www.oh-my-job.com/jobs/${job.id}`,
     datePosted: job.created
       ? new Date(job.created).toISOString().split('T')[0]
