@@ -12,6 +12,7 @@ import Link from 'next/link'
 
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
+import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
 import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
 import { searchLensaJobs } from '@/lib/lensa'
 import { getJobById } from '@/lib/adzuna'
@@ -118,18 +119,61 @@ function getJobDetailWithSalary(job: JobDetail): JobDetail {
   return job
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Employment type resolver ────────────────────────────────────────────────
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+function resolveEmploymentType(job: JobDetail): string {
+  const contractTimeMap: Record<string, string> = {
+    full_time: 'FULL_TIME',
+    part_time: 'PART_TIME',
+    contract: 'CONTRACTOR',
+    temporary: 'TEMPORARY',
+    intern: 'INTERN',
+  }
+  const contractTypeMap: Record<string, string> = {
+    permanent: 'FULL_TIME',
+    contract: 'CONTRACTOR',
+    temporary: 'TEMPORARY',
+    part_time: 'PART_TIME',
+  }
+
+  if (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()])
+    return contractTimeMap[job.contract_time.toLowerCase()]
+
+  if (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
+    return contractTypeMap[job.contract_type.toLowerCase()]
+
+  const text = (job.title + ' ' + (job.description || '')).toLowerCase()
+  if (text.includes('part-time') || text.includes('part time')) return 'PART_TIME'
+  if (text.includes('contract')) return 'CONTRACTOR'
+  if (text.includes('intern')) return 'INTERN'
+  return 'FULL_TIME'
 }
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 function buildJobPostingSchema(job: JobDetail) {
+  const isRemote = (job.location || '').toLowerCase().includes('remote')
+  const employmentType = resolveEmploymentType(job)
+
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: job.title,
-    description: stripHtml(job.description || ''),
+
+    // ── Fully original description for Google Jobs differentiation ──────────
+    description: buildSchemaDescription({
+      title: job.title,
+      company: job.company || '',
+      city: job.location || '',
+      state: job.addressRegion || '',
+      stateCode: job.addressRegion || '',
+      description: job.description || '',
+      salaryMin: job.salary_min,
+      salaryMax: job.salary_max,
+      employmentType,
+      remote: isRemote,
+    }),
+
     hiringOrganization: {
       '@type': 'Organization',
       name: job.company || 'Unknown',
@@ -148,6 +192,7 @@ function buildJobPostingSchema(job: JobDetail) {
       ? new Date(job.created).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0],
     directApply: false,
+    employmentType,
   }
 
   const sourceNames: Record<string, string> = {
@@ -163,34 +208,6 @@ function buildJobPostingSchema(job: JobDetail) {
   base.setDate(base.getDate() + 60)
   schema.validThrough = base.toISOString().split('T')[0]
 
-  // employmentType
-  const contractTimeMap: Record<string, string> = {
-    full_time: 'FULL_TIME', part_time: 'PART_TIME',
-    contract: 'CONTRACTOR', temporary: 'TEMPORARY', intern: 'INTERN',
-  }
-  const contractTypeMap: Record<string, string> = {
-    permanent: 'FULL_TIME', contract: 'CONTRACTOR',
-    temporary: 'TEMPORARY', part_time: 'PART_TIME',
-  }
-
-  let employmentType =
-    (job.contract_time && contractTimeMap[job.contract_time.toLowerCase()]) ||
-    (job.contract_type && contractTypeMap[job.contract_type.toLowerCase()])
-
-  if (!employmentType) {
-    const text = (job.title + ' ' + (job.description || '')).toLowerCase()
-    if (text.includes('part-time') || text.includes('part time')) {
-      employmentType = 'PART_TIME'
-    } else if (text.includes('contract')) {
-      employmentType = 'CONTRACTOR'
-    } else if (text.includes('intern')) {
-      employmentType = 'INTERN'
-    } else {
-      employmentType = 'FULL_TIME'
-    }
-  }
-  schema.employmentType = employmentType
-
   if (job.salary_min && job.salary_max) {
     schema.baseSalary = {
       '@type': 'MonetaryAmount',
@@ -204,7 +221,7 @@ function buildJobPostingSchema(job: JobDetail) {
     }
   }
 
-  if ((job.location || '').toLowerCase().includes('remote')) {
+  if (isRemote) {
     schema.jobLocationType = 'TELECOMMUTE'
     schema.applicantLocationRequirements = { '@type': 'Country', name: 'US' }
   }
