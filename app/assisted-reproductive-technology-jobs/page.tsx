@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   },
 }
 
+// ─── Fixed JSON-LD: ItemList with ListItem (not JobPosting) ──────────────────
+// JobPosting requires hiringOrganization, jobLocation, datePosted.
+// These entries are illustrative role categories, not real job postings,
+// so ListItem is the correct type and avoids GSC validation errors.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -40,16 +44,20 @@ const jsonLd = {
     description: 'Explore high-demand clinical and laboratory roles across the ART sector.',
     itemListElement: [
       {
-        '@type': 'JobPosting',
-        title: 'Embryologist',
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Embryologist',
         description: 'Laboratory roles requiring hands-on expertise in IVF, ICSI, and modern cryopreservation protocols.',
+        url: 'https://www.oh-my-job.com/assisted-reproductive-technology-jobs',
       },
       {
-        '@type': 'JobPosting', 
-        title: 'Reproductive Endocrinology Specialist',
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Reproductive Endocrinology Specialist',
         description: 'Highly sought-after REI positions at top fertility clinics nationwide.',
+        url: 'https://www.oh-my-job.com/assisted-reproductive-technology-jobs',
       },
-    ]
+    ],
   },
 }
 
@@ -63,64 +71,64 @@ const artRoles = [
 ]
 
 const marketInsights = [
-  { stat: '$32.6B', label: 'The global ART market value in 2024. It is growing fast, expected to hit $89.4B by 2034.', source: 'Emergen Research 2024' },
-  { stat: '17.5%', label: 'Roughly 1 in 6 adults globally experience infertility, creating a huge need for compassionate care.', source: 'World Health Organization 2023' },
-  { stat: '60 Fellows', label: 'The estimated number of REI grads in 2024, compared to 50+ clinics fighting to hire them.', source: 'Fertility Bridge 2024 Report' },
-  { stat: '36%', label: 'North America’s share of the global market revenue, driving highly competitive salaries.', source: 'Emergen Market Analysis' },
+  { stat: '$32.6B', label: "The global ART market value in 2024. It is growing fast, expected to hit $89.4B by 2034.", source: 'Emergen Research 2024' },
+  { stat: '17.5%', label: "Roughly 1 in 6 adults globally experience infertility, creating a huge need for compassionate care.", source: 'World Health Organization 2023' },
+  { stat: '60 Fellows', label: "The estimated number of REI grads in 2024, compared to 50+ clinics fighting to hire them.", source: 'Fertility Bridge 2024 Report' },
+  { stat: '36%', label: "North America's share of the global market revenue, driving highly competitive salaries.", source: 'Emergen Market Analysis' },
 ]
 
 const salaryEvolution = [
-  { role: 'AI Embryology Specialist', range: '$125,000 – $185,000', note: 'Tech meets biology. Clinics pay top dollar if you know how to leverage machine learning for embryo selection.' },
-  { role: 'Cryopreservation Director', range: '$95,000 – $140,000', note: 'Lead the charge in the booming egg-freezing space. Advanced certifications really pay off here.' },
-  { role: 'REI Fellowship Graduate', range: '$450,000 – $650,000+', note: 'Starting salaries are through the roof because there simply aren’t enough grads to go around.' },
-  { role: 'Genetic Counselor - ART', range: '$85,000 – $120,000', note: 'Having specialized PGT-A knowledge easily bumps your pay over general genetic counseling.' },
-  { role: 'Private Equity Clinic Leader', range: '$200,000 – $350,000', note: 'Big networks need leaders who understand both patient care and bottom-line growth.' },
-  { role: 'Cross-Border ART Coordinator', range: '$70,000 – $95,000', note: 'Managing international patients and the logistics of reproductive tourism is a highly valued niche.' },
+  { role: 'AI Embryology Specialist', range: '$125,000 – $185,000', note: "Tech meets biology. Clinics pay top dollar if you know how to leverage machine learning for embryo selection." },
+  { role: 'Cryopreservation Director', range: '$95,000 – $140,000', note: "Lead the charge in the booming egg-freezing space. Advanced certifications really pay off here." },
+  { role: 'REI Fellowship Graduate', range: '$450,000 – $650,000+', note: "Starting salaries are through the roof because there simply aren't enough grads to go around." },
+  { role: 'Genetic Counselor - ART', range: '$85,000 – $120,000', note: "Having specialized PGT-A knowledge easily bumps your pay over general genetic counseling." },
+  { role: 'Private Equity Clinic Leader', range: '$200,000 – $350,000', note: "Big networks need leaders who understand both patient care and bottom-line growth." },
+  { role: 'Cross-Border ART Coordinator', range: '$70,000 – $95,000', note: "Managing international patients and the logistics of reproductive tourism is a highly valued niche." },
 ]
 
 const industryRevolution = [
   {
-    question: 'How is AI actually changing day-to-day ART jobs?',
-    answer: 'AI is completely shaking up the lab. We’re seeing predictive algorithms that can boost IVF success rates noticeably. If you’re an embryologist today, you aren’t just looking through a microscope; you’re often interpreting data from time-lapse imaging systems. It’s creating this new hybrid role where traditional lab skills meet tech literacy, and clinics are paying a premium for people who can do both.',
+    question: "How is AI actually changing day-to-day ART jobs?",
+    answer: "AI is completely shaking up the lab. We're seeing predictive algorithms that can boost IVF success rates noticeably. If you're an embryologist today, you aren't just looking through a microscope; you're often interpreting data from time-lapse imaging systems. It's creating this new hybrid role where traditional lab skills meet tech literacy, and clinics are paying a premium for people who can do both.",
   },
   {
-    question: 'Why is it such a candidate’s market right now?',
-    answer: 'It comes down to simple math: the industry is exploding, but the talent pool isn’t. While the global market is growing by double digits, we’re only seeing a handful of REI fellows graduate each year. When you have 50 clinics fighting over 60 graduates, the candidates hold all the cards. The same goes for specialized lab roles—traditional training programs just haven’t caught up with the demand for skills in genetic screening and cryopreservation.',
+    question: "Why is it such a candidate's market right now?",
+    answer: "It comes down to simple math: the industry is exploding, but the talent pool isn't. While the global market is growing by double digits, we're only seeing a handful of REI fellows graduate each year. When you have 50 clinics fighting over 60 graduates, the candidates hold all the cards. The same goes for specialized lab roles—traditional training programs just haven't caught up with the demand for skills in genetic screening and cryopreservation.",
   },
   {
-    question: 'How is private equity changing clinic careers?',
-    answer: 'Private equity now backs a massive portion of fertility networks, which has changed the career ladder. It’s no longer just about moving from a junior to a senior clinician. There are now executive roles that require you to manage multiple locations, understand P&L, and lead regional teams. It also means clinics generally have deeper pockets for new tech, which is great if you want to work with the latest equipment.',
+    question: "How is private equity changing clinic careers?",
+    answer: "Private equity now backs a massive portion of fertility networks, which has changed the career ladder. It's no longer just about moving from a junior to a senior clinician. There are now executive roles that require you to manage multiple locations, understand P&L, and lead regional teams. It also means clinics generally have deeper pockets for new tech, which is great if you want to work with the latest equipment.",
   },
   {
-    question: 'Where are the best locations for fertility jobs?',
-    answer: 'North America is still the heavyweight champ when it comes to compensation and market size. However, the Asia Pacific region is growing incredibly fast. We’re also seeing a boom in "reproductive tourism" in places like Eastern Europe and Mexico, creating a need for professionals who can handle cross-border care. Meanwhile, the Middle East offers some heavily government-subsidized opportunities with great stability.',
+    question: "Where are the best locations for fertility jobs?",
+    answer: 'North America is still the heavyweight champ when it comes to compensation and market size. However, the Asia Pacific region is growing incredibly fast. We\'re also seeing a boom in "reproductive tourism" in places like Eastern Europe and Mexico, creating a need for professionals who can handle cross-border care. Meanwhile, the Middle East offers some heavily government-subsidized opportunities with great stability.',
   },
   {
-    question: 'Why is cryopreservation suddenly everywhere?',
-    answer: 'Social egg freezing has gone mainstream, and vitrification techniques have gotten so good that egg and embryo banking is now the fastest-growing segment of the industry. This means we need dedicated lab directors to run large-scale biobanks, and coordinators who can handle the logistics of long-term storage and multi-cycle planning.',
+    question: "Why is cryopreservation suddenly everywhere?",
+    answer: "Social egg freezing has gone mainstream, and vitrification techniques have gotten so good that egg and embryo banking is now the fastest-growing segment of the industry. This means we need dedicated lab directors to run large-scale biobanks, and coordinators who can handle the logistics of long-term storage and multi-cycle planning.",
   },
   {
-    question: 'Which certifications actually matter to employers?',
-    answer: 'For lab leadership, the HCLD (High Complexity Laboratory Director) is still the gold standard. But beyond that, we’re seeing a big push for specialized credentials. Genetic counselors with PGT-A expertise are highly sought after. Even in administrative roles, having a background in healthcare management or cross-cultural patient care will make your resume jump to the top of the pile.',
+    question: "Which certifications actually matter to employers?",
+    answer: "For lab leadership, the HCLD (High Complexity Laboratory Director) is still the gold standard. But beyond that, we're seeing a big push for specialized credentials. Genetic counselors with PGT-A expertise are highly sought after. Even in administrative roles, having a background in healthcare management or cross-cultural patient care will make your resume jump to the top of the pile.",
   },
 ]
 
 const strategicAdvantages = [
   {
     title: 'Lean into AI & Tech',
-    description: 'Get comfortable with embryo imaging algorithms and machine learning. Clinics are pouring money into AI, and they want staff who aren’t intimidated by data-driven tools.',
+    description: "Get comfortable with embryo imaging algorithms and machine learning. Clinics are pouring money into AI, and they want staff who aren't intimidated by data-driven tools.",
   },
   {
     title: 'Master the Freeze',
-    description: 'Vitrification is booming. If you can specialize in advanced cryopreservation and egg banking, you’ll easily find leadership opportunities.',
+    description: "Vitrification is booming. If you can specialize in advanced cryopreservation and egg banking, you'll easily find leadership opportunities.",
   },
   {
     title: 'Understand the Business Side',
-    description: 'With so many clinics backed by private equity, having a grasp on operational management and clinic financials makes you prime management material.',
+    description: "With so many clinics backed by private equity, having a grasp on operational management and clinic financials makes you prime management material.",
   },
   {
     title: 'Think Globally',
-    description: 'Reproductive tourism is growing. Experience in managing international patients or navigating cross-border compliance is a massive plus on your resume.',
+    description: "Reproductive tourism is growing. Experience in managing international patients or navigating cross-border compliance is a massive plus on your resume.",
   },
 ]
 
@@ -181,7 +189,7 @@ export default async function AssistedReproductiveTechnologyJobsPage({ searchPar
             <h2 className="text-2xl font-bold text-gray-900">A Market Expanding Faster Than Its Talent Pool</h2>
           </div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            The fertility sector is going through a massive growth phase, expected to nearly triple in size over the next decade. Because educational pipelines haven't kept pace, clinics are fiercely competing for skilled embryologists, physicians, and lab technicians. If you have the right expertise, it’s entirely a candidate's market.
+            The fertility sector is going through a massive growth phase, expected to nearly triple in size over the next decade. Because educational pipelines haven't kept pace, clinics are fiercely competing for skilled embryologists, physicians, and lab technicians. If you have the right expertise, it's entirely a candidate's market.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {marketInsights.map((item, index) => (
