@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-
+import JobDecoder from '@/components/JobDecoder'
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
 import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
@@ -369,6 +369,15 @@ export default async function JobDetailPage({
               }}
             />
           </div>
+
+         {/* Job Decoded — AI analysis */}
+          <div className="mt-8">
+            <JobDecoder defaultValue={job.description || ''} />
+          </div>
+
+          <hr className="my-8" />
+
+         
 
           {/* Apply CTA */}
           <div className="mt-10">
