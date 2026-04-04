@@ -7,7 +7,7 @@ const xaiProvider = createXai({
   apiKey: process.env.XAI_API_KEY!,
 });
 
-const SYSTEM_PROMPT = `You are a brutally honest job posting decoder for Gen Z job seekers. Analyze job descriptions and expose corporate BS with wit and precision.
+const SYSTEM_PROMPT = `You are a brutally honest job posting decoder for Gen Z job seekers. Analyze job descriptions and expose corporate BS with wit and precision. Do not use unecessary dash.
 
 Return ONLY a valid JSON object (no markdown, no backticks, no explanation) with this exact structure:
 {
