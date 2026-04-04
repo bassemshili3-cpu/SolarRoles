@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import JobDecoder from '@/components/JobDecoder'
+
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
 import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
@@ -41,7 +42,6 @@ type JobDetail = {
 // ─── Essaie l'API, sinon la base ────────────────────────────────────────────
 
 async function getJobDetail(id: string): Promise<JobDetail | null> {
-  // ─── Tentative API d'abord ───────────────────────────────────────────────
   try {
     if (id.startsWith('lensa-')) {
       const originalId = id.replace('lensa-', '')
@@ -70,8 +70,6 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
     console.warn(`⚠️ API failed for ${id}, falling back to DB:`, error.message)
   }
 
-  // ─── Fallback : lecture depuis la base Prisma ────────────────────────────
-  // Couvre : Jooble (pas d'API par ID), Adzuna 429/404, Lensa down
   try {
     const dbJob = await prisma.job.findUnique({ where: { id } })
     if (dbJob && dbJob.active) {
@@ -149,7 +147,7 @@ function resolveEmploymentType(job: JobDetail): string {
   return 'FULL_TIME'
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Schema ──────────────────────────────────────────────────────────────────
 
 function buildJobPostingSchema(job: JobDetail) {
   const isRemote = (job.location || '').toLowerCase().includes('remote')
@@ -159,8 +157,6 @@ function buildJobPostingSchema(job: JobDetail) {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: job.title,
-
-    // ── Fully original description for Google Jobs differentiation ──────────
     description: buildSchemaDescription({
       title: job.title,
       company: job.company || '',
@@ -173,22 +169,21 @@ function buildJobPostingSchema(job: JobDetail) {
       employmentType,
       remote: isRemote,
     }),
-
     hiringOrganization: {
       '@type': 'Organization',
       name: job.company || 'Unknown',
     },
     jobLocation: {
-  '@type': 'Place',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: job.location || '',
-    addressRegion: job.addressRegion || '',
-    addressCountry: 'US',
-    streetAddress: job.location || '',  
-    postalCode: '',                       
-  },
-},
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: job.location || '',
+        addressRegion: job.addressRegion || '',
+        addressCountry: 'US',
+        streetAddress: job.location || '',
+        postalCode: '',
+      },
+    },
     url: `https://www.oh-my-job.com/jobs/${job.id}`,
     datePosted: job.created
       ? new Date(job.created).toISOString().split('T')[0]
@@ -280,7 +275,7 @@ export default async function JobDetailPage({
 
   const applyConfig: Record<string, { label: string; className: string }> = {
     adzuna: { label: 'Apply now on Adzuna', className: '' },
-    lensa: { label: 'Apply on Lensa', className: 'bg-green-600 hover:bg-green-700' },
+    lensa:  { label: 'Apply on Lensa',       className: 'bg-green-600 hover:bg-green-700' },
     jooble: { label: 'Apply on Company Site', className: 'bg-blue-600 hover:bg-blue-700' },
   }
 
@@ -294,106 +289,124 @@ export default async function JobDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <Link href="/jobs" className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8">
+      <div className="max-w-6xl mx-auto px-6 py-12">
+
+        <Link
+          href="/jobs"
+          className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8"
+        >
           <ArrowLeft className="w-4 h-4" /> Back to jobs
         </Link>
 
-        <div className="bg-card border rounded-2xl p-8 shadow-sm">
+        {/* ── Layout 2 colonnes ── */}
+        <div className="flex gap-6 items-start">
 
-          {/* Attribution */}
-          {job.source === 'adzuna' && (
-            <div className="flex justify-end mb-4">
-              <a href="https://www.adzuna.com" target="_blank" rel="noopener noreferrer">
-                <img src="/adzuna-logo.png" alt="Powered by Adzuna" width={116} height={23} />
-              </a>
-            </div>
-          )}
-          {job.source === 'jooble' && (
-            <div className="flex justify-end mb-4">
-              <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
-            </div>
-          )}
-
-          <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
-
-          {job.company && (
-            <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-              <Building2 className="w-4 h-4" />
-              <span className="text-lg">{job.company}</span>
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
-            {job.location && (
-              <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" /> {job.location}
-              </div>
-            )}
-            {job.created && (
-              <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />{' '}
-                {new Date(job.created).toLocaleDateString('en-US', {
-                  month: 'short', day: 'numeric', year: 'numeric',
-                })}
-              </div>
-            )}
-            <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
-              <DollarSign className="w-4 h-4" />
-              {(job.salary || 'Salary not listed').replace(/^\$/, '')}
-            </div>
-            {job.contract_type && (
-              <span className="bg-secondary px-3 py-1 rounded-full capitalize">
-                {job.contract_type}
-              </span>
-            )}
-            {job.contract_time && (
-              <span className="bg-secondary px-3 py-1 rounded-full capitalize">
-                {job.contract_time.replace('_', ' ')}
-              </span>
-            )}
+          {/* ── Sidebar sticky gauche ── */}
+          <div className="w-72 shrink-0 sticky top-6 self-start hidden lg:block">
+            <JobDecoder jobDescription={job.description || ''} />
           </div>
 
-          <hr className="my-8" />
+          {/* ── Contenu principal ── */}
+          <div className="flex-1 min-w-0 bg-card border rounded-2xl p-8 shadow-sm">
 
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Job Description</h2>
-            <div
-              className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed
-                prose-h3:text-lg prose-h3:font-semibold prose-h3:text-foreground prose-h3:mt-10 prose-h3:mb-4 prose-h3:border-b prose-h3:border-border prose-h3:pb-2
-                prose-p:my-4
-                prose-ul:my-4 prose-ul:pl-6 prose-ul:list-disc
-                prose-li:text-muted-foreground prose-li:my-2 prose-li:leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: formatJobDescription(job.description || ''),
-              }}
-            />
-          </div>
-
-         {/* Job Decoded — AI analysis */}
-          <div className="mt-8">
-            <JobDecoder defaultValue={job.description || ''} />
-          </div>
-
-          <hr className="my-8" />
-
-         
-
-          {/* Apply CTA */}
-          <div className="mt-10">
-            {applyUrl ? (
-              <Button asChild size="lg" className={`w-full md:w-auto ${apply.className}`}>
-                <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-                  {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
+            {/* Attribution */}
+            {job.source === 'adzuna' && (
+              <div className="flex justify-end mb-4">
+                <a href="https://www.adzuna.com" target="_blank" rel="noopener noreferrer">
+                  <img src="/adzuna-logo.png" alt="Powered by Adzuna" width={116} height={23} />
                 </a>
-              </Button>
-            ) : (
-              <Button disabled size="lg" className="w-full md:w-auto">
-                Apply link unavailable
-              </Button>
+              </div>
             )}
+            {job.source === 'jooble' && (
+              <div className="flex justify-end mb-4">
+                <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
+              </div>
+            )}
+
+            <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+
+            {job.company && (
+              <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+                <Building2 className="w-4 h-4" />
+                <span className="text-lg">{job.company}</span>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
+              {job.location && (
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-4 h-4" /> {job.location}
+                </div>
+              )}
+              {job.created && (
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />{' '}
+                  {new Date(job.created).toLocaleDateString('en-US', {
+                    month: 'short', day: 'numeric', year: 'numeric',
+                  })}
+                </div>
+              )}
+              <div className="flex items-center gap-1 text-emerald-600 font-semibold text-base">
+                <DollarSign className="w-4 h-4" />
+                {(job.salary || 'Salary not listed').replace(/^\$/, '')}
+              </div>
+              {job.contract_type && (
+                <span className="bg-secondary px-3 py-1 rounded-full capitalize">
+                  {job.contract_type}
+                </span>
+              )}
+              {job.contract_time && (
+                <span className="bg-secondary px-3 py-1 rounded-full capitalize">
+                  {job.contract_time.replace('_', ' ')}
+                </span>
+              )}
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Job Description */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Job Description</h2>
+              <div
+                className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed
+                  prose-h3:text-lg prose-h3:font-semibold prose-h3:text-foreground prose-h3:mt-10 prose-h3:mb-4 prose-h3:border-b prose-h3:border-border prose-h3:pb-2
+                  prose-p:my-4
+                  prose-ul:my-4 prose-ul:pl-6 prose-ul:list-disc
+                  prose-li:text-muted-foreground prose-li:my-2 prose-li:leading-relaxed"
+                dangerouslySetInnerHTML={{
+                  __html: formatJobDescription(job.description || ''),
+                }}
+              />
+            </div>
+
+            {/* JobDecoder mobile uniquement (lg: caché dans la sidebar) */}
+            <div className="mt-8 lg:hidden">
+              <JobDecoder jobDescription={job.description || ''} />
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Apply CTA */}
+            <div className="mt-10">
+              {applyUrl ? (
+                <Button asChild size="lg" className={`w-full md:w-auto ${apply.className}`}>
+                  <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+                    {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                </Button>
+              ) : (
+                <Button disabled size="lg" className="w-full md:w-auto">
+                  Apply link unavailable
+                </Button>
+              )}
+            </div>
+
           </div>
+          {/* ── fin contenu principal ── */}
+
         </div>
+        {/* ── fin layout 2 colonnes ── */}
+
       </div>
     </>
   )

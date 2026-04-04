@@ -17,86 +17,30 @@ interface DecodeResult {
   score: Severity;
 }
 
-const EXAMPLES = {
-  startup: `Senior Full-Stack Rockstar (Startup)
-
-We're a fast-moving startup disrupting the SaaS space. We're looking for a self-starter who thrives in ambiguity and can wear many hats. You'll be joining our family of passionate entrepreneurs who move fast and break things.
-
-- Own multiple projects simultaneously with minimal supervision
-- Be comfortable with shifting priorities and a fast-paced environment
-- Hustle hard and go above and beyond — we reward loyalty
-- Salary: competitive, based on experience
-- Remote-friendly (some in-office time required)`,
-
-  corporate: `Marketing Manager — Join Our Family!
-
-At Acme Corp, we believe in work-life integration, not just balance. We're a tight-knit team that celebrates wins together. You'll wear many hats in this highly visible role.
-
-- 7+ years experience (entry-to-mid level position)
-- Must be available outside regular hours when needed
-- Proactive, autonomous, and comfortable with ambiguity
-- Unlimited PTO policy
-- "We work hard, play hard" culture`,
-
-  sales: `Sales Representative — Unlimited Earning Potential!
-
-We offer a competitive base salary with uncapped commission. Our top performers earn 6 figures! This role requires someone driven and not afraid to hustle.
-
-- Base salary: DOE (Depending on Experience)
-- Must be a team player but also independently motivated
-- Fast-paced, high-energy environment
-- No experience necessary — we'll train the right candidate
-- Immediate start required`,
-};
-
-const SYSTEM_PROMPT = `You are a brutally honest job posting decoder for Gen Z job seekers. Analyze job descriptions and expose corporate BS with wit and precision.
-
-Return ONLY a valid JSON object (no markdown, no backticks) with this exact structure:
-{
-  "flags": [
-    {
-      "category": "short category label (e.g. Culture, Salary, Workload, Management, Growth)",
-      "original": "exact phrase or sentence from the job posting",
-      "translation": "what it REALLY means, sarcastic but accurate, max 1 sentence",
-      "severity": "green" | "yellow" | "red"
-    }
-  ],
-  "verdict": "1-2 sentence honest overall verdict on this job posting",
-  "score": "green" | "yellow" | "red"
-}
-
-Severity rules:
-- green: neutral or genuinely positive signal
-- yellow: mild red flag, proceed with caution
-- red: major red flag, serious concern
-
-Extract 4-7 of the most telling phrases. Focus on buzzwords, vague language, salary opacity, culture claims, and workload hints. Be sharp, funny but fair. Never fabricate — only analyze what's in the text.`;
-
-const severityConfig: Record<Severity, { label: string; bg: string; text: string; border: string }> = {
-  green:  { label: "ok",       bg: "#EAF3DE", text: "#3B6D11", border: "#3B6D11" },
-  yellow: { label: "caution",  bg: "#FAEEDA", text: "#BA7517", border: "#BA7517" },
-  red:    { label: "red flag", bg: "#FCEBEB", text: "#A32D2D", border: "#E24B4A" },
-};
-
-const scoreLabel: Record<Severity, string> = {
-  green:  "Looks legit",
-  yellow: "Proceed with caution",
-  red:    "Multiple red flags",
-};
-
 interface JobDecoderProps {
-  defaultValue?: string
+  jobDescription: string;
 }
 
-export default function JobDecoder({ defaultValue = "" }: JobDecoderProps) {
-  const [input, setInput] = useState(defaultValue);
+const severityStyles: Record<Severity, { dot: string; border: string; label: string; labelStyle: string }> = {
+  red:    { dot: "bg-red-500",    border: "border-red-500/30",    label: "Red flag",  labelStyle: "text-red-400" },
+  yellow: { dot: "bg-yellow-400", border: "border-yellow-400/30", label: "Watch out", labelStyle: "text-yellow-400" },
+  green:  { dot: "bg-emerald-400",border: "border-emerald-400/30",label: "All good",  labelStyle: "text-emerald-400" },
+};
+
+const scoreConfig: Record<Severity, { label: string; color: string }> = {
+  green:  { label: "Looks legit",           color: "text-emerald-400" },
+  yellow: { label: "Proceed with caution",  color: "text-yellow-400" },
+  red:    { label: "Multiple red flags",    color: "text-red-400" },
+};
+
+export default function JobDecoder({ jobDescription }: JobDecoderProps) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<DecodeResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   async function decode() {
-    if (!input.trim()) return;
+    if (!jobDescription.trim()) return;
     setLoading(true);
     setResult(null);
     setError(null);
@@ -105,15 +49,13 @@ export default function JobDecoder({ defaultValue = "" }: JobDecoderProps) {
       const res = await fetch("/api/decode-job", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jobDescription: input }),
+        body: JSON.stringify({ jobDescription }),
       });
-
       if (!res.ok) throw new Error("API error");
-
       const data = await res.json();
       setResult(data);
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Something went wrong. Try again.");
     } finally {
       setLoading(false);
     }
@@ -134,123 +76,149 @@ export default function JobDecoder({ defaultValue = "" }: JobDecoderProps) {
   }
 
   const counts = result
-    ? result.flags.reduce(
-        (acc, f) => { acc[f.severity]++; return acc; },
-        { green: 0, yellow: 0, red: 0 }
-      )
+    ? result.flags.reduce((acc, f) => { acc[f.severity]++; return acc; }, { green: 0, yellow: 0, red: 0 })
     : null;
 
   return (
-    <div className="w-full font-sans">
+    <div className="rounded-2xl overflow-hidden bg-[#0f0f0f] text-white shadow-xl border border-white/5">
+
       {/* Header */}
-      <div className="mb-5">
-        <span className="inline-block text-xs font-semibold px-2 py-1 rounded bg-amber-100 text-amber-700 mb-2 uppercase tracking-wide">
-          Beta feature
-        </span>
-        <h2 className="text-xl font-semibold text-gray-900 mb-1">Job Decoded</h2>
-        <p className="text-sm text-gray-500">
-          Paste any job description. We translate the corporate speak — honestly.
+      <div className="px-5 pt-5 pb-4 border-b border-white/5">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-[10px] font-semibold tracking-widest uppercase text-white/30">
+            Beta
+          </span>
+          <span className="w-1 h-1 rounded-full bg-white/20" />
+          <span className="text-[10px] font-semibold tracking-widest uppercase text-white/30">
+            AI-powered
+          </span>
+        </div>
+        <h3 className="text-base font-semibold tracking-tight text-white">
+          Job Decoded
+        </h3>
+        <p className="text-xs text-white/40 mt-0.5 leading-relaxed">
+          We read between the lines so you don't have to.
         </p>
       </div>
 
-      {/* Textarea */}
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder={`Paste the full job description here...\n\ne.g. "We're looking for a rockstar self-starter who thrives in a fast-paced environment..."`}
-        className="w-full min-h-[140px] text-sm px-3 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 resize-y leading-relaxed focus:outline-none focus:border-gray-400 placeholder-gray-400"
-      />
+      {/* Body */}
+      <div className="px-5 py-4">
+        {!result && !loading && (
+          <p className="text-xs text-white/30 leading-relaxed mb-4">
+            Hit decode — our AI will flag every corporate BS phrase in this job posting.
+          </p>
+        )}
 
-      {/* Example buttons */}
-      <div className="flex flex-wrap gap-2 mt-2 items-center">
-        <span className="text-xs text-gray-400">Try an example:</span>
-        {(Object.keys(EXAMPLES) as Array<keyof typeof EXAMPLES>).map((key) => (
+        {/* Decode button */}
+        {!result && (
           <button
-            key={key}
-            onClick={() => setInput(EXAMPLES[key])}
-            className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg text-gray-500 hover:border-gray-300 hover:text-gray-700 transition-colors"
+            onClick={decode}
+            disabled={loading || !jobDescription.trim()}
+            className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all
+              bg-white text-[#0f0f0f] hover:bg-white/90 active:scale-[0.98]
+              disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            {key === "startup" ? "Startup rockstar" : key === "corporate" ? 'Corporate "family"' : "Competitive salary"}
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="inline-block w-3 h-3 rounded-full border-2 border-black/20 border-t-black animate-spin" />
+                Decoding…
+              </span>
+            ) : (
+              "🔍 Decode this job"
+            )}
           </button>
-        ))}
-      </div>
+        )}
 
-      {/* Decode button */}
-      <button
-        onClick={decode}
-        disabled={loading || !input.trim()}
-        className="mt-3 w-full py-3 text-sm font-semibold bg-gray-900 text-white rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        {loading ? "Decoding…" : "Decode this job"}
-      </button>
-
-      {/* Error */}
-      {error && (
-        <div className="mt-3 px-4 py-3 bg-red-50 text-red-700 text-sm rounded-xl">
-          {error}
-        </div>
-      )}
-
-      {/* Results */}
-      {result && counts && (
-        <div className="mt-5">
-          {/* Score bar */}
-          <div className="flex flex-wrap gap-2 items-center mb-4">
-            {counts.green > 0 && (
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
-                {counts.green} ok
-              </span>
-            )}
-            {counts.yellow > 0 && (
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-700">
-                {counts.yellow} caution
-              </span>
-            )}
-            {counts.red > 0 && (
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red-100 text-red-700">
-                {counts.red} red flag{counts.red > 1 ? "s" : ""}
-              </span>
-            )}
-            <span className="ml-auto text-xs text-gray-400">{scoreLabel[result.score]}</span>
+        {/* Error */}
+        {error && (
+          <div className="mt-3 px-3 py-2 rounded-lg bg-red-500/10 text-red-400 text-xs">
+            {error}
+            <button onClick={decode} className="ml-2 underline underline-offset-2">Retry</button>
           </div>
+        )}
 
-          {/* Flags */}
-          <div className="flex flex-col gap-2">
+        {/* Results */}
+        {result && counts && (
+          <div className="space-y-2">
+            {/* Score summary */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex gap-1.5">
+                {counts.red > 0 && (
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-red-500/15 text-red-400">
+                    {counts.red} 🚩
+                  </span>
+                )}
+                {counts.yellow > 0 && (
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-yellow-400/15 text-yellow-400">
+                    {counts.yellow} ⚠️
+                  </span>
+                )}
+                {counts.green > 0 && (
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400">
+                    {counts.green} ✅
+                  </span>
+                )}
+              </div>
+              <span className={`text-[11px] font-medium ${scoreConfig[result.score].color}`}>
+                {scoreConfig[result.score].label}
+              </span>
+            </div>
+
+            {/* Flags */}
             {result.flags.map((flag, i) => {
-              const cfg = severityConfig[flag.severity];
+              const s = severityStyles[flag.severity];
               return (
                 <div
                   key={i}
-                  className="border border-gray-100 rounded-xl px-4 py-3 bg-white"
-                  style={{ borderLeft: `3px solid ${cfg.border}` }}
+                  className={`rounded-xl border px-3 py-2.5 bg-white/[0.03] ${s.border}`}
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
-                    {flag.category}
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${s.dot}`} />
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-white/30">
+                      {flag.category}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-white/30 italic leading-relaxed mb-1">
+                    "{flag.original.length > 80 ? flag.original.slice(0, 80) + "…" : flag.original}"
                   </p>
-                  <p className="text-xs text-gray-500 italic bg-gray-50 rounded-lg px-2 py-1.5 mb-2">
-                    "{flag.original}"
+                  <p className="text-xs text-white/80 leading-relaxed font-medium">
+                    {flag.translation}
                   </p>
-                  <p className="text-sm font-medium text-gray-900">{flag.translation}</p>
                 </div>
               );
             })}
-          </div>
 
-          {/* Verdict */}
-          <div className="mt-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Verdict</p>
-            <p className="text-sm text-gray-900 leading-relaxed">{result.verdict}</p>
-          </div>
+            {/* Verdict */}
+            <div className="rounded-xl bg-white/[0.04] border border-white/5 px-3 py-2.5 mt-1">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-white/25 mb-1">Verdict</p>
+              <p className="text-xs text-white/60 leading-relaxed">{result.verdict}</p>
+            </div>
 
-          {/* Copy button */}
-          <button
-            onClick={copyResults}
-            className="mt-3 w-full py-2.5 text-sm border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            {copied ? "Copied!" : "Copy decoded results"}
-          </button>
-        </div>
-      )}
+            {/* Actions */}
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={copyResults}
+                className="flex-1 py-2 text-xs font-medium rounded-xl border border-white/10 text-white/40 hover:text-white/70 hover:border-white/20 transition-colors"
+              >
+                {copied ? "Copied!" : "Copy results"}
+              </button>
+              <button
+                onClick={() => { setResult(null); setError(null); }}
+                className="flex-1 py-2 text-xs font-medium rounded-xl border border-white/10 text-white/40 hover:text-white/70 hover:border-white/20 transition-colors"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-5 pb-4">
+        <p className="text-[10px] text-white/15 leading-relaxed">
+          AI analysis for informational purposes only. Always do your own research.
+        </p>
+      </div>
     </div>
   );
 }
