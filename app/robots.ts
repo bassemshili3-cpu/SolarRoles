@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      'https://www.oh-my-job.com/sitemap.xml',
+      'https://www.oh-my-job.com/sitemap-index.xml',
     ],
   }
 }
