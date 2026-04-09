@@ -39,37 +39,7 @@ type JobDetail = {
   apply_url?: string
 }
 
-// ─── Essaie l'API, sinon la base ────────────────────────────────────────────
-
 async function getJobDetail(id: string): Promise<JobDetail | null> {
-  try {
-    if (id.startsWith('lensa-')) {
-      const originalId = id.replace('lensa-', '')
-      const lensaData = await searchLensaJobs({ limit: 180 })
-      const job = lensaData.job_adverts?.find(j => j.unique_id === originalId)
-      if (job) return { ...normalizeLensa(job), source: 'lensa' as const }
-    }
-
-    if (id.startsWith('adzuna-')) {
-      const originalId = id.replace('adzuna-', '')
-      const jobRaw = await getJobById(originalId)
-      if (jobRaw) {
-        const normalized = normalizeAdzuna(jobRaw)
-        return {
-          ...normalized,
-          source: 'adzuna' as const,
-          externalApplyUrl: jobRaw.redirect_url || null,
-          salary_min: jobRaw.salary_min,
-          salary_max: jobRaw.salary_max,
-          addressRegion: normalized.addressRegion,
-          contract_type: jobRaw.contract_type,
-        }
-      }
-    }
-  } catch (error: any) {
-    console.warn(`⚠️ API failed for ${id}, falling back to DB:`, error.message)
-  }
-
   try {
     const dbJob = await prisma.job.findUnique({ where: { id } })
     if (dbJob && dbJob.active) {
@@ -91,8 +61,8 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
         contract_time: dbJob.contractTime || undefined,
       }
     }
-  } catch (dbError: any) {
-    console.error('❌ DB fallback also failed:', dbError.message)
+  } catch (error: any) {
+    console.error('DB error:', error.message)
   }
 
   return null
