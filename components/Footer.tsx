@@ -16,6 +16,12 @@ export default function Footer() {
           </ul>
         </div>
         <div>
+          <div className="font-semibold mb-3">Tools</div>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/paycheck-calculator" className="hover:underline">Paycheck Calculator</Link></li>
+          </ul>
+        </div>
+        <div>
           <div className="font-semibold mb-3">Legal</div>
           <ul className="space-y-2 text-sm">
             <li><Link href="/terms" className="hover:underline">Terms of Service</Link></li>
@@ -27,7 +33,6 @@ export default function Footer() {
           <div className="font-semibold mb-3">For Employers</div>
           <Link href="/dashboard/employer" className="text-sm hover:underline">Post a Job • Sponsored</Link>
         </div>
-        
       </div>
     </footer>
   )
