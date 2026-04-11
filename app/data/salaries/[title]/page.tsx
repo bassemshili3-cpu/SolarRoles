@@ -153,14 +153,14 @@ export default async function SalaryReportPage({
             {jobTitle} Average Salary by State
           </h2>
           <div className="border border-gray-200 rounded-2xl overflow-hidden">
-            {/* Header */}
+           
             <div className="grid grid-cols-4 gap-px bg-gray-100 text-xs font-medium text-gray-500 uppercase tracking-wider">
               <div className="bg-white px-4 py-3">Rank</div>
               <div className="bg-white px-4 py-3">State</div>
               <div className="bg-white px-4 py-3 text-right">Avg. Salary</div>
               <div className="bg-white px-4 py-3 text-right">Listings</div>
             </div>
-            {/* Rows */}
+            
             {salaryByState.map((row, i) => {
               const diff = nationalAvg > 0 ? ((row.avgSalary - nationalAvg) / nationalAvg) * 100 : 0
               return (
