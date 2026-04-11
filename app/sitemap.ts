@@ -87,7 +87,65 @@ const landingPages: string[] = [
   '/social-media-supervisor',
   '/weekend-jobs',
   '/talent-acquisition-jobs',
+  // ── New keyword landing pages ──
+  '/new-grad-nurse-jobs',
+  '/language-pathologist-jobs',
+  '/school-bus-driver-jobs',
+  '/special-education-teacher-jobs',
+  '/summer-camp-counselor-jobs',
+  '/public-works-commission-jobs',
 ]
+
+// ── Top Jobs ranking pages ───────────────────────────────────
+const topJobsPages: string[] = [
+  '/best-jobs-in-united-states-2026',
+  '/best-jobs-without-a-degree-2026',
+  '/best-paying-jobs-in-finance-2026',
+  '/best-paying-easy-jobs-us',
+  '/best-paying-blue-collar-jobs',
+  '/best-paying-entry-level-jobs',
+  '/best-paying-nursing-jobs-2026',
+]
+
+// ── Paycheck calculator pages ────────────────────────────────
+const paycheckPages: string[] = [
+  '/paycheck-calculator',
+  '/paycheck-calculator/california',
+  '/paycheck-calculator/illinois',
+  '/paycheck-calculator/ohio',
+  '/paycheck-calculator/michigan',
+  '/paycheck-calculator/washington',
+  '/paycheck-calculator/maryland',
+  '/paycheck-calculator/new-york',
+  '/paycheck-calculator/virginia',
+  '/paycheck-calculator/nevada',
+  '/paycheck-calculator/utah',
+]
+
+// ── Data Center pages ────────────────────────────────────────
+const dataPages: string[] = [
+  '/data',
+]
+
+const dataStatePages: string[] = [
+  'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado',
+  'connecticut', 'delaware', 'florida', 'georgia', 'hawaii', 'idaho',
+  'illinois', 'indiana', 'iowa', 'kansas', 'kentucky', 'louisiana',
+  'maine', 'maryland', 'massachusetts', 'michigan', 'minnesota',
+  'mississippi', 'missouri', 'montana', 'nebraska', 'nevada',
+  'new-hampshire', 'new-jersey', 'new-mexico', 'new-york',
+  'north-carolina', 'north-dakota', 'ohio', 'oklahoma', 'oregon',
+  'pennsylvania', 'rhode-island', 'south-carolina', 'south-dakota',
+  'tennessee', 'texas', 'utah', 'vermont', 'virginia', 'washington',
+  'west-virginia', 'wisconsin', 'wyoming',
+].map(s => `/data/states/${s}`)
+
+const dataSalaryPages: string[] = [
+  'registered-nurse', 'software-engineer', 'data-analyst',
+  'project-manager', 'dental-assistant', 'electrician',
+  'medical-assistant', 'truck-driver', 'accountant',
+  'customer-service', 'sales-associate', 'pharmacy-technician',
+].map(s => `/data/salaries/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────
 const blogPosts: string[] = [
@@ -154,11 +212,23 @@ export default async function sitemap({
       toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.6 })
     )
 
+    const topJobs = topJobsPages.map((slug) =>
+      toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.7 })
+    )
+
+    const paycheck = paycheckPages.map((slug) =>
+      toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.7 })
+    )
+
+    const data = [...dataPages, ...dataStatePages, ...dataSalaryPages].map((slug) =>
+      toSitemapEntry(slug, { changeFrequency: 'daily', priority: 0.7 })
+    )
+
     const blog = blogPosts.map((slug) =>
       toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
     )
 
-    return [...core, ...priority, ...standard, ...blog]
+    return [...core, ...priority, ...standard, ...topJobs, ...paycheck, ...data, ...blog]
   }
 
   // id=1+ : batches de job detail pages (14 derniers jours uniquement)

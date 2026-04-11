@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import JobDecoder from '@/components/JobDecoder'
+import PaycheckCalculator from '@/components/PaycheckCalculator'
 
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
@@ -272,9 +272,13 @@ export default async function JobDetailPage({
         <div className="flex gap-6 items-start">
 
           {/* ── Sidebar sticky gauche ── */}
-          <div className="w-72 shrink-0 sticky top-6 self-start hidden lg:block">
-            <JobDecoder jobDescription={job.description || ''} />
-          </div>
+          // NOUVEAU :
+<div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
+  <div className="border rounded-2xl p-5 bg-card shadow-sm">
+    <h3 className="text-sm font-semibold text-gray-900 mb-3">What would this salary look like in your pocket?</h3>
+    <PaycheckCalculator defaultState={job.addressRegion || ''} />
+  </div>
+</div>
 
           {/* ── Contenu principal ── */}
           <div className="flex-1 min-w-0 bg-card border rounded-2xl p-8 shadow-sm">
@@ -349,10 +353,13 @@ export default async function JobDetailPage({
               />
             </div>
 
-            {/* JobDecoder mobile uniquement (lg: caché dans la sidebar) */}
+            {/* Paycheck Calculator mobile uniquement (lg: caché dans la sidebar) */}
             <div className="mt-8 lg:hidden">
-              <JobDecoder jobDescription={job.description || ''} />
-            </div>
+  <div className="border rounded-2xl p-5 bg-card shadow-sm">
+    <h3 className="text-sm font-semibold text-gray-900 mb-3">What would this salary look like in your pocket?</h3>
+    <PaycheckCalculator defaultState={job.addressRegion || ''} />
+  </div>
+</div>
 
             <hr className="my-8" />
 

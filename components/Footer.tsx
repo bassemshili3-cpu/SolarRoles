@@ -16,10 +16,13 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <div className="font-semibold mb-3">Tools</div>
-          <ul className="space-y-2 text-sm">
-            <li><Link href="/paycheck-calculator" className="hover:underline">Paycheck Calculator</Link></li>
-          </ul>
+         <div>
+  <div className="font-semibold mb-3">Tools</div>
+  <ul className="space-y-2 text-sm">
+    <li><Link href="/paycheck-calculator" className="hover:underline">Paycheck Calculator</Link></li>
+    <li><Link href="/data" className="hover:underline">US Job Market Data</Link></li>
+  </ul>
+</div>
         </div>
         <div>
           <div className="font-semibold mb-3">Legal</div>
