@@ -272,7 +272,7 @@ export default async function JobDetailPage({
         <div className="flex gap-6 items-start">
 
           {/* ── Sidebar sticky gauche ── */}
-          // NOUVEAU :
+          
 <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
   <div className="border rounded-2xl p-5 bg-card shadow-sm">
     <h3 className="text-sm font-semibold text-gray-900 mb-3">What would this salary look like in your pocket?</h3>
