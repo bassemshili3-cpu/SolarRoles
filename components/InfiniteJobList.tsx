@@ -32,7 +32,7 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
         results_per_page: '30',
       })
       if (salary_min) params.set('salary_min', salary_min)
-      const res = await fetch(`/api/jobs?${params}`)
+      const res = await fetch(`/api/jobs-all?${params}`)
       if (!res.ok) throw new Error('Failed to fetch jobs')
       return res.json()
     },
