@@ -446,7 +446,7 @@ export default async function PetrolPlatformJobsPage({ searchParams }: any) {
         {/* ── DISCLAIMER ── */}
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Oh My Job is an independent job search platform and is not affiliated with any petroleum company, offshore contractor, or regulatory body. Job listings are sourced from third-party APIs. Salary figures are estimates based on industry data and may not reflect specific offers. Certification requirements, safety regulations, and hiring standards vary by employer and jurisdiction. Offshore petroleum work involves inherent physical risks; consult employers directly for current safety policies and requirements. This page is for informational purposes only.
+            <strong>Disclaimer:</strong> Oh My Job is an independent job search platform and is not affiliated with any petroleum company, offshore contractor, or regulatory body. Job listings are sourced from third-party APIs. Salary figures are estimates based on industry data and may not reflect specific offers. Certification requirements, safety regulations, and hiring standards vary by employer and jurisdiction. Offshore petroleum work involves inherent physical risks; consult employers directly for current safety policies and requirements. 
           </p>
         </section>
       </div>
