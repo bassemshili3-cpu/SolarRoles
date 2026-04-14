@@ -10,6 +10,11 @@
       "path": "/api/cron/sync-careerjet",
       "schedule": "0 */2 * * *"
     }
+
+    ,{
+  "path": "/api/cron/cleanup-jobs",
+  "schedule": "0 4 * * *"
+}
   ]
 }
 
