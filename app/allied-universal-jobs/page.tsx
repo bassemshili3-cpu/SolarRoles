@@ -2,9 +2,9 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import { normalizeAdzuna } from '@/lib/jobs'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, TrendingUp, Users } from 'lucide-react'
-import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
+
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 
 export const revalidate = 3600
@@ -156,11 +156,11 @@ const stateRequirements = [
 export default async function AlliedUniversalJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'Allied Universal', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'Allied Universal', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+// Corrigé (pour que le filtre salary fonctionne si un visiteur l'utilise)
+const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'Allied Universal', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'Allied Universal', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>
