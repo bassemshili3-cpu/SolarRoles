@@ -40,6 +40,7 @@ type JobDetail = {
 }
 
 async function getJobDetail(id: string): Promise<JobDetail | null> {
+  // ── 1. Toujours essayer la DB en premier ──────────────────────────────────
   try {
     const dbJob = await prisma.job.findUnique({ where: { id } })
     if (dbJob && dbJob.active) {
@@ -65,9 +66,25 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
     console.error('DB error:', error.message)
   }
 
+  // ── 2. Fallback Adzuna ────────────────────────────────────────────────────
+  if (id.startsWith('adzuna-')) {
+    try {
+      const adzunaId = id.replace('adzuna-', '')
+      const raw = await getJobById(adzunaId)
+      if (raw) {
+        const job = normalizeAdzuna(raw)
+        return { ...job, source: 'adzuna' }
+      }
+    } catch (error: any) {
+      console.error('Adzuna API error:', error.message)
+    }
+  }
+
+  // ── 4. Jooble : DB only, pas d'endpoint par ID ────────────────────────────
+  // (déjà couvert par l'étape 1)
+
   return null
 }
-
 // ─── Enrichissement salaire ──────────────────────────────────────────────────
 
 function getJobDetailWithSalary(job: JobDetail): JobDetail {
