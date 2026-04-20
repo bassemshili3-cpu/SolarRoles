@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import PaycheckCalculator from '@/components/PaycheckCalculator'
+import PaycheckCalculatorCard from '@/components/PaycheckCalculatorCard'
 
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
@@ -18,6 +18,7 @@ import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
 import { searchLensaJobs } from '@/lib/lensa'
 import { getJobById } from '@/lib/adzuna'
 import { prisma } from '@/lib/prisma'
+import PaycheckCalculator from '@/components/PaycheckCalculator'
 
 export const revalidate = 3600
 
@@ -293,7 +294,7 @@ export default async function JobDetailPage({
 <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
   <div className="border rounded-2xl p-5 bg-card shadow-sm">
     <h3 className="text-sm font-semibold text-gray-900 mb-3">What would this salary look like in your pocket?</h3>
-    <PaycheckCalculator defaultState={job.addressRegion || ''} />
+    <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
   </div>
 </div>
 
