@@ -18,7 +18,7 @@ import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
 import { searchLensaJobs } from '@/lib/lensa'
 import { getJobById } from '@/lib/adzuna'
 import { prisma } from '@/lib/prisma'
-import PaycheckCalculator from '@/components/PaycheckCalculator'
+
 
 export const revalidate = 3600
 
@@ -292,10 +292,7 @@ export default async function JobDetailPage({
           {/* ── Sidebar sticky gauche ── */}
           
 <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
-  <div className="border rounded-2xl p-5 bg-card shadow-sm">
-    <h3 className="text-sm font-semibold text-gray-900 mb-3">What would this salary look like in your pocket?</h3>
-    <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
-  </div>
+  <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
 </div>
 
           {/* ── Contenu principal ── */}
@@ -372,11 +369,8 @@ export default async function JobDetailPage({
             </div>
 
             {/* Paycheck Calculator mobile uniquement (lg: caché dans la sidebar) */}
-            <div className="mt-8 lg:hidden">
-  <div className="border rounded-2xl p-5 bg-card shadow-sm">
-    <h3 className="text-sm font-semibold text-gray-900 mb-3">What would this salary look like in your pocket?</h3>
-    <PaycheckCalculator defaultState={job.addressRegion || ''} />
-  </div>
+           <div className="mt-8 lg:hidden">
+  <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
 </div>
 
             <hr className="my-8" />
