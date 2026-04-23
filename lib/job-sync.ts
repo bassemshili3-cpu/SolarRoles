@@ -1,26 +1,64 @@
 // lib/job-sync.ts
-// ─── Synchronise les jobs depuis les APIs vers la base PostgreSQL ─────────────
+// ─── Synchronise les jobs Jooble vers la base PostgreSQL ──────────────────────
+// Adzuna paused — only Jooble fetched here
+// Careerjet has its own dedicated cron (sync-careerjet)
 //
-// Ce module est appelé par le cron. Il :
-//   1. Fetch les jobs depuis Adzuna + Jooble (+ Lensa si actif)
-//   2. Les normalise
-//   3. Les upsert en base (insert ou update si déjà existant)
-//   4. Désactive les jobs expirés
+// Strategy:
+//   - Rotate through a large pool of keywords (50+)
+//   - Multiple pages per keyword per run
+//   - Target ~500-1000 new jobs per execution
 
 import { prisma } from './prisma'
-import { searchJobs as searchAdzuna } from './adzuna'
 import { searchJooble } from './jooble'
-import { normalizeAdzuna, normalizeJooble, UnifiedJob } from './jobs'
+import { normalizeJooble, UnifiedJob } from './jobs'
 
 const EXPIRY_DAYS = 30
 
 interface SyncResult {
-  adzuna: { fetched: number; saved: number; errors: number }
-  jooble: { fetched: number; saved: number; errors: number }
+  jooble: { fetched: number; saved: number; errors: number; queriesRun: number }
   expired: number
 }
 
-// ─── Upsert un batch de jobs en base ─────────────────────────────────────────
+// ─── Large keyword pool for broad coverage ───────────────────────────────────
+const JOOBLE_KEYWORDS = [
+  // Tech
+  'software engineer', 'developer', 'data analyst', 'data scientist',
+  'devops engineer', 'product manager', 'ux designer', 'it support',
+  'cybersecurity', 'cloud engineer',
+
+  // Healthcare
+  'registered nurse', 'nursing assistant', 'medical assistant', 'pharmacy technician',
+  'physical therapist', 'dental assistant', 'home health aide', 'medical receptionist',
+  'mental health counselor', 'radiologic technologist',
+
+  // Trades & Services
+  'electrician', 'plumber', 'hvac technician', 'carpenter',
+  'welder', 'auto mechanic', 'truck driver', 'construction worker',
+  'landscaper', 'maintenance technician',
+
+  // Business & Admin
+  'accountant', 'bookkeeper', 'financial analyst', 'human resources',
+  'administrative assistant', 'project manager', 'operations manager', 'office manager',
+  'executive assistant', 'business analyst',
+
+  // Retail & Customer Service
+  'customer service', 'call center', 'sales associate', 'cashier',
+  'retail manager', 'barista', 'server', 'hostess',
+
+  // Education
+  'teacher', 'substitute teacher', 'special education teacher', 'school counselor',
+  'tutor', 'daycare worker', 'preschool teacher',
+
+  // Logistics & Warehouse
+  'warehouse worker', 'forklift operator', 'delivery driver', 'shipping clerk',
+  'inventory specialist',
+
+  // Marketing & Sales
+  'marketing manager', 'digital marketing', 'content writer', 'social media manager',
+  'account executive', 'sales representative',
+]
+
+// ─── Upsert helper ───────────────────────────────────────────────────────────
 async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
   let saved = 0
 
@@ -71,7 +109,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
   return saved
 }
 
-// ─── Désactive les jobs expirés ──────────────────────────────────────────────
+// ─── Deactivate expired ──────────────────────────────────────────────────────
 async function deactivateExpired(): Promise<number> {
   const result = await prisma.job.updateMany({
     where: {
@@ -83,58 +121,64 @@ async function deactivateExpired(): Promise<number> {
   return result.count
 }
 
-// ─── Sync principal ──────────────────────────────────────────────────────────
-export async function syncAllJobs(page: number = 1, limit: number = 50): Promise<SyncResult> {
+// ─── Rotation helper: select a subset of keywords based on run ─────────────
+function getKeywordsForRun(page: number, keywordsPerRun: number = 8): string[] {
+  const startIdx = (page * keywordsPerRun) % JOOBLE_KEYWORDS.length
+  const selected: string[] = []
+  for (let i = 0; i < keywordsPerRun; i++) {
+    selected.push(JOOBLE_KEYWORDS[(startIdx + i) % JOOBLE_KEYWORDS.length])
+  }
+  return selected
+}
+
+// ─── Main sync ───────────────────────────────────────────────────────────────
+export async function syncAllJobs(
+  page: number = 1,
+  limit: number = 50
+): Promise<SyncResult> {
   const result: SyncResult = {
-    adzuna: { fetched: 0, saved: 0, errors: 0 },
-    jooble: { fetched: 0, saved: 0, errors: 0 },
+    jooble: { fetched: 0, saved: 0, errors: 0, queriesRun: 0 },
     expired: 0,
   }
 
-  // ─── Fetch Adzuna ────────────────────────────────────────────────────────
-  try {
-    const adzunaData = await searchAdzuna({
-      what: '',
-      where: '',
-      page,
-      results_per_page: limit,
-    })
+  // Select 8 keywords per run; rotate through the full pool on subsequent runs
+  const keywords = getKeywordsForRun(page, 8)
 
-    if (adzunaData?.results) {
-      const jobs = adzunaData.results.map(normalizeAdzuna)
-      result.adzuna.fetched = jobs.length
-      result.adzuna.saved = await upsertJobs(jobs, 'adzuna')
-      console.log(`✅ Adzuna sync: ${result.adzuna.fetched} fetched, ${result.adzuna.saved} saved`)
+  for (const keyword of keywords) {
+    // Fetch 2 pages per keyword
+    for (let p = 1; p <= 2; p++) {
+      try {
+        const joobleData = await searchJooble({
+          keywords: keyword,
+          location: 'USA',
+          page: p,
+          resultsOnPage: limit,
+        })
+
+        if (joobleData?.jobs && joobleData.jobs.length > 0) {
+          const jobs = joobleData.jobs.map(normalizeJooble)
+          result.jooble.fetched += jobs.length
+          result.jooble.saved += await upsertJobs(jobs, 'jooble')
+          result.jooble.queriesRun++
+        }
+
+        // Rate limit: 300ms between pages
+        await new Promise((resolve) => setTimeout(resolve, 300))
+      } catch (e: any) {
+        console.error(`❌ Jooble sync error (${keyword}, page ${p}):`, e.message)
+        result.jooble.errors++
+      }
     }
-  } catch (e: any) {
-    console.error('❌ Adzuna sync error:', e.message)
-    result.adzuna.errors = 1
+
+    // Rate limit: 500ms between keywords
+    await new Promise((resolve) => setTimeout(resolve, 500))
   }
 
-// ─── Fetch Jooble ────────────────────────────────────────────────────────
-  try {
-    const joobleKeywords = ['developer', 'nurse', 'accountant', 'manager', 'sales', 'engineer', 'teacher', 'analyst', 'driver', 'marketing']
-    const keyword = joobleKeywords[page % joobleKeywords.length]
+  console.log(
+    `✅ Jooble sync: ${result.jooble.fetched} fetched, ${result.jooble.saved} saved, ${result.jooble.queriesRun} queries ran across ${keywords.length} keywords`
+  )
 
-    const joobleData = await searchJooble({
-      keywords: keyword,
-      location: 'USA',
-      page,
-      resultsOnPage: limit,
-    })
-
-    if (joobleData?.jobs) {
-      const jobs = joobleData.jobs.map(normalizeJooble)
-      result.jooble.fetched = jobs.length
-      result.jooble.saved = await upsertJobs(jobs, 'jooble')
-      console.log(`✅ Jooble sync: ${result.jooble.fetched} fetched, ${result.jooble.saved} saved`)
-    }
-  } catch (e: any) {
-    console.error('❌ Jooble sync error:', e.message)
-    result.jooble.errors = 1
-  }
-
-  // ─── Nettoyage des expirés ───────────────────────────────────────────────
+  // ─── Cleanup expired ────────────────────────────────────────────────────
   result.expired = await deactivateExpired()
   if (result.expired > 0) {
     console.log(`🗑️ ${result.expired} expired jobs deactivated`)

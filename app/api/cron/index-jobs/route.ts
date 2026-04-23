@@ -1,127 +1,112 @@
 // app/api/cron/index-jobs/route.ts
-// ─── Cron Job : soumettre automatiquement les nouveaux jobs à Google ─────────
-//
-// Appeler via Vercel Cron (vercel.json) toutes les heures :
-//   { "crons": [{ "path": "/api/cron/index-jobs", "schedule": "0 * * * *" }] }
-//
-// Ce cron :
-//   1. Récupère les dernières offres Adzuna (les plus récentes)
-//   2. Vérifie que chaque page existe (200) avant de la soumettre
-//   3. Envoie les URLs valides à l'API d'indexation Google
-//   4. Log les résultats
-//
-// Quota Google : 200 URLs/jour → avec un cron toutes les heures,
-// on envoie ~8 URLs par heure max pour rester dans les limites.
+// Sends ONLY Jooble, Lensa, and Careerjet job URLs to Google Indexing API
+// Adzuna paused — no Adzuna API calls made here
 
-import { NextRequest, NextResponse } from 'next/server'
-import { searchJobs } from '@/lib/adzuna'
-import { notifyGoogleBatch } from '@/lib/google-indexing'
-import { submitToIndexNow } from '@/lib/indexnow'
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { google } from 'googleapis'
 
-const BASE_URL = 'https://www.oh-my-job.com'
-const MAX_URLS_PER_RUN = 16 // 16 × 24h = 384/jour (sous la limite de 400)
+const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
+const BATCH_SIZE = 50 // Google Indexing API quota: 200 URLs/day on default tier
 
-async function checkUrlExists(url: string): Promise<boolean> {
-  try {
-    const res = await fetch(url, { method: 'HEAD', redirect: 'follow' })
-    return res.status === 200
-  } catch {
-    return false
-  }
-}
-
-export async function GET(req: NextRequest) {
-  // ─── Sécurité : vérifie le header Vercel Cron ─────────────────────────────
-  const authHeader = req.headers.get('authorization')
-  const cronSecret = process.env.CRON_SECRET
-
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+export async function GET(request: Request) {
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  console.log('🕐 === CRON INDEX-JOBS START ===')
-
   try {
-    // ─── Récupère les dernières offres ────────────────────────────────────────
-   const currentHour = new Date().getUTCHours()
-const page = (currentHour % 12) + 1
+    // ── Fetch recent Jooble/Lensa/Careerjet jobs that haven't been indexed ──
+    const jobs = await prisma.job.findMany({
+      where: {
+        active: true,
+        source: { in: ACTIVE_SOURCES },
+        expiresAt: { gt: new Date() },
+        // Add a field like 'googleIndexed' if you have one, otherwise use fetchedAt
+        fetchedAt: { gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, // Last 24h
+      },
+      orderBy: { fetchedAt: 'desc' },
+      take: BATCH_SIZE,
+      select: {
+        id: true,
+        title: true,
+        source: true,
+      },
+    })
 
-const data = await searchJobs({
-  what: '',
-  where: '',
-  results_per_page: MAX_URLS_PER_RUN,
-  page,
-})
-
-    if (!data.results || data.results.length === 0) {
-      console.log('⚠️ Aucun job récent trouvé')
-      return NextResponse.json({ message: 'No recent jobs found', submitted: 0 })
-    }
-
-    // ─── Construit les URLs et vérifie qu'elles existent ─────────────────────
-    const candidates = data.results.map((job: any) => `${BASE_URL}/jobs/adzuna-${job.id}`)
-
-    console.log(`🔍 Vérification de ${candidates.length} URLs...`)
-
-    const checks = await Promise.all(
-      candidates.map(async (url: string) => ({
-        url,
-        alive: await checkUrlExists(url),
-      }))
-    )
-
-    const alive = checks.filter((c) => c.alive)
-    const dead = checks.filter((c) => !c.alive)
-
-    console.log(`✅ ${alive.length} pages OK, ❌ ${dead.length} pages 404 (skipped)`)
-
-    if (dead.length > 0) {
-      console.log('🗑️ URLs skipped (404):', dead.map((d) => d.url).join(', '))
-    }
-
-    if (alive.length === 0) {
-      console.log('⚠️ Aucune URL valide à soumettre')
+    if (jobs.length === 0) {
       return NextResponse.json({
-        message: 'No valid URLs to submit',
-        checked: candidates.length,
-        alive: 0,
-        dead: dead.length,
+        message: 'No new jobs to index',
+        timestamp: new Date().toISOString(),
       })
     }
 
-    // ─── Envoi à IndexNow (Bing, Yandex) ──────────────────────────────
-const aliveUrls = alive.map((c) => c.url)
-const indexNowResult = await submitToIndexNow(aliveUrls)
-console.log(`🔔 IndexNow: ${indexNowResult.success ? 'OK' : 'Failed'}`)
+    // ── Authenticate with Google Indexing API ──
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      },
+      scopes: ['https://www.googleapis.com/auth/indexing'],
+    })
 
-    // ─── Envoi à Google (uniquement les URLs vivantes) ───────────────────────
-    const urls = alive.map((c) => ({
-      url: c.url,
-      action: 'URL_UPDATED' as const,
-    }))
+    const authClient = await auth.getClient()
+    const accessToken = await authClient.getAccessToken()
 
-    console.log(`📡 Soumission de ${urls.length} URLs à Google Indexing API`)
+    // ── Submit each URL ──
+    let submitted = 0
+    let failed = 0
+    const errors: string[] = []
 
-    const results = await notifyGoogleBatch(urls)
+    for (const job of jobs) {
+      const url = `https://www.oh-my-job.com/jobs/${job.id}`
 
-    const succeeded = results.filter((r) => r.success).length
-    const failed = results.filter((r) => !r.success).length
+      try {
+        const response = await fetch(
+          'https://indexing.googleapis.com/v3/urlNotifications:publish',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken.token}`,
+            },
+            body: JSON.stringify({
+              url,
+              type: 'URL_UPDATED',
+            }),
+          }
+        )
 
-    console.log(`📊 Résultats : ${succeeded} OK, ${failed} échoués`)
-    console.log('🕐 === CRON INDEX-JOBS END ===')
+        if (response.ok) {
+          submitted++
+        } else {
+          failed++
+          const errText = await response.text()
+          errors.push(`${job.id}: ${response.status} - ${errText.slice(0, 100)}`)
+        }
+      } catch (err: any) {
+        failed++
+        errors.push(`${job.id}: ${err.message}`)
+      }
+
+      // Rate limit: 200ms between requests
+      await new Promise((resolve) => setTimeout(resolve, 200))
+    }
 
     return NextResponse.json({
-      message: `Checked ${candidates.length}, submitted ${urls.length} URLs`,
-      checked: candidates.length,
-      alive: alive.length,
-      dead: dead.length,
-      succeeded,
+      success: true,
+      totalJobs: jobs.length,
+      submitted,
       failed,
-      results: results.map((r) => ({ url: r.url, success: r.success, error: r.error })),
+      sources: [...new Set(jobs.map((j) => j.source))],
+      errors: errors.slice(0, 5), // First 5 errors only
+      timestamp: new Date().toISOString(),
     })
   } catch (error: any) {
-    console.error('💥 Cron index-jobs error:', error.message)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('Index jobs cron error:', error.message)
+    return NextResponse.json(
+      { error: error.message, timestamp: new Date().toISOString() },
+      { status: 500 }
+    )
   }
 }
-

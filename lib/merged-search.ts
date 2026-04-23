@@ -1,11 +1,18 @@
 // lib/merged-search.ts
-import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
+// Adzuna partnership paused — using Jooble, Lensa, and Careerjet from Prisma
 import { prisma } from '@/lib/prisma'
 
+const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
+
 export async function getMergedJobCount(what: string, where: string, salary_min?: number) {
-  const { count: adzunaCount } = await getCachedJobCount(what, where, salary_min)
-  return { count: adzunaCount }
+  try {
+    const whereClause = buildPrismaWhere(what, where, salary_min)
+    const count = await prisma.job.count({ where: whereClause })
+    return { count }
+  } catch (err: any) {
+    console.error('Prisma count error:', err.message)
+    return { count: 0 }
+  }
 }
 
 export async function searchMergedJobs(params: {
@@ -17,113 +24,91 @@ export async function searchMergedJobs(params: {
 }) {
   const { what, where, results_per_page = 30, page = 1, salary_min } = params
 
-  // ── 1. Adzuna API (primary) ──
-  const adzunaData = await searchJobs({
-    what,
-    where,
-    results_per_page,
-    page,
-    salary_min,
-  }).then((data: AdzunaSearchResult) => ({
-    results: data.results.map(normalizeAdzuna),
-    count: data.count || 0,
-  })).catch((err: any) => {
-    console.error('Adzuna error in merged search:', err.message)
-    return { results: [] as any[], count: 0 }
-  })
+  try {
+    const whereClause = buildPrismaWhere(what, where, salary_min)
 
-  // ── 2. Prisma (Jooble + Careerjet supplement) — only on page 1 ──
-  let prismaJobs: any[] = []
-
-  if (page === 1) {
-    try {
-      const keywords = what.split(/\s+/).filter(Boolean)
-      const prismaWhere: any = {
-        active: true,
-        expiresAt: { gt: new Date() },
-        source: { in: ['jooble', 'careerjet'] },
-      }
-
-      if (keywords.length > 0) {
-        prismaWhere.AND = keywords.map((kw: string) => ({
-          OR: [
-            { title: { contains: kw, mode: 'insensitive' as const } },
-            { company: { contains: kw, mode: 'insensitive' as const } },
-          ],
-        }))
-      }
-
-      if (where) {
-        const locationCondition = {
-          OR: [
-            { location: { contains: where, mode: 'insensitive' as const } },
-            { addressRegion: { contains: where, mode: 'insensitive' as const } },
-          ],
-        }
-        if (prismaWhere.AND) {
-          prismaWhere.AND.push(locationCondition)
-        } else {
-          prismaWhere.AND = [locationCondition]
-        }
-      }
-
-      const dbJobs = await prisma.job.findMany({
-        where: prismaWhere,
+    const [dbJobs, count] = await Promise.all([
+      prisma.job.findMany({
+        where: whereClause,
         orderBy: { fetchedAt: 'desc' },
-        take: 10,
-      })
+        skip: (page - 1) * results_per_page,
+        take: results_per_page,
+      }),
+      prisma.job.count({ where: whereClause }),
+    ])
 
-      prismaJobs = dbJobs.map((job) => ({
-        id: job.id,
-        title: job.title,
-        company: job.company,
-        location: job.location,
-        addressRegion: job.addressRegion,
-        description: job.description,
-        url: job.url,
-        applyUrl: job.applyUrl,
-        apply_url: job.applyUrl,
-        salary: job.salary,
-        salaryMin: job.salaryMin,
-        salaryMax: job.salaryMax,
-        salary_min: job.salaryMin,
-        salary_max: job.salaryMax,
-        contractType: job.contractType,
-        contractTime: job.contractTime,
-        source: job.source,
-        postedAt: job.postedAt?.toISOString() || null,
+    const results = dbJobs.map((job) => ({
+      id: job.id,
+      title: job.title,
+      company: job.company,
+      location: job.location,
+      addressRegion: job.addressRegion,
+      description: job.description,
+      url: job.url,
+      applyUrl: job.applyUrl,
+      apply_url: job.applyUrl,
+      salary: job.salary,
+      salaryMin: job.salaryMin,
+      salaryMax: job.salaryMax,
+      salary_min: job.salaryMin,
+      salary_max: job.salaryMax,
+      contractType: job.contractType,
+      contractTime: job.contractTime,
+      source: job.source,
+      postedAt: job.postedAt?.toISOString() || null,
+      created: job.postedAt?.toISOString() || null,
+    }))
+
+    return { results, count }
+  } catch (err: any) {
+    console.error('Prisma error in merged search:', err.message)
+    return { results: [], count: 0 }
+  }
+}
+
+// ── Shared where clause builder ──
+function buildPrismaWhere(what: string, where: string, salary_min?: number) {
+  const whereClause: any = {
+    active: true,
+    expiresAt: { gt: new Date() },
+    source: { in: ACTIVE_SOURCES },
+  }
+
+  if (what) {
+    const keywords = what.split(/\s+/).filter(Boolean)
+    if (keywords.length > 0) {
+      whereClause.AND = keywords.map((kw: string) => ({
+        OR: [
+          { title: { contains: kw, mode: 'insensitive' as const } },
+          { company: { contains: kw, mode: 'insensitive' as const } },
+          { description: { contains: kw, mode: 'insensitive' as const } },
+        ],
       }))
-    } catch (err: any) {
-      console.error('Prisma error in merged search:', err.message)
     }
   }
 
-  // ── 3. Deduplicate + merge ──
-  const adzunaTitles = new Set(
-    adzunaData.results.map((j: any) =>
-      `${j.title?.toLowerCase().trim()}|${j.company?.toLowerCase().trim()}`
-    )
-  )
-
-  const uniquePrismaJobs = prismaJobs.filter((j: any) => {
-    const key = `${j.title?.toLowerCase().trim()}|${j.company?.toLowerCase().trim()}`
-    return !adzunaTitles.has(key)
-  })
-
-  const merged = [...adzunaData.results]
-  let insertIndex = 3
-
-  for (const prismaJob of uniquePrismaJobs) {
-    if (insertIndex <= merged.length) {
-      merged.splice(insertIndex, 0, prismaJob)
-      insertIndex += 5
+  if (where) {
+    const locationCondition = {
+      OR: [
+        { location: { contains: where, mode: 'insensitive' as const } },
+        { addressRegion: { contains: where, mode: 'insensitive' as const } },
+      ],
+    }
+    if (whereClause.AND) {
+      whereClause.AND.push(locationCondition)
     } else {
-      merged.push(prismaJob)
+      whereClause.AND = [locationCondition]
     }
   }
 
-  return {
-    results: merged,
-    count: adzunaData.count,
+  if (salary_min) {
+    const salaryCondition = { salaryMin: { gte: salary_min } }
+    if (whereClause.AND) {
+      whereClause.AND.push(salaryCondition)
+    } else {
+      whereClause.AND = [salaryCondition]
+    }
   }
+
+  return whereClause
 }

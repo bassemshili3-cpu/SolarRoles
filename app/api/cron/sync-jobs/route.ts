@@ -1,17 +1,17 @@
 // app/api/cron/sync-jobs/route.ts
-// ─── Cron Job v2 : Sync → DB → Google Indexing + IndexNow ───────────────────
+// ─── Cron Job : Sync Jooble → DB → Google Indexing + IndexNow ───────────────
 //
-// Nouveau flow :
-//   1. Fetch les jobs depuis Adzuna + Jooble
-//   2. Upsert en base PostgreSQL (Prisma)
-//   3. Récupère les URLs actives depuis la base
-//   4. Soumet à Google Indexing API + IndexNow (Bing/Yandex)
+// Flow:
+//   1. Fetch Jooble jobs (rotates through keyword pool)
+//   2. Upsert into PostgreSQL (Prisma)
+//   3. Fetch active URLs from DB
+//   4. Submit to Google Indexing API + IndexNow (Bing/Yandex)
 //
-// Fini les 404 : Googlebot trouve toujours une page valide puisque
-// les données sont servies depuis la base, pas depuis un cache volatile.
+// Adzuna partnership paused.
+// Careerjet has its own dedicated cron (sync-careerjet).
 //
-// Schedule : toutes les heures via vercel.json
-//   { "crons": [{ "path": "/api/cron/sync-jobs", "schedule": "0 * * * *" }] }
+// Schedule: hourly via vercel.json
+//   { "path": "/api/cron/sync-jobs", "schedule": "0 * * * *" }
 
 import { NextRequest, NextResponse } from 'next/server'
 import { syncAllJobs } from '@/lib/job-sync'
@@ -19,10 +19,10 @@ import { getActiveJobUrls } from '@/lib/job-db'
 import { notifyGoogleBatch } from '@/lib/google-indexing'
 import { submitToIndexNow } from '@/lib/indexnow'
 
-const MAX_GOOGLE_URLS = 16 // ~16/h × 24h = 384/jour (sous quota 200... on ajustera)
+const MAX_GOOGLE_URLS = 16 // ~16/h × 24h = ~384/day (adjust based on quota)
 
 export async function GET(req: NextRequest) {
-  // ─── Sécurité ──────────────────────────────────────────────────────────────
+  // ─── Security ──────────────────────────────────────────────────────────
   const authHeader = req.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET
 
@@ -33,31 +33,32 @@ export async function GET(req: NextRequest) {
   console.log('🕐 === CRON SYNC-JOBS START ===')
 
   try {
-    // ─── Étape 1 : Sync APIs → Base ─────────────────────────────────────────
+    // ─── Step 1: Sync APIs → DB ─────────────────────────────────────────
+    // Rotate through the keyword pool using current hour
+    // With 50+ keywords and 8 per run, you cover the full pool every ~6-7 runs
     const currentHour = new Date().getUTCHours()
-    const page = (currentHour % 12) + 1 // rotation des pages
+    const page = currentHour + 1 // 1 to 24, ensures rotation across the day
 
-    console.log(`📥 Syncing page ${page} from APIs...`)
+    console.log(`📥 Syncing Jooble (rotation page ${page})...`)
     const syncResult = await syncAllJobs(page, 50)
 
     console.log(`📊 Sync results:`)
-    console.log(`   Adzuna: ${syncResult.adzuna.fetched} fetched, ${syncResult.adzuna.saved} saved`)
-    console.log(`   Jooble: ${syncResult.jooble.fetched} fetched, ${syncResult.jooble.saved} saved`)
+    console.log(`   Jooble: ${syncResult.jooble.fetched} fetched, ${syncResult.jooble.saved} saved (${syncResult.jooble.queriesRun} queries)`)
     console.log(`   Expired: ${syncResult.expired} deactivated`)
 
-    // ─── Étape 2 : Récupère les URLs à indexer depuis la base ────────────────
+    // ─── Step 2: Get URLs to index from DB ───────────────────────────────
     const urls = await getActiveJobUrls(MAX_GOOGLE_URLS)
 
     if (urls.length === 0) {
-      console.log('⚠️ Aucune URL active à soumettre')
+      console.log('⚠️ No active URLs to submit')
       return NextResponse.json({ message: 'Sync done, no URLs to index', syncResult })
     }
 
-    // ─── Étape 3 : IndexNow (Bing/Yandex) — pas de quota ────────────────────
+    // ─── Step 3: IndexNow (Bing/Yandex) — no quota ─────────────────────
     const indexNowResult = await submitToIndexNow(urls)
     console.log(`🔔 IndexNow: ${indexNowResult.success ? 'OK' : 'Failed'} (${urls.length} URLs)`)
 
-    // ─── Étape 4 : Google Indexing API — quota limité ────────────────────────
+    // ─── Step 4: Google Indexing API — limited quota ────────────────────
     const googleUrls = urls.slice(0, MAX_GOOGLE_URLS).map((url) => ({
       url,
       action: 'URL_UPDATED' as const,
@@ -75,7 +76,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       message: 'Sync + indexing complete',
       sync: {
-        adzuna: syncResult.adzuna,
         jooble: syncResult.jooble,
         expired: syncResult.expired,
       },
