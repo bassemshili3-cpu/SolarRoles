@@ -1,39 +1,44 @@
 // scripts/seed-jobs.ts
-// ─── Remplissage initial de la base ──────────────────────────────────────────
-// Lance avec : npx tsx scripts/seed-jobs.ts
-// Fetch 20 pages depuis chaque source = ~1000 jobs par source
-
+// ─── Initial database seeding ──────────────────────────────────────────────
+// Run with: npx tsx scripts/seed-jobs.ts
+// Fetches Jooble + Lensa + Careerjet across the keyword pool
 import { syncAllJobs } from '../lib/job-sync'
 
 const TOTAL_PAGES = 20
 
 async function seed() {
-  console.log(`🌱 Seeding database with ${TOTAL_PAGES} pages per source...`)
-  
-  let totalAdzuna = 0
+  console.log(`🌱 Seeding database with ${TOTAL_PAGES} rotation pages across 3 sources...`)
+
   let totalJooble = 0
+  let totalLensa = 0
+  let totalCareerjet = 0
 
   for (let page = 1; page <= TOTAL_PAGES; page++) {
-    console.log(`\n📥 Page ${page}/${TOTAL_PAGES}`)
-    
+    console.log(`\n📥 Rotation page ${page}/${TOTAL_PAGES}`)
+
     try {
       const result = await syncAllJobs(page, 50)
-      totalAdzuna += result.adzuna.saved
       totalJooble += result.jooble.saved
-      console.log(`   Adzuna: +${result.adzuna.saved} | Jooble: +${result.jooble.saved}`)
+      totalLensa += result.lensa.saved
+      totalCareerjet += result.careerjet.saved
+      console.log(
+        `   Jooble: +${result.jooble.saved} | Lensa: +${result.lensa.saved} | Careerjet: +${result.careerjet.saved}`
+      )
     } catch (e: any) {
       console.error(`   ❌ Page ${page} failed:`, e.message)
     }
 
-    // Pause 2 secondes entre chaque page pour éviter les rate limits
+    // Pause 2 seconds between pages to respect API rate limits
     await new Promise((r) => setTimeout(r, 2000))
   }
 
   console.log(`\n✅ Seed complete!`)
-  console.log(`   Total Adzuna: ${totalAdzuna} jobs`)
   console.log(`   Total Jooble: ${totalJooble} jobs`)
-  console.log(`   Run "npx prisma studio" to verify.`)
-  
+  console.log(`   Total Lensa: ${totalLensa} jobs`)
+  console.log(`   Total Careerjet: ${totalCareerjet} jobs`)
+  console.log(`   Total: ${totalJooble + totalLensa + totalCareerjet} jobs`)
+  console.log(`\n   Run "npx prisma studio" to verify.`)
+
   process.exit(0)
 }
 
