@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, DollarSign, AlertTriangle, Phone, Headphones, TrendingUp, Home } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -215,11 +215,11 @@ const faqs = [
 export default async function CallCenterJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'call center', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'call center', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+ const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'Call center', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'Call center', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
+
 
   return (
     <>

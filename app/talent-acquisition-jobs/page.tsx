@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -241,17 +241,9 @@ export default async function TalentAcquisitionJobsPage({ searchParams }: any) {
   const params = await searchParams
 
   const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'talent acquisition', params.where || '', params.salary_min),
-    searchJobs({
-      what: params.what || 'talent acquisition',
-      where: params.where || '',
-      results_per_page: 30,
-      page: 1,
-    }).then((data: AdzunaSearchResult) => ({
-      ...data,
-      results: data.results.map(normalizeAdzuna),
-    })),
-  ])
+  getMergedJobCount(params.what || 'talent acquisition', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'talent acquisition', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, Heart, Award, TrendingUp, Building2, GraduationCap, Microscope } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — reduces Adzuna calls
 
 export const metadata: Metadata = {
@@ -135,11 +135,10 @@ const strategicAdvantages = [
 export default async function AssistedReproductiveTechnologyJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'Assisted Reproductive Technology', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'Assisted Reproductive Technology', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+ const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'Assisted Reproductive Technology', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'Assisted Reproductive Technology', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

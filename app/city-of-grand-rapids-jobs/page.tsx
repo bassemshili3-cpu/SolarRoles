@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, DollarSign, MapPin, Building2, Users, TrendingUp, HeartPulse, Wrench } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -202,11 +202,10 @@ const faqs = [
 export default async function CityOfGrandRapidsJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'city of grand rapids', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'city of grand rapids', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+   const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'city of grand rapids', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'city of grand rapids', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

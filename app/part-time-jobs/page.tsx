@@ -6,6 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, TrendingUp, Clock, Users, Award, MapPin, Star } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Now Hiring: Part Time Jobs Near You | Apply Today',
@@ -172,10 +173,9 @@ const faqs = [
 export default async function PartTimeJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'part time', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'part time', where: params.where || '', results_per_page: 30, page: 1 })
-   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'part time', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'part time', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
 ])
 
   return (

@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import { Shield, DollarSign, TrendingUp, Briefcase } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {

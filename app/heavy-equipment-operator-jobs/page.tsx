@@ -6,6 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users, TrendingUp } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Heavy Equipment Operator Jobs Hiring Now | Apply Today',
@@ -117,10 +118,9 @@ export default async function HeavyEquipmentOperatorJobsPage({ searchParams }: P
     ? parseInt(params.salary_min, 10) 
     : undefined
 
- const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'heavy equipment operator', params.where || '', salaryMinNumber),
-  searchJobs({ what: params.what || 'heavy equipment operator', where: params.where || '', results_per_page: 30, page: 1 })
-   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'heavy equipment operator', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'heavy equipment operator', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
 ])
   return (
     <>

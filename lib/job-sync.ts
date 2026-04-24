@@ -21,42 +21,72 @@ export interface SyncResult {
 }
 
 // ─── Keyword pool ────────────────────────────────────────────────────────────
+// Keywords align with landing pages to ensure Prisma is populated with
+// relevant jobs for each SEO page.
 const KEYWORDS = [
-  // Tech
+  // ─── Generic job categories (broad coverage) ───
   'software engineer', 'developer', 'data analyst', 'data scientist',
   'devops engineer', 'product manager', 'ux designer', 'it support',
   'cybersecurity', 'cloud engineer',
-
-  // Healthcare
-  'registered nurse', 'nursing assistant', 'medical assistant', 'pharmacy technician',
-  'physical therapist', 'dental assistant', 'home health aide', 'medical receptionist',
-  'mental health counselor', 'radiologic technologist',
-
-  // Trades & Services
-  'electrician', 'plumber', 'hvac technician', 'carpenter',
-  'welder', 'auto mechanic', 'truck driver', 'construction worker',
-  'landscaper', 'maintenance technician',
-
-  // Business & Admin
+  'nursing assistant', 'medical assistant', 'physical therapist',
+  'home health aide', 'medical receptionist', 'mental health counselor',
+  'radiologic technologist', 'plumber', 'carpenter', 'welder',
+  'auto mechanic', 'construction worker', 'landscaper',
   'accountant', 'bookkeeper', 'financial analyst', 'human resources',
-  'administrative assistant', 'project manager', 'operations manager', 'office manager',
-  'executive assistant', 'business analyst',
+  'administrative assistant', 'operations manager', 'office manager',
+  'business analyst', 'sales associate', 'cashier',
+  'retail manager', 'server', 'hostess', 'school counselor',
+  'tutor', 'preschool teacher', 'warehouse worker', 'forklift operator',
+  'delivery driver', 'shipping clerk', 'inventory specialist',
+  'marketing manager', 'digital marketing', 'content writer',
+  'social media manager', 'account executive', 'sales representative',
 
-  // Retail & Customer Service
-  'customer service', 'call center', 'sales associate', 'cashier',
-  'retail manager', 'barista', 'server', 'hostess',
+  // ─── Teen / age-based (landing pages) ───
+  'jobs for 14 year olds', 'jobs for 15 year olds', 'jobs for 16 year olds',
 
-  // Education
-  'teacher', 'substitute teacher', 'special education teacher', 'school counselor',
-  'tutor', 'daycare worker', 'preschool teacher',
+  // ─── Schedule / part-time ───
+  'part time', 'evening jobs', 'weekend jobs', 'weekly paying jobs',
 
-  // Logistics & Warehouse
-  'warehouse worker', 'forklift operator', 'delivery driver', 'shipping clerk',
-  'inventory specialist',
+  // ─── Food & Retail ───
+  'barista', 'bartending', 'burger king', 'chick-fil-a', 'sonic',
+  'planet fitness',
 
-  // Marketing & Sales
-  'marketing manager', 'digital marketing', 'content writer', 'social media manager',
-  'account executive', 'sales representative',
+  // ─── Healthcare specific ───
+  'certified nursing assistant', 'certified nursing assistant hospital',
+  'patient care technician', 'patient transporter', 'pharmacy technician',
+  'pediatric nurse practitioner', 'new grad nurse', 'labor and delivery nurse',
+  'school nurse', 'respiratory therapist', 'surgical tech',
+  'sterile processing technician', 'emt', 'ekg technician',
+  'dental assistant', 'language pathologist', 'dignity health',
+  'assisted reproductive technology', 'healthcare administration',
+
+  // ─── Education ───
+  'art teacher', 'substitute teacher', 'special education teacher',
+  'social studies teacher', 'paraprofessional', 'summer camp counselor',
+  'childcare', 'daycare', 'nanny',
+
+  // ─── Trades & Labor ───
+  'electrician', 'hvac', 'truck driver', 'lineman',
+  'heavy equipment operator', 'welding', 'general labor',
+  'school bus driver', 'oil rig', 'fly in fly out',
+
+  // ─── Corporate / Companies ───
+  'allied universal', 'amgen', 'cardinal health', 'cintas',
+  'chase bank', 'doordash', 'exelon', 'honda', 'live nation',
+  'national grid', 'press association',
+
+  // ─── City / Government ───
+  'city of grand rapids', 'city of reno', 'city of laredo', 'city of portland',
+  'public work commission', 'university of california san diego',
+
+  // ─── Office & Professional ───
+  'call center', 'customer service', 'executive assistant',
+  'front desk', 'project manager', 'case manager', 'talent acquisition',
+  'remote hr', 'quality assurance', 'engineering', 'entry level data analyst',
+  'social media supervisor', 'marketing chef', 'property management',
+
+  // ─── Services ───
+  'housekeeping', 'dog walking', 'christian', 'event organization',
 ]
 
 function getKeywordsForRun(page: number, count: number = 8): string[] {

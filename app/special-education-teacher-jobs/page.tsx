@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, TrendingUp, Award, Heart, GraduationCap } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -225,10 +225,9 @@ export default async function SpecialEducationTeacherJobsPage({ searchParams }: 
   const params = await searchParams
 
   const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'special education teacher', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'special education teacher', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+  getMergedJobCount(params.what || 'special education teacher', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'special education teacher', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

@@ -6,6 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, TrendingUp, ShieldCheck, Pill } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Pharmacy Technician Jobs Hiring Immediately | Apply Now Before Positions Fill',
@@ -153,10 +154,9 @@ const tips = [
 export default async function PharmacyTechnicianJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'pharmacy technician', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'pharmacy technician', where: params.where || '', results_per_page: 30, page: 1 })
-   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'pharmacy technician', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'pharmacy technician', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
 ])
  
 

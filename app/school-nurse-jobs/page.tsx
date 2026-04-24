@@ -6,6 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, Heart, DollarSign, MapPin, CheckCircle, GraduationCap, Users, Award, Building, Stethoscope, HelpCircle, TrendingUp, Calendar, BookOpen, FileText } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Demand for School Nurse Professionals | Apply Now',
@@ -139,12 +140,10 @@ const workSettings = [
 export default async function SchoolNurseJobsPage({ searchParams }: any) {
   const params = await searchParams
 
- const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'school nurse', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'school nurse', where: params.where || '', results_per_page: 30, page: 1 })
-   .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'school nurse', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'school nurse', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
 ])
-
   return (
     <>
       <script

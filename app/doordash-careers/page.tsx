@@ -6,6 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, TrendingUp, DollarSign, Clock, Users, Target, Zap, Award, MapPin, CheckCircle, Smartphone, Package, BookOpen } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzunas
 export const metadata: Metadata = {
   title: 'Urgent: DoorDash Careers & Jobs Hiring Now | 1000+ Positions Available',
@@ -123,10 +124,9 @@ const applicationTips = [
 export default async function DoorDashCareersPage({ searchParams }: any) {
   const params = await searchParams
 
-const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'doordash careers', params.where || '', params.salary_min),
-  searchJobs({ what: params.what || 'doordash careers', where: params.where || '', results_per_page: 30, page: 1 })
-    .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'doordash careers', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'doordash careers', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
 ])
 
   return (

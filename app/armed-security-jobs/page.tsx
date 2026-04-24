@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import { searchJobs, getCachedJobCount, type AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 type SearchValue = string | string[] | undefined

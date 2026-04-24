@@ -6,7 +6,7 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
 import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
-
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -129,11 +129,10 @@ const tips = [
 export default async function FifoJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'fly in fly out jobs', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'fly in fly out jobs', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+    const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'fly in fly out jobs', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'fly in fly out jobs', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

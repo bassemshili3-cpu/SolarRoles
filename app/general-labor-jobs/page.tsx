@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import {
   Hammer,
@@ -400,17 +401,9 @@ export default async function GeneralLaborJobsPage({ searchParams }: any) {
   const params = await searchParams
 
   const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'general labor', params.where || '', params.salary_min),
-    searchJobs({
-      what: params.what || 'general labor',
-      where: params.where || '',
-      results_per_page: 30,
-      page: 1,
-    }).then((data: AdzunaSearchResult) => ({
-      ...data,
-      results: data.results.map(normalizeAdzuna),
-    })),
-  ])
+  getMergedJobCount(params.what || 'general labor', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'general labor', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

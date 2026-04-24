@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import {
   Briefcase,
   DollarSign,
@@ -166,11 +167,10 @@ const tips = [
 export default async function CnaJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(params.what || 'certified nursing assistant', params.where || '', params.salary_min),
-    searchJobs({ what: params.what || 'certified nursing assistant', where: params.where || '', results_per_page: 30, page: 1 })
-      .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
-  ])
+   const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount(params.what || 'certified nursing assistant', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'certified nursing assistant', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>

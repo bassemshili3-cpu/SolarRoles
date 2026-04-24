@@ -5,6 +5,7 @@ import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, BookOpen, Users, TrendingUp } from 'lucide-react'
 import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
+import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
@@ -122,11 +123,9 @@ const applicationTips = [
   }
 
   const [{ count }, initialData] = await Promise.all([
-  getCachedJobCount(params.what || 'engineering', params.where || '', salaryMinNum),
-  searchJobs({ what: params.what || 'engineering', where: params.where || '', results_per_page: 30, page: 1 })
-     .then((data: AdzunaSearchResult) => ({ ...data, results: data.results.map(normalizeAdzuna) })),
+  getMergedJobCount(params.what || 'engineering', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+  searchMergedJobs({ what: params.what || 'engineering', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
 ])
-
 
 
   return (

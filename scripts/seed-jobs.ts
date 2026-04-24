@@ -4,7 +4,7 @@
 // Fetches Jooble + Lensa + Careerjet across the keyword pool
 import { syncAllJobs } from '../lib/job-sync'
 
-const TOTAL_PAGES = 20
+const TOTAL_PAGES = 30
 
 async function seed() {
   console.log(`🌱 Seeding database with ${TOTAL_PAGES} rotation pages across 3 sources...`)
