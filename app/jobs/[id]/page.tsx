@@ -261,11 +261,11 @@ export default async function JobDetailPage({
   const job = getJobDetailWithSalary(raw)
   const schema = buildJobPostingSchema(job)
 
-  const applyConfig: Record<string, { label: string; className: string }> = {
-    adzuna: { label: 'Apply now on Adzuna', className: '' },
-    lensa:  { label: 'Apply on Lensa',       className: 'bg-white hover:bg-white' },
-    jooble: { label: 'Apply on Company Site', className: 'bg-white hover:bg-white' },
-  }
+ const applyConfig: Record<string, { label: string; className: string }> = {
+  adzuna: { label: 'Apply now on Adzuna', className: 'bg-green-600 text-white' },
+  lensa:  { label: 'Apply on Lensa',       className: 'bg-purple-600 text-white' },
+  jooble: { label: 'Apply on Company Site', className: 'bg-blue-600 text-white' },
+}
 
   const apply = applyConfig[job.source] || applyConfig.adzuna
   const applyUrl = job.externalApplyUrl || job.apply_url
