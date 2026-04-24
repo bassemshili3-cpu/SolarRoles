@@ -263,8 +263,8 @@ export default async function JobDetailPage({
 
   const applyConfig: Record<string, { label: string; className: string }> = {
     adzuna: { label: 'Apply now on Adzuna', className: '' },
-    lensa:  { label: 'Apply on Lensa',       className: 'bg-green-600 hover:bg-green-700' },
-    jooble: { label: 'Apply on Company Site', className: 'bg-blue-600 hover:bg-blue-700' },
+    lensa:  { label: 'Apply on Lensa',       className: 'bg-white hover:bg-green-700' },
+    jooble: { label: 'Apply on Company Site', className: 'bg-white hover:bg-blue-700' },
   }
 
   const apply = applyConfig[job.source] || applyConfig.adzuna
