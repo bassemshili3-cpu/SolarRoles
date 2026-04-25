@@ -1,7 +1,12 @@
 // lib/adzuna.ts
-import { unstable_cache } from 'next/cache'
+// ─── ADZUNA MUTED — partnership paused ──────────────────────────────────────
+// All functions return empty results without making any API calls.
+// This file keeps the same exports so existing imports across landing pages
+// continue to compile without modification.
+//
+// To re-enable Adzuna later: restore the original implementation from git history.
 
-const BASE = 'https://api.adzuna.com/v1/api/jobs/us'
+import { unstable_cache } from 'next/cache'
 
 export interface AdzunaJob {
   id: string
@@ -31,115 +36,28 @@ export interface AdzunaSearchParams {
   page?: number
 }
 
-// ──────────────────────────────────────────────────────────────
-// FONCTION ORIGINALE (inchangée, on la garde pour d'autres usages)
-// ──────────────────────────────────────────────────────────────
-export async function searchJobs(params: AdzunaSearchParams): Promise<AdzunaSearchResult> {
-  const appId = process.env.ADZUNA_APP_ID
-  const appKey = process.env.ADZUNA_APP_KEY
+// ─── No-op implementations ───────────────────────────────────────────────────
 
-  if (!appId || !appKey) {
-    console.error('❌ Adzuna credentials missing')
-    return { count: 0, results: [] }
-  }
-
-  const searchParams = new URLSearchParams({
-    app_id: appId,
-    app_key: appKey,
-    results_per_page: String(params.results_per_page || 10),
-  })
-
-  if (params.what) searchParams.set('what', params.what)
-  if (params.where) searchParams.set('where', params.where)
-  if (params.salary_min) searchParams.set('salary_min', String(params.salary_min))
-
-  const url = `${BASE}/search/${params.page || 1}?${searchParams}`
-
-  try {
-    const response = await fetch(url, {
-      headers: { 'User-Agent': 'OhMyJob/1.0' },
-      next: { revalidate: 3600 },
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => '')
-      console.error('❌ Adzuna API error:', response.status, errorText)
-      return { count: 0, results: [] }
-    }
-
-    const data = await response.json()
-    return {
-      count: data.count || 0,
-      results: data.results || [],
-    }
-  } catch (error) {
-    console.error('❌ Adzuna fetch error:', error)
-    return { count: 0, results: [] }
-  }
+export async function searchJobs(_params: AdzunaSearchParams): Promise<AdzunaSearchResult> {
+  return { count: 0, results: [] }
 }
 
-// ──────────────────────────────────────────────────────────────
-// GET JOB BY ID
-// ──────────────────────────────────────────────────────────────
-export async function getJobById(id: string): Promise<AdzunaJob | null> {
-  const appId = process.env.ADZUNA_APP_ID
-  const appKey = process.env.ADZUNA_APP_KEY
-
-  if (!appId || !appKey) {
-    console.error('❌ Adzuna credentials missing')
-    return null
-  }
-
-  // Tentative via endpoint direct
-  try {
-    const url = `${BASE}/jobs/${id}?app_id=${appId}&app_key=${appKey}`
-    const response = await fetch(url, {
-      headers: { 'User-Agent': 'OhMyJob/1.0' },
-      next: { revalidate: 3600 },
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      return data ?? null
-    }
-  } catch (error) {
-    console.error('❌ Adzuna getJobById direct error:', error)
-  }
-
-  // Fallback : recherche par id et filtre
-  try {
-    const result = await searchJobs({ what: id, results_per_page: 10 })
-    return result.results.find(job => job.id === id) ?? null
-  } catch (error) {
-    console.error('❌ Adzuna getJobById fallback error:', error)
-    return null
-  }
+export async function getJobById(_id: string): Promise<AdzunaJob | null> {
+  return null
 }
 
-// ──────────────────────────────────────────────────────────────
-// NOUVELLE FONCTION CACHÉE (celle que tu vas utiliser partout)
-// ──────────────────────────────────────────────────────────────
 export const getCachedJobCount = unstable_cache(
-  async (what: string, where: string = '', salary_min?: number) => {
-    return searchJobs({
-      what,
-      where,
-      salary_min,
-      results_per_page: 1,
-    })
+  async (_what: string, _where: string = '', _salary_min?: number) => {
+    return { count: 0, results: [] as AdzunaJob[] }
   },
-  ['adzuna-job-count'],
-  {
-    revalidate: 3600,
-    tags: ['jobs'],
-  }
+  ['adzuna-job-count-muted'],
+  { revalidate: 86400, tags: ['jobs'] }
 )
 
-// Optionnel : version complète pour InfiniteJobList
 export const getCachedJobs = unstable_cache(
-  async (params: AdzunaSearchParams) => {
-    return searchJobs(params)
+  async (_params: AdzunaSearchParams) => {
+    return { count: 0, results: [] as AdzunaJob[] }
   },
-  ['adzuna-jobs'],
-  { revalidate: 3600, tags: ['jobs'] }
+  ['adzuna-jobs-muted'],
+  { revalidate: 86400, tags: ['jobs'] }
 )
