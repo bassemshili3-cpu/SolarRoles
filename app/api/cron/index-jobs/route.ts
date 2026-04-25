@@ -4,10 +4,10 @@
 
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { google } from 'googleapis'
+import { notifyGoogleBatch } from '@/lib/google-indexing'
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
-const BATCH_SIZE = 50 // Google Indexing API quota: 200 URLs/day on default tier
+const BATCH_SIZE = 50
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization')
@@ -16,14 +16,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    // ── Fetch recent Jooble/Lensa/Careerjet jobs that haven't been indexed ──
     const jobs = await prisma.job.findMany({
       where: {
         active: true,
         source: { in: ACTIVE_SOURCES },
         expiresAt: { gt: new Date() },
-        // Add a field like 'googleIndexed' if you have one, otherwise use fetchedAt
-        fetchedAt: { gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, // Last 24h
+        fetchedAt: { gt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
       },
       orderBy: { fetchedAt: 'desc' },
       take: BATCH_SIZE,
@@ -41,65 +39,22 @@ export async function GET(request: Request) {
       })
     }
 
-    // ── Authenticate with Google Indexing API ──
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/indexing'],
-    })
+    const items = jobs.map((j) => ({
+      url: `https://www.oh-my-job.com/jobs/${j.id}`,
+      action: 'URL_UPDATED' as const,
+    }))
 
-    const authClient = await auth.getClient()
-    const accessToken = await authClient.getAccessToken()
-
-    // ── Submit each URL ──
-    let submitted = 0
-    let failed = 0
-    const errors: string[] = []
-
-    for (const job of jobs) {
-      const url = `https://www.oh-my-job.com/jobs/${job.id}`
-
-      try {
-        const response = await fetch(
-          'https://indexing.googleapis.com/v3/urlNotifications:publish',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken.token}`,
-            },
-            body: JSON.stringify({
-              url,
-              type: 'URL_UPDATED',
-            }),
-          }
-        )
-
-        if (response.ok) {
-          submitted++
-        } else {
-          failed++
-          const errText = await response.text()
-          errors.push(`${job.id}: ${response.status} - ${errText.slice(0, 100)}`)
-        }
-      } catch (err: any) {
-        failed++
-        errors.push(`${job.id}: ${err.message}`)
-      }
-
-      // Rate limit: 200ms between requests
-      await new Promise((resolve) => setTimeout(resolve, 200))
-    }
+    const results = await notifyGoogleBatch(items)
+    const succeeded = results.filter((r) => r.success).length
+    const failed = results.filter((r) => !r.success).length
 
     return NextResponse.json({
       success: true,
       totalJobs: jobs.length,
-      submitted,
+      submitted: results.length,
+      succeeded,
       failed,
       sources: [...new Set(jobs.map((j) => j.source))],
-      errors: errors.slice(0, 5), // First 5 errors only
       timestamp: new Date().toISOString(),
     })
   } catch (error: any) {
