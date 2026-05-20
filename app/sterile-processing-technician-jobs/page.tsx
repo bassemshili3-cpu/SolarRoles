@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Sterile Processing Technician Jobs Hiring Now | SPT Positions Open Across the US',
-  description: 'Hospitals and surgical centers across the United States are urgently hiring sterile processing technicians right now. Entry-level and certified SPT positions available with competitive pay and full benefits. No degree required for many roles. Apply today before these positions are filled.',
+  description: 'Sterile processing technician roles in hospital CSDs and surgical centers — CRCST certification valued, but many employers train entry-level candidates on the job.',
   keywords: 'sterile processing technician jobs, sterile processing tech hiring now, SPT jobs, central sterile technician, CRCST jobs, sterile processing department jobs, hospital sterile processing, surgical instrument technician',
   openGraph: {
     title: 'Sterile Processing Technician Jobs Hiring Immediately | SPT Positions Needed Now',

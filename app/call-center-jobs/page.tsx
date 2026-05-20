@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Call Center Jobs Hiring Now | Remote & On-Site Across All 50 States',
-  description: 'Call center jobs open today. $15 to $30/hr, many fully remote. Inbound support, outbound sales, tech support, insurance, and healthcare lines. No degree required for most roles. Browse and apply instantly.',
+  description: 'Remote and on-site call center roles paying $15–$30/hr. Inbound support, outbound sales, healthcare, and tech lines — no degree required.',
   keywords: 'call center jobs, call center jobs hiring, remote call center jobs, work from home call center, customer service call center jobs, call center representative jobs 2026',
   openGraph: {
     title: 'Call Center Jobs | Remote & On-Site Positions Hiring Now',

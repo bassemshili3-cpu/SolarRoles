@@ -22,7 +22,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Social Media Supervisor Jobs | Lead Content & Brand Teams',
   description:
-    'Companies across the US are urgently hiring Social Media Supervisors right now. Lead content strategies, manage teams, and drive engagement. Competitive salaries, remote options available. Apply in minutes!',
+    'Content strategy, team leadership, and brand engagement for social media supervisors — remote and on-site positions with salary expectations listed.',
   keywords:
     'social media supervisor jobs, social media supervisor hiring, social media manager supervisor, social media team lead, digital marketing supervisor, social media jobs US, social media supervisor remote',
   openGraph: {

@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Dental Assistant Jobs — Chairside, Ortho, Surgical & EFDA Openings Near You',
-  description: 'Search dental assistant jobs at general practices, orthodontic offices, oral-surgery centers, and corporate DSOs. Filter by specialty, certification level, and schedule — new listings from every US state posted daily.',
+  description: 'Dental assistant openings at general practices, orthodontic offices, oral surgery centers, and DSOs. Filter by specialty, certification, and schedule.',
   keywords: 'dental assistant jobs, chairside dental assistant hiring, orthodontic assistant openings, oral surgery assistant positions, EFDA jobs, CDA certified dental assistant, dental assistant near me, dental assistant salary',
   openGraph: {
     title: 'Dental Assistant Jobs: General, Ortho, Surgery & Pediatric Roles | Oh My Job',

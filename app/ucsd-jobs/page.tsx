@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'UCSD Jobs | University of California San Diego Careers',
-  description: 'Hundreds of UCSD jobs are hiring immediately at the University of California, San Diego. Campus, research, administrative, and student positions with excellent benefits and competitive pay. Apply today before positions fill up!',
+  description: 'UC San Diego campus, research, administrative, and student employment with full UC system benefits. Sorted by department and position classification.',
   keywords: 'ucsd jobs, university of california san diego jobs, ucsd careers, ucsd employment, jobs at ucsd, uc san diego hiring, ucsd staff jobs, ucsd student jobs',
   openGraph: {
     title: 'UCSD Jobs | Research, Campus & Admin Positions',

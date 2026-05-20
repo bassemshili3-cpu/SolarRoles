@@ -25,7 +25,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Labor & Delivery Nurse Jobs | L&D RN Positions',
   description:
-    'Hospitals across the US urgently need labor and delivery nurses. Staff and travel L&D RN positions available now. Competitive pay from $75K/yr, sign-on bonuses, flexible scheduling. Apply today.',
+    'L&D RN positions at teaching hospitals, community birth centers, and travel assignments. Pay starts above $75K with shift differentials and sign-on incentives.',
   keywords:
     'labor and delivery nurse jobs, L&D nurse jobs, labor and delivery RN jobs, L&D nurse hiring now, labor delivery nurse positions, OB nurse jobs, maternity nurse jobs',
   openGraph: {

@@ -14,7 +14,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Truck Driver Jobs | CDL-A & CDL-B Openings Nationwide',
-  description: 'Urgent demand for truck drivers across the United States. Browse CDL-A, CDL-B, and no-CDL positions with top pay, sign-on bonuses, and home-time options. Companies are hiring now — apply today.',
+  description: 'CDL-A, CDL-B, and non-CDL driving positions with local, regional, and OTR schedules. Sign-on bonuses and home-time expectations shown by route and company.',
   keywords: 'truck driver jobs, CDL jobs, CDL-A jobs, truck driving jobs near me, local truck driver jobs, OTR truck driver jobs, no experience truck driver jobs',
   openGraph: {
     title: 'Truck Driver Jobs | CDL & Non-CDL Routes Available',

@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Social Studies Teacher Jobs Hiring for 2026-2027 | All 50 States',
-  description: 'Social studies teacher positions open now for the upcoming school year. $50K to $112K depending on district and experience. Shortage areas offering signing bonuses and loan forgiveness. Browse openings and apply.',
+  description: 'History, civics, and economics teacher positions in districts from $50K to $112K. Shortage designations mean loan forgiveness eligibility and faster interview timelines.',
   keywords: 'social studies teacher jobs, social studies teaching positions, history teacher jobs, civics teacher hiring, social studies teacher salary 2026, teaching jobs social studies',
   openGraph: {
     title: 'Social Studies Teacher Jobs | Positions Open for 2026-2027',

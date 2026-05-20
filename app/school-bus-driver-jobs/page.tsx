@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'School Bus Driver Jobs | Paid CDL Training & Benefits',
-  description: 'School bus driver jobs hiring immediately. National shortage means fast hiring, sign-on bonuses up to $5,000, and paid CDL training. Browse openings near you and apply today.',
+  description: 'National driver shortage, paid CDL training, and sign-on bonuses up to $5,000. School bus openings listed by district across every state.',
   keywords: 'school bus driver jobs, school bus driver hiring, CDL bus driver jobs, school bus driver salary, school bus driver near me, school district bus driver openings',
   openGraph: {
     title: 'School Bus Driver Jobs | Openings in Every State',

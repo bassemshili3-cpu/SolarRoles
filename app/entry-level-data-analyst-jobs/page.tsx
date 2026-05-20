@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Entry Level Data Analyst Jobs | Start Your Analytics Career',
-  description: 'Hundreds of entry level data analyst jobs hiring right now across the U.S. No experience required for many roles. Learn SQL, Excel, Python on the job. Browse openings and launch your data career today!',
+  description: 'Entry-level data analyst openings across the U.S. Learn SQL, Excel, and Python on the job — no prior analytics experience needed.',
   keywords: 'entry level data analyst jobs, junior data analyst jobs, data analyst no experience, entry level data analyst positions, beginner data analyst jobs, data analyst hiring now, data analyst internship',
   openGraph: {
     title: 'Entry Level Data Analyst Jobs Hiring Now | Start Your Data Career',

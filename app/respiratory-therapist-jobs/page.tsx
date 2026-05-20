@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Respiratory Therapist Jobs | RT Positions at Top Hospitals',
-  description: 'Respiratory therapist positions are critically needed at hospitals and healthcare facilities across the US! Browse 800+ immediate openings for RTs, CRTs, and RRTs. Competitive salaries, sign-on bonuses, and strong career growth. Apply today!',
+  description: 'CRT and RRT openings at hospital ICUs, emergency departments, and long-term acute care. Sign-on bonuses and pay rates noted per certification level.',
   keywords: 'respiratory therapist jobs, RT jobs, respiratory therapist hiring, CRT jobs, RRT jobs, respiratory care jobs, respiratory therapist positions, travel respiratory therapist jobs',
   openGraph: {
     title: 'Respiratory Therapist Jobs | CRT & RRT Openings Nationwide',

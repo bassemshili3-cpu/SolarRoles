@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Paraprofessional Jobs | School & Healthcare Para Roles',
-  description: 'Paraprofessional positions are urgently needed across the US! Browse 1,000+ openings in schools, special education, and healthcare settings. Competitive pay, meaningful work, and career growth. Apply today and make a difference in students\' lives!',
+  description: 'Schools and healthcare settings across the country have open paraprofessional roles. Pay, district details, and any certification requirements noted per posting.',
   keywords: 'paraprofessional jobs, paraprofessional positions, school paraprofessional jobs, special education paraprofessional, paraeducator jobs, teacher aide jobs, instructional assistant jobs, paraprofessional hiring',
   openGraph: {
     title: 'Paraprofessional Jobs | Special Ed & Behavioral Support',

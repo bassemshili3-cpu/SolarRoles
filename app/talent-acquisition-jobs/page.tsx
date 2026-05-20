@@ -14,7 +14,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Talent Acquisition Jobs | Recruiter & TA Specialist Roles',
-  description: 'Urgent demand for talent acquisition professionals across the United States. Browse open TA roles — from sourcing specialists to heads of recruiting — and apply today. Competitive salaries, remote options, and fast-moving pipelines.',
+  description: 'Sourcing specialist to VP of talent acquisition — full-funnel TA roles at startups, agencies, and enterprise companies. Remote-eligible and hybrid options noted.',
   keywords: 'talent acquisition jobs, talent acquisition specialist, talent acquisition manager, recruiting jobs, TA jobs, talent acquisition director, hiring now talent acquisition',
   openGraph: {
     title: 'Talent Acquisition Jobs | TA Specialist & Manager Roles',

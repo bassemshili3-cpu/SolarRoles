@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Preschool Jobs | Teacher, Assistant & Director Positions',
-  description: 'Find preschool jobs hiring now across the United States. Lead teacher, assistant, floater, and director positions in church, Montessori, public Pre-K, and private settings. Apply today.',
+  description: 'Lead teacher, assistant, floater, and director positions at church, Montessori, public Pre-K, and private preschool programs. CDA and associate degree paths welcome.',
   keywords: 'preschool jobs, preschool teacher jobs, preschool assistant jobs, preschool director jobs, daycare preschool teacher, Pre-K teacher jobs, Montessori preschool jobs, head start jobs',
   openGraph: {
     title: 'Preschool Jobs | Teaching Positions in Every Setting',

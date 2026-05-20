@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Speech-Language Pathologist Jobs | SLP Openings',
-  description: 'Language pathologist jobs open immediately in schools, hospitals, and private practice nationwide. 15% projected growth, median pay $95K+. Browse SLP openings and apply today.',
+  description: 'Speech-language pathologist openings in schools, hospitals, and private practice. 15% projected job growth and a median salary above $95K.',
   keywords: 'language pathologist jobs, speech language pathologist jobs, SLP jobs, speech therapist jobs, CCC-SLP positions, language pathologist hiring, speech pathology careers',
   openGraph: {
     title: 'Speech-Language Pathologist Jobs | SLP Openings Nationwide',

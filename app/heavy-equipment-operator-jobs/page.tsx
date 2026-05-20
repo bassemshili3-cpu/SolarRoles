@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Heavy Equipment Operator Jobs | Excavator & Crane Roles',
-  description: 'Discover thousands of heavy equipment operator jobs hiring immediately across the United States. Drive bulldozers, excavators, loaders and more with high-paying roles. CDL and union opportunities available. Apply in minutes and start your next construction career today!',
+  description: 'Excavator, bulldozer, and crane operator roles at construction sites and infrastructure projects. Union and non-union, with CDL requirements for each.',
   keywords: 'heavy equipment operator jobs, construction equipment operator jobs, heavy equipment operator hiring now, excavator operator jobs, bulldozer operator jobs, union heavy equipment jobs',
   openGraph: {
     title: 'Heavy Equipment Operator Jobs | Up to $85K+ Available',

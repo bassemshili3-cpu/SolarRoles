@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Physician Assistant Jobs | PA Openings in Every Specialty',
-  description: 'Find physician assistant jobs hiring now across the United States. PA positions in emergency medicine, surgery, dermatology, primary care, orthopedics, and more. New grad and experienced roles. Apply today.',
+  description: 'PA openings in emergency medicine, orthopedics, dermatology, surgery, and primary care. New grad and experienced PAs welcome — compensation and specialty shown.',
   keywords: 'physician assistant jobs, PA jobs, physician associate jobs, surgical PA jobs, emergency medicine PA, dermatology PA, primary care PA, new grad physician assistant, hospitalist PA jobs',
   openGraph: {
     title: 'Physician Assistant Jobs | PA Roles in Every Specialty',

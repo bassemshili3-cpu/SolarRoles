@@ -11,7 +11,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 
 export const metadata: Metadata = {
   title: 'Case Manager Jobs — Clinical, Social Work & Remote Openings Near You',
-  description: 'Browse case-manager-jobs in hospitals, managed care, behavioral health, and child welfare. Filter by license type, remote eligibility, and salary band — new listings posted daily.',
+  description: 'Case manager roles in hospitals, managed care, behavioral health, and child welfare. Filter by license type, salary, and remote eligibility.',
   keywords: 'case-manager-jobs, clinical case manager openings, remote case management, RN case manager hiring, LCSW case manager, utilization review careers, care coordinator positions',
   openGraph: {
     title: 'Case Manager Jobs: RN, LCSW & Non-Clinical Roles Hiring Now | Oh My Job',

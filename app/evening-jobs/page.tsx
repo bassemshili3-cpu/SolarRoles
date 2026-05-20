@@ -10,7 +10,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Evening Jobs | After-5pm & Night Shift Openings Near You',
-  description: 'Evening jobs are urgently available across the US! Browse 1,000+ immediate openings in retail, healthcare, food service, security, and more. Perfect for students, parents, and anyone seeking extra income after hours. Apply today and start earning this week!',
+  description: 'After-5pm openings in retail, healthcare, food service, and security — evening schedules built for students, parents, and second-income earners.',
   keywords: 'evening jobs, evening jobs near me, part time evening jobs, evening shift jobs, night jobs hiring now, evening work, jobs after 5pm, evening jobs hiring immediately',
   openGraph: {
     title: 'Evening Jobs | Retail, Healthcare & Food Service Shifts',

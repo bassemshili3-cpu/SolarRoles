@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Oil Rig Jobs | Offshore & Onshore Drilling Positions',
-  description: 'Oil and gas companies across the United States are urgently hiring for oil rig positions right now. Roughnecks, drillers, roustabouts, and engineers needed immediately. No experience required for entry-level roles. Top pay, rotational schedules, and full benefits. Apply before these positions are gone.',
+  description: 'Roughneck, driller, roustabout, and engineer roles on U.S. offshore and onshore rigs. Rotational schedules with accommodation provided — entry-level slots included.',
   keywords: 'oil rig jobs, oil rig hiring now, offshore oil rig jobs, onshore oil rig jobs, roughneck jobs, roustabout jobs, oil rig no experience, oil field jobs, drilling jobs',
   openGraph: {
     title: 'Oil Rig Jobs | Gulf Coast, Permian & Bakken Openings',

@@ -26,7 +26,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'City of Laredo Jobs | Municipal & Public Service Roles',
-  description: 'City of Laredo jobs are open now across multiple departments. Competitive Texas pay, full benefits, and a growing municipal workforce. Browse current openings and apply today.',
+  description: 'Laredo city positions in public safety, administration, utilities, and parks. Texas pension eligibility and bilingual roles listed across multiple departments.',
   keywords: 'jobs at city of laredo, city of laredo jobs, laredo tx city jobs, city of laredo hiring, laredo municipal jobs, laredo texas government jobs, city of laredo careers',
   openGraph: {
     title: 'City of Laredo Jobs | Municipal Openings in Texas',

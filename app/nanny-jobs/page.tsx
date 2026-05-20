@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Nanny Jobs | Full-Time, Part-Time & Live-In Positions',
-  description: 'Discover thousands of nanny jobs hiring immediately across the United States. Flexible full-time, part-time and live-in roles with great pay. Background-checked families actively hiring. Apply in minutes and start earning today!',
+  description: 'Full-time, part-time, and live-in nanny positions with background-checked families. Compensation ranges and household schedule described for each opening.',
   keywords: 'nanny jobs, nanny careers, babysitter jobs, live-in nanny jobs, part time nanny jobs, full time nanny jobs, hiring now, childcare jobs',
   openGraph: {
     title: 'Nanny Jobs | Trusted Families Seeking Caregivers',

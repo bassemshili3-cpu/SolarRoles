@@ -10,7 +10,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Chick-fil-A Careers — Team Member, Kitchen, Shift Lead & Manager Openings',
-  description: 'Browse chick-fil-a careers from front-counter to restaurant director. Filter openings by zip code, shift preference, and pay — every listing includes the Operator\'s location details.',
+  description: 'Chick-fil-A posts front counter, kitchen, and director roles by Operator location. Filter by zip code, shift preference, and pay range.',
   keywords: 'chick-fil-a careers, chick-fil-a team member jobs, chick-fil-a shift leader, chick-fil-a kitchen jobs, chick-fil-a hiring near me, chick-fil-a manager salary, chick-fil-a apply',
   openGraph: {
     title: 'Chick-fil-A Careers: Front Counter to Director Roles | Oh My Job',

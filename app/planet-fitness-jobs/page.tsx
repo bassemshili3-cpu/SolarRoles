@@ -24,7 +24,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Planet Fitness Jobs | Trainer, Front Desk & Manager Roles',
   description:
-    'Browse Planet Fitness job openings hiring immediately near you. Front desk, personal trainer, and fitness staff positions available. Flexible hours, free membership perks, and real growth opportunities. Apply in minutes!',
+    'Planet Fitness front desk, personal trainer, and team lead openings nationwide. Free gym membership included — flexible scheduling and promotion from within common.',
   keywords:
     'planet fitness jobs, planet fitness hiring, planet fitness careers, planet fitness front desk jobs, planet fitness personal trainer jobs, fitness jobs near me, gym jobs hiring now',
   openGraph: {

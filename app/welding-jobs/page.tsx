@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Welding Jobs | MIG, TIG & Structural Openings Near You',
-  description: 'Find welding jobs hiring immediately across the United States. MIG, TIG, stick, and structural welding positions at top manufacturers, shipyards, and construction firms. Competitive pay up to $35/hr and beyond. Apply in minutes and start your welding career today!',
+  description: 'MIG, TIG, stick, and pipe welding openings at manufacturers, shipyards, and construction sites. AWS certification improves earnings — pay shown by process type.',
   keywords: 'welding jobs, welding jobs near me, welder hiring now, MIG welder jobs, TIG welder jobs, structural welder jobs, pipe welder jobs, welding careers, entry level welding jobs',
   openGraph: {
     title: 'Welding Jobs | MIG, TIG & Pipe Positions Near You',

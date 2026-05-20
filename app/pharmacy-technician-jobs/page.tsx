@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Pharmacy Technician Jobs | Retail & Hospital Openings',
-  description: 'Thousands of pharmacy technician jobs are open right now across the United States. Retail, hospital, and compounding pharmacies are actively hiring. Competitive pay, benefits, and flexible shifts. Submit your application today before these positions are gone.',
+  description: 'Retail, hospital, and compounding pharmacy tech openings with part-time and full-time shifts. ExCPT or CPhT certification preferred — pay and advancement opportunities noted.',
   keywords: 'pharmacy technician jobs, pharmacy tech jobs, pharmacy technician hiring now, pharm tech jobs, hospital pharmacy technician, retail pharmacy technician jobs, pharmacy technician positions',
   openGraph: {
     title: 'Pharmacy Technician Jobs | Retail, Hospital & Specialty',

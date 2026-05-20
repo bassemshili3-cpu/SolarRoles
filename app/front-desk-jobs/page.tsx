@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Front Desk Jobs | Receptionist & Admin Openings Near You',
-  description: 'Find front desk jobs hiring immediately across the United States. Receptionist, front desk agent, and administrative roles at hotels, clinics, gyms, and offices. Great pay, flexible hours, and no degree required for many positions. Apply in minutes and start this week!',
+  description: 'Receptionist and front desk roles at hotels, clinics, gyms, and offices. Hourly pay and available shifts shown with every listing.',
   keywords: 'front desk jobs, front desk jobs near me, front desk hiring now, receptionist jobs, front desk agent jobs, hotel front desk jobs, medical front desk jobs, front desk clerk jobs',
   openGraph: {
     title: 'Front Desk Jobs | Hotels, Clinics, Gyms & Offices',

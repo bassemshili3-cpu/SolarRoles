@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Jobs for 16 Year Olds | No Federal Hour Limits',
-  description: 'Find jobs for 16 year olds open right now near you. No federal hour limits at 16. Retail, food service, outdoor, and office roles with real pay. Browse by location and apply today.',
+  description: 'At 16, federal hour restrictions are lifted. Retail, food service, outdoor, and office jobs with real pay listed by location.',
   keywords: 'jobs for 16 year olds, jobs hiring at 16, teen jobs 16, part time jobs 16 year old, jobs near me 16 year old, first job 16, youth employment, summer jobs for 16 year olds',
   openGraph: {
     title: 'Jobs for 16 Year Olds | More Hours, More Roles at 16',

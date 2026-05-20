@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Hospital CNA Jobs | $19–$30/hr + Shift Differentials',
-  description: 'Certified nursing assistant jobs in hospitals hiring across every state. $19 to $30/hr with shift differentials. Hospitals pay more than nursing homes and fund your RN degree. Browse and apply today.',
+  description: 'Hospital CNA positions pay $19–$30/hr with shift differentials. Many employers fund RN education — openings sorted by state and unit.',
   keywords: 'certified nursing assistant jobs hospital, CNA hospital jobs, hospital CNA hiring, CNA jobs near me hospital, certified nursing assistant hospital positions 2026',
   openGraph: {
     title: 'Hospital CNA Jobs | Nationwide Openings',

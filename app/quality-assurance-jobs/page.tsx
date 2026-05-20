@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Quality Assurance Jobs | QA Engineer & Analyst Openings',
-  description: 'Quality assurance positions are critically needed across the US! Browse 1,000+ immediate openings in software, manufacturing, pharma, and food production. Competitive salaries, remote options, and strong career growth. Apply today!',
+  description: 'QA roles in software, manufacturing, pharma, and food production — over 1,000 openings with pay and remote work details included.',
   keywords: 'quality assurance jobs, QA jobs, quality assurance engineer jobs, software QA jobs, QA analyst jobs, quality control jobs, QA tester jobs, quality assurance hiring now',
   openGraph: {
     title: 'Quality Assurance Jobs | Software, Pharma & Manufacturing',

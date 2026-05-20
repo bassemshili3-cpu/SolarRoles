@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Patient Care Technician Jobs | PCT Roles in Hospitals & Clinics',
-  description: 'Discover thousands of Patient Care Technician jobs hiring immediately across the United States. High-demand hospital, clinic and long-term care roles with excellent pay and benefits. No experience needed for many entry-level positions. Apply in minutes and start your healthcare career today!',
+  description: 'PCT openings at hospitals, clinics, and long-term care — entry-level positions with on-the-job training and first-day benefit eligibility.',
   keywords: 'patient care technician jobs, pct jobs, patient care tech careers, hospital pct jobs, cna pct jobs, dialysis technician jobs, hiring now, healthcare jobs',
   openGraph: {
     title: 'Patient Care Technician Jobs | PCT Openings Nationwide',

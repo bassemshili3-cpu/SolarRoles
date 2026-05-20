@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Surgical Tech Jobs | OR Tech & Scrub Tech Openings',
-  description: 'Hundreds of surgical tech jobs hiring immediately in hospitals and surgical centers across the U.S. Competitive pay, sign on bonuses, and full benefits. Browse openings and start your operating room career now!',
+  description: 'Surgical tech positions in hospital ORs and outpatient centers. Sign-on bonuses and benefits included — sorted by region and experience level.',
   keywords: 'surgical tech jobs, surgical technologist jobs, surgical technician jobs, operating room tech jobs, scrub tech jobs, surgical tech hiring now, certified surgical technologist jobs',
   openGraph: {
     title: 'Surgical Tech Jobs | Hospital & Surgery Center Roles',

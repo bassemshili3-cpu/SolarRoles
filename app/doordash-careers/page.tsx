@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzunas
 export const metadata: Metadata = {
   title: 'DoorDash Careers | 1,000+ Delivery & Corporate Jobs',
-  description: 'DoorDash is urgently hiring nationwide! Explore 1000+ career opportunities as a Dasher, in corporate roles, engineering, operations & more. Flexible schedules, competitive pay. Apply today and start earning immediately!',
+  description: 'DoorDash fills Dasher, engineering, operations, and corporate roles across the country. Flexible delivery schedules and career-track positions sit side by side.',
   keywords: 'doordash careers, doordash jobs, dasher jobs, doordash hiring, work for doordash, doordash employment, doordash driver jobs, doordash corporate careers',
   openGraph: {
     title: 'DoorDash Careers | Dasher, Corporate & Engineering Roles',

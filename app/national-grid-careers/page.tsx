@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'National Grid Careers | Engineering & Operations Jobs',
-  description: 'National Grid is urgently hiring across the US! Explore 500+ career opportunities in electrical engineering, gas operations, field services, IT, and corporate roles. Competitive salaries, strong benefits, and union positions available. Apply today!',
+  description: 'Electrical engineers, gas operators, and field technicians at National Grid — union-eligible roles with salary and benefits listed by service region.',
   keywords: 'national grid careers, national grid jobs, national grid hiring, national grid employment, national grid engineer jobs, national grid lineman jobs, utility jobs national grid, national grid new york jobs',
   openGraph: {
     title: 'National Grid Careers | 500+ Energy Roles Available',

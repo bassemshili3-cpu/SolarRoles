@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'HVAC Jobs | Earn $60K+ as a Technician or Engineer',
-  description: 'Hundreds of HVAC jobs open immediately across the United States. High pay up to $60k+, benefits, paid training and fast hiring. No experience needed for many entry-level positions. Apply today and start your high-demand career!',
+  description: 'HVAC technician and installer roles paying up to $60K+. Apprentice-level positions include paid training — no prior experience required for many.',
   keywords: 'hvac jobs, hvac technician jobs, hvac careers, heating ventilation air conditioning jobs, hvac hiring now, hvac technician hiring',
   openGraph: {
     title: 'HVAC Jobs | High Pay & Benefits for Technicians',

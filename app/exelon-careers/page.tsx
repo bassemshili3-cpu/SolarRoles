@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Exelon Careers | Energy Engineering & Operations Jobs',
-  description: 'Discover 500+ Exelon careers hiring now. Join America\'s leading energy company with competitive salaries, excellent benefits, and growth opportunities. Engineers, technicians, and professionals needed. Apply today!',
+  description: 'Exelon posts engineering, grid operations, and corporate openings across its U.S. energy network. Union roles with competitive benefits and salary listed.',
   keywords: 'exelon careers, exelon jobs, exelon employment, energy jobs, utility careers, exelon hiring, power plant jobs, electrical engineer jobs exelon',
   openGraph: {
     title: "Exelon Careers | 500+ Positions at America's Top Utility",

@@ -22,7 +22,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Dog Walking Jobs | Flexible Pet Walker Openings Near You',
   description:
-    'Dog walking jobs are in urgent demand across the United States. Find flexible, well-paying positions near you today. No degree required. Start earning with dogs on your schedule. Apply in minutes!',
+    'Pet walkers wanted across the U.S. Independent contractors and employed walkers welcome — hourly pay and schedule varies by employer.',
   keywords:
     'dog walking jobs, dog walker jobs, dog walking jobs near me, pet walker jobs, dog walking employment, professional dog walker, dog walking gigs, dog walker hiring',
   openGraph: {

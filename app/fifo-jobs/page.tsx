@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'FIFO Jobs | Fly In Fly Out in Mining, Oil & Gas',
-  description: 'Hundreds of FIFO jobs available right now. Fly in fly out positions in mining, oil, gas and construction with top pay and rotation schedules. No experience required for some roles. Apply today before positions fill up.',
+  description: 'Fly-in fly-out positions in mining, oil, gas, and construction — rotation schedules, accommodation details, and pay rates included per role.',
   keywords: 'fifo jobs, fly in fly out jobs, fifo mining jobs, fifo work, fifo positions, fly in fly out mining, fifo oil and gas jobs, remote work fifo',
   openGraph: {
     title: 'FIFO Jobs | Top-Paying Rotational Positions',

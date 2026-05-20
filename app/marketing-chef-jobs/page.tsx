@@ -28,7 +28,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Marketing Chef Jobs | Culinary & Brand Roles',
   description:
-    'Immediate openings for marketing chefs across the U.S. — CPG brands, foodservice companies, and restaurant groups are hiring now. Browse demo chef, test kitchen, and culinary brand ambassador roles. Apply today.',
+    'CPG brands, foodservice companies, and restaurant groups need marketing chefs for demo cooking, test kitchen, and culinary brand strategy work.',
   keywords:
     'marketing chef jobs, marketing chef hiring, demo chef jobs, culinary brand ambassador, test kitchen chef, active marketing chef, foodservice marketing chef, culinary marketing jobs',
   openGraph: {

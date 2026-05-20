@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Housekeeping Jobs Near You | Hotels, Hospitals & Homes',
-  description: 'Housekeeping jobs are urgently needed near you! Browse 500+ immediate openings at hotels, resorts, hospitals & private homes. Competitive pay, flexible shifts, no degree required. Start your housekeeping career today!',
+  description: 'Hotel, resort, hospital, and private household housekeeping roles with no degree required. Hourly rates and morning or evening shift options included.',
   keywords: 'housekeeping jobs near me, housekeeping jobs, hotel housekeeping jobs, housekeeper hiring now, housekeeping positions near you, maid jobs near me, housekeeping employment',
   openGraph: {
     title: 'Housekeeping Jobs | Competitive Pay & Flexible Shifts',

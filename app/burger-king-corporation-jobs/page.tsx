@@ -11,7 +11,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 
 export const metadata: Metadata = {
   title: 'Burger King Corporation Jobs — Open Roles From Crew to GM Near You',
-  description: 'Browse Burger King Corporation Jobs posted this week. Filter crew, kitchen, shift-lead, and management openings by zip code, pay range, and schedule — apply in minutes.',
+  description: 'Burger King is filling crew, kitchen, shift lead, and management roles. Filter live openings by zip code, pay, and schedule.',
   keywords: 'Burger King Corporation Jobs, BK crew member hiring, Burger King shift lead, QSR careers, fast food manager jobs, Burger King apply online, flame-grill jobs',
   openGraph: {
     title: 'Burger King Corporation Jobs: Crew to Management — All Shifts | Oh My Job',

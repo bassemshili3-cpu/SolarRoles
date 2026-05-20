@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'HR Jobs | Human Resources, Talent & People Ops Roles',
-  description: 'Find HR jobs hiring now across the United States. HR Generalist, HRBP, Talent Acquisition, People Operations, Compensation, and HRIS roles in companies of every size. Apply today.',
+  description: 'HR Generalist, HRBP, Compensation, and HRIS roles at companies of every size. Specialty, seniority, and remote work options shown per opening.',
   keywords: 'hr jobs, human resources jobs, hr generalist jobs, talent acquisition jobs, people operations jobs, hrbp jobs, hr business partner jobs, compensation analyst jobs, hris jobs',
   openGraph: {
     title: 'HR Jobs | HR Generalist, HRBP & People Ops Positions',

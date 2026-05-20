@@ -22,7 +22,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Weekend Jobs Near You | Saturday & Sunday Shifts',
   description:
-    'Hundreds of weekend jobs are available right now across the United States. Earn extra income on your days off with flexible Saturday and Sunday shifts. No experience required for many roles. Apply today!',
+    'Saturday and Sunday shifts in retail, food service, healthcare, and delivery — extra income without sacrificing weekday hours or commitments.',
   keywords:
     'weekend jobs, weekend jobs near me, Saturday Sunday jobs, part time weekend jobs, weekend work, weekend employment, jobs on weekends, weekend shifts hiring',
   openGraph: {

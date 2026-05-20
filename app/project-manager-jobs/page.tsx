@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Project Manager Jobs | PM Positions in Every Industry',
-  description: 'Companies across the United States are urgently hiring project managers right now. IT, construction, healthcare, and finance PM roles available with six-figure salaries and remote options. PMP certification preferred but not always required. Apply today before these positions are filled.',
+  description: 'IT, construction, healthcare, and finance PM roles with remote flexibility and six-figure earning potential. PMP helpful but employers often hire without it.',
   keywords: 'project manager jobs, project manager hiring now, PM jobs, PMP jobs, IT project manager jobs, construction project manager, remote project manager jobs, senior project manager positions',
   openGraph: {
     title: 'Project Manager Jobs | IT, Construction & Healthcare PMs',

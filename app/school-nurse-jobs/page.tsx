@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'School Nurse Jobs | RN & LPN Positions in Schools',
-  description: 'Discover 500+ school nurse jobs hiring immediately across the U.S. Enjoy summers off, school schedules, and competitive benefits. RNs and LPNs needed. No nights or weekends. Apply today!',
+  description: 'School district nurse openings for RNs and LPNs — daytime hours, school calendar schedule, and strong benefits with no evening or weekend shifts.',
   keywords: 'school nurse jobs, school nurse positions, school nursing careers, registered nurse school jobs, LPN school nurse, school health nurse, pediatric school nurse',
   openGraph: {
     title: 'School Nurse Jobs | Immediate Openings Available',

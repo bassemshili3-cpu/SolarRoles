@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'EKG Technician Jobs | Earn $67K+ as a Cardiac Tech',
-  description: 'Hundreds of EKG technician jobs open immediately across the United States. High pay up to $67k+, benefits, paid training and fast hiring. No experience needed for many entry-level positions. Apply today and launch your healthcare career!',
+  description: 'EKG technician positions at hospitals and cardiology clinics, paying up to $67K. Paid training included — no prior clinical experience needed.',
   keywords: 'ekg technician jobs, ekg tech jobs, electrocardiogram technician jobs, cardiac monitor tech jobs, ekg technician hiring now, telemetry technician jobs',
   openGraph: {
     title: 'EKG Technician Jobs | $67K+ Cardiac Tech Positions',

@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Lineman Jobs | 21,800+ Openings for Electrical Linemen',
-  description: 'Lineman jobs hiring now across all 50 states. $70K to $130K+ with overtime. More linemen are retiring than entering the trade, and utilities are desperate. Browse positions and apply today.',
+  description: 'Utility lineman positions in all 50 states, paying $70K–$130K+ with overtime. High demand as veteran workers retire across the country.',
   keywords: 'lineman jobs, lineman jobs hiring, power lineman jobs, journeyman lineman jobs, apprentice lineman, electrical lineman careers, lineworker jobs 2026',
   openGraph: {
     title: 'Lineman Jobs | Power Line Work in All 50 States',

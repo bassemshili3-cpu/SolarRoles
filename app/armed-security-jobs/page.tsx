@@ -48,7 +48,7 @@ const parseOptionalNumber = (value: SearchValue): number | undefined => {
 export const metadata: Metadata = {
   title: 'Armed Security Jobs | Licensed Roles Hiring Nationwide',
   description:
-    'Search armed security jobs across the United States. Compare live openings, pay, licensing paths, and high priority roles in patrol, hospitals, access control, and executive protection.',
+    'Armed security roles at hospitals, campuses, and patrol sites — state permit required. Pay bands and licensing tier noted per job.',
   keywords:
     'armed security jobs, armed security officer jobs, armed security guard jobs, armed guard jobs, hospital armed security jobs, executive protection jobs',
   openGraph: {

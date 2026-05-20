@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Live Nation Jobs | Concerts, Events & Venue Careers',
-  description: 'Discover thousands of Live Nation jobs hiring immediately across the United States. Work in concerts, events, venue operations, marketing and more with one of the world’s biggest live entertainment companies. Competitive pay and exciting perks. Apply in minutes and join the show today!',
+  description: 'Concert ops, venue management, marketing, and ticketing at one of entertainment's biggest employers. Live Nation listings organized by city and department.',
   keywords: 'live nation jobs, live nation careers, live nation hiring now, concert promoter jobs, event production jobs, venue manager jobs, ticketmaster jobs, live events jobs',
   openGraph: {
     title: 'Live Nation Jobs | Entertainment Industry Openings',

@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'New Grad Nurse Jobs | Entry-Level RN Openings',
-  description: 'New grad nurse jobs hiring immediately across all 50 states. Residency programs, sign-on bonuses, and mentored positions for newly licensed RNs. No experience required. Apply today.',
+  description: 'Nurse residency programs, mentored med-surg placements, and direct-hire new grad RN openings — organized by specialty and health system size.',
   keywords: 'new grad nurse jobs, new graduate nurse positions, entry level RN jobs, nurse residency programs, new grad RN hiring, first nursing job, BSN new grad jobs',
   openGraph: {
     title: 'New Grad Nurse Jobs | RN Residency Programs',

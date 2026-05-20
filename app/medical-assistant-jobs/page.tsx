@@ -24,7 +24,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Medical Assistant Jobs | Clinical & Administrative Openings',
   description:
-    'Medical assistant jobs hiring immediately across the United States. Certified and entry-level openings at clinics, hospitals, and private practices. Competitive pay, great benefits, and real career growth. Apply now!',
+    'Certified and entry-level medical assistant openings at clinics, private practices, and health systems. Externship-to-hire paths common — prior experience helpful but rarely required.',
   keywords:
     'medical assistant jobs, medical assistant jobs near me, CMA jobs, certified medical assistant jobs, entry level medical assistant jobs, medical assistant hiring now, clinical medical assistant jobs, administrative medical assistant jobs',
   openGraph: {

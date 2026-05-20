@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Dignity Health Jobs Hiring Now | Clinical and Non-Clinical Positions Across the US',
-  description: 'Explore current Dignity Health jobs across hospitals, medical foundations, and care centers. Nursing, allied health, IT, and administrative roles available with competitive pay and benefits. Apply today.',
+  description: 'Dignity Health fills nursing, allied health, IT, and admin positions across hospitals and medical foundations. Browse by department and location.',
   keywords: 'dignity health jobs, dignity health careers, dignity health hiring, nurse jobs dignity health, hospital jobs dignity health, administrative jobs dignity health',
   openGraph: {
     title: 'Dignity Health Jobs Hiring Immediately | Clinical and Non-Clinical Roles',

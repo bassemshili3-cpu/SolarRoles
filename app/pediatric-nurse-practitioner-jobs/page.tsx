@@ -27,7 +27,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Pediatric Nurse Practitioner Jobs | PNP Openings',
   description:
-    'Pediatric nurse practitioner jobs are critically understaffed across the U.S. Browse CPNP-PC and CPNP-AC openings in primary care, urgent care, hospitals, and telehealth. Sign-on bonuses available. Apply now.',
+    'CPNP-PC and CPNP-AC openings in pediatric primary care, urgent care, inpatient units, and telehealth — sign-on bonuses noted where available by employer.',
   keywords:
     'pediatric nurse practitioner jobs, PNP jobs, CPNP-PC jobs, CPNP-AC jobs, pediatric NP hiring, pediatric nurse practitioner positions, pediatric NP urgent care, pediatric nurse practitioner salary',
   openGraph: {

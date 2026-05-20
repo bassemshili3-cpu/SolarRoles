@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Summer Camp Counselor Jobs | 2026 Seasonal Positions',
-  description: 'Summer camp counselor jobs hiring now for 2026. Day camps, sleepaway camps, specialty programs. $300 to $1,500/week with housing included at residential camps. Apply before spots fill.',
+  description: 'Day, sleepaway, and specialty camp counselor positions for summer 2026 — $300 to $1,500/week with housing included at residential programs.',
   keywords: 'summer camp counselor jobs, camp counselor hiring, summer camp jobs, camp counselor salary, sleepaway camp jobs, day camp counselor, seasonal camp positions',
   openGraph: {
     title: 'Summer Camp Counselor Jobs | Camps Urgently Hiring for 2026',

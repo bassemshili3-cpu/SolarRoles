@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Part Time Jobs Near You | Flexible Hours & Great Pay',
-  description: 'Find part time jobs hiring immediately across the United States. Flexible schedules, competitive pay, and openings in retail, food service, healthcare, and more. No degree required for many roles. Apply in minutes and start earning this week!',
+  description: 'Retail, food service, healthcare, and delivery openings with flexible hours — each part-time listing shows pay and the available shift windows.',
   keywords: 'part time jobs, part time jobs near me, part time hiring now, part time work, flexible part time jobs, part time jobs for students, weekend part time jobs, evening part time jobs',
   openGraph: {
     title: 'Part Time Jobs | Retail, Healthcare & Remote Roles',

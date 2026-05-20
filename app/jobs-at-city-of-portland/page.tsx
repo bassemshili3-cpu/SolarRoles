@@ -27,7 +27,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'City of Portland Jobs | Municipal & Government Openings',
-  description: 'Immediate openings for City of Portland jobs. Competitive pay, full benefits, union-backed positions across all bureaus. Portland municipal roles are filling fast — search and apply now.',
+  description: 'Portland bureau roles spanning transportation, water, housing, and parks. Union-backed positions with Oregon PERS retirement and strong salary transparency.',
   keywords: 'jobs at city of portland, city of portland jobs, portland municipal jobs, city of portland hiring, portland government jobs, city of portland careers, portland oregon city jobs',
   openGraph: {
     title: 'City of Portland Jobs | Bureau Positions & Public Roles',

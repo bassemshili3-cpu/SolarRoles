@@ -26,7 +26,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Customer Service Jobs Hiring Now | Apply Today',
   description:
-    'Browse customer service jobs open right now across the US. Remote, hybrid, and on-site roles at companies hiring immediately. Entry-level to senior positions. Filter by pay, location, and shift type.',
+    'Remote, hybrid, and on-site customer service roles across the U.S. Entry-level to senior positions — filter by pay, location, and schedule.',
   keywords:
     'customer service jobs, customer service jobs near me, customer service representative jobs, remote customer service jobs, call center jobs, customer support jobs hiring now, entry level customer service jobs',
   openGraph: {

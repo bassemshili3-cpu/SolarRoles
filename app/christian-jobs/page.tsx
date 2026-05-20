@@ -27,7 +27,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Christian Jobs Hiring Now | Faith-Based Positions Open Across the U.S.',
   description:
-    'Hundreds of Christian jobs are open right now — from ministry and chaplaincy to education, healthcare, nonprofit, and media. Find a role where your faith and your career align. Browse and apply today.',
+    'Ministry, chaplaincy, faith-based nonprofits, and mission-aligned healthcare — Christian jobs where your values shape the work you do every day.',
   keywords:
     'christian jobs, faith-based jobs, ministry jobs, christian nonprofit jobs, christian school jobs, chaplain jobs, christian organization hiring, christian employer jobs',
   openGraph: {

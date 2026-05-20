@@ -23,7 +23,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'CNA Jobs | Certified Nursing Assistant Openings Near You',
-  description: 'Browse CNA jobs open right now in all 50 states. Hospitals, nursing homes, and home health agencies are actively hiring Certified Nursing Assistants. Filter by location, pay, and shift type.',
+  description: 'Certified Nursing Assistant openings in hospitals, nursing homes, and home health across all 50 states. Shift type and pay listed by location.',
   keywords: 'cna jobs, certified nursing assistant jobs, cna jobs near me, cna hiring now, cna positions, nursing assistant jobs, cna jobs hospital, cna jobs nursing home',
   openGraph: {
     title: 'CNA Jobs | Certified Nursing Assistant Openings',

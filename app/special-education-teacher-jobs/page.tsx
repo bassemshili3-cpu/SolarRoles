@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Special Education Teacher Jobs | SPED Openings in 45 States',
-  description: 'Special education teacher jobs hiring urgently in districts nationwide. 39+ states report active shortages. Competitive salaries, sign-on bonuses, loan forgiveness. Browse and apply today.',
+  description: 'SPED teacher openings in self-contained, resource, and inclusion classrooms across 39+ shortage states. IEP experience valued — sign-on bonuses and relocation packages available.',
   keywords: 'special education teacher jobs, sped teacher jobs, special ed teacher hiring, special education positions, IEP teacher jobs, resource room teacher openings, special education career',
   openGraph: {
     title: 'Special Education Teacher Jobs | Openings in 45 States',

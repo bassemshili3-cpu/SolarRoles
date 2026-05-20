@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Patient Transporter Jobs | Hospital & Healthcare Roles',
-  description: 'Patient transporter positions are urgently needed at hospitals and healthcare facilities across the US! Browse 800+ immediate openings. No degree required, paid training available, and benefits from day one. Apply today and start your healthcare career!',
+  description: 'Hospital patient transporter roles with paid training, first-day benefits, and no college requirement. Over 800 current openings across the country.',
   keywords: 'patient transporter jobs, patient transport jobs, hospital transporter jobs, patient transporter hiring, healthcare transporter jobs, patient escort jobs, hospital porter jobs, patient transporter positions',
   openGraph: {
     title: 'Patient Transporter Jobs | 800+ Hospital Openings',

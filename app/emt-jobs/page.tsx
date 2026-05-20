@@ -22,7 +22,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'EMT Jobs | Emergency Medical Technician Openings',
   description:
-    'EMT jobs are critically needed across the United States right now. Browse hundreds of Emergency Medical Technician openings with competitive pay, benefits, and career growth. Apply today and make a difference.',
+    'EMT positions in urban EMS, rural fire, and private transport. Certification paths, pay bands, and advancement opportunities listed by state.',
   keywords:
     'EMT jobs, emergency medical technician jobs, EMT hiring, EMT jobs near me, EMT careers, paramedic jobs, EMT positions, emergency medical services jobs',
   openGraph: {

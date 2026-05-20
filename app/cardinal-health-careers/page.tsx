@@ -11,7 +11,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 
 export const metadata: Metadata = {
   title: 'Cardinal Health Careers — Warehouse, Pharmacy, IT & Corporate Openings',
-  description: 'Search cardinal-health-careers across distribution, clinical pharmacy, technology, and corporate functions. Filter by location, pay band, and work model — remote, hybrid, or on-site.',
+  description: 'Cardinal Health hires across distribution, clinical pharmacy, IT, and corporate functions. Filter openings by location and remote or hybrid preference.',
   keywords: 'cardinal-health-careers, Cardinal Health warehouse jobs, pharmacy technician Cardinal Health, healthcare supply chain careers, Cardinal Health remote jobs, Dublin Ohio Cardinal Health',
   openGraph: {
     title: 'Cardinal Health Careers: Distribution to Director-Level Roles | Oh My Job',

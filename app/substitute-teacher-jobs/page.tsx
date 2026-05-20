@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Substitute Teacher Jobs | Flexible Daily Teaching Openings',
-  description: 'Discover thousands of substitute teacher jobs hiring immediately across the United States. Flexible schedules, pay up to $200 per day, many positions need no prior experience. Apply in minutes and make a real difference in classrooms!',
+  description: 'Day-to-day and long-term substitute teacher assignments paying up to $200/day. Most districts need a bachelor\'s degree — classroom experience not always required.',
   keywords: 'substitute teacher jobs, substitute teaching jobs, substitute teacher positions, daily substitute teacher jobs, long term substitute teacher jobs',
   openGraph: {
     title: 'Substitute Teacher Jobs | Earn Up to $200 Per Day',

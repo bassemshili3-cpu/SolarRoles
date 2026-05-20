@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Manufacturing Jobs Hiring Now | Production, Assembly, CNC & Quality Roles Across the US',
-  description: 'Find manufacturing jobs hiring now across the United States. Production operator, CNC machinist, assembler, quality inspector, and maintenance technician roles. Day, swing, and night shifts available. Apply today.',
+  description: 'CNC machinists, production operators, assemblers, and quality inspectors wanted across U.S. plants. Day, swing, and night shifts with pay details listed.',
   keywords: 'manufacturing jobs, production jobs, factory jobs, CNC machinist jobs, assembly jobs, quality inspector jobs, maintenance technician jobs, manufacturing engineer jobs, warehouse manufacturing',
   openGraph: {
     title: 'Manufacturing Jobs Hiring Now | Production & Skilled Trades Across the US',

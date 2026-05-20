@@ -10,7 +10,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Press Association Jobs | Reporter & Editor Openings',
-  description: 'Discover hundreds of press association jobs hiring immediately across the United States. Median salary $60,280. Flexible reporting, editing and media roles available now. Apply in minutes and launch your journalism career!',
+  description: 'Reporter, editor, and media roles at press associations nationwide — median salary $60,280. Listings organized by specialty and publication type.',
   keywords: 'press association jobs, press association reporter jobs, press association editor positions, journalism association jobs, media association careers',
   openGraph: {
     title: 'Press Association Jobs | Journalism Roles, Median $60K',

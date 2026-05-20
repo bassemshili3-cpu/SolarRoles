@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Honda Careers | Engineering, Manufacturing & Corporate Roles',
-  description: 'Discover 500+ Honda careers hiring now across the U.S. Join a top automotive manufacturer with competitive pay, excellent benefits, and career growth. Engineers, technicians, and professionals needed. Apply now!',
+  description: 'Honda hires engineers, production technicians, and corporate professionals across its U.S. manufacturing and R&D facilities. Browse by role and location.',
   keywords: 'honda careers, honda jobs, honda employment, automotive jobs, honda manufacturing jobs, honda engineering jobs, american honda jobs, honda dealership jobs',
   openGraph: {
     title: 'Honda Careers | 500+ Openings Across North America',

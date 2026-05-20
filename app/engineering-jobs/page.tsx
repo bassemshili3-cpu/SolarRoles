@@ -10,7 +10,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Engineering Jobs | Top Openings for Engineers in 2026',
-  description: 'Discover thousands of engineering jobs hiring immediately across the United States. High-paying software, mechanical, civil, electrical and more roles available now. No experience required for entry-level positions. Apply in minutes and land your next role today!',
+  description: 'Software, mechanical, civil, and electrical engineering roles — from entry-level up to principal and staff engineer. Salary and location with every opening.',
   keywords: 'engineering jobs, engineering careers, software engineering jobs, mechanical engineering jobs, civil engineering jobs, electrical engineering jobs, hiring now, high paying engineering jobs',
   openGraph: {
     title: 'Engineering Jobs | Software, Civil & Mechanical Openings',

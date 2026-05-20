@@ -11,7 +11,7 @@ export const revalidate = 3600 // Cache ISR 1h — reduces Adzuna calls
 
 export const metadata: Metadata = {
   title: 'ART & Fertility Jobs: Find Your Next Role in Reproductive Medicine',
-  description: 'Explore top careers in Assisted Reproductive Technology (ART). With a massive shortage of embryologists, IVF specialists, and REI physicians, your skills are in higher demand than ever. Browse open roles today.',
+  description: 'IVF coordinators, embryologists, and REI physicians are in short supply at fertility clinics nationwide. Salary data and clinic details included.',
   keywords: 'ART jobs, fertility clinic careers, REI fellowship, embryologist jobs, IVF specialist, reproductive endocrinology, reproductive medicine careers',
   openGraph: {
     title: 'Careers in Assisted Reproductive Technology (ART)',

@@ -24,7 +24,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Electrician Jobs | Residential, Commercial & Industrial',
   description:
-    'Electrician jobs hiring immediately across the United States. Apprentice to master electrician openings at top contractors, construction firms, and industrial employers. Excellent pay and benefits. Apply now!',
+    'Apprentice to master electrician openings at contractors, construction firms, and industrial employers. Pay, union status, and licensing tier noted per listing.',
   keywords:
     'electrician jobs, electrician jobs near me, electrician hiring now, journeyman electrician jobs, master electrician jobs, apprentice electrician jobs, electrical contractor jobs, industrial electrician jobs',
   openGraph: {

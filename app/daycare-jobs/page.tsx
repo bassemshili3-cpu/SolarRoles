@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Daycare Jobs — Teacher, Assistant, Director & Before/After School Openings',
-  description: 'Search daycare jobs at licensed centers, Head Start programs, and private preschools. Filter by age group, credential level, and schedule — new listings posted from every US state daily.',
+  description: 'Daycare roles at licensed centers, Head Start programs, and private preschools. Filter by age group, credential level, and schedule preference.',
   keywords: 'daycare jobs, daycare teacher hiring, childcare assistant openings, daycare director salary, infant room jobs, preschool teacher positions, before after school counselor, CDA credential jobs',
   openGraph: {
     title: 'Daycare Jobs: Infant Room to Center Director Roles | Oh My Job',

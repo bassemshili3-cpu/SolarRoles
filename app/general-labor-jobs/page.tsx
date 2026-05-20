@@ -26,7 +26,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'General Labor Jobs | Construction, Warehouse & More',
   description:
-    'Hundreds of general labor jobs with immediate openings across the US. No degree required. Competitive pay from $17/hr. Construction, warehousing, manufacturing and more. Apply now and start fast.',
+    'Construction, warehousing, and manufacturing openings starting at $17/hr. No degree needed — most general labor positions train you on the job.',
   keywords:
     'general labor jobs, general labor jobs near me, general laborer hiring now, general labor positions, manual labor jobs, general labor work, laborer jobs no experience',
   openGraph: {

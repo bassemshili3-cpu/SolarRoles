@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Local Truck Driving Jobs | Home Daily CDL Routes',
-  description: 'Find local truck driving jobs hiring now. Home every night, day and night shifts, no overnight stays. CDL A and B routes within 50 to 150 mile radius. Apply today.',
+  description: 'Local truck driving routes within 150 miles — CDL A and B positions with home-daily schedules and no overnight stays required.',
   keywords: 'local truck driving jobs, local CDL jobs, home daily truck driving, local driver jobs, day cab driving jobs, regional truck driving, no overnight truck driving',
   openGraph: {
     title: 'Local Truck Driving Jobs | Home Daily CDL Routes',

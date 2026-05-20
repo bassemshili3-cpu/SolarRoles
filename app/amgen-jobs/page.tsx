@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Amgen Jobs | Careers in Biotechnology, Research & Clinical Operations',
-  description: 'Discover amgen jobs across research, clinical operations, manufacturing, engineering, and commercial roles. Join teams that impact patients and advance scientific innovation.',
+  description: 'Research, clinical, manufacturing, and commercial teams at Amgen shape how therapies reach patients worldwide. Open positions by site and function.',
   keywords: 'amgen jobs, amgen careers, biotech careers, research jobs amgen, clinical jobs amgen, biotechnology positions',
   openGraph: {
     title: 'Amgen Jobs | Biotechnology & Research Careers',

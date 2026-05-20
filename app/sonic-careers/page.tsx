@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Sonic Careers | Carhop, Cook & Manager Openings',
-  description: 'Discover 500+ Sonic Drive-In careers hiring immediately near you. Carhops, cooks, and managers needed. Flexible schedules, tips for carhops, and fun work environment. Apply in minutes!',
+  description: 'Sonic Drive-In posts carhop, cook, shift lead, and general manager openings by franchise location. Carhops earn tips on top of hourly pay.',
   keywords: 'sonic careers, sonic drive-in jobs, sonic hiring, work at sonic, sonic carhop jobs, sonic crew member, sonic manager jobs, sonic application',
   openGraph: {
     title: 'Sonic Careers | Immediate Openings Available',

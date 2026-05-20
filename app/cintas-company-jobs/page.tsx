@@ -10,7 +10,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Cintas Company Jobs — Route Driver, Sales, Production & Management Openings',
-  description: 'Search cintas company jobs across route service, field sales, plant production, and corporate support. Filter by location, pay range, and division — listings refreshed daily from 480+ US facilities.',
+  description: 'Cintas posts route service, field sales, plant production, and corporate roles from 480+ U.S. facilities. Filter by location and division.',
   keywords: 'cintas company jobs, cintas route driver hiring, cintas service sales rep, cintas production associate, cintas management trainee, cintas first aid specialist, cintas careers near me',
   openGraph: {
     title: 'Cintas Company Jobs: Route, Sales, Production & Corporate Roles | Oh My Job',

@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Childcare Jobs Hiring Now | Daycare, Preschool & Nanny Positions',
-  description: 'Childcare jobs open across every state. Daycare teachers $13 to $19/hr, preschool leads $17 to $25/hr, directors $45K to $75K. CDA holders earn more. Browse openings at centers, schools, and private families.',
+  description: 'Daycare teachers, preschool leads, and center directors — childcare roles in every state with salary ranges listed. CDA credentials earn more.',
   keywords: 'childcare jobs, childcare jobs near me, daycare jobs, preschool teacher jobs, childcare worker jobs, nanny jobs, childcare assistant jobs 2026',
   openGraph: {
     title: 'Childcare Jobs | Daycare, Preschool & Nanny Positions Hiring Now',

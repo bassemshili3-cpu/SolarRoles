@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'City of Grand Rapids Jobs | Municipal Positions Open',
-  description: 'City of Grand Rapids jobs hiring now. Police, fire, parks, public works, planning, and admin roles. Michigan pension, full benefits, and a cost of living that lets a city salary go further than you think.',
+  description: 'Grand Rapids city roles across fire, police, parks, and administration. Michigan pension and full benefits make the pay stretch further.',
   keywords: 'city of grand rapids jobs, grand rapids city jobs, grand rapids municipal jobs, grand rapids government jobs, city of grand rapids careers, grand rapids michigan city employment',
   openGraph: {
     title: 'City of Grand Rapids Jobs | Municipal Positions',

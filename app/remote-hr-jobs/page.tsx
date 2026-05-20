@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Remote HR Jobs | Work-From-Home HR & Recruiting Roles',
-  description: 'Hundreds of remote HR jobs hiring immediately. Work from home as a recruiter, HR generalist, benefits specialist and more. Full time and part time positions with top companies. Browse openings and apply now!',
+  description: 'Work-from-home HR roles spanning recruiting, generalist work, benefits administration, and people ops. Full-time and part-time across companies of every size.',
   keywords: 'remote hr jobs, work from home hr jobs, remote human resources jobs, remote recruiter jobs, remote hr generalist, virtual hr positions, remote hr coordinator, telecommute hr jobs',
   openGraph: {
     title: 'Remote HR Jobs | Generalist, Recruiter & Benefits Roles',

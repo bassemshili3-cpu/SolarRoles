@@ -12,7 +12,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Art Teacher Jobs | School, Studio & Creative Education',
   description:
-    'Explore art teacher jobs across the United States. Discover openings in schools, studios, museums, and community programs, with practical insight on certification, hiring expectations, and salary potential.',
+    'Art teacher positions in public schools, private studios, museums, and after-school programs. Certification requirements and salary ranges noted per state.',
   keywords:
     'art teacher jobs, art teacher positions, art education jobs, art instructor jobs, visual arts teacher, elementary art teacher, high school art teacher, museum art educator, studio art teacher',
   openGraph: {

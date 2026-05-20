@@ -11,7 +11,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 
 export const metadata: Metadata = {
   title: 'Barista Jobs | Cafés, Chains & Roastery Openings Near You',
-  description: 'Search barista-jobs at independent roasteries, drive-thru chains, and hotel cafés across every US state. Filter by pay, shift, and experience level — new listings added daily.',
+  description: 'Barista openings at independent roasteries, hotel cafés, and drive-thru chains. Filter by shift, pay, and your experience level.',
   keywords: 'barista-jobs, barista openings, coffee shop hiring, espresso bar careers, cafe employment, latte art jobs, morning shift barista, weekend barista positions',
   openGraph: {
     title: 'Barista Jobs: Fresh Openings at Cafés & Roasteries | Oh My Job',

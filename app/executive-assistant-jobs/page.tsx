@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Executive Assistant Jobs | EA Roles Supporting C-Suite',
-  description: 'Discover thousands of executive assistant jobs hiring immediately across the United States. Support CEOs and top executives with high-paying roles. Flexible options available. Apply in minutes and land your next position today!',
+  description: 'C-suite support roles with remote, hybrid, and in-office options. Salary ranges and travel expectations described for each opportunity.',
   keywords: 'executive assistant jobs, executive assistant careers, executive assistant hiring now, administrative assistant jobs, high paying executive assistant jobs, executive support roles',
   openGraph: {
     title: 'Executive Assistant Jobs | 5,000+ EA Positions Open',

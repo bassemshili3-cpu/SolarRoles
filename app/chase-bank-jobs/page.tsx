@@ -22,7 +22,7 @@ export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Chase Bank Jobs — Teller, Banker, Tech & Management Openings Near You',
   description:
-    'Search chase bank jobs in retail branches, wealth management, software engineering, and corporate operations. Filter by role, location, and salary — new listings refreshed daily.',
+    'Chase Bank fills roles in branch banking, wealth management, software engineering, and corporate operations. Filter by location and salary range.',
   keywords:
     'chase bank jobs, chase bank teller hiring, JPMorgan Chase careers, chase personal banker openings, chase bank software engineer, chase branch manager salary, chase bank apply online',
   openGraph: {

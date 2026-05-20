@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Healthcare Administration Jobs | Manager & Director Roles',
-  description: 'Discover thousands of healthcare administration jobs hiring immediately across the United States. Competitive salaries up to $117k+. Entry level and experienced roles available in hospitals, clinics and more. Start your high impact career today!',
+  description: 'Healthcare administration roles in hospitals and clinics, from entry-level coordinators to experienced directors. Salaries up to $117K with benefits.',
   keywords: 'healthcare administration jobs, healthcare admin jobs, medical administration jobs, health services manager positions, healthcare management careers, hospital administrator jobs',
   openGraph: {
     title: 'Healthcare Administration Jobs | Earn Up to $117K',

@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Allied Universal Jobs | Security & Specialized Roles',
-  description: 'Explore allied universal jobs currently open across the United States, including security officer, canine team roles, technology and event services. Discover diverse career paths and apply.',
+  description: 'Allied Universal staffs security officers, canine units, and event services personnel across thousands of U.S. locations. Shifts listed per opening.',
   keywords: 'allied universal jobs, allied universal careers, allied universal hiring, security jobs allied universal, allied universal canine careers, allied universal tech jobs',
   openGraph: {
     title: 'Allied Universal Jobs | Security & Professional Positions',

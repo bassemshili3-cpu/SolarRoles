@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Jobs for 15 Year Olds | Teen Positions Near You',
-  description: 'Find jobs for 15 year olds open right now across the US. Retail, food service, and flexible gigs with hours that fit around school. Browse by location and apply today.',
+  description: 'Jobs for 15-year-olds in retail, food service, and flexible gigs. School-safe hours, honest pay, and age-appropriate work conditions listed by state.',
   keywords: 'jobs for 15 year olds, jobs hiring at 15, teen jobs, part time jobs for 15 year olds, summer jobs for 15 year olds, jobs for teens',
   openGraph: {
     title: 'Jobs for 15 Year Olds | Retail, Food & Outdoor Roles',
