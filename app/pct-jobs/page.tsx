@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Patient Care Technician Jobs Needed Right Now | Apply Today',
+  title: 'Patient Care Technician Jobs | PCT Roles in Hospitals & Clinics',
   description: 'Discover thousands of Patient Care Technician jobs hiring immediately across the United States. High-demand hospital, clinic and long-term care roles with excellent pay and benefits. No experience needed for many entry-level positions. Apply in minutes and start your healthcare career today!',
   keywords: 'patient care technician jobs, pct jobs, patient care tech careers, hospital pct jobs, cna pct jobs, dialysis technician jobs, hiring now, healthcare jobs',
   openGraph: {
-    title: 'Urgent Patient Care Technician Jobs Hiring Now | Start Today',
+    title: 'Patient Care Technician Jobs | PCT Openings Nationwide',
     description: 'Explore thousands of Patient Care Technician positions available right now in the US. Hospitals and clinics actively hiring. Competitive salaries and immediate start dates. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Patient Care Technician Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Patient Care Technician Jobs | Entry-Level Healthcare',
     description: 'Ready to start a rewarding healthcare career? Thousands of Patient Care Technician jobs available immediately. Apply now!',
   },
   alternates: {

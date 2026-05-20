@@ -20,20 +20,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Weekend Jobs Hiring Now | Immediate Openings Near You',
+  title: 'Weekend Jobs Near You | Saturday & Sunday Shifts',
   description:
     'Hundreds of weekend jobs are available right now across the United States. Earn extra income on your days off with flexible Saturday and Sunday shifts. No experience required for many roles. Apply today!',
   keywords:
     'weekend jobs, weekend jobs near me, Saturday Sunday jobs, part time weekend jobs, weekend work, weekend employment, jobs on weekends, weekend shifts hiring',
   openGraph: {
-    title: 'Weekend Jobs Available Now | Urgently Hiring Across the US',
+    title: 'Weekend Jobs | Retail, Healthcare & Gig Shifts',
     description:
       'Find flexible weekend jobs near you today. Retail, food service, healthcare, gig work, and more. Great pay, no long-term commitment required. Start earning this weekend.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Weekend Jobs | Immediate Openings Across the US',
+    title: 'Weekend Jobs | Flexible Weekend Shifts Near You',
     description:
       'Need extra income? Weekend jobs are hiring right now near you. Flexible shifts, competitive pay. Apply in minutes and work as soon as this weekend.',
   },

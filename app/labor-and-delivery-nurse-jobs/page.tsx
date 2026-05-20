@@ -23,20 +23,20 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent Demand for Labor and Delivery Nurses | L&D RN Jobs Hiring Now',
+  title: 'Labor & Delivery Nurse Jobs | L&D RN Positions',
   description:
     'Hospitals across the US urgently need labor and delivery nurses. Staff and travel L&D RN positions available now. Competitive pay from $75K/yr, sign-on bonuses, flexible scheduling. Apply today.',
   keywords:
     'labor and delivery nurse jobs, L&D nurse jobs, labor and delivery RN jobs, L&D nurse hiring now, labor delivery nurse positions, OB nurse jobs, maternity nurse jobs',
   openGraph: {
-    title: 'Urgent: Labor and Delivery Nurse Jobs Hiring Now | Staff & Travel',
+    title: 'Labor & Delivery Nurse Jobs | Staff & Travel L&D Roles',
     description:
       'L&D RN positions with immediate openings across the US. Staff and travel roles, competitive pay, sign-on bonuses. Apply now.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Now Hiring Labor and Delivery Nurses – Urgent Need Nationwide',
+    title: 'Labor & Delivery Nurse Jobs | $75K to $130K+',
     description:
       'Immediate openings for L&D RNs. Staff and travel positions available. Earn $75K to $130K+ depending on role and location. Apply today.',
   },

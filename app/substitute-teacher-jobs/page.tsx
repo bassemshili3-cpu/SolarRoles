@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Substitute Teacher Jobs Needed Right Now | Start Teaching Today',
+  title: 'Substitute Teacher Jobs | Flexible Daily Teaching Openings',
   description: 'Discover thousands of substitute teacher jobs hiring immediately across the United States. Flexible schedules, pay up to $200 per day, many positions need no prior experience. Apply in minutes and make a real difference in classrooms!',
   keywords: 'substitute teacher jobs, substitute teaching jobs, substitute teacher positions, daily substitute teacher jobs, long term substitute teacher jobs',
   openGraph: {
-    title: 'Substitute Teacher Jobs Hiring Now | Up to $200 Per Day',
+    title: 'Substitute Teacher Jobs | Earn Up to $200 Per Day',
     description: 'Flexible substitute teacher positions open immediately nationwide. Competitive pay and easy application process. Start your teaching career today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgent Substitute Teacher Jobs | Hiring Immediately',
+    title: 'Substitute Teacher Jobs | Flexible Schedules, $200/Day',
     description: 'Thousands of substitute teacher jobs available right now. Earn up to $200 daily with flexible schedules. Apply today and join classrooms across America!',
   },
   alternates: {

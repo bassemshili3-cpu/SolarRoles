@@ -10,11 +10,11 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent Demand for Lineman Professionals | 21,800+ Openings in 2026',
+  title: 'Lineman Jobs | 21,800+ Openings for Electrical Linemen',
   description: 'Lineman jobs hiring now across all 50 states. $70K to $130K+ with overtime. More linemen are retiring than entering the trade, and utilities are desperate. Browse positions and apply today.',
   keywords: 'lineman jobs, lineman jobs hiring, power lineman jobs, journeyman lineman jobs, apprentice lineman, electrical lineman careers, lineworker jobs 2026',
   openGraph: {
-    title: 'Lineman Jobs | Urgent Need Across All 50 States',
+    title: 'Lineman Jobs | Power Line Work in All 50 States',
     description: 'The trade is losing workers faster than it replaces them. Utilities are hiring aggressively. Browse openings now.',
     type: 'website',
   },

@@ -26,20 +26,20 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent: Marketing Chef Jobs Hiring Now | Culinary + Brand Roles Open Today',
+  title: 'Marketing Chef Jobs | Culinary & Brand Roles',
   description:
     'Immediate openings for marketing chefs across the U.S. — CPG brands, foodservice companies, and restaurant groups are hiring now. Browse demo chef, test kitchen, and culinary brand ambassador roles. Apply today.',
   keywords:
     'marketing chef jobs, marketing chef hiring, demo chef jobs, culinary brand ambassador, test kitchen chef, active marketing chef, foodservice marketing chef, culinary marketing jobs',
   openGraph: {
-    title: 'Urgent: Marketing Chef Positions Needed ASAP | Apply Now',
+    title: 'Marketing Chef Jobs | Demo Chef & Brand Ambassador Roles',
     description:
       'CPG brands and foodservice companies are urgently hiring marketing chefs. Browse open roles in demo cooking, brand strategy, and test kitchen development.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Now Hiring Marketing Chefs – Urgent Need Across the U.S.',
+    title: 'Marketing Chef Jobs | CPG, Foodservice & Test Kitchen',
     description:
       'Hundreds of marketing chef roles are open right now. From active demo chefs to corporate culinary strategists — find your fit and apply today.',
   },

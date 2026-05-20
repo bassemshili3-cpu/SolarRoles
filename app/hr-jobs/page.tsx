@@ -9,11 +9,11 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'HR Jobs Hiring Now | Human Resources, Talent Acquisition & People Ops Across the US',
+  title: 'HR Jobs | Human Resources, Talent & People Ops Roles',
   description: 'Find HR jobs hiring now across the United States. HR Generalist, HRBP, Talent Acquisition, People Operations, Compensation, and HRIS roles in companies of every size. Apply today.',
   keywords: 'hr jobs, human resources jobs, hr generalist jobs, talent acquisition jobs, people operations jobs, hrbp jobs, hr business partner jobs, compensation analyst jobs, hris jobs',
   openGraph: {
-    title: 'HR Jobs Hiring Now | Human Resources Positions Across the US',
+    title: 'HR Jobs | HR Generalist, HRBP & People Ops Positions',
     description: 'Browse open HR positions in talent acquisition, HRBP, people operations, compensation, employee relations, and HRIS across the United States.',
     type: 'website',
   },

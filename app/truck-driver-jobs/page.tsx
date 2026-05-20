@@ -13,17 +13,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Truck Driver Jobs Needed ASAP | CDL Positions Open Now Nationwide',
+  title: 'Truck Driver Jobs | CDL-A & CDL-B Openings Nationwide',
   description: 'Urgent demand for truck drivers across the United States. Browse CDL-A, CDL-B, and no-CDL positions with top pay, sign-on bonuses, and home-time options. Companies are hiring now — apply today.',
   keywords: 'truck driver jobs, CDL jobs, CDL-A jobs, truck driving jobs near me, local truck driver jobs, OTR truck driver jobs, no experience truck driver jobs',
   openGraph: {
-    title: 'Truck Driver Jobs | Urgent Openings Across the U.S.',
+    title: 'Truck Driver Jobs | CDL & Non-CDL Routes Available',
     description: 'Hundreds of truck driving positions hiring now. CDL-A, CDL-B, local and OTR routes available. Competitive pay and benefits.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Truck Driver Jobs Needed ASAP | Apply Today',
+    title: 'Truck Driver Jobs | Local & OTR CDL Positions',
     description: 'Companies urgently need truck drivers nationwide. Browse CDL and non-CDL roles, local and OTR. Top pay, sign-on bonuses, benefits.',
   },
   alternates: {

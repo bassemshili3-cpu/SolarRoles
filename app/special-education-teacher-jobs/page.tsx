@@ -10,11 +10,11 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Immediate Openings for Special Education Teacher Jobs | 45 States Reporting Shortages',
+  title: 'Special Education Teacher Jobs | SPED Openings in 45 States',
   description: 'Special education teacher jobs hiring urgently in districts nationwide. 39+ states report active shortages. Competitive salaries, sign-on bonuses, loan forgiveness. Browse and apply today.',
   keywords: 'special education teacher jobs, sped teacher jobs, special ed teacher hiring, special education positions, IEP teacher jobs, resource room teacher openings, special education career',
   openGraph: {
-    title: 'Special Education Teacher Jobs | Urgent Openings Nationwide',
+    title: 'Special Education Teacher Jobs | Openings in 45 States',
     description: 'Districts across 45 states urgently need special education teachers. Competitive pay, loan forgiveness, mentorship programs. Apply now.',
     type: 'website',
   },

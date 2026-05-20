@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Live Nation Jobs Needed Right Now | Apply Today',
+  title: 'Live Nation Jobs | Concerts, Events & Venue Careers',
   description: 'Discover thousands of Live Nation jobs hiring immediately across the United States. Work in concerts, events, venue operations, marketing and more with one of the world’s biggest live entertainment companies. Competitive pay and exciting perks. Apply in minutes and join the show today!',
   keywords: 'live nation jobs, live nation careers, live nation hiring now, concert promoter jobs, event production jobs, venue manager jobs, ticketmaster jobs, live events jobs',
   openGraph: {
-    title: 'Urgent Live Nation Jobs Hiring Now | Start Today',
+    title: 'Live Nation Jobs | Entertainment Industry Openings',
     description: 'Explore thousands of Live Nation positions available right now in the US. Top roles in concerts, events and entertainment. Competitive salaries and immediate start dates. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Live Nation Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Live Nation Jobs | Event Production & Venue Operations',
     description: 'Ready to work in live music and entertainment? Thousands of Live Nation jobs available immediately. Apply now!',
   },
   alternates: {

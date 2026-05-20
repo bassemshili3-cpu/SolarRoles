@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Healthcare Administration Jobs Needed Right Now | Apply Today',
+  title: 'Healthcare Administration Jobs | Manager & Director Roles',
   description: 'Discover thousands of healthcare administration jobs hiring immediately across the United States. Competitive salaries up to $117k+. Entry level and experienced roles available in hospitals, clinics and more. Start your high impact career today!',
   keywords: 'healthcare administration jobs, healthcare admin jobs, medical administration jobs, health services manager positions, healthcare management careers, hospital administrator jobs',
   openGraph: {
-    title: 'Healthcare Administration Jobs Hiring Now | Earn Up to $117k',
+    title: 'Healthcare Administration Jobs | Earn Up to $117K',
     description: 'Find urgent healthcare administration positions available today. High paying roles with excellent benefits and rapid career growth. Apply in minutes and join the booming healthcare management field.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgent Healthcare Administration Jobs | Hiring Immediately',
+    title: 'Healthcare Administration Jobs | Fast-Growing Field',
     description: 'Thousands of healthcare admin jobs open right now. Median salary $117,960. Fastest growing field according to BLS. Start applying today!',
   },
   alternates: {

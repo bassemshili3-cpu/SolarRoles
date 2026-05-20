@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Executive Assistant Jobs Needed Right Now | Apply Today',
+  title: 'Executive Assistant Jobs | EA Roles Supporting C-Suite',
   description: 'Discover thousands of executive assistant jobs hiring immediately across the United States. Support CEOs and top executives with high-paying roles. Flexible options available. Apply in minutes and land your next position today!',
   keywords: 'executive assistant jobs, executive assistant careers, executive assistant hiring now, administrative assistant jobs, high paying executive assistant jobs, executive support roles',
   openGraph: {
-    title: 'Urgent Executive Assistant Jobs Hiring Now | Start Today',
+    title: 'Executive Assistant Jobs | 5,000+ EA Positions Open',
     description: 'Explore 5,000+ executive assistant positions available right now in the US. Top companies actively hiring. Competitive salaries and immediate start dates. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Executive Assistant Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Executive Assistant Jobs | High-Paying EA Opportunities',
     description: 'Ready to support executives? Thousands of executive assistant jobs available immediately. High salaries and flexible opportunities. Apply now!',
   },
   alternates: {

@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzunas
 export const metadata: Metadata = {
-  title: 'Urgent: DoorDash Careers & Jobs Hiring Now | 1000+ Positions Available',
+  title: 'DoorDash Careers | 1,000+ Delivery & Corporate Jobs',
   description: 'DoorDash is urgently hiring nationwide! Explore 1000+ career opportunities as a Dasher, in corporate roles, engineering, operations & more. Flexible schedules, competitive pay. Apply today and start earning immediately!',
   keywords: 'doordash careers, doordash jobs, dasher jobs, doordash hiring, work for doordash, doordash employment, doordash driver jobs, doordash corporate careers',
   openGraph: {
-    title: 'Now Hiring: DoorDash Careers | Urgent Need for Dashers & Corporate Roles',
+    title: 'DoorDash Careers | Dasher, Corporate & Engineering Roles',
     description: 'Join DoorDash today! 1000+ urgent openings for Dashers, engineers, operations specialists & corporate teams. Flexible work, great pay, immediate start available.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DoorDash Careers | Hiring Immediately Nationwide',
+    title: 'DoorDash Careers | Delivery, Tech & Operations Jobs',
     description: 'DoorDash is urgently hiring! Find Dasher positions, corporate careers, and tech roles. Apply now and start your DoorDash journey today.',
   },
   alternates: {

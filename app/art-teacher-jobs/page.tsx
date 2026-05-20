@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Art Teacher Jobs Hiring Now | School, Studio and Creative Education Roles',
+  title: 'Art Teacher Jobs | School, Studio & Creative Education',
   description:
     'Explore art teacher jobs across the United States. Discover openings in schools, studios, museums, and community programs, with practical insight on certification, hiring expectations, and salary potential.',
   keywords:
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Art Teacher Jobs | Creative Teaching Roles Hiring Now',
+    title: 'Art Teacher Jobs | Creative Teaching Roles Nationwide',
     description:
       'Search art teacher jobs nationwide and discover what schools and arts organizations really value beyond basic credentials.',
   },

@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Now Hiring: National Grid Careers | Urgent Need for Energy Professionals',
+  title: 'National Grid Careers | Engineering & Operations Jobs',
   description: 'National Grid is urgently hiring across the US! Explore 500+ career opportunities in electrical engineering, gas operations, field services, IT, and corporate roles. Competitive salaries, strong benefits, and union positions available. Apply today!',
   keywords: 'national grid careers, national grid jobs, national grid hiring, national grid employment, national grid engineer jobs, national grid lineman jobs, utility jobs national grid, national grid new york jobs',
   openGraph: {
-    title: 'National Grid Careers | Urgently Hiring Energy Professionals Nationwide',
+    title: 'National Grid Careers | 500+ Energy Roles Available',
     description: 'Join National Grid today! Urgent openings for engineers, field technicians, gas operators, and corporate professionals. Excellent pay, union options, and career growth. Apply now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'National Grid Careers | Hiring Immediately',
+    title: 'National Grid Careers | Engineering, Field & Corporate',
     description: 'National Grid urgently needs energy professionals. Find engineering, operations, field service, and corporate roles. Strong salaries and benefits. Apply today!',
   },
   alternates: {

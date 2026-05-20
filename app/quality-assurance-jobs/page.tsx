@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Quality Assurance Jobs Needed ASAP | QA Professionals Urgently Hiring',
+  title: 'Quality Assurance Jobs | QA Engineer & Analyst Openings',
   description: 'Quality assurance positions are critically needed across the US! Browse 1,000+ immediate openings in software, manufacturing, pharma, and food production. Competitive salaries, remote options, and strong career growth. Apply today!',
   keywords: 'quality assurance jobs, QA jobs, quality assurance engineer jobs, software QA jobs, QA analyst jobs, quality control jobs, QA tester jobs, quality assurance hiring now',
   openGraph: {
-    title: 'Quality Assurance Jobs Needed ASAP | Urgent QA Openings Nationwide',
+    title: 'Quality Assurance Jobs | Software, Pharma & Manufacturing',
     description: 'QA professionals are urgently needed across software, manufacturing, pharma, and food industries. 1,000+ openings with competitive pay and remote options. Apply now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quality Assurance Jobs | Urgently Hiring Nationwide',
+    title: 'QA Jobs | 1,000+ Openings in Every Industry',
     description: 'Urgent demand for QA professionals across the US. Software, manufacturing, pharma, and more. Find your role and apply today.',
   },
   alternates: {

@@ -9,17 +9,17 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Evening Jobs Hiring Now | Immediate Openings for Night Shift Workers',
+  title: 'Evening Jobs | After-5pm & Night Shift Openings Near You',
   description: 'Evening jobs are urgently available across the US! Browse 1,000+ immediate openings in retail, healthcare, food service, security, and more. Perfect for students, parents, and anyone seeking extra income after hours. Apply today and start earning this week!',
   keywords: 'evening jobs, evening jobs near me, part time evening jobs, evening shift jobs, night jobs hiring now, evening work, jobs after 5pm, evening jobs hiring immediately',
   openGraph: {
-    title: 'Evening Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Evening Jobs | Retail, Healthcare & Food Service Shifts',
     description: 'Find your perfect evening job today. 1,000+ urgent openings in healthcare, retail, food service, and more. Flexible hours after 5pm, competitive pay, immediate start. Apply now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Evening Jobs | Urgently Hiring Nationwide',
+    title: 'Evening Jobs | Flexible Hours After 5pm Near You',
     description: 'Urgent demand for evening workers across the US. Find part time and full time roles starting after 5pm. Great pay, flexible schedules, immediate openings.',
   },
   alternates: {

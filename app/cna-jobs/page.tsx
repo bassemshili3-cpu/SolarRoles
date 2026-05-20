@@ -22,11 +22,11 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'CNA Jobs Hiring Now | Find Certified Nursing Assistant Openings Near You',
+  title: 'CNA Jobs | Certified Nursing Assistant Openings Near You',
   description: 'Browse CNA jobs open right now in all 50 states. Hospitals, nursing homes, and home health agencies are actively hiring Certified Nursing Assistants. Filter by location, pay, and shift type.',
   keywords: 'cna jobs, certified nursing assistant jobs, cna jobs near me, cna hiring now, cna positions, nursing assistant jobs, cna jobs hospital, cna jobs nursing home',
   openGraph: {
-    title: 'CNA Jobs Hiring Now | Certified Nursing Assistant Openings',
+    title: 'CNA Jobs | Certified Nursing Assistant Openings',
     description: 'Certified Nursing Assistants are needed across the country. Search CNA positions by state, salary, and facility type.',
     type: 'website',
   },

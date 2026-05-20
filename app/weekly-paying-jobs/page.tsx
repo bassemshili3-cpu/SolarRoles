@@ -9,7 +9,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Weekly Paying Jobs Hiring Now | Get Paid Every Week Starting Immediately',
+  title: 'Weekly Paying Jobs | Get Your Paycheck Every Friday',
   description: 'Find 1,000+ jobs that pay weekly near you. Get your paycheck every Friday with positions in warehousing, construction, healthcare, delivery, and more. No waiting two weeks. Apply today and start earning fast!',
   keywords: 'weekly paying jobs, jobs that pay weekly, weekly pay jobs hiring now, get paid weekly, jobs with weekly paycheck, weekly pay near me, jobs that pay every week',
   openGraph: {

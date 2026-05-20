@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Jobs for 14 Year Olds Hiring Now | Teen-Friendly Positions Near You',
+  title: 'Jobs for 14 Year Olds | Teen-Friendly Positions Near You',
   description: 'Find jobs for 14 year olds open right now. Legal, safe positions with flexible hours that work around school. No experience needed. Browse by location and apply today.',
   keywords: 'jobs for 14 year olds, jobs hiring at 14, teen jobs, first job for 14 year old, part time jobs for 14 year olds, summer jobs for 14 year olds',
   openGraph: {

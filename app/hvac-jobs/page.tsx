@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent HVAC Jobs Hiring Now | Earn $60k+ Starting Today',
+  title: 'HVAC Jobs | Earn $60K+ as a Technician or Engineer',
   description: 'Hundreds of HVAC jobs open immediately across the United States. High pay up to $60k+, benefits, paid training and fast hiring. No experience needed for many entry-level positions. Apply today and start your high-demand career!',
   keywords: 'hvac jobs, hvac technician jobs, hvac careers, heating ventilation air conditioning jobs, hvac hiring now, hvac technician hiring',
   openGraph: {
-    title: 'HVAC Jobs Hiring Immediately | High Pay & Benefits',
+    title: 'HVAC Jobs | High Pay & Benefits for Technicians',
     description: 'Real HVAC positions available right now. Earn competitive wages with overtime, benefits and quick advancement. Get hired fast!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgent HVAC Jobs | Hiring Now Across the US',
+    title: 'HVAC Jobs | $60K+ with Overtime & Paid Training',
     description: 'Hundreds of HVAC technician jobs open today. $60k+ potential, paid training and immediate start dates. Apply in minutes!',
   },
   alternates: {

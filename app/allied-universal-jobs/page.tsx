@@ -10,17 +10,17 @@ import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Allied Universal Jobs Hiring Now | Security & Specialized Roles Across the US',
+  title: 'Allied Universal Jobs | Security & Specialized Roles',
   description: 'Explore allied universal jobs currently open across the United States, including security officer, canine team roles, technology and event services. Discover diverse career paths and apply.',
   keywords: 'allied universal jobs, allied universal careers, allied universal hiring, security jobs allied universal, allied universal canine careers, allied universal tech jobs',
   openGraph: {
-    title: 'Allied Universal Jobs Open Now | Security & Professional Positions',
+    title: 'Allied Universal Jobs | Security & Professional Positions',
     description: 'Browse current allied universal jobs in security, event services, canine teams and technology sectors across the US.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Allied Universal Jobs | Nationwide Openings in Security & Specialist Tracks',
+    title: 'Allied Universal Jobs | Security & Specialist Tracks',
     description: 'Find allied universal jobs in multiple domains including security, canine units, tech and event operations. Apply where you qualify.',
   },
   alternates: {

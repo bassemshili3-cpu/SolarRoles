@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Patient Transporter Jobs Needed ASAP | Hospitals Hiring Now',
+  title: 'Patient Transporter Jobs | Hospital & Healthcare Roles',
   description: 'Patient transporter positions are urgently needed at hospitals and healthcare facilities across the US! Browse 800+ immediate openings. No degree required, paid training available, and benefits from day one. Apply today and start your healthcare career!',
   keywords: 'patient transporter jobs, patient transport jobs, hospital transporter jobs, patient transporter hiring, healthcare transporter jobs, patient escort jobs, hospital porter jobs, patient transporter positions',
   openGraph: {
-    title: 'Patient Transporter Jobs Needed ASAP | Healthcare Facilities Urgently Hiring',
+    title: 'Patient Transporter Jobs | 800+ Hospital Openings',
     description: 'Hospitals across the US urgently need patient transporters. 800+ openings with paid training, competitive hourly pay, and full benefits. No experience required. Apply now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Patient Transporter Jobs | Urgently Hiring Nationwide',
+    title: 'Patient Transporter Jobs | Entry-Level, Paid Training',
     description: 'Urgent demand for patient transporters at hospitals and clinics across the US. Entry level, paid training, benefits included. Find your role and apply today!',
   },
   alternates: {

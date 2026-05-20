@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Heavy Equipment Operator Jobs Hiring Now | Apply Today',
+  title: 'Heavy Equipment Operator Jobs | Excavator & Crane Roles',
   description: 'Discover thousands of heavy equipment operator jobs hiring immediately across the United States. Drive bulldozers, excavators, loaders and more with high-paying roles. CDL and union opportunities available. Apply in minutes and start your next construction career today!',
   keywords: 'heavy equipment operator jobs, construction equipment operator jobs, heavy equipment operator hiring now, excavator operator jobs, bulldozer operator jobs, union heavy equipment jobs',
   openGraph: {
-    title: 'Heavy Equipment Operator Jobs Hiring Now | Start Today',
+    title: 'Heavy Equipment Operator Jobs | Up to $85K+ Available',
     description: 'Explore 500+ heavy equipment operator positions available right now in the US. Top contractors actively hiring. Competitive salaries up to $85k+ and immediate start dates. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Heavy Equipment Operator Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Heavy Equipment Operator Jobs | Union & Non-Union Roles',
     description: 'Ready to operate heavy machinery? Thousands of heavy equipment operator jobs available immediately. High salaries, union benefits and flexible opportunities. Apply now!',
   },
   alternates: {

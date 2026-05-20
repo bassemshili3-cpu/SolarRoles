@@ -22,20 +22,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgently Hiring: Medical Assistant Jobs Near You | Apply Today',
+  title: 'Medical Assistant Jobs | Clinical & Administrative Openings',
   description:
     'Medical assistant jobs hiring immediately across the United States. Certified and entry-level openings at clinics, hospitals, and private practices. Competitive pay, great benefits, and real career growth. Apply now!',
   keywords:
     'medical assistant jobs, medical assistant jobs near me, CMA jobs, certified medical assistant jobs, entry level medical assistant jobs, medical assistant hiring now, clinical medical assistant jobs, administrative medical assistant jobs',
   openGraph: {
-    title: 'Immediate Opening: Medical Assistant Jobs | Apply Now',
+    title: 'Medical Assistant Jobs | Find Your Next Clinical Role',
     description:
       'Find medical assistant jobs hiring immediately near you. Certified and non-certified openings at leading healthcare employers. Excellent pay, benefits, and advancement opportunities. Start your application today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Now Hiring: Medical Assistants | Find Your Next Role',
+    title: 'Medical Assistant Jobs | Clinics & Hospitals Near You',
     description:
       'Hundreds of medical assistant positions open right now. Clinics, hospitals, and private practices actively hiring. Apply today and join one of the fastest-growing healthcare professions in the U.S.',
   },

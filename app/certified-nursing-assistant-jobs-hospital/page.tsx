@@ -10,11 +10,11 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Immediate Openings for Hospital CNA Positions | Apply Now',
+  title: 'Hospital CNA Jobs | $19–$30/hr + Shift Differentials',
   description: 'Certified nursing assistant jobs in hospitals hiring across every state. $19 to $30/hr with shift differentials. Hospitals pay more than nursing homes and fund your RN degree. Browse and apply today.',
   keywords: 'certified nursing assistant jobs hospital, CNA hospital jobs, hospital CNA hiring, CNA jobs near me hospital, certified nursing assistant hospital positions 2026',
   openGraph: {
-    title: 'Hospital CNA Jobs | Immediate Openings Nationwide',
+    title: 'Hospital CNA Jobs | Nationwide Openings',
     description: 'Hospitals are hiring CNAs at higher rates than nursing homes. Shift differentials, tuition reimbursement, and a direct path to RN. Apply now.',
     type: 'website',
   },

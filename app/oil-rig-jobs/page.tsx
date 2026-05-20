@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Oil Rig Jobs Hiring Now | Offshore and Onshore Positions Open Immediately',
+  title: 'Oil Rig Jobs | Offshore & Onshore Drilling Positions',
   description: 'Oil and gas companies across the United States are urgently hiring for oil rig positions right now. Roughnecks, drillers, roustabouts, and engineers needed immediately. No experience required for entry-level roles. Top pay, rotational schedules, and full benefits. Apply before these positions are gone.',
   keywords: 'oil rig jobs, oil rig hiring now, offshore oil rig jobs, onshore oil rig jobs, roughneck jobs, roustabout jobs, oil rig no experience, oil field jobs, drilling jobs',
   openGraph: {
-    title: 'Oil Rig Jobs Hiring Immediately | Offshore and Onshore Positions Needed Now',
+    title: 'Oil Rig Jobs | Gulf Coast, Permian & Bakken Openings',
     description: 'Oil rigs across the US Gulf Coast, Permian Basin, and Bakken are actively hiring. High-paying rotational positions with full room and board. Apply today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Oil Rig Jobs | Hiring Immediately Across the United States',
+    title: 'Oil Rig Jobs | Roughneck, Driller & Engineer Roles',
     description: 'Find oil rig jobs hiring now. Entry-level to senior drilling positions available offshore and onshore. Top pay, FIFO schedules, and full accommodations provided.',
   },
   alternates: {

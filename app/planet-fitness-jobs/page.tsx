@@ -22,20 +22,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Now Hiring: Planet Fitness Jobs Near You | Apply Today',
+  title: 'Planet Fitness Jobs | Trainer, Front Desk & Manager Roles',
   description:
     'Browse Planet Fitness job openings hiring immediately near you. Front desk, personal trainer, and fitness staff positions available. Flexible hours, free membership perks, and real growth opportunities. Apply in minutes!',
   keywords:
     'planet fitness jobs, planet fitness hiring, planet fitness careers, planet fitness front desk jobs, planet fitness personal trainer jobs, fitness jobs near me, gym jobs hiring now',
   openGraph: {
-    title: 'Immediate Opening: Planet Fitness Jobs | Apply Now',
+    title: 'Planet Fitness Jobs | Find a Role at Your Local Gym',
     description:
       'Find Planet Fitness jobs hiring immediately in your area. Entry-level to management roles at one of the largest gym chains in the U.S. Great perks and flexible scheduling. Start your application today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgently Hiring: Planet Fitness Jobs | Find Yours Now',
+    title: 'Planet Fitness Jobs | Front Desk, Training & Management',
     description:
       'Planet Fitness locations hiring now near you. Front desk, fitness training, and management openings. Apply today and work somewhere you love.',
   },

@@ -25,17 +25,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Immediate Openings: Jobs at City of Laredo | Municipal Positions Hiring Now',
+  title: 'City of Laredo Jobs | Municipal & Public Service Roles',
   description: 'City of Laredo jobs are open now across multiple departments. Competitive Texas pay, full benefits, and a growing municipal workforce. Browse current openings and apply today.',
   keywords: 'jobs at city of laredo, city of laredo jobs, laredo tx city jobs, city of laredo hiring, laredo municipal jobs, laredo texas government jobs, city of laredo careers',
   openGraph: {
-    title: 'Jobs at City of Laredo | Urgent Municipal Openings in Texas',
+    title: 'City of Laredo Jobs | Municipal Openings in Texas',
     description: 'Explore active City of Laredo job postings. From public works to utilities, finance to public safety — Laredo is hiring across all departments right now.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'City of Laredo Jobs Hiring Now | Apply Today',
+    title: 'City of Laredo Jobs | Public Service Roles in Texas',
     description: 'Municipal positions open at the City of Laredo. Strong benefits, stable employment, and a fast-growing border economy. Search available roles now.',
   },
   alternates: {

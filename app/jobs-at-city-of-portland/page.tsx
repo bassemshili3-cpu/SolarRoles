@@ -26,17 +26,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent Openings: Jobs at City of Portland Hiring Now | Apply Today',
+  title: 'City of Portland Jobs | Municipal & Government Openings',
   description: 'Immediate openings for City of Portland jobs. Competitive pay, full benefits, union-backed positions across all bureaus. Portland municipal roles are filling fast — search and apply now.',
   keywords: 'jobs at city of portland, city of portland jobs, portland municipal jobs, city of portland hiring, portland government jobs, city of portland careers, portland oregon city jobs',
   openGraph: {
-    title: 'Urgent Need: Jobs at City of Portland | Positions Filling Fast',
+    title: 'City of Portland Jobs | Bureau Positions & Public Roles',
     description: 'Explore current City of Portland job openings. From public works to parks, administrative to public safety — Portland is actively hiring across all departments.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'City of Portland Jobs Hiring Now | Urgent Openings',
+    title: 'City of Portland Jobs | All Bureaus & Departments',
     description: 'Portland municipal positions open across multiple bureaus. Strong benefits, union protections, and career growth. Search available roles today.',
   },
   alternates: {

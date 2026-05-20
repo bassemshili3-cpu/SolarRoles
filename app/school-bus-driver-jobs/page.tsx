@@ -10,17 +10,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Now Hiring School Bus Driver Jobs | Urgent Need Across All States',
+  title: 'School Bus Driver Jobs | Paid CDL Training & Benefits',
   description: 'School bus driver jobs hiring immediately. National shortage means fast hiring, sign-on bonuses up to $5,000, and paid CDL training. Browse openings near you and apply today.',
   keywords: 'school bus driver jobs, school bus driver hiring, CDL bus driver jobs, school bus driver salary, school bus driver near me, school district bus driver openings',
   openGraph: {
-    title: 'School Bus Driver Jobs | Urgent Openings Nationwide',
+    title: 'School Bus Driver Jobs | Openings in Every State',
     description: 'Districts urgently hiring school bus drivers. Paid training, benefits, summers off. Apply now.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'School Bus Driver Jobs | Immediate Openings in Every State',
+    title: 'School Bus Driver Jobs | CDL Training & Paid Benefits',
     description: 'National driver shortage means fast hiring timelines, paid CDL training, and competitive hourly rates. Start today.',
   },
   alternates: {

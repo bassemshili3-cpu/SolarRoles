@@ -25,20 +25,20 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent Demand for Pediatric Nurse Practitioners | PNP Positions Open Now',
+  title: 'Pediatric Nurse Practitioner Jobs | PNP Openings',
   description:
     'Pediatric nurse practitioner jobs are critically understaffed across the U.S. Browse CPNP-PC and CPNP-AC openings in primary care, urgent care, hospitals, and telehealth. Sign-on bonuses available. Apply now.',
   keywords:
     'pediatric nurse practitioner jobs, PNP jobs, CPNP-PC jobs, CPNP-AC jobs, pediatric NP hiring, pediatric nurse practitioner positions, pediatric NP urgent care, pediatric nurse practitioner salary',
   openGraph: {
-    title: 'Urgent: Pediatric Nurse Practitioner Positions Open Nationwide',
+    title: 'Pediatric Nurse Practitioner Jobs | CPNP & PNP Roles',
     description:
       'PNP shortages are acute across primary care, urgent care, and inpatient settings. Browse open roles with competitive salaries and sign-on bonuses.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pediatric Nurse Practitioner Jobs Needed ASAP — Apply Today',
+    title: 'Pediatric NP Jobs | Primary Care, Urgent Care & Telehealth',
     description:
       'Critical PNP shortages nationwide. Full-time, part-time, locum tenens, and telehealth roles available. Competitive pay and benefits. Find your next position now.',
   },

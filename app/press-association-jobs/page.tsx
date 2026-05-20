@@ -9,17 +9,17 @@ import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Press Association Jobs Needed Right Now | Start Today',
+  title: 'Press Association Jobs | Reporter & Editor Openings',
   description: 'Discover hundreds of press association jobs hiring immediately across the United States. Median salary $60,280. Flexible reporting, editing and media roles available now. Apply in minutes and launch your journalism career!',
   keywords: 'press association jobs, press association reporter jobs, press association editor positions, journalism association jobs, media association careers',
   openGraph: {
-    title: 'Press Association Jobs Hiring Now | Median $60,280',
+    title: 'Press Association Jobs | Journalism Roles, Median $60K',
     description: 'Flexible press association positions open immediately nationwide. Competitive pay and exciting journalism opportunities. Start your media career today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgent Press Association Jobs | Hiring Immediately',
+    title: 'Press Association Jobs | Median $60,280 in Journalism',
     description: 'Hundreds of press association jobs available right now. Earn up to the national median of $60,280 with flexible schedules. Apply today!',
   },
   alternates: {

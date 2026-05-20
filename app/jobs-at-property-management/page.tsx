@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Property Management Jobs Needed Right Now | Apply Today',
+  title: 'Property Management Jobs | Residential & Commercial Roles',
   description: 'Discover thousands of property management jobs hiring immediately across the United States. Manage residential, commercial and HOA properties with competitive salaries. Entry-level roles available. Apply in minutes and start your next career today!',
   keywords: 'property management jobs, property manager jobs, property management careers, residential property management jobs, commercial property management jobs, HOA manager jobs, hiring now',
   openGraph: {
-    title: 'Urgent Property Management Jobs Hiring Now | Start Today',
+    title: 'Property Management Jobs | Top Companies Hiring Now',
     description: 'Explore thousands of property management positions available right now in the US. Top companies actively hiring. Competitive salaries and immediate start dates. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Property Management Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Property Management Jobs | HOA, Residential & Commercial',
     description: 'Ready to manage properties? Thousands of high-paying property management jobs available immediately. Apply now!',
   },
   alternates: {

@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent: Housekeeping Jobs Near You Hiring Now | Apply Today',
+  title: 'Housekeeping Jobs Near You | Hotels, Hospitals & Homes',
   description: 'Housekeeping jobs are urgently needed near you! Browse 500+ immediate openings at hotels, resorts, hospitals & private homes. Competitive pay, flexible shifts, no degree required. Start your housekeeping career today!',
   keywords: 'housekeeping jobs near me, housekeeping jobs, hotel housekeeping jobs, housekeeper hiring now, housekeeping positions near you, maid jobs near me, housekeeping employment',
   openGraph: {
-    title: 'Urgent Demand for Housekeeping Professionals | Positions Near You',
+    title: 'Housekeeping Jobs | Competitive Pay & Flexible Shifts',
     description: 'Housekeeping positions needed ASAP across the US. Hotels, hospitals, resorts and private employers are hiring now. Competitive wages, immediate start. Find your housekeeping job today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Housekeeping Jobs Near You | Urgently Hiring Now',
+    title: 'Housekeeping Jobs | Hotels, Resorts & Private Homes',
     description: 'Urgent openings for housekeeping professionals near you. Hotels, hospitals & private homes hiring immediately. Apply in minutes!',
   },
   alternates: {

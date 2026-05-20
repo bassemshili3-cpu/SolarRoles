@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgently Hiring Honda Careers | Apply Today',
+  title: 'Honda Careers | Engineering, Manufacturing & Corporate Roles',
   description: 'Discover 500+ Honda careers hiring now across the U.S. Join a top automotive manufacturer with competitive pay, excellent benefits, and career growth. Engineers, technicians, and professionals needed. Apply now!',
   keywords: 'honda careers, honda jobs, honda employment, automotive jobs, honda manufacturing jobs, honda engineering jobs, american honda jobs, honda dealership jobs',
   openGraph: {
-    title: 'Honda Careers | Immediate Openings Available',
+    title: 'Honda Careers | 500+ Openings Across North America',
     description: 'Join Honda, one of the world\'s leading automotive manufacturers. Competitive salaries, comprehensive benefits, and innovation driven culture. Hundreds of positions available now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Honda Careers | Now Hiring Automotive Professionals',
+    title: 'Honda Careers | Manufacturing, Engineering & Sales Jobs',
     description: 'Build your career with Honda. Explore openings in manufacturing, engineering, sales, and more. Top benefits and growth opportunities await.',
   },
   alternates: {

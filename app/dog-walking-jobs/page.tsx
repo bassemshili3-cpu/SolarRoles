@@ -20,20 +20,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Dog Walking Jobs Hiring Now | Immediate Openings Near You',
+  title: 'Dog Walking Jobs | Flexible Pet Walker Openings Near You',
   description:
     'Dog walking jobs are in urgent demand across the United States. Find flexible, well-paying positions near you today. No degree required. Start earning with dogs on your schedule. Apply in minutes!',
   keywords:
     'dog walking jobs, dog walker jobs, dog walking jobs near me, pet walker jobs, dog walking employment, professional dog walker, dog walking gigs, dog walker hiring',
   openGraph: {
-    title: 'Dog Walking Jobs Available Now | Urgently Hiring Near You',
+    title: 'Dog Walking Jobs | Pet Walker Positions Near You',
     description:
       'Hundreds of dog walking jobs are open right now across the US. Flexible hours, great pay, and no experience required for many roles. Find your next dog walking job today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Dog Walking Jobs | Immediate Openings Across the US',
+    title: 'Dog Walking Jobs | Flexible Schedules, No Degree Needed',
     description:
       'Love dogs? Get paid for it. Explore hundreds of dog walking jobs near you. Flexible schedules, no degree needed. Apply now.',
   },

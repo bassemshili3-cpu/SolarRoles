@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent UCSD Jobs Hiring Now | University of California San Diego Careers',
+  title: 'UCSD Jobs | University of California San Diego Careers',
   description: 'Hundreds of UCSD jobs are hiring immediately at the University of California, San Diego. Campus, research, administrative, and student positions with excellent benefits and competitive pay. Apply today before positions fill up!',
   keywords: 'ucsd jobs, university of california san diego jobs, ucsd careers, ucsd employment, jobs at ucsd, uc san diego hiring, ucsd staff jobs, ucsd student jobs',
   openGraph: {
-    title: 'Urgent UCSD Jobs Hiring Now | Apply at University of California San Diego',
+    title: 'UCSD Jobs | Research, Campus & Admin Positions',
     description: 'Discover hundreds of open UCSD jobs right now. From research roles to campus operations and student employment. Competitive salaries, full benefits, and career growth at one of America’s top public universities.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'UCSD Jobs Hiring Now | University of California San Diego',
+    title: 'UCSD Jobs | Research, Campus & Student Positions',
     description: 'Hundreds of positions open at UC San Diego. Great pay, benefits, and the chance to work at a world-class research university. Apply in minutes.',
   },
   alternates: {

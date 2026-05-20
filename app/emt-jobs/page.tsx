@@ -20,20 +20,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna, } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Demand for EMT Professionals | Immediate Openings Across the US',
+  title: 'EMT Jobs | Emergency Medical Technician Openings',
   description:
     'EMT jobs are critically needed across the United States right now. Browse hundreds of Emergency Medical Technician openings with competitive pay, benefits, and career growth. Apply today and make a difference.',
   keywords:
     'EMT jobs, emergency medical technician jobs, EMT hiring, EMT jobs near me, EMT careers, paramedic jobs, EMT positions, emergency medical services jobs',
   openGraph: {
-    title: 'EMT Jobs | Urgent Openings for Emergency Medical Technicians',
+    title: 'EMT Jobs | Full & Part-Time EMT Positions Nationwide',
     description:
       'Emergency services are urgently hiring EMTs across the US. Full-time and part-time roles available. Competitive salaries, strong benefits, and real career advancement. Apply now.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'EMT Jobs | Immediate Openings Nationwide',
+    title: 'EMT Jobs | Meaningful Work & Career Growth',
     description:
       'EMTs are urgently needed across the country. Find your next emergency medical technician role today. Great pay, meaningful work, and career growth. Apply now.',
   },

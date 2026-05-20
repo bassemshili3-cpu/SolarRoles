@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Immediate Openings for Paraprofessional Jobs | Schools Hiring Now',
+  title: 'Paraprofessional Jobs | School & Healthcare Para Roles',
   description: 'Paraprofessional positions are urgently needed across the US! Browse 1,000+ openings in schools, special education, and healthcare settings. Competitive pay, meaningful work, and career growth. Apply today and make a difference in students\' lives!',
   keywords: 'paraprofessional jobs, paraprofessional positions, school paraprofessional jobs, special education paraprofessional, paraeducator jobs, teacher aide jobs, instructional assistant jobs, paraprofessional hiring',
   openGraph: {
-    title: 'Immediate Openings for Paraprofessional Jobs | Districts Urgently Hiring',
+    title: 'Paraprofessional Jobs | Special Ed & Behavioral Support',
     description: 'Schools and districts across the US urgently need paraprofessionals. 1,000+ openings in special education, general ed, and behavioral support. Competitive pay and benefits. Apply now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paraprofessional Jobs | Urgently Hiring Nationwide',
+    title: 'Paraprofessional Jobs | 1,000+ Openings Nationwide',
     description: 'Urgent demand for paraprofessionals in schools and healthcare across the US. Find your role, apply in minutes, and start making an impact.',
   },
   alternates: {

@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgently Hiring Surgical Tech Roles | Apply Today',
+  title: 'Surgical Tech Jobs | OR Tech & Scrub Tech Openings',
   description: 'Hundreds of surgical tech jobs hiring immediately in hospitals and surgical centers across the U.S. Competitive pay, sign on bonuses, and full benefits. Browse openings and start your operating room career now!',
   keywords: 'surgical tech jobs, surgical technologist jobs, surgical technician jobs, operating room tech jobs, scrub tech jobs, surgical tech hiring now, certified surgical technologist jobs',
   openGraph: {
-    title: 'Surgical Tech Jobs Hiring Now | Immediate Openings Nationwide',
+    title: 'Surgical Tech Jobs | Hospital & Surgery Center Roles',
     description: 'Hospitals and surgical centers urgently seeking surgical technologists. Competitive salaries, full benefits, and sign on bonuses available. Find your next OR position today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Surgical Tech Jobs | Urgent Need Nationwide',
+    title: 'Surgical Tech Jobs | Competitive Pay & Sign-On Bonuses',
     description: 'Surgical tech positions needed ASAP in hospitals across America. Competitive pay and benefits. Browse hundreds of openings and apply in minutes!',
   },
   alternates: {

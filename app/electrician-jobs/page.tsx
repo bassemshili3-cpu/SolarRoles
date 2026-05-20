@@ -22,20 +22,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Immediate Hire: Electrician Jobs Near You | Apply Today',
+  title: 'Electrician Jobs | Residential, Commercial & Industrial',
   description:
     'Electrician jobs hiring immediately across the United States. Apprentice to master electrician openings at top contractors, construction firms, and industrial employers. Excellent pay and benefits. Apply now!',
   keywords:
     'electrician jobs, electrician jobs near me, electrician hiring now, journeyman electrician jobs, master electrician jobs, apprentice electrician jobs, electrical contractor jobs, industrial electrician jobs',
   openGraph: {
-    title: 'Now Hiring Electricians | Immediate Openings Near You',
+    title: 'Electrician Jobs | Openings Near You in All 50 States',
     description:
       'Find electrician jobs hiring immediately in your area. Apprentice, journeyman, and master electrician positions available at leading contractors. Competitive wages and union opportunities. Apply today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgently Hiring: Electrician Jobs | Find Yours Now',
+    title: 'Electrician Jobs | Union & Non-Union Positions Near You',
     description:
       'Hundreds of electrician jobs open right now. Residential, commercial, and industrial roles. Union and non-union. Apply today and start your next project.',
   },

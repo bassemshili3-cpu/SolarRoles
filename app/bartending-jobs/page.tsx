@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgently Hiring: Bartending Jobs',
+    title: 'Bartending Jobs | Competitive Pay & Flexible Shifts',
     description:
       'Browse active bartending jobs in your city. Secure competitive wages, massive tip potential, and the ultimate flexible schedule.',
   },

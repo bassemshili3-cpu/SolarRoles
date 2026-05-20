@@ -9,11 +9,11 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Immediate Openings for Exelon Careers | Apply Now',
+  title: 'Exelon Careers | Energy Engineering & Operations Jobs',
   description: 'Discover 500+ Exelon careers hiring now. Join America\'s leading energy company with competitive salaries, excellent benefits, and growth opportunities. Engineers, technicians, and professionals needed. Apply today!',
   keywords: 'exelon careers, exelon jobs, exelon employment, energy jobs, utility careers, exelon hiring, power plant jobs, electrical engineer jobs exelon',
   openGraph: {
-    title: 'Exelon Careers | Urgent Need for Energy Professionals',
+    title: "Exelon Careers | 500+ Positions at America's Top Utility",
     description: 'Join Exelon, one of the largest utility companies in the U.S. Competitive pay, comprehensive benefits, and career advancement opportunities. Hundreds of positions available now!',
     type: 'website',
   },

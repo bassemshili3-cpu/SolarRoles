@@ -10,11 +10,11 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Now Hiring: City of Grand Rapids Jobs | Municipal Positions Open',
+  title: 'City of Grand Rapids Jobs | Municipal Positions Open',
   description: 'City of Grand Rapids jobs hiring now. Police, fire, parks, public works, planning, and admin roles. Michigan pension, full benefits, and a cost of living that lets a city salary go further than you think.',
   keywords: 'city of grand rapids jobs, grand rapids city jobs, grand rapids municipal jobs, grand rapids government jobs, city of grand rapids careers, grand rapids michigan city employment',
   openGraph: {
-    title: 'City of Grand Rapids Jobs | Municipal Positions Hiring Now',
+    title: 'City of Grand Rapids Jobs | Municipal Positions',
     description: 'Browse open positions with the City of Grand Rapids. Pension, benefits, job security, and one of the most affordable metros in the Midwest.',
     type: 'website',
   },

@@ -13,17 +13,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Public Works Commission Jobs Open Now | Immediate Government Openings',
+  title: 'Public Works Commission Jobs | Government & Civil Service',
   description: 'Public works commission positions are hiring across the U.S. right now. Browse civil engineering, infrastructure, utilities, and administrative roles with government pay scales, pensions, and job security. Apply today.',
   keywords: 'public works commission jobs, public works jobs, government public works, civil service jobs, infrastructure jobs, public works department jobs, municipal jobs',
   openGraph: {
-    title: 'Public Works Commission Jobs | Immediate Openings Nationwide',
+    title: 'Public Works Commission Jobs | Engineering & Utilities Roles',
     description: 'Browse open public works commission roles in engineering, utilities, planning, and operations. Government pay, full benefits, and long-term stability.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Public Works Commission Jobs Open Now | Apply Today',
+    title: 'Public Works Commission Jobs | Civil Service Positions',
     description: 'Immediate openings at public works commissions across the U.S. Civil engineering, operations, utilities, and more. Competitive government pay and benefits.',
   },
   alternates: {

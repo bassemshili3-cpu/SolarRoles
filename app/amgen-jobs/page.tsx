@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: 'Discover amgen jobs across research, clinical operations, manufacturing, engineering, and commercial roles. Join teams that impact patients and advance scientific innovation.',
   keywords: 'amgen jobs, amgen careers, biotech careers, research jobs amgen, clinical jobs amgen, biotechnology positions',
   openGraph: {
-    title: 'Amgen Jobs Hiring Now | Biotechnology & Research Careers',
+    title: 'Amgen Jobs | Biotechnology & Research Careers',
     description: 'Explore current amgen jobs and build your career in cutting-edge biotech roles. Competitive pay, benefits, and a chance to impact patient lives.',
     type: 'website',
   },

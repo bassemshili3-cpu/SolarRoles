@@ -10,17 +10,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent Demand for Language Pathologist Professionals | SLP Jobs Hiring Now',
+  title: 'Speech-Language Pathologist Jobs | SLP Openings',
   description: 'Language pathologist jobs open immediately in schools, hospitals, and private practice nationwide. 15% projected growth, median pay $95K+. Browse SLP openings and apply today.',
   keywords: 'language pathologist jobs, speech language pathologist jobs, SLP jobs, speech therapist jobs, CCC-SLP positions, language pathologist hiring, speech pathology careers',
   openGraph: {
-    title: 'Language Pathologist Jobs | Urgent SLP Openings Nationwide',
+    title: 'Speech-Language Pathologist Jobs | SLP Openings Nationwide',
     description: 'Thousands of language pathologist positions hiring now. Schools, hospitals, teletherapy. Competitive salaries and sign-on bonuses available.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Language Pathologist Jobs | Immediate Openings Across All 50 States',
+    title: 'SLP Jobs | Schools, Hospitals & Teletherapy Positions',
     description: 'High-demand SLP positions with competitive pay, flexible settings, and career growth. Browse and apply now.',
   },
   alternates: {

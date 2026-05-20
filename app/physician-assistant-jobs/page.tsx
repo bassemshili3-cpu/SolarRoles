@@ -9,17 +9,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Physician Assistant Jobs Hiring Now | PA Positions in Every Specialty Across the US',
+  title: 'Physician Assistant Jobs | PA Openings in Every Specialty',
   description: 'Find physician assistant jobs hiring now across the United States. PA positions in emergency medicine, surgery, dermatology, primary care, orthopedics, and more. New grad and experienced roles. Apply today.',
   keywords: 'physician assistant jobs, PA jobs, physician associate jobs, surgical PA jobs, emergency medicine PA, dermatology PA, primary care PA, new grad physician assistant, hospitalist PA jobs',
   openGraph: {
-    title: 'Physician Assistant Jobs Hiring Now | PA Roles Across the US',
+    title: 'Physician Assistant Jobs | PA Roles in Every Specialty',
     description: 'Browse open physician assistant positions across every medical specialty. Hospital, outpatient, surgical, and primary care PA roles nationwide.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Physician Assistant Jobs | All Specialties Hiring Now',
+    title: 'Physician Assistant Jobs | All Specialties',
     description: 'Hundreds of PA positions open across the United States. Surgical, medical, primary care, and specialty practice roles. Competitive compensation and benefits.',
   },
   alternates: {

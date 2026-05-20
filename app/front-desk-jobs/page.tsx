@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Immediate Hire: Front Desk Jobs Near You | Apply Today',
+  title: 'Front Desk Jobs | Receptionist & Admin Openings Near You',
   description: 'Find front desk jobs hiring immediately across the United States. Receptionist, front desk agent, and administrative roles at hotels, clinics, gyms, and offices. Great pay, flexible hours, and no degree required for many positions. Apply in minutes and start this week!',
   keywords: 'front desk jobs, front desk jobs near me, front desk hiring now, receptionist jobs, front desk agent jobs, hotel front desk jobs, medical front desk jobs, front desk clerk jobs',
   openGraph: {
-    title: 'Now Hiring: Front Desk Jobs | Immediate Openings Across the US',
+    title: 'Front Desk Jobs | Hotels, Clinics, Gyms & Offices',
     description: 'Hundreds of front desk and receptionist positions available now. Hotels, medical offices, gyms, salons, and corporate offices actively recruiting. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgently Hiring: Front Desk Jobs | Start This Week',
+    title: 'Front Desk Jobs | Entry-Level to Experienced Roles',
     description: 'Browse front desk jobs hiring immediately near you. Entry level to experienced roles across multiple industries. Competitive pay and benefits. Apply now!',
   },
   alternates: {

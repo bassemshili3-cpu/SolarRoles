@@ -24,20 +24,20 @@ import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Urgent: General Labor Jobs Hiring Now | Apply Today, Start This Week',
+  title: 'General Labor Jobs | Construction, Warehouse & More',
   description:
     'Hundreds of general labor jobs with immediate openings across the US. No degree required. Competitive pay from $17/hr. Construction, warehousing, manufacturing and more. Apply now and start fast.',
   keywords:
     'general labor jobs, general labor jobs near me, general laborer hiring now, general labor positions, manual labor jobs, general labor work, laborer jobs no experience',
   openGraph: {
-    title: 'Urgent: General Labor Jobs Hiring Now | Start This Week',
+    title: 'General Labor Jobs | $17/hr+ No Degree Required',
     description:
       'Immediate openings for general laborers across the US. No experience required for most roles. Apply today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Now Hiring General Labor – Urgent Need Across the US',
+    title: 'General Labor Jobs | Flexible Shifts, No Degree Required',
     description:
       'General labor positions available immediately. Competitive hourly pay, flexible shifts, no degree required. Browse and apply now.',
   },

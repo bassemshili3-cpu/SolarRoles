@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Now Hiring: Part Time Jobs Near You | Apply Today',
+  title: 'Part Time Jobs Near You | Flexible Hours & Great Pay',
   description: 'Find part time jobs hiring immediately across the United States. Flexible schedules, competitive pay, and openings in retail, food service, healthcare, and more. No degree required for many roles. Apply in minutes and start earning this week!',
   keywords: 'part time jobs, part time jobs near me, part time hiring now, part time work, flexible part time jobs, part time jobs for students, weekend part time jobs, evening part time jobs',
   openGraph: {
-    title: 'Hiring Immediately: Part Time Jobs | Flexible Hours Across the US',
+    title: 'Part Time Jobs | Retail, Healthcare & Remote Roles',
     description: 'Thousands of part time positions available now. Retail, hospitality, healthcare, and remote roles with flexible schedules. Great pay and no experience required for many openings. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgent Part Time Jobs Hiring Now | Start This Week',
+    title: 'Part Time Jobs | Flexible Schedules Near You',
     description: 'Browse part time jobs hiring immediately near you. Flexible hours, competitive pay, and opportunities across every industry. Apply now!',
   },
   alternates: {

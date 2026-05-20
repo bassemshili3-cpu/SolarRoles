@@ -20,20 +20,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Sales Jobs Needed ASAP | Immediate Openings Across the US',
+  title: 'Sales Jobs | Inside, Outside & B2B Sales Openings',
   description:
     'Companies across the United States are urgently hiring sales professionals right now. Browse hundreds of sales job openings with uncapped commissions, base salaries, and clear career paths. Apply today and start closing deals.',
   keywords:
     'sales jobs, sales job openings, sales careers, sales representative jobs, inside sales jobs, outside sales jobs, sales jobs near me, sales hiring, B2B sales jobs',
   openGraph: {
-    title: 'Sales Jobs | Urgently Hiring Across the US',
+    title: 'Sales Jobs | Uncapped Commission & Remote Options',
     description:
       'Immediate sales job openings in every industry. Base salary plus commission, remote options, and fast career progression. Top earners make $100K+. Apply now.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sales Jobs | Positions Needed ASAP Nationwide',
+    title: 'Sales Jobs | Top Earners Make $100K+ in Sales',
     description:
       'Sales roles are open right now across the US. Competitive pay, uncapped commissions, and growth opportunities. Find your next sales job and apply today.',
   },

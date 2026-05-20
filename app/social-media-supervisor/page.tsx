@@ -20,20 +20,20 @@ import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Social Media Supervisor Positions Needed ASAP | Apply Today',
+  title: 'Social Media Supervisor Jobs | Lead Content & Brand Teams',
   description:
     'Companies across the US are urgently hiring Social Media Supervisors right now. Lead content strategies, manage teams, and drive engagement. Competitive salaries, remote options available. Apply in minutes!',
   keywords:
     'social media supervisor jobs, social media supervisor hiring, social media manager supervisor, social media team lead, digital marketing supervisor, social media jobs US, social media supervisor remote',
   openGraph: {
-    title: 'Social Media Supervisor Jobs | Urgently Hiring Across the US',
+    title: 'Social Media Supervisor Jobs | Digital Marketing Roles',
     description:
       'Immediate openings for Social Media Supervisors nationwide. Lead creative teams, build brand presence, and grow your career in digital marketing. High-demand roles with great pay. Apply now.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Social Media Supervisor | Positions Needed ASAP',
+    title: 'Social Media Supervisor | Remote & On-Site Openings',
     description:
       'Brands urgently need Social Media Supervisors. Browse open roles across the US, including remote positions. Competitive pay and career growth. Apply today.',
   },

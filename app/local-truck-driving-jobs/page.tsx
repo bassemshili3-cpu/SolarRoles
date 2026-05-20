@@ -9,11 +9,11 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Local Truck Driving Jobs Hiring Now | Home Daily CDL Routes Across the US',
+  title: 'Local Truck Driving Jobs | Home Daily CDL Routes',
   description: 'Find local truck driving jobs hiring now. Home every night, day and night shifts, no overnight stays. CDL A and B routes within 50 to 150 mile radius. Apply today.',
   keywords: 'local truck driving jobs, local CDL jobs, home daily truck driving, local driver jobs, day cab driving jobs, regional truck driving, no overnight truck driving',
   openGraph: {
-    title: 'Local Truck Driving Jobs | Home Daily Routes Hiring Now',
+    title: 'Local Truck Driving Jobs | Home Daily CDL Routes',
     description: 'Browse local CDL truck driving positions across the United States. Home every night, competitive hourly pay, multiple shifts available.',
     type: 'website',
   },

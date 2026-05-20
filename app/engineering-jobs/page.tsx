@@ -9,17 +9,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent Engineering Jobs Needed Right Now | Apply Today',
+  title: 'Engineering Jobs | Top Openings for Engineers in 2026',
   description: 'Discover thousands of engineering jobs hiring immediately across the United States. High-paying software, mechanical, civil, electrical and more roles available now. No experience required for entry-level positions. Apply in minutes and land your next role today!',
   keywords: 'engineering jobs, engineering careers, software engineering jobs, mechanical engineering jobs, civil engineering jobs, electrical engineering jobs, hiring now, high paying engineering jobs',
   openGraph: {
-    title: 'Urgent Engineering Jobs Hiring Now | Start Your Career Today',
+    title: 'Engineering Jobs | Software, Civil & Mechanical Openings',
     description: 'Explore 10,000+ engineering jobs available immediately in the US. Top employers actively hiring software, civil, mechanical and electrical engineers. Apply now and secure your future.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Engineering Jobs Hiring Now | Urgent Openings Across the US',
+    title: 'Engineering Jobs | High-Salary Roles in Every Discipline',
     description: 'Ready for your next engineering role? Thousands of positions available right now. High salaries, flexible locations, and immediate start dates. Apply today!',
   },
   alternates: {

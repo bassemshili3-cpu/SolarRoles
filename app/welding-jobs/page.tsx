@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgently Hiring: Welding Jobs Near You | Apply Today',
+  title: 'Welding Jobs | MIG, TIG & Structural Openings Near You',
   description: 'Find welding jobs hiring immediately across the United States. MIG, TIG, stick, and structural welding positions at top manufacturers, shipyards, and construction firms. Competitive pay up to $35/hr and beyond. Apply in minutes and start your welding career today!',
   keywords: 'welding jobs, welding jobs near me, welder hiring now, MIG welder jobs, TIG welder jobs, structural welder jobs, pipe welder jobs, welding careers, entry level welding jobs',
   openGraph: {
-    title: 'Immediate Opening: Welding Jobs Hiring Now | Oh My Job',
+    title: 'Welding Jobs | MIG, TIG & Pipe Positions Near You',
     description: 'Hundreds of welding positions available now across manufacturing, construction, and energy. MIG, TIG, and pipe welding roles with competitive pay. Apply today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Now Hiring: Welding Jobs | High Pay, Immediate Start',
+    title: 'Welding Jobs | Skilled Trade Positions Near You',
     description: 'Browse welding jobs hiring immediately near you. Skilled trades in high demand nationwide. Competitive salaries and career advancement. Apply now!',
   },
   alternates: {

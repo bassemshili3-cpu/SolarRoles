@@ -13,17 +13,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Talent Acquisition Jobs Needed ASAP | Hiring Now Across the U.S.',
+  title: 'Talent Acquisition Jobs | Recruiter & TA Specialist Roles',
   description: 'Urgent demand for talent acquisition professionals across the United States. Browse open TA roles — from sourcing specialists to heads of recruiting — and apply today. Competitive salaries, remote options, and fast-moving pipelines.',
   keywords: 'talent acquisition jobs, talent acquisition specialist, talent acquisition manager, recruiting jobs, TA jobs, talent acquisition director, hiring now talent acquisition',
   openGraph: {
-    title: 'Talent Acquisition Jobs | Urgent Openings Nationwide',
+    title: 'Talent Acquisition Jobs | TA Specialist & Manager Roles',
     description: 'Companies are hiring talent acquisition professionals right now. Find your next TA role and apply today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Talent Acquisition Jobs Needed ASAP | Apply Now',
+    title: 'Talent Acquisition Jobs | Sourcing to VP of TA',
     description: 'Browse hundreds of open talent acquisition roles across the U.S. From entry-level sourcing to VP of TA — find your match today.',
   },
   alternates: {

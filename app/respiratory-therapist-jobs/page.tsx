@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Respiratory Therapist Jobs Needed ASAP | Hospitals Urgently Hiring RT Professionals',
+  title: 'Respiratory Therapist Jobs | RT Positions at Top Hospitals',
   description: 'Respiratory therapist positions are critically needed at hospitals and healthcare facilities across the US! Browse 800+ immediate openings for RTs, CRTs, and RRTs. Competitive salaries, sign-on bonuses, and strong career growth. Apply today!',
   keywords: 'respiratory therapist jobs, RT jobs, respiratory therapist hiring, CRT jobs, RRT jobs, respiratory care jobs, respiratory therapist positions, travel respiratory therapist jobs',
   openGraph: {
-    title: 'Respiratory Therapist Jobs Needed ASAP | Urgently Hiring RTs Nationwide',
+    title: 'Respiratory Therapist Jobs | CRT & RRT Openings Nationwide',
     description: 'Hospitals and health systems across the US urgently need respiratory therapists. 800+ immediate openings for CRTs and RRTs. Excellent pay, sign-on bonuses, and travel options. Apply now!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Respiratory Therapist Jobs | Urgently Hiring Nationwide',
+    title: 'Respiratory Therapist Jobs | 800+ CRT & RRT Openings',
     description: 'Urgent demand for respiratory therapists at hospitals across the US. CRT and RRT openings with competitive pay and sign-on bonuses. Find your role today.',
   },
   alternates: {

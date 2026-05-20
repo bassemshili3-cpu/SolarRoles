@@ -10,17 +10,17 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'FIFO Jobs Hiring Immediately | Fly In Fly Out Positions Open Now',
+  title: 'FIFO Jobs | Fly In Fly Out in Mining, Oil & Gas',
   description: 'Hundreds of FIFO jobs available right now. Fly in fly out positions in mining, oil, gas and construction with top pay and rotation schedules. No experience required for some roles. Apply today before positions fill up.',
   keywords: 'fifo jobs, fly in fly out jobs, fifo mining jobs, fifo work, fifo positions, fly in fly out mining, fifo oil and gas jobs, remote work fifo',
   openGraph: {
-    title: 'FIFO Jobs Hiring Now | Top Paying Fly In Fly Out Positions',
+    title: 'FIFO Jobs | Top-Paying Rotational Positions',
     description: 'Find urgent FIFO job openings across the United States. Mining, oil, gas, and construction employers are actively hiring. High pay, flexible rotations, and no relocation required.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FIFO Jobs | Fly In Fly Out Positions Hiring Now',
+    title: 'FIFO Jobs | Mining, Oil, Gas & Construction Rotations',
     description: 'Ready to earn more with FIFO work? Browse hundreds of fly in fly out jobs paying top wages. Apply now before these positions are filled.',
   },
   alternates: { canonical: 'https://www.oh-my-job.com/fifo-jobs' },

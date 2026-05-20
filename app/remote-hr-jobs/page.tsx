@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Now Hiring Remote HR Jobs – Urgent Need | Apply Today',
+  title: 'Remote HR Jobs | Work-From-Home HR & Recruiting Roles',
   description: 'Hundreds of remote HR jobs hiring immediately. Work from home as a recruiter, HR generalist, benefits specialist and more. Full time and part time positions with top companies. Browse openings and apply now!',
   keywords: 'remote hr jobs, work from home hr jobs, remote human resources jobs, remote recruiter jobs, remote hr generalist, virtual hr positions, remote hr coordinator, telecommute hr jobs',
   openGraph: {
-    title: 'Remote HR Jobs Hiring Now | Work From Home Opportunities',
+    title: 'Remote HR Jobs | Generalist, Recruiter & Benefits Roles',
     description: 'Companies urgently seeking remote HR professionals. Recruiters, generalists, benefits specialists and more. Find your ideal work from home HR position today!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Remote HR Jobs | Urgently Hiring Nationwide',
+    title: 'Remote HR Jobs | Full-Time & Part-Time WFH Positions',
     description: 'Remote HR positions needed ASAP. From recruiting to employee relations, browse hundreds of work from home HR openings. Apply in minutes!',
   },
   alternates: {

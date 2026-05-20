@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Urgent EKG Technician Jobs Hiring Now | Start Earning $67k+ Today',
+  title: 'EKG Technician Jobs | Earn $67K+ as a Cardiac Tech',
   description: 'Hundreds of EKG technician jobs open immediately across the United States. High pay up to $67k+, benefits, paid training and fast hiring. No experience needed for many entry-level positions. Apply today and launch your healthcare career!',
   keywords: 'ekg technician jobs, ekg tech jobs, electrocardiogram technician jobs, cardiac monitor tech jobs, ekg technician hiring now, telemetry technician jobs',
   openGraph: {
-    title: 'EKG Technician Jobs Hiring Immediately | Earn $67k+ Fast',
+    title: 'EKG Technician Jobs | $67K+ Cardiac Tech Positions',
     description: 'Real EKG technician positions available right now. Competitive wages, benefits and quick advancement. Get hired fast!',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgent EKG Technician Jobs | Hiring Now Across the US',
+    title: 'EKG Technician Jobs | Hospital & Clinic Openings',
     description: 'Hundreds of EKG technician jobs open today. $67k+ potential, paid training and immediate start dates. Apply in minutes!',
   },
   alternates: {

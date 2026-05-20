@@ -9,17 +9,17 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'Pharmacy Technician Jobs Hiring Immediately | Apply Now Before Positions Fill',
+  title: 'Pharmacy Technician Jobs | Retail & Hospital Openings',
   description: 'Thousands of pharmacy technician jobs are open right now across the United States. Retail, hospital, and compounding pharmacies are actively hiring. Competitive pay, benefits, and flexible shifts. Submit your application today before these positions are gone.',
   keywords: 'pharmacy technician jobs, pharmacy tech jobs, pharmacy technician hiring now, pharm tech jobs, hospital pharmacy technician, retail pharmacy technician jobs, pharmacy technician positions',
   openGraph: {
-    title: 'Pharmacy Technician Jobs Hiring Now | Positions Needed Urgently',
+    title: 'Pharmacy Technician Jobs | Retail, Hospital & Specialty',
     description: 'Pharmacies across the US are urgently hiring technicians. Browse hundreds of pharmacy tech jobs with competitive pay and immediate start dates. Apply today.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pharmacy Technician Jobs | Hiring Immediately Across the US',
+    title: 'Pharmacy Technician Jobs | Full-Time & Part-Time Shifts',
     description: 'Find pharmacy technician jobs hiring now near you. Full-time, part-time, and per diem positions available in retail, hospital, and specialty pharmacy settings.',
   },
   alternates: {
