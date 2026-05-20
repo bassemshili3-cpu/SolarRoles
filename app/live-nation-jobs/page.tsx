@@ -10,7 +10,7 @@ import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Live Nation Jobs | Concerts, Events & Venue Careers',
-  description: 'Concert ops, venue management, marketing, and ticketing at one of entertainment's biggest employers. Live Nation listings organized by city and department.',
+  description: 'Concert ops, venue management, marketing, and ticketing at one of entertainment\'s biggest employers. Live Nation listings organized by city and department.',
   keywords: 'live nation jobs, live nation careers, live nation hiring now, concert promoter jobs, event production jobs, venue manager jobs, ticketmaster jobs, live events jobs',
   openGraph: {
     title: 'Live Nation Jobs | Entertainment Industry Openings',
