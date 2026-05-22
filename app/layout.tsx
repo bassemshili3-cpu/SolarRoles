@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Oh My Job - Smart Job Search USA',
-  description: 'Fastest job search in the United States with salary transparency',
+  description: 'Search and compare real job listings across the U.S. Salary ranges shown upfront — no account or sign-up required.',
   icons: { icon: '/logo.svg' },
 }
 
