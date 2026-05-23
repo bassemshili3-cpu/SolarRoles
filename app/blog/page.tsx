@@ -6,643 +6,636 @@ const CATEGORIES = ["All", "Career Advice", "Industry Trends", "Remote Work", "S
 const FEATURED_ARTICLE = {
   category: "Career Advice",
   title: "How to Quit a Job in 2026: The Complete Guide to Resigning the Right Way",
-  subtitle: "Walking away from a paycheck is never just about the job. It's about your family, your health coverage, your financial safety net, and everything that depends on you. Here's how to quit without putting any of it at risk.",
+  subtitle: "Walking away from a paycheck is never just about the job. Here's how to quit without putting your financial safety net at risk.",
   author: "Eleanor M. Bishop",
   date: "March 8, 2026",
-  
+  readTime: "14 min read",
   url: "/blog/how-to-quit-a-job",
-  image: "/howtoquit.png?w=400&h=300&fit=crop",
+  image: "/howtoquit.png",
 };
 
-const EDITOR_PICKS = [
+const ARTICLES = [
   {
     category: "Salary Insights",
     title: "What Six Figures Really Means in New York, San Francisco, and Austin",
     author: "James Whitfield",
     date: "March 7, 2026",
-    
+    readTime: "8 min read",
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop",
   },
-
   {
     category: "Interview Tips",
-    title: "Job Interview Questions in 2026: What Employers Are Really Asking and How to Prepare",
+    title: "Job Interview Questions in 2026: What Employers Are Really Asking",
     author: "Gregory S.",
     date: "March 7, 2026",
-    
-    image: "/interview.png?w=400&h=300&fit=crop",
+    readTime: "11 min read",
+    image: "/interview.png",
   },
-
   {
     category: "Interview Tips",
     title: "The 30-Second Rule: How First Impressions Still Decide Who Gets the Offer",
     author: "Priya Nair",
     date: "March 6, 2026",
-    
-    image: "/30sec.jpg?w=400&h=300&fit=crop",
+    readTime: "6 min read",
+    image: "/30sec.jpg",
   },
   {
     category: "Remote Work",
     title: "Return-to-Office Mandates Are Backfiring. Here's the Data.",
     author: "David Rosenthal",
     date: "March 5, 2026",
-    
-    image: "/remote.jpg?w=400&h=300&fit=crop",
+    readTime: "7 min read",
+    image: "/remote.jpg",
   },
-];
-
-const LATEST_ARTICLES = [
   {
     category: "Tech Jobs",
     title: "Inside the AI Talent War: How Startups Are Luring Engineers Away From Big Tech",
     author: "Michael Chen",
     date: "March 7, 2026",
-    
+    readTime: "9 min read",
+    image: null,
   },
   {
     category: "Industry Trends",
     title: "Healthcare Hiring Is Booming — But Not Where You'd Expect",
     author: "Sarah Abrams",
     date: "March 6, 2026",
-    
+    readTime: "6 min read",
+    image: null,
   },
   {
     category: "Career Advice",
     title: "You Don't Need a Personal Brand. You Need a Personal Practice.",
     author: "Tomás Rivera",
     date: "March 5, 2026",
-    
+    readTime: "5 min read",
+    image: null,
   },
   {
     category: "Salary Insights",
     title: "The Hidden Cost of Stock Options: A Cautionary Tale for Job Hoppers",
     author: "Angela Wu",
     date: "March 4, 2026",
-    
+    readTime: "7 min read",
+    image: null,
   },
   {
     category: "Remote Work",
     title: "Digital Nomad Visas: Which Countries Are Actually Worth It in 2026?",
     author: "Lukas Bauer",
     date: "March 3, 2026",
-    
+    readTime: "8 min read",
+    image: null,
   },
   {
     category: "Interview Tips",
     title: "When the Interviewer Asks 'Why Should We Hire You?' — The Only Answer That Works",
     author: "Rachel Simmons",
     date: "March 2, 2026",
-    
+    readTime: "4 min read",
+    image: null,
   },
 ];
 
-const OPINION_PIECES = [
-  {
-    title: "America's Obsession With 'Passion' at Work Is Making Us Miserable",
-    author: "Dr. Caroline Frey",
-    excerpt: "The relentless pursuit of passion has become a trap, not a compass. It's time we talked about jobs as jobs.",
-  },
-  {
-    title: "Why I Stopped Applying to Jobs Online — and Started Getting Offers",
-    author: "Marcus Holloway",
-    excerpt: "The application black hole is real. But the alternative isn't networking events — it's something far simpler.",
-  },
-];
+const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
+  "Career Advice":    { bg: "#EEF2FF", color: "#2B4ACB" },
+  "Interview Tips":   { bg: "#F0FDF4", color: "#16A34A" },
+  "Salary Insights":  { bg: "#FFF7ED", color: "#C2410C" },
+  "Remote Work":      { bg: "#F0F9FF", color: "#0369A1" },
+  "Tech Jobs":        { bg: "#FAF5FF", color: "#7C3AED" },
+  "Industry Trends":  { bg: "#FDF2F8", color: "#BE185D" },
+};
 
-export default function OhMyJobHome() {
+function CategoryBadge({ category }: { category: string }) {
+  const style = CATEGORY_COLORS[category] || { bg: "#F3F4F6", color: "#374151" };
+  return (
+    <span style={{
+      display: "inline-block",
+      padding: "3px 10px",
+      borderRadius: "4px",
+      fontSize: "11px",
+      fontWeight: 600,
+      letterSpacing: "0.3px",
+      background: style.bg,
+      color: style.color,
+    }}>
+      {category}
+    </span>
+  );
+}
+
+export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [scrolled, setScrolled] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    setVisible(true);
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const [subscribed, setSubscribed] = useState(false);
 
   const filtered = activeCategory === "All"
-    ? LATEST_ARTICLES
-    : LATEST_ARTICLES.filter((a) => a.category === activeCategory);
+    ? ARTICLES
+    : ARTICLES.filter((a) => a.category === activeCategory);
+
+  const withImages = filtered.filter((a) => a.image);
+  const withoutImages = filtered.filter((a) => !a.image);
 
   return (
-    <div style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif", background: "#FFFFFF", color: "#1A1A1A", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", background: "#F8F9FC", color: "#111827", minHeight: "100vh" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Libre+Franklin:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        ::selection { background: #1A1A1A; color: #FFFFFF; }
-
-        .nav-bar {
+        .blog-nav {
+          background: #fff;
+          border-bottom: 1px solid #E5E7EB;
           position: sticky; top: 0; z-index: 100;
-          background: rgba(255, 255, 255, 0.92);
-          backdrop-filter: blur(12px);
-          border-bottom: 1px solid #E0DDD5;
-          transition: box-shadow 0.3s ease;
         }
-        .nav-bar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-
-        .masthead {
-          text-align: center;
-          padding: 28px 24px 18px;
-          border-bottom: 3px double #1A1A1A;
+        .blog-nav-inner {
+          max-width: 1200px; margin: 0 auto;
+          padding: 0 24px;
+          display: flex; align-items: center; gap: 32px;
+          height: 56px;
         }
-        .masthead h1 {
-          font-family: 'Playfair Display', serif;
-          font-size: 42px;
-          font-weight: 900;
-          letter-spacing: -0.5px;
-          line-height: 1;
+        .nav-logo {
+          font-size: 17px; font-weight: 700;
+          color: #0F1B3D; text-decoration: none;
+          letter-spacing: -0.3px; flex-shrink: 0;
         }
-        .masthead h1 span { color: #2B4ACB; }
-        .masthead-date {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px;
-          letter-spacing: 1.5px;
-          text-transform: uppercase;
-          color: #888;
-          margin-top: 6px;
-        }
-
+        .nav-logo span { color: #2B4ACB; }
         .nav-links {
-          display: flex; justify-content: center; gap: 28px;
-          padding: 12px 24px;
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 12px;
-          font-weight: 500;
-          letter-spacing: 0.8px;
-          text-transform: uppercase;
-          border-bottom: 1px solid #E0DDD5;
-          overflow-x: auto;
+          display: flex; gap: 24px;
+          font-size: 14px; font-weight: 500;
+          color: #6B7280;
         }
-        .nav-links a {
-          color: #555; text-decoration: none; white-space: nowrap;
-          transition: color 0.2s;
-          cursor: pointer;
+        .nav-links a { color: inherit; text-decoration: none; transition: color 0.15s; cursor: pointer; }
+        .nav-links a:hover { color: #111827; }
+        .nav-links a.active { color: #2B4ACB; }
+        .nav-cta {
+          margin-left: auto;
+          padding: 8px 18px;
+          background: #2B4ACB; color: #fff;
+          font-size: 13px; font-weight: 600;
+          border-radius: 6px; text-decoration: none;
+          cursor: pointer; border: none;
+          transition: background 0.15s;
         }
-        .nav-links a:hover { color: #1A1A1A; }
+        .nav-cta:hover { background: #2240B0; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-        .breaking-bar {
-          background: #1A1A1A; color: #FAFAF7;
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 12px; font-weight: 500;
-          letter-spacing: 0.5px;
-          padding: 10px 24px;
-          text-align: center;
+        /* Page header */
+        .page-header {
+          padding: 40px 0 32px;
+          border-bottom: 1px solid #E5E7EB;
+          background: #fff;
+          margin-bottom: 0;
+        }
+        .page-header-inner {
+          max-width: 1200px; margin: 0 auto; padding: 0 24px;
+        }
+        .page-header h1 {
+          font-size: 26px; font-weight: 700;
+          color: #0F1B3D; letter-spacing: -0.5px;
+          margin-bottom: 6px;
+        }
+        .page-header p {
+          font-size: 15px; color: #6B7280; font-weight: 400;
+        }
+
+        /* Featured */
+        .featured-wrap { padding: 32px 0 0; }
+        .featured-card {
+          background: #fff;
+          border: 1px solid #E5E7EB;
+          border-radius: 10px;
           overflow: hidden;
+          display: grid;
+          grid-template-columns: 1.1fr 0.9fr;
         }
-        .breaking-bar span { color: #E8C547; font-weight: 700; margin-right: 12px; letter-spacing: 1.5px; }
-
-        /* Hero featured */
-        .hero { padding: 48px 0 40px; border-bottom: 1px solid #D5D1C9; }
-        .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: start; }
-        .hero-image {
-          width: 100%; aspect-ratio: 3/2; object-fit: cover;
-          filter: grayscale(15%) contrast(1.05);
-          transition: filter 0.4s;
+        .featured-img {
+          width: 100%; height: 100%;
+          min-height: 240px;
+          object-fit: cover;
+          display: block;
         }
-        .hero-image:hover { filter: grayscale(0%) contrast(1); }
-        .hero-category {
-          font-family: 'Libre Franklin', sans-serif;
+        .featured-body {
+          padding: 36px 32px;
+          display: flex; flex-direction: column; justify-content: center;
+        }
+        .featured-label {
           font-size: 11px; font-weight: 700;
-          letter-spacing: 2px; text-transform: uppercase;
-          color: #2B4ACB; margin-bottom: 14px;
+          letter-spacing: 1px; text-transform: uppercase;
+          color: #2B4ACB; margin-bottom: 12px;
         }
-        .hero-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 38px; font-weight: 800;
-          line-height: 1.18; letter-spacing: -0.3px;
-          margin-bottom: 18px;
-          cursor: pointer;
-          transition: color 0.2s;
+        .featured-title {
+          font-size: 22px; font-weight: 700;
+          line-height: 1.35; color: #0F1B3D;
+          margin-bottom: 12px; letter-spacing: -0.3px;
+          text-decoration: none; display: block;
+          transition: color 0.15s;
         }
-        .hero-title:hover { color: #2B4ACB; }
-        .hero-subtitle {
-          font-family: 'Source Serif 4', serif;
-          font-size: 18px; line-height: 1.65;
-          color: #444; margin-bottom: 24px;
+        .featured-title:hover { color: #2B4ACB; }
+        .featured-subtitle {
+          font-size: 15px; line-height: 1.6;
+          color: #4B5563; margin-bottom: 20px;
         }
-        .hero-meta {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 12px; color: #888;
-          display: flex; align-items: center; gap: 8px;
+        .featured-meta {
+          display: flex; align-items: center; gap: 12px;
+          font-size: 13px; color: #9CA3AF;
         }
-        .hero-meta strong { color: #1A1A1A; font-weight: 600; }
-
-        /* Editor's picks */
-        .section-header {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; font-weight: 700;
-          letter-spacing: 2.5px; text-transform: uppercase;
-          color: #1A1A1A;
-          padding-bottom: 12px;
-          border-bottom: 2px solid #1A1A1A;
-          margin-bottom: 28px;
-        }
-        .picks-section { padding: 48px 0; border-bottom: 1px solid #D5D1C9; }
-        .picks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .pick-card { cursor: pointer; }
-        .pick-card img {
-          width: 100%; aspect-ratio: 4/3; object-fit: cover;
-          filter: grayscale(20%);
-          transition: filter 0.4s, transform 0.4s;
-        }
-        .pick-card:hover img { filter: grayscale(0%); transform: scale(1.01); }
-        .pick-card-cat {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 10px; font-weight: 700;
-          letter-spacing: 2px; text-transform: uppercase;
-          color: #2B4ACB; margin: 14px 0 8px;
-        }
-        .pick-card-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 20px; font-weight: 700;
-          line-height: 1.28; margin-bottom: 10px;
-          transition: color 0.2s;
-        }
-        .pick-card:hover .pick-card-title { color: #2B4ACB; }
-        .pick-card-meta {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; color: #999;
-        }
-        .pick-card-meta strong { color: #555; font-weight: 600; }
-
-        /* Main content area */
-        .main-section { padding: 48px 0; }
-        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 56px; }
+        .featured-meta strong { color: #374151; font-weight: 600; }
+        .meta-dot { color: #D1D5DB; }
 
         /* Category filter */
-        .cat-filter {
-          display: flex; gap: 6px; flex-wrap: wrap;
-          margin-bottom: 32px;
+        .filter-wrap { padding: 28px 0 0; }
+        .filter-row {
+          display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
         }
-        .cat-btn {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; font-weight: 500;
-          letter-spacing: 0.5px;
+        .filter-label {
+          font-size: 13px; font-weight: 500;
+          color: #6B7280; margin-right: 4px;
+        }
+        .filter-btn {
           padding: 6px 14px;
-          border: 1px solid #D5D1C9;
-          background: transparent;
-          color: #666; cursor: pointer;
-          transition: all 0.2s;
+          border-radius: 20px;
+          border: 1px solid #E5E7EB;
+          background: #fff;
+          font-size: 13px; font-weight: 500;
+          color: #374151; cursor: pointer;
+          transition: all 0.15s;
+          font-family: inherit;
         }
-        .cat-btn:hover { border-color: #1A1A1A; color: #1A1A1A; }
-        .cat-btn.active {
-          background: #1A1A1A; color: #FAFAF7;
-          border-color: #1A1A1A;
+        .filter-btn:hover { border-color: #2B4ACB; color: #2B4ACB; }
+        .filter-btn.active {
+          background: #2B4ACB; color: #fff;
+          border-color: #2B4ACB;
         }
 
-        /* Article list */
-        .article-item {
-          padding: 24px 0;
-          border-bottom: 1px solid #E8E5DD;
+        /* Articles grid */
+        .articles-wrap { padding: 28px 0 48px; }
+        .articles-section-title {
+          font-size: 13px; font-weight: 600;
+          color: #9CA3AF; letter-spacing: 0.5px;
+          text-transform: uppercase;
+          margin-bottom: 16px;
+        }
+
+        /* Card with image */
+        .cards-with-image {
+          display: grid; grid-template-columns: repeat(3, 1fr);
+          gap: 20px; margin-bottom: 32px;
+        }
+        .img-card {
+          background: #fff;
+          border: 1px solid #E5E7EB;
+          border-radius: 8px; overflow: hidden;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: box-shadow 0.2s, border-color 0.2s;
+          text-decoration: none; color: inherit; display: block;
         }
-        .article-item:first-child { padding-top: 0; }
-        .article-item:hover { background: rgba(0,0,0,0.01); }
-        .article-item-num {
-          font-family: 'Playfair Display', serif;
-          font-size: 36px; font-weight: 300;
-          color: #D5D1C9; line-height: 1;
-          margin-bottom: 8px;
+        .img-card:hover { box-shadow: 0 4px 16px rgba(43,74,203,0.1); border-color: #C7D2FE; }
+        .img-card img { width: 100%; height: 168px; object-fit: cover; display: block; }
+        .img-card-body { padding: 16px; }
+        .img-card-cat { margin-bottom: 8px; }
+        .img-card-title {
+          font-size: 15px; font-weight: 600;
+          line-height: 1.4; color: #111827;
+          margin-bottom: 12px; letter-spacing: -0.1px;
         }
-        .article-item-cat {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 10px; font-weight: 700;
-          letter-spacing: 2px; text-transform: uppercase;
-          color: #2B4ACB; margin-bottom: 6px;
+        .img-card:hover .img-card-title { color: #2B4ACB; }
+        .img-card-meta {
+          font-size: 12px; color: #9CA3AF;
+          display: flex; gap: 8px; align-items: center;
         }
-        .article-item-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 22px; font-weight: 700;
-          line-height: 1.3; margin-bottom: 8px;
-          transition: color 0.2s;
-        }
-        .article-item:hover .article-item-title { color: #2B4ACB; }
-        .article-item-meta {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; color: #999;
-        }
-        .article-item-meta strong { color: #555; font-weight: 600; }
+        .img-card-meta strong { color: #6B7280; font-weight: 500; }
 
-        /* Sidebar */
-        .sidebar-section { margin-bottom: 40px; }
-        .sidebar-section .section-header { font-size: 10px; }
+        /* List articles (no image) */
+        .list-articles {
+          display: grid; grid-template-columns: repeat(2, 1fr);
+          gap: 1px;
+          background: #E5E7EB;
+          border: 1px solid #E5E7EB;
+          border-radius: 8px; overflow: hidden;
+        }
+        .list-article-item {
+          background: #fff;
+          padding: 20px 24px;
+          cursor: pointer;
+          transition: background 0.15s;
+          text-decoration: none; color: inherit; display: block;
+        }
+        .list-article-item:hover { background: #F8F9FC; }
+        .list-article-cat { margin-bottom: 8px; }
+        .list-article-title {
+          font-size: 15px; font-weight: 600;
+          line-height: 1.4; color: #111827;
+          margin-bottom: 10px; letter-spacing: -0.1px;
+        }
+        .list-article-item:hover .list-article-title { color: #2B4ACB; }
+        .list-article-meta {
+          font-size: 12px; color: #9CA3AF;
+          display: flex; gap: 8px; align-items: center;
+        }
+        .list-article-meta strong { color: #6B7280; font-weight: 500; }
 
-        /* Opinion */
-        .opinion-card {
-          padding: 20px 0;
-          border-bottom: 1px solid #E8E5DD;
-        }
-        .opinion-card:last-child { border-bottom: none; }
-        .opinion-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 18px; font-weight: 700; font-style: italic;
-          line-height: 1.35; margin-bottom: 8px;
-          cursor: pointer; transition: color 0.2s;
-        }
-        .opinion-title:hover { color: #2B4ACB; }
-        .opinion-excerpt {
-          font-family: 'Source Serif 4', serif;
-          font-size: 14px; line-height: 1.6; color: #666;
-          margin-bottom: 8px;
-        }
-        .opinion-author {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; font-weight: 600; color: #888;
+        /* Empty state */
+        .empty-state {
+          text-align: center; padding: 64px 24px;
+          color: #9CA3AF; font-size: 15px;
+          background: #fff; border: 1px solid #E5E7EB;
+          border-radius: 8px;
         }
 
         /* Newsletter */
-        .newsletter-box {
-          background: #1A1A1A; color: #FAFAF7;
-          padding: 32px 28px;
+        .newsletter-wrap {
+          background: #0F1B3D;
+          border-radius: 10px;
+          padding: 40px 48px;
+          display: flex; align-items: center;
+          justify-content: space-between; gap: 40px;
+          margin-bottom: 48px;
         }
-        .newsletter-box h3 {
-          font-family: 'Playfair Display', serif;
-          font-size: 22px; font-weight: 700;
-          margin-bottom: 10px;
+        .newsletter-text h3 {
+          font-size: 20px; font-weight: 700;
+          color: #fff; margin-bottom: 6px;
+          letter-spacing: -0.3px;
         }
-        .newsletter-box p {
-          font-family: 'Source Serif 4', serif;
-          font-size: 14px; line-height: 1.6;
-          color: #BBB; margin-bottom: 18px;
+        .newsletter-text p {
+          font-size: 14px; color: #9CA3AF; line-height: 1.5;
+        }
+        .newsletter-form {
+          display: flex; gap: 10px; flex-shrink: 0;
         }
         .newsletter-input {
-          width: 100%; padding: 10px 14px;
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 13px;
-          border: 1px solid #444; background: transparent;
-          color: #FAFAF7; margin-bottom: 10px;
-          outline: none; transition: border-color 0.2s;
+          padding: 10px 16px;
+          border: 1px solid #374151;
+          background: #1F2D52;
+          color: #fff; border-radius: 6px;
+          font-size: 14px; font-family: inherit;
+          width: 260px; outline: none;
+          transition: border-color 0.15s;
         }
-        .newsletter-input::placeholder { color: #777; }
-        .newsletter-input:focus { border-color: #E8C547; }
+        .newsletter-input::placeholder { color: #6B7280; }
+        .newsletter-input:focus { border-color: #2B4ACB; }
         .newsletter-btn {
-          width: 100%; padding: 11px;
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 12px; font-weight: 700;
-          letter-spacing: 1.5px; text-transform: uppercase;
-          background: #E8C547; color: #1A1A1A;
-          border: none; cursor: pointer;
-          transition: background 0.2s;
+          padding: 10px 20px;
+          background: #2B4ACB; color: #fff;
+          border: none; border-radius: 6px;
+          font-size: 14px; font-weight: 600;
+          font-family: inherit; cursor: pointer;
+          white-space: nowrap;
+          transition: background 0.15s;
         }
-        .newsletter-btn:hover { background: #F0D060; }
+        .newsletter-btn:hover { background: #2240B0; }
 
-        /* Numbers bar */
-        .numbers-bar {
-          border-top: 3px double #1A1A1A;
-          border-bottom: 1px solid #D5D1C9;
-          padding: 36px 0;
-          margin-bottom: 0;
+        /* Stats */
+        .stats-bar {
+          background: #fff;
+          border: 1px solid #E5E7EB;
+          border-radius: 8px;
+          padding: 24px 0;
+          margin-bottom: 48px;
         }
-        .numbers-grid {
+        .stats-grid {
           display: grid; grid-template-columns: repeat(4, 1fr);
-          gap: 24px; text-align: center;
+          divide-x: 1px solid #E5E7EB;
+          text-align: center;
         }
-        .number-val {
-          font-family: 'Playfair Display', serif;
-          font-size: 38px; font-weight: 800;
-          color: #1A1A1A; line-height: 1;
+        .stat-item {
+          padding: 0 24px;
+          border-right: 1px solid #E5E7EB;
         }
-        .number-label {
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; letter-spacing: 1px;
-          text-transform: uppercase; color: #888;
-          margin-top: 6px;
+        .stat-item:last-child { border-right: none; }
+        .stat-val {
+          font-size: 28px; font-weight: 700;
+          color: #0F1B3D; letter-spacing: -0.5px;
+          margin-bottom: 4px;
+        }
+        .stat-label {
+          font-size: 12px; color: #9CA3AF; font-weight: 500;
         }
 
         /* Footer */
         .site-footer {
-          background: #1A1A1A; color: #999;
-          padding: 48px 24px 32px;
-          margin-top: 64px;
+          background: #fff;
+          border-top: 1px solid #E5E7EB;
+          padding: 32px 0;
         }
-        .footer-inner { max-width: 1200px; margin: 0 auto; }
-        .footer-top {
+        .footer-inner {
+          max-width: 1200px; margin: 0 auto; padding: 0 24px;
           display: flex; justify-content: space-between;
-          align-items: flex-start; padding-bottom: 28px;
-          border-bottom: 1px solid #333;
-          flex-wrap: wrap; gap: 24px;
+          align-items: center; flex-wrap: wrap; gap: 16px;
         }
-        .footer-brand {
-          font-family: 'Playfair Display', serif;
-          font-size: 24px; font-weight: 900; color: #FAFAF7;
+        .footer-logo {
+          font-size: 16px; font-weight: 700;
+          color: #0F1B3D; letter-spacing: -0.3px;
         }
-        .footer-brand span { color: #2B4ACB; }
-        .footer-links {
-          display: flex; gap: 24px;
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; letter-spacing: 0.5px;
-          text-transform: uppercase;
+        .footer-logo span { color: #2B4ACB; }
+        .footer-links-row {
+          display: flex; gap: 20px;
+          font-size: 13px; color: #6B7280;
         }
-        .footer-links a { color: #777; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: #FAFAF7; }
-        .footer-bottom {
+        .footer-links-row a {
+          color: inherit; text-decoration: none;
+          transition: color 0.15s; cursor: pointer;
+        }
+        .footer-links-row a:hover { color: #111827; }
+        .footer-copy {
+          width: 100%; text-align: center;
           padding-top: 20px;
-          font-family: 'Libre Franklin', sans-serif;
-          font-size: 11px; color: #555;
-          text-align: center;
+          font-size: 12px; color: #D1D5DB;
+          border-top: 1px solid #F3F4F6;
+          margin-top: 16px;
         }
-
-        /* Animations */
-        .fade-up {
-          opacity: 0; transform: translateY(24px);
-          transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
-        .fade-up.d1 { transition-delay: 0.1s; }
-        .fade-up.d2 { transition-delay: 0.2s; }
-        .fade-up.d3 { transition-delay: 0.3s; }
-        .fade-up.d4 { transition-delay: 0.4s; }
 
         @media (max-width: 900px) {
-          .hero-grid { grid-template-columns: 1fr; gap: 24px; }
-          .picks-grid { grid-template-columns: 1fr; }
-          .main-grid { grid-template-columns: 1fr; }
-          .numbers-grid { grid-template-columns: repeat(2, 1fr); }
-          .hero-title { font-size: 28px; }
-          .masthead h1 { font-size: 32px; }
+          .featured-card { grid-template-columns: 1fr; }
+          .featured-img { min-height: 200px; max-height: 220px; }
+          .cards-with-image { grid-template-columns: 1fr; }
+          .list-articles { grid-template-columns: 1fr; }
+          .newsletter-wrap { flex-direction: column; padding: 28px 24px; gap: 20px; }
+          .newsletter-form { flex-direction: column; width: 100%; }
+          .newsletter-input { width: 100%; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr); }
+          .stat-item:nth-child(2) { border-right: none; }
+          .stat-item:nth-child(3), .stat-item:nth-child(4) { border-top: 1px solid #E5E7EB; border-right: none; }
+          .stat-item:nth-child(4) { border-right: none; }
+          .footer-inner { flex-direction: column; align-items: flex-start; }
         }
       `}</style>
 
-      {/* Breaking Bar */}
-      <div className="breaking-bar">
-        <span>TRENDING</span>
-        Tech layoffs slow as AI hiring surges across 14 major U.S. metros 
-      </div>
-
-      {/* Navigation */}
-      <nav className={`nav-bar ${scrolled ? "scrolled" : ""}`}>
-        
-        <div className="nav-links">
-          <a>Find Jobs</a>
-          <a>Career Advice</a>
-          
-          <a>Remote Work</a>
-         
+      {/* Nav */}
+      <nav className="blog-nav">
+        <div className="blog-nav-inner">
+          <a className="nav-logo" href="/">Oh My <span>Job</span></a>
+          <div className="nav-links">
+            <a href="/jobs">Find Jobs</a>
+            <a href="/companies">Companies</a>
+            <a href="/salaries">Salaries</a>
+            <a href="/blog" className="active">Career Tips</a>
+          </div>
+          <button className="nav-cta">Post a Job</button>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="hero">
-        <div className="container">
-          <div className={`hero-grid fade-up ${visible ? "visible" : ""}`}>
-            <div style={{ overflow: "hidden" }}>
-              <img className="hero-image" src={FEATURED_ARTICLE.image} alt="" />
-            </div>
-            <div>
-              <div className="hero-category">{FEATURED_ARTICLE.category}</div>
-              <h2 className="hero-title"><a href={FEATURED_ARTICLE.url} style={{color: 'inherit', textDecoration: 'none'}}>{FEATURED_ARTICLE.title}</a></h2>
-              <p className="hero-subtitle">{FEATURED_ARTICLE.subtitle}</p>
-              <div className="hero-meta">
-                <strong>{FEATURED_ARTICLE.author}</strong>
-                <span>·</span>
-                <span>{FEATURED_ARTICLE.date}</span>
-                <span>·</span>
-                
-              </div>
-            </div>
-          </div>
+      {/* Page header */}
+      <div className="page-header">
+        <div className="page-header-inner">
+          <h1>Career Resources</h1>
+          <p>Advice, guides, and market insights to help you land your next job.</p>
         </div>
-      </section>
+      </div>
 
-      {/* Editor's Picks */}
-      <section className="picks-section">
-        <div className="container">
-          <div className="section-header">Editor's Picks</div>
-          <div className="picks-grid">
-            {EDITOR_PICKS.map((pick, i) => (
-              <div key={i} className={`pick-card fade-up d${i + 1} ${visible ? "visible" : ""}`}>
-                <div style={{ overflow: "hidden" }}>
-                  <img src={pick.image} alt="" />
+      <div className="page-wrap">
+
+        {/* Featured article */}
+        <div className="featured-wrap">
+          <a href={FEATURED_ARTICLE.url} style={{ textDecoration: "none", color: "inherit" }}>
+            <div className="featured-card">
+              <img className="featured-img" src={FEATURED_ARTICLE.image} alt={FEATURED_ARTICLE.title} />
+              <div className="featured-body">
+                <div className="featured-label">Featured</div>
+                <CategoryBadge category={FEATURED_ARTICLE.category} />
+                <div style={{ marginTop: "12px" }}>
+                  <span className="featured-title">{FEATURED_ARTICLE.title}</span>
                 </div>
-                <div className="pick-card-cat">{pick.category}</div>
-                <div className="pick-card-title">{pick.title}</div>
-                <div className="pick-card-meta">
-                  <strong>{pick.author}</strong> · {pick.date} 
+                <p className="featured-subtitle">{FEATURED_ARTICLE.subtitle}</p>
+                <div className="featured-meta">
+                  <strong>{FEATURED_ARTICLE.author}</strong>
+                  <span className="meta-dot">·</span>
+                  <span>{FEATURED_ARTICLE.date}</span>
+                  <span className="meta-dot">·</span>
+                  <span>{FEATURED_ARTICLE.readTime}</span>
                 </div>
               </div>
+            </div>
+          </a>
+        </div>
+
+        {/* Filter */}
+        <div className="filter-wrap">
+          <div className="filter-row">
+            <span className="filter-label">Topic:</span>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                className={`filter-btn ${activeCategory === cat ? "active" : ""}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </button>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Main Content + Sidebar */}
-      <section className="main-section">
-        <div className="container">
-          <div className="main-grid">
-            {/* Articles */}
-            <div>
-              <div className="section-header">Latest</div>
-              <div className="cat-filter">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat}
-                    className={`cat-btn ${activeCategory === cat ? "active" : ""}`}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-              <div>
-                {filtered.map((article, i) => (
-                  <div key={i} className={`article-item fade-up d${Math.min(i + 1, 4)} ${visible ? "visible" : ""}`}>
-                    <div className="article-item-num">{String(i + 1).padStart(2, "0")}</div>
-                    <div className="article-item-cat">{article.category}</div>
-                    <div className="article-item-title">{article.title}</div>
-                    <div className="article-item-meta">
-                      <strong>{article.author}</strong> · {article.date} 
-                    </div>
+        {/* Articles */}
+        <div className="articles-wrap">
+          {filtered.length === 0 ? (
+            <div className="empty-state">No articles in this category yet.</div>
+          ) : (
+            <>
+              {withImages.length > 0 && (
+                <>
+                  <div className="articles-section-title">Latest guides</div>
+                  <div className="cards-with-image">
+                    {withImages.map((article, i) => (
+                      <a key={i} className="img-card" href="#">
+                        <img src={article.image!} alt={article.title} />
+                        <div className="img-card-body">
+                          <div className="img-card-cat"><CategoryBadge category={article.category} /></div>
+                          <div className="img-card-title">{article.title}</div>
+                          <div className="img-card-meta">
+                            <strong>{article.author}</strong>
+                            <span>·</span>
+                            <span>{article.readTime}</span>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
                   </div>
-                ))}
-                {filtered.length === 0 && (
-                  <p style={{ fontFamily: "'Source Serif 4', serif", color: "#999", padding: "32px 0", fontStyle: "italic" }}>
-                    No articles in this category yet. Check back soon.
-                  </p>
-                )}
-              </div>
-            </div>
+                </>
+              )}
 
-            {/* Sidebar */}
-            <aside>
-              <div className="sidebar-section">
-                <div className="section-header">Opinion</div>
-                {OPINION_PIECES.map((op, i) => (
-                  <div key={i} className="opinion-card">
-                    <div className="opinion-title">{op.title}</div>
-                    <div className="opinion-excerpt">{op.excerpt}</div>
-                    <div className="opinion-author">{op.author}</div>
+              {withoutImages.length > 0 && (
+                <>
+                  <div className="articles-section-title" style={{ marginTop: withImages.length > 0 ? "8px" : "0" }}>More articles</div>
+                  <div className="list-articles">
+                    {withoutImages.map((article, i) => (
+                      <a key={i} className="list-article-item" href="#">
+                        <div className="list-article-cat"><CategoryBadge category={article.category} /></div>
+                        <div className="list-article-title">{article.title}</div>
+                        <div className="list-article-meta">
+                          <strong>{article.author}</strong>
+                          <span>·</span>
+                          <span>{article.readTime}</span>
+                        </div>
+                      </a>
+                    ))}
                   </div>
-                ))}
-              </div>
-
-              <div className="sidebar-section">
-                <div className="section-header">The Morning Brief</div>
-                <div className="newsletter-box">
-                  <h3>Get hired smarter.</h3>
-                  <p>
-                    A weekly dispatch of career intelligence: market shifts, salary benchmarks,
-                    and the advice that actually works. Free, every Tuesday.
-                  </p>
-                  <input
-                    className="newsletter-input"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <button className="newsletter-btn">Subscribe</button>
-                </div>
-              </div>
-            </aside>
-          </div>
+                </>
+              )}
+            </>
+          )}
         </div>
-      </section>
 
-      {/* Numbers */}
-      <section className="numbers-bar">
-        <div className="container">
-          <div className={`numbers-grid fade-up d2 ${visible ? "visible" : ""}`}>
+        {/* Newsletter */}
+        <div className="newsletter-wrap">
+          <div className="newsletter-text">
+            <h3>Get weekly job market insights</h3>
+            <p>Salary data, hiring trends, and career tips — straight to your inbox every Tuesday.</p>
+          </div>
+          {subscribed ? (
+            <div style={{ color: "#86EFAC", fontWeight: 600, fontSize: "15px", flexShrink: 0 }}>
+              You're in. See you Tuesday.
+            </div>
+          ) : (
+            <div className="newsletter-form">
+              <input
+                className="newsletter-input"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button className="newsletter-btn" onClick={() => email && setSubscribed(true)}>
+                Subscribe
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Stats */}
+        <div className="stats-bar">
+          <div className="stats-grid">
             {[
               { val: "8.2M", label: "Open Positions" },
               { val: "$78K", label: "Median Salary" },
               { val: "62%", label: "Offer Remote" },
               { val: "3.4%", label: "Unemployment" },
             ].map((n, i) => (
-              <div key={i}>
-                <div className="number-val">{n.val}</div>
-                <div className="number-label">{n.label}</div>
+              <div key={i} className="stat-item">
+                <div className="stat-val">{n.val}</div>
+                <div className="stat-label">{n.label}</div>
               </div>
             ))}
           </div>
         </div>
-      </section>
+
+      </div>
 
       {/* Footer */}
       <footer className="site-footer">
         <div className="footer-inner">
-          <div className="footer-top">
-            <div className="footer-brand">Oh My <span>Job</span></div>
-            <div className="footer-links">
-              <a>About</a>
-              <a>Contact</a>
-              <a>Privacy</a>
-              <a>Terms</a>
-              <a>Advertise</a>
-              <a>Careers</a>
-            </div>
+          <div className="footer-logo">Oh My <span>Job</span></div>
+          <div className="footer-links-row">
+            <a>About</a>
+            <a>Contact</a>
+            <a>Privacy</a>
+            <a>Terms</a>
+            <a>Advertise</a>
           </div>
-          <div className="footer-bottom">
-            © 2026 Oh My Job. All rights reserved. Made for job seekers, by job seekers.
-          </div>
+          <div className="footer-copy">© 2026 Oh My Job. All rights reserved.</div>
         </div>
       </footer>
+
     </div>
   );
 }

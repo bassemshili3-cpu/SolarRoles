@@ -3,8 +3,99 @@
 import { useQuery } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import { Bell, Check } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Bell, Check, ChevronDown } from 'lucide-react'
+
+const JOB_TYPES = [
+  'All job types',
+  'Full-time',
+  'Part-time',
+  'Contract',
+  'Remote',
+  'Hybrid',
+  'Internship',
+  'Temporary',
+  'Per diem',
+]
+
+const US_LOCATIONS = [
+  'All locations',
+  'New York, NY',
+  'Los Angeles, CA',
+  'Chicago, IL',
+  'Houston, TX',
+  'Phoenix, AZ',
+  'Philadelphia, PA',
+  'San Antonio, TX',
+  'San Diego, CA',
+  'Dallas, TX',
+  'San Jose, CA',
+  'Austin, TX',
+  'Jacksonville, FL',
+  'Fort Worth, TX',
+  'Columbus, OH',
+  'Charlotte, NC',
+  'Indianapolis, IN',
+  'San Francisco, CA',
+  'Seattle, WA',
+  'Denver, CO',
+  'Nashville, TN',
+  'Oklahoma City, OK',
+  'El Paso, TX',
+  'Washington, DC',
+  'Las Vegas, NV',
+  'Louisville, KY',
+  'Memphis, TN',
+  'Portland, OR',
+  'Baltimore, MD',
+  'Milwaukee, WI',
+  'Atlanta, GA',
+  'Miami, FL',
+  'Minneapolis, MN',
+  'Boston, MA',
+  'Remote (US)',
+]
+
+const JOB_CATEGORIES = [
+  'All categories',
+  'Technology & Software',
+  'Healthcare & Nursing',
+  'Finance & Accounting',
+  'Sales & Business Dev.',
+  'Marketing & Advertising',
+  'Education & Teaching',
+  'Engineering',
+  'Customer Service',
+  'Administrative & Office',
+  'Manufacturing & Logistics',
+  'Construction & Trades',
+  'Retail & Hospitality',
+  'Legal',
+  'Human Resources',
+  'Creative & Design',
+  'Science & Research',
+  'Transportation & Delivery',
+  'Government & Public Sector',
+  'Non-profit & Social Services',
+]
+
+const EXPERIENCE_LEVELS = [
+  'All levels',
+  'Internship',
+  'Entry / Junior',
+  'Mid-Level',
+  'Senior',
+  'Manager / Lead',
+  'Director',
+  'Executive / VP+',
+]
+
+const WORK_ARRANGEMENTS = [
+  'All arrangements',
+  'Remote',
+  'Hybrid',
+  'On-site',
+]
 
 interface JobListProps {
   what: string
@@ -13,11 +104,79 @@ interface JobListProps {
   initialData?: { results: any[]; count: number } // ← données SSR pour Googlebot
 }
 
+function AlertDropdown({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string
+  options: string[]
+  value: string
+  onChange: (v: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const isActive = value !== options[0]
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    if (open) document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
+
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${
+          isActive
+            ? 'bg-gray-900 text-white'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+        }`}
+      >
+        <span className="max-w-[140px] truncate">{isActive ? value : label}</span>
+        <ChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div
+          className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg py-1 min-w-[200px] max-h-64 overflow-y-auto"
+          style={{ top: '100%', left: 0 }}
+        >
+          {options.map(opt => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => { onChange(opt); setOpen(false) }}
+              className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                value === opt
+                  ? 'bg-gray-900 text-white font-semibold'
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function JobList({ what, where, salary_min, initialData }: JobListProps) {
   const [page, setPage] = useState(1)
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
   const [frequency, setFrequency] = useState<'weekly' | 'twice'>('weekly')
+  const [alertJobType, setAlertJobType] = useState(JOB_TYPES[0])
+  const [alertLocation, setAlertLocation] = useState(US_LOCATIONS[0])
+  const [alertCategory, setAlertCategory] = useState(JOB_CATEGORIES[0])
+  const [alertExperience, setAlertExperience] = useState(EXPERIENCE_LEVELS[0])
+  const [alertArrangement, setAlertArrangement] = useState(WORK_ARRANGEMENTS[0])
 
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
@@ -130,15 +289,36 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
           >
             2x / Week
           </button>
-          <div className="px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 flex items-center gap-2">
-            All jobs <span className="text-xs opacity-70">⌄</span>
-          </div>
-          <div className="px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 flex items-center gap-2">
-            All locations <span className="text-xs opacity-70">⌄</span>
-          </div>
-          <div className="px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 flex items-center gap-2">
-            All categories <span className="text-xs opacity-70">⌄</span>
-          </div>
+          <AlertDropdown
+            label="All job types"
+            options={JOB_TYPES}
+            value={alertJobType}
+            onChange={setAlertJobType}
+          />
+          <AlertDropdown
+            label="All locations"
+            options={US_LOCATIONS}
+            value={alertLocation}
+            onChange={setAlertLocation}
+          />
+          <AlertDropdown
+            label="All categories"
+            options={JOB_CATEGORIES}
+            value={alertCategory}
+            onChange={setAlertCategory}
+          />
+          <AlertDropdown
+            label="All levels"
+            options={EXPERIENCE_LEVELS}
+            value={alertExperience}
+            onChange={setAlertExperience}
+          />
+          <AlertDropdown
+            label="All arrangements"
+            options={WORK_ARRANGEMENTS}
+            value={alertArrangement}
+            onChange={setAlertArrangement}
+          />
         </div>
 
         {/* Formulaire */}
@@ -153,8 +333,12 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
                 email,
                 frequency,
                 what: resolvedWhat,
-                where: resolvedWhere,
+                where: alertLocation !== US_LOCATIONS[0] ? alertLocation : resolvedWhere,
                 salaryMin: salary_min,
+                jobType: alertJobType !== JOB_TYPES[0] ? alertJobType : undefined,
+                category: alertCategory !== JOB_CATEGORIES[0] ? alertCategory : undefined,
+                experience: alertExperience !== EXPERIENCE_LEVELS[0] ? alertExperience : undefined,
+                arrangement: alertArrangement !== WORK_ARRANGEMENTS[0] ? alertArrangement : undefined,
               }),
             })
             if (res.ok) {

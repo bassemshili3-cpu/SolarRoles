@@ -8,10 +8,29 @@ import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ['latin'] })
 
+const SITE_URL = 'https://www.oh-my-job.com'
+
 export const metadata = {
   title: 'Oh My Job - Smart Job Search USA',
   description: 'Search and compare real job listings across the U.S. Salary ranges shown upfront — no account or sign-up required.',
-  icons: { icon: '/logo.svg' },
+  metadataBase: new URL(SITE_URL),
+  // app/icon.svg is auto-discovered by Next.js App Router — no manual icon entry needed
+}
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Oh My Job',
+  url: SITE_URL,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/logo-square.svg`,
+    width: 512,
+    height: 512,
+  },
+  sameAs: [
+    'https://www.facebook.com/ohmyjob',
+  ],
 }
 
 export default function RootLayout({
@@ -21,14 +40,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body className={inter.className}>
         <Providers>
           <CookieBanner />
           <Navbar />
           {children}
           <Footer />
-         
-          
         </Providers>
         <Analytics/>
       </body>
