@@ -83,9 +83,7 @@ export default function Home() {
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-tight">
             Your next opportunity<br />is one click away
           </h1>
-          <p className="text-blue-100 text-lg md:text-xl mb-10 max-w-xl mx-auto leading-relaxed">
-            Millions of jobs. Salary ranges upfront. No account needed to start searching.
-          </p>
+          
           <SearchHero />
         </div>
       </section>
