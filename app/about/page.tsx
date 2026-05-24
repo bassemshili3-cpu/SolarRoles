@@ -1,108 +1,87 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: "About Oh My Job | Smarter Job Search, Powered by AI",
+  title: 'About | Oh My Job',
   description:
-    "Oh My Job is a U.S. job search platform that uses AI-powered smart matching to connect job seekers with the right opportunities faster. Learn more about our mission.",
+    'We are rethinking how hiring works in the US. Oh My Job puts skills first so the right people find the right jobs, regardless of where they went to school.',
   openGraph: {
-    title: "About Oh My Job | Smarter Job Search, Powered by AI",
-    description:
-      "Oh My Job is a U.S. job search platform that uses AI-powered smart matching to connect job seekers with the right opportunities faster.",
-    url: "https://oh-my-job.com/about",
-    type: "website",
+    title: 'About Oh My Job',
+    description: 'Skills-based hiring for the modern job market.',
+    url: 'https://oh-my-job.com/about',
+    type: 'website',
   },
-};
+}
 
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="max-w-3xl mx-auto px-6 pt-20 pb-16">
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
-          Finding a job is hard enough.
-          <br />
-          <span className="text-blue-600">Searching for one shouldn't be.</span>
-        </h1>
-        <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-2xl">
-          Oh My Job is a job search platform built for the U.S. market that
-          helps you cut through the noise. Instead of scrolling through hundreds
-          of irrelevant listings, our AI-powered matching surfaces the
-          opportunities that actually fit your skills, experience, and
-          preferences.
-        </p>
+      <section className="bg-[#1a2340] text-white">
+        <div className="max-w-3xl mx-auto px-6 py-20">
+          <p className="text-[#6b8cff] text-sm font-semibold tracking-wider uppercase mb-5">About Oh My Job</p>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
+            The job market judges you<br />by where you've been.
+            <br />
+            <span className="text-[#6b8cff]">We think that's backwards.</span>
+          </h1>
+          <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+            We're building a job board that focuses on what people can actually do, not where they went to school or who they've worked for before.
+          </p>
+        </div>
       </section>
 
-      {/* Why we built this */}
-      <section className="max-w-3xl mx-auto px-6 py-12">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Why we built this
-        </h2>
-        <p className="text-gray-600 leading-relaxed mb-4">
-          Most job boards work the same way they did fifteen years ago: you type
-          a keyword, pick a location, and get thousands of results sorted by
-          date. That approach puts the burden on you to figure out what's
-          relevant and what's not.
-        </p>
-        <p className="text-gray-600 leading-relaxed mb-4">
-          We thought it could work differently. What if a job search engine
-          actually understood what you're looking for and brought back results
-          ranked by how well they match you, not just how recently they were
-          posted?
-        </p>
-        <p className="text-gray-600 leading-relaxed">
-          That's the idea behind Oh My Job. We combine traditional filters with
-          smart AI matching so you spend less time searching and more time
-          applying to jobs worth your attention.
-        </p>
+      {/* The problem */}
+      <section className="max-w-3xl mx-auto px-6 py-16">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">The problem we're solving</h2>
+        <div className="space-y-5 text-gray-600 leading-relaxed text-lg">
+          <p>
+            Getting a first job still requires having had a first job. Changing careers at 35 is still treated like starting from zero. And a self-taught developer with the skills to do the work gets screened out before a recruiter ever reads their resume.
+          </p>
+          <p>
+            Most job boards are running the same playbook they had in 2005: keyword search, date sort, done. They're not broken. They're just not built for the people who need them most.
+          </p>
+          <p>
+            We think there's a better way.
+          </p>
+        </div>
       </section>
 
-      {/* How it works */}
+      {/* What we're building */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-8">
-            How it works
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">What we're building</h2>
           <div className="space-y-8">
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm">
+            <div className="flex gap-5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2B4ACB] text-white text-sm font-bold flex items-center justify-center mt-0.5">
                 1
               </div>
               <div>
-                <h3 className="font-medium text-gray-900 text-lg">
-                  Tell us what you're looking for
-                </h3>
-                <p className="text-gray-600 mt-1 leading-relaxed">
-                  Use our search filters or describe your ideal role in plain
-                  language. Our AI understands both.
+                <h3 className="font-semibold text-gray-900 text-lg mb-2">A job board that actually works</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Over 300,000 US jobs updated daily, with filters that go beyond the basics. Job type, salary, experience level, remote work, visa sponsorship. Everything you need to find something worth applying to, without scrolling through pages of irrelevant listings.
                 </p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm">
+            <div className="flex gap-5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2B4ACB] text-white text-sm font-bold flex items-center justify-center mt-0.5">
                 2
               </div>
               <div>
-                <h3 className="font-medium text-gray-900 text-lg">
-                  Get matched, not flooded
-                </h3>
-                <p className="text-gray-600 mt-1 leading-relaxed">
-                  Instead of dumping every listing on you, we rank results by
-                  relevance to your profile. The best fits come first.
+                <h3 className="font-semibold text-gray-900 text-lg mb-2">Skills over pedigree</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  We're working toward a world where you can prove what you know. Verified digital credentials, skills assessments, and portable badges will let candidates demonstrate competence, not just claim it. This is where we're going, and we're building toward it deliberately.
                 </p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm">
+            <div className="flex gap-5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2B4ACB] text-white text-sm font-bold flex items-center justify-center mt-0.5">
                 3
               </div>
               <div>
-                <h3 className="font-medium text-gray-900 text-lg">
-                  Stay ahead with job alerts
-                </h3>
-                <p className="text-gray-600 mt-1 leading-relaxed">
-                  Set up alerts and get notified when new roles matching your
-                  criteria are posted, so you never miss an opportunity.
+                <h3 className="font-semibold text-gray-900 text-lg mb-2">Built for who actually needs it</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Recent grads, career changers, people without traditional degrees — the ones the system wasn't designed for. Our goal is to give them the same shot as everyone else, based on what they can do today.
                 </p>
               </div>
             </div>
@@ -112,71 +91,50 @@ export default function AboutPage() {
 
       {/* What we believe */}
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-8">
-          What we believe
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-8">What we believe</h2>
         <div className="grid sm:grid-cols-2 gap-8">
           <div>
-            <h3 className="font-medium text-gray-900 text-lg mb-2">
-              Job search should be efficient
-            </h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Skills are the real signal</h3>
             <p className="text-gray-600 leading-relaxed">
-              Your time matters. Every feature we build is designed to reduce the
-              hours you spend searching and increase the quality of what you
-              find.
+              A degree is one data point. A portfolio of verifiable skills is a much better one. We want to help candidates build that portfolio and share it with employers who are paying attention.
             </p>
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 text-lg mb-2">
-              AI should work for you
-            </h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Free for job seekers, always</h3>
             <p className="text-gray-600 leading-relaxed">
-              We use artificial intelligence to understand context and intent,
-              not just keywords. The technology adapts to you, not the other way
-              around.
+              No premium tiers, no paywalls on search results. If you're looking for work, you get the full platform from day one.
             </p>
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 text-lg mb-2">
-              Transparency matters
-            </h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Real listings</h3>
             <p className="text-gray-600 leading-relaxed">
-              We show you real listings from real employers. No fake postings, no
-              ghost jobs, no bait-and-switch. What you see is what's actually out
-              there.
+              We aggregate from verified sources and filter aggressively. No ghost jobs, no positions that were filled three months ago, no bait-and-switch.
             </p>
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 text-lg mb-2">
-              Free means free
-            </h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Transparency</h3>
             <p className="text-gray-600 leading-relaxed">
-              Oh My Job is completely free for job seekers. No premium tiers, no
-              paywalls on search results, no hidden fees. You get the full
-              experience from day one.
+              Salary ranges when we have them. Clear requirements. Honest about what we know and what we don't. No hidden ranking by paid placement.
             </p>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-[#1a2340] py-16">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-            Ready to find your next role?
-          </h2>
-          <p className="text-gray-600 mb-8 max-w-lg mx-auto">
-            Start searching thousands of U.S. job listings matched to what
-            you're actually looking for.
+          <h2 className="text-2xl font-bold text-white mb-4">Ready to find your next role?</h2>
+          <p className="text-white/60 mb-8 max-w-lg mx-auto">
+            Browse thousands of US jobs and set up alerts so you never miss the right opportunity.
           </p>
           <Link
             href="/"
-            className="inline-block bg-blue-600 text-white font-medium px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-block bg-white text-[#1a2340] font-semibold px-8 py-3 rounded-lg hover:bg-white/90 transition-colors"
           >
             Start searching
           </Link>
         </div>
       </section>
     </main>
-  );
+  )
 }

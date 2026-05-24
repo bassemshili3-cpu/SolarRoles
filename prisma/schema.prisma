@@ -21,6 +21,15 @@ model JobAlert {
 
   @@unique([email, what, where], name: "email_what_where")
 }
+
+model NewsletterSubscriber {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  active     Boolean  @default(true)
+  sentSlugs  String[]
+  createdAt  DateTime @default(now())
+  lastSentAt DateTime?
+}
 model Job {
   id            String   @id
   source        String
