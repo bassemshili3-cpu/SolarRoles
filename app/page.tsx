@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import SearchHero from '@/components/SearchHero'
 import NewsletterForm from '@/components/NewsletterForm'
 import { BLOG_ARTICLES } from '@/lib/blog-articles'
@@ -7,6 +8,12 @@ import {
   Code2, Palette, BarChart2, Settings, TrendingUp, Heart, Briefcase,
   Award, Globe, Users, ArrowRight,
 } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Oh My Job - Smart Job Search USA',
+  description:
+    'Search 300,000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account required.',
+}
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
