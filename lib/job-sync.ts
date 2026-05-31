@@ -199,7 +199,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
   return saved
 }
 
-// ─── Upsert for Lensa (also different shape) ─────────────────────────────────
+// ─── Upsert for Lensa ────────────────────────────────────────────────────────
 async function upsertLensaJobs(adverts: any[]): Promise<number> {
   let saved = 0
   const expiresAt = new Date()
@@ -303,17 +303,12 @@ export async function syncAllJobs(
 
     // ─── LENSA ────────────────────────────────────────────────────────
     try {
-      const data = await searchLensaJobs({
-        job_title: keyword,
-        limit,
-      })
-
+      const data = await searchLensaJobs({ job_title: keyword, limit })
       if (data?.job_adverts && data.job_adverts.length > 0) {
         result.lensa.fetched += data.job_adverts.length
         result.lensa.saved += await upsertLensaJobs(data.job_adverts)
         result.lensa.queriesRun++
       }
-
       await new Promise((r) => setTimeout(r, 300))
     } catch (e: any) {
       console.error(`❌ Lensa error (${keyword}):`, e.message)

@@ -2,17 +2,17 @@ import { Metadata } from 'next'
 import PaycheckCalculator from '@/components/PaycheckCalculator'
 
 export const metadata: Metadata = {
-  title: 'Free Paycheck Calculator 2026 | Estimate Your Take-Home Pay by State',
+  title: 'Oh My Job Free Paycheck Calculator 2026 | Estimate Your Take-Home Pay by State',
   description: 'Calculate your actual take-home pay after federal taxes, state taxes, Social Security, and Medicare. All 50 states supported. Updated for 2026 tax brackets. Free, instant, no signup.',
   keywords: 'paycheck calculator, take home pay calculator, salary after taxes, paycheck calculator by state, net pay calculator 2026, gross to net salary, biweekly paycheck calculator',
   openGraph: {
-    title: 'Free Paycheck Calculator 2026 | Every State',
+    title: 'Oh My Job Free Paycheck Calculator 2026 | Every State',
     description: 'Enter your salary, pick your state, see your real take-home pay. Federal + state taxes, Social Security, Medicare. Instant results.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paycheck Calculator 2026 | Instant Take-Home Pay Estimate',
+    title: 'Oh My Job Free Paycheck Calculator 2026 | Instant Take-Home Pay Estimate',
     description: 'Free paycheck calculator for all 50 states. Gross to net in seconds.',
   },
   alternates: {

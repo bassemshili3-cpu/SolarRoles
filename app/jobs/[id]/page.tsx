@@ -14,8 +14,7 @@ import PaycheckCalculatorCard from '@/components/PaycheckCalculatorCard'
 import { extractSalaryFromText } from '@/lib/extractSalary'
 import { formatJobDescription } from '@/lib/formatJobDescription'
 import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
-import { normalizeLensa, normalizeAdzuna } from '@/lib/jobs'
-import { searchLensaJobs } from '@/lib/lensa'
+import { normalizeAdzuna } from '@/lib/jobs'
 import { getJobById } from '@/lib/adzuna'
 import { prisma } from '@/lib/prisma'
 
@@ -250,10 +249,14 @@ export async function generateMetadata(
 
 export default async function JobDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ from?: string }>
 }) {
   const { id } = await params
+  const { from } = await searchParams
+  const backUrl = from && decodeURIComponent(from).startsWith('/jobs') ? decodeURIComponent(from) : '/jobs'
   const raw = await getJobDetail(id)
 
   if (!raw) notFound()
@@ -280,7 +283,7 @@ export default async function JobDetailPage({
       <div className="max-w-6xl mx-auto px-6 py-12">
 
         <Link
-          href="/jobs"
+          href={backUrl}
           className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8"
         >
           <ArrowLeft className="w-4 h-4" /> Back to jobs
@@ -309,6 +312,11 @@ export default async function JobDetailPage({
             {job.source === 'jooble' && (
               <div className="flex justify-end mb-4">
                 <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
+              </div>
+            )}
+            {job.source === 'lensa' && (
+              <div className="flex justify-end mb-4">
+                <span className="text-xs text-muted-foreground">Sourced via Lensa</span>
               </div>
             )}
 

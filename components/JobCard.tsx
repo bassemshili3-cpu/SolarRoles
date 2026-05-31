@@ -19,6 +19,7 @@ interface JobCardProps {
     created?: string
     company_logo?: string
   }
+  backUrl?: string
 }
 
 function getCompanyDomain(companyName: string): string {
@@ -28,7 +29,7 @@ function getCompanyDomain(companyName: string): string {
     + '.com'
 }
 
-export default function JobCard({ job }: JobCardProps) {
+export default function JobCard({ job, backUrl }: JobCardProps) {
   const formatSalary = (min?: number, max?: number, period?: string) => {
     if (!min && !max) return null
     const formatter = new Intl.NumberFormat('en-US', {
@@ -63,7 +64,7 @@ export default function JobCard({ job }: JobCardProps) {
 
   return (
     <Link
-      href={`/jobs/${job.id}`}
+      href={`/jobs/${job.id}${backUrl ? `?from=${encodeURIComponent(backUrl)}` : ''}`}
       className="group block bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300 hover:-translate-y-1"
     >
       {/* Header */}

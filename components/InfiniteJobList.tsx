@@ -3,8 +3,9 @@
 import { useQuery } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import { Button } from '@/components/ui/button'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { Bell, Check, ChevronDown } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 const JOB_TYPES = [
   'All job types',
@@ -168,6 +169,7 @@ function AlertDropdown({
 }
 
 export default function JobList({ what, where, salary_min, initialData }: JobListProps) {
+  const searchParams = useSearchParams()
   const [page, setPage] = useState(1)
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
@@ -180,6 +182,18 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
 
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
+
+  // Build back URL preserving all current filters + current page
+  const backUrl = useMemo(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (page > 1) {
+      params.set('page', page.toString())
+    } else {
+      params.delete('page')
+    }
+    const qs = params.toString()
+    return qs ? `/jobs?${qs}` : '/jobs'
+  }, [searchParams, page])
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['jobs', resolvedWhat, resolvedWhere, salary_min, page],
@@ -232,7 +246,7 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
       {/* Jobs */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
         {(data?.results || []).map((job: any) => (
-          <JobCard key={job.id} job={job} />
+          <JobCard key={job.id} job={job} backUrl={backUrl} />
         ))}
       </div>
 

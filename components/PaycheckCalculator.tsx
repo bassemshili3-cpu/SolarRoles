@@ -296,11 +296,12 @@ export default function PaycheckCalculator({ defaultState = '' }: { defaultState
           </div>
 
           {/* Breakdown */}
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="overflow-x-auto">
+          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden min-w-[340px]">
             <div className="grid grid-cols-3 gap-px bg-gray-100 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <div className="bg-white px-5 py-3">Deduction</div>
-              <div className="bg-white px-5 py-3 text-right">Per {payFrequency === 'annual' ? 'Year' : payFrequency === 'monthly' ? 'Month' : 'Paycheck'}</div>
-              <div className="bg-white px-5 py-3 text-right">Annual</div>
+              <div className="bg-white px-3 sm:px-5 py-3">Deduction</div>
+              <div className="bg-white px-3 sm:px-5 py-3 text-right">Per {payFrequency === 'annual' ? 'Year' : payFrequency === 'monthly' ? 'Month' : 'Paycheck'}</div>
+              <div className="bg-white px-3 sm:px-5 py-3 text-right">Annual</div>
             </div>
 
             {[
@@ -311,13 +312,13 @@ export default function PaycheckCalculator({ defaultState = '' }: { defaultState
               { label: 'Medicare (1.45%)', per: results.medicare / periods, annual: results.medicare },
             ].map((row, i) => (
               <div key={i} className={`grid grid-cols-3 gap-px ${row.highlight ? 'bg-gray-50' : 'bg-gray-100'}`}>
-                <div className={`${row.highlight ? 'bg-gray-50' : 'bg-white'} px-5 py-3.5 text-sm ${row.highlight ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>
+                <div className={`${row.highlight ? 'bg-gray-50' : 'bg-white'} px-3 sm:px-5 py-3.5 text-sm ${row.highlight ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>
                   {row.label}
                 </div>
-                <div className={`${row.highlight ? 'bg-gray-50' : 'bg-white'} px-5 py-3.5 text-sm text-right ${row.highlight ? 'font-semibold text-gray-900' : 'text-red-600'}`}>
+                <div className={`${row.highlight ? 'bg-gray-50' : 'bg-white'} px-3 sm:px-5 py-3.5 text-sm text-right ${row.highlight ? 'font-semibold text-gray-900' : 'text-red-600'}`}>
                   {row.highlight ? '' : '-'}${fmt(row.per)}
                 </div>
-                <div className={`${row.highlight ? 'bg-gray-50' : 'bg-white'} px-5 py-3.5 text-sm text-right ${row.highlight ? 'font-semibold text-gray-900' : 'text-red-600'}`}>
+                <div className={`${row.highlight ? 'bg-gray-50' : 'bg-white'} px-3 sm:px-5 py-3.5 text-sm text-right ${row.highlight ? 'font-semibold text-gray-900' : 'text-red-600'}`}>
                   {row.highlight ? '' : '-'}${fmt(row.annual)}
                 </div>
               </div>
@@ -325,25 +326,26 @@ export default function PaycheckCalculator({ defaultState = '' }: { defaultState
 
             {/* Total Deductions */}
             <div className="grid grid-cols-3 gap-px bg-gray-100">
-              <div className="bg-white px-5 py-3.5 text-sm font-semibold text-gray-900 border-t border-gray-200">Total Deductions</div>
-              <div className="bg-white px-5 py-3.5 text-sm text-right font-semibold text-red-700 border-t border-gray-200">
+              <div className="bg-white px-3 sm:px-5 py-3.5 text-sm font-semibold text-gray-900 border-t border-gray-200">Total Deductions</div>
+              <div className="bg-white px-3 sm:px-5 py-3.5 text-sm text-right font-semibold text-red-700 border-t border-gray-200">
                 -${fmt(results.totalDeductions / periods)}
               </div>
-              <div className="bg-white px-5 py-3.5 text-sm text-right font-semibold text-red-700 border-t border-gray-200">
+              <div className="bg-white px-3 sm:px-5 py-3.5 text-sm text-right font-semibold text-red-700 border-t border-gray-200">
                 -${fmt(results.totalDeductions)}
               </div>
             </div>
 
             {/* Net Pay */}
             <div className="grid grid-cols-3 gap-px bg-gray-100">
-              <div className="bg-green-50 px-5 py-4 text-sm font-bold text-green-800 border-t-2 border-green-200">Take-Home Pay</div>
-              <div className="bg-green-50 px-5 py-4 text-sm text-right font-bold text-green-800 border-t-2 border-green-200">
+              <div className="bg-green-50 px-3 sm:px-5 py-4 text-sm font-bold text-green-800 border-t-2 border-green-200">Take-Home Pay</div>
+              <div className="bg-green-50 px-3 sm:px-5 py-4 text-sm text-right font-bold text-green-800 border-t-2 border-green-200">
                 ${fmt(results.netAnnual / periods)}
               </div>
-              <div className="bg-green-50 px-5 py-4 text-sm text-right font-bold text-green-800 border-t-2 border-green-200">
+              <div className="bg-green-50 px-3 sm:px-5 py-4 text-sm text-right font-bold text-green-800 border-t-2 border-green-200">
                 ${fmt(results.netAnnual)}
               </div>
             </div>
+          </div>
           </div>
 
           {/* Visual Bar */}
