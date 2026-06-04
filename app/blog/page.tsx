@@ -143,42 +143,6 @@ export default function BlogPage() {
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .blog-nav {
-          background: #fff;
-          border-bottom: 1px solid #E5E7EB;
-          position: sticky; top: 0; z-index: 100;
-        }
-        .blog-nav-inner {
-          max-width: 1200px; margin: 0 auto;
-          padding: 0 24px;
-          display: flex; align-items: center; gap: 32px;
-          height: 56px;
-        }
-        .nav-logo {
-          font-size: 17px; font-weight: 700;
-          color: #0F1B3D; text-decoration: none;
-          letter-spacing: -0.3px; flex-shrink: 0;
-        }
-        .nav-logo span { color: #2B4ACB; }
-        .nav-links {
-          display: flex; gap: 24px;
-          font-size: 14px; font-weight: 500;
-          color: #6B7280;
-        }
-        .nav-links a { color: inherit; text-decoration: none; transition: color 0.15s; cursor: pointer; }
-        .nav-links a:hover { color: #111827; }
-        .nav-links a.active { color: #2B4ACB; }
-        .nav-cta {
-          margin-left: auto;
-          padding: 8px 18px;
-          background: #2B4ACB; color: #fff;
-          font-size: 13px; font-weight: 600;
-          border-radius: 6px; text-decoration: none;
-          cursor: pointer; border: none;
-          transition: background 0.15s;
-        }
-        .nav-cta:hover { background: #2240B0; }
-
         .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
         /* Page header */
@@ -413,39 +377,6 @@ export default function BlogPage() {
           font-size: 12px; color: #9CA3AF; font-weight: 500;
         }
 
-        /* Footer */
-        .site-footer {
-          background: #fff;
-          border-top: 1px solid #E5E7EB;
-          padding: 32px 0;
-        }
-        .footer-inner {
-          max-width: 1200px; margin: 0 auto; padding: 0 24px;
-          display: flex; justify-content: space-between;
-          align-items: center; flex-wrap: wrap; gap: 16px;
-        }
-        .footer-logo {
-          font-size: 16px; font-weight: 700;
-          color: #0F1B3D; letter-spacing: -0.3px;
-        }
-        .footer-logo span { color: #2B4ACB; }
-        .footer-links-row {
-          display: flex; gap: 20px;
-          font-size: 13px; color: #6B7280;
-        }
-        .footer-links-row a {
-          color: inherit; text-decoration: none;
-          transition: color 0.15s; cursor: pointer;
-        }
-        .footer-links-row a:hover { color: #111827; }
-        .footer-copy {
-          width: 100%; text-align: center;
-          padding-top: 20px;
-          font-size: 12px; color: #D1D5DB;
-          border-top: 1px solid #F3F4F6;
-          margin-top: 16px;
-        }
-
         @media (max-width: 900px) {
           .featured-card { grid-template-columns: 1fr; }
           .featured-img { min-height: 200px; max-height: 220px; }
@@ -461,20 +392,6 @@ export default function BlogPage() {
           .footer-inner { flex-direction: column; align-items: flex-start; }
         }
       `}</style>
-
-      {/* Nav */}
-      <nav className="blog-nav">
-        <div className="blog-nav-inner">
-          <a className="nav-logo" href="/">Oh My <span>Job</span></a>
-          <div className="nav-links">
-            <a href="/jobs">Find Jobs</a>
-            <a href="/companies">Companies</a>
-            <a href="/salaries">Salaries</a>
-            <a href="/blog" className="active">Career Tips</a>
-          </div>
-          <button className="nav-cta">Post a Job</button>
-        </div>
-      </nav>
 
       {/* Page header */}
       <div className="page-header">
@@ -621,20 +538,6 @@ export default function BlogPage() {
 
       </div>
 
-      {/* Footer */}
-      <footer className="site-footer">
-        <div className="footer-inner">
-          <div className="footer-logo">Oh My <span>Job</span></div>
-          <div className="footer-links-row">
-            <a>About</a>
-            <a>Contact</a>
-            <a>Privacy</a>
-            <a>Terms</a>
-            <a>Advertise</a>
-          </div>
-          <div className="footer-copy">© 2026 Oh My Job. All rights reserved.</div>
-        </div>
-      </footer>
 
     </div>
   );

@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Oh My Job - Smart Job Search USA',
+  title: 'Oh My Job | US Job Board with Salary Ranges & Smart Filters',
   description:
     'Search 300,000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account required.',
 }

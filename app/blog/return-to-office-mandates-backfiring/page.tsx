@@ -14,16 +14,15 @@ const ARTICLE_DATA = {
 };
 
 const styles = `
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500;8..60,600&family=Libre+Franklin:wght@300;400;500;600;700&display=swap');
 
 *{margin:0;padding:0;box-sizing:border-box}
 ::selection{background:#1A1A1A;color:#FFFFFF}
 
 .pbar{position:fixed;top:0;left:0;height:3px;background:#2B4ACB;z-index:1000;transition:width .1s linear}
 .anav{position:sticky;top:0;z-index:99;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid #E0DDD5;padding:14px 32px;display:flex;justify-content:space-between;align-items:center}
-.anav-brand{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-decoration:none;color:#1A1A1A}
+.anav-brand{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:22px;font-weight:900;text-decoration:none;color:#1A1A1A}
 .anav-brand span{color:#2B4ACB}
-.anav-links{display:flex;gap:24px;align-items:center;font-family:'Libre Franklin',sans-serif;font-size:12px;font-weight:500;letter-spacing:.6px;text-transform:uppercase}
+.anav-links{display:flex;gap:24px;align-items:center;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;font-weight:500;letter-spacing:.6px;text-transform:uppercase}
 .anav-links a{color:#666;text-decoration:none;transition:color .2s;cursor:pointer}
 .anav-links a:hover{color:#1A1A1A}
 .ncta{background:#2B4ACB;color:#fff;padding:8px 18px;font-weight:600;letter-spacing:1px}
@@ -32,62 +31,62 @@ const styles = `
 .ac{max-width:740px;margin:0 auto;padding:0 24px}
 .aw{max-width:1000px;margin:0 auto;padding:0 24px}
 .ahdr{padding:48px 0 40px;text-align:center}
-.acat{font-family:'Libre Franklin',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2B4ACB;margin-bottom:20px}
-.atitle{font-family:'Playfair Display',serif;font-size:46px;font-weight:800;line-height:1.12;letter-spacing:-.5px;margin-bottom:24px;max-width:800px;margin-left:auto;margin-right:auto}
-.asub{font-family:'Source Serif 4',serif;font-size:20px;line-height:1.6;color:#555;max-width:660px;margin:0 auto 28px}
-.ameta{font-family:'Libre Franklin',sans-serif;font-size:13px;color:#888;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.acat{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2B4ACB;margin-bottom:20px}
+.atitle{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:46px;font-weight:800;line-height:1.12;letter-spacing:-.5px;margin-bottom:24px;max-width:800px;margin-left:auto;margin-right:auto}
+.asub{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;line-height:1.6;color:#555;max-width:660px;margin:0 auto 28px}
+.ameta{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;color:#888;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
 .ameta strong{color:#1A1A1A;font-weight:600}
 .adiv{width:60px;height:1px;background:#1A1A1A;margin:0 auto}
 
 .himgw{margin:0 auto 48px;max-width:1000px;padding:0 24px}
 .himg{width:100%;aspect-ratio:16/7;object-fit:cover;filter:grayscale(15%) contrast(1.05)}
-.hcap{font-family:'Libre Franklin',sans-serif;font-size:11px;color:#999;margin-top:8px;text-align:right}
+.hcap{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;color:#999;margin-top:8px;text-align:right}
 
 .abody{padding-bottom:64px}
-.abody p{font-family:'Source Serif 4',serif;font-size:19px;line-height:1.78;color:#2A2A2A;margin-bottom:24px}
-.abody h2{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1.25;margin:48px 0 20px;padding-top:12px;border-top:1px solid #E0DDD5}
-.abody h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;line-height:1.35;margin:36px 0 16px}
+.abody p{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:19px;line-height:1.78;color:#2A2A2A;margin-bottom:24px}
+.abody h2{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:30px;font-weight:700;line-height:1.25;margin:48px 0 20px;padding-top:12px;border-top:1px solid #E0DDD5}
+.abody h3{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:22px;font-weight:600;line-height:1.35;margin:36px 0 16px}
 .abody a{color:#2B4ACB;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;transition:color .2s}
 .abody a:hover{color:#1E3AAF}
 
-.dcap::first-letter{font-family:'Playfair Display',serif;float:left;font-size:72px;font-weight:700;line-height:.8;margin:4px 12px 0 0;color:#1A1A1A}
+.dcap::first-letter{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;float:left;font-size:72px;font-weight:700;line-height:.8;margin:4px 12px 0 0;color:#1A1A1A}
 
 .cbox{background:#F0EDE6;border-left:4px solid #2B4ACB;padding:28px 32px;margin:36px 0}
-.cbox-t{font-family:'Libre Franklin',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2B4ACB;margin-bottom:10px}
+.cbox-t{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2B4ACB;margin-bottom:10px}
 .cbox p{font-size:17px;color:#333;margin-bottom:0}
 .cbox p+p{margin-top:12px}
 
 .pq{border-top:2px solid #1A1A1A;border-bottom:2px solid #1A1A1A;padding:28px 0;margin:40px 0;text-align:center}
-.pq p{font-family:'Playfair Display',serif;font-size:26px;font-style:italic;font-weight:500;line-height:1.4;color:#1A1A1A}
+.pq p{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:26px;font-style:italic;font-weight:500;line-height:1.4;color:#1A1A1A}
 
 .trow{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 32px}
-.ttag{font-family:'Libre Franklin',sans-serif;font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;padding:6px 14px;border:1px solid #D5D1C9;color:#666}
+.ttag{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;padding:6px 14px;border:1px solid #D5D1C9;color:#666}
 
 .abox{border-top:2px solid #1A1A1A;padding:32px 0;display:flex;gap:20px;align-items:center;margin-bottom:48px}
-.aav{width:64px;height:64px;border-radius:50%;background:#E0DDD5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#888}
-.ain{font-family:'Playfair Display',serif;font-size:18px;font-weight:700}
-.air{font-family:'Libre Franklin',sans-serif;font-size:12px;color:#888;margin-top:2px}
-.aib{font-family:'Source Serif 4',serif;font-size:14px;line-height:1.5;color:#666;margin-top:6px}
+.aav{width:64px;height:64px;border-radius:50%;background:#E0DDD5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:24px;font-weight:700;color:#888}
+.ain{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;font-weight:700}
+.air{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;color:#888;margin-top:2px}
+.aib{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.5;color:#666;margin-top:6px}
 
 .rsec{border-top:1px solid #D5D1C9;padding:48px 0}
 .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .rcard{cursor:pointer}
-.rcard-c{font-family:'Libre Franklin',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2B4ACB;margin-bottom:8px}
-.rcard-t{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;line-height:1.3;transition:color .2s}
+.rcard-c{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2B4ACB;margin-bottom:8px}
+.rcard-t{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;font-weight:700;line-height:1.3;transition:color .2s}
 .rcard:hover .rcard-t{color:#2B4ACB}
-.rcard-m{font-family:'Libre Franklin',sans-serif;font-size:11px;color:#999;margin-top:8px}
+.rcard-m{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;color:#999;margin-top:8px}
 
-.shdr{font-family:'Libre Franklin',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#1A1A1A;padding-bottom:12px;border-bottom:2px solid #1A1A1A;margin-bottom:28px}
+.shdr{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#1A1A1A;padding-bottom:12px;border-bottom:2px solid #1A1A1A;margin-bottom:28px}
 
 .sfoot{background:#1A1A1A;color:#999;padding:48px 24px 32px}
 .finner{max-width:1200px;margin:0 auto}
 .ftop{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:28px;border-bottom:1px solid #333;flex-wrap:wrap;gap:24px}
-.fbrand{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#FAFAF7}
+.fbrand{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:24px;font-weight:900;color:#FAFAF7}
 .fbrand span{color:#2B4ACB}
-.flinks{display:flex;gap:24px;font-family:'Libre Franklin',sans-serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+.flinks{display:flex;gap:24px;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
 .flinks a{color:#777;text-decoration:none;transition:color .2s;cursor:pointer}
 .flinks a:hover{color:#FAFAF7}
-.fbot{padding-top:20px;font-family:'Libre Franklin',sans-serif;font-size:11px;color:#555;text-align:center}
+.fbot{padding-top:20px;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;color:#555;text-align:center}
 
 .fi{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease}
 .fi.v{opacity:1;transform:translateY(0)}
@@ -130,7 +129,7 @@ export default function RTOBackfiringArticle() {
   const v = vis ? " v" : "";
 
   return (
-    <div style={{ fontFamily: "'Playfair Display', Georgia, serif", background: "#FFFFFF", color: "#1A1A1A", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "Inter,-apple-system,BlinkMacSystemFont,sans-serif", background: "#FFFFFF", color: "#1A1A1A", minHeight: "100vh" }}>
       <style>{styles}</style>
 
       <div className="pbar" style={{ width: sp + "%" }} />
@@ -262,21 +261,6 @@ export default function RTOBackfiringArticle() {
         </div>
       </section>
 
-      <footer className="sfoot">
-        <div className="finner">
-          <div className="ftop">
-            <div className="fbrand">Oh My <span>Job</span></div>
-            <div className="flinks">
-              <a href="https://www.oh-my-job.com/jobs">Find Jobs</a>
-              <a>About</a>
-              <a>Contact</a>
-              <a>Privacy</a>
-              <a>Terms</a>
-            </div>
-          </div>
-          <div className="fbot">{"\u00A9"} 2026 Oh My Job. All rights reserved. Made for job seekers, by job seekers.</div>
-        </div>
-      </footer>
     </div>
   );
 }
