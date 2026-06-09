@@ -4,11 +4,17 @@ import { normalizeJooble } from '@/lib/jobs'
 import { prisma } from '@/lib/prisma'
 
 const KEYWORDS = [
-  // FIFO / rotational
-  'fly in fly out',
-  'fifo jobs',
-  'fifo mining',
-  'fifo oil gas',
+  // FIFO / rotational US (more specific to reduce aviation noise)
+  'rotational shift mining',
+  'remote site mining jobs',
+  'oil rig 14/14',
+  'oil rig 21/7',
+  'offshore rotation jobs',
+  'Bakken oil field jobs',
+  'Permian basin rotation',
+  'Alaska mining rotation',
+  'remote camp jobs',
+  'mining camp operator',
   // Trades & Labor
   'electrician',
   'hvac',
