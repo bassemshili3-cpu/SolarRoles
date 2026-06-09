@@ -56,6 +56,7 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
   const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
   const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
   const externalApplyUrl = job.apply_url || job.url || '#'
+  const detailHref = `/jobs/${job.id}${backUrl ? `?from=${encodeURIComponent(backUrl)}` : ''}`
 
   const locationLabel =
     typeof job.location === 'string'
@@ -63,12 +64,14 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
       : job.location?.display_name || 'United States'
 
   return (
-    <Link
-      href={`/jobs/${job.id}${backUrl ? `?from=${encodeURIComponent(backUrl)}` : ''}`}
-      className="group block bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300 hover:-translate-y-1"
-    >
-      {/* Header */}
-      <div className="flex items-start gap-3 mb-3">
+    <div className="group relative bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 transition-all duration-300 hover:-translate-y-1">
+      <Link
+        href={detailHref}
+        className="absolute inset-0 z-0"
+        aria-label={`View details for ${job.title} at ${job.company}`}
+      />
+
+      <div className="relative z-10 flex items-start gap-3 mb-3 pointer-events-none">
         <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
           <img
             src={logoSrc}
@@ -83,7 +86,6 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
               fallback?.removeAttribute('hidden')
             }}
           />
-          {/* Fallback SVG si logo introuvable */}
           <div hidden className="w-5 h-5 md:w-6 md:h-6">
             <svg
               className="w-full h-full text-slate-400"
@@ -107,7 +109,6 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
               </span>
             )}
           </div>
-          {/* Location sur mobile */}
           <div className="flex items-center gap-1 text-slate-400 mt-1 md:hidden">
             <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -118,13 +119,11 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
         </div>
       </div>
 
-      {/* Title */}
-      <h3 className="text-base md:text-lg font-semibold text-slate-900 mb-2 md:mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+      <h3 className="relative z-10 text-base md:text-lg font-semibold text-slate-900 mb-2 md:mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors pointer-events-none">
         {job.title}
       </h3>
 
-      {/* Location desktop */}
-      <div className="hidden md:flex items-center gap-1.5 text-slate-500 mb-4">
+      <div className="relative z-10 hidden md:flex items-center gap-1.5 text-slate-500 mb-4 pointer-events-none">
         <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -132,8 +131,7 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
         <span className="text-sm truncate">{locationLabel}</span>
       </div>
 
-      {/* Footer */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100 pointer-events-none">
         <div className="flex items-center gap-2">
           {salary ? (
             <span className="inline-flex items-center px-2 py-0.5 md:px-2.5 md:py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs md:text-sm font-medium">
@@ -156,8 +154,7 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
             {formatDate(job.created)}
           </span>
 
-          {/* Bouton Apply externe — stopPropagation pour ne pas déclencher le Link */}
-          <a
+           <a
             href={externalApplyUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -168,6 +165,6 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
           </a>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
