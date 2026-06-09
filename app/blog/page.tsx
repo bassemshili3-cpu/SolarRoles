@@ -29,7 +29,7 @@ const ARTICLES = [
     author: "Gregory S.",
     date: "March 7, 2026",
     readTime: "11 min read",
-    image: "/interview.png",
+    image: "/interview (2).jpg",
   },
   {
     category: "Interview Tips",

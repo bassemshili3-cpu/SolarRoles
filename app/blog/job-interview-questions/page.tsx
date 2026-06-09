@@ -10,7 +10,7 @@ const ARTICLE_DATA = {
   
   category: "Interview Tips",
   canonicalUrl: "https://www.oh-my-job.com/blog/job-interview-questions",
-  heroImage: "/interview.png",
+  heroImage: "/interview (2).jpg",
 };
 
 const styles = `
