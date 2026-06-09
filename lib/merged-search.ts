@@ -4,7 +4,11 @@ import { prisma } from '@/lib/prisma'
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
 
-export async function getMergedJobCount(what: string, where: string, salary_min?: number) {
+export async function getMergedJobCount(
+  what: string | string[],
+  where: string,
+  salary_min?: number,
+) {
   try {
     const whereClause = buildPrismaWhere(what, where, salary_min)
     const count = await prisma.job.count({ where: whereClause })
@@ -16,7 +20,7 @@ export async function getMergedJobCount(what: string, where: string, salary_min?
 }
 
 export async function searchMergedJobs(params: {
-  what: string
+  what: string | string[]
   where: string
   results_per_page?: number
   page?: number
@@ -67,7 +71,11 @@ export async function searchMergedJobs(params: {
 }
 
 // ── Shared where clause builder ──
-function buildPrismaWhere(what: string, where: string, salary_min?: number) {
+function buildPrismaWhere(
+  what: string | string[],
+  where: string,
+  salary_min?: number,
+) {
   const whereClause: any = {
     active: true,
     expiresAt: { gt: new Date() },
@@ -75,15 +83,36 @@ function buildPrismaWhere(what: string, where: string, salary_min?: number) {
   }
 
   if (what) {
-    const keywords = what.split(/\s+/).filter(Boolean)
-    if (keywords.length > 0) {
-      whereClause.AND = keywords.map((kw: string) => ({
-        OR: [
-          { title: { contains: kw, mode: 'insensitive' as const } },
-          { company: { contains: kw, mode: 'insensitive' as const } },
-          { description: { contains: kw, mode: 'insensitive' as const } },
-        ],
-      }))
+    // Normalize input: a string becomes a one-phrase array, an array stays as is
+    const phrases = Array.isArray(what)
+      ? what.filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+      : [what]
+
+    // Build a per-phrase condition: within a phrase, all keywords must match (AND)
+    // Between fields (title, company, description), an OR is kept from the original logic
+    const phraseConditions = phrases
+      .map((phrase) => {
+        const keywords = phrase.split(/\s+/).filter(Boolean)
+        if (keywords.length === 0) return null
+
+        return {
+          AND: keywords.map((kw: string) => ({
+            OR: [
+              { title: { contains: kw, mode: 'insensitive' as const } },
+              { company: { contains: kw, mode: 'insensitive' as const } },
+              { description: { contains: kw, mode: 'insensitive' as const } },
+            ],
+          })),
+        }
+      })
+      .filter((c): c is { AND: any[] } => c !== null)
+
+    if (phraseConditions.length === 1) {
+      // Single phrase: flatten into top-level AND for full backward compatibility
+      whereClause.AND = phraseConditions[0].AND
+    } else if (phraseConditions.length > 1) {
+      // Multiple phrases: any phrase can match (OR between phrases)
+      whereClause.AND = [{ OR: phraseConditions }]
     }
   }
 

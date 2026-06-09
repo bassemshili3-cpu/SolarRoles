@@ -9,6 +9,10 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
+// Liste des keywords qui matchent cette landing page
+// Tous les jobs seedés avec l'un de ces keywords seront affichés
+const FIFO_KEYWORDS = ['fifo jobs', 'fly in fly out jobs']
+
 export const metadata: Metadata = {
   title: 'FIFO Jobs | Fly In Fly Out in Mining, Oil & Gas',
   description: 'Fly-in fly-out positions in mining, oil, gas, and construction — rotation schedules, accommodation details, and pay rates included per role.',
@@ -121,7 +125,7 @@ const tips = [
     description: "White Card is the baseline. First aid and CPR push you ahead of unqualified candidates. Working at heights, confined space entry, and forklift tickets each open a different category of role. None of these take long to obtain and most cost under $300. They pay for themselves on the first paycheck.",
   },
   {
-    title: 'Understand what \"point of hire\" actually means',
+    title: 'Understand what "point of hire" actually means',
     description: "Employers fly you from a designated city — Perth, Darwin, Townsville, Houston, depending on the project. If that's not where you live, the travel to get there is usually on you. Some employers are flexible on this and some aren't. Clarify before you accept, not after.",
   },
 ]
@@ -129,10 +133,14 @@ const tips = [
 export default async function FifoJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-    const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'fly in fly out jobs', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'fly in fly out jobs', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+  // Si l'utilisateur a tapé une recherche custom dans le filtre, on respecte sa requête
+  // Sinon, on passe l'array de keywords FIFO pour matcher toutes les variantes seedées
+  const whatQuery = params.what || FIFO_KEYWORDS
+
+  const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount(whatQuery, params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+    searchMergedJobs({ what: whatQuery, where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>
@@ -142,7 +150,7 @@ export default async function FifoJobsPage({ searchParams }: any) {
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Fly In Fly Out Jobs Available Now</h1>
           <p className="text-gray-700">
-            FIFO work isn't for everyone — but for the right person, it's one of the fastest ways to earn well without relocating. Mining, oil and gas, remote construction, and camp services are all hiring. Rotations, pay structures, and requirements vary significantly by industry and employer. The listings below are updated regularly.
+            FIFO work is one of the fastest ways to earn well without relocating. Mining, oil and gas, remote construction, and camp services are all hiring. Rotations, pay structures, and requirements vary significantly by industry and employer. The listings below are updated regularly.
           </p>
         </header>
 
