@@ -1,10 +1,15 @@
 // lib/careerjet.ts
-// ─── CareerJet Public Search API ──────────────────────────────────────────
-// Endpoint public : affid en query param, pas de Basic Auth.
-// Doc : https://www.careerjet.com/partners/search/
+// ─── CareerJet Partner API v4 ─────────────────────────────────────────────
+// Endpoint : https://search.api.careerjet.net/v4/query
+// Auth     : Basic base64(API_KEY:)
+// 403      : déclenché si user_ip ou user_agent sont absents
+// Doc      : https://www.careerjet.com/partners/api
 
-const CAREERJET_AFFID = process.env.CAREERJET_API_KEY || ''
-const CAREERJET_ENDPOINT = 'https://public.api.careerjet.net/search'
+const CAREERJET_API_KEY = process.env.CAREERJET_API_KEY || ''
+const CAREERJET_ENDPOINT = 'https://search.api.careerjet.net/v4/query'
+
+const DEFAULT_USER_AGENT =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
 export type CareerjetJob = {
   title: string
@@ -44,41 +49,52 @@ type SearchParams = {
   noCache?: boolean
 }
 
+function getAuthHeader(): string {
+  const credentials = Buffer.from(`${CAREERJET_API_KEY}:`).toString('base64')
+  return `Basic ${credentials}`
+}
+
 export async function searchCareerjetJobs(params: SearchParams): Promise<CareerjetSearchResult> {
+  // user_ip et user_agent sont OBLIGATOIRES — un 403 est renvoyé si absents
+  const userIp = params.user_ip || '8.8.8.8'
+  const userAgent = params.user_agent || DEFAULT_USER_AGENT
+
   const queryParams = new URLSearchParams({
-    affid: CAREERJET_AFFID,
     locale_code: 'en_US',
     keywords: params.keywords || '',
     location: params.location || '',
     page: String(params.page || 1),
-    pagesize: String(params.page_size || 20),
+    page_size: String(params.page_size || 20),
     sort: params.sort || 'relevance',
-    user_ip: params.user_ip || '1.1.1.1',
-    user_agent: params.user_agent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    fragment_size: '300',
+    user_ip: userIp,
+    user_agent: userAgent,
   })
 
-  if (params.contract_type) queryParams.set('contracttype', params.contract_type)
-  if (params.work_hours) queryParams.set('contractperiod', params.work_hours)
+  if (params.contract_type) queryParams.set('contract_type', params.contract_type)
+  if (params.work_hours) queryParams.set('work_hours', params.work_hours)
 
   const url = `${CAREERJET_ENDPOINT}?${queryParams.toString()}`
 
-  console.log(`🔵 CareerJet → ${url.replace(CAREERJET_AFFID, '***')}`)
+  console.log(`🔵 CareerJet → keywords="${params.keywords}" page=${params.page} ip=${userIp}`)
 
   const res = await fetch(url, {
     headers: {
+      Authorization: getAuthHeader(),
       Accept: 'application/json',
+      Referer: process.env.NEXT_PUBLIC_APP_URL || 'https://www.oh-my-job.com',
     },
     ...(params.noCache ? { cache: 'no-store' } : { next: { revalidate: 3600 } }),
   })
 
   if (!res.ok) {
     const body = await res.text().catch(() => '')
-    console.error(`❌ CareerJet ${res.status} ${res.statusText} — body: ${body}`)
+    console.error(`❌ CareerJet ${res.status} ${res.statusText} — ${body}`)
     return { type: 'JOBS', hits: 0, message: 'API error', pages: 0, response_time: 0, jobs: [] }
   }
 
   const data: CareerjetSearchResult = await res.json()
-  console.log(`✅ CareerJet: ${data.jobs?.length ?? 0} jobs (hits: ${data.hits ?? 0}, type: ${data.type})`)
+  console.log(`✅ CareerJet: ${data.jobs?.length ?? 0} jobs (hits: ${data.hits ?? 0})`)
 
   if (data.type === 'LOCATIONS') {
     return { type: 'JOBS', hits: 0, message: data.message, pages: 0, response_time: data.response_time, jobs: [], locations: data.locations }
@@ -104,8 +120,10 @@ export function normalizeCareerjet(job: CareerjetJob) {
     salaryMax = Math.round(salaryMax * mult)
   }
 
+  const stableId = `careerjet-${Buffer.from(job.url).toString('base64url').slice(0, 20)}`
+
   return {
-    id: `careerjet-${Buffer.from(job.url).toString('base64url').slice(0, 20)}`,
+    id: stableId,
     title: job.title,
     company: job.company || '',
     location: job.locations || '',
@@ -113,7 +131,7 @@ export function normalizeCareerjet(job: CareerjetJob) {
     salary: job.salary || undefined,
     salaryMin: salaryMin || undefined,
     salaryMax: salaryMax || undefined,
-    url: `/jobs/careerjet-${Buffer.from(job.url).toString('base64url').slice(0, 20)}`,
+    url: `/jobs/${stableId}`,
     applyUrl: job.url,
     source: 'careerjet' as const,
     postedAt: job.date ? new Date(job.date).toISOString() : undefined,

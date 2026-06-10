@@ -1,7 +1,5 @@
 // scripts/seed-jobs.ts
-// ─── Initial database seeding ──────────────────────────────────────────────
-// Run with: npx tsx scripts/seed-jobs.ts
-// Fetches Jooble + Lensa + Careerjet across the keyword pool
+// Run with: npm run seed
 import { syncAllJobs } from '../lib/job-sync'
 
 const TOTAL_PAGES = 30
@@ -28,7 +26,6 @@ async function seed() {
       console.error(`   ❌ Page ${page} failed:`, e.message)
     }
 
-    // Pause 2 seconds between pages to respect API rate limits
     await new Promise((r) => setTimeout(r, 2000))
   }
 
@@ -37,8 +34,6 @@ async function seed() {
   console.log(`   Total Lensa: ${totalLensa} jobs`)
   console.log(`   Total Careerjet: ${totalCareerjet} jobs`)
   console.log(`   Total: ${totalJooble + totalLensa + totalCareerjet} jobs`)
-  console.log(`\n   Run "npx prisma studio" to verify.`)
-
   process.exit(0)
 }
 

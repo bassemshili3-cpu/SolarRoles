@@ -262,6 +262,16 @@ async function deactivateExpired(): Promise<number> {
   return result.count
 }
 
+async function getPublicIp(): Promise<string> {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' })
+    const data = await res.json()
+    return data.ip as string
+  } catch {
+    return '1.2.3.4'
+  }
+}
+
 // ─── Main sync ───────────────────────────────────────────────────────────────
 export async function syncAllJobs(
   page: number = 1,
@@ -273,6 +283,9 @@ export async function syncAllJobs(
     careerjet: { fetched: 0, saved: 0, errors: 0, queriesRun: 0 },
     expired: 0,
   }
+
+  const publicIp = await getPublicIp()
+  console.log(`🌐 Public IP détectée : ${publicIp}`)
 
   const keywords = getKeywordsForRun(page, 6) // 6 keywords per source per run
 
@@ -322,6 +335,8 @@ export async function syncAllJobs(
           keywords: keyword,
           page: p,
           page_size: 20,
+          user_ip: publicIp,
+          noCache: true,
         })
 
         if (data?.jobs && data.jobs.length > 0) {
