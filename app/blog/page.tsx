@@ -54,6 +54,7 @@ const ARTICLES = [
     date: "March 7, 2026",
     readTime: "9 min read",
     image: null,
+    url: "/blog/ai-talent-war",
   },
   {
     category: "Industry Trends",
@@ -62,6 +63,7 @@ const ARTICLES = [
     date: "March 6, 2026",
     readTime: "6 min read",
     image: null,
+    url: "/blog/healthcare-hiring-boom",
   },
   {
     category: "Career Advice",
@@ -70,6 +72,7 @@ const ARTICLES = [
     date: "March 5, 2026",
     readTime: "5 min read",
     image: null,
+    url: "/blog/personal-practice-not-brand",
   },
   {
     category: "Salary Insights",
@@ -78,6 +81,7 @@ const ARTICLES = [
     date: "March 4, 2026",
     readTime: "7 min read",
     image: null,
+    url: "/blog/stock-options-hidden-cost",
   },
   {
     category: "Remote Work",
@@ -86,6 +90,7 @@ const ARTICLES = [
     date: "March 3, 2026",
     readTime: "8 min read",
     image: null,
+    url: "/blog/digital-nomad-visas-2026",
   },
   {
     category: "Interview Tips",
@@ -94,6 +99,7 @@ const ARTICLES = [
     date: "March 2, 2026",
     readTime: "4 min read",
     image: null,
+    url: "/blog/why-should-we-hire-you",
   },
 ];
 
@@ -138,7 +144,7 @@ export default function BlogPage() {
 
   return (
     <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", background: "#F8F9FC", color: "#111827", minHeight: "100vh" }}>
-      <style>{`
+      <style suppressHydrationWarning>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -476,7 +482,7 @@ export default function BlogPage() {
                   <div className="articles-section-title" style={{ marginTop: withImages.length > 0 ? "8px" : "0" }}>More articles</div>
                   <div className="list-articles">
                     {withoutImages.map((article, i) => (
-                      <a key={i} className="list-article-item" href="#">
+                      <a key={i} className="list-article-item" href={(article as any).url || "#"}>
                         <div className="list-article-cat"><CategoryBadge category={article.category} /></div>
                         <div className="list-article-title">{article.title}</div>
                         <div className="list-article-meta">
