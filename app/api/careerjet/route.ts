@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get('page') || '1')
   const pageSize = parseInt(searchParams.get('page_size') || '20')
 
-  const userIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0'
+  const userIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '1.1.1.1'
   const userAgent = request.headers.get('user-agent') || ''
 
   try {

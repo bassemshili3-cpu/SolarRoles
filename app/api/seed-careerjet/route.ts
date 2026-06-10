@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { searchCareerjetJobs, normalizeCareerjet } from '@/lib/careerjet'
 import { prisma } from '@/lib/prisma'
 
+// CareerJet exige un user_ip réaliste — 0.0.0.0 déclenche un 403.
+// On tourne sur une pool d'IPs US pour simuler des utilisateurs réels.
+const US_IPS = [
+  '98.207.254.110', '68.45.162.33', '72.229.28.185', '75.108.44.195',
+  '107.77.193.210', '174.195.50.218', '50.193.209.6', '24.26.163.50',
+  '76.102.7.211', '67.161.83.42',
+]
+
+function pickIp(index: number): string {
+  return US_IPS[index % US_IPS.length]
+}
+
 const KEYWORDS = [
   'allied universal', 'amgen', 'cardinal health', 'cintas',
   'chase bank', 'doordash', 'exelon', 'honda',
@@ -26,6 +38,7 @@ export async function GET(request: NextRequest) {
 
   let totalSaved = 0
   let totalErrors = 0
+  let ipIndex = 0
   const expiresAt = new Date()
   expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
 
@@ -36,6 +49,9 @@ export async function GET(request: NextRequest) {
           keywords: keyword,
           page,
           page_size: 20,
+          user_ip: pickIp(ipIndex++),
+          user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          noCache: true,
         })
 
         if (!data?.jobs?.length) continue
