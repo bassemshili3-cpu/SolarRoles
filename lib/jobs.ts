@@ -11,7 +11,7 @@ export interface UnifiedJob {
   description: string
   url: string
   apply_url: string
-  source: 'lensa' | 'adzuna' | 'jooble'
+  source: 'lensa' | 'adzuna' | 'jooble' | 'greenhouse' | 'careerjet'
   salary_min?: number
   salary_max?: number
   created?: string
@@ -25,6 +25,7 @@ export interface UnifiedSearchResult {
   lensa_count: number
   adzuna_count: number
   jooble_count: number
+  greenhouse_count: number
 }
 
 // Cooldown en mémoire — évite de recontacter Lensa si il est down
@@ -192,11 +193,33 @@ export async function searchAllJobs(params: {
     console.warn("⚠️ Lensa en cooldown → skip")
   }
 
-  // === Appels parallèles (3 sources) ===
-  const [joobleResult, lensaResult, adzunaResult] = await Promise.allSettled([
+  // === Appels parallèles (3 sources live + DB Greenhouse) ===
+  const dbGreenhouseLimit = Math.min(totalLimit, 15)
+  const dbGreenhouseOffset = (page - 1) * dbGreenhouseLimit
+
+  const [joobleResult, lensaResult, adzunaResult, greenhouseResult] = await Promise.allSettled([
     searchJooble(joobleParams),
     lensaSkipped ? Promise.reject(new Error('Lensa en cooldown')) : getCachedLensaJobs(lensaParams),
     searchAdzuna(adzunaParams),
+    prisma.job.findMany({
+      where: {
+        source: 'greenhouse',
+        active: true,
+        ...(params.what && {
+          OR: [
+            { title: { contains: params.what, mode: 'insensitive' } },
+            { company: { contains: params.what, mode: 'insensitive' } },
+            { description: { contains: params.what, mode: 'insensitive' } },
+          ],
+        }),
+        ...(params.where && {
+          location: { contains: params.where.split(',')[0].trim(), mode: 'insensitive' },
+        }),
+      },
+      orderBy: { fetchedAt: 'desc' },
+      take: dbGreenhouseLimit,
+      skip: dbGreenhouseOffset,
+    }),
   ])
 
   // === Traitement Jooble (priorité #1) ===
@@ -256,6 +279,28 @@ export async function searchAllJobs(params: {
     console.error("❌ Adzuna error:", adzunaResult.status === 'rejected' ? adzunaResult.reason?.message : 'unknown')
   }
 
+  // === Traitement Greenhouse (depuis DB, priorité #4) ===
+  let greenhouseJobs: UnifiedJob[] = []
+
+  if (greenhouseResult.status === 'fulfilled' && greenhouseResult.value.length > 0) {
+    greenhouseJobs = greenhouseResult.value.map((j) => ({
+      id: j.id,
+      title: j.title,
+      company: j.company,
+      location: j.location,
+      description: j.description,
+      url: j.url,
+      apply_url: j.applyUrl,
+      source: 'greenhouse' as const,
+      salary_min: j.salaryMin ?? undefined,
+      salary_max: j.salaryMax ?? undefined,
+      created: j.postedAt?.toISOString() ?? undefined,
+    }))
+    console.log(`✅ Greenhouse DB : ${greenhouseJobs.length} jobs`)
+  } else if (greenhouseResult.status === 'rejected') {
+    console.error('❌ Greenhouse DB error:', greenhouseResult.reason?.message)
+  }
+
   // === Déduplications par titre + company ===
   const seen = new Set<string>()
   const dedup = (jobs: UnifiedJob[]): UnifiedJob[] => {
@@ -267,12 +312,13 @@ export async function searchAllJobs(params: {
     })
   }
 
-  // Ordre de priorité : Jooble → Lensa → Adzuna
+  // Ordre de priorité : Jooble → Lensa → Adzuna → Greenhouse
   const dedupedJooble = dedup(joobleJobs)
- 
+
 cacheJoobleJobs(dedupedJooble)
   const dedupedLensa = dedup(lensaJobs)
   const dedupedAdzuna = dedup(adzunaJobs)
+  const dedupedGreenhouse = dedup(greenhouseJobs)
 
   // ── Interleave Adzuna + Jooble (1:1 alternance) ──
 const interleaved: UnifiedJob[] = []
@@ -283,18 +329,19 @@ for (let i = 0; i < maxLen; i++) {
   if (i < dedupedJooble.length) interleaved.push(dedupedJooble[i])
 }
 
-// Lensa en fin de liste (inactif pour l'instant, mais prêt)
-const allResults = [...interleaved, ...dedupedLensa]
+// Lensa après Jooble/Adzuna, Greenhouse en dernier
+const allResults = [...interleaved, ...dedupedLensa, ...dedupedGreenhouse]
 
-  console.log(`📦 TOTAL RETOURNÉ : ${dedupedJooble.length} Jooble + ${dedupedLensa.length} Lensa + ${dedupedAdzuna.length} Adzuna (${allResults.length} après dédup)`)
+  console.log(`📦 TOTAL RETOURNÉ : ${dedupedJooble.length} Jooble + ${dedupedLensa.length} Lensa + ${dedupedAdzuna.length} Adzuna + ${dedupedGreenhouse.length} Greenhouse (${allResults.length} après dédup)`)
   console.log("=== DEBUG END ===")
 
-  upsertJobsBackground(allResults).catch(console.error)
+  upsertJobsBackground(allResults.filter((j) => j.source !== 'greenhouse')).catch(console.error)
   return {
     results: allResults,
     count: Math.max(joobleCount, lensaCount, adzunaCount),
     lensa_count: lensaCount,
     adzuna_count: adzunaCount,
     jooble_count: joobleCount,
+    greenhouse_count: dedupedGreenhouse.length,
   }
 }
