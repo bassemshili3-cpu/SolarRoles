@@ -83,7 +83,7 @@ export default function Home() {
   return (
     
     <>
-    <meta name="netlinkdeal-verification" content="b8c85ffe-cec7-46e5-85e3-dd0896106227" />
+    
       {/* ── Hero ── */}
       <section className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white pt-24 pb-36">
         <div className="max-w-5xl mx-auto px-6 text-center">
