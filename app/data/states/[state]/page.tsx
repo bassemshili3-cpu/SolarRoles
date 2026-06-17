@@ -26,6 +26,12 @@ const SLUG_TO_STATE: Record<string, string> = {
   'west-virginia': 'West Virginia', 'wisconsin': 'Wisconsin', 'wyoming': 'Wyoming',
 }
 
+// ── Salary sanity bounds — values outside this range are hourly/monthly/corrupt ──
+// $20 000 minimum : élimine les valeurs horaires ($15) et mensuelles ($1 500)
+// $600 000 maximum : élimine les outliers extrêmes (CEO packages mal encodés)
+const SALARY_MIN_THRESHOLD = 20_000
+const SALARY_MAX_THRESHOLD = 600_000
+
 function fmt(n: number): string {
   return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
 }
@@ -71,13 +77,22 @@ export default async function StateDataPage({
       where: { active: true, addressRegion: stateName },
     }),
 
-    // Average salary
+    // Average salary — annuel uniquement
+    // FIX: filtre gte 20 000 et lte 600 000 pour exclure les valeurs horaires,
+    // mensuelles et les outliers. Sans ce filtre, les salaires horaires ($15)
+    // et mensuels ($1 200) tirent la moyenne vers le bas (ex: $11 957 affiché).
     prisma.job.aggregate({
       where: {
         active: true,
         addressRegion: stateName,
-        salaryMin: { not: null, gt: 0 },
-        salaryMax: { not: null, gt: 0 },
+        salaryMin: {
+          gte: SALARY_MIN_THRESHOLD,
+          lte: SALARY_MAX_THRESHOLD,
+        },
+        salaryMax: {
+          gte: SALARY_MIN_THRESHOLD,
+          lte: SALARY_MAX_THRESHOLD,
+        },
       },
       _avg: { salaryMin: true, salaryMax: true },
       _min: { salaryMin: true },
@@ -112,11 +127,14 @@ export default async function StateDataPage({
     }),
   ])
 
-  const avgSalary = Math.round(
-    ((salaryAgg._avg.salaryMin || 0) + (salaryAgg._avg.salaryMax || 0)) / 2
-  )
-  const minSalary = salaryAgg._min.salaryMin || 0
-  const maxSalary = salaryAgg._max.salaryMax || 0
+  // Moyenne de (salaryMin + salaryMax) / 2 — uniquement sur les valeurs filtrées
+  const avgSalary =
+    salaryAgg._avg.salaryMin != null && salaryAgg._avg.salaryMax != null
+      ? Math.round((salaryAgg._avg.salaryMin + salaryAgg._avg.salaryMax) / 2)
+      : null
+
+  const minSalary = salaryAgg._min.salaryMin ?? null
+  const maxSalary = salaryAgg._max.salaryMax ?? null
   const salaryCount = salaryAgg._count.id
 
   const fullTimeCount = contractBreakdown.find(c => c.contractTime === 'full_time')?._count.id || 0
@@ -159,17 +177,47 @@ export default async function StateDataPage({
             <p className="text-2xl font-bold text-gray-900">{fmt(totalJobs)}</p>
             <p className="text-xs text-gray-500 mt-1">Active listings</p>
           </div>
+
           <div className="border border-gray-200 rounded-xl p-5 text-center">
-            <p className="text-2xl font-bold text-gray-900">${fmt(avgSalary)}</p>
-            <p className="text-xs text-gray-500 mt-1">Avg. salary ({fmt(salaryCount)} with data)</p>
+            {avgSalary != null ? (
+              <>
+                <p className="text-2xl font-bold text-gray-900">${fmt(avgSalary)}</p>
+                <p className="text-xs text-gray-500 mt-1">Avg. salary ({fmt(salaryCount)} with data)</p>
+              </>
+            ) : (
+              <>
+                <p className="text-2xl font-bold text-gray-400">—</p>
+                <p className="text-xs text-gray-400 mt-1">Avg. salary (no data)</p>
+              </>
+            )}
           </div>
+
           <div className="border border-gray-200 rounded-xl p-5 text-center">
-            <p className="text-2xl font-bold text-gray-900">${fmt(minSalary)}</p>
-            <p className="text-xs text-gray-500 mt-1">Lowest listed</p>
+            {minSalary != null ? (
+              <>
+                <p className="text-2xl font-bold text-gray-900">${fmt(minSalary)}</p>
+                <p className="text-xs text-gray-500 mt-1">Lowest listed</p>
+              </>
+            ) : (
+              <>
+                <p className="text-2xl font-bold text-gray-400">—</p>
+                <p className="text-xs text-gray-400 mt-1">Lowest listed</p>
+              </>
+            )}
           </div>
+
           <div className="border border-gray-200 rounded-xl p-5 text-center">
-            <p className="text-2xl font-bold text-gray-900">${fmt(maxSalary)}</p>
-            <p className="text-xs text-gray-500 mt-1">Highest listed</p>
+            {maxSalary != null ? (
+              <>
+                <p className="text-2xl font-bold text-gray-900">${fmt(maxSalary)}</p>
+                <p className="text-xs text-gray-500 mt-1">Highest listed</p>
+              </>
+            ) : (
+              <>
+                <p className="text-2xl font-bold text-gray-400">—</p>
+                <p className="text-xs text-gray-400 mt-1">Highest listed</p>
+              </>
+            )}
           </div>
         </div>
 
@@ -268,7 +316,7 @@ export default async function StateDataPage({
         {/* ── DISCLAIMER ── */}
         <footer className="mt-16 border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
-            Data computed from active job listings in the Oh My Job database. Salary figures reflect listed compensation and may not include bonuses, equity, or benefits. Updated daily. This page does not constitute employment or financial advice.
+            Data computed from active job listings in the Oh My Job database. Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits. Updated daily. This page does not constitute employment or financial advice.
           </p>
         </footer>
       </div>

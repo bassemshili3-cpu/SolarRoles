@@ -39,6 +39,12 @@ function stateToSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-')
 }
 
+// ── Salary sanity bounds — values outside this range are hourly/monthly/corrupt ──
+// $20 000 minimum : élimine les valeurs horaires ($15) et mensuelles ($1 500)
+// $600 000 maximum : élimine les outliers extrêmes (CEO packages mal encodés)
+const SALARY_MIN_THRESHOLD = 20_000
+const SALARY_MAX_THRESHOLD = 600_000
+
 const SKILL_BARS = [
   { skill: 'Certifications required', mentions: 2748, pct: 100, color: 'bg-violet-500' },
   { skill: 'Communication skills',    mentions: 2510, pct: 91,  color: 'bg-violet-400' },
@@ -52,10 +58,25 @@ const SKILL_BARS = [
 export default async function DataCenterPage() {
   const [totalJobs, avgSalaryResult, topStates, entryLevelCount] = await Promise.all([
     prisma.job.count({ where: { active: true } }),
+
+    // FIX: filtre gte 20 000 et lte 600 000 pour exclure les valeurs horaires,
+    // mensuelles et les outliers. Sans ce filtre, les salaires horaires ($15)
+    // et mensuels ($1 200) tirent la moyenne vers le bas (ex: $11 957 affiché).
     prisma.job.aggregate({
-      where: { active: true, salaryMin: { not: null }, salaryMax: { not: null } },
+      where: {
+        active: true,
+        salaryMin: {
+          gte: SALARY_MIN_THRESHOLD,
+          lte: SALARY_MAX_THRESHOLD,
+        },
+        salaryMax: {
+          gte: SALARY_MIN_THRESHOLD,
+          lte: SALARY_MAX_THRESHOLD,
+        },
+      },
       _avg: { salaryMin: true, salaryMax: true },
     }),
+
     prisma.job.groupBy({
       by: ['addressRegion'],
       where: { active: true, addressRegion: { not: '' } },
@@ -63,6 +84,7 @@ export default async function DataCenterPage() {
       orderBy: { _count: { id: 'desc' } },
       take: 10,
     }),
+
     prisma.job.count({
       where: {
         active: true,
@@ -75,9 +97,12 @@ export default async function DataCenterPage() {
     }),
   ])
 
-  const avgSalary = Math.round(
-    ((avgSalaryResult._avg.salaryMin || 0) + (avgSalaryResult._avg.salaryMax || 0)) / 2
-  )
+  // Moyenne de (salaryMin + salaryMax) / 2 — uniquement sur les valeurs filtrées
+  const avgSalary =
+    avgSalaryResult._avg.salaryMin != null && avgSalaryResult._avg.salaryMax != null
+      ? Math.round((avgSalaryResult._avg.salaryMin + avgSalaryResult._avg.salaryMax) / 2)
+      : null
+
   const entryLevelPct = totalJobs > 0
     ? ((entryLevelCount / totalJobs) * 100).toFixed(1)
     : '0.0'
@@ -107,8 +132,17 @@ export default async function DataCenterPage() {
             <p className="text-sm text-gray-500 mt-1">Active listings</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-gray-900">${avgSalary.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-1">Avg. listed salary</p>
+            {avgSalary != null ? (
+              <>
+                <p className="text-3xl font-bold text-gray-900">${avgSalary.toLocaleString()}</p>
+                <p className="text-sm text-gray-500 mt-1">Avg. listed salary</p>
+              </>
+            ) : (
+              <>
+                <p className="text-3xl font-bold text-gray-400">—</p>
+                <p className="text-sm text-gray-500 mt-1">Avg. listed salary</p>
+              </>
+            )}
           </div>
           <div className="text-center">
             <p className="text-3xl font-bold text-gray-900">
@@ -304,7 +338,7 @@ export default async function DataCenterPage() {
         <footer className="border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
             All data is computed from active job listings in the Oh My Job database sourced from third-party APIs.
-            Salary figures reflect listed compensation ranges and may not include bonuses, equity, or benefits.
+            Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits.
             Numbers update daily and represent a snapshot, not a comprehensive census of the US labor market.
           </p>
         </footer>
