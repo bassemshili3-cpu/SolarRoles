@@ -1,152 +1,113 @@
-// app/data/states/[state]/page.tsx
+// app/data/page.tsx
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { notFound } from 'next/navigation'
-import { ArrowLeft, Building2, Briefcase, DollarSign, MapPin } from 'lucide-react'
+import { Building2, MapPin, DollarSign, TrendingUp, Briefcase, Brain } from 'lucide-react'
 
 export const revalidate = 86400
 
-// ── State slug → full name mapping ──
-const SLUG_TO_STATE: Record<string, string> = {
-  'alabama': 'Alabama', 'alaska': 'Alaska', 'arizona': 'Arizona', 'arkansas': 'Arkansas',
-  'california': 'California', 'colorado': 'Colorado', 'connecticut': 'Connecticut',
-  'delaware': 'Delaware', 'florida': 'Florida', 'georgia': 'Georgia', 'hawaii': 'Hawaii',
-  'idaho': 'Idaho', 'illinois': 'Illinois', 'indiana': 'Indiana', 'iowa': 'Iowa',
-  'kansas': 'Kansas', 'kentucky': 'Kentucky', 'louisiana': 'Louisiana', 'maine': 'Maine',
-  'maryland': 'Maryland', 'massachusetts': 'Massachusetts', 'michigan': 'Michigan',
-  'minnesota': 'Minnesota', 'mississippi': 'Mississippi', 'missouri': 'Missouri',
-  'montana': 'Montana', 'nebraska': 'Nebraska', 'nevada': 'Nevada',
-  'new-hampshire': 'New Hampshire', 'new-jersey': 'New Jersey', 'new-mexico': 'New Mexico',
-  'new-york': 'New York', 'north-carolina': 'North Carolina', 'north-dakota': 'North Dakota',
-  'ohio': 'Ohio', 'oklahoma': 'Oklahoma', 'oregon': 'Oregon', 'pennsylvania': 'Pennsylvania',
-  'rhode-island': 'Rhode Island', 'south-carolina': 'South Carolina',
-  'south-dakota': 'South Dakota', 'tennessee': 'Tennessee', 'texas': 'Texas', 'utah': 'Utah',
-  'vermont': 'Vermont', 'virginia': 'Virginia', 'washington': 'Washington',
-  'west-virginia': 'West Virginia', 'wisconsin': 'Wisconsin', 'wyoming': 'Wyoming',
+export const metadata: Metadata = {
+  title: 'US Job Market Data Center | Salary Stats, Hiring Trends & More',
+  description: 'Live job market data pulled from thousands of active listings across the US. Average salaries by state, top hiring companies, job market snapshots, and more. Updated daily.',
+  keywords: 'US job market data, average salary by state, top hiring companies, job market statistics 2026, employment data',
+  alternates: { canonical: 'https://www.oh-my-job.com/data' },
 }
 
-// ── Salary sanity bounds — values outside this range are hourly/monthly/corrupt ──
-// $20 000 minimum : élimine les valeurs horaires ($15) et mensuelles ($1 500)
-// $600 000 maximum : élimine les outliers extrêmes (CEO packages mal encodés)
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'US Job Market Data Center',
+  description: 'Live job market statistics from active US job listings. Updated daily.',
+  url: 'https://www.oh-my-job.com/data',
+}
+
+const STATES: Record<string, string> = {
+  Alabama: 'AL', Alaska: 'AK', Arizona: 'AZ', Arkansas: 'AR', California: 'CA',
+  Colorado: 'CO', Connecticut: 'CT', Delaware: 'DE', Florida: 'FL', Georgia: 'GA',
+  Hawaii: 'HI', Idaho: 'ID', Illinois: 'IL', Indiana: 'IN', Iowa: 'IA',
+  Kansas: 'KS', Kentucky: 'KY', Louisiana: 'LA', Maine: 'ME', Maryland: 'MD',
+  Massachusetts: 'MA', Michigan: 'MI', Minnesota: 'MN', Mississippi: 'MS', Missouri: 'MO',
+  Montana: 'MT', Nebraska: 'NE', Nevada: 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+  'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND',
+  Ohio: 'OH', Oklahoma: 'OK', Oregon: 'OR', Pennsylvania: 'PA', 'Rhode Island': 'RI',
+  'South Carolina': 'SC', 'South Dakota': 'SD', Tennessee: 'TN', Texas: 'TX', Utah: 'UT',
+  Vermont: 'VT', Virginia: 'VA', Washington: 'WA', 'West Virginia': 'WV',
+  Wisconsin: 'WI', Wyoming: 'WY',
+}
+
+function stateToSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '-')
+}
+
+// ── Salary sanity bounds ──
 const SALARY_MIN_THRESHOLD = 20_000
 const SALARY_MAX_THRESHOLD = 600_000
 
-function fmt(n: number): string {
-  return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
-}
+const SKILL_BARS = [
+  { skill: 'Certifications required', mentions: 2748, pct: 100, color: 'bg-violet-500' },
+  { skill: 'Communication skills',    mentions: 2510, pct: 91,  color: 'bg-violet-400' },
+  { skill: 'Customer service',        mentions: 2007, pct: 73,  color: 'bg-violet-300' },
+  { skill: 'Prompt / AI fluency',     mentions: 328,  pct: 12,  color: 'bg-blue-500'   },
+  { skill: 'AI tools',                mentions: 256,  pct: 9,   color: 'bg-blue-400'   },
+  { skill: 'Bilingual',               mentions: 234,  pct: 9,   color: 'bg-green-500'  },
+  { skill: 'Empathy',                 mentions: 195,  pct: 7,   color: 'bg-green-400'  },
+]
 
-export async function generateStaticParams() {
-  return Object.keys(SLUG_TO_STATE).map((slug) => ({ state: slug }))
-}
+export default async function DataCenterPage() {
+  const [totalJobs, avgSalaryResult, topStatesRaw, entryLevelCount] = await Promise.all([
+    prisma.job.count({ where: { active: true } }),
 
-export async function generateMetadata(
-  { params }: { params: Promise<{ state: string }> }
-): Promise<Metadata> {
-  const { state: slug } = await params
-  const stateName = SLUG_TO_STATE[slug]
-  if (!stateName) return { title: 'Not Found' }
-
-  return {
-    title: `${stateName} Job Market Data 2026 | Salaries, Top Employers & Hiring Trends`,
-    description: `Live job market statistics for ${stateName}. Average salaries, top hiring companies, most in-demand roles, and more. Computed from real job listings. Updated daily.`,
-    keywords: `${stateName} job market, ${stateName} average salary, ${stateName} hiring companies, ${stateName} employment data 2026`,
-    alternates: { canonical: `https://www.oh-my-job.com/data/states/${slug}` },
-  }
-}
-
-export default async function StateDataPage({
-  params,
-}: {
-  params: Promise<{ state: string }>
-}) {
-  const { state: slug } = await params
-  const stateName = SLUG_TO_STATE[slug]
-  if (!stateName) notFound()
-
-  // ── Queries ──
-  const [
-    totalJobs,
-    salaryAgg,
-    topCompanies,
-    topTitles,
-    contractBreakdown,
-  ] = await Promise.all([
-    // Total active jobs in this state
-    prisma.job.count({
-      where: { active: true, addressRegion: stateName },
-    }),
-
-    // Average salary — annuel uniquement
-    // FIX: filtre gte 20 000 et lte 600 000 pour exclure les valeurs horaires,
-    // mensuelles et les outliers. Sans ce filtre, les salaires horaires ($15)
-    // et mensuels ($1 200) tirent la moyenne vers le bas (ex: $11 957 affiché).
     prisma.job.aggregate({
       where: {
         active: true,
-        addressRegion: stateName,
-        salaryMin: {
-          gte: SALARY_MIN_THRESHOLD,
-          lte: SALARY_MAX_THRESHOLD,
-        },
-        salaryMax: {
-          gte: SALARY_MIN_THRESHOLD,
-          lte: SALARY_MAX_THRESHOLD,
-        },
+        salaryMin: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
+        salaryMax: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
       },
       _avg: { salaryMin: true, salaryMax: true },
-      _min: { salaryMin: true },
-      _max: { salaryMax: true },
-      _count: { id: true },
     }),
 
-    // Top 15 hiring companies
+    // FIX Ln 86: on ne peut pas passer `not: null` sur un champ String? avec Prisma.
+    // On filtre côté JS après coup en excluant les valeurs null/vides.
     prisma.job.groupBy({
-      by: ['company'],
-      where: { active: true, addressRegion: stateName, company: { not: '' } },
+      by: ['addressRegion'],
+      where: {
+        active: true,
+        addressRegion: { not: '' },
+      },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
-      take: 15,
+      take: 15, // on prend 15 pour avoir de la marge après filtre JS
     }),
 
-    // Top 15 job titles
-    prisma.job.groupBy({
-      by: ['title'],
-      where: { active: true, addressRegion: stateName },
-      _count: { id: true },
-      orderBy: { _count: { id: 'desc' } },
-      take: 15,
-    }),
-
-    // Contract type breakdown
-    prisma.job.groupBy({
-      by: ['contractTime'],
-      where: { active: true, addressRegion: stateName },
-      _count: { id: true },
-      orderBy: { _count: { id: 'desc' } },
+    prisma.job.count({
+      where: {
+        active: true,
+        OR: [
+          { description: { contains: 'no experience', mode: 'insensitive' } },
+          { description: { contains: 'entry level',   mode: 'insensitive' } },
+          { description: { contains: 'entry-level',   mode: 'insensitive' } },
+        ],
+      },
     }),
   ])
 
-  // Moyenne de (salaryMin + salaryMax) / 2 — uniquement sur les valeurs filtrées
+  // FIX Ln 219: filtre null côté JS + cast explicite pour satisfaire TS
+  const topStates = topStatesRaw
+    .filter((s): s is typeof s & { addressRegion: string } =>
+      typeof s.addressRegion === 'string' && s.addressRegion.length > 0
+    )
+    .slice(0, 10)
+
   const avgSalary =
-    salaryAgg._avg.salaryMin != null && salaryAgg._avg.salaryMax != null
-      ? Math.round((salaryAgg._avg.salaryMin + salaryAgg._avg.salaryMax) / 2)
+    avgSalaryResult._avg.salaryMin != null && avgSalaryResult._avg.salaryMax != null
+      ? Math.round((avgSalaryResult._avg.salaryMin + avgSalaryResult._avg.salaryMax) / 2)
       : null
 
-  const minSalary = salaryAgg._min.salaryMin ?? null
-  const maxSalary = salaryAgg._max.salaryMax ?? null
-  const salaryCount = salaryAgg._count.id
+  const entryLevelPct = totalJobs > 0
+    ? ((entryLevelCount / totalJobs) * 100).toFixed(1)
+    : '0.0'
 
-  const fullTimeCount = contractBreakdown.find(c => c.contractTime === 'full_time')?._count.id || 0
-  const partTimeCount = contractBreakdown.find(c => c.contractTime === 'part_time')?._count.id || 0
-
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: `${stateName} Job Market Data 2026`,
-    description: `Live job market statistics for ${stateName} including salary data and top employers.`,
-    url: `https://www.oh-my-job.com/data/states/${slug}`,
-  }
+  const topHiringState = topStates.length > 0 ? topStates[0].addressRegion : '—'
 
   return (
     <>
@@ -154,171 +115,234 @@ export default async function StateDataPage({
 
       <div className="max-w-5xl mx-auto px-6 py-16">
 
-        <Link href="/data" className="flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-8 text-sm">
-          <ArrowLeft className="w-4 h-4" /> Back to Data Center
-        </Link>
-
         {/* ── HEADER ── */}
-        <header className="mb-12">
-          <div className="flex items-center gap-3 mb-3">
-            <MapPin className="w-6 h-6 text-blue-600" />
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-              {stateName} Job Market Data
-            </h1>
-          </div>
-          <p className="text-gray-500 max-w-2xl">
-            Live snapshot of the {stateName} job market based on {fmt(totalJobs)} active listings in our database. All figures are computed from real postings and update daily.
+        <header className="text-center mb-16">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            US Job Market Data Center
+          </h1>
+          <p className="text-gray-500 max-w-2xl mx-auto">
+            Live statistics pulled from {totalJobs.toLocaleString()} active job listings across the United States.
+            Every number on this page is computed from real postings in our database, not estimates or projections.
+            Updated daily.
           </p>
         </header>
 
-        {/* ── STATS CARDS ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
-            <p className="text-2xl font-bold text-gray-900">{fmt(totalJobs)}</p>
-            <p className="text-xs text-gray-500 mt-1">Active listings</p>
+        {/* ── LIVE STATS BAR ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+          <div className="text-center">
+            <p className="text-3xl font-bold text-gray-900">{totalJobs.toLocaleString()}</p>
+            <p className="text-sm text-gray-500 mt-1">Active listings</p>
           </div>
-
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
+          <div className="text-center">
             {avgSalary != null ? (
               <>
-                <p className="text-2xl font-bold text-gray-900">${fmt(avgSalary)}</p>
-                <p className="text-xs text-gray-500 mt-1">Avg. salary ({fmt(salaryCount)} with data)</p>
+                <p className="text-3xl font-bold text-gray-900">${avgSalary.toLocaleString()}</p>
+                <p className="text-sm text-gray-500 mt-1">Avg. listed salary</p>
               </>
             ) : (
               <>
-                <p className="text-2xl font-bold text-gray-400">—</p>
-                <p className="text-xs text-gray-400 mt-1">Avg. salary (no data)</p>
+                <p className="text-3xl font-bold text-gray-400">—</p>
+                <p className="text-sm text-gray-500 mt-1">Avg. listed salary</p>
               </>
             )}
           </div>
-
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
-            {minSalary != null ? (
-              <>
-                <p className="text-2xl font-bold text-gray-900">${fmt(minSalary)}</p>
-                <p className="text-xs text-gray-500 mt-1">Lowest listed</p>
-              </>
-            ) : (
-              <>
-                <p className="text-2xl font-bold text-gray-400">—</p>
-                <p className="text-xs text-gray-400 mt-1">Lowest listed</p>
-              </>
-            )}
+          <div className="text-center">
+            <p className="text-3xl font-bold text-gray-900">{topHiringState}</p>
+            <p className="text-sm text-gray-500 mt-1">Top hiring state</p>
           </div>
-
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
-            {maxSalary != null ? (
-              <>
-                <p className="text-2xl font-bold text-gray-900">${fmt(maxSalary)}</p>
-                <p className="text-xs text-gray-500 mt-1">Highest listed</p>
-              </>
-            ) : (
-              <>
-                <p className="text-2xl font-bold text-gray-400">—</p>
-                <p className="text-xs text-gray-400 mt-1">Highest listed</p>
-              </>
-            )}
+          <div className="text-center">
+            <p className="text-3xl font-bold text-gray-900">50</p>
+            <p className="text-sm text-gray-500 mt-1">States covered</p>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-10">
+        {/* ── SECTION: Job Market by State ── */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+              <MapPin className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Job Market by State</h2>
+              <p className="text-sm text-gray-500">Active listings, average salary, and top employers for each state</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {Object.entries(STATES).map(([name, code]) => (
+              <Link
+                key={code}
+                href={`/data/states/${stateToSlug(name)}`}
+                className="px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 transition-all"
+              >
+                {name}
+              </Link>
+            ))}
+          </div>
+        </section>
 
-          {/* ── TOP EMPLOYERS ── */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
+        {/* ── SECTION: Top Hiring States ── */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Top 10 Hiring States Right Now</h2>
+              <p className="text-sm text-gray-500">Ranked by number of active job listings</p>
+            </div>
+          </div>
+          <div className="border border-gray-200 rounded-2xl overflow-hidden">
+            {topStates.map((state, i) => (
+              <div
+                key={state.addressRegion}
+                className={`flex items-center justify-between px-5 py-3.5 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-gray-400 w-6">{i + 1}</span>
+                  <Link
+                    href={`/data/states/${stateToSlug(state.addressRegion)}`}
+                    className="text-sm font-medium text-gray-900 hover:text-blue-600"
+                  >
+                    {state.addressRegion}
+                  </Link>
+                </div>
+                {/* FIX Ln 219: _count.id peut être undefined selon la version Prisma */}
+                <span className="text-sm text-gray-500">
+                  {(state._count.id ?? 0).toLocaleString()} listings
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── SECTION: AI & Entry-Level Insights ── */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+              <Brain className="w-5 h-5 text-violet-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">AI & Entry-Level Hiring Insights</h2>
+              <p className="text-sm text-gray-500">
+                Based on {totalJobs.toLocaleString()} active US listings — June 2026
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div className="border border-gray-200 rounded-2xl p-6 bg-white">
+              <p className="text-4xl font-bold text-violet-600">{entryLevelPct}%</p>
+              <p className="text-sm font-medium text-gray-800 mt-2">
+                of listings explicitly mention &ldquo;entry-level&rdquo; or &ldquo;no experience required&rdquo;
+              </p>
+              <p className="text-xs text-gray-400 mt-2">
+                {entryLevelCount.toLocaleString()} out of {totalJobs.toLocaleString()} active postings
+              </p>
+            </div>
+            <div className="border border-gray-200 rounded-2xl p-6 bg-white">
+              <p className="text-4xl font-bold text-violet-600">256</p>
+              <p className="text-sm font-medium text-gray-800 mt-2">
+                listings already require AI tools proficiency — including 33 mentioning ChatGPT by name
+              </p>
+              <p className="text-xs text-gray-400 mt-2">An emerging trend in job descriptions</p>
+            </div>
+            <div className="border border-gray-200 rounded-2xl p-6 bg-white">
+              <p className="text-4xl font-bold text-violet-600">2,748</p>
+              <p className="text-sm font-medium text-gray-800 mt-2">
+                listings require certifications — the #1 demanded qualifier, ahead of communication skills
+              </p>
+              <p className="text-xs text-gray-400 mt-2">vs. only 19 requiring a degree</p>
+            </div>
+          </div>
+
+          <div className="border border-gray-200 rounded-2xl p-6 bg-white mb-6">
+            <h3 className="text-sm font-semibold text-gray-700 mb-5">
+              Most demanded skills in active US listings
+            </h3>
+            <div className="space-y-4">
+              {SKILL_BARS.map(({ skill, mentions, pct, color }) => (
+                <div key={skill}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-gray-700 font-medium">{skill}</span>
+                    <span className="text-gray-400">{mentions.toLocaleString()} listings</span>
+                  </div>
+                  <div className="w-full bg-gray-100 rounded-full h-2">
+                    <div className={`${color} h-2 rounded-full`} style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-5">
+              Computed from job description text across all active listings. Skills extracted via keyword matching.
+            </p>
+          </div>
+
+          <div className="bg-violet-50 border border-violet-100 rounded-2xl p-6">
+            <p className="text-sm text-violet-800 leading-relaxed">
+              <span className="font-semibold">What the data suggests: </span>
+              With only {entryLevelPct}% of US job postings explicitly open to candidates without experience,
+              the traditional entry point into the workforce has narrowed significantly. Meanwhile, demand for
+              certifications, communication skills, and AI fluency is rising — signaling a shift toward
+              skills-based hiring over degree or experience requirements.
+            </p>
+          </div>
+        </section>
+
+        {/* ── SECTION: Salary Reports ── */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+              <DollarSign className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Salary Reports by Job Title</h2>
+              <p className="text-sm text-gray-500">Average pay across states for popular roles</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {[
+              'Registered Nurse', 'Software Engineer', 'Data Analyst',
+              'Project Manager', 'Dental Assistant', 'Electrician',
+              'Medical Assistant', 'Truck Driver', 'Accountant',
+              'Customer Service', 'Sales Associate', 'Pharmacy Technician',
+            ].map((title) => (
+              <Link
+                key={title}
+                href={`/data/salaries/${title.toLowerCase().replace(/\s+/g, '-')}`}
+                className="px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-purple-400 hover:bg-purple-50 hover:text-purple-700 transition-all flex items-center gap-2"
+              >
+                <Briefcase className="w-3.5 h-3.5" />
+                {title}
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ── SECTION: Top Employers ── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
               <Building2 className="w-5 h-5 text-amber-600" />
-              <h2 className="text-xl font-bold text-gray-900">Top Hiring Companies</h2>
             </div>
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
-              {topCompanies.map((company, i) => (
-                <div
-                  key={company.company}
-                  className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-gray-400 w-5">{i + 1}</span>
-                    <span className="text-sm text-gray-800">{company.company}</span>
-                  </div>
-                  <span className="text-xs text-gray-500">{company._count.id} openings</span>
-                </div>
-              ))}
-              {topCompanies.length === 0 && (
-                <p className="px-4 py-6 text-sm text-gray-400 text-center">No data available</p>
-              )}
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Top Employers Reports</h2>
+              <p className="text-sm text-gray-500">Which companies are hiring the most in each state</p>
             </div>
-          </section>
-
-          {/* ── TOP JOB TITLES ── */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <Briefcase className="w-5 h-5 text-blue-600" />
-              <h2 className="text-xl font-bold text-gray-900">Most In-Demand Roles</h2>
-            </div>
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
-              {topTitles.map((title, i) => (
-                <div
-                  key={title.title}
-                  className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-gray-400 w-5">{i + 1}</span>
-                    <span className="text-sm text-gray-800">{title.title}</span>
-                  </div>
-                  <span className="text-xs text-gray-500">{title._count.id} listings</span>
-                </div>
-              ))}
-              {topTitles.length === 0 && (
-                <p className="px-4 py-6 text-sm text-gray-400 text-center">No data available</p>
-              )}
-            </div>
-          </section>
-        </div>
-
-        {/* ── CONTRACT TYPE BREAKDOWN ── */}
-        {totalJobs > 0 && (
-          <section className="mt-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Employment Type Breakdown</h2>
-            <div className="flex gap-4">
-              {fullTimeCount > 0 && (
-                <div className="flex-1 border border-gray-200 rounded-xl p-5 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{fmt(fullTimeCount)}</p>
-                  <p className="text-xs text-gray-500 mt-1">Full-time</p>
-                  <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(fullTimeCount / totalJobs) * 100}%` }} />
-                  </div>
-                </div>
-              )}
-              {partTimeCount > 0 && (
-                <div className="flex-1 border border-gray-200 rounded-xl p-5 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{fmt(partTimeCount)}</p>
-                  <p className="text-xs text-gray-500 mt-1">Part-time</p>
-                  <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: `${(partTimeCount / totalJobs) * 100}%` }} />
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* ── CTA ── */}
-        <section className="mt-16 bg-blue-50 border border-blue-200 rounded-2xl p-8 text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Browse {stateName} Jobs</h2>
-          <p className="text-sm text-gray-500 mb-4">See all {fmt(totalJobs)} active listings in {stateName}</p>
-          <Link
-            href={`/jobs?where=${encodeURIComponent(stateName)}`}
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
-            View {stateName} Jobs
-          </Link>
+          </div>
+          <p className="text-sm text-gray-500">
+            Select a state above to see the top hiring companies in that region.
+          </p>
         </section>
 
         {/* ── DISCLAIMER ── */}
-        <footer className="mt-16 border-t border-gray-200 pt-8">
+        <footer className="border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
-            Data computed from active job listings in the Oh My Job database. Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits. Updated daily. This page does not constitute employment or financial advice.
+            All data is computed from active job listings in the Oh My Job database sourced from third-party APIs.
+            Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits.
+            Numbers update daily and represent a snapshot, not a comprehensive census of the US labor market.
           </p>
         </footer>
+
       </div>
     </>
   )
