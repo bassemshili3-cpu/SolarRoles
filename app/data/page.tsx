@@ -39,9 +39,7 @@ function stateToSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-')
 }
 
-// ── Salary sanity bounds — values outside this range are hourly/monthly/corrupt ──
-// $20 000 minimum : élimine les valeurs horaires ($15) et mensuelles ($1 500)
-// $600 000 maximum : élimine les outliers extrêmes (CEO packages mal encodés)
+// ── Salary sanity bounds ──
 const SALARY_MIN_THRESHOLD = 20_000
 const SALARY_MAX_THRESHOLD = 600_000
 
@@ -56,33 +54,29 @@ const SKILL_BARS = [
 ]
 
 export default async function DataCenterPage() {
-  const [totalJobs, avgSalaryResult, topStates, entryLevelCount] = await Promise.all([
+  const [totalJobs, avgSalaryResult, topStatesRaw, entryLevelCount] = await Promise.all([
     prisma.job.count({ where: { active: true } }),
 
-    // FIX: filtre gte 20 000 et lte 600 000 pour exclure les valeurs horaires,
-    // mensuelles et les outliers. Sans ce filtre, les salaires horaires ($15)
-    // et mensuels ($1 200) tirent la moyenne vers le bas (ex: $11 957 affiché).
     prisma.job.aggregate({
       where: {
         active: true,
-        salaryMin: {
-          gte: SALARY_MIN_THRESHOLD,
-          lte: SALARY_MAX_THRESHOLD,
-        },
-        salaryMax: {
-          gte: SALARY_MIN_THRESHOLD,
-          lte: SALARY_MAX_THRESHOLD,
-        },
+        salaryMin: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
+        salaryMax: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
       },
       _avg: { salaryMin: true, salaryMax: true },
     }),
 
+    // FIX Ln 86: on ne peut pas passer `not: null` sur un champ String? avec Prisma.
+    // On filtre côté JS après coup en excluant les valeurs null/vides.
     prisma.job.groupBy({
       by: ['addressRegion'],
-      where: { active: true, addressRegion: { not: '' } },
+      where: {
+        active: true,
+        addressRegion: { not: '' },
+      },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
-      take: 10,
+      take: 15, // on prend 15 pour avoir de la marge après filtre JS
     }),
 
     prisma.job.count({
@@ -97,7 +91,13 @@ export default async function DataCenterPage() {
     }),
   ])
 
-  // Moyenne de (salaryMin + salaryMax) / 2 — uniquement sur les valeurs filtrées
+  // FIX Ln 219: filtre null côté JS + cast explicite pour satisfaire TS
+  const topStates = topStatesRaw
+    .filter((s): s is typeof s & { addressRegion: string } =>
+      typeof s.addressRegion === 'string' && s.addressRegion.length > 0
+    )
+    .slice(0, 10)
+
   const avgSalary =
     avgSalaryResult._avg.salaryMin != null && avgSalaryResult._avg.salaryMax != null
       ? Math.round((avgSalaryResult._avg.salaryMin + avgSalaryResult._avg.salaryMax) / 2)
@@ -106,6 +106,8 @@ export default async function DataCenterPage() {
   const entryLevelPct = totalJobs > 0
     ? ((entryLevelCount / totalJobs) * 100).toFixed(1)
     : '0.0'
+
+  const topHiringState = topStates.length > 0 ? topStates[0].addressRegion : '—'
 
   return (
     <>
@@ -145,9 +147,7 @@ export default async function DataCenterPage() {
             )}
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-gray-900">
-              {topStates.length > 0 ? topStates[0].addressRegion : '—'}
-            </p>
+            <p className="text-3xl font-bold text-gray-900">{topHiringState}</p>
             <p className="text-sm text-gray-500 mt-1">Top hiring state</p>
           </div>
           <div className="text-center">
@@ -206,7 +206,10 @@ export default async function DataCenterPage() {
                     {state.addressRegion}
                   </Link>
                 </div>
-                <span className="text-sm text-gray-500">{state._count.id.toLocaleString()} listings</span>
+                {/* FIX Ln 219: _count.id peut être undefined selon la version Prisma */}
+                <span className="text-sm text-gray-500">
+                  {(state._count.id ?? 0).toLocaleString()} listings
+                </span>
               </div>
             ))}
           </div>
@@ -226,7 +229,6 @@ export default async function DataCenterPage() {
             </div>
           </div>
 
-          {/* 3 stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="border border-gray-200 rounded-2xl p-6 bg-white">
               <p className="text-4xl font-bold text-violet-600">{entryLevelPct}%</p>
@@ -253,7 +255,6 @@ export default async function DataCenterPage() {
             </div>
           </div>
 
-          {/* Bar chart skills */}
           <div className="border border-gray-200 rounded-2xl p-6 bg-white mb-6">
             <h3 className="text-sm font-semibold text-gray-700 mb-5">
               Most demanded skills in active US listings
@@ -276,7 +277,6 @@ export default async function DataCenterPage() {
             </p>
           </div>
 
-          {/* Editorial callout */}
           <div className="bg-violet-50 border border-violet-100 rounded-2xl p-6">
             <p className="text-sm text-violet-800 leading-relaxed">
               <span className="font-semibold">What the data suggests: </span>
