@@ -136,6 +136,7 @@ export function normalizeCareerjet(job: CareerjetJob) {
     url: `/jobs/${stableId}`,
     applyUrl: job.url,
     source: 'careerjet' as const,
+    sourcePriority: 1,
     postedAt: job.date ? new Date(job.date).toISOString() : undefined,
   }
 }
