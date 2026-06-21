@@ -13,6 +13,12 @@ import { normalizeJooble, UnifiedJob } from './jobs'
 
 const EXPIRY_DAYS = 30
 
+const SOURCE_PRIORITY: Record<string, number> = {
+  careerjet: 1,
+  lensa: 2,
+  jooble: 3,
+}
+
 export interface SyncResult {
   jooble: { fetched: number; saved: number; errors: number; queriesRun: number }
   lensa: { fetched: number; saved: number; errors: number; queriesRun: number }
@@ -125,6 +131,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
         create: {
           id: job.id,
           source,
+          sourcePriority: SOURCE_PRIORITY[source] ?? 99,
           title: job.title,
           company: job.company,
           location: job.location,
@@ -175,6 +182,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
         create: {
           id: job.id,
           source: 'careerjet',
+          sourcePriority: SOURCE_PRIORITY.careerjet,
           title: job.title,
           company: job.company,
           location: job.location,
@@ -226,6 +234,7 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
         create: {
           id,
           source: 'lensa',
+          sourcePriority: SOURCE_PRIORITY.lensa,
           title: advert.cleaned_job_title,
           company: advert.company || '',
           location,
