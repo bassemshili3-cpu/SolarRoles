@@ -203,14 +203,17 @@ export async function GET(request: NextRequest) {
     }
 
     const [dbJobs, count] = await Promise.all([
-      prisma.job.findMany({
-        where: whereClause,
-        orderBy: { fetchedAt: 'desc' },
-        skip: (page - 1) * resultsPerPage,
-        take: resultsPerPage,
-      }),
-      prisma.job.count({ where: whereClause }),
-    ])
+  prisma.job.findMany({
+    where: whereClause,
+    orderBy: [
+      { sourcePriority: 'asc' },
+      { fetchedAt: 'desc' },
+    ],
+    skip: (page - 1) * resultsPerPage,
+    take: resultsPerPage,
+  }),
+  prisma.job.count({ where: whereClause }),
+])
 
     const results = dbJobs.map((job) => ({
       id: job.id,

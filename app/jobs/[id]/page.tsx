@@ -34,7 +34,7 @@ type JobDetail = {
   created?: string
   contract_type?: string
   contract_time?: string
-  source: 'lensa' | 'adzuna' | 'jooble'
+  source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet'
   externalApplyUrl?: string | null
   apply_url?: string
 }
@@ -55,7 +55,7 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
         salary_max: dbJob.salaryMax || undefined,
         salary: dbJob.salary || undefined,
         created: dbJob.postedAt?.toISOString(),
-        source: dbJob.source as 'adzuna' | 'lensa' | 'jooble',
+       source: dbJob.source as 'adzuna' | 'lensa' | 'jooble' | 'careerjet',
         externalApplyUrl: dbJob.applyUrl,
         apply_url: dbJob.applyUrl,
         contract_type: dbJob.contractType || undefined,
@@ -180,8 +180,8 @@ function buildJobPostingSchema(job: JobDetail) {
   }
 
   const sourceNames: Record<string, string> = {
-    adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble',
-  }
+  adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble', careerjet: 'CareerJet',
+}
   schema.identifier = {
     '@type': 'PropertyValue',
     name: sourceNames[job.source] || job.source,
@@ -265,9 +265,10 @@ export default async function JobDetailPage({
   const schema = buildJobPostingSchema(job)
 
  const applyConfig: Record<string, { label: string; className: string }> = {
-  adzuna: { label: 'Apply now on Adzuna', className: 'bg-green-600 text-white' },
-  lensa:  { label: 'Apply on Lensa',       className: 'bg-purple-600 text-white' },
-  jooble: { label: 'Apply on Company Site', className: 'bg-blue-600 text-white' },
+  adzuna:    { label: 'Apply now on Adzuna', className: 'bg-green-600 text-white' },
+  lensa:     { label: 'Apply on Lensa',       className: 'bg-purple-600 text-white' },
+  jooble:    { label: 'Apply on Company Site', className: 'bg-blue-600 text-white' },
+  careerjet: { label: 'Apply on Company Site', className: 'bg-slate-700 text-white' },
 }
 
   const apply = applyConfig[job.source] || applyConfig.adzuna
@@ -295,7 +296,7 @@ export default async function JobDetailPage({
           {/* ── Sidebar sticky gauche ── */}
           
 <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
-  <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
+  <PaycheckCalculatorCard salary={job.salary_min} state={job.location} compact />
 </div>
 
           {/* ── Contenu principal ── */}
@@ -314,6 +315,12 @@ export default async function JobDetailPage({
                 <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
               </div>
             )}
+
+            {job.source === 'careerjet' && (
+  <div className="flex justify-end mb-4">
+    <span className="text-xs text-muted-foreground">Sourced via CareerJet</span>
+  </div>
+)}
             {job.source === 'lensa' && (
               <div className="flex justify-end mb-4">
                 <span className="text-xs text-muted-foreground">Sourced via Lensa</span>

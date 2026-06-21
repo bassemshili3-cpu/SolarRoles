@@ -7,9 +7,10 @@ import PaycheckCalculator from './PaycheckCalculator'
 interface Props {
   salary?: number | null
   state?: string
+  compact?: boolean
 }
 
-export default function PaycheckCalculatorCard({ salary, state }: Props) {
+export default function PaycheckCalculatorCard({ salary, state, compact = false }: Props) {
   const [open, setOpen] = useState(false)
 
   // Try to detect state abbreviation from location string
@@ -44,7 +45,7 @@ export default function PaycheckCalculatorCard({ salary, state }: Props) {
       {/* ── Expanded calculator ── */}
       {open && (
         <div className="border-t border-gray-100 p-5">
-          <PaycheckCalculator defaultState={detectedState} />
+          <PaycheckCalculator defaultState={detectedState} compact={compact} />
         </div>
       )}
     </div>

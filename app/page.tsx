@@ -12,13 +12,13 @@ import {
 export const metadata: Metadata = {
   title: 'Oh My Job | US Job Board with Salary Ranges & Smart Filters',
   description:
-    'Search 300,000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account required.',
+    'Search 100 000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account required.',
 }
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const stats = [
-  { value: '6M+',  label: 'Active listings' },
+  { value: '100k+', label: 'Active listings' },
   { value: '$78K', label: 'Median salary shown' },
   { value: '50',   label: 'States covered' },
   { value: '0',    label: 'Accounts needed to search' },

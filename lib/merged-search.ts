@@ -34,7 +34,10 @@ export async function searchMergedJobs(params: {
     const [dbJobs, count] = await Promise.all([
       prisma.job.findMany({
         where: whereClause,
-        orderBy: { fetchedAt: 'desc' },
+        orderBy: [
+  { sourcePriority: 'asc' },
+  { fetchedAt: 'desc' },
+],
         skip: (page - 1) * results_per_page,
         take: results_per_page,
       }),

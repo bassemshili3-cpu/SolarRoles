@@ -99,6 +99,14 @@ export function normalizeJooble(job: JoobleJob): UnifiedJob {
   }
 }
 
+const SOURCE_PRIORITY: Record<string, number> = {
+  careerjet: 1,
+  lensa: 2,
+  jooble: 3,
+  adzuna: 4,
+  greenhouse: 5,
+}
+
 async function upsertJobsBackground(jobs: UnifiedJob[]) {
   for (const job of jobs) {
     const expiresAt = new Date()
@@ -122,6 +130,7 @@ async function upsertJobsBackground(jobs: UnifiedJob[]) {
       create: {
         id: job.id,
         source: job.source,
+        sourcePriority: SOURCE_PRIORITY[job.source] ?? 99,
         title: job.title,
         company: job.company,
         location: job.location,
@@ -353,7 +362,7 @@ export async function searchAllJobs(params: {
   }
 
   // CareerJet en tête, Greenhouse en queue
-  const allResults = [...dedupedCareerjet, ...interleaved, ...dedupedLensa, ...dedupedGreenhouse]
+  const allResults = [...dedupedCareerjet, ...dedupedLensa, ...interleaved, ...dedupedGreenhouse]
 
   console.log(`📦 TOTAL RETOURNÉ : ${dedupedCareerjet.length} CareerJet + ${dedupedJooble.length} Jooble + ${dedupedAdzuna.length} Adzuna + ${dedupedLensa.length} Lensa + ${dedupedGreenhouse.length} Greenhouse (${allResults.length} après dédup)`)
   console.log("=== DEBUG END ===")

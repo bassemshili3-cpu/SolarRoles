@@ -168,7 +168,10 @@ function fmtPct(n: number): string {
 
 /* ─── COMPONENT ─── */
 
-export default function PaycheckCalculator({ defaultState = '' }: { defaultState?: string }) {
+export default function PaycheckCalculator({
+  defaultState = '',
+  compact = false,
+}: { defaultState?: string; compact?: boolean }) {
   const [grossInput, setGrossInput] = useState('75000')
   const [payFrequency, setPayFrequency] = useState('biweekly')
   const [filingStatus, setFilingStatus] = useState('single')
@@ -190,10 +193,10 @@ export default function PaycheckCalculator({ defaultState = '' }: { defaultState
 
   return (
     <div className="w-full">
-      <div className="grid lg:grid-cols-5 gap-8">
+      <div className={compact ? 'flex flex-col gap-6' : 'grid lg:grid-cols-5 gap-8'}>
 
         {/* ── INPUTS ── */}
-        <div className="lg:col-span-2 space-y-5">
+        <div className={compact ? 'space-y-5' : 'lg:col-span-2 space-y-5'}>
 
           {/* Gross Salary */}
           <div>
@@ -231,10 +234,10 @@ export default function PaycheckCalculator({ defaultState = '' }: { defaultState
             </div>
           </div>
 
-          {/* Filing Status */}
+           {/* Filing Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Filing Status</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className={`grid gap-2 ${compact ? 'grid-cols-1' : 'grid-cols-3'}`}>
               {[
                 { value: 'single', label: 'Single' },
                 { value: 'married', label: 'Married' },
@@ -280,8 +283,8 @@ export default function PaycheckCalculator({ defaultState = '' }: { defaultState
           </div>
         </div>
 
-        {/* ── RESULTS ── */}
-        <div className="lg:col-span-3">
+       {/* ── RESULTS ── */}
+        <div className={compact ? '' : 'lg:col-span-3'}>
 
           {/* Net Pay Highlight */}
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 mb-6">
