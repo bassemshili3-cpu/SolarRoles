@@ -17,6 +17,7 @@ import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
 import { normalizeAdzuna } from '@/lib/jobs'
 import { getJobById } from '@/lib/adzuna'
 import { prisma } from '@/lib/prisma'
+import ShareBar from '@/components/ShareBar'
 
 
 export const revalidate = 3600
@@ -256,7 +257,8 @@ export default async function JobDetailPage({
 }) {
   const { id } = await params
   const { from } = await searchParams
-  const backUrl = from && decodeURIComponent(from).startsWith('/jobs') ? decodeURIComponent(from) : '/jobs'
+  const decoded = from ? decodeURIComponent(from) : null
+  const backUrl = decoded && decoded.startsWith('/') ? decoded : '/jobs'
   const raw = await getJobDetail(id)
 
   if (!raw) notFound()
@@ -389,6 +391,7 @@ export default async function JobDetailPage({
 </div>
 
             <hr className="my-8" />
+            
 
             {/* Apply CTA */}
             <div className="mt-10">
@@ -401,9 +404,17 @@ export default async function JobDetailPage({
               ) : (
                 <Button disabled size="lg" className="w-full md:w-auto">
                   Apply link unavailable
-                </Button>
+                </Button>                
               )}
             </div>
+
+<div className="mt-10">
+            <ShareBar
+  url={`https://www.oh-my-job.com/jobs/${job.id}`}
+  title={job.title}
+  company={job.company || ''}
+/>
+</div>
 
           </div>
           {/* ── fin contenu principal ── */}

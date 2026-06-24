@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'  
 import { formatDistanceToNow } from 'date-fns'
+import { useState, useEffect } from 'react'  // probablement déjà importé
 
 interface JobCardProps {
   job: {
@@ -29,7 +31,12 @@ function getCompanyDomain(companyName: string): string {
     + '.com'
 }
 
-export default function JobCard({ job, backUrl }: JobCardProps) {
+export default function JobCard({ job }: JobCardProps) {
+  const [backPath, setBackPath] = useState('/jobs')
+
+  useEffect(() => {
+    setBackPath(window.location.pathname)
+  }, [])
   const formatSalary = (min?: number, max?: number, period?: string) => {
     if (!min && !max) return null
     const formatter = new Intl.NumberFormat('en-US', {
@@ -56,7 +63,7 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
   const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
   const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
   const externalApplyUrl = job.apply_url || job.url || '#'
-  const detailHref = `/jobs/${job.id}${backUrl ? `?from=${encodeURIComponent(backUrl)}` : ''}`
+  const detailHref = `/jobs/${job.id}?from=${encodeURIComponent(backPath)}`
 
   const locationLabel =
     typeof job.location === 'string'

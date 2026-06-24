@@ -252,21 +252,27 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-4 mt-10">
-        <Button
-          variant="outline"
-          onClick={() => setPage(p => Math.max(1, p - 1))}
-          disabled={page === 1}
-        >
-          ← Previous
-        </Button>
-        <span className="text-sm text-muted-foreground">Page {page}</span>
-        <Button
-          variant="outline"
-          onClick={() => setPage(p => p + 1)}
-          disabled={page >= totalPages}
-        >
-          Next →
-        </Button>
+       <Button
+  variant="outline"
+  onClick={() => {
+    setPage(p => Math.max(1, p - 1))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }}
+  disabled={page === 1}
+>
+  ← Previous
+</Button>
+<span className="text-sm text-muted-foreground">Page {page}</span>
+<Button
+  variant="outline"
+  onClick={() => {
+    setPage(p => p + 1)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }}
+  disabled={page >= totalPages}
+>
+  Next →
+</Button>
       </div>
 
       {/* Newsletter */}
