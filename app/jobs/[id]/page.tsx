@@ -393,27 +393,25 @@ export default async function JobDetailPage({
             <hr className="my-8" />
             
 
-            {/* Apply CTA */}
-            <div className="mt-10">
-              {applyUrl ? (
-                <Button asChild size="lg" className={`w-full md:w-auto ${apply.className}`}>
-                  <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-                    {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
-                  </a>
-                </Button>
-              ) : (
-                <Button disabled size="lg" className="w-full md:w-auto">
-                  Apply link unavailable
-                </Button>                
-              )}
-            </div>
+            {/* Apply CTA + Share */}
+<div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  {applyUrl ? (
+    <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
+      <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+        {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
+      </a>
+    </Button>
+  ) : (
+    <Button disabled size="lg" className="w-full sm:w-auto">
+      Apply link unavailable
+    </Button>
+  )}
 
-<div className="mt-10">
-            <ShareBar
-  url={`https://www.oh-my-job.com/jobs/${job.id}`}
-  title={job.title}
-  company={job.company || ''}
-/>
+  <ShareBar
+    url={`https://www.oh-my-job.com/jobs/${job.id}`}
+    title={job.title}
+    company={job.company || ''}
+  />
 </div>
 
           </div>
