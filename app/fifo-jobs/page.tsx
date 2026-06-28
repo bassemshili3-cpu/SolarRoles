@@ -11,7 +11,7 @@ export const revalidate = 3600
 
 // Liste des keywords qui matchent cette landing page
 // Tous les jobs seedés avec l'un de ces keywords seront affichés
-const FIFO_KEYWORDS = ['fifo jobs', 'fly in fly out jobs']
+const FIFO_KEYWORDS = ['fly in fly out', 'fifo']
 
 export const metadata: Metadata = {
   title: 'FIFO Jobs | Fly In Fly Out in Mining, Oil & Gas',
@@ -155,12 +155,12 @@ export default async function FifoJobsPage({ searchParams }: any) {
         </header>
 
         <div className="flex flex-col lg:flex-row gap-10">
-          <aside className="lg:w-80"><JobFilters defaultWhat="fly in fly out jobs" /></aside>
+          <aside className="lg:w-80"><JobFilters defaultWhat="fly in fly out" /></aside>
           <div className="flex-1">
             {count > 0 && <p className="text-sm text-gray-500 mb-4"><span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available</p>}
             <AIJobMatcherWrapper />
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList what={params.what || 'fly in fly out jobs'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
+              <InfiniteJobList what={params.what || 'fly in fly out'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>
           </div>
         </div>
