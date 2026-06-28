@@ -74,7 +74,9 @@ const KEYWORDS = [
   // ─── Trades & Labor ───
   'electrician', 'hvac', 'truck driver', 'lineman',
   'heavy equipment operator', 'welding', 'general labor',
-  'school bus driver', 'oil rig', 'fly in fly out',
+  'school bus driver','oil rig','fifo roster','fifo rotation',
+  'fifo mining','fifo oil gas','fifo camp','fly in fly out roster'
+  ,'fly in fly out rotation','fly in fly out mining',
 
   // ─── Corporate / Companies ───
   'allied universal', 'amgen', 'cardinal health', 'cintas',
