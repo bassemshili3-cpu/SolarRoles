@@ -9,13 +9,11 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
-// Liste des keywords qui matchent cette landing page
 const FIFO_KEYWORDS = [
-  'fifo roster',        
-  'fifo rotation',  
-  'fifo mining',       
-  'fifo oil',         
-  'fifo camp',          
+  'fly in fly out mining',
+  'fly in fly out roster',
+  'fly in fly out rotation schedule',
+  'fly in, fly out', 
 ]
 
 export const metadata: Metadata = {
@@ -159,12 +157,12 @@ export default async function FifoJobsPage({ searchParams }: any) {
         </header>
 
         <div className="flex flex-col lg:flex-row gap-10">
-          <aside className="lg:w-80"><JobFilters defaultWhat="fifo" /></aside>
+          <aside className="lg:w-80"><JobFilters defaultWhat="fly in fly out mining" /></aside>
           <div className="flex-1">
             {count > 0 && <p className="text-sm text-gray-500 mb-4"><span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available</p>}
             <AIJobMatcherWrapper />
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList what={params.what || 'fifo roster'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
+              <InfiniteJobList what={params.what || 'fly in fly out mining'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>
           </div>
         </div>
