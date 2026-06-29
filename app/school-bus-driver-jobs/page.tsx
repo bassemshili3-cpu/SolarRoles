@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, TrendingUp, Award, Heart, Truck } from 'lucide-react'
-import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
@@ -229,10 +227,10 @@ const faqs = [
 export default async function SchoolBusDriverJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'school bus driver', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'school bus driver', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'school bus driver', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'school bus driver', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>

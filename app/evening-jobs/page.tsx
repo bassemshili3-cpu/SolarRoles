@@ -1,12 +1,10 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, DollarSign, CheckCircle, Shield, Clock, Users, TrendingUp, FileText, Award, Star } from 'lucide-react'
-import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Evening Jobs | After-5pm & Night Shift Openings Near You',
@@ -163,10 +161,10 @@ const applicationTips = [
 export default async function EveningJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'evening jobs', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'evening jobs', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'evening jobs', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'evening jobs', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>

@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Palette, Clock, GraduationCap, DollarSign, MapPin, CheckCircle, BookOpen, Users, Award, TrendingUp, FileText, Briefcase } from 'lucide-react'
-import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
@@ -238,10 +236,10 @@ const topStates = [
 export default async function ArtTeacherJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'Art Teacher', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'Art Teacher', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'Art Teacher', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'Art Teacher', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -20,8 +20,6 @@ import {
   Users,
   Award,
 } from 'lucide-react'
-import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 
 export const revalidate = 3600
 
@@ -383,10 +381,10 @@ const faqs = [
 export default async function MarketingChefJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-   const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'marketing chef', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'marketing chef', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'marketing chef', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'marketing chef', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>

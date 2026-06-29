@@ -1,12 +1,10 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Calendar, Clock, DollarSign, MapPin, CheckCircle, BookOpen, Users, Award, TrendingUp, FileText, Briefcase, Star } from 'lucide-react'
-import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
   title: 'Urgent Demand for Event Organization Professionals | Apply Now',
@@ -116,10 +114,10 @@ const faqs = [
 export default async function EventOrganizationJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'event organization', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'event organization', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'event organization', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'event organization', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Suspense } from 'react' 
+﻿import { Suspense } from 'react' 
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -157,10 +157,10 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
   const params = await searchParams
 
 // Corrigé (pour que le filtre salary fonctionne si un visiteur l'utilise)
-const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'Allied Universal', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'Allied Universal', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'Allied Universal', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'Allied Universal', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   return (
     <>

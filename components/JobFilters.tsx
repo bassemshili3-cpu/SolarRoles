@@ -1,9 +1,9 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
-import { Checkbox } from '@/components/ui/checkbox'
+
 import { useState, useEffect, useRef } from 'react'
 import {
   Search, MapPin, X, ChevronDown, ChevronUp,
@@ -150,24 +150,26 @@ function RadioOption({
   )
 }
 
-function CheckOption({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string
-  checked: boolean
-  onChange: () => void
+function CheckOption({ label, checked, onChange }: {
+  label: string; checked: boolean; onChange: () => void
 }) {
   return (
     <div
       onClick={onChange}
-      className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors ${
-        checked ? 'bg-primary/10 border border-primary/30' : 'hover:bg-accent border border-transparent'
+      className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors select-none ${
+        checked ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-accent text-foreground'
       }`}
     >
-      <Checkbox checked={checked} onCheckedChange={onChange} className="flex-shrink-0" />
-      <span className={checked ? 'text-primary font-medium' : 'text-foreground'}>{label}</span>
+      <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+        checked ? 'bg-primary border-primary' : 'border-input'
+      }`}>
+        {checked && (
+          <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+      </div>
+      <span>{label}</span>
     </div>
   )
 }
@@ -181,6 +183,8 @@ interface JobFiltersProps {
 export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  // Dans le composant — ajouter
+const pathname = usePathname()
 
   // Search
   const [keywords, setKeywords] = useState('')
@@ -257,7 +261,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     setOrDelete(params, 'easy_apply', easyApply ? 'true' : '')
     setOrDelete(params, 'visa_sponsorship', visaSponsorship ? 'true' : '')
     const qs = params.toString()
-    router.push(`/jobs${qs ? `?${qs}` : ''}`)
+    router.push(`${pathname}${qs ? `?${qs}` : ''}`)
     router.refresh()
   }
 
@@ -274,7 +278,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     setBenefits([])
     setEasyApply(false)
     setVisaSponsorship(false)
-    router.push(defaultWhat ? `/jobs?what=${encodeURIComponent(defaultWhat)}` : '/jobs')
+    router.push(defaultWhat ? `${pathname}?what=${encodeURIComponent(defaultWhat)}` : pathname)
     router.refresh()
   }
 

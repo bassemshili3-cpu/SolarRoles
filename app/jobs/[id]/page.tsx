@@ -390,7 +390,7 @@ export default async function JobDetailPage({
   <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
 </div>
 
-            <hr className="my-8" />
+            
             
 
             {/* Apply CTA + Share */}
@@ -408,6 +408,7 @@ export default async function JobDetailPage({
   )}
 
   <ShareBar
+  
     url={`https://www.oh-my-job.com/jobs/${job.id}`}
     title={job.title}
     company={job.company || ''}

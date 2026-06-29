@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, Users, Award } from 'lucide-react'
-import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 
@@ -108,17 +106,11 @@ export default async function BurgerKingCorporationJobsPage(props: {
 }) {
   const params = await props.searchParams
 
-  // 2. Conversion parseInt sécurisée UNIQUEMENT pour getCachedJobCount
-  let salaryMinNum: number | undefined = undefined
-  if (params.salary_min) {
-    const parsed = Number.parseInt(params.salary_min, 10)
-    salaryMinNum = Number.isNaN(parsed) ? undefined : parsed
-  }
 
- const [{ count }, initialData] = await Promise.all([
-  getMergedJobCount(params.what || 'Burger-king-corporation-jobs', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-  searchMergedJobs({ what: params.what || 'Burger-king-corporation-jobs', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-])
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'Burger-king-corporation-jobs', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'Burger-king-corporation-jobs', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+  ])
 
   
   return (

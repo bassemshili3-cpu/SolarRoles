@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -397,8 +397,8 @@ const faqs = [
 export default async function PhysicianAssistantJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getMergedJobCount(params.what || 'physician assistant', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'physician assistant', where: params.where || '' }),
     searchMergedJobs({ what: params.what || 'physician assistant', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
   ])
 

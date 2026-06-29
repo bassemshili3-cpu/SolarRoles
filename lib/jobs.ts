@@ -3,6 +3,7 @@ import { searchJobs as searchAdzuna, AdzunaJob } from './adzuna'
 import { searchJooble, JoobleJob } from './jooble'
 import { cacheJoobleJobs } from './jooble-cache'
 import { prisma } from './prisma'
+import { matchesFilters, hasAdvancedFilters, JobFilterParams, FilterableJob } from './job-filters'
 export interface UnifiedJob {
   id: string
   title: string
@@ -99,11 +100,13 @@ export function normalizeJooble(job: JoobleJob): UnifiedJob {
   }
 }
 
-const SOURCE_PRIORITY: Record<string, number> = {
+const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet', 'adzuna', 'greenhouse']
+
+const SOURCE_PRIORITY: Record<UnifiedJob['source'], number> = {
   careerjet: 1,
-  lensa: 2,
-  jooble: 3,
-  adzuna: 4,
+  jooble: 2,
+  adzuna: 3,
+  lensa: 4,
   greenhouse: 5,
 }
 
@@ -155,13 +158,16 @@ export async function searchAllJobs(params: {
   page?: number
   results_per_page?: number
   salary_min?: string
-}): Promise<UnifiedSearchResult> {
+} & JobFilterParams): Promise<UnifiedSearchResult> {
   console.log("=== 🔍 DEBUG SEARCH ALL JOBS START ===")
   console.log("Params reçus:", params)
 
   const page = Number(params.page) || 1
   const totalLimit = Number(params.results_per_page) || 30
   const lensaOffset = Math.min((page - 1) * totalLimit, 180)
+
+  const advanced = hasAdvancedFilters(params)
+  const fetchLimit = advanced ? Math.min(totalLimit * 3, 90) : totalLimit
 
   // === Parse localisation pour Lensa ===
   let city: string | undefined
@@ -181,19 +187,19 @@ export async function searchAllJobs(params: {
     }
   }
 
-  const lensaParams = { job_title: params.what, city, state, remote_only, offset: lensaOffset, limit: totalLimit }
+ const lensaParams = { job_title: params.what, city, state, remote_only, offset: lensaOffset, limit: fetchLimit }
   const adzunaParams = {
     what: params.what || '',
     where: params.where || '',
     page,
-    results_per_page: totalLimit,
+    results_per_page: fetchLimit,
     ...(params.salary_min && { salary_min: Number(params.salary_min) }),
   }
   const joobleParams = {
     keywords: params.what || '',
     location: params.where || '',
     page,
-    resultsOnPage: totalLimit,
+    resultsOnPage: fetchLimit,
     ...(params.salary_min && { salary: Number(params.salary_min) }),
   }
 
@@ -204,9 +210,9 @@ export async function searchAllJobs(params: {
   }
 
   // === Appels parallèles (3 sources live + DB CareerJet + DB Greenhouse) ===
-  const dbCareerjetLimit = Math.min(totalLimit, 20)
+ const dbCareerjetLimit = Math.min(fetchLimit, 60)
   const dbCareerjetOffset = (page - 1) * dbCareerjetLimit
-  const dbGreenhouseLimit = Math.min(totalLimit, 15)
+  const dbGreenhouseLimit = Math.min(fetchLimit, 45)
   const dbGreenhouseOffset = (page - 1) * dbGreenhouseLimit
 
   const dbWhere = (source: string) => ({
@@ -367,9 +373,25 @@ export async function searchAllJobs(params: {
   console.log(`📦 TOTAL RETOURNÉ : ${dedupedCareerjet.length} CareerJet + ${dedupedJooble.length} Jooble + ${dedupedAdzuna.length} Adzuna + ${dedupedLensa.length} Lensa + ${dedupedGreenhouse.length} Greenhouse (${allResults.length} après dédup)`)
   console.log("=== DEBUG END ===")
 
+  const toFilterable = (job: UnifiedJob): FilterableJob => ({
+    title: job.title,
+    company: job.company,
+    location: job.location,
+    description: job.description,
+    applyUrl: job.apply_url,
+    postedAt: job.created ? new Date(job.created) : null,
+  })
+
+  const finalResults = advanced
+    ? allResults.filter(job => matchesFilters(toFilterable(job), params)).slice(0, totalLimit)
+    : allResults
+
+  console.log(`📦 TOTAL RETOURNÉ : ${dedupedCareerjet.length} CareerJet + ${dedupedJooble.length} Jooble + ${dedupedAdzuna.length} Adzuna + ${dedupedLensa.length} Lensa + ${dedupedGreenhouse.length} Greenhouse (${allResults.length} après dédup, ${finalResults.length} après filtres)`)
+  console.log("=== DEBUG END ===")
+
   upsertJobsBackground(allResults.filter((j) => j.source !== 'greenhouse' && j.source !== 'careerjet')).catch(console.error)
   return {
-    results: allResults,
+    results: finalResults,
     count: Math.max(joobleCount, lensaCount, adzunaCount),
     lensa_count: lensaCount,
     adzuna_count: adzunaCount,

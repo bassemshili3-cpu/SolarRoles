@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -302,8 +302,8 @@ const faqs = [
 export default async function LocalTruckDrivingJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  const [{ count }, initialData] = await Promise.all([
-    getMergedJobCount(params.what || 'local truck driving', params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'local truck driving', where: params.where || '' }),
     searchMergedJobs({ what: params.what || 'local truck driving', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
   ])
 

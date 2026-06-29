@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -14,8 +14,6 @@ import {
   BookOpen,
   Users,
 } from 'lucide-react'
-import { searchJobs, getCachedJobCount, type AdzunaSearchResult } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
@@ -284,23 +282,10 @@ const structuredData = [collectionPageJsonLd, faqPageJsonLd]
 export default async function ArmedSecurityJobsPage({ searchParams }: PageProps) {
   const params = await Promise.resolve(searchParams)
 
-  const what = getSingleValue(params.what)?.trim() || 'Armed Security'
-  const where = getSingleValue(params.where)?.trim() || ''
-  const salaryMin = parseOptionalNumber(params.salary_min)
-  const salaryMinStr = getSingleValue(params.salary_min)
 
-  const [{ count }, initialData] = await Promise.all([
-    getCachedJobCount(what, where, salaryMin),
-    searchJobs({
-      what,
-      where,
-      salary_min: salaryMin,
-      results_per_page: 30,
-      page: 1,
-    }).then((data: AdzunaSearchResult) => ({
-      ...data,
-      results: data.results.map(normalizeAdzuna),
-    })),
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'Armed Security', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'Armed Security', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
   ])
 
   return (
@@ -325,7 +310,7 @@ export default async function ArmedSecurityJobsPage({ searchParams }: PageProps)
 
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80">
-            <JobFilters defaultWhat={what} />
+            <JobFilters defaultWhat={getSingleValue(params.what) || 'Armed Security'} />
           </aside>
 
           <div className="flex-1">
@@ -338,14 +323,14 @@ export default async function ArmedSecurityJobsPage({ searchParams }: PageProps)
 
             <AIJobMatcherWrapper />
 
-            <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList
-                what={what}
-                where={where}
-                salary_min={salaryMinStr}
-                initialData={initialData}
-              />
-            </Suspense>
+           <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
+  <InfiniteJobList
+    what={getSingleValue(params.what) || 'Armed Security'}
+    where={getSingleValue(params.where) || ''}
+    salary_min={getSingleValue(params.salary_min)}
+    initialData={initialData}
+  />
+</Suspense>
           </div>
         </div>
 

@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import InfiniteJobList from '@/components/InfiniteJobList'
+import JobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-
 import AIJobMatcher from '@/components/AIJobMatcher'
 
 type AIFilters = {
@@ -18,50 +17,43 @@ type AIFilters = {
 export default function JobsPage() {
   const searchParams = useSearchParams()
 
-  const initialWhat = searchParams.get('what') || ''
-  const initialWhere = searchParams.get('where') || ''  // vide = nationwide US
+  const initialWhat     = searchParams.get('what')       || ''
+  const initialWhere    = searchParams.get('where')      || ''
   const initialSalaryMin = searchParams.get('salary_min')
     ? Number(searchParams.get('salary_min'))
     : undefined
 
-  const [aiFilters, setAiFilters] = useState<AIFilters | null>(null)
-  const [jobCount, setJobCount] = useState<number | null>(null)
+  const [aiFilters, setAiFilters]     = useState<AIFilters | null>(null)
+  const [jobCount, setJobCount]       = useState<number | null>(null)
   const [loadingCount, setLoadingCount] = useState(true)
 
   useEffect(() => {
     async function loadCount() {
       setLoadingCount(true)
 
+      const query = new URLSearchParams(searchParams.toString())
+
       const effectiveWhat =
         aiFilters?.title ||
         (aiFilters?.keywords?.length ? aiFilters.keywords.join(' ') : initialWhat)
 
-      const effectiveWhere = aiFilters?.location || initialWhere
-
+      const effectiveWhere    = aiFilters?.location || initialWhere
       const effectiveSalaryMin =
-        aiFilters?.minSalary !== undefined
-          ? aiFilters.minSalary
-          : initialSalaryMin
+        aiFilters?.minSalary !== undefined ? aiFilters.minSalary : initialSalaryMin
 
-      const query = new URLSearchParams({
-        what: effectiveWhat,
-        where: effectiveWhere,
-      })
+      if (effectiveWhat)          query.set('what',       effectiveWhat)
+      else                        query.delete('what')
 
-      if (effectiveSalaryMin !== undefined) {
-        query.set('salary_min', String(effectiveSalaryMin))
-      }
+      if (effectiveWhere)         query.set('where',      effectiveWhere)
+      else                        query.delete('where')
 
-      const url = `/api/jobs-count?${query.toString()}`
-
-      console.log('Fetching count via API route:', url)
+      if (effectiveSalaryMin !== undefined) query.set('salary_min', String(effectiveSalaryMin))
+      else                                  query.delete('salary_min')
 
       try {
-        const res = await fetch(url)
+        const res = await fetch(`/api/jobs-count?${query.toString()}`)
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
-
         const data = await res.json()
-        console.log('Count reçu:', data.count)
         setJobCount(data.count ?? 0)
       } catch (err) {
         console.error('Error loading count:', err)
@@ -72,7 +64,20 @@ export default function JobsPage() {
     }
 
     loadCount()
-  }, [initialWhat, initialWhere, initialSalaryMin, aiFilters])
+  }, [initialWhat, initialWhere, initialSalaryMin, aiFilters, searchParams.toString()])
+
+  const effectiveWhat =
+    aiFilters?.title ||
+    (aiFilters?.keywords?.length ? aiFilters.keywords.join(' ') : initialWhat)
+
+  const effectiveWhere = aiFilters?.location || initialWhere
+
+  const effectiveSalaryMin =
+    aiFilters?.minSalary !== undefined
+      ? String(aiFilters.minSalary)
+      : initialSalaryMin !== undefined
+        ? String(initialSalaryMin)
+        : undefined
 
   const displayWhat =
     aiFilters?.title ||
@@ -102,24 +107,14 @@ export default function JobsPage() {
             )}
           </p>
 
-          {/* AI section juste ici */}
           <AIJobMatcher onFiltersChange={setAiFilters} />
 
-         
-
-          <InfiniteJobList
-            what={
-              aiFilters?.title ||
-              (aiFilters?.keywords?.length ? aiFilters.keywords.join(' ') : initialWhat)
-            }
-            where={aiFilters?.location || initialWhere}
-            salary_min={
-              aiFilters?.minSalary !== undefined
-                ? String(aiFilters.minSalary)
-                : initialSalaryMin !== undefined
-                  ? String(initialSalaryMin)
-                  : undefined
-            }
+          {/* JobList reads advanced filters (job_type, arrangement, etc.)
+              directly from useSearchParams internally — no need to pass them */}
+          <JobList
+            what={effectiveWhat}
+            where={effectiveWhere}
+            salary_min={effectiveSalaryMin}
           />
         </div>
       </div>

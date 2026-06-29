@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
-import { searchJobs, getCachedJobCount, AdzunaSearchResult } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
@@ -139,9 +137,9 @@ export default async function FifoJobsPage({ searchParams }: any) {
   // Sinon, on passe l'array de keywords FIFO pour matcher toutes les variantes seedées
   const whatQuery = params.what || FIFO_KEYWORDS
 
-  const [{ count }, initialData] = await Promise.all([
-    getMergedJobCount(whatQuery, params.where || '', params.salary_min ? Number(params.salary_min) : undefined),
-    searchMergedJobs({ what: whatQuery, where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+    const [{ count }, initialData] = await Promise.all([
+    getMergedJobCount({ what: params.what || 'fly in fly out mining', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'fly in fly out mining', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
   ])
 
   return (

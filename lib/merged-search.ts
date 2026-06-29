@@ -1,16 +1,223 @@
 // lib/merged-search.ts
-// Adzuna partnership paused — using Jooble, Lensa, and Careerjet from Prisma
 import { prisma } from '@/lib/prisma'
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
 
-export async function getMergedJobCount(
-  what: string | string[],
-  where: string,
-  salary_min?: number,
-) {
+// ==================== KEYWORDS ====================
+const JOB_TYPE_KEYWORDS: Record<string, string[]> = {
+  'Full-time':  ['full-time', 'full time'],
+  'Part-time':  ['part-time', 'part time'],
+  'Contract':   ['contract', 'contractor'],
+  'Internship': ['intern', 'internship'],
+  'Temporary':  ['temporary', 'temp'],
+  'Freelance':  ['freelance'],
+  'Per diem':   ['per diem'],
+}
+
+const EXPERIENCE_KEYWORDS: Record<string, string[]> = {
+  internship: ['intern', 'internship'],
+  entry:      ['entry level', 'entry-level', 'junior', 'associate', 'new grad', '0-1 year', '0-2 year', 'no experience'],
+  mid:        ['mid level', 'mid-level', '2-4 year', '3-5 year', '2+ year', '3+ year'],
+  senior:     ['senior', 'sr.', 'lead', '5+ year', '5-8 year', '7+ year'],
+  manager:    ['manager', 'management', 'team lead', 'supervisor', 'head of'],
+  director:   ['director', 'vp of', 'vice president'],
+  executive:  ['chief', 'cto', 'cfo', 'coo', 'ceo', 'executive', 'president', 'c-suite'],
+}
+
+const EDUCATION_KEYWORDS: Record<string, string[]> = {
+  high_school: ['high school diploma', 'ged', 'high school'],
+  associate:   ["associate's degree", "associate degree", 'a.a.', 'a.s.'],
+  bachelor:    ["bachelor's degree", "bachelor degree", 'b.s.', 'b.a.', 'undergraduate degree'],
+  master:      ["master's degree", "master degree", 'm.s.', 'm.b.a.', 'mba', 'postgraduate'],
+  phd:         ['phd', 'doctorate', 'ph.d.', 'doctoral degree'],
+}
+
+const ARRANGEMENT_KEYWORDS: Record<string, string[]> = {
+  Remote:    ['remote', 'work from home', 'wfh', 'telecommute', 'distributed'],
+  Hybrid:    ['hybrid', 'flexible work', 'partial remote'],
+  'On-site': ['on-site', 'onsite', 'in-office', 'in office', 'on site'],
+}
+
+const BENEFIT_KEYWORDS: Record<string, string[]> = {
+  'Health insurance':       ['health insurance', 'medical insurance', 'medical benefits', 'healthcare'],
+  'Dental & Vision':        ['dental', 'vision insurance', 'dental and vision'],
+  '401(k) match':           ['401k', '401(k)', 'retirement match', 'employer match'],
+  'Paid time off':          ['paid time off', 'pto', 'vacation days', 'paid vacation'],
+  'Stock options / RSU':    ['stock options', 'equity', 'rsu', 'restricted stock', 'esop'],
+  'Remote stipend':         ['remote stipend', 'home office stipend', 'equipment stipend', 'internet stipend'],
+  'Tuition reimbursement':  ['tuition reimbursement', 'education assistance', 'tuition assistance'],
+  'Parental leave':         ['parental leave', 'maternity leave', 'paternity leave', 'family leave'],
+  'Wellness perks':         ['gym membership', 'wellness', 'mental health', 'employee assistance'],
+}
+
+const COMPANY_SIZE_KEYWORDS: Record<string, string[]> = {
+  'Startup (1–50)':     ['startup', 'start-up', 'early stage', 'seed stage', 'series a'],
+  'Small (51–200)':     ['small company', 'growing team', 'small team', 'boutique'],
+  'Mid-size (201–1k)':  ['mid-size', 'midsize', 'medium company'],
+  'Large (1k–5k)':      ['large company', 'established company', 'well-established'],
+  'Enterprise (5k+)':   ['fortune 500', 'fortune500', 'enterprise', 'multinational', 'global company'],
+}
+
+// ── Helper ────────────────────────────────────────────────────────────────────
+
+function resolveString(v: string | string[] | undefined, fallback = ''): string {
+  if (!v) return fallback
+  return Array.isArray(v) ? (v[0] ?? fallback) : v
+}
+
+// ==================== getMergedJobCount ====================
+
+export async function getMergedJobCount(params: {
+  what?:          string | string[]
+  where?:         string | string[]
+  salary_min?:    number | string
+  postedWithin?:  number
+  jobTypes?:      string[]
+  arrangements?:  string[]
+  experience?:    string
+  education?:     string
+  companySizes?:  string[]
+  benefits?:      string[]
+  easyApply?:     boolean
+  visaSponsorship?: boolean
+}) {
+  const what       = resolveString(params.what)
+  const where      = resolveString(params.where)
+  const salary_min = params.salary_min !== undefined ? Number(params.salary_min) : undefined
+
+  const {
+    postedWithin,
+    jobTypes      = [],
+    arrangements  = [],
+    experience    = '',
+    education     = '',
+    companySizes  = [],
+    benefits      = [],
+    easyApply     = false,
+    visaSponsorship = false,
+  } = params
+
   try {
-    const whereClause = buildPrismaWhere(what, where, salary_min)
+    const AND: any[] = []
+
+    // What (keywords — AND par mot pour cohérence avec jobs-all)
+    if (what) {
+      for (const kw of what.split(/\s+/).filter(Boolean)) {
+        AND.push({
+          OR: [
+            { title:       { contains: kw, mode: 'insensitive' } },
+            { company:     { contains: kw, mode: 'insensitive' } },
+            { description: { contains: kw, mode: 'insensitive' } },
+          ],
+        })
+      }
+    }
+
+    // Where
+    if (where) {
+      AND.push({
+        OR: [
+          { location:      { contains: where, mode: 'insensitive' } },
+          { addressRegion: { contains: where, mode: 'insensitive' } },
+        ],
+      })
+    }
+
+    // Salary
+    if (salary_min) {
+      AND.push({ salaryMin: { gte: salary_min } })
+    }
+
+    // Posted within
+    if (postedWithin) {
+      AND.push({ postedAt: { gte: new Date(Date.now() - postedWithin * 86_400_000) } })
+    }
+
+    // Job Types
+    if (jobTypes.length > 0) {
+      const typeConds = jobTypes.flatMap(t => {
+        const kws = JOB_TYPE_KEYWORDS[t] || []
+        return kws.flatMap(kw => [
+          { title:       { contains: kw, mode: 'insensitive' } },
+          { description: { contains: kw, mode: 'insensitive' } },
+        ])
+      })
+      if (typeConds.length > 0) AND.push({ OR: typeConds })
+    }
+
+    // Arrangements
+    if (arrangements.length > 0) {
+      const arrKws = arrangements.flatMap(a => ARRANGEMENT_KEYWORDS[a] || [])
+      if (arrKws.length > 0) {
+        AND.push({
+          OR: arrKws.flatMap(kw => [
+            { location:    { contains: kw, mode: 'insensitive' } },
+            { title:       { contains: kw, mode: 'insensitive' } },
+            { description: { contains: kw, mode: 'insensitive' } },
+          ]),
+        })
+      }
+    }
+
+    // Experience
+    if (experience && EXPERIENCE_KEYWORDS[experience]) {
+      const kws = EXPERIENCE_KEYWORDS[experience]
+      AND.push({ OR: kws.flatMap(kw => [
+        { title:       { contains: kw, mode: 'insensitive' } },
+        { description: { contains: kw, mode: 'insensitive' } },
+      ])})
+    }
+
+    // Education
+    if (education && EDUCATION_KEYWORDS[education]) {
+      const kws = EDUCATION_KEYWORDS[education]
+      AND.push({ OR: kws.flatMap(kw => [
+        { title:       { contains: kw, mode: 'insensitive' } },
+        { description: { contains: kw, mode: 'insensitive' } },
+      ])})
+    }
+
+    // Company size
+    if (companySizes.length > 0) {
+      const kws = companySizes.flatMap(s => COMPANY_SIZE_KEYWORDS[s] || [])
+      if (kws.length > 0) {
+        AND.push({ OR: kws.map(kw => ({ description: { contains: kw, mode: 'insensitive' } })) })
+      }
+    }
+
+    // Benefits
+    if (benefits.length > 0) {
+      benefits.forEach(b => {
+        const kws = BENEFIT_KEYWORDS[b] || []
+        if (kws.length > 0) {
+          AND.push({ OR: kws.map(kw => ({ description: { contains: kw, mode: 'insensitive' } })) })
+        }
+      })
+    }
+
+    // Easy apply
+    if (easyApply) AND.push({ applyUrl: { not: '' } })
+
+    // Visa sponsorship
+    if (visaSponsorship) {
+      AND.push({
+        OR: [
+          { description: { contains: 'visa sponsorship',   mode: 'insensitive' } },
+          { description: { contains: 'will sponsor',       mode: 'insensitive' } },
+          { description: { contains: 'h1b',                mode: 'insensitive' } },
+          { description: { contains: 'h-1b',               mode: 'insensitive' } },
+          { description: { contains: 'work authorization', mode: 'insensitive' } },
+        ],
+      })
+    }
+
+    const whereClause: any = {
+      active:    true,
+      expiresAt: { gt: new Date() },
+      source:    { in: ACTIVE_SOURCES },
+      ...(AND.length > 0 && { AND }),
+    }
+
     const count = await prisma.job.count({ where: whereClause })
     return { count }
   } catch (err: any) {
@@ -19,25 +226,63 @@ export async function getMergedJobCount(
   }
 }
 
+// ==================== searchMergedJobs ====================
+
 export async function searchMergedJobs(params: {
-  what: string | string[]
-  where: string
+  what?:            string | string[]
+  where?:           string | string[]
+  salary_min?:      number | string
   results_per_page?: number
-  page?: number
-  salary_min?: number
+  page?:            number
 }) {
-  const { what, where, results_per_page = 30, page = 1, salary_min } = params
+  const what       = resolveString(params.what)
+  const where      = resolveString(params.where)
+  const salary_min = params.salary_min !== undefined ? Number(params.salary_min) : undefined
+  const results_per_page = params.results_per_page ?? 30
+  const page             = params.page ?? 1
 
   try {
-    const whereClause = buildPrismaWhere(what, where, salary_min)
+    const AND: any[] = []
+
+    if (what) {
+      for (const kw of what.split(/\s+/).filter(Boolean)) {
+        AND.push({
+          OR: [
+            { title:       { contains: kw, mode: 'insensitive' } },
+            { company:     { contains: kw, mode: 'insensitive' } },
+            { description: { contains: kw, mode: 'insensitive' } },
+          ],
+        })
+      }
+    }
+
+    if (where) {
+      AND.push({
+        OR: [
+          { location:      { contains: where, mode: 'insensitive' } },
+          { addressRegion: { contains: where, mode: 'insensitive' } },
+        ],
+      })
+    }
+
+    if (salary_min) {
+      AND.push({ salaryMin: { gte: salary_min } })
+    }
+
+    const whereClause = {
+      active:    true,
+      expiresAt: { gt: new Date() },
+      source:    { in: ACTIVE_SOURCES },
+      ...(AND.length > 0 && { AND }),
+    }
 
     const [dbJobs, count] = await Promise.all([
       prisma.job.findMany({
         where: whereClause,
         orderBy: [
-  { sourcePriority: 'asc' },
-  { fetchedAt: 'desc' },
-],
+          { sourcePriority: 'asc' },
+          { fetchedAt: 'desc' },
+        ],
         skip: (page - 1) * results_per_page,
         take: results_per_page,
       }),
@@ -45,102 +290,30 @@ export async function searchMergedJobs(params: {
     ])
 
     const results = dbJobs.map((job) => ({
-      id: job.id,
-      title: job.title,
-      company: job.company,
-      location: job.location,
+      id:            job.id,
+      title:         job.title,
+      company:       job.company,
+      location:      job.location,
       addressRegion: job.addressRegion,
-      description: job.description,
-      url: job.url,
-      applyUrl: job.applyUrl,
-      apply_url: job.applyUrl,
-      salary: job.salary,
-      salaryMin: job.salaryMin,
-      salaryMax: job.salaryMax,
-      salary_min: job.salaryMin,
-      salary_max: job.salaryMax,
-      contractType: job.contractType,
-      contractTime: job.contractTime,
-      source: job.source,
-      postedAt: job.postedAt?.toISOString() || null,
-      created: job.postedAt?.toISOString() || null,
+      description:   job.description,
+      url:           job.url,
+      applyUrl:      job.applyUrl,
+      apply_url:     job.applyUrl,
+      salary:        job.salary,
+      salaryMin:     job.salaryMin,
+      salaryMax:     job.salaryMax,
+      salary_min:    job.salaryMin,
+      salary_max:    job.salaryMax,
+      contractType:  job.contractType,
+      contractTime:  job.contractTime,
+      source:        job.source,
+      postedAt:      job.postedAt?.toISOString() || null,
+      created:       job.postedAt?.toISOString() || null,
     }))
 
     return { results, count }
   } catch (err: any) {
-    console.error('Prisma error in merged search:', err.message)
+    console.error('searchMergedJobs error:', err.message)
     return { results: [], count: 0 }
   }
-}
-
-// ── Shared where clause builder ──
-function buildPrismaWhere(
-  what: string | string[],
-  where: string,
-  salary_min?: number,
-) {
-  const whereClause: any = {
-    active: true,
-    expiresAt: { gt: new Date() },
-    source: { in: ACTIVE_SOURCES },
-  }
-
-  if (what) {
-    // Normalize input: a string becomes a one-phrase array, an array stays as is
-    const phrases = Array.isArray(what)
-      ? what.filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
-      : [what]
-
-    // Build a per-phrase condition: within a phrase, all keywords must match (AND)
-    // Between fields (title, company, description), an OR is kept from the original logic
-    const phraseConditions = phrases
-      .map((phrase) => {
-        const keywords = phrase.split(/\s+/).filter(Boolean)
-        if (keywords.length === 0) return null
-
-        return {
-          AND: keywords.map((kw: string) => ({
-            OR: [
-              { title: { contains: kw, mode: 'insensitive' as const } },
-              { company: { contains: kw, mode: 'insensitive' as const } },
-              { description: { contains: kw, mode: 'insensitive' as const } },
-            ],
-          })),
-        }
-      })
-      .filter((c): c is { AND: any[] } => c !== null)
-
-    if (phraseConditions.length === 1) {
-      // Single phrase: flatten into top-level AND for full backward compatibility
-      whereClause.AND = phraseConditions[0].AND
-    } else if (phraseConditions.length > 1) {
-      // Multiple phrases: any phrase can match (OR between phrases)
-      whereClause.AND = [{ OR: phraseConditions }]
-    }
-  }
-
-  if (where) {
-    const locationCondition = {
-      OR: [
-        { location: { contains: where, mode: 'insensitive' as const } },
-        { addressRegion: { contains: where, mode: 'insensitive' as const } },
-      ],
-    }
-    if (whereClause.AND) {
-      whereClause.AND.push(locationCondition)
-    } else {
-      whereClause.AND = [locationCondition]
-    }
-  }
-
-  if (salary_min) {
-    const salaryCondition = { salaryMin: { gte: salary_min } }
-    if (whereClause.AND) {
-      whereClause.AND.push(salaryCondition)
-    } else {
-      whereClause.AND = [salaryCondition]
-    }
-  }
-
-  return whereClause
 }

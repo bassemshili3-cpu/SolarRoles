@@ -183,6 +183,12 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
 
+  const filterKeys = [
+    'job_type', 'arrangement', 'experience', 'education',
+    'company_size', 'benefits', 'easy_apply', 'visa_sponsorship', 'posted_within',
+  ]
+  const hasFilters = filterKeys.some(key => searchParams.has(key))
+
   // Build back URL preserving all current filters + current page
   const backUrl = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString())
@@ -196,7 +202,7 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
   }, [searchParams, page])
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['jobs', resolvedWhat, resolvedWhere, salary_min, page],
+    queryKey: ['jobs', resolvedWhat, resolvedWhere, salary_min, page, searchParams.toString()],
     queryFn: async () => {
       const params = new URLSearchParams({
         what: resolvedWhat,
@@ -205,13 +211,18 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
         results_per_page: '30',
       })
       if (salary_min) params.set('salary_min', salary_min)
+
+      for (const key of filterKeys) {
+        const val = searchParams.get(key)
+        if (val) params.set(key, val)
+      }
       const res = await fetch(`/api/jobs-all?${params}`)
       if (!res.ok) throw new Error('Failed to fetch jobs')
       return res.json()
     },
     // ← Page 1 : on utilise les données SSR directement, pas de fetch client
     // Page 2+ : fetch client normal
-    initialData: page === 1 && initialData ? initialData : undefined,
+    initialData: page === 1 && initialData && !hasFilters ? initialData : undefined,
     retry: 1,
   })
 
