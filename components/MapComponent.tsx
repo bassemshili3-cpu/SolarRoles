@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
@@ -83,7 +83,7 @@ export default function MapComponent({ jobs }: { jobs?: any[] }) {
                 </span>
                 {job.salary_min && (
                   <span className="block text-green-600 mt-1">
-                    ${job.salary_min.toLocaleString()}
+                    ${job.salary_min.toLocaleString('en-US')}
                   </span>
                 )}
                 {job.location?.display_name && (

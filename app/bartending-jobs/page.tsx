@@ -243,11 +243,6 @@ export default async function BartendingJobsPage({ searchParams }: any) {
             <JobFilters defaultWhat="bartending" />
           </aside>
           <div className="flex-1">
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> open roles discovered
-              </p>
-            )}
 
             <AIJobMatcherWrapper />
 

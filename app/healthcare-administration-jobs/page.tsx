@@ -133,11 +133,6 @@ export default async function HealthcareAdministrationJobsPage({ searchParams }:
           <div className="flex-1">
 
             {/* ✅ Count ici, à droite, au-dessus de la map */}
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
-              </p>
-            )}
 
             {/* Client wrapper isolé — pas de use client sur la page */}
             <AIJobMatcherWrapper />

@@ -1,4 +1,4 @@
-// app/data/page.tsx
+﻿// app/data/page.tsx
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
@@ -121,7 +121,7 @@ export default async function DataCenterPage() {
             US Job Market Data Center
           </h1>
           <p className="text-gray-500 max-w-2xl mx-auto">
-            Live statistics pulled from {totalJobs.toLocaleString()} active job listings across the United States.
+            Live statistics pulled from {totalJobs.toLocaleString('en-US')} active job listings across the United States.
             Every number on this page is computed from real postings in our database, not estimates or projections.
             Updated daily.
           </p>
@@ -130,13 +130,13 @@ export default async function DataCenterPage() {
         {/* ── LIVE STATS BAR ── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
           <div className="text-center">
-            <p className="text-3xl font-bold text-gray-900">{totalJobs.toLocaleString()}</p>
+            <p className="text-3xl font-bold text-gray-900">{totalJobs.toLocaleString('en-US')}</p>
             <p className="text-sm text-gray-500 mt-1">Active listings</p>
           </div>
           <div className="text-center">
             {avgSalary != null ? (
               <>
-                <p className="text-3xl font-bold text-gray-900">${avgSalary.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-gray-900">${avgSalary.toLocaleString('en-US')}</p>
                 <p className="text-sm text-gray-500 mt-1">Avg. listed salary</p>
               </>
             ) : (
@@ -208,7 +208,7 @@ export default async function DataCenterPage() {
                 </div>
                 {/* FIX Ln 219: _count.id peut être undefined selon la version Prisma */}
                 <span className="text-sm text-gray-500">
-                  {(state._count.id ?? 0).toLocaleString()} listings
+                  {(state._count.id ?? 0).toLocaleString('en-US')} listings
                 </span>
               </div>
             ))}
@@ -224,7 +224,7 @@ export default async function DataCenterPage() {
             <div>
               <h2 className="text-xl font-bold text-gray-900">AI & Entry-Level Hiring Insights</h2>
               <p className="text-sm text-gray-500">
-                Based on {totalJobs.toLocaleString()} active US listings — June 2026
+                Based on {totalJobs.toLocaleString('en-US')} active US listings — June 2026
               </p>
             </div>
           </div>
@@ -236,7 +236,7 @@ export default async function DataCenterPage() {
                 of listings explicitly mention &ldquo;entry-level&rdquo; or &ldquo;no experience required&rdquo;
               </p>
               <p className="text-xs text-gray-400 mt-2">
-                {entryLevelCount.toLocaleString()} out of {totalJobs.toLocaleString()} active postings
+                {entryLevelCount.toLocaleString('en-US')} out of {totalJobs.toLocaleString('en-US')} active postings
               </p>
             </div>
             <div className="border border-gray-200 rounded-2xl p-6 bg-white">
@@ -264,7 +264,7 @@ export default async function DataCenterPage() {
                 <div key={skill}>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-gray-700 font-medium">{skill}</span>
-                    <span className="text-gray-400">{mentions.toLocaleString()} listings</span>
+                    <span className="text-gray-400">{mentions.toLocaleString('en-US')} listings</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
                     <div className={`${color} h-2 rounded-full`} style={{ width: `${pct}%` }} />

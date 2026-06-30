@@ -189,6 +189,14 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
   ]
   const hasFilters = filterKeys.some(key => searchParams.has(key))
 
+  // initialData ne doit servir QU'AU tout premier rendu (what/where par défaut,
+  // page 1, aucun filtre avancé actif). On le fige dans une ref pour qu'il ne soit
+  // jamais réinjecté après coup — sinon un changement de mot-clé/lieu peut se faire
+  // écraser par les anciennes données SSR au lieu de déclencher un vrai fetch.
+  const initialDataRef = useRef(
+    page === 1 && initialData && !hasFilters ? initialData : undefined
+  )
+
   // Build back URL preserving all current filters + current page
   const backUrl = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString())
@@ -220,9 +228,11 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
       if (!res.ok) throw new Error('Failed to fetch jobs')
       return res.json()
     },
-    // ← Page 1 : on utilise les données SSR directement, pas de fetch client
-    // Page 2+ : fetch client normal
-    initialData: page === 1 && initialData && !hasFilters ? initialData : undefined,
+    // Page 1, premier rendu, aucun filtre avancé : on utilise les données SSR
+    // directement (pas de fetch client, pas de flash de loading).
+    // initialDataRef ne change jamais après le premier rendu, donc tout changement
+    // de filtre (queryKey différente) déclenche bien un vrai fetch.
+    initialData: initialDataRef.current,
     retry: 1,
   })
 
@@ -254,6 +264,13 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
 
   return (
     <div>
+      {/* Count dynamique — reflète toujours les filtres actuellement actifs */}
+      {typeof data?.count === 'number' && data.count > 0 && (
+        <p className="text-sm text-gray-500 mb-4">
+          <span className="font-semibold text-gray-800">{data.count.toLocaleString('en-US')}</span> positions available
+        </p>
+      )}
+
       {/* Jobs */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
         {(data?.results || []).map((job: any) => (

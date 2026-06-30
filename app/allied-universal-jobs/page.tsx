@@ -184,11 +184,6 @@ export default async function AlliedUniversalJobsPage({ searchParams }: any) {
             <JobFilters defaultWhat="Allied Universal" />
           </aside>
           <div className="flex-1">
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> allied universal jobs available
-              </p>
-            )}
 
             <AIJobMatcherWrapper />
 

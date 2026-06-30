@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import { Shield, DollarSign, TrendingUp, Briefcase } from 'lucide-react'
@@ -143,11 +143,6 @@ export default async function BestJobsUS2026Page() {
                     <Briefcase className="w-4 h-4 text-blue-600" />
                     {job.title} openings
                   </span>
-                  {count > 0 && (
-                    <span className="text-xs text-gray-500">
-                      {count.toLocaleString()} positions
-                    </span>
-                  )}
                 </div>
                 <div className="max-h-[420px] overflow-y-auto">
                   <Suspense fallback={<div className="animate-pulse bg-gray-100 h-48" />}>

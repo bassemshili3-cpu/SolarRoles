@@ -134,11 +134,6 @@ export default async function BurgerKingCorporationJobsPage(props: {
             <JobFilters defaultWhat="burger-king-corporation-jobs" />
           </aside>
           <div className="flex-1">
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
-              </p>
-            )}
 
             <AIJobMatcherWrapper />
 

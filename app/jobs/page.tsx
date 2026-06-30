@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -97,7 +97,7 @@ export default function JobsPage() {
             ) : jobCount !== null && jobCount > 0 ? (
               <>
                 <span className="font-semibold text-gray-800">
-                  {jobCount.toLocaleString()}
+                  {jobCount.toLocaleString('en-US')}
                 </span>{' '}
                 positions available
                 {displayWhat ? ` for "${displayWhat}"` : ''}

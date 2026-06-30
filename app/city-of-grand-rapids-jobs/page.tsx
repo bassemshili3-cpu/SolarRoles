@@ -213,7 +213,7 @@ export default async function CityOfGrandRapidsJobsPage({ searchParams }: any) {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            {count > 0 ? count.toLocaleString() : ''} City of Grand Rapids Jobs Available Now
+            {count > 0 ? count.toLocaleString('en-US') : ''} City of Grand Rapids Jobs Available Now
           </h1>
         </header>
 
@@ -222,11 +222,6 @@ export default async function CityOfGrandRapidsJobsPage({ searchParams }: any) {
             <JobFilters defaultWhat="city of grand rapids" />
           </aside>
           <div className="flex-1">
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available
-              </p>
-            )}
             <AIJobMatcherWrapper />
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'city of grand rapids'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />

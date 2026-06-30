@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import {
   GraduationCap, Building2, Gift, Zap,
 } from 'lucide-react'
 
-// ── Data ─────────────────────────────────────────────────────────────────────
+// Data
 
 const US_LOCATIONS = [
   'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ',
@@ -73,10 +73,10 @@ const EDUCATION_LEVELS = [
 ]
 
 const COMPANY_SIZES = [
-  'Startup (1–50)',
-  'Small (51–200)',
-  'Mid-size (201–1k)',
-  'Large (1k–5k)',
+  'Startup (1-50)',
+  'Small (51-200)',
+  'Mid-size (201-1k)',
+  'Large (1k-5k)',
   'Enterprise (5k+)',
 ]
 
@@ -92,7 +92,7 @@ const BENEFITS = [
   'Wellness perks',
 ]
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// Sub-components
 
 function Section({
   icon,
@@ -126,6 +126,14 @@ function Section({
   )
 }
 
+// Classes 100% statiques des deux cotes de chaque etat (jamais de concatenation
+// partielle dans un template literal). Tailwind JIT scanne le code source pour
+// decider quelles classes generer dans le CSS final : une classe comme
+// "border-primary" assemblee dynamiquement via `${checked ? 'border-primary' : ...}`
+// peut etre purgee si elle n'apparait nulle part ailleurs en clair dans le projet.
+// En ecrivant la classe complete en dur a chaque branche, le scanner la voit
+// systematiquement et la genere, peu importe le contexte d'execution.
+
 function RadioOption({
   label,
   checked,
@@ -135,16 +143,34 @@ function RadioOption({
   checked: boolean
   onChange: () => void
 }) {
+  // Un <input type="radio"> natif ne declenche jamais onChange si on clique
+  // dessus alors qu'il est deja checked - c'est un comportement du navigateur,
+  // pas une question de logique React. Pour permettre le "clic pour deselectionner",
+  // le gestionnaire de clic est donc place sur le <label> (qui recoit le clic
+  // a chaque fois, meme quand le radio est deja coche), et l'input devient
+  // purement visuel/accessible, sans son propre onChange actif sur le clic.
   return (
-    <label className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors ${
-      checked ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-accent text-foreground'
-    }`}>
-      <span className={`w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
-        checked ? 'border-primary' : 'border-muted-foreground/50'
-      }`}>
-        {checked && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+    <label
+      onClick={(e) => {
+        e.preventDefault()
+        onChange()
+      }}
+      className={
+        checked
+          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors bg-gray-100 text-gray-900 font-medium'
+          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors hover:bg-accent text-foreground'
+      }
+    >
+      <span
+        className={
+          checked
+            ? 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-gray-900 bg-white'
+            : 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-gray-300 bg-white'
+        }
+      >
+        {checked && <span className="w-2 h-2 rounded-full bg-gray-900" />}
       </span>
-      <input type="radio" className="sr-only" checked={checked} onChange={onChange} />
+      <input type="radio" className="sr-only" checked={checked} readOnly />
       {label}
     </label>
   )
@@ -156,15 +182,21 @@ function CheckOption({ label, checked, onChange }: {
   return (
     <div
       onClick={onChange}
-      className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors select-none ${
-        checked ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-accent text-foreground'
-      }`}
+      className={
+        checked
+          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors select-none bg-gray-100 text-gray-900 font-medium'
+          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors select-none hover:bg-accent text-foreground'
+      }
     >
-      <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-        checked ? 'bg-primary border-primary' : 'border-input'
-      }`}>
+      <div
+        className={
+          checked
+            ? 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors bg-white border-gray-900'
+            : 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors bg-white border-gray-300'
+        }
+      >
         {checked && (
-          <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <svg className="w-3.5 h-3.5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         )}
@@ -174,7 +206,7 @@ function CheckOption({ label, checked, onChange }: {
   )
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
+// Main Component
 
 interface JobFiltersProps {
   defaultWhat?: string
@@ -183,8 +215,7 @@ interface JobFiltersProps {
 export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  // Dans le composant — ajouter
-const pathname = usePathname()
+  const pathname = usePathname()
 
   // Search
   const [keywords, setKeywords] = useState('')
@@ -370,7 +401,7 @@ const pathname = usePathname()
               key={opt.value}
               label={opt.label}
               checked={postedWithin === opt.value}
-              onChange={() => setPostedWithin(opt.value)}
+              onChange={() => setPostedWithin(p => (p === opt.value ? '' : opt.value))}
             />
           ))}
         </Section>
@@ -420,7 +451,7 @@ const pathname = usePathname()
           <div className="flex items-center justify-center bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
             <div className="text-center">
               <div className="text-xs text-muted-foreground uppercase tracking-wide">Min.</div>
-              <div className="text-xl font-semibold text-primary">${salary.toLocaleString()}</div>
+              <div className="text-xl font-semibold text-primary">${salary.toLocaleString('en-US')}</div>
             </div>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -447,7 +478,7 @@ const pathname = usePathname()
               key={opt.value}
               label={opt.label}
               checked={experience === opt.value}
-              onChange={() => setExperience(opt.value)}
+              onChange={() => setExperience(p => (p === opt.value ? '' : opt.value))}
             />
           ))}
         </Section>
@@ -459,7 +490,7 @@ const pathname = usePathname()
               key={opt.value}
               label={opt.label}
               checked={education === opt.value}
-              onChange={() => setEducation(opt.value)}
+              onChange={() => setEducation(p => (p === opt.value ? '' : opt.value))}
             />
           ))}
         </Section>
@@ -519,7 +550,7 @@ const pathname = usePathname()
   )
 }
 
-// ── Utils ─────────────────────────────────────────────────────────────────────
+// Utils
 
 function splitParam(v: string | null) {
   return v ? v.split(',').map(s => s.trim()).filter(Boolean) : []

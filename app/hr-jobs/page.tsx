@@ -395,11 +395,6 @@ export default async function HRJobsPage({ searchParams }: any) {
             <JobFilters defaultWhat="human resources" />
           </aside>
           <div className="flex-1">
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> HR positions available
-              </p>
-            )}
             <AIJobMatcherWrapper />
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'human resources'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />

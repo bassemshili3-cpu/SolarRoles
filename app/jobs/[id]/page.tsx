@@ -1,4 +1,4 @@
-// app/jobs/[id]/page.tsx
+﻿// app/jobs/[id]/page.tsx
 // ─── Page détail job HYBRIDE ─────────────────────────────────────────────────
 // 1. Essaie l'API en temps réel (Adzuna, Lensa)
 // 2. Si l'API échoue (404, 429, timeout) → lit depuis la base Prisma
@@ -228,7 +228,7 @@ export async function generateMetadata(
 
   const salaryStr =
     job.salary_min && job.salary_max
-      ? ` – $${job.salary_min.toLocaleString()} to $${job.salary_max.toLocaleString()}`
+      ? ` – $${job.salary_min.toLocaleString('en-US')} to $${job.salary_max.toLocaleString('en-US')}`
       : ''
 
   return {

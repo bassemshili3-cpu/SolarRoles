@@ -143,11 +143,6 @@ const applicationTips = [
           <div className="flex-1">
 
             {/* Count */}
-            {count > 0 && (
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold text-gray-800">{count.toLocaleString()}</span> positions available 
-              </p>
-            )}
 
             {/* AI Matcher */}
             <AIJobMatcherWrapper />

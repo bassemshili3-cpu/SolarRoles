@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { Calculator, ChevronDown, DollarSign } from 'lucide-react'
@@ -31,7 +31,7 @@ export default function PaycheckCalculatorCard({ salary, state, compact = false 
             <p className="text-sm font-semibold text-gray-900">Paycheck Calculator</p>
             <p className="text-xs text-gray-500">
               {salary
-                ? `Estimate take-home on ~$${Math.round(salary).toLocaleString()}/yr`
+                ? `Estimate take-home on ~$${Math.round(salary).toLocaleString('en-US')}/yr`
                 : 'Estimate your take-home pay'
               }
             </p>
