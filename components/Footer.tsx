@@ -3,11 +3,7 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="border-t bg-muted/50 py-12">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-8">
-        <div>
-          <div className="font-bold text-xl mb-3">Oh My Job</div>
-          <p className="text-sm text-muted-foreground">Premium job search for the United States</p>
-        </div>
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <div className="font-semibold mb-3">Company</div>
           <ul className="space-y-2 text-sm">
@@ -16,15 +12,15 @@ export default function Footer() {
             <li><Link href="/contact" className="hover:underline">Contact</Link></li>
           </ul>
         </div>
+
         <div>
-         <div>
-  <div className="font-semibold mb-3">Tools</div>
-  <ul className="space-y-2 text-sm">
-    <li><Link href="/paycheck-calculator" className="hover:underline">Paycheck Calculator</Link></li>
-    <li><Link href="/data" className="hover:underline">US Job Market Data</Link></li>
-  </ul>
-</div>
+          <div className="font-semibold mb-3">Tools</div>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/paycheck-calculator" className="hover:underline">Paycheck Calculator</Link></li>
+            <li><Link href="/data" className="hover:underline">US Job Market Data</Link></li>
+          </ul>
         </div>
+
         <div>
           <div className="font-semibold mb-3">Legal</div>
           <ul className="space-y-2 text-sm">
@@ -33,9 +29,12 @@ export default function Footer() {
             <li><Link href="/ccpa" className="hover:underline">California Privacy Rights</Link></li>
           </ul>
         </div>
+
         <div>
           <div className="font-semibold mb-3">For Employers</div>
-          <Link href="/dashboard/employer" className="text-sm hover:underline">Post a Job • Sponsored</Link>
+          <Link href="/dashboard/employer" className="text-sm hover:underline">
+            Post a Job • Sponsored
+          </Link>
         </div>
       </div>
     </footer>

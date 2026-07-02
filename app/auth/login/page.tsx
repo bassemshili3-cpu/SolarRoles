@@ -98,7 +98,7 @@ export default function Login() {
 
           <div className="flex gap-12 mt-12">
             <div>
-              <p className="text-3xl font-bold text-white">6M+</p>
+              <p className="text-3xl font-bold text-white">300k+</p>
               <p className="text-slate-400">Active Jobs</p>
             </div>
             <div>

@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: 'Oh My Job | US Job Board with Salary Ranges & Smart Filters',
   description:
-    'Search 200 000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account required.',
+    'Search 300 000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account is required.',
 }
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -28,22 +28,22 @@ const strengths = [
   {
     icon: DollarSign,
     title: 'Salary on every listing',
-    body: 'No "competitive salary" guessing games. Every job on Oh My Job displays a pay range before you click, so you apply with numbers in hand.',
+    body: 'No "competitive salary" guessing games. Every job on Oh My Job displays a pay range before you click so you apply with numbers in hand.',
   },
   {
     icon: Search,
     title: 'No account required',
-    body: 'Browse freely. Search like you would Google. Create a profile only when you decide it makes sense, not before.',
+    body: 'Browse freely. Search like you would Google and create a profile only when you decide it makes sense.',
   },
   {
     icon: Zap,
-    title: 'Multi-source, real time',
-    body: 'We pull from multiple job feeds across all 50 states and deduplicate in real time, so you see the full picture without the noise.',
+    title: 'Multi-source in real time',
+    body: 'We pull from multiple job feeds across all 50 states and deduplicate in real time.',
   },
   {
     icon: ShieldCheck,
     title: 'AI-assisted matching',
-    body: 'Our matching layer surfaces roles that fit your actual skills and situation, not just keyword overlaps.',
+    body: 'Our matching layer surfaces roles that fit your actual skills and situation.',
   },
 ]
 
@@ -99,16 +99,16 @@ export default function Home() {
       </section>
 
       {/* ── Stats ── */}
-      <section className="bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 sm:grid-cols-4 gap-8">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="text-center">
-              <p className="text-4xl font-extrabold text-[#1a2340] tracking-tight">{value}</p>
-              <p className="text-sm text-gray-500 mt-1">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+<section className="bg-white border-b border-gray-100">
+  <div className="max-w-5xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-x-12 gap-y-8">
+    {stats.map(({ value, label }) => (
+      <div key={label} className="text-center min-w-[100px]">
+        <p className="text-4xl font-extrabold text-[#1a2340] tracking-tight">{value}</p>
+        <p className="text-sm text-gray-500 mt-1">{label}</p>
+      </div>
+    ))}
+  </div>
+</section>
 
       {/* ── Vision ── */}
       <section className="bg-gray-50 py-24 px-6">
@@ -118,14 +118,10 @@ export default function Home() {
             Getting a first job shouldn't require having had a first job.
           </h2>
           <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
+           
             <p>
-              Here's what often happens: a company posts an "entry-level" role, asks for two to three years of experience, and wonders why their pipeline is full of the same people.
-            </p>
-            <p>
-              Meanwhile, someone with real talent, drive, and provable skills never gets past the filter. Not because they can't do the job. Because their résumé doesn't check the boxes it was never designed to check.
-            </p>
-            <p>
-              Oh My Job is built on a different premise. The best hire isn't always the most experienced one. It's the most capable one. And the only way to find that person is to actually look at what they can do.
+              Oh My Job is a job board built on a different premise. Because the best hire isn't always the most experienced one, but rather the most capable one. 
+              And the only way to find that person is to actually look at what they can do.
             </p>
           </div>
           <div className="mt-10 flex gap-4 flex-wrap">
@@ -153,9 +149,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#1a2340] tracking-tight mb-3">
               Built to get out of your way
             </h2>
-            <p className="text-gray-500 max-w-lg mx-auto">
-              No paywalls, no forced sign-ups, no opaque salary ranges. Just jobs, with the information you actually need.
-            </p>
+            
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {strengths.map(({ icon: Icon, title, body }) => (
@@ -180,13 +174,15 @@ export default function Home() {
             <div>
               <p className="text-xs font-bold tracking-widest text-indigo-400 uppercase mb-4">Where we're headed</p>
               <h2 className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
-                Your skills, verified.<br />Portable for life.
+                Your skills matters.
               </h2>
               <p className="text-gray-400 leading-relaxed mb-5">
-                A résumé tells people what you've done. We want employers to see what you can actually do. That means real skill assessments, verifiable credentials, and badges that carry weight over time, regardless of where you apply next.
+                A résumé tells people what you've done and we want employers to see what you can actually do. 
+                That means real skill assessments, verifiable credentials, and badges that carry weight over time, regardless of where you apply next.
               </p>
               <p className="text-gray-400 leading-relaxed mb-10">
-                We're building a credential layer for Oh My Job aligned with open industry standards, so what you prove here belongs to you and follows you. No proprietary lock-in. We're actively working on integrations with the leading digital credential platforms and will share details as partnerships are confirmed.
+                We're building a credential layer for Oh My Job aligned with open industry standards, so what you prove here belongs to you and follows you.
+                 Our team is currently actively working on integrations with the leading digital credential platforms, and will share details as partnerships are confirmed.
               </p>
               <p className="text-indigo-300 text-sm font-medium">
                 Credential partnerships in progress. More soon.
@@ -222,7 +218,8 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-[#1a2340] mb-3">If you're starting out or switching lanes</h3>
               <p className="text-gray-500 leading-relaxed mb-5">
-                Fresh grad, career changer, or someone returning to the workforce after a break. You have skills. The old hiring process just wasn't designed to see them. Oh My Job gives you the tools to show what you're actually capable of, not just what your résumé says.
+                Fresh grad, career changer, or someone returning to the workforce after a break. We believe in your potential and the skills you bring.
+                The old hiring process just wasn't designed to see them. Oh My Job gives you the tools to show what you're actually capable of.
               </p>
               <Link href="/jobs" className="text-indigo-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
                 Find your role <ArrowRight size={15} />
@@ -236,7 +233,8 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-[#1a2340] mb-3">If you're hiring and tired of screening the same profiles</h3>
               <p className="text-gray-500 leading-relaxed mb-5">
-                The best candidate for your role might not have the most polished résumé. Posting on Oh My Job connects you with people who've actively proven their skills, not just claimed them. Less time filtering. Better fits. And a pipeline that actually looks different.
+                The best candidate for your role might not have the most polished résumé. Posting on Oh My Job connects you with people who've actively proven their skills.
+                Oh My job saves you time filtering and find better fits. 
               </p>
               <a href="mailto:contact@oh-my-job.com" className="text-teal-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
                 Talk to us <ArrowRight size={15} />
@@ -326,10 +324,10 @@ export default function Home() {
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs font-bold tracking-widest text-blue-200 uppercase mb-4">Weekly newsletter</p>
           <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
-            One article a week. No noise.
+            Oh My News
           </h2>
           <p className="text-blue-100 leading-relaxed mb-8 text-base">
-            Every Tuesday, one piece from our career resources blog. Practical advice, market data, or something genuinely worth reading. You'll never get the same article twice.
+            Every Tuesday, one piece from our career resources blog. Practical advice on the employment field & market data.
           </p>
           <NewsletterForm />
           <p className="text-blue-200/60 text-xs mt-5">No spam. Unsubscribe anytime.</p>
