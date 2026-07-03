@@ -25,6 +25,7 @@ export const ROLE_CATEGORIES: RoleCategory[] = [
   { slug: 'customer-service',    label: 'Customer Service',    keywords: ['customer service'] },
   { slug: 'sales-associate',     label: 'Sales Associate',     keywords: ['sales associate'] },
   { slug: 'pharmacy-technician', label: 'Pharmacy Technician', keywords: ['pharmacy technician'] },
+ { slug: 'ux-writer', label: 'UX Writer', keywords: ['ux writer'] },
 
   // Catégories additionnelles (pas encore de page /data/salaries/[slug] dédiée,
   // donc pas dans KNOWN_SALARY_REPORT_SLUGS ci-dessous — mais utilisables pour
@@ -37,9 +38,18 @@ export const ROLE_CATEGORIES: RoleCategory[] = [
 // Slugs pour lesquels /data/salaries/[title] existe vraiment aujourd'hui.
 // Ajuste cette liste au fur et à mesure que tu crées de nouvelles pages de rapport.
 export const KNOWN_SALARY_REPORT_SLUGS = new Set([
-  'registered-nurse', 'software-engineer', 'data-analyst', 'project-manager',
-  'dental-assistant', 'electrician', 'medical-assistant', 'truck-driver',
-  'accountant', 'customer-service', 'sales-associate', 'pharmacy-technician',
+  'registered-nurse', 'Registered Nurse',
+  'software-engineer', 'Software Engineer',
+  'data-analyst', 'Data Analyst',
+  'project-manager', 'Project Manager',
+  'dental-assistant', 'Dental Assistant',
+  'electrician', 'Electrician',
+  'medical-assistant', 'Medical Assistant',
+  'truck-driver', 'Truck Driver',
+  'accountant', 'Accountant',
+  'customer-service', 'Customer Service',
+  'sales-associate', 'Sales Associate',
+  'pharmacy-technician', 'Pharmacy Technician',
 ])
 
 export function matchRoleCategory(title: string): RoleCategory | null {

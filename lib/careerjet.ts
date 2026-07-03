@@ -7,6 +7,7 @@
 // ✅ Option 2 (plus robuste) : hash SHA1
 import { createHash } from 'crypto'
 import { extractStateFromLocation } from './usStates'
+import { extractSalaryFromText } from './extractSalary'
 
 const CAREERJET_API_KEY = process.env.CAREERJET_API_KEY || ''
 const CAREERJET_ENDPOINT = 'https://search.api.careerjet.net/v4/query'
@@ -107,8 +108,11 @@ export async function searchCareerjetJobs(params: SearchParams): Promise<Careerj
 }
 
 export function normalizeCareerjet(job: CareerjetJob) {
-  let salaryMin = job.salary_min
-  let salaryMax = job.salary_max
+  // On neutralise `null` dès le départ pour ne travailler qu'avec
+  // `number | undefined` de bout en bout — évite les conflits de type
+  // entre la source CareerJet (number | null) et le fallback texte (number).
+  let salaryMin: number | undefined = job.salary_min ?? undefined
+  let salaryMax: number | undefined = job.salary_max ?? undefined
 
   if (salaryMin && salaryMax && job.salary_type) {
     const multiplier: Record<string, number> = {
@@ -123,6 +127,17 @@ export function normalizeCareerjet(job: CareerjetJob) {
     salaryMax = Math.round(salaryMax * mult)
   }
 
+  // Fallback : si CareerJet ne fournit pas de salaire structuré,
+  // on tente de l'extraire du texte pour le PERSISTER en DB
+  // (et pas seulement le recalculer à chaque affichage de page)
+  if (!salaryMin || !salaryMax) {
+    const extracted = extractSalaryFromText(job.title, job.description || '')
+    if (extracted) {
+      salaryMin = extracted.min
+      salaryMax = extracted.max
+    }
+  }
+
   const stableId = `cj-${createHash('sha1').update(job.url).digest('hex').slice(0, 24)}`
 
   return {
@@ -133,8 +148,8 @@ export function normalizeCareerjet(job: CareerjetJob) {
     addressRegion: extractStateFromLocation(job.locations) || '',
     description: job.description || '',
     salary: job.salary || undefined,
-    salaryMin: salaryMin || undefined,
-    salaryMax: salaryMax || undefined,
+    salaryMin,
+    salaryMax,
     url: `/jobs/${stableId}`,
     applyUrl: job.url,
     source: 'careerjet' as const,

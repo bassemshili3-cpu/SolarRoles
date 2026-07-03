@@ -1,9 +1,8 @@
 // app/api/cron/backfill-address-region/route.ts
-// ─── Backfill ponctuel : remplit addressRegion pour les jobs existants
-// où il est vide, en reparsant `location`. Idempotent — safe à relancer.
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { extractStateFromLocation } from '@/lib/usStates'
+import { extractSalaryFromText } from '@/lib/extractSalary'
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
@@ -12,46 +11,59 @@ export async function GET(request: NextRequest) {
   }
 
   const { searchParams } = new URL(request.url)
-  const dryRun = searchParams.get('dry_run') !== 'false' // dry-run par défaut, sécurité
+  const dryRun = searchParams.get('dry_run') !== 'false'
   const limit = parseInt(searchParams.get('limit') || '500')
 
-  // Ne touche que les jobs actifs avec addressRegion vide et une location exploitable
+  // Jobs où addressRegion OU salaire manque
   const candidates = await prisma.job.findMany({
     where: {
-      addressRegion: '',
-      location: { not: '' },
+      OR: [
+        { addressRegion: '' },
+        { salaryMin: null },
+        { salaryMax: null },
+      ],
     },
-    select: { id: true, location: true, source: true },
+    select: { id: true, location: true, title: true, description: true, addressRegion: true, salaryMin: true, salaryMax: true },
     take: limit,
   })
 
-  let matched = 0
-  let unmatched = 0
-  const preview: { id: string; location: string; resolved: string | null }[] = []
+  let regionMatched = 0
+  let salaryMatched = 0
+  const preview: any[] = []
 
   for (const job of candidates) {
-    const resolved = extractStateFromLocation(job.location)
+    const data: any = {}
 
-    if (resolved) {
-      matched++
-      if (preview.length < 20) preview.push({ id: job.id, location: job.location, resolved })
-
-      if (!dryRun) {
-        await prisma.job.update({
-          where: { id: job.id },
-          data: { addressRegion: resolved },
-        })
+    if (!job.addressRegion) {
+      const resolved = extractStateFromLocation(job.location)
+      if (resolved) {
+        data.addressRegion = resolved
+        regionMatched++
       }
-    } else {
-      unmatched++
+    }
+
+    if (job.salaryMin == null || job.salaryMax == null) {
+      const extracted = extractSalaryFromText(job.title, job.description || '')
+      if (extracted) {
+        data.salaryMin = extracted.min
+        data.salaryMax = extracted.max
+        salaryMatched++
+      }
+    }
+
+    if (Object.keys(data).length > 0) {
+      if (preview.length < 20) preview.push({ id: job.id, title: job.title, ...data })
+      if (!dryRun) {
+        await prisma.job.update({ where: { id: job.id }, data })
+      }
     }
   }
 
   return NextResponse.json({
     dryRun,
     candidatesFound: candidates.length,
-    matched,
-    unmatched,
-    preview, // vérifie que le parsing a l'air correct avant de relancer en dry_run=false
+    regionMatched,
+    salaryMatched,
+    preview,
   })
 }
