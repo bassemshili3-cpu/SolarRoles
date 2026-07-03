@@ -1,4 +1,5 @@
 import { getCachedLensaJobs, LensaJobAdvert } from './lensa'
+import { extractStateFromLocation } from './usStates' 
 import { searchJobs as searchAdzuna, AdzunaJob } from './adzuna'
 import { searchJooble, JoobleJob } from './jooble'
 import { cacheJoobleJobs } from './jooble-cache'
@@ -39,6 +40,7 @@ export function normalizeLensa(job: LensaJobAdvert): UnifiedJob {
     title: job.cleaned_job_title,
     company: job.company,
     location: `${job.city}, ${job.state}`,
+    addressRegion: job.state || '',
     description: job.description_digest,
     url: `/jobs/lensa-${job.unique_id}`,
     apply_url: job.incoming_click_url,
@@ -90,6 +92,7 @@ export function normalizeJooble(job: JoobleJob): UnifiedJob {
     title: job.title,
     company: job.company || '',
     location: job.location || '',
+    addressRegion: extractStateFromLocation(job.location) || '',
     description: job.snippet || '',
     url: `/jobs/jooble-${stableId}`,
     apply_url: job.link || '',
@@ -97,7 +100,7 @@ export function normalizeJooble(job: JoobleJob): UnifiedJob {
     salary_min,
     salary_max,
     created: job.updated || undefined,
-  }
+}
 }
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet', 'adzuna', 'greenhouse']
@@ -304,6 +307,7 @@ export async function searchAllJobs(params: {
       title: j.title,
       company: j.company,
       location: j.location,
+      addressRegion: j.addressRegion || undefined,
       description: j.description,
       url: j.url,
       apply_url: j.applyUrl,
@@ -326,6 +330,7 @@ export async function searchAllJobs(params: {
       title: j.title,
       company: j.company,
       location: j.location,
+      addressRegion: j.addressRegion || undefined,
       description: j.description,
       url: j.url,
       apply_url: j.applyUrl,

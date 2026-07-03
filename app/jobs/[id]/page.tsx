@@ -3,6 +3,9 @@
 // 1. Essaie l'API en temps réel (Adzuna, Lensa)
 // 2. Si l'API échoue (404, 429, timeout) → lit depuis la base Prisma
 // 3. Jooble toujours depuis la base (pas d'endpoint par ID)
+import { matchRoleCategory, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
+import { resolveStateName, stateToSlug } from '@/lib/usStates'
+import { getRoleLocationStats } from '@/lib/roleLocationStats'
 
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -18,6 +21,7 @@ import { normalizeAdzuna } from '@/lib/jobs'
 import { getJobById } from '@/lib/adzuna'
 import { prisma } from '@/lib/prisma'
 import ShareBar from '@/components/ShareBar'
+import { isDescriptionTruncated } from '@/lib/description-quality'
 
 
 export const revalidate = 3600
@@ -221,10 +225,12 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { id } = await params
   const raw = await getJobDetail(id)
+if (!raw) notFound()
 
-  if (!raw) return { title: 'Job Not Found | Oh My Job' }
+const job = getJobDetailWithSalary(raw)
 
-  const job = getJobDetailWithSalary(raw)
+
+const truncated = isDescriptionTruncated(job.description || '')
 
   const salaryStr =
     job.salary_min && job.salary_max
@@ -264,6 +270,24 @@ export default async function JobDetailPage({
   if (!raw) notFound()
 
   const job = getJobDetailWithSalary(raw)
+
+  const roleMatch = matchRoleCategory(job.title)
+  const stateName = resolveStateName(job.addressRegion)
+  const roleStats =
+    roleMatch && stateName
+      ? await getRoleLocationStats(roleMatch.keywords, stateName)
+      : null
+  const salaryReportSlug =
+    roleMatch && KNOWN_SALARY_REPORT_SLUGS.has(roleMatch.slug) ? roleMatch.slug : null
+
+    console.log('[SEO block debug]', {
+    title: job.title,
+    addressRegion: job.addressRegion,
+    roleMatch,
+    stateName,
+    roleStats,
+  })
+
   const schema = buildJobPostingSchema(job)
 
  const applyConfig: Record<string, { label: string; className: string }> = {
@@ -373,6 +397,7 @@ export default async function JobDetailPage({
             {/* Job Description */}
             <div>
               <h2 className="text-xl font-semibold mb-4">Job Description</h2>
+              
               <div
                 className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed
                   prose-h3:text-lg prose-h3:font-semibold prose-h3:text-foreground prose-h3:mt-10 prose-h3:mb-4 prose-h3:border-b prose-h3:border-border prose-h3:pb-2
@@ -384,6 +409,36 @@ export default async function JobDetailPage({
                 }}
               />
             </div>
+
+            {/* Bloc SEO interne : stats métier x état */}
+            {roleStats && stateName && roleMatch && (
+              <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-900">
+                <p>
+                  <span className="font-semibold">{roleMatch.label}</span> roles in{' '}
+                  <span className="font-semibold">{stateName}</span> average{' '}
+                  <span className="font-semibold">
+                    ${roleStats.avgSalary.toLocaleString('en-US')}/year
+                  </span>
+                  , based on {roleStats.count.toLocaleString('en-US')} active listings on Oh My Job.
+                </p>
+                <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                  <Link
+                    href={`/data/states/${stateToSlug(stateName)}`}
+                    className="font-medium underline hover:text-blue-700"
+                  >
+                    See the full {stateName} job market report →
+                  </Link>
+                  {salaryReportSlug && (
+                    <Link
+                      href={`/data/salaries/${salaryReportSlug}`}
+                      className="font-medium underline hover:text-blue-700"
+                    >
+                      {roleMatch.label} salaries by state →
+                    </Link>
+                  )}
+                </p>
+              </div>
+            )}
 
             {/* Paycheck Calculator mobile uniquement (lg: caché dans la sidebar) */}
            <div className="mt-8 lg:hidden">

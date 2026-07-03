@@ -6,6 +6,7 @@
 // Doc      : https://www.careerjet.com/partners/api
 // ✅ Option 2 (plus robuste) : hash SHA1
 import { createHash } from 'crypto'
+import { extractStateFromLocation } from './usStates'
 
 const CAREERJET_API_KEY = process.env.CAREERJET_API_KEY || ''
 const CAREERJET_ENDPOINT = 'https://search.api.careerjet.net/v4/query'
@@ -122,13 +123,14 @@ export function normalizeCareerjet(job: CareerjetJob) {
     salaryMax = Math.round(salaryMax * mult)
   }
 
- const stableId = `cj-${createHash('sha1').update(job.url).digest('hex').slice(0, 24)}`
+  const stableId = `cj-${createHash('sha1').update(job.url).digest('hex').slice(0, 24)}`
 
   return {
     id: stableId,
     title: job.title,
     company: job.company || '',
     location: job.locations || '',
+    addressRegion: extractStateFromLocation(job.locations) || '',
     description: job.description || '',
     salary: job.salary || undefined,
     salaryMin: salaryMin || undefined,

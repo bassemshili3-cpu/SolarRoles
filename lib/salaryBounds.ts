@@ -1,0 +1,2 @@
+export const SALARY_MIN_THRESHOLD = 20_000
+export const SALARY_MAX_THRESHOLD = 600_000

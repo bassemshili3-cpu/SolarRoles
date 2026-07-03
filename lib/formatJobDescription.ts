@@ -29,6 +29,7 @@ export function formatJobDescription(html: string): string {
 
   // ── Strip redundant metadata at top ───────────────────────────────────
   text = stripMetadataBlock(text)
+  text = truncateAtEllipsis(text)
 
   // ── Split inline dashes: "-Item one. -Item two" → separate lines ──────
   text = text.replace(/\s+-(?=[A-Z])/g, '\n-')
@@ -81,6 +82,14 @@ function stripMetadataBlock(text: string): string {
 
   lines.splice(0, startIndex)
   return lines.join('\n')
+}
+
+const GARBLED_TRUNCATION_REGEX = /(\.{3,}|…)[^.!?]*[.!?]/g
+
+function truncateAtEllipsis(text: string): string {
+  return text
+    .replace(GARBLED_TRUNCATION_REGEX, '. ')
+    .replace(/ {2,}/g, ' ')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
