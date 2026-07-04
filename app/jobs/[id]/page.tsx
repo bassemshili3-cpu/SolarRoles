@@ -3,10 +3,10 @@
 // 1. Essaie l'API en temps réel (Adzuna, Lensa)
 // 2. Si l'API échoue (404, 429, timeout) → lit depuis la base Prisma
 // 3. Jooble toujours depuis la base (pas d'endpoint par ID)
+import { getSimilarJobs } from '@/lib/similarJobs'
 import { matchRoleCategory, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
 import { resolveStateName, stateToSlug } from '@/lib/usStates'
 import { getRoleLocationStats } from '@/lib/roleLocationStats'
-
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -277,6 +277,10 @@ export default async function JobDetailPage({
     roleMatch && stateName
       ? await getRoleLocationStats(roleMatch.keywords, stateName)
       : null
+
+      const similarJobs = roleMatch
+  ? await getSimilarJobs(roleMatch.keywords, job.addressRegion, job.id, 4)
+  : []
   const salaryReportSlug =
     roleMatch && KNOWN_SALARY_REPORT_SLUGS.has(roleMatch.slug) ? roleMatch.slug : null
 
@@ -410,35 +414,9 @@ export default async function JobDetailPage({
               />
             </div>
 
-            {/* Bloc SEO interne : stats métier x état */}
-            {roleStats && stateName && roleMatch && (
-              <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-900">
-                <p>
-                  <span className="font-semibold">{roleMatch.label}</span> roles in{' '}
-                  <span className="font-semibold">{stateName}</span> average{' '}
-                  <span className="font-semibold">
-                    ${roleStats.avgSalary.toLocaleString('en-US')}/year
-                  </span>
-                  , based on {roleStats.count.toLocaleString('en-US')} active listings on Oh My Job.
-                </p>
-                <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-                  <Link
-                    href={`/data/states/${stateToSlug(stateName)}`}
-                    className="font-medium underline hover:text-blue-700"
-                  >
-                    See the full {stateName} job market report →
-                  </Link>
-                  {salaryReportSlug && (
-                    <Link
-                      href={`/data/salaries/${salaryReportSlug}`}
-                      className="font-medium underline hover:text-blue-700"
-                    >
-                      {roleMatch.label} salaries by state →
-                    </Link>
-                  )}
-                </p>
-              </div>
-            )}
+            
+
+            
 
             {/* Paycheck Calculator mobile uniquement (lg: caché dans la sidebar) */}
            <div className="mt-8 lg:hidden">
@@ -470,7 +448,67 @@ export default async function JobDetailPage({
   />
 </div>
 
-          </div>
+{/* Bloc SEO interne : stats métier x état */}
+            {roleStats && stateName && roleMatch && (
+              <div className="mt-16 rounded-xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-900">
+                <p>
+                  <span className="font-semibold">{roleMatch.label}</span> roles in{' '}
+                  <span className="font-semibold">{stateName}</span> average{' '}
+                  <span className="font-semibold">
+                    ${roleStats.avgSalary.toLocaleString('en-US')}/year
+                  </span>
+                  , based on {roleStats.count.toLocaleString('en-US')} active listings on Oh My Job.
+                </p>
+                <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                  <Link
+                    href={`/data/states/${stateToSlug(stateName)}`}
+                    className="font-medium underline hover:text-blue-700"
+                  >
+                    See the full {stateName} job market report →
+                  </Link>
+                  {salaryReportSlug && (
+                    <Link
+                      href={`/data/salaries/${salaryReportSlug}`}
+                      className="font-medium underline hover:text-blue-700"
+                    >
+                      {roleMatch.label} salaries by state →
+                    </Link>
+                  )}
+                </p>
+              </div>
+            )}
+
+{/* Similar positions */}
+{similarJobs.length > 0 && (
+  <div className="mt-10">
+    <h3 className="text-lg font-semibold text-foreground mb-3">Similar positions:</h3>
+    <ul className="space-y-2">
+      {similarJobs.map((sj) => (
+        <li key={sj.id}>
+          <Link
+            href={`/jobs/${sj.id}`}
+            className="flex items-center justify-between gap-4 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
+          >
+            <div className="min-w-0">
+              <p className="font-medium truncate">{sj.title}</p>
+              <p className="text-xs text-muted-foreground truncate">
+                {sj.company}{sj.location ? ` • ${sj.location}` : ''}
+              </p>
+            </div>
+            {sj.salaryMin && sj.salaryMax && (
+              <span className="shrink-0 text-xs font-semibold text-emerald-600">
+                ${sj.salaryMin.toLocaleString('en-US')}–${sj.salaryMax.toLocaleString('en-US')}
+              </span>
+            )}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+ </div>
+
+ 
           {/* ── fin contenu principal ── */}
 
         </div>

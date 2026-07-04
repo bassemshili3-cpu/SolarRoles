@@ -5,10 +5,10 @@
 // Toutes les lectures passent par la base, zéro appel API côté utilisateur.
 //
 // Adzuna paused: only Jooble, Lensa, and Careerjet are active.
-
 import { prisma } from './prisma'
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
+const MIN_DESCRIPTION_LENGTH = 80
 
 export interface DbJob {
   id: string
@@ -28,6 +28,10 @@ export interface DbJob {
   postedAt: Date | null
   fetchedAt: Date
   active: boolean
+}
+
+function stripHtmlForLengthCheck(html: string): string {
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
 // ─── Recherche dans la base ──────────────────────────────────────────────────
@@ -88,35 +92,49 @@ export async function getJobFromDb(id: string): Promise<DbJob | null> {
   return job as DbJob
 }
 
-// ─── URLs actives pour Google Indexing API ───────────────────────────────────
+// ─── URLs actives pour Google Indexing API + IndexNow ────────────────────────
+// Ne remonte que les jobs dont la description a un minimum de contenu
+// substantiel (≥ 80 caractères après nettoyage HTML), pour éviter de
+// soumettre des pages "thin content" qui nuisent au SEO global du domaine.
 // Distribution: ~50% Jooble, ~30% Lensa, ~20% Careerjet
 export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
   const joobleQuota = Math.floor(limit * 0.5)
   const lensaQuota = Math.floor(limit * 0.3)
   const careerjetQuota = limit - joobleQuota - lensaQuota
 
+  // On sur-fetch (x3) car une partie sera écartée par le filtre description,
+  // puis on tronque au quota exact après filtrage.
+  const OVERFETCH_MULTIPLIER = 3
+
   const [joobleJobs, lensaJobs, careerjetJobs] = await Promise.all([
     prisma.job.findMany({
       where: { active: true, source: 'jooble' },
-      select: { id: true },
+      select: { id: true, description: true },
       orderBy: { fetchedAt: 'desc' },
-      take: joobleQuota,
+      take: joobleQuota * OVERFETCH_MULTIPLIER,
     }),
     prisma.job.findMany({
       where: { active: true, source: 'lensa' },
-      select: { id: true },
+      select: { id: true, description: true },
       orderBy: { fetchedAt: 'desc' },
-      take: lensaQuota,
+      take: lensaQuota * OVERFETCH_MULTIPLIER,
     }),
     prisma.job.findMany({
       where: { active: true, source: 'careerjet' },
-      select: { id: true },
+      select: { id: true, description: true },
       orderBy: { fetchedAt: 'desc' },
-      take: careerjetQuota,
+      take: careerjetQuota * OVERFETCH_MULTIPLIER,
     }),
   ])
 
-  const all = [...joobleJobs, ...lensaJobs, ...careerjetJobs]
+  const hasEnoughContent = (j: { description: string | null }) =>
+    stripHtmlForLengthCheck(j.description || '').length >= MIN_DESCRIPTION_LENGTH
+
+  const filteredJooble = joobleJobs.filter(hasEnoughContent).slice(0, joobleQuota)
+  const filteredLensa = lensaJobs.filter(hasEnoughContent).slice(0, lensaQuota)
+  const filteredCareerjet = careerjetJobs.filter(hasEnoughContent).slice(0, careerjetQuota)
+
+  const all = [...filteredJooble, ...filteredLensa, ...filteredCareerjet]
   return all.map((j) => `https://www.oh-my-job.com/jobs/${j.id}`)
 }
 

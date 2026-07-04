@@ -59,17 +59,25 @@ export async function GET(request: NextRequest) {
         for (const rawJob of data.jobs) {
           const job = normalizeCareerjet(rawJob)
           try {
-            await prisma.job.upsert({
+
+const existing = await prisma.job.findUnique({
+  where: { id: job.id },
+  select: { addressRegion: true, salaryMin: true, salaryMax: true },
+})
+
+await prisma.job.upsert({
   where: { id: job.id },
   update: {
     title: job.title,
     company: job.company,
     location: job.location,
-    addressRegion: job.addressRegion || '',
+    // Ne jamais écraser une région déjà connue par du vide
+    addressRegion: job.addressRegion || existing?.addressRegion || '',
     description: job.description,
     applyUrl: job.applyUrl,
-    salaryMin: job.salaryMin || null,
-    salaryMax: job.salaryMax || null,
+    // Idem pour le salaire : garder l'existant si la nouvelle extraction échoue
+    salaryMin: job.salaryMin ?? existing?.salaryMin ?? null,
+    salaryMax: job.salaryMax ?? existing?.salaryMax ?? null,
     fetchedAt: new Date(),
     expiresAt,
     active: true,

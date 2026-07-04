@@ -1,5 +1,5 @@
 'use client'
-
+import { useRouter, usePathname } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import { Button } from '@/components/ui/button'
@@ -98,6 +98,7 @@ const WORK_ARRANGEMENTS = [
   'On-site',
 ]
 
+
 interface JobListProps {
   what: string
   where: string
@@ -170,7 +171,10 @@ function AlertDropdown({
 
 export default function JobList({ what, where, salary_min, initialData }: JobListProps) {
   const searchParams = useSearchParams()
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(() => {
+  const fromUrl = parseInt(searchParams.get('page') || '1', 10)
+  return Number.isFinite(fromUrl) && fromUrl > 0 ? fromUrl : 1
+})
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
   const [frequency, setFrequency] = useState<'weekly' | 'twice'>('weekly')
@@ -179,6 +183,8 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
   const [alertCategory, setAlertCategory] = useState(JOB_CATEGORIES[0])
   const [alertExperience, setAlertExperience] = useState(EXPERIENCE_LEVELS[0])
   const [alertArrangement, setAlertArrangement] = useState(WORK_ARRANGEMENTS[0])
+
+
 
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
@@ -197,7 +203,9 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
     page === 1 && initialData && !hasFilters ? initialData : undefined
   )
 
-  // Build back URL preserving all current filters + current page
+ 
+
+ // Build back URL preserving all current filters + current page
   const backUrl = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString())
     if (page > 1) {
@@ -208,6 +216,21 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
     const qs = params.toString()
     return qs ? `/jobs?${qs}` : '/jobs'
   }, [searchParams, page])
+
+  // ── AJOUT ────────────────────────────────────────────────
+  const router = useRouter()
+  const pathname = usePathname()
+
+  function goToPage(newPage: number) {
+    const params = new URLSearchParams(searchParams.toString())
+    if (newPage > 1) params.set('page', newPage.toString())
+    else params.delete('page')
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    setPage(newPage)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+ 
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['jobs', resolvedWhat, resolvedWhere, salary_min, page, searchParams.toString()],
@@ -239,6 +262,19 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
   const jobType = resolvedWhat ? `${resolvedWhat} ` : ''
 
+
+  const scrollRestoredRef = useRef(false)
+
+  useEffect(() => {
+    if (scrollRestoredRef.current || isLoading) return
+    const saved = sessionStorage.getItem('jobs:scrollY')
+    if (saved) {
+      window.scrollTo(0, parseInt(saved, 10))
+      sessionStorage.removeItem('jobs:scrollY')
+    }
+    scrollRestoredRef.current = true
+  }, [isLoading])
+  
   // Loading state — ne s'affiche pas sur page 1 grâce à initialData
   if (isLoading) {
     return (
@@ -272,35 +308,25 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
       )}
 
       {/* Jobs */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
-        {(data?.results || []).map((job: any) => (
-          <JobCard key={job.id} job={job} backUrl={backUrl} />
-        ))}
-      </div>
+      <div
+  className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6"
+  onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
+>
+  {(data?.results || []).map((job: any) => (
+    <JobCard key={job.id} job={job} backUrl={backUrl} />
+  ))}
+</div>
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-4 mt-10">
-       <Button
-  variant="outline"
-  onClick={() => {
-    setPage(p => Math.max(1, p - 1))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }}
-  disabled={page === 1}
->
+       <Button variant="outline" onClick={() => goToPage(Math.max(1, page - 1))} disabled={page === 1}>
   ← Previous
 </Button>
 <span className="text-sm text-muted-foreground">Page {page}</span>
-<Button
-  variant="outline"
-  onClick={() => {
-    setPage(p => p + 1)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }}
-  disabled={page >= totalPages}
->
+<Button variant="outline" onClick={() => goToPage(page + 1)} disabled={page >= totalPages}>
   Next →
 </Button>
+
       </div>
 
       {/* Newsletter */}
