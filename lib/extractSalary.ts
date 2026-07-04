@@ -10,7 +10,7 @@ type SalaryResult = {
   min?: number
   max?: number
   raw: string
-  period: 'hour' | 'week' | 'month' | 'year'
+  period: 'hour' | 'day' | 'week' | 'month' | 'year'
 }
 
 /**
@@ -46,12 +46,10 @@ function matchRange(text: string): SalaryResult | null {
     let high = parseNum(match[3])
     const context = match[5] || ''
 
-    // Handle k suffix
-    if (match[2] || /^\s*k\b/i.test(context)) {
+    // Le suffixe "k" s'applique aux DEUX nombres dès qu'il apparaît sur
+    // l'un des deux (ex: "$70-90k" doit donner 70000-90000, pas 70-90000)
+    if (match[2] || match[4]) {
       if (low < 1000) low *= 1000
-      if (high < 1000) high *= 1000
-    }
-    if (match[4]) {
       if (high < 1000) high *= 1000
     }
 
@@ -131,11 +129,12 @@ function detectPeriodFromContext(
   context: string,
   low: number,
   high: number
-): 'hour' | 'week' | 'month' | 'year' {
+): 'hour' | 'day' | 'week' | 'month' | 'year' {
   const c = context.toLowerCase()
 
   // Explicit period words (within the context window)
   if (/\b(?:per\s+hour|hourly|\/\s*hr|\/\s*hour|an\s+hour)\b/.test(c)) return 'hour'
+  if (/\b(?:per\s+day|daily|\/\s*day|a\s+day)\b/.test(c)) return 'day'
   if (/\b(?:per\s+week|weekly|\/\s*wk|\/\s*week|a\s+week)\b/.test(c)) return 'week'
   if (/\b(?:per\s+month|monthly|\/\s*mo|\/\s*month|a\s+month)\b/.test(c)) return 'month'
   if (/\b(?:per\s+year|yearly|annually|annual|\/\s*yr|\/\s*year|a\s+year)\b/.test(c)) return 'year'
@@ -144,18 +143,20 @@ function detectPeriodFromContext(
   return inferPeriodFromValue(low, high)
 }
 
-function extractExplicitPeriod(context: string): 'hour' | 'week' | 'month' | 'year' | null {
+function extractExplicitPeriod(context: string): 'hour' | 'day' | 'week' | 'month' | 'year' | null {
   const c = context.toLowerCase()
   if (/\b(?:per\s+hour|hourly|\/\s*hr|\/\s*hour)\b/.test(c)) return 'hour'
+  if (/\b(?:per\s+day|daily|\/\s*day)\b/.test(c)) return 'day'
   if (/\b(?:per\s+week|weekly|\/\s*wk|\/\s*week)\b/.test(c)) return 'week'
   if (/\b(?:per\s+month|monthly|\/\s*mo|\/\s*month)\b/.test(c)) return 'month'
   if (/\b(?:per\s+year|yearly|annually|annual|\/\s*yr|\/\s*year)\b/.test(c)) return 'year'
   return null
 }
 
-function inferPeriodFromValue(low: number, high: number): 'hour' | 'week' | 'month' | 'year' {
+function inferPeriodFromValue(low: number, high: number): 'hour' | 'day' | 'week' | 'month' | 'year' {
   const avg = (low + high) / 2
   if (avg <= 150) return 'hour'
+  if (avg <= 600) return 'day'
   if (avg <= 6000) return 'week'
   if (avg <= 25000) return 'month'
   return 'year'
@@ -170,9 +171,9 @@ function parseNum(s: string): number {
 function annualize(
   min: number,
   max: number,
-  period: 'hour' | 'week' | 'month' | 'year'
+  period: 'hour' | 'day' | 'week' | 'month' | 'year'
 ): { annualMin: number; annualMax: number } {
-  const multipliers = { hour: 2080, week: 52, month: 12, year: 1 }
+  const multipliers = { hour: 2080, day: 260, week: 52, month: 12, year: 1 }
   const m = multipliers[period]
   return {
     annualMin: Math.round(min * m),
@@ -180,13 +181,13 @@ function annualize(
   }
 }
 
-function formatRange(low: number, high: number, period: 'hour' | 'week' | 'month' | 'year'): string {
-  const labels = { hour: '/hr', week: '/week', month: '/month', year: '/year' }
+function formatRange(low: number, high: number, period: 'hour' | 'day' | 'week' | 'month' | 'year'): string {
+  const labels = { hour: '/hr', day: '/day', week: '/week', month: '/month', year: '/year' }
   return `$${fmtNum(low)} – $${fmtNum(high)}${labels[period]}`
 }
 
-function formatSingle(val: number, period: 'hour' | 'week' | 'month' | 'year'): string {
-  const labels = { hour: '/hr', week: '/week', month: '/month', year: '/year' }
+function formatSingle(val: number, period: 'hour' | 'day' | 'week' | 'month' | 'year'): string {
+  const labels = { hour: '/hr', day: '/day', week: '/week', month: '/month', year: '/year' }
   return `$${fmtNum(val)}${labels[period]}`
 }
 
