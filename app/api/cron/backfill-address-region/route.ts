@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { extractStateFromLocation } from '@/lib/usStates'
 import { extractSalaryFromText } from '@/lib/extractSalary'
+import { SALARY_MIN_THRESHOLD, SALARY_MAX_THRESHOLD } from '@/lib/salaryBounds'
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
@@ -14,7 +15,6 @@ export async function GET(request: NextRequest) {
   const dryRun = searchParams.get('dry_run') !== 'false'
   const limit = parseInt(searchParams.get('limit') || '500')
 
-  // Jobs où addressRegion OU salaire manque
   const candidates = await prisma.job.findMany({
     where: {
       OR: [
@@ -23,7 +23,15 @@ export async function GET(request: NextRequest) {
         { salaryMax: null },
       ],
     },
-    select: { id: true, location: true, title: true, description: true, addressRegion: true, salaryMin: true, salaryMax: true },
+    select: {
+      id: true,
+      location: true,
+      title: true,
+      description: true,
+      addressRegion: true,
+      salaryMin: true,
+      salaryMax: true,
+    },
     take: limit,
   })
 
@@ -44,9 +52,17 @@ export async function GET(request: NextRequest) {
 
     if (job.salaryMin == null || job.salaryMax == null) {
       const extracted = extractSalaryFromText(job.title, job.description || '')
-      if (extracted) {
-        data.salaryMin = extracted.min
-        data.salaryMax = extracted.max
+      const min = extracted?.min
+      const max = extracted?.max
+
+      if (
+        min != null &&
+        max != null &&
+        min >= SALARY_MIN_THRESHOLD &&
+        max <= SALARY_MAX_THRESHOLD
+      ) {
+        data.salaryMin = min
+        data.salaryMax = max
         salaryMatched++
       }
     }
