@@ -17,9 +17,7 @@
       "path": "/api/cron/sync-jobs",
       "schedule": "0 * * * *"
     },
-    {
-      "path": "/api/cron/cleanup-jobs",
-      "schedule": "0 4 * * *"
-    }
+     { "path": "/api/cron/mark-expired-jobs", "schedule": "0 */6 * * *" },
+    { "path": "/api/cron/purge-expired-jobs", "schedule": "0 3 * * *" }
   ]
 }
