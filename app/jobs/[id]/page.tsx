@@ -3,6 +3,7 @@
 // 1. Essaie l'API en temps réel (Adzuna, Lensa)
 // 2. Si l'API échoue (404, 429, timeout) → lit depuis la base Prisma
 // 3. Jooble toujours depuis la base (pas d'endpoint par ID)
+import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
 import { getSimilarJobs } from '@/lib/similarJobs'
 import { matchRoleCategory, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
 import { resolveStateName, stateToSlug } from '@/lib/usStates'
@@ -292,6 +293,15 @@ export default async function JobDetailPage({
     roleStats,
   })
 
+  const breadcrumbSegments = buildBreadcrumbSegments({
+  jobTitle: job.title,
+  stateName,
+  stateSlug: stateName ? stateToSlug(stateName) : null,
+  roleLabel: roleMatch?.label || null,
+  roleSlug: salaryReportSlug,
+})
+const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
+
   const schema = buildJobPostingSchema(job)
 
  const applyConfig: Record<string, { label: string; className: string }> = {
@@ -310,6 +320,10 @@ export default async function JobDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+/>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
 
