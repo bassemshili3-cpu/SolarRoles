@@ -33,3 +33,10 @@ export function isDescriptionTruncated(description: string): boolean {
 
   return false
 }
+// lib/description-quality.ts — à ajouter à la fin du fichier existant
+
+export function hasEnoughDescriptionContent(description: string | null, minLength = 80): boolean {
+  if (!description) return false
+  const stripped = description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  return stripped.length >= minLength
+}
