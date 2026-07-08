@@ -5,6 +5,7 @@
 // 3. Jooble toujours depuis la base (pas d'endpoint par ID)
 import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
 import { getSimilarJobs } from '@/lib/similarJobs'
+import { getEmployerProfile } from '@/lib/employerProfile'
 import { matchRoleCategory, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
 import { resolveStateName, stateToSlug } from '@/lib/usStates'
 import { getRoleLocationStats } from '@/lib/roleLocationStats'
@@ -282,6 +283,11 @@ export default async function JobDetailPage({
       const similarJobs = roleMatch
   ? await getSimilarJobs(roleMatch.keywords, job.addressRegion, job.id, 4)
   : []
+
+  const employerProfile = job.company
+    ? await getEmployerProfile(job.company, job.id)
+    : null
+
   const salaryReportSlug =
     roleMatch && KNOWN_SALARY_REPORT_SLUGS.has(roleMatch.slug) ? roleMatch.slug : null
 
@@ -491,6 +497,32 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
                 </p>
               </div>
             )}
+
+{/* Profil employeur : vue transversale toutes sources confondues */}
+{employerProfile && (
+  <div className="mt-8 rounded-xl border p-5 text-sm">
+    <p className="font-semibold text-foreground mb-2">
+      {job.company} on Oh My Job
+    </p>
+    <p className="text-muted-foreground">
+      {employerProfile.totalOpenings.toLocaleString('en-US')} open position
+      {employerProfile.totalOpenings > 1 ? 's' : ''} right now
+      {employerProfile.states[0] && (
+        <>
+          , including {employerProfile.states[0].count} in {employerProfile.states[0].state}
+        </>
+      )}
+      .
+      {employerProfile.avgSalaryMin && employerProfile.avgSalaryMax && (
+        <>
+          {' '}Average salary across all roles: $
+          {employerProfile.avgSalaryMin.toLocaleString('en-US')}–$
+          {employerProfile.avgSalaryMax.toLocaleString('en-US')}.
+        </>
+      )}
+    </p>
+  </div>
+)}
 
 {/* Similar positions */}
 {similarJobs.length > 0 && (
