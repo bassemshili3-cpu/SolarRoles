@@ -6,6 +6,14 @@ export const revalidate = 86400
 const BASE_URL = 'https://www.oh-my-job.com'
 const JOBS_PER_SITEMAP = 10000
 
+// ── Date de dernière refonte connue ──────────────────────────
+// À bumper manuellement à chaque changement structurel notable
+// (nouveau bloc, nouvelle section, refonte de template...).
+// Sert de lastModified plancher pour signaler à Bing/Google que
+// le contenu a changé, même quand les données Prisma sous-jacentes
+// n'ont pas été re-synchronisées.
+const LAST_MAJOR_UPDATE = new Date('2026-07-08')
+
 // ── Helper date : jobs des 14 derniers jours uniquement ──────
 function getJobCutoff(): Date {
   const cutoff = new Date()
@@ -162,11 +170,12 @@ function toSitemapEntry(
   options: {
     changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']
     priority: number
+    lastModified?: Date // optionnel : surcharge ponctuelle si une page précise a changé récemment
   }
 ): MetadataRoute.Sitemap[number] {
   return {
     url: `${BASE_URL}${slug}`,
-    lastModified: new Date(),
+    lastModified: options.lastModified ?? LAST_MAJOR_UPDATE,
     changeFrequency: options.changeFrequency,
     priority: options.priority,
   }
@@ -200,8 +209,8 @@ export default async function sitemap({
   // id=0 : toutes les pages statiques
   if (id === 0) {
     const core: MetadataRoute.Sitemap = [
-      { url: `${BASE_URL}`,      changeFrequency: 'daily',  priority: 1.0 },
-      { url: `${BASE_URL}/jobs`, changeFrequency: 'hourly', priority: 0.9 },
+      { url: `${BASE_URL}`,      lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'daily',  priority: 1.0 },
+      { url: `${BASE_URL}/jobs`, lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'hourly', priority: 0.9 },
     ]
 
     const priority = priorityLandingPages.map((slug) =>
@@ -249,7 +258,11 @@ export default async function sitemap({
 
   return jobs.map((job) => ({
     url: `${BASE_URL}/jobs/${job.id}`,
-    lastModified: job.fetchedAt,
+    // On prend le plus récent entre la vraie date de synchro des données
+    // et la date de dernière refonte du template. Ça évite qu'une offre
+    // non re-synchronisée depuis la refonte affiche un lastmod obsolète
+    // qui ne reflète pas le nouveau rendu HTML (bloc salaire, Similar positions...).
+    lastModified: job.fetchedAt > LAST_MAJOR_UPDATE ? job.fetchedAt : LAST_MAJOR_UPDATE,
     changeFrequency: 'daily' as const,
     priority: 0.4,
   }))
