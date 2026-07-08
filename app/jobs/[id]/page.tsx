@@ -446,27 +446,7 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
             
             
 
-            {/* Apply CTA + Share */}
-<div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-  {applyUrl ? (
-    <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
-      <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-        {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
-      </a>
-    </Button>
-  ) : (
-    <Button disabled size="lg" className="w-full sm:w-auto">
-      Apply link unavailable
-    </Button>
-  )}
-
-  <ShareBar
-  
-    url={`https://www.oh-my-job.com/jobs/${job.id}`}
-    title={job.title}
-    company={job.company || ''}
-  />
-</div>
+           
 
 {/* Bloc SEO interne : stats métier x état */}
             {roleStats && stateName && roleMatch && (
@@ -477,7 +457,7 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
                   <span className="font-semibold">
                     ${roleStats.avgSalary.toLocaleString('en-US')}/year
                   </span>
-                  , based on {roleStats.count.toLocaleString('en-US')} active listings on Oh My Job.
+                  , based on {roleStats.count.toLocaleString('en-US')} active listings on our database.
                 </p>
                 <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
                   <Link
@@ -523,6 +503,30 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
     </p>
   </div>
 )}
+
+
+{/* Apply CTA + Share */}
+<div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  {applyUrl ? (
+    <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
+      <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+        {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
+      </a>
+    </Button>
+  ) : (
+    <Button disabled size="lg" className="w-full sm:w-auto">
+      Apply link unavailable
+    </Button>
+  )}
+
+  <ShareBar
+  
+    url={`https://www.oh-my-job.com/jobs/${job.id}`}
+    title={job.title}
+    company={job.company || ''}
+  />
+</div>
+
 
 {/* Similar positions */}
 {similarJobs.length > 0 && (
