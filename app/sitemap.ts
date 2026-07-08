@@ -102,6 +102,17 @@ const landingPages: string[] = [
   '/special-education-teacher-jobs',
   '/summer-camp-counselor-jobs',
   '/public-works-commission-jobs',
+   '/manufacturing-jobs',
+  '/physician-assistant-jobs',
+  '/hr-jobs',
+  '/preschool-jobs',
+  '/local-truck-driving-jobs',
+]
+
+// ── Articles / FAQ hors blog (URL racine, sans préfixe /blog/) ──
+const faqArticles: string[] = [
+  '/could-you-collect-unemployment-if-you-quit-your-job',
+  '/could-someone-get-fired-from-a-job-for-being-sick',
 ]
 
 // ── Top Jobs ranking pages ───────────────────────────────────
@@ -236,8 +247,11 @@ export default async function sitemap({
     const blog = blogPosts.map((slug) =>
       toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
     )
+     const faq = faqArticles.map((slug) =>
+      toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
+    )
 
-    return [...core, ...priority, ...standard, ...topJobs, ...paycheck, ...data, ...blog]
+    return [...core, ...priority, ...standard, ...topJobs, ...paycheck, ...data, ...blog, ...faq]
   }
 
   // id=1+ : batches de job detail pages (14 derniers jours uniquement)

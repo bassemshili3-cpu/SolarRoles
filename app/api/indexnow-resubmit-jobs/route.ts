@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma'
 import { submitAllToIndexNow } from '@/lib/indexnow'
 
 const BASE_URL = 'https://www.oh-my-job.com'
+const MIN_DESCRIPTION_LENGTH = 80
 
 // Même fenêtre que le sitemap : on ne pingue que ce qui est réellement
 // listé/visible, pas les vieilles offres en train d'expirer.
@@ -14,6 +15,10 @@ function getJobCutoff(): Date {
   const cutoff = new Date()
   cutoff.setDate(cutoff.getDate() - 14)
   return cutoff
+}
+
+function stripHtmlForLengthCheck(html: string): string {
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
 export async function GET(request: NextRequest) {
@@ -28,10 +33,16 @@ export async function GET(request: NextRequest) {
       expiresAt: { gt: new Date() },
       fetchedAt: { gt: getJobCutoff() },
     },
-    select: { id: true },
+    select: { id: true, description: true },
   })
 
-  const urls = jobs.map((job) => `${BASE_URL}/jobs/${job.id}`)
+  // Même garde-fou anti-thin-content que getActiveJobUrls (lib/job-db.ts) —
+  // on ne notifie pas les moteurs de pages sans contenu substantiel.
+  const qualifyingJobs = jobs.filter(
+    (j) => stripHtmlForLengthCheck(j.description || '').length >= MIN_DESCRIPTION_LENGTH
+  )
+
+  const urls = qualifyingJobs.map((job) => `${BASE_URL}/jobs/${job.id}`)
 
   if (urls.length === 0) {
     return NextResponse.json({ success: true, totalUrls: 0, submitted: 0, failed: 0, batches: 0 })
@@ -41,6 +52,8 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({
     success: result.success,
+    totalCandidates: jobs.length,
+    filteredOut: jobs.length - qualifyingJobs.length,
     totalUrls: urls.length,
     submitted: result.submitted,
     failed: result.failed,

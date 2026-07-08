@@ -10,6 +10,7 @@ import { searchJooble } from './jooble'
 import { searchLensaJobs } from './lensa'
 import { searchCareerjetJobs, normalizeCareerjet } from './careerjet'
 import { normalizeJooble, UnifiedJob } from './jobs'
+import { extractSalaryFromText } from './extractSalary'
 
 const EXPIRY_DAYS = 30
 
@@ -27,10 +28,7 @@ export interface SyncResult {
 }
 
 // ─── Keyword pool ────────────────────────────────────────────────────────────
-// Keywords align with landing pages to ensure Prisma is populated with
-// relevant jobs for each SEO page.
 const KEYWORDS = [
-  // ─── Generic job categories (broad coverage) ───
   'software engineer', 'developer', 'data analyst', 'data scientist',
   'devops engineer', 'product manager', 'ux designer', 'it support',
   'cybersecurity', 'cloud engineer',
@@ -46,18 +44,10 @@ const KEYWORDS = [
   'delivery driver', 'shipping clerk', 'inventory specialist',
   'marketing manager', 'digital marketing', 'content writer',
   'social media manager', 'account executive', 'sales representative',
-
-  // ─── Teen / age-based (landing pages) ───
   'jobs for 14 year olds', 'jobs for 15 year olds', 'jobs for 16 year olds',
-
-  // ─── Schedule / part-time ───
   'part time', 'evening jobs', 'weekend jobs', 'weekly paying jobs',
-
-  // ─── Food & Retail ───
   'barista', 'bartending', 'burger king', 'chick-fil-a', 'sonic',
   'planet fitness',
-
-  // ─── Healthcare specific ───
   'certified nursing assistant', 'certified nursing assistant hospital',
   'patient care technician', 'patient transporter', 'pharmacy technician',
   'pediatric nurse practitioner', 'new grad nurse', 'labor and delivery nurse',
@@ -65,36 +55,24 @@ const KEYWORDS = [
   'sterile processing technician', 'emt', 'ekg technician',
   'dental assistant', 'language pathologist', 'dignity health',
   'assisted reproductive technology', 'healthcare administration',
-
-  // ─── Education ───
   'art teacher', 'substitute teacher', 'special education teacher',
   'social studies teacher', 'paraprofessional', 'summer camp counselor',
   'childcare', 'daycare', 'nanny',
-
-  // ─── Trades & Labor ───
   'electrician', 'hvac', 'truck driver', 'lineman',
   'heavy equipment operator', 'welding', 'general labor',
   'school bus driver', 'fly in fly out mining',
-'fly in fly out roster',
-'fly in fly out rotation schedule',
-'fly in fly out oil gas',
-
-  // ─── Corporate / Companies ───
+  'fly in fly out roster',
+  'fly in fly out rotation schedule',
+  'fly in fly out oil gas',
   'allied universal', 'amgen', 'cardinal health', 'cintas',
   'chase bank', 'doordash', 'exelon', 'honda', 'live nation',
   'national grid', 'press association',
-
-  // ─── City / Government ───
   'city of grand rapids', 'city of reno', 'city of laredo', 'city of portland',
   'public work commission', 'university of california san diego',
-
-  // ─── Office & Professional ───
   'call center', 'customer service', 'executive assistant',
   'front desk', 'project manager', 'case manager', 'talent acquisition',
   'remote hr', 'quality assurance', 'engineering', 'entry level data analyst',
   'social media supervisor', 'marketing chef', 'property management',
-
-  // ─── Services ───
   'housekeeping', 'dog walking', 'christian', 'event organization',
 ]
 
@@ -107,7 +85,7 @@ function getKeywordsForRun(page: number, count: number = 8): string[] {
   return selected
 }
 
-// ─── Upsert helper ───────────────────────────────────────────────────────────
+// ─── Upsert helper (Jooble) ──────────────────────────────────────────────────
 async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
   let saved = 0
 
@@ -181,6 +159,9 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          // Note: addressRegion volontairement absent ici — on ne veut
+          // jamais écraser une valeur déjà correcte par une extraction
+          // qui aurait échoué sur ce run précis.
         },
         create: {
           id: job.id,
@@ -189,7 +170,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           title: job.title,
           company: job.company,
           location: job.location,
-          addressRegion: '',
+          addressRegion: job.addressRegion || '', // fix : était codé en dur à ''
           description: job.description,
           url: job.url,
           applyUrl: job.applyUrl,
@@ -221,6 +202,13 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
       const id = `lensa-${advert.unique_id}`
       const location = [advert.city, advert.state].filter(Boolean).join(', ')
 
+      // Fallback : Lensa ne fournit pas de salaire structuré, on tente
+      // de l'extraire du texte comme pour Careerjet.
+      const extracted = extractSalaryFromText(
+        advert.cleaned_job_title || '',
+        advert.description_digest || ''
+      )
+
       await prisma.job.upsert({
         where: { id },
         update: {
@@ -230,6 +218,8 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
           addressRegion: advert.state || '',
           description: advert.description_digest || '',
           applyUrl: advert.incoming_click_url,
+          salaryMin: extracted?.min ?? null,
+          salaryMax: extracted?.max ?? null,
           fetchedAt: new Date(),
           expiresAt,
           active: true,
@@ -245,8 +235,8 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
           description: advert.description_digest || '',
           url: advert.incoming_click_url,
           applyUrl: advert.incoming_click_url,
-          salaryMin: null,
-          salaryMax: null,
+          salaryMin: extracted?.min ?? null,
+          salaryMax: extracted?.max ?? null,
           postedAt: null,
           fetchedAt: new Date(),
           expiresAt,
@@ -299,7 +289,7 @@ export async function syncAllJobs(
   const publicIp = await getPublicIp()
   console.log(`🌐 Public IP détectée : ${publicIp}`)
 
-  const keywords = getKeywordsForRun(page, 6) // 6 keywords per source per run
+  const keywords = getKeywordsForRun(page, 6)
 
   for (const keyword of keywords) {
     // ─── JOOBLE ───────────────────────────────────────────────────────
@@ -365,7 +355,6 @@ export async function syncAllJobs(
       }
     }
 
-    // Pause between keywords
     await new Promise((r) => setTimeout(r, 500))
   }
 
