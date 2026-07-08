@@ -18,12 +18,18 @@ export async function getRoleLocationStats(
   const result = await prisma.job.aggregate({
     where: {
       active: true,
-      AND: roleKeywords.map((kw) => ({
-        title: { contains: kw, mode: 'insensitive' as const },
-      })),
-      OR: [
-        { addressRegion: stateName },
-        ...(stateCode ? [{ addressRegion: stateCode }] : []),
+      AND: [
+        {
+          OR: roleKeywords.map((kw) => ({
+            title: { contains: kw, mode: 'insensitive' as const },
+          })),
+        },
+        {
+          OR: [
+            { addressRegion: stateName },
+            ...(stateCode ? [{ addressRegion: stateCode }] : []),
+          ],
+        },
       ],
       salaryMin: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
       salaryMax: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },

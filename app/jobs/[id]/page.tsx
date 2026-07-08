@@ -24,6 +24,8 @@ import { getJobById } from '@/lib/adzuna'
 import { prisma } from '@/lib/prisma'
 import ShareBar from '@/components/ShareBar'
 import { isDescriptionTruncated } from '@/lib/description-quality'
+import CompanyLogo from '@/components/CompanyLogo'
+import { formatDistanceToNow } from 'date-fns'
 
 
 export const revalidate = 3600
@@ -139,6 +141,15 @@ function resolveEmploymentType(job: JobDetail): string {
   if (text.includes('contract')) return 'CONTRACTOR'
   if (text.includes('intern')) return 'INTERN'
   return 'FULL_TIME'
+}
+
+function formatPostedDate(date: Date | null): string {
+  if (!date) return 'Recently posted'
+  try {
+    return formatDistanceToNow(date, { addSuffix: true })
+  } catch {
+    return 'Recently posted'
+  }
 }
 
 // ─── Schema ──────────────────────────────────────────────────────────────────
@@ -380,11 +391,11 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
             <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
 
             {job.company && (
-              <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-                <Building2 className="w-4 h-4" />
-                <span className="text-lg">{job.company}</span>
-              </div>
-            )}
+  <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+    <CompanyLogo company={job.company} size={36} />
+    <span className="text-lg">{job.company}</span>
+  </div>
+)}
 
             <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
               {job.location && (
@@ -537,26 +548,27 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
         <li key={sj.id}>
           <Link
             href={`/jobs/${sj.id}`}
-            className="flex items-center justify-between gap-4 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
+            className="flex items-center gap-3 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
           >
-            <div className="min-w-0">
+            <CompanyLogo company={sj.company || ''} />
+
+            <div className="min-w-0 flex-1">
               <p className="font-medium truncate">{sj.title}</p>
               <p className="text-xs text-muted-foreground truncate">
                 {sj.company}{sj.location ? ` • ${sj.location}` : ''}
               </p>
             </div>
-            {sj.salaryMin && sj.salaryMax && (
-              <span className="shrink-0 text-xs font-semibold text-emerald-600">
-                ${sj.salaryMin.toLocaleString('en-US')}–${sj.salaryMax.toLocaleString('en-US')}
-              </span>
-            )}
+
+            <span className="shrink-0 text-xs text-muted-foreground">
+              {formatPostedDate(sj.postedAt)}
+            </span>
           </Link>
         </li>
       ))}
     </ul>
   </div>
 )}
- </div>
+</div>
 
  
           {/* ── fin contenu principal ── */}
