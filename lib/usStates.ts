@@ -53,10 +53,22 @@ export function resolveStateName(raw?: string | null): string | null {
 }
 export function extractStateFromLocation(location?: string | null): string | null {
   if (!location) return null
-  const match = location.match(/,\s*([A-Za-z]{2})\s*$/) // capte "..., CA" en fin de string
+  const trimmed = location.trim()
+
+  // Cas standard : "Ville, CODE" ou "Ville, Nom Complet"
+  const match = trimmed.match(/,\s*(.+)\s*$/)
   if (match) {
-    const code = match[1].toUpperCase()
-    if (Object.values(STATES).includes(code)) return code // adapte selon ta structure STATES
+    const part = match[1].trim()
+    const upper = part.toUpperCase()
+    if (Object.values(STATES).includes(upper)) return upper
+    if (STATES[part]) return STATES[part]
   }
+
+  // Cas remote/état seul : "Ohio", "Texas"... (pas de virgule, pas de ville)
+  if (STATES[trimmed]) return STATES[trimmed]
+
+  const upperTrimmed = trimmed.toUpperCase()
+  if (Object.values(STATES).includes(upperTrimmed)) return upperTrimmed
+
   return null
 }
