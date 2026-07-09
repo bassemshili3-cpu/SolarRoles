@@ -12,7 +12,7 @@ import { getRoleLocationStats } from '@/lib/roleLocationStats'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { MapPin, Clock, DollarSign, Building2, ArrowLeft, ExternalLink } from 'lucide-react'
+import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import Link from 'next/link'
 import PaycheckCalculatorCard from '@/components/PaycheckCalculatorCard'
 
@@ -26,6 +26,7 @@ import ShareBar from '@/components/ShareBar'
 import { isDescriptionTruncated } from '@/lib/description-quality'
 import CompanyLogo from '@/components/CompanyLogo'
 import { formatDistanceToNow } from 'date-fns'
+import { compareSalaryToMarket } from '@/lib/salaryComparison'
 
 
 export const revalidate = 3600
@@ -99,15 +100,23 @@ async function getJobDetail(id: string): Promise<JobDetail | null> {
 function getJobDetailWithSalary(job: JobDetail): JobDetail {
   const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
 
-  if (!hasRealSalary) {
-    const extracted = extractSalaryFromText(job.title, job.description || '')
-    if (extracted) {
-      job.salary = extracted.display
-      job.salary_min = extracted.min
-      job.salary_max = extracted.max
-    } else if (job.salary_min && job.salary_min === job.salary_max) {
-      job.salary = `~$${job.salary_min.toLocaleString('en-US')}/year (est.)`
+  if (hasRealSalary) {
+    // salary_min/salary_max existent déjà, mais la chaîne d'affichage `salary`
+    // peut ne jamais avoir été stockée par certaines sources (ex: CareerJet).
+    // On la reconstruit à la volée si besoin, sans écraser une valeur existante.
+    if (!job.salary) {
+      job.salary = `$${job.salary_min!.toLocaleString('en-US')} - $${job.salary_max!.toLocaleString('en-US')}/year`
     }
+    return job
+  }
+
+  const extracted = extractSalaryFromText(job.title, job.description || '')
+  if (extracted) {
+    job.salary = extracted.display
+    job.salary_min = extracted.min
+    job.salary_max = extracted.max
+  } else if (job.salary_min && job.salary_min === job.salary_max) {
+    job.salary = `~$${job.salary_min.toLocaleString('en-US')}/year (est.)`
   }
 
   return job
@@ -291,6 +300,10 @@ export default async function JobDetailPage({
       ? await getRoleLocationStats(roleMatch.keywords, stateName)
       : null
 
+      const salaryComparison = roleStats
+  ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary)
+  : null
+
       const similarJobs = roleMatch
   ? await getSimilarJobs(roleMatch.keywords, job.addressRegion, job.id, 4)
   : []
@@ -415,6 +428,37 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
                 <DollarSign className="w-4 h-4" />
                 {(job.salary || 'Salary not listed').replace(/^\$/, '')}
               </div>
+
+              {salaryComparison && (
+  <span
+    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
+      salaryComparison.direction === 'above'
+        ? 'bg-emerald-50 text-emerald-700'
+        : salaryComparison.direction === 'below'
+        ? 'bg-amber-50 text-amber-700'
+        : 'bg-slate-100 text-slate-600'
+    }`}
+  >
+    {salaryComparison.direction === 'above' && (
+      <>
+        <TrendingUp className="w-3.5 h-3.5" />
+        +{salaryComparison.percentDiff}% vs {stateName} average
+      </>
+    )}
+    {salaryComparison.direction === 'below' && (
+      <>
+        <TrendingDown className="w-3.5 h-3.5" />
+        -{salaryComparison.percentDiff}% vs {stateName} average
+      </>
+    )}
+    {salaryComparison.direction === 'average' && (
+      <>
+        <Minus className="w-3.5 h-3.5" />
+        Average for {stateName}
+      </>
+    )}
+  </span>
+)}
               {job.contract_type && (
                 <span className="bg-secondary px-3 py-1 rounded-full capitalize">
                   {job.contract_type}
@@ -498,10 +542,15 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
     <p className="text-muted-foreground">
       {employerProfile.totalOpenings.toLocaleString('en-US')} open position
       {employerProfile.totalOpenings > 1 ? 's' : ''} right now
-      {employerProfile.states[0] && (
-        <>
-          , including {employerProfile.states[0].count} in {employerProfile.states[0].state}
-        </>
+      {employerProfile.singleState ? (
+        <>, all of them in {resolveStateName(employerProfile.singleState) || employerProfile.singleState}</>
+      ) : (
+        employerProfile.states[0] && (
+          <>
+            , including {employerProfile.states[0].count} in{' '}
+            {resolveStateName(employerProfile.states[0].state) || employerProfile.states[0].state}
+          </>
+        )
       )}
       .
       {employerProfile.avgSalaryMin && employerProfile.avgSalaryMax && (
