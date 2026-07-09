@@ -24,36 +24,36 @@ export default function Navbar() {
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-4 sm:gap-8">
-          <Link href="/" className="flex items-center gap-3 -translate-x-[20%]">
-        <img src="/logo.svg" alt="Oh My Job" className="h-[3.3rem] sm:h-11 w-auto" />
-        </Link>
-          
-          {/* Find Jobs → 20% plus petit + une seule ligne sur mobile uniquement */}
-          <Link 
-    href="/jobs" 
-    className="font-medium hover:text-primary text-sm sm:text-base whitespace-nowrap transition-colors sm:-translate-x-[20%]"
-  >
-    Find Jobs
-  </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 sm:gap-8 min-w-0">
+          <Link href="/" className="flex items-center shrink-0">
+            <img src="/logo.svg" alt="Oh My Job" className="h-8 sm:h-11 w-auto" />
+          </Link>
+
+          <Link
+            href="/jobs"
+            className="font-medium hover:text-primary text-sm sm:text-base whitespace-nowrap transition-colors"
+          >
+            Find Jobs
+          </Link>
         </div>
 
-        <div className="flex items-center gap-4">
-          
-
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           {user ? (
             <>
               <Link href="/dashboard">
-                <Button variant="outline" className="gap-2">
-                  <User className="w-4 h-4" /> Dashboard
+                <Button variant="outline" size="sm" className="gap-1.5 sm:gap-2 px-2.5 sm:px-4">
+                  <User className="w-4 h-4" />
+                  <span className="hidden sm:inline">Dashboard</span>
                 </Button>
               </Link>
-              <Button variant="ghost" onClick={signOut}>Log out</Button>
+              <Button variant="ghost" size="sm" onClick={signOut} className="px-2.5 sm:px-4">
+                Log out
+              </Button>
             </>
           ) : (
             <Link href="/auth/login">
-              <Button>Sign in</Button>
+              <Button size="sm" className="px-3 sm:px-4">Sign in</Button>
             </Link>
           )}
         </div>
