@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Moon, Sun, User } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
+import { FilterDrawerTrigger } from '@/components/filter-drawer-trigger'
 
 export default function Navbar() {
   const supabase = createClient()
@@ -56,6 +57,7 @@ export default function Navbar() {
               <Button size="sm" className="px-3 sm:px-4">Sign in</Button>
             </Link>
           )}
+          <FilterDrawerTrigger />
         </div>
       </div>
     </nav>
