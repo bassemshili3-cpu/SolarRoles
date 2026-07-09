@@ -1,6 +1,19 @@
 // lib/merged-search.ts
 import { prisma } from '@/lib/prisma'
 
+const STOPWORDS = new Set([
+  'of', 'in', 'on', 'at', 'to', 'a', 'an', 'the', 'and',
+  'or', 'for', 'with', 'is', 'as', 'by', 'from',
+])
+
+function meaningfulKeywords(what: string): string[] {
+  const all = what.split(/\s+/).filter(Boolean)
+  const filtered = all.filter(kw => kw.length > 2 && !STOPWORDS.has(kw.toLowerCase()))
+  // Fallback : si tout a été filtré (ex: recherche = "of"), on garde les mots originaux
+  // plutôt que de matcher zéro résultat.
+  return filtered.length > 0 ? filtered : all
+}
+
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
 
 // ==================== KEYWORDS ====================
@@ -102,7 +115,7 @@ export async function getMergedJobCount(params: {
 
     // What (keywords — AND par mot pour cohérence avec jobs-all)
     if (what) {
-      for (const kw of what.split(/\s+/).filter(Boolean)) {
+      for (const kw of meaningfulKeywords(what)) { 
         AND.push({
           OR: [
             { title:       { contains: kw, mode: 'insensitive' } },
