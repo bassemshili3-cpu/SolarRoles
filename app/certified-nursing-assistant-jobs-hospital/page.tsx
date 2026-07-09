@@ -150,7 +150,7 @@ export default async function CertifiedNursingAssistantHospitalJobsPage({ search
             <JobFilters defaultWhat="certified nursing assistant hospital" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'certified nursing assistant hospital'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>

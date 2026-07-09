@@ -236,7 +236,7 @@ export default async function CallCenterJobsPage({ searchParams }: any) {
             <JobFilters defaultWhat="call center" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'call center'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>

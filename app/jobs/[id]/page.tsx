@@ -6,7 +6,7 @@
 import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
 import { getSimilarJobs } from '@/lib/similarJobs'
 import { getEmployerProfile } from '@/lib/employerProfile'
-import { matchRoleCategory, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
+import { matchRoleCategory, getRoleKeywords, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
 import { resolveStateName, stateToSlug } from '@/lib/usStates'
 import { getRoleLocationStats } from '@/lib/roleLocationStats'
 import { Metadata } from 'next'
@@ -297,7 +297,7 @@ export default async function JobDetailPage({
   const stateName = resolveStateName(job.addressRegion)
   const roleStats =
     roleMatch && stateName
-      ? await getRoleLocationStats(roleMatch.keywords, stateName)
+      ? await getRoleLocationStats(getRoleKeywords(roleMatch), stateName)
       : null
 
       const salaryComparison = roleStats
@@ -305,7 +305,7 @@ export default async function JobDetailPage({
   : null
 
       const similarJobs = roleMatch
-  ? await getSimilarJobs(roleMatch.keywords, job.addressRegion, job.id, 4)
+  ? await getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
   : []
 
   const employerProfile = job.company

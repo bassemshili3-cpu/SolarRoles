@@ -164,7 +164,7 @@ export default async function SchoolNurseJobsPage({ searchParams }: any) {
           </aside>
           <div className="flex-1">
 
-            <AIJobMatcherWrapper />
+            
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList

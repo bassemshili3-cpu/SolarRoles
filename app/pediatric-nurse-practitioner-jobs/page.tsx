@@ -374,7 +374,7 @@ export default async function PediatricNursePractitionerJobsPage({ searchParams 
             <JobFilters defaultWhat="pediatric nurse practitioner" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense
               fallback={
                 <div className="animate-pulse bg-gray-100 rounded-lg h-96" />

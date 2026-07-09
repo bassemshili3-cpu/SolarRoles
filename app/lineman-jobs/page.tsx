@@ -237,7 +237,7 @@ export default async function LinemanJobsPage({ searchParams }: any) {
             <JobFilters defaultWhat="lineman" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'lineman'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>

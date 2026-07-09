@@ -145,7 +145,7 @@ const applicationTips = [
             {/* Count */}
 
             {/* AI Matcher */}
-            <AIJobMatcherWrapper />
+            
 
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList

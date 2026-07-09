@@ -70,7 +70,11 @@ export async function searchCareerjetJobs(params: SearchParams): Promise<Careerj
     page: String(params.page || 1),
     page_size: String(params.page_size || 20),
     sort: params.sort || 'relevance',
-    fragment_size: '300',
+    // 3000 au lieu de 300 : un fragment trop court coupait la description avant
+    // la mention du salaire (quand elle existe en fin d'annonce), ce qui faisait
+    // rater extractSalaryFromText à l'ingestion ET affichait une description
+    // tronquée en plein milieu de phrase sur la page de détail.
+    fragment_size: '3000',
     user_ip: userIp,
     user_agent: userAgent,
   })

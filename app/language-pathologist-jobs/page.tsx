@@ -251,7 +251,7 @@ export default async function LanguagePathologistJobsPage({ searchParams }: any)
             <JobFilters defaultWhat="language pathologist" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'language pathologist'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>

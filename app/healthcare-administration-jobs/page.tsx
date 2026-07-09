@@ -135,7 +135,7 @@ export default async function HealthcareAdministrationJobsPage({ searchParams }:
             {/* ✅ Count ici, à droite, au-dessus de la map */}
 
             {/* Client wrapper isolé — pas de use client sur la page */}
-            <AIJobMatcherWrapper />
+            
 
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList

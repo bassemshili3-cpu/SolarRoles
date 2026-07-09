@@ -268,7 +268,7 @@ export default async function PublicWorksCommissionJobsPage({ searchParams }: an
             <JobFilters defaultWhat="public works commission" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList
                 what={params.what || 'public works commission'}

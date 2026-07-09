@@ -423,7 +423,7 @@ export default async function PhysicianAssistantJobsPage({ searchParams }: any) 
             <JobFilters defaultWhat="physician assistant" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'physician assistant'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>

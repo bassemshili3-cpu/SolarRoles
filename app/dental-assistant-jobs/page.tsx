@@ -191,7 +191,7 @@ export default async function DentalAssistantJobsPage({ searchParams }: any) {
           <div className="flex-1">
 
            {/* Client wrapper isolé — pas de use client sur la page */}
-                      <AIJobMatcherWrapper />
+                      
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList

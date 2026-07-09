@@ -232,7 +232,7 @@ export default async function JobsFor14YearOldsPage({ searchParams }: any) {
             <JobFilters defaultWhat="jobs for 14 year olds" />
           </aside>
           <div className="flex-1">
-            <AIJobMatcherWrapper />
+            
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'jobs for 14 year olds'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>
