@@ -361,7 +361,7 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
           href={backUrl}
           className="flex items-center gap-2 text-muted-foreground hover:text-primary mb-8"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to jobs
+          
         </Link>
 
         {/* ── Layout 2 colonnes ── */}
