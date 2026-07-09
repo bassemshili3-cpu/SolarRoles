@@ -344,7 +344,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
       <div
         onClick={close}
         aria-hidden="true"
-        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 md:hidden ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       />
@@ -352,13 +352,13 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
       {/* Panneau : drawer plein ecran depuis la droite sur mobile, sidebar sticky sur desktop */}
       <div
         className={`
-          fixed top-0 right-0 z-50 h-full w-[85vw] max-w-sm
-          bg-card border-l shadow-2xl overflow-y-auto
+          fixed top-0 right-0 z-[70] h-full w-[85vw] max-w-sm
+          bg-white dark:bg-neutral-950 border-l shadow-2xl overflow-y-auto
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
           md:sticky md:top-20 md:right-auto md:z-auto md:h-auto
           md:w-auto md:max-w-none md:translate-x-0 md:transition-none
-          md:rounded-2xl md:border md:border-l md:shadow-lg
+          md:bg-card md:rounded-2xl md:border md:border-l md:shadow-lg
           md:max-h-[calc(100vh-6rem)]
         `}
       >
