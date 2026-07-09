@@ -77,9 +77,9 @@
 
 body {
     font-feature-settings: "kern" 1, "tnum" 1;
-    overflow-x: hidden; /* ← ajoute ça */
+    overflow-x: clip; /* evite le scroll horizontal sans casser position: sticky */
   }
 
   html {
-    overflow-x: hidden; /* ← et ça */
+    overflow-x: clip; /* idem */
   }

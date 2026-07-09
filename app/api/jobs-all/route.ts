@@ -13,17 +13,25 @@ export async function GET(request: NextRequest) {
     const whereClause = buildJobWhere(parseJobWhereParams(searchParams))
 
     const [dbJobs, count] = await Promise.all([
-      prisma.job.findMany({
-        where: whereClause,
-        orderBy: [
-          { sourcePriority: 'asc' },
-          { fetchedAt: 'desc' },
-        ],
-        skip: (page - 1) * resultsPerPage,
-        take: resultsPerPage,
-      }),
-      prisma.job.count({ where: whereClause }),
-    ])
+  prisma.job.findMany({
+    where: whereClause,
+    select: {
+      id: true, title: true, company: true, location: true,
+      addressRegion: true, url: true, applyUrl: true,
+      salaryMin: true, salaryMax: true, salary: true,
+      contractType: true, contractTime: true, source: true, postedAt: true,
+      // description volontairement exclu ici : trop lourd pour une liste,
+      // à fetcher uniquement sur la page détail du job
+    },
+    orderBy: [
+      { sourcePriority: 'asc' },
+      { fetchedAt: 'desc' },
+    ],
+    skip: (page - 1) * resultsPerPage,
+    take: resultsPerPage,
+  }),
+  prisma.job.count({ where: whereClause }),
+])
 
     const results = dbJobs.map((job) => ({
       id:            job.id,
@@ -31,7 +39,6 @@ export async function GET(request: NextRequest) {
       company:       job.company,
       location:      job.location,
       addressRegion: job.addressRegion,
-      description:   job.description,
       url:           job.url,
       applyUrl:      job.applyUrl,
       apply_url:     job.applyUrl,
