@@ -17,15 +17,29 @@ type AIFilters = {
 export default function JobsPage() {
   const searchParams = useSearchParams()
 
-  const initialWhat     = searchParams.get('what')       || ''
-  const initialWhere    = searchParams.get('where')      || ''
+  const initialWhat      = searchParams.get('what')       || ''
+  const initialWhere     = searchParams.get('where')      || ''
   const initialSalaryMin = searchParams.get('salary_min')
     ? Number(searchParams.get('salary_min'))
     : undefined
 
-  const [aiFilters, setAiFilters]     = useState<AIFilters | null>(null)
-  const [jobCount, setJobCount]       = useState<number | null>(null)
+  const [aiFilters, setAiFilters]       = useState<AIFilters | null>(null)
+  const [jobCount, setJobCount]         = useState<number | null>(null)
   const [loadingCount, setLoadingCount] = useState(true)
+
+  // Calculs des valeurs effectives une seule fois, réutilisés partout
+  const effectiveWhat =
+    aiFilters?.title ||
+    (aiFilters?.keywords?.length ? aiFilters.keywords.join(' ') : initialWhat)
+
+  const effectiveWhere = aiFilters?.location || initialWhere
+
+  const effectiveSalaryMin =
+    aiFilters?.minSalary !== undefined ? aiFilters.minSalary : initialSalaryMin
+
+  // Cle stable basee sur les VALEURS, pas sur la reference de aiFilters :
+  // le useEffect ne se redeclenche que si le resultat de la recherche change reellement
+  const effectiveQueryKey = `${effectiveWhat}|${effectiveWhere}|${effectiveSalaryMin ?? ''}`
 
   useEffect(() => {
     async function loadCount() {
@@ -33,22 +47,14 @@ export default function JobsPage() {
 
       const query = new URLSearchParams(searchParams.toString())
 
-      const effectiveWhat =
-        aiFilters?.title ||
-        (aiFilters?.keywords?.length ? aiFilters.keywords.join(' ') : initialWhat)
+      if (effectiveWhat) query.set('what', effectiveWhat)
+      else                query.delete('what')
 
-      const effectiveWhere    = aiFilters?.location || initialWhere
-      const effectiveSalaryMin =
-        aiFilters?.minSalary !== undefined ? aiFilters.minSalary : initialSalaryMin
-
-      if (effectiveWhat)          query.set('what',       effectiveWhat)
-      else                        query.delete('what')
-
-      if (effectiveWhere)         query.set('where',      effectiveWhere)
-      else                        query.delete('where')
+      if (effectiveWhere) query.set('where', effectiveWhere)
+      else                 query.delete('where')
 
       if (effectiveSalaryMin !== undefined) query.set('salary_min', String(effectiveSalaryMin))
-      else                                  query.delete('salary_min')
+      else                                   query.delete('salary_min')
 
       try {
         const res = await fetch(`/api/jobs-count?${query.toString()}`)
@@ -64,20 +70,8 @@ export default function JobsPage() {
     }
 
     loadCount()
-  }, [initialWhat, initialWhere, initialSalaryMin, aiFilters, searchParams.toString()])
-
-  const effectiveWhat =
-    aiFilters?.title ||
-    (aiFilters?.keywords?.length ? aiFilters.keywords.join(' ') : initialWhat)
-
-  const effectiveWhere = aiFilters?.location || initialWhere
-
-  const effectiveSalaryMin =
-    aiFilters?.minSalary !== undefined
-      ? String(aiFilters.minSalary)
-      : initialSalaryMin !== undefined
-        ? String(initialSalaryMin)
-        : undefined
+  }, [effectiveQueryKey]) // <- plus besoin d'inclure aiFilters/initialWhat/etc. séparément,
+                           //    effectiveQueryKey les résume déjà tous
 
   const displayWhat =
     aiFilters?.title ||
@@ -114,7 +108,7 @@ export default function JobsPage() {
           <JobList
             what={effectiveWhat}
             where={effectiveWhere}
-            salary_min={effectiveSalaryMin}
+            salary_min={effectiveSalaryMin?.toString()}
           />
         </div>
       </div>

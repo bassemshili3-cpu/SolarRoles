@@ -4,7 +4,8 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
-import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
+import { searchMergedJobs } from '@/lib/merged-search'
+
 export const revalidate = 3600
 
 const FIFO_KEYWORDS = [
@@ -137,10 +138,12 @@ export default async function FifoJobsPage({ searchParams }: any) {
   // Sinon, on passe l'array de keywords FIFO pour matcher toutes les variantes seedées
   const whatQuery = params.what || FIFO_KEYWORDS
 
-    const [{ count }, initialData] = await Promise.all([
-    getMergedJobCount({ what: params.what || 'fly in fly out mining', where: params.where || '' }),
-    searchMergedJobs({ what: params.what || 'fly in fly out mining', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-  ])
+    const initialData = await searchMergedJobs({
+  what: params.what || 'fly in fly out mining',
+   where: params.where || '',
+   results_per_page: 30,
+   salary_min: params.salary_min ? Number(params.salary_min) : undefined,
+ })
 
   return (
     <>
@@ -149,15 +152,13 @@ export default async function FifoJobsPage({ searchParams }: any) {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Fly In Fly Out Jobs Available Now</h1>
-          <p className="text-gray-700">
-            FIFO work is one of the fastest ways to earn well without relocating. Mining, oil and gas, remote construction, and camp services are all hiring. Rotations, pay structures, and requirements vary significantly by industry and employer. The listings below are updated regularly.
-          </p>
+          
         </header>
 
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80"><JobFilters defaultWhat="fly in fly out mining" /></aside>
           <div className="flex-1">
-            {count > 0 && <p className="text-sm text-gray-500 mb-4"><span className="font-semibold text-gray-800">{count.toLocaleString('en-US')}</span> positions available</p>}
+            
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
               <InfiniteJobList what={params.what || 'fly in fly out mining'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
