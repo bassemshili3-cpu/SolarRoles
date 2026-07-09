@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Providers } from './providers'
+import { FilterDrawerProvider } from '@/contexts/filter-drawer-context'
 import CookieBanner from '@/components/CookieBanner'
 import { Analytics } from "@vercel/analytics/next"
 
@@ -14,7 +15,6 @@ export const metadata = {
   title: 'Oh My Job - Smart Job Search USA',
   description: 'Search and compare real job listings across the U.S. Salary ranges shown upfront — no account or sign-up required.',
   metadataBase: new URL(SITE_URL),
-  // app/icon.svg is auto-discovered by Next.js App Router — no manual icon entry needed
 }
 
 const organizationJsonLd = {
@@ -48,10 +48,12 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Providers>
-          <CookieBanner />
-          <Navbar />
-          {children}
-          <Footer />
+          <FilterDrawerProvider>
+            <CookieBanner />
+            <Navbar />
+            {children}
+            <Footer />
+          </FilterDrawerProvider>
         </Providers>
         <Analytics/>
       </body>

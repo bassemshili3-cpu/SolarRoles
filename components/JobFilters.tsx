@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
+import { useFilterDrawer } from '@/contexts/filter-drawer-context'
 
 import { useState, useEffect, useRef } from 'react'
 import {
@@ -216,6 +217,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const { isOpen, close } = useFilterDrawer()
 
   // Search
   const [keywords, setKeywords] = useState('')
@@ -273,6 +275,21 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Lock du scroll body + fermeture via Echap quand le drawer mobile est ouvert
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+      const handleEsc = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') close()
+      }
+      document.addEventListener('keydown', handleEsc)
+      return () => {
+        document.body.style.overflow = ''
+        document.removeEventListener('keydown', handleEsc)
+      }
+    }
+  }, [isOpen, close])
+
   // Helpers
   const toggleArr = (arr: string[], val: string, set: (v: string[]) => void) =>
     set(arr.includes(val) ? arr.filter(t => t !== val) : [...arr, val])
@@ -294,6 +311,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     const qs = params.toString()
     router.push(`${pathname}${qs ? `?${qs}` : ''}`)
     router.refresh()
+    close() // referme le drawer sur mobile apres la recherche (no-op sur desktop)
   }
 
   const clearFilters = () => {
@@ -311,6 +329,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     setVisaSponsorship(false)
     router.push(defaultWhat ? `${pathname}?what=${encodeURIComponent(defaultWhat)}` : pathname)
     router.refresh()
+    close()
   }
 
   const activeCount = [
@@ -320,233 +339,265 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   ].filter(Boolean).length
 
   return (
-    <div className="sticky top-20 space-y-0 bg-card rounded-2xl border shadow-lg overflow-y-auto max-h-[calc(100vh-6rem)]">
+    <>
+      {/* Backdrop - visible uniquement sur mobile quand le drawer est ouvert */}
+      <div
+        onClick={close}
+        aria-hidden="true"
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 md:hidden ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
 
-      {/* Header */}
-      <div className="p-4 md:p-5 pb-0">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-bold text-foreground">Filter Jobs</h2>
-          {activeCount > 0 && (
-            <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5 font-semibold">
-              {activeCount}
-            </span>
-          )}
+      {/* Panneau : drawer plein ecran depuis la droite sur mobile, sidebar sticky sur desktop */}
+      <div
+        className={`
+          fixed top-0 right-0 z-50 h-full w-[85vw] max-w-sm
+          bg-card border-l shadow-2xl overflow-y-auto
+          transition-transform duration-300 ease-in-out
+          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+          md:sticky md:top-20 md:right-auto md:z-auto md:h-auto
+          md:w-auto md:max-w-none md:translate-x-0 md:transition-none
+          md:rounded-2xl md:border md:border-l md:shadow-lg
+          md:max-h-[calc(100vh-6rem)]
+        `}
+      >
+        {/* Header */}
+        <div className="p-4 md:p-5 pb-0">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-foreground">Filter Jobs</h2>
+            <div className="flex items-center gap-2">
+              {activeCount > 0 && (
+                <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5 font-semibold">
+                  {activeCount}
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={close}
+                aria-label="Fermer les filtres"
+                className="md:hidden p-1.5 -mr-1.5 rounded-lg hover:bg-accent transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Keywords */}
+          <div className="relative mb-2">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Job title, keywords, or company"
+              value={keywords}
+              onChange={e => setKeywords(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && applyFilters()}
+              className="w-full pl-10 pr-4 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+            />
+          </div>
+
+          {/* Location */}
+          <div className="relative mb-4" ref={locationInputRef}>
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="City, State, or Remote"
+              value={location}
+              onChange={e => setLocation(e.target.value)}
+              onFocus={() => location.length > 0 && setShowSuggestions(true)}
+              onKeyDown={e => e.key === 'Enter' && applyFilters()}
+              className="w-full pl-10 pr-8 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+            />
+            {location && (
+              <button
+                onClick={() => setLocation('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <div className="absolute z-[100] w-full mt-1 rounded-lg shadow-2xl max-h-64 overflow-y-auto bg-white border border-gray-200">
+                {filteredSuggestions.map((loc, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setLocation(loc); setShowSuggestions(false) }}
+                    className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-blue-50 border-b border-gray-100 last:border-b-0 text-gray-900"
+                  >
+                    <MapPin className="h-4 w-4 flex-shrink-0 text-gray-400" />
+                    <span className="truncate font-medium">{loc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Button
+            onClick={applyFilters}
+            className="w-full py-2.5 text-sm font-semibold active:scale-[0.97] transition-all"
+          >
+            <Search className="h-4 w-4 mr-2" />
+            Search Jobs
+          </Button>
         </div>
 
-        {/* Keywords */}
-        <div className="relative mb-2">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Job title, keywords, or company"
-            value={keywords}
-            onChange={e => setKeywords(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && applyFilters()}
-            className="w-full pl-10 pr-4 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
-          />
-        </div>
+        {/* Filter sections */}
+        <div className="p-4 md:p-5 space-y-0">
 
-        {/* Location */}
-        <div className="relative mb-4" ref={locationInputRef}>
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="City, State, or Remote"
-            value={location}
-            onChange={e => setLocation(e.target.value)}
-            onFocus={() => location.length > 0 && setShowSuggestions(true)}
-            onKeyDown={e => e.key === 'Enter' && applyFilters()}
-            className="w-full pl-10 pr-8 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
-          />
-          {location && (
-            <button
-              onClick={() => setLocation('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-          {showSuggestions && filteredSuggestions.length > 0 && (
-            <div className="absolute z-[100] w-full mt-1 rounded-lg shadow-2xl max-h-64 overflow-y-auto bg-white border border-gray-200">
-              {filteredSuggestions.map((loc, i) => (
+          {/* Date Posted */}
+          <Section icon={<Clock className="h-4 w-4" />} title="Date Posted">
+            {DATE_OPTIONS.map(opt => (
+              <RadioOption
+                key={opt.value}
+                label={opt.label}
+                checked={postedWithin === opt.value}
+                onChange={() => setPostedWithin(p => (p === opt.value ? '' : opt.value))}
+              />
+            ))}
+          </Section>
+
+          {/* Job Type */}
+          <Section icon={<Briefcase className="h-4 w-4" />} title="Job Type">
+            {JOB_TYPES.map(type => (
+              <CheckOption
+                key={type}
+                label={type}
+                checked={jobTypes.includes(type)}
+                onChange={() => toggleArr(jobTypes, type, setJobTypes)}
+              />
+            ))}
+          </Section>
+
+          {/* Work Arrangement */}
+          <Section icon={<Monitor className="h-4 w-4" />} title="Work Arrangement">
+            {ARRANGEMENTS.map(arr => (
+              <CheckOption
+                key={arr}
+                label={arr}
+                checked={arrangements.includes(arr)}
+                onChange={() => toggleArr(arrangements, arr, setArrangements)}
+              />
+            ))}
+          </Section>
+
+          {/* Salary */}
+          <Section icon={<DollarSign className="h-4 w-4" />} title="Minimum Salary">
+            <div className="py-2 px-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl">
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground whitespace-nowrap">$0</span>
+                <div className="flex-1">
+                  <Slider
+                    value={[salary]}
+                    onValueChange={v => setSalary(v[0])}
+                    min={0}
+                    max={300000}
+                    step={5000}
+                    className="py-2"
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">$300k</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-center bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
+              <div className="text-center">
+                <div className="text-xs text-muted-foreground uppercase tracking-wide">Min.</div>
+                <div className="text-xl font-semibold text-primary">${salary.toLocaleString('en-US')}</div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {[50000, 75000, 100000, 125000, 150000, 200000].map(p => (
                 <button
-                  key={i}
-                  onClick={() => { setLocation(loc); setShowSuggestions(false) }}
-                  className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-blue-50 border-b border-gray-100 last:border-b-0 text-gray-900"
+                  key={p}
+                  onClick={() => setSalary(p === salary ? 0 : p)}
+                  className={`text-xs px-2.5 py-1 rounded-full transition-all ${
+                    salary === p
+                      ? 'bg-primary text-primary-foreground font-semibold'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
                 >
-                  <MapPin className="h-4 w-4 flex-shrink-0 text-gray-400" />
-                  <span className="truncate font-medium">{loc}</span>
+                  ${p / 1000}k
                 </button>
               ))}
             </div>
-          )}
+          </Section>
+
+          {/* Experience Level */}
+          <Section icon={<TrendingUp className="h-4 w-4" />} title="Experience Level">
+            {EXPERIENCE_LEVELS.map(opt => (
+              <RadioOption
+                key={opt.value}
+                label={opt.label}
+                checked={experience === opt.value}
+                onChange={() => setExperience(p => (p === opt.value ? '' : opt.value))}
+              />
+            ))}
+          </Section>
+
+          {/* Education */}
+          <Section icon={<GraduationCap className="h-4 w-4" />} title="Education Required" defaultOpen={false}>
+            {EDUCATION_LEVELS.map(opt => (
+              <RadioOption
+                key={opt.value}
+                label={opt.label}
+                checked={education === opt.value}
+                onChange={() => setEducation(p => (p === opt.value ? '' : opt.value))}
+              />
+            ))}
+          </Section>
+
+          {/* Company Size */}
+          <Section icon={<Building2 className="h-4 w-4" />} title="Company Size" defaultOpen={false}>
+            {COMPANY_SIZES.map(size => (
+              <CheckOption
+                key={size}
+                label={size}
+                checked={companySizes.includes(size)}
+                onChange={() => toggleArr(companySizes, size, setCompanySizes)}
+              />
+            ))}
+          </Section>
+
+          {/* Benefits */}
+          <Section icon={<Gift className="h-4 w-4" />} title="Benefits & Perks" defaultOpen={false}>
+            {BENEFITS.map(b => (
+              <CheckOption
+                key={b}
+                label={b}
+                checked={benefits.includes(b)}
+                onChange={() => toggleArr(benefits, b, setBenefits)}
+              />
+            ))}
+          </Section>
+
+          {/* Quick Filters */}
+          <Section icon={<Zap className="h-4 w-4" />} title="Quick Filters">
+            <CheckOption
+              label="Easy Apply"
+              checked={easyApply}
+              onChange={() => setEasyApply(v => !v)}
+            />
+            <CheckOption
+              label="Visa Sponsorship"
+              checked={visaSponsorship}
+              onChange={() => setVisaSponsorship(v => !v)}
+            />
+          </Section>
+
         </div>
 
-        <Button
-          onClick={applyFilters}
-          className="w-full py-2.5 text-sm font-semibold active:scale-[0.97] transition-all"
-        >
-          <Search className="h-4 w-4 mr-2" />
-          Search Jobs
-        </Button>
-      </div>
-
-      {/* Filter sections */}
-      <div className="p-4 md:p-5 space-y-0">
-
-        {/* Date Posted */}
-        <Section icon={<Clock className="h-4 w-4" />} title="Date Posted">
-          {DATE_OPTIONS.map(opt => (
-            <RadioOption
-              key={opt.value}
-              label={opt.label}
-              checked={postedWithin === opt.value}
-              onChange={() => setPostedWithin(p => (p === opt.value ? '' : opt.value))}
-            />
-          ))}
-        </Section>
-
-        {/* Job Type */}
-        <Section icon={<Briefcase className="h-4 w-4" />} title="Job Type">
-          {JOB_TYPES.map(type => (
-            <CheckOption
-              key={type}
-              label={type}
-              checked={jobTypes.includes(type)}
-              onChange={() => toggleArr(jobTypes, type, setJobTypes)}
-            />
-          ))}
-        </Section>
-
-        {/* Work Arrangement */}
-        <Section icon={<Monitor className="h-4 w-4" />} title="Work Arrangement">
-          {ARRANGEMENTS.map(arr => (
-            <CheckOption
-              key={arr}
-              label={arr}
-              checked={arrangements.includes(arr)}
-              onChange={() => toggleArr(arrangements, arr, setArrangements)}
-            />
-          ))}
-        </Section>
-
-        {/* Salary */}
-        <Section icon={<DollarSign className="h-4 w-4" />} title="Minimum Salary">
-          <div className="py-2 px-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl">
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-muted-foreground whitespace-nowrap">$0</span>
-              <div className="flex-1">
-                <Slider
-                  value={[salary]}
-                  onValueChange={v => setSalary(v[0])}
-                  min={0}
-                  max={300000}
-                  step={5000}
-                  className="py-2"
-                />
-              </div>
-              <span className="text-xs text-muted-foreground whitespace-nowrap">$300k</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-center bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
-            <div className="text-center">
-              <div className="text-xs text-muted-foreground uppercase tracking-wide">Min.</div>
-              <div className="text-xl font-semibold text-primary">${salary.toLocaleString('en-US')}</div>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {[50000, 75000, 100000, 125000, 150000, 200000].map(p => (
-              <button
-                key={p}
-                onClick={() => setSalary(p === salary ? 0 : p)}
-                className={`text-xs px-2.5 py-1 rounded-full transition-all ${
-                  salary === p
-                    ? 'bg-primary text-primary-foreground font-semibold'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                }`}
-              >
-                ${p / 1000}k
-              </button>
-            ))}
-          </div>
-        </Section>
-
-        {/* Experience Level */}
-        <Section icon={<TrendingUp className="h-4 w-4" />} title="Experience Level">
-          {EXPERIENCE_LEVELS.map(opt => (
-            <RadioOption
-              key={opt.value}
-              label={opt.label}
-              checked={experience === opt.value}
-              onChange={() => setExperience(p => (p === opt.value ? '' : opt.value))}
-            />
-          ))}
-        </Section>
-
-        {/* Education */}
-        <Section icon={<GraduationCap className="h-4 w-4" />} title="Education Required" defaultOpen={false}>
-          {EDUCATION_LEVELS.map(opt => (
-            <RadioOption
-              key={opt.value}
-              label={opt.label}
-              checked={education === opt.value}
-              onChange={() => setEducation(p => (p === opt.value ? '' : opt.value))}
-            />
-          ))}
-        </Section>
-
-        {/* Company Size */}
-        <Section icon={<Building2 className="h-4 w-4" />} title="Company Size" defaultOpen={false}>
-          {COMPANY_SIZES.map(size => (
-            <CheckOption
-              key={size}
-              label={size}
-              checked={companySizes.includes(size)}
-              onChange={() => toggleArr(companySizes, size, setCompanySizes)}
-            />
-          ))}
-        </Section>
-
-        {/* Benefits */}
-        <Section icon={<Gift className="h-4 w-4" />} title="Benefits & Perks" defaultOpen={false}>
-          {BENEFITS.map(b => (
-            <CheckOption
-              key={b}
-              label={b}
-              checked={benefits.includes(b)}
-              onChange={() => toggleArr(benefits, b, setBenefits)}
-            />
-          ))}
-        </Section>
-
-        {/* Quick Filters */}
-        <Section icon={<Zap className="h-4 w-4" />} title="Quick Filters">
-          <CheckOption
-            label="Easy Apply"
-            checked={easyApply}
-            onChange={() => setEasyApply(v => !v)}
-          />
-          <CheckOption
-            label="Visa Sponsorship"
-            checked={visaSponsorship}
-            onChange={() => setVisaSponsorship(v => !v)}
-          />
-        </Section>
+        {/* Footer */}
+        <div className="p-4 md:p-5 pt-2">
+          <Button
+            variant="outline"
+            onClick={clearFilters}
+            className="w-full text-sm active:scale-[0.97] transition-all"
+          >
+            {activeCount > 0 ? `Clear ${activeCount} filter${activeCount > 1 ? 's' : ''}` : 'Clear All Filters'}
+          </Button>
+        </div>
 
       </div>
-
-      {/* Footer */}
-      <div className="p-4 md:p-5 pt-2">
-        <Button
-          variant="outline"
-          onClick={clearFilters}
-          className="w-full text-sm active:scale-[0.97] transition-all"
-        >
-          {activeCount > 0 ? `Clear ${activeCount} filter${activeCount > 1 ? 's' : ''}` : 'Clear All Filters'}
-        </Button>
-      </div>
-
-    </div>
+    </>
   )
 }
 
