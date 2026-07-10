@@ -191,7 +191,7 @@ const faqs = [
   {
     question: 'Is customer service a dying field because of AI and automation?',
     answer:
-      'Chatbots have absorbed a chunk of simple, repetitive inquiries like order tracking and password resets. But every time automation handles the easy questions, the remaining ones that reach a human get harder. Companies still need people who can navigate complex situations, show genuine empathy, and make judgment calls that a script cannot cover. The role is evolving, not disappearing.',
+      'Chatbots have absorbed a chunk of simple, repetitive inquiries like order tracking and password resets. But every time automation handles the easy questions, the remaining ones that reach a human get harder. Companies still need people who can navigate complex situations, show genuine empathy, and make judgment calls that a script cannot cover.',
   },
   {
     question: 'Can customer service experience lead to career advancement?',
@@ -207,14 +207,14 @@ const faqs = [
 
 const tips = [
   {
-    title: 'Lead Your Resume With Numbers, Not Adjectives',
+    title: 'Lead Your Resume With Numbers',
     description:
       'Every applicant writes "excellent communicator" and "team player." What stands out is specificity: "Handled 80+ inbound calls per shift with a 94% satisfaction rating." Even if your numbers are approximate, they signal that you understand what the job actually measures.',
   },
   {
     title: 'Prepare Three Stories Before the Interview',
     description:
-      'Customer service interviews run on scenario questions. "Tell me about a time you dealt with an angry customer." "Describe a situation where you went above and beyond." Have three concrete stories ready, structured as situation, action, result. Rehearse them out loud until they sound natural, not memorized.',
+      'Customer service interviews run on scenario questions. "Tell me about a time you dealt with an angry customer." "Describe a situation where you went above and beyond." Have three concrete stories ready, structured as situation, action, result. Rehearse them out loud until they sound natural.',
   },
   {
     title: 'Learn One CRM Tool Before You Apply',

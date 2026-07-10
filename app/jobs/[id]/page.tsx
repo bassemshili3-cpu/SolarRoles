@@ -7,6 +7,8 @@ import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBread
 import { getSimilarJobs } from '@/lib/similarJobs'
 import { getEmployerProfile } from '@/lib/employerProfile'
 import { matchRoleCategory, getRoleKeywords, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
+import { getRoleDemandByState } from '@/lib/roleDemandByState'
+import RoleDemandMap from '@/components/RoleDemandMap'
 import { resolveStateName, stateToSlug } from '@/lib/usStates'
 import { getRoleLocationStats } from '@/lib/roleLocationStats'
 import { Metadata } from 'next'
@@ -308,6 +310,10 @@ export default async function JobDetailPage({
   ? await getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
   : []
 
+      const roleDemand = roleMatch
+  ? await getRoleDemandByState(getRoleKeywords(roleMatch))
+  : []
+
   const employerProfile = job.company
     ? await getEmployerProfile(job.company, job.id)
     : null
@@ -533,6 +539,11 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
               </div>
             )}
 
+{/* Carte de densité des offres par état pour ce métier */}
+{roleMatch && (
+  <RoleDemandMap data={roleDemand} roleLabel={roleMatch.label} />
+)}
+
 {/* Profil employeur : vue transversale toutes sources confondues */}
 {employerProfile && (
   <div className="mt-8 rounded-xl border p-5 text-sm">
@@ -597,12 +608,12 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
         <li key={sj.id}>
           <Link
             href={`/jobs/${sj.id}`}
-            className="flex items-center gap-3 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
+            className="group flex items-center gap-3 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
           >
             <CompanyLogo company={sj.company || ''} />
 
             <div className="min-w-0 flex-1">
-              <p className="font-medium truncate">{sj.title}</p>
+              <p className="font-medium truncate group-hover:text-blue-600 transition-colors">{sj.title}</p>
               <p className="text-xs text-muted-foreground truncate">
                 {sj.company}{sj.location ? ` • ${sj.location}` : ''}
               </p>

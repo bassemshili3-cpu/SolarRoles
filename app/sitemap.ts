@@ -38,7 +38,6 @@ const landingPages: string[] = [
   '/oil-rig-jobs',
   '/pharmacy-technician-jobs',
   '/project-manager-jobs',
-  '/amgen-jobs',
   '/armed-security-jobs',
   '/city-of-reno-jobs',
   '/healthcare-administration-jobs',
