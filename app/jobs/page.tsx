@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import JobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
@@ -24,8 +24,10 @@ export default function JobsPage() {
     : undefined
 
   const [aiFilters, setAiFilters]       = useState<AIFilters | null>(null)
-  const [jobCount, setJobCount]         = useState<number | null>(null)
-  const [loadingCount, setLoadingCount] = useState(true)
+  
+
+
+
 
   // Calculs des valeurs effectives une seule fois, réutilisés partout
   const effectiveWhat =
@@ -39,43 +41,10 @@ export default function JobsPage() {
 
   // Cle stable basee sur les VALEURS, pas sur la reference de aiFilters :
   // le useEffect ne se redeclenche que si le resultat de la recherche change reellement
-  const effectiveQueryKey = `${effectiveWhat}|${effectiveWhere}|${effectiveSalaryMin ?? ''}`
+ 
 
-  useEffect(() => {
-    async function loadCount() {
-      setLoadingCount(true)
 
-      const query = new URLSearchParams(searchParams.toString())
 
-      if (effectiveWhat) query.set('what', effectiveWhat)
-      else                query.delete('what')
-
-      if (effectiveWhere) query.set('where', effectiveWhere)
-      else                 query.delete('where')
-
-      if (effectiveSalaryMin !== undefined) query.set('salary_min', String(effectiveSalaryMin))
-      else                                   query.delete('salary_min')
-
-      try {
-        const res = await fetch(`/api/jobs-count?${query.toString()}`)
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = await res.json()
-        setJobCount(data.count ?? 0)
-      } catch (err) {
-        console.error('Error loading count:', err)
-        setJobCount(0)
-      } finally {
-        setLoadingCount(false)
-      }
-    }
-
-    loadCount()
-  }, [effectiveQueryKey]) // <- plus besoin d'inclure aiFilters/initialWhat/etc. séparément,
-                           //    effectiveQueryKey les résume déjà tous
-
-  const displayWhat =
-    aiFilters?.title ||
-    (aiFilters?.keywords?.length ? aiFilters.keywords.join(', ') : initialWhat)
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
@@ -85,21 +54,8 @@ export default function JobsPage() {
         </aside>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-gray-500 mb-4">
-            {loadingCount ? (
-              'Loading number of positions...'
-            ) : jobCount !== null && jobCount > 0 ? (
-              <>
-                <span className="font-semibold text-gray-800">
-                  {jobCount.toLocaleString('en-US')}
-                </span>{' '}
-                positions available
-                {displayWhat ? ` for "${displayWhat}"` : ''}
-              </>
-            ) : (
-              'No positions found matching the criteria.'
-            )}
-          </p>
+          
+
 
           <AIJobMatcher onFiltersChange={setAiFilters} />
 

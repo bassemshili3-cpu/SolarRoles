@@ -8,6 +8,7 @@ import { ArrowLeft, DollarSign, MapPin } from 'lucide-react'
 export const revalidate = 86400
 
 const SLUG_TO_TITLE: Record<string, string> = {
+  // ── existant ──
   'registered-nurse': 'Registered Nurse',
   'software-engineer': 'Software Engineer',
   'data-analyst': 'Data Analyst',
@@ -20,6 +21,101 @@ const SLUG_TO_TITLE: Record<string, string> = {
   'customer-service': 'Customer Service',
   'sales-associate': 'Sales Associate',
   'pharmacy-technician': 'Pharmacy Technician',
+
+  // ── tech ──
+  'data-scientist': 'Data Scientist',
+  'devops-engineer': 'DevOps Engineer',
+  'product-manager': 'Product Manager',
+  'ux-designer': 'UX Designer',
+  'it-support': 'IT Support',
+  'cybersecurity': 'Cybersecurity',
+  'cloud-engineer': 'Cloud Engineer',
+
+  // ── santé ──
+  'nursing-assistant': 'Nursing Assistant',
+  'physical-therapist': 'Physical Therapist',
+  'home-health-aide': 'Home Health Aide',
+  'medical-receptionist': 'Medical Receptionist',
+  'mental-health-counselor': 'Mental Health Counselor',
+  'radiologic-technologist': 'Radiologic Technologist',
+  'certified-nursing-assistant': 'Certified Nursing Assistant',
+  'patient-care-technician': 'Patient Care Technician',
+  'patient-transporter': 'Patient Transporter',
+  'pediatric-nurse-practitioner': 'Pediatric Nurse Practitioner',
+  'new-grad-nurse': 'New Grad Nurse',
+  'labor-and-delivery-nurse': 'Labor and Delivery Nurse',
+  'school-nurse': 'School Nurse',
+  'respiratory-therapist': 'Respiratory Therapist',
+  'surgical-tech': 'Surgical Tech',
+  'sterile-processing-technician': 'Sterile Processing Technician',
+  'emt': 'EMT',
+  'ekg-technician': 'EKG Technician',
+  'speech-language-pathologist': 'Speech-Language Pathologist',
+  'assisted-reproductive-technology': 'Assisted Reproductive Technology',
+
+  // ── éducation / petite enfance ──
+  'art-teacher': 'Art Teacher',
+  'substitute-teacher': 'Substitute Teacher',
+  'special-education-teacher': 'Special Education Teacher',
+  'social-studies-teacher': 'Social Studies Teacher',
+  'paraprofessional': 'Paraprofessional',
+  'summer-camp-counselor': 'Summer Camp Counselor',
+  'school-counselor': 'School Counselor',
+  'tutor': 'Tutor',
+  'preschool-teacher': 'Preschool Teacher',
+  'childcare': 'Childcare',
+  'daycare': 'Daycare',
+  'nanny': 'Nanny',
+
+  // ── métiers manuels / terrain ──
+  'plumber': 'Plumber',
+  'carpenter': 'Carpenter',
+  'welder': 'Welder',
+  'auto-mechanic': 'Auto Mechanic',
+  'construction-worker': 'Construction Worker',
+  'landscaper': 'Landscaper',
+  'hvac': 'HVAC',
+  'lineman': 'Lineman',
+  'heavy-equipment-operator': 'Heavy Equipment Operator',
+  'general-labor': 'General Labor',
+  'school-bus-driver': 'School Bus Driver',
+  'fly-in-fly-out-mining': 'Fly In Fly Out Mining',
+  'fly-in-fly-out-oil-gas': 'Fly In Fly Out Oil & Gas',
+
+  // ── business / bureau ──
+  'bookkeeper': 'Bookkeeper',
+  'financial-analyst': 'Financial Analyst',
+  'administrative-assistant': 'Administrative Assistant',
+  'executive-assistant': 'Executive Assistant',
+  'operations-manager': 'Operations Manager',
+  'office-manager': 'Office Manager',
+  'business-analyst': 'Business Analyst',
+  'case-manager': 'Case Manager',
+
+  // ── retail / service ──
+  'cashier': 'Cashier',
+  'retail-manager': 'Retail Manager',
+  'hostess': 'Hostess',
+  'barista': 'Barista',
+  'bartender': 'Bartender',
+  'housekeeping': 'Housekeeping',
+  'dog-walker': 'Dog Walker',
+
+  // ── logistique ──
+  'warehouse-worker': 'Warehouse Worker',
+  'forklift-operator': 'Forklift Operator',
+  'delivery-driver': 'Delivery Driver',
+  'shipping-clerk': 'Shipping Clerk',
+  'inventory-specialist': 'Inventory Specialist',
+
+  // ── marketing / vente ──
+  'marketing-manager': 'Marketing Manager',
+  'digital-marketing': 'Digital Marketing',
+  'content-writer': 'Content Writer',
+  'social-media-manager': 'Social Media Manager',
+  'social-media-supervisor': 'Social Media Supervisor',
+  'account-executive': 'Account Executive',
+  'sales-representative': 'Sales Representative',
 }
 
 function fmt(n: number): string {
