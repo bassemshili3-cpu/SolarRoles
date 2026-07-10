@@ -312,7 +312,7 @@ export default async function JobDetailPage({
       ? getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
       : Promise.resolve([]),
     roleMatch
-      ? getRoleDemandByState(getRoleKeywords(roleMatch))
+      ? getRoleDemandByState(roleMatch.slug)
       : Promise.resolve([]),
     job.company
       ? getEmployerProfile(job.company, job.id)

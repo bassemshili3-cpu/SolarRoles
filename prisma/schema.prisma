@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model JobAlert {
   id         String    @id @default(cuid())
   email      String
@@ -57,4 +58,14 @@ model Job {
   @@index([fetchedAt])
   @@index([title, company])
   @@index([sourcePriority, fetchedAt])
+}
+model RoleStateDemand {
+  id        String   @id @default(cuid())
+  roleSlug  String
+  state     String
+  count     Int
+  updatedAt DateTime @updatedAt
+
+  @@unique([roleSlug, state])
+  @@index([roleSlug])
 }

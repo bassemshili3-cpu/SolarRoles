@@ -87,7 +87,7 @@ export default function RoleDemandMap({ data, roleLabel }: RoleDemandMapProps) {
           aria-labelledby={titleId}
           aria-describedby={descId}
         >
-          <title id={titleId}>{roleLabel} job openings by US state</title>
+        <title id={titleId}>{`${roleLabel} job openings by US state`}</title>
           <desc id={descId}>{svgDescription}</desc>
 
           {Object.entries(US_STATE_PATHS).map(([abbr, { name, d }]) => {
