@@ -24,6 +24,14 @@ export type RoleCategory = {
   label: string
   keywords?: string[]
   keywordGroups?: string[][]
+  // Si true, matchRoleCategory() peut matcher cette catégorie sur le texte de la
+  // description (en plus du titre) quand le titre seul ne suffit pas. À réserver
+  // aux catégories dont les mots-clés sont assez spécifiques pour ne pas générer
+  // de faux positifs sur un long texte libre (ex: 'fly in fly out' + 'mining').
+  // Les catégories à mots-clés génériques combinés (ex: 'operations' + 'manager')
+  // ne doivent PAS activer ce flag : ces deux mots peuvent apparaître incidemment
+  // n'importe où dans une description sans rapport avec le poste réel.
+  matchInDescription?: boolean
 }
 
 export const ROLE_CATEGORIES: RoleCategory[] = [
@@ -184,19 +192,35 @@ export const ROLE_CATEGORIES: RoleCategory[] = [
   {
     slug: 'fly-in-fly-out-mining',
     label: 'Fly In Fly Out Mining',
+    // Ces offres mentionnent quasi systématiquement "FIFO"/"fly in fly out" dans
+    // la description plutôt que dans le titre (ex: "Scanning Technician" avec
+    // "Fly In, Fly Out" + "mining" quelque part dans le texte). D'où le fallback.
+    matchInDescription: true,
     keywordGroups: [
       ['fly in fly out mining'],
       ['fifo mining'],
+      // Variantes où "fly in fly out" et le mot-clé industrie ne sont pas collés,
+      // et où la virgule ("Fly In, Fly Out") casse le match en phrase unique.
+      ['fly in fly out', 'mining'],
+      ['fly in, fly out', 'mining'],
+      ['fifo', 'mining'],
     ],
   },
   {
     slug: 'fly-in-fly-out-oil-gas',
     label: 'Fly In Fly Out Oil & Gas',
+    matchInDescription: true,
     keywordGroups: [
       ['fly in fly out oil & gas'],
       ['fly in fly out oil and gas'],
       ['fifo oil & gas'],
       ['fifo oil and gas'],
+      ['fly in fly out', 'oil'],
+      ['fly in fly out', 'gas'],
+      ['fly in, fly out', 'oil'],
+      ['fly in, fly out', 'gas'],
+      ['fifo', 'oil'],
+      ['fifo', 'gas'],
     ],
   },
 
@@ -365,20 +389,38 @@ function containsWholeWordPhrase(haystack: string, phrase: string): boolean {
   return pattern.test(haystack)
 }
 
-export function matchRoleCategory(title: string): RoleCategory | null {
-  const lower = title.toLowerCase()
+function categoryMatches(category: RoleCategory, haystack: string): boolean {
+  if (category.keywordGroups) {
+    return category.keywordGroups.some((group) =>
+      group.every((kw) => containsWholeWordPhrase(haystack, kw))
+    )
+  }
+  if (category.keywords) {
+    return category.keywords.every((kw) => containsWholeWordPhrase(haystack, kw))
+  }
+  return false
+}
+
+// `description` est optionnel : les appelants qui n'ont qu'un titre libre (ex: les
+// pages /data/salaries/[title]) continuent de fonctionner à l'identique.
+// Passe 1 : titre seul, sur TOUTES les catégories (comportement historique, le
+// plus fiable — un titre est court et ciblé, peu de risque de faux positif).
+// Passe 2 : titre + description, mais UNIQUEMENT sur les catégories qui ont
+// explicitement `matchInDescription: true`, pour éviter qu'une catégorie à
+// mots-clés génériques ne se déclenche sur un mot isolé perdu dans un long texte.
+export function matchRoleCategory(title: string, description?: string): RoleCategory | null {
+  const lowerTitle = title.toLowerCase()
 
   for (const category of ROLE_CATEGORIES) {
-    if (category.keywordGroups) {
-      const matches = category.keywordGroups.some((group) =>
-        group.every((kw) => containsWholeWordPhrase(lower, kw))
-      )
-      if (matches) return category
-      continue
-    }
+    if (categoryMatches(category, lowerTitle)) return category
+  }
 
-    if (category.keywords && category.keywords.every((kw) => containsWholeWordPhrase(lower, kw))) {
-      return category
+  if (description) {
+    const combined = `${title} ${description}`.toLowerCase()
+    for (const category of ROLE_CATEGORIES) {
+      if (category.matchInDescription && categoryMatches(category, combined)) {
+        return category
+      }
     }
   }
 

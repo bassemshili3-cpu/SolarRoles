@@ -295,27 +295,32 @@ export default async function JobDetailPage({
 
   const job = getJobDetailWithSalary(raw)
 
-  const roleMatch = matchRoleCategory(job.title)
+  const roleMatch = matchRoleCategory(job.title, job.description)
   const stateName = resolveStateName(job.addressRegion)
-  const roleStats =
+
+  // ── Requêtes DB indépendantes lancées en parallèle ──────────────────────
+  // Avant : 4 `await` séquentiels = temps total = SOMME des 4 requêtes.
+  // Après : Promise.all = temps total = MAX des 4 requêtes.
+  // Aucune de ces 4 requêtes ne dépend du résultat d'une autre, donc c'est
+  // strictement gagnant. `salaryComparison` (qui dépend de `roleStats`) est
+  // calculé juste après, une fois qu'on a le résultat.
+  const [roleStats, similarJobs, roleDemand, employerProfile] = await Promise.all([
     roleMatch && stateName
-      ? await getRoleLocationStats(getRoleKeywords(roleMatch), stateName)
-      : null
+      ? getRoleLocationStats(getRoleKeywords(roleMatch), stateName)
+      : Promise.resolve(null),
+    roleMatch
+      ? getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
+      : Promise.resolve([]),
+    roleMatch
+      ? getRoleDemandByState(getRoleKeywords(roleMatch))
+      : Promise.resolve([]),
+    job.company
+      ? getEmployerProfile(job.company, job.id)
+      : Promise.resolve(null),
+  ])
 
-      const salaryComparison = roleStats
-  ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary)
-  : null
-
-      const similarJobs = roleMatch
-  ? await getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
-  : []
-
-      const roleDemand = roleMatch
-  ? await getRoleDemandByState(getRoleKeywords(roleMatch))
-  : []
-
-  const employerProfile = job.company
-    ? await getEmployerProfile(job.company, job.id)
+  const salaryComparison = roleStats
+    ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary)
     : null
 
   const salaryReportSlug =
@@ -539,10 +544,7 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
               </div>
             )}
 
-{/* Carte de densité des offres par état pour ce métier */}
-{roleMatch && (
-  <RoleDemandMap data={roleDemand} roleLabel={roleMatch.label} />
-)}
+
 
 {/* Profil employeur : vue transversale toutes sources confondues */}
 {employerProfile && (
@@ -598,6 +600,11 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
   />
 </div>
 
+{/* Carte de densité des offres par état pour ce métier */}
+{roleMatch && (
+  <RoleDemandMap data={roleDemand} roleLabel={roleMatch.label} />
+)}
+
 
 {/* Similar positions */}
 {similarJobs.length > 0 && (
@@ -629,6 +636,8 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
   </div>
 )}
 </div>
+
+
 
  
           {/* ── fin contenu principal ── */}

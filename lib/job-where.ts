@@ -2,16 +2,7 @@
 // Shared Prisma WHERE clause builder — used by /api/jobs-all and /api/jobs-count
 
 import { Prisma } from '@prisma/client'
-const STOPWORDS = new Set([
-  'of', 'in', 'on', 'at', 'to', 'a', 'an', 'the', 'and',
-  'or', 'for', 'with', 'is', 'as', 'by', 'from',
-])
 
-function meaningfulKeywords(what: string): string[] {
-  const all = what.split(/\s+/).filter(Boolean)
-  const filtered = all.filter(kw => kw.length > 2 && !STOPWORDS.has(kw.toLowerCase()))
-  return filtered.length > 0 ? filtered : all
-}
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -124,18 +115,6 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
 
   const AND: Prisma.JobWhereInput[] = []
 
-  // ── Keyword search ──────────────────────────────────────────────────────────
-  if (what) {
-    for (const kw of meaningfulKeywords(what)) {
-      AND.push({
-        OR: [
-          { title:       { contains: kw, mode: 'insensitive' } },
-          { company:     { contains: kw, mode: 'insensitive' } },
-          { description: { contains: kw, mode: 'insensitive' } },
-        ],
-      })
-    }
-  }
 
   // ── Location ────────────────────────────────────────────────────────────────
   if (where) {
