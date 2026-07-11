@@ -11,19 +11,25 @@ export type RoleLocationStat = {
 
 export async function getRoleLocationStats(
   roleKeywords: string[],
-  stateName: string
+  stateName: string,
+  includeDescription = false // true pour les catégories matchInDescription (ex: FIFO)
 ): Promise<RoleLocationStat | null> {
   const stateCode = STATES[stateName]
+
+  const keywordOr = roleKeywords.flatMap((kw) =>
+    includeDescription
+      ? [
+          { title: { contains: kw, mode: 'insensitive' as const } },
+          { description: { contains: kw, mode: 'insensitive' as const } },
+        ]
+      : [{ title: { contains: kw, mode: 'insensitive' as const } }]
+  )
 
   const result = await prisma.job.aggregate({
     where: {
       active: true,
       AND: [
-        {
-          OR: roleKeywords.map((kw) => ({
-            title: { contains: kw, mode: 'insensitive' as const },
-          })),
-        },
+        { OR: keywordOr },
         {
           OR: [
             { addressRegion: stateName },

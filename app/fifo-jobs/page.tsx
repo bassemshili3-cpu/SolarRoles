@@ -136,10 +136,12 @@ export default async function FifoJobsPage({ searchParams }: any) {
 
   // Si l'utilisateur a tapé une recherche custom dans le filtre, on respecte sa requête
   // Sinon, on passe l'array de keywords FIFO pour matcher toutes les variantes seedées
-  const whatQuery = params.what || FIFO_KEYWORDS
+  
 
     const initialData = await searchMergedJobs({
-  what: params.what || 'fly in fly out mining',
+     ...(params.what
+     ? { what: params.what }
+     : { whatPhrases: FIFO_KEYWORDS }),
    where: params.where || '',
    results_per_page: 30,
    salary_min: params.salary_min ? Number(params.salary_min) : undefined,
@@ -161,7 +163,9 @@ export default async function FifoJobsPage({ searchParams }: any) {
             
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList what={params.what || 'fly in fly out mining'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
+              <InfiniteJobList what={params.what || ''}
+               whatPhrases={params.what ? undefined : FIFO_KEYWORDS}
+               searchLabel="fly in fly out " where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
             </Suspense>
           </div>
         </div>

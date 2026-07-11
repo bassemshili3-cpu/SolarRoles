@@ -204,6 +204,8 @@ export const ROLE_CATEGORIES: RoleCategory[] = [
       ['fly in fly out', 'mining'],
       ['fly in, fly out', 'mining'],
       ['fifo', 'mining'],
+      ['fly in fly out roster'],
+     ['fly in fly out rotation schedule'],
     ],
   },
   {
@@ -213,6 +215,7 @@ export const ROLE_CATEGORIES: RoleCategory[] = [
     keywordGroups: [
       ['fly in fly out oil & gas'],
       ['fly in fly out oil and gas'],
+      ['fly in fly out oil gas'],
       ['fifo oil & gas'],
       ['fifo oil and gas'],
       ['fly in fly out', 'oil'],
@@ -221,6 +224,8 @@ export const ROLE_CATEGORIES: RoleCategory[] = [
       ['fly in, fly out', 'gas'],
       ['fifo', 'oil'],
       ['fifo', 'gas'],
+      ['fly in fly out roster'],
+     ['fly in fly out rotation schedule'],
     ],
   },
 

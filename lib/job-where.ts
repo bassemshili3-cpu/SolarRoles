@@ -3,7 +3,6 @@
 
 import { Prisma } from '@prisma/client'
 
-
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 export const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet'] as const
@@ -66,6 +65,10 @@ const COMPANY_SIZE_KEYWORDS: Record<string, string[]> = {
 
 export interface JobWhereParams {
   what?: string
+  // Recherche OU sur des phrases complètes (title/company/description), prioritaire
+  // sur `what` si fourni. Pour les pages à synonymes multiples (ex: fifo-jobs), où
+  // une seule chaîne "what" mot-par-mot-en-ET ne suffit pas à couvrir les variantes.
+  whatPhrases?: string[]
   where?: string
   salaryMin?: number
   postedWithin?: number
@@ -81,10 +84,10 @@ export interface JobWhereParams {
 
 // ── Helper ────────────────────────────────────────────────────────────────────
 
-/** Build a set of OR conditions from keywords against title + description. */
+/** Build a set of OR conditions from keywords against the given fields. */
 function keywordOr(
   keywords: string[],
-  fields: Array<'title' | 'description' | 'location'> = ['title', 'description'],
+  fields: Array<'title' | 'description' | 'location' | 'company'> = ['title', 'description'],
 ): Prisma.JobWhereInput[] {
   return keywords.flatMap((kw) =>
     fields.map((field) => ({ [field]: { contains: kw, mode: 'insensitive' as const } })),
@@ -100,6 +103,7 @@ function keywordOr(
 export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
   const {
     what          = '',
+    whatPhrases   = [],
     where         = '',
     salaryMin,
     postedWithin,
@@ -115,6 +119,17 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
 
   const AND: Prisma.JobWhereInput[] = []
 
+  // ── Search term (what / whatPhrases) ─────────────────────────────────────────
+  // whatPhrases prioritaire : OU entre phrases complètes (chaque phrase gardant
+  // son sens exact, sans découpage mot par mot). Sinon, `what` classique :
+  // chaque mot doit apparaître (ET), n'importe où dans title/company/description.
+  if (whatPhrases.length > 0) {
+    AND.push({ OR: keywordOr(whatPhrases, ['title', 'company', 'description']) })
+  } else if (what) {
+    for (const kw of what.split(/\s+/).filter(Boolean)) {
+      AND.push({ OR: keywordOr([kw], ['title', 'company', 'description']) })
+    }
+  }
 
   // ── Location ────────────────────────────────────────────────────────────────
   if (where) {
@@ -212,6 +227,11 @@ export function splitParam(v: string | null): string[] {
   return v ? v.split(',').map((s) => s.trim()).filter(Boolean) : []
 }
 
+/** Parse a pipe-separated query param into a string array (phrases may contain commas/spaces). */
+export function splitPhrasesParam(v: string | null): string[] {
+  return v ? v.split('|').map((s) => s.trim()).filter(Boolean) : []
+}
+
 /**
  * Extract all job filter params from a URLSearchParams instance
  * and return a ready-to-use JobWhereParams object.
@@ -219,6 +239,7 @@ export function splitParam(v: string | null): string[] {
 export function parseJobWhereParams(searchParams: URLSearchParams): JobWhereParams {
   return {
     what:           searchParams.get('what')?.trim() || '',
+    whatPhrases:    splitPhrasesParam(searchParams.get('what_phrases')),
     where:          searchParams.get('where')?.trim() || '',
     salaryMin:      searchParams.get('salary_min')     ? parseInt(searchParams.get('salary_min')!)    : undefined,
     postedWithin:   searchParams.get('posted_within')  ? parseInt(searchParams.get('posted_within')!) : undefined,

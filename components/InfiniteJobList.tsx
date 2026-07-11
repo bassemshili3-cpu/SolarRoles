@@ -101,8 +101,10 @@ const WORK_ARRANGEMENTS = [
 
 interface JobListProps {
   what: string
+  whatPhrases?: string[] // recherche OU sur des phrases complètes, prioritaire sur `what`
   where: string
   salary_min?: string
+  searchLabel?: string   // libellé affiché (ex: "fly in fly out "), sinon dérivé de `what`
   initialData?: { results: any[]; count: number } // ← données SSR pour Googlebot
 }
 
@@ -169,7 +171,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, where, salary_min, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, where, salary_min, searchLabel, initialData }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -188,6 +190,7 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
 
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
+  const resolvedWhatPhrases = whatPhrases && whatPhrases.length > 0 ? whatPhrases : undefined
 
   const filterKeys = [
     'job_type', 'arrangement', 'experience', 'education',
@@ -233,14 +236,18 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
  
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['jobs', resolvedWhat, resolvedWhere, salary_min, page, searchParams.toString()],
+    queryKey: ['jobs', resolvedWhat, resolvedWhatPhrases, resolvedWhere, salary_min, page, searchParams.toString()],
     queryFn: async () => {
       const params = new URLSearchParams({
-        what: resolvedWhat,
         where: resolvedWhere,
         page: page.toString(),
         results_per_page: '30',
       })
+      if (resolvedWhatPhrases) {
+       params.set('what_phrases', resolvedWhatPhrases.join('|'))
+     } else {
+       params.set('what', resolvedWhat)
+     }
       if (salary_min) params.set('salary_min', salary_min)
 
       for (const key of filterKeys) {
@@ -260,7 +267,7 @@ export default function JobList({ what, where, salary_min, initialData }: JobLis
   })
 
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
-  const jobType = resolvedWhat ? `${resolvedWhat} ` : ''
+  const jobType = searchLabel ?? (resolvedWhat ? `${resolvedWhat} ` : '')
 
 
   const scrollRestoredRef = useRef(false)

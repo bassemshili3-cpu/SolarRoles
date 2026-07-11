@@ -29,7 +29,7 @@ import { isDescriptionTruncated } from '@/lib/description-quality'
 import CompanyLogo from '@/components/CompanyLogo'
 import { formatDistanceToNow } from 'date-fns'
 import { compareSalaryToMarket } from '@/lib/salaryComparison'
-
+import { getJobHeaderImage } from '@/lib/jobHeaderImage'
 
 export const revalidate = 3600
 
@@ -304,20 +304,23 @@ export default async function JobDetailPage({
   // Aucune de ces 4 requêtes ne dépend du résultat d'une autre, donc c'est
   // strictement gagnant. `salaryComparison` (qui dépend de `roleStats`) est
   // calculé juste après, une fois qu'on a le résultat.
-  const [roleStats, similarJobs, roleDemand, employerProfile] = await Promise.all([
-    roleMatch && stateName
-      ? getRoleLocationStats(getRoleKeywords(roleMatch), stateName)
-      : Promise.resolve(null),
-    roleMatch
-      ? getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
-      : Promise.resolve([]),
-    roleMatch
-      ? getRoleDemandByState(roleMatch.slug)
-      : Promise.resolve([]),
-    job.company
-      ? getEmployerProfile(job.company, job.id)
-      : Promise.resolve(null),
-  ])
+  const headerImageQuery = roleMatch?.label || job.title
+
+const [roleStats, similarJobs, roleDemand, employerProfile, headerImage] = await Promise.all([
+  roleMatch && stateName
+    ? getRoleLocationStats(getRoleKeywords(roleMatch), stateName, !!roleMatch.matchInDescription)
+    : Promise.resolve(null),
+  roleMatch
+    ? getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
+    : Promise.resolve([]),
+  roleMatch
+    ? getRoleDemandByState(roleMatch.slug)
+    : Promise.resolve([]),
+  job.company
+    ? getEmployerProfile(job.company, job.id)
+    : Promise.resolve(null),
+  getJobHeaderImage(headerImageQuery),
+])
 
   const salaryComparison = roleStats
     ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary)
@@ -385,34 +388,47 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
 </div>
 
           {/* ── Contenu principal ── */}
-          <div className="flex-1 min-w-0 bg-card border rounded-2xl p-8 shadow-sm">
+          <div className="flex-1 min-w-0">
 
-            {/* Attribution */}
-            {job.source === 'adzuna' && (
-              <div className="flex justify-end mb-4">
+            {/* Attribution — juste au-dessus de la carte, l'image peut prendre toute la largeur */}
+            <div className="flex justify-end mb-2 px-1">
+              {job.source === 'adzuna' && (
                 <a href="https://www.adzuna.com" target="_blank" rel="noopener noreferrer">
                   <img src="/adzuna-logo.png" alt="Powered by Adzuna" width={116} height={23} />
                 </a>
-              </div>
-            )}
-            {job.source === 'jooble' && (
-              <div className="flex justify-end mb-4">
+              )}
+              {job.source === 'jooble' && (
                 <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
-              </div>
-            )}
-
-            {job.source === 'careerjet' && (
-  <div className="flex justify-end mb-4">
-    <span className="text-xs text-muted-foreground">Sourced via CareerJet</span>
-  </div>
-)}
-            {job.source === 'lensa' && (
-              <div className="flex justify-end mb-4">
+              )}
+              {job.source === 'careerjet' && (
+                <span className="text-xs text-muted-foreground">Sourced via CareerJet</span>
+              )}
+              {job.source === 'lensa' && (
                 <span className="text-xs text-muted-foreground">Sourced via Lensa</span>
-              </div>
-            )}
+              )}
+            </div>
 
-            <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+            <div className="bg-card border rounded-2xl shadow-sm overflow-hidden">
+
+ {/* En-tête illustratif : ne s'affiche que si une image a été trouvée */}
+  {headerImage && (
+
+    <div className="relative h-48 sm:h-56">
+      <img
+        src={headerImage}
+        alt={`Illustration - ${job.title}`}
+        className="w-full h-full object-cover opacity-70"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+    </div>
+  )}
+
+  {/* Contenu paddé — c'est ici que va tout le reste de la carte */}
+  <div className="p-8">
+
+<h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
+
+            
 
             {job.company && (
   <div className="flex items-center gap-2 mt-2 text-muted-foreground">
@@ -636,10 +652,12 @@ const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
   </div>
 )}
 </div>
+          {/* fin du padding p-8 */}
 
+          </div>
+          {/* fin de la carte bg-card */}
 
-
- 
+          </div>
           {/* ── fin contenu principal ── */}
 
         </div>

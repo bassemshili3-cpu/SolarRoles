@@ -223,6 +223,12 @@ export async function getMergedJobCount(params: {
 
 export async function searchMergedJobs(params: {
   what?:            string | string[]
+
+  whatPhrases?:     string[]  // recherche OU : matche si AU MOINS UNE phrase complète
+                            // apparaît telle quelle (title/company/description).
+                             // Prioritaire sur `what` si fourni. Utilisé pour les
+                              // pages à synonymes multiples (ex: fifo-jobs).
+
   where?:           string | string[]
   salary_min?:      number | string
   results_per_page?: number
@@ -237,7 +243,15 @@ export async function searchMergedJobs(params: {
   try {
     const AND: any[] = []
 
-    if (what) {
+    if (params.whatPhrases && params.whatPhrases.length > 0) {
+     AND.push({
+      OR: params.whatPhrases.flatMap((phrase) => [
+        { title:       { contains: phrase, mode: 'insensitive' } },
+        { company:     { contains: phrase, mode: 'insensitive' } },
+         { description: { contains: phrase, mode: 'insensitive' } },
+       ]),
+     })
+   } else if (what) {
       for (const kw of what.split(/\s+/).filter(Boolean)) {
         AND.push({
           OR: [
