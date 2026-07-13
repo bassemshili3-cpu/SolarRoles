@@ -223,12 +223,10 @@ export async function getMergedJobCount(params: {
 
 export async function searchMergedJobs(params: {
   what?:            string | string[]
-
-  whatPhrases?:     string[]  // recherche OU : matche si AU MOINS UNE phrase complète
-                            // apparaît telle quelle (title/company/description).
-                             // Prioritaire sur `what` si fourni. Utilisé pour les
-                              // pages à synonymes multiples (ex: fifo-jobs).
-
+  whatPhrases?:     string[]
+  excludePhrases?:  string[]  // NEW: si une de ces phrases apparaît, l'offre est écartée
+                               // même si elle matche whatPhrases. Utile pour désambiguïser
+                               // un acronyme comme "FIFO" (rotation FIFO vs méthode d'inventaire).
   where?:           string | string[]
   salary_min?:      number | string
   results_per_page?: number
@@ -244,14 +242,14 @@ export async function searchMergedJobs(params: {
     const AND: any[] = []
 
     if (params.whatPhrases && params.whatPhrases.length > 0) {
-     AND.push({
+    AND.push({
       OR: params.whatPhrases.flatMap((phrase) => [
         { title:       { contains: phrase, mode: 'insensitive' } },
         { company:     { contains: phrase, mode: 'insensitive' } },
-         { description: { contains: phrase, mode: 'insensitive' } },
-       ]),
-     })
-   } else if (what) {
+        { description: { contains: phrase, mode: 'insensitive' } },
+      ]),
+    })
+  } else if (what) {
       for (const kw of what.split(/\s+/).filter(Boolean)) {
         AND.push({
           OR: [
@@ -262,6 +260,21 @@ export async function searchMergedJobs(params: {
         })
       }
     }
+
+      // NEW: exclusion — une offre est écartée si title OU description contient une des phrases d'exclusion
+  if (params.excludePhrases && params.excludePhrases.length > 0) {
+    params.excludePhrases.forEach((phrase) => {
+      AND.push({
+        NOT: {
+          OR: [
+            { title:       { contains: phrase, mode: 'insensitive' } },
+            { description: { contains: phrase, mode: 'insensitive' } },
+          ],
+        },
+      })
+    })
+  }
+
 
     if (where) {
       AND.push({

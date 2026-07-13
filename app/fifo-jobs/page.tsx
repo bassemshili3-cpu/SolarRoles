@@ -9,10 +9,30 @@ import { searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600
 
 const FIFO_KEYWORDS = [
-  'fly in fly out mining',
-  'fly in fly out roster',
-  'fly in fly out rotation schedule',
-  'fly in, fly out', 
+  'fly in fly out',
+  'fly-in fly-out',
+  'fly in, fly out',
+  'fly-in, fly-out',
+  'fly-in/fly-out',
+  'fly in / fly out',
+  'fifo',
+]
+
+// Écarte les offres où "FIFO" désigne la méthode d'inventaire (restauration, entrepôt, compta)
+// plutôt que le régime de travail en rotation
+const FIFO_EXCLUDE = [
+  'fifo method',
+  'fifo basis',
+  'fifo system',
+  'fifo inventory',
+  'first in, first out',
+  'first-in, first-out',
+  'stock rotation',
+  'inventory rotation',
+  'perishable',
+  'shelf life',
+  'expiration date',
+  'build-to',
 ]
 
 export const metadata: Metadata = {
@@ -139,13 +159,13 @@ export default async function FifoJobsPage({ searchParams }: any) {
   
 
     const initialData = await searchMergedJobs({
-     ...(params.what
-     ? { what: params.what }
-     : { whatPhrases: FIFO_KEYWORDS }),
-   where: params.where || '',
-   results_per_page: 30,
-   salary_min: params.salary_min ? Number(params.salary_min) : undefined,
- })
+  ...(params.what
+    ? { what: params.what }
+    : { whatPhrases: FIFO_KEYWORDS, excludePhrases: FIFO_EXCLUDE }),
+  where: params.where || '',
+  results_per_page: 30,
+  salary_min: params.salary_min ? Number(params.salary_min) : undefined,
+})
 
   return (
     <>

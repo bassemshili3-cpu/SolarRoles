@@ -113,8 +113,8 @@ const applicationTips = [
 
 
     const [{ count }, initialData] = await Promise.all([
-    getMergedJobCount({ what: params.what || 'jobs at property management', where: params.where || '' }),
-    searchMergedJobs({ what: params.what || 'jobs at property management', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+    getMergedJobCount({ what: params.what || 'property management', where: params.where || '' }),
+    searchMergedJobs({ what: params.what || 'property management', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
   ])
   
 
