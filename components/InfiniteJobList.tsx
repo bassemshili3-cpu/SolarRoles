@@ -203,8 +203,16 @@ export default function JobList({ what, whatPhrases, where, salary_min, searchLa
   // jamais réinjecté après coup — sinon un changement de mot-clé/lieu peut se faire
   // écraser par les anciennes données SSR au lieu de déclencher un vrai fetch.
   const initialDataRef = useRef(
-    page === 1 && initialData && !hasFilters ? initialData : undefined
-  )
+  page === 1 && initialData && !hasFilters
+    ? { forPage: 1, forWhat: resolvedWhat, forWhere: resolvedWhere, data: initialData }
+    : null
+)
+
+const canUseSSRInitialData =
+  initialDataRef.current !== null &&
+  page === initialDataRef.current.forPage &&
+  resolvedWhat === initialDataRef.current.forWhat &&
+  resolvedWhere === initialDataRef.current.forWhere
 
  
 
@@ -262,8 +270,7 @@ export default function JobList({ what, whatPhrases, where, salary_min, searchLa
     // directement (pas de fetch client, pas de flash de loading).
     // initialDataRef ne change jamais après le premier rendu, donc tout changement
     // de filtre (queryKey différente) déclenche bien un vrai fetch.
-    initialData: initialDataRef.current,
-    retry: 1,
+    initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
   })
 
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
