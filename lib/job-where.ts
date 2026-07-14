@@ -2,6 +2,7 @@
 // Shared Prisma WHERE clause builder — used by /api/jobs-all and /api/jobs-count
 
 import { Prisma } from '@prisma/client'
+import { STATES } from './usStates'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -135,14 +136,21 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
   }
 
   // ── Location ────────────────────────────────────────────────────────────────
-  if (where) {
-    AND.push({
-      OR: [
-        { location:      { contains: where, mode: 'insensitive' } },
-        { addressRegion: { contains: where, mode: 'insensitive' } },
-      ],
-    })
-  }
+  // dans buildJobWhere, remplace le bloc where actuel par :
+if (where) {
+  const trimmedWhere = where.trim()
+  const matchedStateCode = STATES[trimmedWhere] // ex: "Massachusetts" -> "MA", undefined si ce n'est pas un nom d'état exact
+
+  AND.push({
+    OR: [
+      { location:      { contains: trimmedWhere, mode: 'insensitive' } },
+      { addressRegion: { contains: trimmedWhere, mode: 'insensitive' } },
+      ...(matchedStateCode
+        ? [{ addressRegion: { equals: matchedStateCode, mode: 'insensitive' as const } }]
+        : []),
+    ],
+  })
+}
 
   // ── Salary ──────────────────────────────────────────────────────────────────
   if (salaryMin) {
