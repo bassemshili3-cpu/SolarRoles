@@ -52,9 +52,10 @@ model Job {
   expiresAt      DateTime
   active         Boolean   @default(true)
   sourcePriority Int       @default(99)
+  isFifo Boolean @default(false)
 
-  @@index([source])
-  @@index([active])
+  @@index([isFifo])
+    @@index([active])
   @@index([fetchedAt])
   @@index([title, company])
   @@index([sourcePriority, fetchedAt])

@@ -11,6 +11,7 @@ import { searchLensaJobs } from './lensa'
 import { searchCareerjetJobs, normalizeCareerjet } from './careerjet'
 import { normalizeJooble, UnifiedJob } from './jobs'
 import { extractSalaryFromText } from './extractSalary'
+import { isFifoJob } from './classifyJob'
 
 const EXPIRY_DAYS = 30
 
@@ -93,6 +94,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
     try {
       const expiresAt = new Date()
       expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
+      const isFifo = isFifoJob(job.title, job.description)
 
       await prisma.job.upsert({
         where: { id: job.id },
@@ -108,6 +110,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          isFifo,
         },
         create: {
           id: job.id,
@@ -126,6 +129,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          isFifo,
         },
       })
       saved++
@@ -145,6 +149,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
     try {
       const expiresAt = new Date()
       expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
+      const isFifo = isFifoJob(job.title, job.description)
 
       await prisma.job.upsert({
         where: { id: job.id },
@@ -159,6 +164,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          isFifo,
           // Note: addressRegion volontairement absent ici — on ne veut
           // jamais écraser une valeur déjà correcte par une extraction
           // qui aurait échoué sur ce run précis.
@@ -180,6 +186,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          isFifo,
         },
       })
       saved++
@@ -208,6 +215,7 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
         advert.cleaned_job_title || '',
         advert.description_digest || ''
       )
+      const isFifo = isFifoJob(advert.cleaned_job_title, advert.description_digest)
 
       await prisma.job.upsert({
         where: { id },
@@ -223,6 +231,7 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          isFifo,
         },
         create: {
           id,
@@ -241,6 +250,7 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
           fetchedAt: new Date(),
           expiresAt,
           active: true,
+          isFifo,
         },
       })
       saved++

@@ -102,6 +102,8 @@ const WORK_ARRANGEMENTS = [
 interface JobListProps {
   what: string
   whatPhrases?: string[] // recherche OU sur des phrases complètes, prioritaire sur `what`
+  excludePhrases?: string[]  
+  isFifo?: boolean  
   where: string
   salary_min?: string
   searchLabel?: string   // libellé affiché (ex: "fly in fly out "), sinon dérivé de `what`
@@ -171,7 +173,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, whatPhrases, where, salary_min, searchLabel, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, excludePhrases, isFifo, where, salary_min, searchLabel, initialData }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -191,6 +193,7 @@ export default function JobList({ what, whatPhrases, where, salary_min, searchLa
   const resolvedWhat = what || ''
   const resolvedWhere = where || ''
   const resolvedWhatPhrases = whatPhrases && whatPhrases.length > 0 ? whatPhrases : undefined
+   const resolvedExcludePhrases = excludePhrases && excludePhrases.length > 0 ? excludePhrases : undefined 
 
   const filterKeys = [
     'job_type', 'arrangement', 'experience', 'education',
@@ -209,11 +212,11 @@ export default function JobList({ what, whatPhrases, where, salary_min, searchLa
 )
 
 const canUseSSRInitialData =
-  initialDataRef.current !== null &&
-  page === initialDataRef.current.forPage &&
-  resolvedWhat === initialDataRef.current.forWhat &&
-  resolvedWhere === initialDataRef.current.forWhere
-
+  page === 1 &&
+  !hasFilters &&
+  resolvedWhat === (initialDataRef.current?.forWhat ?? resolvedWhat) &&
+  resolvedWhere === (initialDataRef.current?.forWhere ?? resolvedWhere) &&
+  initialDataRef.current !== null
  
 
  // Build back URL preserving all current filters + current page
@@ -244,34 +247,33 @@ const canUseSSRInitialData =
  
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['jobs', resolvedWhat, resolvedWhatPhrases, resolvedWhere, salary_min, page, searchParams.toString()],
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        where: resolvedWhere,
-        page: page.toString(),
-        results_per_page: '30',
-      })
-      if (resolvedWhatPhrases) {
-       params.set('what_phrases', resolvedWhatPhrases.join('|'))
-     } else {
-       params.set('what', resolvedWhat)
-     }
-      if (salary_min) params.set('salary_min', salary_min)
-
-      for (const key of filterKeys) {
-        const val = searchParams.get(key)
-        if (val) params.set(key, val)
-      }
-      const res = await fetch(`/api/jobs-all?${params}`)
-      if (!res.ok) throw new Error('Failed to fetch jobs')
-      return res.json()
-    },
-    // Page 1, premier rendu, aucun filtre avancé : on utilise les données SSR
-    // directement (pas de fetch client, pas de flash de loading).
-    // initialDataRef ne change jamais après le premier rendu, donc tout changement
-    // de filtre (queryKey différente) déclenche bien un vrai fetch.
-    initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
-  })
+  queryKey: ['jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, resolvedWhere, salary_min, page, searchParams.toString()],
+  queryFn: async () => {
+    const params = new URLSearchParams({
+      where: resolvedWhere,
+      page: page.toString(),
+      results_per_page: '30',
+    })
+    if (resolvedWhatPhrases) {
+      params.set('what_phrases', resolvedWhatPhrases.join('|'))
+    } else {
+      params.set('what', resolvedWhat)
+    }
+    if (resolvedExcludePhrases) {
+      params.set('exclude_phrases', resolvedExcludePhrases.join('|'))
+    }
+    if (isFifo) params.set('is_fifo', 'true')   // ← ajout
+    if (salary_min) params.set('salary_min', salary_min)
+    for (const key of filterKeys) {
+      const val = searchParams.get(key)
+      if (val) params.set(key, val)
+    }
+    const res = await fetch(`/api/jobs-all?${params}`)
+    if (!res.ok) throw new Error('Failed to fetch jobs')
+    return res.json()
+  },
+  initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
+})
 
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
   const jobType = searchLabel ?? (resolvedWhat ? `${resolvedWhat} ` : '')

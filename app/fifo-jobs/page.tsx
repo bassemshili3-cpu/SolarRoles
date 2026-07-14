@@ -5,35 +5,12 @@ import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, DollarSign, MapPin, CheckCircle, HardHat, Plane, TrendingUp, ShieldCheck } from 'lucide-react'
 import { searchMergedJobs } from '@/lib/merged-search'
+import { getJobs } from '@/lib/getJobs'
 
 export const revalidate = 3600
 
-const FIFO_KEYWORDS = [
-  'fly in fly out',
-  'fly-in fly-out',
-  'fly in, fly out',
-  'fly-in, fly-out',
-  'fly-in/fly-out',
-  'fly in / fly out',
-  'fifo',
-]
 
-// Écarte les offres où "FIFO" désigne la méthode d'inventaire (restauration, entrepôt, compta)
-// plutôt que le régime de travail en rotation
-const FIFO_EXCLUDE = [
-  'fifo method',
-  'fifo basis',
-  'fifo system',
-  'fifo inventory',
-  'first in, first out',
-  'first-in, first-out',
-  'stock rotation',
-  'inventory rotation',
-  'perishable',
-  'shelf life',
-  'expiration date',
-  'build-to',
-]
+
 
 export const metadata: Metadata = {
   title: 'FIFO Jobs | Fly In Fly Out in Mining, Oil & Gas',
@@ -154,19 +131,23 @@ const tips = [
 export default async function FifoJobsPage({ searchParams }: any) {
   const params = await searchParams
 
-  // Si l'utilisateur a tapé une recherche custom dans le filtre, on respecte sa requête
-  // Sinon, on passe l'array de keywords FIFO pour matcher toutes les variantes seedées
-  
-
-    const initialData = await searchMergedJobs({
-  ...(params.what
-    ? { what: params.what }
-    : { whatPhrases: FIFO_KEYWORDS, excludePhrases: FIFO_EXCLUDE }),
-  where: params.where || '',
-  results_per_page: 30,
-  salary_min: params.salary_min ? Number(params.salary_min) : undefined,
-})
-
+  const initialData = await getJobs({
+    isFifo: true,
+    ...(params.what ? { what: params.what } : {}),
+    where: params.where || '',
+    resultsPerPage: 30,
+    salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
+    postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
+    jobTypes: params.job_type ? params.job_type.split(',') : undefined,
+    arrangements: params.arrangement ? params.arrangement.split(',') : undefined,
+    experience: params.experience || undefined,
+    education: params.education || undefined,
+    companySizes: params.company_size ? params.company_size.split(',') : undefined,
+    benefits: params.benefits ? params.benefits.split(',') : undefined,
+    easyApply: params.easy_apply === 'true',
+    visaSponsorship: params.visa_sponsorship === 'true',
+  })
+  // ...
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -178,14 +159,19 @@ export default async function FifoJobsPage({ searchParams }: any) {
         </header>
 
         <div className="flex flex-col lg:flex-row gap-10">
-          <aside className="lg:w-80"><JobFilters defaultWhat="fly in fly out mining" /></aside>
+          <aside className="lg:w-80"><JobFilters /></aside>
           <div className="flex-1">
             
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList what={params.what || ''}
-               whatPhrases={params.what ? undefined : FIFO_KEYWORDS}
-               searchLabel="fly in fly out " where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
+              <InfiniteJobList
+  isFifo
+  what={params.what || ''}
+  searchLabel="fly in fly out "
+  where={params.where || ''}
+  salary_min={params.salary_min}
+  initialData={initialData}
+/>
             </Suspense>
           </div>
         </div>
