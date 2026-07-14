@@ -4,27 +4,9 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Building2, Briefcase, DollarSign, MapPin } from 'lucide-react'
+import { STATES, SLUG_TO_STATE } from '@/lib/usStates'
 
 export const revalidate = 86400
-
-// ── State slug → full name mapping ──
-const SLUG_TO_STATE: Record<string, string> = {
-  'alabama': 'Alabama', 'alaska': 'Alaska', 'arizona': 'Arizona', 'arkansas': 'Arkansas',
-  'california': 'California', 'colorado': 'Colorado', 'connecticut': 'Connecticut',
-  'delaware': 'Delaware', 'florida': 'Florida', 'georgia': 'Georgia', 'hawaii': 'Hawaii',
-  'idaho': 'Idaho', 'illinois': 'Illinois', 'indiana': 'Indiana', 'iowa': 'Iowa',
-  'kansas': 'Kansas', 'kentucky': 'Kentucky', 'louisiana': 'Louisiana', 'maine': 'Maine',
-  'maryland': 'Maryland', 'massachusetts': 'Massachusetts', 'michigan': 'Michigan',
-  'minnesota': 'Minnesota', 'mississippi': 'Mississippi', 'missouri': 'Missouri',
-  'montana': 'Montana', 'nebraska': 'Nebraska', 'nevada': 'Nevada',
-  'new-hampshire': 'New Hampshire', 'new-jersey': 'New Jersey', 'new-mexico': 'New Mexico',
-  'new-york': 'New York', 'north-carolina': 'North Carolina', 'north-dakota': 'North Dakota',
-  'ohio': 'Ohio', 'oklahoma': 'Oklahoma', 'oregon': 'Oregon', 'pennsylvania': 'Pennsylvania',
-  'rhode-island': 'Rhode Island', 'south-carolina': 'South Carolina',
-  'south-dakota': 'South Dakota', 'tennessee': 'Tennessee', 'texas': 'Texas', 'utah': 'Utah',
-  'vermont': 'Vermont', 'virginia': 'Virginia', 'washington': 'Washington',
-  'west-virginia': 'West Virginia', 'wisconsin': 'Wisconsin', 'wyoming': 'Wyoming',
-}
 
 // ── Salary sanity bounds — values outside this range are hourly/monthly/corrupt ──
 // $20 000 minimum : élimine les valeurs horaires ($15) et mensuelles ($1 500)
@@ -64,6 +46,12 @@ export default async function StateDataPage({
   const stateName = SLUG_TO_STATE[slug]
   if (!stateName) notFound()
 
+  // addressRegion en base stocke le code à 2 lettres ("MA"), pas le nom complet
+  // ("Massachusetts") — on filtre sur les deux formats par sécurité, au cas où
+  // une source aurait stocké le nom complet sans passer par extractStateFromLocation.
+  const stateCode = STATES[stateName]
+  const addressRegionFilter = { in: [stateName, stateCode] }
+
   // ── Queries ──
   const [
     totalJobs,
@@ -74,7 +62,7 @@ export default async function StateDataPage({
   ] = await Promise.all([
     // Total active jobs in this state
     prisma.job.count({
-      where: { active: true, addressRegion: stateName },
+      where: { active: true, addressRegion: addressRegionFilter },
     }),
 
     // Average salary — annuel uniquement
@@ -84,7 +72,7 @@ export default async function StateDataPage({
     prisma.job.aggregate({
       where: {
         active: true,
-        addressRegion: stateName,
+        addressRegion: addressRegionFilter,
         salaryMin: {
           gte: SALARY_MIN_THRESHOLD,
           lte: SALARY_MAX_THRESHOLD,
@@ -103,7 +91,7 @@ export default async function StateDataPage({
     // Top 15 hiring companies
     prisma.job.groupBy({
       by: ['company'],
-      where: { active: true, addressRegion: stateName, company: { not: '' } },
+      where: { active: true, addressRegion: addressRegionFilter, company: { not: '' } },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
       take: 15,
@@ -112,7 +100,7 @@ export default async function StateDataPage({
     // Top 15 job titles
     prisma.job.groupBy({
       by: ['title'],
-      where: { active: true, addressRegion: stateName },
+      where: { active: true, addressRegion: addressRegionFilter },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
       take: 15,
@@ -121,7 +109,7 @@ export default async function StateDataPage({
     // Contract type breakdown
     prisma.job.groupBy({
       by: ['contractTime'],
-      where: { active: true, addressRegion: stateName },
+      where: { active: true, addressRegion: addressRegionFilter },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
     }),
@@ -322,4 +310,4 @@ export default async function StateDataPage({
       </div>
     </>
   )
-  }
+}

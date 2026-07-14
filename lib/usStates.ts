@@ -16,6 +16,18 @@ export const STATES: Record<string, string> = {
   Wisconsin: 'WI', Wyoming: 'WY',
 }
 
+// ── Ajouts pour couvrir les besoins de /data, /data/states/[state] et la homepage ──
+
+export const SLUG_TO_STATE: Record<string, string> = Object.fromEntries(
+  Object.keys(STATES).map((name) => [stateToSlug(name), name])
+)
+
+/** Code abréviation ("MA") -> slug de route ("massachusetts") */
+export function codeToSlug(code: string): string | null {
+  const name = STATE_CODE_TO_NAME[code.toUpperCase()]
+  return name ? stateToSlug(name) : null
+}
+
 export const STATE_CODE_TO_NAME: Record<string, string> = Object.fromEntries(
   Object.entries(STATES).map(([name, code]) => [code, name])
 )

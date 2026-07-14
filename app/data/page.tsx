@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { Building2, MapPin, DollarSign, TrendingUp, Briefcase, Brain } from 'lucide-react'
+import { STATES, STATE_CODE_TO_NAME, stateToSlug, codeToSlug } from '@/lib/usStates'
 
 export const revalidate = 86400
 
@@ -19,24 +20,6 @@ const jsonLd = {
   name: 'US Job Market Data Center',
   description: 'Live job market statistics from active US job listings. Updated daily.',
   url: 'https://www.oh-my-job.com/data',
-}
-
-const STATES: Record<string, string> = {
-  Alabama: 'AL', Alaska: 'AK', Arizona: 'AZ', Arkansas: 'AR', California: 'CA',
-  Colorado: 'CO', Connecticut: 'CT', Delaware: 'DE', Florida: 'FL', Georgia: 'GA',
-  Hawaii: 'HI', Idaho: 'ID', Illinois: 'IL', Indiana: 'IN', Iowa: 'IA',
-  Kansas: 'KS', Kentucky: 'KY', Louisiana: 'LA', Maine: 'ME', Maryland: 'MD',
-  Massachusetts: 'MA', Michigan: 'MI', Minnesota: 'MN', Mississippi: 'MS', Missouri: 'MO',
-  Montana: 'MT', Nebraska: 'NE', Nevada: 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
-  'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND',
-  Ohio: 'OH', Oklahoma: 'OK', Oregon: 'OR', Pennsylvania: 'PA', 'Rhode Island': 'RI',
-  'South Carolina': 'SC', 'South Dakota': 'SD', Tennessee: 'TN', Texas: 'TX', Utah: 'UT',
-  Vermont: 'VT', Virginia: 'VA', Washington: 'WA', 'West Virginia': 'WV',
-  Wisconsin: 'WI', Wyoming: 'WY',
-}
-
-function stateToSlug(name: string): string {
-  return name.toLowerCase().replace(/\s+/g, '-')
 }
 
 // ── Salary sanity bounds ──
@@ -68,6 +51,7 @@ export default async function DataCenterPage() {
 
     // FIX Ln 86: on ne peut pas passer `not: null` sur un champ String? avec Prisma.
     // On filtre côté JS après coup en excluant les valeurs null/vides.
+    // Rappel: addressRegion contient un code à 2 lettres ("TX"), pas le nom complet.
     prisma.job.groupBy({
       by: ['addressRegion'],
       where: {
@@ -91,11 +75,19 @@ export default async function DataCenterPage() {
     }),
   ])
 
-  // FIX Ln 219: filtre null côté JS + cast explicite pour satisfaire TS
+  // FIX Ln 219: filtre null côté JS + résout code -> nom complet + slug de route.
+  // Les states sans page dédiée (ex: codes non reconnus comme "DC" selon config)
+  // sont écartés plutôt que de générer un lien mort.
   const topStates = topStatesRaw
     .filter((s): s is typeof s & { addressRegion: string } =>
       typeof s.addressRegion === 'string' && s.addressRegion.length > 0
     )
+    .map((s) => ({
+      ...s,
+      fullName: STATE_CODE_TO_NAME[s.addressRegion.toUpperCase()] ?? s.addressRegion,
+      slug: codeToSlug(s.addressRegion),
+    }))
+    .filter((s) => s.slug !== null)
     .slice(0, 10)
 
   const avgSalary =
@@ -107,7 +99,7 @@ export default async function DataCenterPage() {
     ? ((entryLevelCount / totalJobs) * 100).toFixed(1)
     : '0.0'
 
-  const topHiringState = topStates.length > 0 ? topStates[0].addressRegion : '—'
+  const topHiringState = topStates.length > 0 ? topStates[0].fullName : '—'
 
   return (
     <>
@@ -168,9 +160,9 @@ export default async function DataCenterPage() {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {Object.entries(STATES).map(([name, code]) => (
+            {Object.keys(STATES).map((name) => (
               <Link
-                key={code}
+                key={name}
                 href={`/data/states/${stateToSlug(name)}`}
                 className="px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 transition-all"
               >
@@ -200,10 +192,10 @@ export default async function DataCenterPage() {
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-bold text-gray-400 w-6">{i + 1}</span>
                   <Link
-                    href={`/data/states/${stateToSlug(state.addressRegion)}`}
+                    href={`/data/states/${state.slug}`}
                     className="text-sm font-medium text-gray-900 hover:text-blue-600"
                   >
-                    {state.addressRegion}
+                    {state.fullName}
                   </Link>
                 </div>
                 {/* FIX Ln 219: _count.id peut être undefined selon la version Prisma */}

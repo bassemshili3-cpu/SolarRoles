@@ -11,7 +11,7 @@ import {
   Clock, MapPin,
 } from 'lucide-react'
 
-import { abbrToSlug, abbrToStateName } from '@/lib/states'
+import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
 import CompanyLogo from '@/components/CompanyLogo'
 import { matchRoleCategory, getRoleKeywords } from '@/lib/roleCategories'
 import { resolveStateName } from '@/lib/usStates'
@@ -23,11 +23,11 @@ async function getTopStates() {
     where: { addressRegion: { not: '' } },
     _count: { addressRegion: true },
     orderBy: { _count: { addressRegion: 'desc' } },
-    take: 12, // marge pour filtrer les states sans page dédiée (ex: DC) sans tomber sous 8
+    take: 12,
   })
   return results
     .map(r => ({ state: r.addressRegion, count: r._count.addressRegion }))
-    .filter(({ state }) => abbrToSlug(state) !== null)
+    .filter(({ state }) => codeToSlug(state) !== null)
     .slice(0, 8)
 }
 
@@ -399,14 +399,14 @@ export default async function Home() {
             
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-            {topStates.map(({ state, count }) => (
+           {topStates.map(({ state, count }) => (
   <Link
     key={state}
-    href={`/jobs/state/${abbrToSlug(state)}`}
+    href={`/jobs/state/${codeToSlug(state)}`}
     className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all"
   >
     <MapPin className="text-indigo-600" size={18} />
-    <span className="font-semibold text-[#1a2340] text-sm">{abbrToStateName(state)}</span>
+    <span className="font-semibold text-[#1a2340] text-sm">{STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}</span>
     <span className="text-xs text-gray-500">{count.toLocaleString()} jobs</span>
   </Link>
 ))}
