@@ -402,7 +402,7 @@ export default async function Home() {
            {topStates.map(({ state, count }) => (
   <Link
     key={state}
-    href={`/jobs/state/${codeToSlug(state)}`}
+    href={`/data/states/${codeToSlug(state)}`}
     className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all"
   >
     <MapPin className="text-indigo-600" size={18} />
