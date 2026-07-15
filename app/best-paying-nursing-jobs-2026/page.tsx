@@ -2,8 +2,12 @@
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import { DollarSign, TrendingUp, Briefcase } from 'lucide-react'
-import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
+import { getJobs } from '@/lib/getJobs'
+
+async function fetchJobData (searchTerm: string) {
+  const { results, count } = await getJobs({ what: searchTerm, resultsPerPage: 20, page: 1 })
+  return { count, data: { results, count } }
+}
 
 export const revalidate = 3600
 
@@ -41,7 +45,7 @@ const topJobs = [
     searchTerm: 'nurse anesthetist',
     salary: '$185K to $240K',
     growth: '38%',
-    paragraph: 'CRNAs occupy a position in healthcare that is almost impossible to replicate: they perform the same clinical function as physician anesthesiologists in most surgical settings, carry independent practice authority in a growing number of states, and earn a median above $220K with a nursing degree rather than a medical degree. The path is demanding (BSN, minimum two years of ICU experience, then a 3-year doctoral program), but the return on investment is unmatched in nursing. In rural hospitals and ambulatory surgery centers where an anesthesiologist is not on staff, the CRNA is the sole anesthesia provider, which is why the role commands the premium it does. The 38% projected growth rate reflects both an aging surgical population and a nationwide push to expand scope of practice for CRNAs as a cost-effective alternative to physician-led anesthesia teams.',
+    paragraph: 'CRNAs hold a position in healthcare that is almost impossible to replicate. They perform the same clinical function as physician anesthesiologists in most surgical settings, carry independent practice authority in a growing number of states, and earn a median above $220,000 with a nursing degree rather than a medical degree. The path is demanding: a BSN, at least two years of ICU experience, then a three-year doctoral program. The return on that investment is unmatched in nursing. In rural hospitals and ambulatory surgery centers without an anesthesiologist on staff, the CRNA is the sole anesthesia provider, which is why the role commands this premium. The 38 percent projected growth rate reflects an aging surgical population and a nationwide push to expand CRNA scope of practice as a cost-effective alternative to physician-led anesthesia teams.',
   },
   {
     rank: 2,
@@ -49,7 +53,7 @@ const topJobs = [
     searchTerm: 'psychiatric nurse practitioner',
     salary: '$130K to $180K',
     growth: '40%',
-    paragraph: 'The behavioral health workforce shortage is so severe that some counties in the United States have zero psychiatrists. Not a shortage. Zero. PMHNPs are filling that void, and the compensation reflects the urgency. In states with full practice authority, a PMHNP can open an independent practice, prescribe controlled substances, and manage a panel of 100+ patients generating $300K to $500K in annual practice revenue. Even employed PMHNPs at health systems earn $140K to $170K with significantly more schedule control than most medical specialties. The pipeline of new PMHNPs is growing but still cannot keep pace with demand driven by expanded insurance coverage for mental health, post-pandemic anxiety and depression rates, and a cultural shift that has normalized seeking psychiatric care. If you are an RN weighing NP specialties right now, this is the one where the gap between supply and demand is widest.',
+    paragraph: 'The behavioral health workforce shortage is severe enough that some US counties have zero psychiatrists. PMHNPs are filling that gap, and compensation reflects the urgency. In states with full practice authority, a PMHNP can open an independent practice, prescribe controlled substances, and manage a panel of 100 or more patients, generating $300,000 to $500,000 in annual practice revenue. Even employed PMHNPs at health systems earn $140,000 to $170,000, with more schedule control than most medical specialties. The pipeline of new PMHNPs is growing but still cannot keep pace with demand, driven by expanded insurance coverage for mental health, higher post-pandemic anxiety and depression rates, and a cultural shift toward seeking psychiatric care. If you are an RN weighing NP specialties, this is the one with the widest gap between supply and demand.',
   },
   {
     rank: 3,
@@ -57,7 +61,7 @@ const topJobs = [
     searchTerm: 'travel nurse',
     salary: '$80K to $150K+ ',
     growth: 'Variable',
-    paragraph: 'Travel nursing is not a specialty in the clinical sense. It is a compensation structure, and understanding how that structure works is the key to evaluating whether the numbers in job ads are real. Contracts pay a base hourly rate plus a tax-free housing stipend plus a meals-and-incidentals stipend, and when you combine all three, weekly gross can reach $2,500 to $4,000 depending on location and specialty. The tax-free stipends are the mechanism that makes travel pay appear dramatically higher than staff pay, but they are only tax-free if you maintain a permanent residence (a "tax home") that you actually pay for while on assignment. Nurses who do the math correctly and maintain a tax home can save $50K to $80K per year. Those who do not, or who get audited and cannot document their tax home, face a significant bill. Crisis contracts during acute staffing emergencies pay even more but are unpredictable. The lifestyle trade-off is real: you change cities every 8 to 13 weeks and orient to a new hospital system each time.',
+    paragraph: 'Travel nursing is not a clinical specialty. It is a compensation structure, and understanding that structure is the key to evaluating whether the numbers in job ads are real. Contracts pay a base hourly rate plus a tax-free housing stipend plus a meals-and-incidentals stipend. Combined, weekly gross can reach $2,500 to $4,000 depending on location and specialty. The tax-free stipends are what make travel pay look dramatically higher than staff pay, but they only stay tax-free if you maintain a permanent residence, a "tax home," that you actually pay for while on assignment. Nurses who track this correctly can save $50,000 to $80,000 a year. Those who do not, or who get audited without documentation, face a real bill. Crisis contracts during acute staffing emergencies pay even more but are unpredictable. The lifestyle trade-off is real too: you change cities every 8 to 13 weeks and orient to a new hospital system each time.',
   },
   {
     rank: 4,
@@ -65,7 +69,7 @@ const topJobs = [
     searchTerm: 'family nurse practitioner',
     salary: '$110K to $145K',
     growth: '40%',
-    paragraph: 'The FNP is the most broadly trained NP specialty, which makes it the most versatile and, for many, the most practical graduate investment. You can work in primary care, urgent care, retail clinics, occupational health, telehealth, or open your own practice in states with full practice authority. That flexibility is worth more than the salary number alone suggests because it means you are never locked into a single employer or setting. Federal loan repayment programs (NHSC) specifically target NPs in shortage areas, offering up to $50K in loan forgiveness over two years, effectively adding $25K per year to your compensation. The median hovers around $125K, but FNPs who own practices in underserved areas and accept a mix of insurance and cash-pay patients routinely exceed $180K. The 40% growth rate is driven by the same forces across all NP specialties: too many patients, too few primary care providers, and a system that increasingly relies on NPs to close the gap.',
+    paragraph: 'The FNP is the most broadly trained NP specialty, which makes it the most versatile and, for many, the most practical graduate investment. You can work in primary care, urgent care, retail clinics, occupational health, telehealth, or open your own practice in states with full practice authority. That flexibility matters more than the salary number alone suggests, since it means you are never locked into a single employer or setting. Federal loan repayment programs through the NHSC target NPs in shortage areas, offering up to $50,000 in loan forgiveness over two years, effectively adding $25,000 a year to your compensation. The median sits around $125,000, but FNPs who own practices in underserved areas and accept a mix of insurance and cash-pay patients routinely exceed $180,000. The 40 percent growth rate is driven by the same forces across all NP specialties: too many patients, too few primary care providers, and a system that relies more and more on NPs to close the gap.',
   },
   {
     rank: 5,
@@ -73,7 +77,7 @@ const topJobs = [
     searchTerm: 'ICU nurse',
     salary: '$75K to $110K',
     growth: '6%',
-    paragraph: 'ICU nursing is the bedside role with the highest compensation floor and the most direct pathway to the two highest-paid positions in the profession (CRNA and acute care NP). Base pay for an experienced ICU nurse ranges from $80K to $100K before differentials, and nurses who pick up overtime or work night shifts routinely exceed $110K. The clinical intensity is significant: you manage ventilators, titrate vasoactive drips, interpret hemodynamic waveforms, and make time-sensitive decisions that directly affect patient survival. That weight is the reason the role pays what it does and the reason it is not for everyone. What most salary articles overlook is that ICU experience is the required prerequisite for CRNA programs, which means every shift you work at the bedside is simultaneously building the clinical hours you need to apply for a $220K career. Two to three years in the ICU followed by a CRNA doctoral program is the single highest-ROI sequence available to any BSN graduate.',
+    paragraph: 'ICU nursing is the bedside role with the highest pay floor and the most direct path to the two highest-paid positions in nursing: CRNA and acute care NP. Base pay for an experienced ICU nurse runs $80,000 to $100,000 before differentials, and nurses who pick up overtime or night shifts routinely exceed $110,000. The clinical intensity is real. You manage ventilators, titrate vasoactive drips, interpret hemodynamic waveforms, and make time-sensitive decisions that directly affect patient survival. That weight is why the role pays what it does, and why it is not for everyone. What most salary articles skip is that ICU experience is the required prerequisite for CRNA programs. Every shift you work at the bedside also builds the clinical hours you need to apply for a $220,000 career. Two to three years in the ICU followed by a CRNA doctoral program is the highest-ROI sequence available to any BSN graduate.',
   },
   {
     rank: 6,
@@ -81,7 +85,7 @@ const topJobs = [
     searchTerm: 'nurse midwife',
     salary: '$100K to $140K',
     growth: '35%',
-    paragraph: 'Nurse midwifery occupies a unique position in healthcare because the demand for it is driven by patient preference as much as by workforce economics. A growing number of families are choosing midwife-led care specifically because the model emphasizes physiological birth, shared decision making, and longer appointment times, things that the traditional OB-GYN system struggles to offer at scale. CNMs provide prenatal care, attend deliveries, manage postpartum recovery, and offer gynecological care throughout the lifespan. In states with full practice authority, many open independent birth centers that operate outside the hospital system entirely. The median salary sits around $130K, but CNMs who own practices report net income above that depending on patient volume and payer mix. The 35% growth projection is among the highest in nursing, driven by both an aging OB-GYN workforce and expanding Medicaid coverage for midwife-attended births.',
+    paragraph: 'Nurse midwifery occupies a unique position in healthcare because demand for it comes from patient preference as much as workforce economics. More families are choosing midwife-led care specifically because the model emphasizes physiological birth, shared decision making, and longer appointment times, things the traditional OB-GYN system struggles to offer at scale. CNMs provide prenatal care, attend deliveries, manage postpartum recovery, and offer gynecological care across the lifespan. In states with full practice authority, many open independent birth centers that operate entirely outside the hospital system. The median salary sits around $130,000, but CNMs who own practices often report higher net income depending on patient volume and payer mix. The 35 percent growth projection is among the highest in nursing, driven by an aging OB-GYN workforce and expanding Medicaid coverage for midwife-attended births.',
   },
   {
     rank: 7,
@@ -89,18 +93,9 @@ const topJobs = [
     searchTerm: 'nurse manager',
     salary: '$85K to $120K',
     growth: '28%',
-    paragraph: 'Nurse management is the path for clinicians who realize they want to shape how a unit operates rather than work at the bedside indefinitely. The role involves staffing, scheduling, budgeting, quality metrics, employee relations, and serving as the interface between floor nurses and hospital administration. Pay ranges from $85K to $120K at most facilities, which can actually be less than what a senior staff nurse earns with overtime and differentials, and that is the detail most articles skip. The financial advantage of management is not the immediate salary bump. It is that the role opens a progression into director of nursing ($120K to $160K), VP of patient care services ($150K to $200K), and eventually chief nursing officer ($180K to $300K+), a ladder that bedside nursing does not access regardless of years of experience. If your long-term goal is executive leadership in healthcare, nurse management is the required step that gives you P&L responsibility, committee exposure, and visibility to senior leadership.',
+    paragraph: 'Nurse management is the path for clinicians who want to shape how a unit operates rather than work at the bedside indefinitely. The role covers staffing, scheduling, budgeting, quality metrics, employee relations, and serving as the interface between floor nurses and hospital administration. Pay ranges from $85,000 to $120,000 at most facilities, which can be less than what a senior staff nurse earns with overtime and differentials, a detail most articles skip. The financial advantage of management is not the immediate salary bump. It is that the role opens a progression into director of nursing ($120,000 to $160,000), VP of patient care services ($150,000 to $200,000), and eventually chief nursing officer ($180,000 to $300,000 or more), a ladder bedside nursing does not access regardless of years of experience. If your long-term goal is executive leadership in healthcare, nurse management is the required step that gives you P&L responsibility, committee exposure, and visibility to senior leadership.',
   },
 ]
-
-async function fetchJobData(searchTerm: string) {
-  const [{ count }, data] = await Promise.all([
-    getCachedJobCount(searchTerm, '', undefined),
-    searchJobs({ what: searchTerm, where: '', results_per_page: 20, page: 1 })
-      .then((d: AdzunaSearchResult) => ({ ...d, results: d.results.map(normalizeAdzuna) })),
-  ])
-  return { count, data }
-}
 
 export default async function BestPayingNursingJobsPage() {
   const jobResults = await Promise.all(
@@ -114,29 +109,30 @@ export default async function BestPayingNursingJobsPage() {
       <div className="max-w-4xl mx-auto px-6 py-16">
 
         <header className="text-center mb-16">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
+          <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-3">2026 Ranking</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#1a2340] mb-5 tracking-tight">
             Best Paying Nursing Jobs in 2026
           </h1>
-          <p className="text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-500 max-w-2xl mx-auto leading-relaxed">
             Seven nursing paths ranked by what you actually take home, not what a recruiter puts in the subject line. Each includes the real compensation mechanics, the investment required to get there, and the trade-offs nobody mentions in the job ad. Live openings are embedded below every entry.
           </p>
         </header>
 
         {topJobs.map((job, index) => {
-          const { count, data } = jobResults[index]
+          const { data } = jobResults[index]
           return (
-            <section key={job.rank} className="mb-20 scroll-mt-8">
+            <section key={job.rank} className="mb-16 scroll-mt-8">
               <div className="flex items-start gap-4 mb-4">
-                <span className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-700 font-bold rounded-xl text-lg flex-shrink-0">
+                <span className="inline-flex items-center justify-center w-10 h-10 bg-indigo-50 text-indigo-600 font-bold rounded-xl text-lg flex-shrink-0">
                   {job.rank}
                 </span>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{job.title}</h2>
+                  <h2 className="text-2xl font-bold text-[#1a2340]">{job.title}</h2>
                   <div className="flex flex-wrap items-center gap-3 mt-1 text-sm">
-                    <span className="flex items-center gap-1 text-green-700 font-medium">
+                    <span className="flex items-center gap-1 text-teal-700 font-medium">
                       <DollarSign className="w-3.5 h-3.5" /> {job.salary}
                     </span>
-                    <span className="flex items-center gap-1 text-blue-600 font-medium">
+                    <span className="flex items-center gap-1 text-indigo-600 font-medium">
                       <TrendingUp className="w-3.5 h-3.5" /> {job.growth} projected growth
                     </span>
                   </div>
@@ -147,10 +143,10 @@ export default async function BestPayingNursingJobsPage() {
                 {job.paragraph}
               </p>
 
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <div className="bg-gray-50 px-5 py-3 flex items-center justify-between border-b border-gray-200">
-                  <span className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-blue-600" />
+              <div className="border border-gray-100 rounded-2xl overflow-hidden">
+                <div className="bg-gray-50 px-5 py-3 flex items-center justify-between border-b border-gray-100">
+                  <span className="text-sm font-semibold text-[#1a2340] flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-indigo-600" />
                     {job.title} openings
                   </span>
                 </div>
@@ -169,7 +165,7 @@ export default async function BestPayingNursingJobsPage() {
           )
         })}
 
-        <footer className="mt-10 border-t border-gray-200 pt-8">
+        <footer className="mt-10 border-t border-gray-100 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
             Oh My Job is an independent job search platform and is not affiliated with any hospital, health system, staffing agency, or employer listed on this page. Job listings are sourced from third-party APIs. Salary figures are estimates drawn from publicly available data including BLS, Nurse.org, and NurseJournal and may not reflect specific offers. Licensing, certification, and scope-of-practice rules vary by state. This page is for informational purposes only.
           </p>

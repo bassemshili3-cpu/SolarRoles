@@ -8,7 +8,7 @@ import {
   DollarSign, Search, Zap, ShieldCheck,
   BarChart2, Award, Globe, Users, ArrowRight, Briefcase,
   Plane, ClipboardList, HeartPulse, Headphones, Stethoscope, Building2,
-  Clock, MapPin,
+  Clock, MapPin, Baby, HardHat, TrendingUp
 } from 'lucide-react'
 
 import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
@@ -40,6 +40,38 @@ export const metadata: Metadata = {
 // Revalidation horaire — les requêtes ci-dessous tapent une table de 400k+ lignes,
 // pas question de les relancer à chaque requête utilisateur
 export const revalidate = 3600
+
+// ── Data ──
+const rankings = [
+  {
+    rank: '01',
+    label: 'Best Paying Blue-Collar Jobs',
+    body: 'Skilled trades and manual roles with the strongest pay.',
+    href: '/best-paying-blue-collar-jobs',
+    trending: true,
+  },
+  {
+    rank: '02',
+    label: 'Best Paying Jobs in Finance',
+    body: 'Where finance salaries top out across the US in 2026.',
+    href: '/best-paying-jobs-in-finance-2026',
+    trending: true,
+  },
+  {
+    rank: '03',
+    label: 'Best Jobs Without a Degree',
+    body: 'High-paying roles that don\u2019t require a 4-year degree.',
+    href: '/best-jobs-without-a-degree-2026',
+    trending: false,
+  },
+  {
+    rank: '04',
+    label: 'Best Jobs in the United States',
+    body: 'The overall ranking across every industry and state.',
+    href: '/best-jobs-in-united-states-2026',
+    trending: false,
+  },
+]
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -79,7 +111,6 @@ const credentialFeatures = [
   { icon: Users,  label: 'Portable across employers' },
 ]
 
-// Remplace les anciens liens /jobs?what=X par tes vraies landing pages
 const categories = [
   { label: 'FIFO Jobs',           icon: Plane,         bg: 'bg-blue-600',   href: '/fifo-jobs' },
   { label: 'Executive Assistant', icon: ClipboardList, bg: 'bg-pink-600',   href: '/executive-assistant-jobs' },
@@ -89,6 +120,10 @@ const categories = [
   { label: 'Data Analyst',        icon: BarChart2,     bg: 'bg-yellow-600', href: '/entry-level-data-analyst-jobs' }, // ⚠️ vérifie l'orthographe de ce slug
   { label: 'Dental Assistant',    icon: Stethoscope,   bg: 'bg-red-600',    href: '/dental-assistant-jobs' },
   { label: 'Property Management', icon: Building2,     bg: 'bg-slate-600',  href: '/jobs-at-property-management' },
+  { label: 'Part-Time Jobs',      icon: Clock,          bg: 'bg-teal-600',   href: '/part-time-jobs' },
+  { label: 'Childcare',           icon: Baby,           bg: 'bg-cyan-600',   href: '/childcare-jobs' },
+  { label: 'Engineering',         icon: HardHat,        bg: 'bg-indigo-600', href: '/engineering-jobs' },
+  { label: 'Patient transporter',         icon: HardHat,        bg: 'bg-indigo-900', href: '/patient-transporter-jobs' },
 ]
 
 const CATEGORY_BADGE_COLORS: Record<string, { bg: string; color: string }> = {
@@ -389,6 +424,40 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Rankings (jus SEO homepage → listicles) ── */}
+<section className="bg-white py-20 px-6">
+  <div className="max-w-5xl mx-auto">
+    <div className="text-center mb-6">
+      
+      <h2 className="text-4xl font-bold text-[#1a2340] tracking-tight mb-3">Rankings</h2>
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {rankings.map(({ rank, label, body, href, trending }) => (
+        <Link
+          key={href}
+          href={href}
+          className="group flex items-start gap-5 p-6 rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all"
+        >
+          <span className="text-3xl font-extrabold text-gray-400 group-hover:text-indigo-500 transition-colors leading-none">
+            {rank}
+          </span>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-semibold text-[#1a2340] text-base leading-snug">{label}</h3>
+              {trending && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded-full">
+                  <TrendingUp size={10} /> Trending
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-gray-500 leading-relaxed">{body}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+</section>
+
       {/* ── Job market data (NOUVEAU) ── */}
       <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto">
@@ -416,7 +485,7 @@ export default async function Home() {
               href="/data"
               className="text-indigo-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
             >
-              See full job market data <ArrowRight size={15} />
+              See full job market data 
             </Link>
           </div>
         </div>
@@ -472,7 +541,7 @@ export default async function Home() {
             Every Tuesday, one piece from our career resources blog. Practical advice on the employment field & market data.
           </p>
           <NewsletterForm />
-          <p className="text-blue-200/60 text-xs mt-5">No spam. Unsubscribe anytime.</p>
+          <p className="text-blue-200/60 text-xs mt-5">Unsubscribe anytime.</p>
         </div>
       </section>
     </>

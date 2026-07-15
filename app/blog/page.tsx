@@ -22,6 +22,7 @@ const ARTICLES = [
     date: "March 7, 2026",
     readTime: "8 min read",
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop",
+    url: "https://www.oh-my-job.com/blog/what-six-figures-really-means",
   },
   {
     category: "Interview Tips",
@@ -30,6 +31,7 @@ const ARTICLES = [
     date: "March 7, 2026",
     readTime: "11 min read",
     image: "/interview (2).jpg",
+    url: "https://www.oh-my-job.com/blog/job-interview-questions",
   },
   {
     category: "Interview Tips",
@@ -38,6 +40,7 @@ const ARTICLES = [
     date: "March 6, 2026",
     readTime: "6 min read",
     image: "/30sec.jpg",
+    url: "https://www.oh-my-job.com/blog/the-30-second-rule",
   },
   {
     category: "Remote Work",
@@ -46,6 +49,7 @@ const ARTICLES = [
     date: "March 5, 2026",
     readTime: "7 min read",
     image: "/remote.jpg",
+    url: "https://www.oh-my-job.com/blog/return-to-office-mandates-backfiring",
   },
   {
     category: "Tech Jobs",
@@ -54,7 +58,7 @@ const ARTICLES = [
     date: "March 7, 2026",
     readTime: "9 min read",
     image: null,
-    url: "/blog/ai-talent-war",
+    url: "https://www.oh-my-job.com/blog/ai-talent-war",
   },
   {
     category: "Industry Trends",
@@ -63,7 +67,7 @@ const ARTICLES = [
     date: "March 6, 2026",
     readTime: "6 min read",
     image: null,
-    url: "/blog/healthcare-hiring-boom",
+    url: "https://www.oh-my-job.com/blog/healthcare-hiring-boom",
   },
   {
     category: "Career Advice",
@@ -72,7 +76,7 @@ const ARTICLES = [
     date: "March 5, 2026",
     readTime: "5 min read",
     image: null,
-    url: "/blog/personal-practice-not-brand",
+    url: "https://www.oh-my-job.com/blog/personal-practice-not-brand",
   },
   {
     category: "Salary Insights",
@@ -81,7 +85,7 @@ const ARTICLES = [
     date: "March 4, 2026",
     readTime: "7 min read",
     image: null,
-    url: "/blog/stock-options-hidden-cost",
+    url: "https://www.oh-my-job.com/blog/stock-options-hidden-cost",
   },
   {
     category: "Remote Work",
@@ -90,7 +94,7 @@ const ARTICLES = [
     date: "March 3, 2026",
     readTime: "8 min read",
     image: null,
-    url: "/blog/digital-nomad-visas-2026",
+    url: "https://www.oh-my-job.com/blog/digital-nomad-visas-2026",
   },
   {
     category: "Interview Tips",
@@ -99,7 +103,7 @@ const ARTICLES = [
     date: "March 2, 2026",
     readTime: "4 min read",
     image: null,
-    url: "/blog/why-should-we-hire-you",
+    url: "https://www.oh-my-job.com/blog/why-should-we-hire-you",
   },
 ];
 
@@ -460,7 +464,7 @@ export default function BlogPage() {
                   <div className="articles-section-title">Latest guides</div>
                   <div className="cards-with-image">
                     {withImages.map((article, i) => (
-                      <a key={i} className="img-card" href="#">
+                      <a key={i} className="img-card" href={(article as any).url || "#"}>
                         <img src={article.image!} alt={article.title} />
                         <div className="img-card-body">
                           <div className="img-card-cat"><CategoryBadge category={article.category} /></div>

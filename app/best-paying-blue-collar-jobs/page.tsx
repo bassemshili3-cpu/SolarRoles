@@ -2,9 +2,14 @@
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import { DollarSign, TrendingUp, Briefcase } from 'lucide-react'
-import { AdzunaSearchResult, getCachedJobCount, searchJobs } from '@/lib/adzuna'
-import { normalizeAdzuna } from '@/lib/jobs'
-import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
+// import { getLandingPageJobs } from '@/lib/landing-jobs' // ⚠️ à activer une fois la signature confirmée
+import { getJobs } from '@/lib/getJobs'
+
+async function fetchJobData (searchTerm: string) {
+  const { results, count } = await getJobs({ what: searchTerm, resultsPerPage: 20, page: 1 })
+  return { count, data: { results, count } }
+}
+
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -41,7 +46,7 @@ const topJobs = [
     searchTerm: 'elevator mechanic',
     salary: '$80K to $150K',
     growth: '5%',
-    paragraph: 'The economics behind this trade are almost absurd: a median above $106K, union backing in most markets, and a specialization so narrow that supply will never catch demand. The work involves installing, maintaining, and repairing elevator systems in commercial buildings, and the reason it pays what it does is straightforward. Elevators operate under strict safety codes, the liability exposure for building owners is enormous, and the systems blend hydraulics, electrical controls, and mechanical engineering in ways that take years to master. The 4-year union apprenticeship is the only way in, and once you complete it, you hold a credential that roughly 35,000 people in the entire country share. Emergency callback rates for nights and weekends push top earners past $150K in cities like New York, Chicago, and San Francisco.',
+    paragraph: 'Elevator mechanics install, maintain, and repair elevator systems in commercial buildings. The median salary is above $106,000. Entry into the trade requires a four-year union apprenticeship. Strict safety codes and high liability for building owners keep wages elevated. The specialization is narrow. Only about 35,000 people hold this credential nationwide. Emergency and weekend callback work pushes top earners past $150,000 in cities like New York, Chicago, and San Francisco.',
   },
   {
     rank: 2,
@@ -49,7 +54,7 @@ const topJobs = [
     searchTerm: 'lineman electrician',
     salary: '$70K to $130K',
     growth: '7%',
-    paragraph: 'Linemen earn what they earn because the work is genuinely dangerous and not many people are willing to do it. You climb 60-foot poles, handle conductors carrying thousands of volts, and do it in weather that would shut down most job sites. Storm restoration crews, the linemen who travel to disaster zones after hurricanes to rebuild the grid, earn double or triple their normal rate during deployments, and a single storm season can add $30K to $50K to an annual paycheck. The standard path is a 3 to 4 year apprenticeship through an electrical utility or the IBEW. Grid modernization, renewable energy interconnection, and EV charging infrastructure are generating transmission projects that did not exist a decade ago, which is why the field is growing even as automation absorbs other sectors.',
+    paragraph: 'Linemen work on live power lines carrying thousands of volts, often 60 feet in the air. The job is dangerous and the pay reflects that. Storm restoration crews travel to disaster zones to rebuild the grid after hurricanes. These deployments pay double or triple the normal rate. A single storm season can add $30,000 to $50,000 to an annual paycheck. Most linemen enter the trade through a three to four year apprenticeship with a utility company or the IBEW. Grid modernization, renewable energy interconnection, and EV charging infrastructure are creating new transmission projects and keeping demand high.',
   },
   {
     rank: 3,
@@ -57,7 +62,7 @@ const topJobs = [
     searchTerm: 'construction manager',
     salary: '$75K to $150K+',
     growth: '8%',
-    paragraph: 'This is the blue collar career with the highest ceiling because it sits at the transition point between working with your hands and managing the people who do. Construction managers coordinate trades, control budgets, enforce safety, and keep projects on schedule. The penalty for delays on a large commercial build is thousands of dollars per day, which is why companies pay the managers who prevent those delays accordingly. Most did not start in management. They started as carpenters, electricians, or plumbers, worked up to foreman, and moved into project oversight after accumulating enough field knowledge to understand what every trade on a job site actually does. That ground-level experience is a competitive advantage that a construction management degree alone cannot replicate. Owners of general contracting firms routinely earn $200K to $500K+.',
+    paragraph: 'Construction managers coordinate trades, control budgets, and keep projects on schedule. Project delays cost thousands of dollars per day on large commercial builds, so companies pay well to avoid them. Most construction managers do not start in management. They begin as carpenters, electricians, or plumbers, move up to foreman, and transition into oversight once they understand every trade on a job site. That field experience gives them an edge a construction management degree alone cannot provide. Owners of general contracting firms can earn $200,000 to $500,000 or more.',
   },
   {
     rank: 4,
@@ -65,7 +70,7 @@ const topJobs = [
     searchTerm: 'electrician',
     salary: '$60K to $100K+',
     growth: '11%',
-    paragraph: 'A residential wireman and a data center electrician hold the same base license but occupy completely different economic tiers. The residential side pays $50K to $70K in most markets and offers steady, predictable work. The industrial and commercial side, especially roles involving high-voltage systems, programmable logic controllers, or renewable energy integration, pushes well past $100K. What separates the $60K electricians from the $120K electricians is not talent or work ethic. It is the decision to specialize in a segment where the stakes are high and the supply of qualified workers is thin. The 4 to 5 year apprenticeship pays you from day one, and the journeyman license that follows is portable across every state in the country.',
+    paragraph: 'Electrician pay varies widely by specialization. Residential wiremen earn $50,000 to $70,000 in most markets. Industrial and commercial electricians, especially those working with high-voltage systems, programmable logic controllers, or renewable energy integration, often earn well past $100,000. The difference is not talent or work ethic. It comes down to specializing in higher-stakes segments where qualified workers are scarce. The four to five year apprenticeship pays from day one. The journeyman license that follows is valid in every state.',
   },
   {
     rank: 5,
@@ -73,7 +78,7 @@ const topJobs = [
     searchTerm: 'welder',
     salary: '$45K to $120K+',
     growth: '5%',
-    paragraph: 'The pay gap within welding is wider than in any other trade on this list, and understanding why is the key to making money in the field. A general shop welder fabricating brackets earns $40K to $55K. A pipeline welder certified in specialized processes (TIG, orbital, exotic alloys) traveling to remote sites earns $100K to $200K. Underwater welders working on offshore platforms occupy a separate tier where weekly pay can exceed $2,000 to $3,000. The variable is not years of experience; it is the type of certification you hold, the environments you are willing to work in, and your tolerance for travel. An AWS certification in a high-demand process combined with willingness to go where the work is can take a welder from $50K to six figures in under three years. No other trade offers that kind of income acceleration based purely on credential stacking.',
+    paragraph: 'Welding has one of the widest pay ranges of any trade. A general shop welder fabricating brackets earns $40,000 to $55,000. A pipeline welder certified in specialized processes like TIG or orbital welding, willing to travel to remote sites, can earn $100,000 to $200,000. Underwater welders on offshore platforms can clear $2,000 to $3,000 a week. Pay depends less on years of experience and more on certification type, work environment, and willingness to travel. An AWS certification in a high-demand process can take a welder from $50,000 to six figures in under three years.',
   },
   {
     rank: 6,
@@ -81,7 +86,7 @@ const topJobs = [
     searchTerm: 'plumber',
     salary: '$55K to $105K',
     growth: '6%',
-    paragraph: 'The detail that matters most about plumbing is not the median salary but the ownership math. A solo master plumber running a residential service truck in a mid-size metro can bill $150 to $250 per hour for emergency calls. After vehicle costs, insurance, and supplies, the take-home on a busy week exceeds what most salaried professionals earn in a month. The path takes 4 to 5 years of paid apprenticeship followed by a journeyman and eventually a master license, but the endpoint is a business you own outright with no franchise fees and minimal overhead. The demographic reality is stark: the average licensed plumber is over 55, and the retirement wave is hitting at the same time as Sun Belt construction demand is surging. Every plumber who retires without a replacement creates an opening that gets filled by higher prices for the plumbers who remain.',
+    paragraph: 'Plumbing pay depends heavily on ownership. A solo master plumber running a residential service truck can bill $150 to $250 an hour for emergency calls. After vehicle costs, insurance, and supplies, a busy week can outearn what many salaried professionals make in a month. The path takes four to five years of paid apprenticeship, followed by a journeyman license and eventually a master license. The result is a business with no franchise fees and low overhead. The average licensed plumber is over 55. As they retire, especially with Sun Belt construction demand rising, the plumbers who remain can charge more.',
   },
   {
     rank: 7,
@@ -89,18 +94,11 @@ const topJobs = [
     searchTerm: 'HVAC technician',
     salary: '$50K to $90K',
     growth: '9%',
-    paragraph: 'HVAC sits lower on this list in terms of median salary but higher in terms of where the field is headed over the next decade. The heat pump transition is the single largest shift in residential mechanical systems since the adoption of central air conditioning, driven by state electrification mandates, federal tax credits, and consumer demand for efficiency. Technicians who already hold EPA 608 certification and add heat pump installation to their skill set are positioning themselves at the front of a wave that most of the existing HVAC workforce has not yet caught. Commercial HVAC specialists who manage building automation systems earn $80K to $100K, and the transition into facility management pushes compensation past $120K. The trade school path takes 6 months to 2 years, and the apprenticeship route pays you throughout.',
+    paragraph: 'HVAC technicians have a lower median salary than most trades on this list, but strong momentum. The shift to heat pumps is the biggest change in residential mechanical systems since the rise of central air conditioning. State electrification mandates, federal tax credits, and consumer demand for efficiency are driving that shift. Technicians who hold an EPA 608 certification and add heat pump installation to their skill set are ahead of most of the current workforce. Commercial HVAC specialists who manage building automation systems earn $80,000 to $100,000. Moving into facility management can push pay past $120,000. Training takes six months to two years, and apprenticeships pay throughout.',
   },
 ]
 
-async function fetchJobData(searchTerm: string) {
-  const [{ count }, data] = await Promise.all([
-    getCachedJobCount(searchTerm, '', undefined),
-    searchJobs({ what: searchTerm, where: '', results_per_page: 20, page: 1 })
-      .then((d: AdzunaSearchResult) => ({ ...d, results: d.results.map(normalizeAdzuna) })),
-  ])
-  return { count, data }
-}
+
 
 export default async function BestPayingBlueCollarJobsPage() {
   const jobResults = await Promise.all(
@@ -113,50 +111,48 @@ export default async function BestPayingBlueCollarJobsPage() {
 
       <div className="max-w-4xl mx-auto px-6 py-16">
 
-        {/* ── CENTERED INTRO ── */}
+        {/* ── Intro ── */}
         <header className="text-center mb-16">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
+          <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-3">2026 Ranking</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#1a2340] mb-5 tracking-tight">
             7 Best Paying Blue Collar Jobs in 2026
           </h1>
-          <p className="text-gray-500 max-w-2xl mx-auto">
-            Seven trades where the compensation rivals or exceeds most white collar careers, and where the path in does not require a college degree or a cent of student debt. Ranked by earning ceiling, not just median, because the gap between an average tradesperson and a specialized one is where the real money lives. Each entry includes live job listings.
+          <p className="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+            Seven trades where pay rivals or beats most office jobs, with no degree and no student debt required. Ranked by earning ceiling, not just the median. Each entry includes live job listings.
           </p>
         </header>
 
-        {/* ── JOB SECTIONS ── */}
+        {/* ── Job sections ── */}
         {topJobs.map((job, index) => {
-          const { count, data } = jobResults[index]
+          const { data } = jobResults[index]
           return (
-            <section key={job.rank} className="mb-20 scroll-mt-8">
+            <section key={job.rank} className="mb-16 scroll-mt-8">
 
-              {/* Title Row */}
               <div className="flex items-start gap-4 mb-4">
-                <span className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-700 font-bold rounded-xl text-lg flex-shrink-0">
+                <span className="inline-flex items-center justify-center w-10 h-10 bg-indigo-50 text-indigo-600 font-bold rounded-xl text-lg flex-shrink-0">
                   {job.rank}
                 </span>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{job.title}</h2>
+                  <h2 className="text-2xl font-bold text-[#1a2340]">{job.title}</h2>
                   <div className="flex flex-wrap items-center gap-3 mt-1 text-sm">
-                    <span className="flex items-center gap-1 text-green-700 font-medium">
+                    <span className="flex items-center gap-1 text-teal-700 font-medium">
                       <DollarSign className="w-3.5 h-3.5" /> {job.salary}
                     </span>
-                    <span className="flex items-center gap-1 text-blue-600 font-medium">
+                    <span className="flex items-center gap-1 text-indigo-600 font-medium">
                       <TrendingUp className="w-3.5 h-3.5" /> {job.growth} projected growth
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Paragraph */}
               <p className="text-gray-600 leading-relaxed mb-6">
                 {job.paragraph}
               </p>
 
-              {/* Scrollable Job Board Embed */}
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <div className="bg-gray-50 px-5 py-3 flex items-center justify-between border-b border-gray-200">
-                  <span className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-blue-600" />
+              <div className="border border-gray-100 rounded-2xl overflow-hidden">
+                <div className="bg-gray-50 px-5 py-3 flex items-center justify-between border-b border-gray-100">
+                  <span className="text-sm font-semibold text-[#1a2340] flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-indigo-600" />
                     {job.title} openings
                   </span>
                 </div>
@@ -175,8 +171,7 @@ export default async function BestPayingBlueCollarJobsPage() {
           )
         })}
 
-        {/* ── DISCLAIMER ── */}
-        <footer className="mt-10 border-t border-gray-200 pt-8">
+        <footer className="mt-10 border-t border-gray-100 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
             Oh My Job is an independent job search platform and is not affiliated with any employer, union, trade school, or organization listed on this page. Job listings are sourced from third-party APIs. Salary figures are estimates drawn from publicly available data and may not reflect specific offers. Apprenticeship availability, licensing requirements, and union membership rules vary by state and trade. This page is for informational purposes only.
           </p>
