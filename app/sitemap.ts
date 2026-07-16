@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
+import { buildJobSlug } from '@/lib/slugify'
 
 export const revalidate = 86400
 
@@ -255,28 +256,26 @@ export default async function sitemap({
 
   // id=1+ : batches de job detail pages (14 derniers jours uniquement)
   const jobs = await prisma.job.findMany({
-    where: {
-      active: true,
-      expiresAt: { gt: new Date() },
-      fetchedAt: { gt: getJobCutoff() },
-    },
-    select: {
-      id: true,
-      fetchedAt: true,
-    },
-    orderBy: { fetchedAt: 'desc' },
-    skip: (id - 1) * JOBS_PER_SITEMAP,
-    take: JOBS_PER_SITEMAP,
-  })
+  where: {
+    active: true,
+    expiresAt: { gt: new Date() },
+    fetchedAt: { gt: getJobCutoff() },
+  },
+  select: {
+    id: true,
+    title: true,
+    location: true,
+    fetchedAt: true,
+  },
+  orderBy: { fetchedAt: 'desc' },
+  skip: (id - 1) * JOBS_PER_SITEMAP,
+  take: JOBS_PER_SITEMAP,
+})
 
-  return jobs.map((job) => ({
-    url: `${BASE_URL}/jobs/${job.id}`,
-    // On prend le plus récent entre la vraie date de synchro des données
-    // et la date de dernière refonte du template. Ça évite qu'une offre
-    // non re-synchronisée depuis la refonte affiche un lastmod obsolète
-    // qui ne reflète pas le nouveau rendu HTML (bloc salaire, Similar positions...).
-    lastModified: job.fetchedAt > LAST_MAJOR_UPDATE ? job.fetchedAt : LAST_MAJOR_UPDATE,
-    changeFrequency: 'daily' as const,
-    priority: 0.4,
-  }))
+return jobs.map((job) => ({
+  url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
+  lastModified: job.fetchedAt > LAST_MAJOR_UPDATE ? job.fetchedAt : LAST_MAJOR_UPDATE,
+  changeFrequency: 'daily' as const,
+  priority: 0.4,
+}))
 }

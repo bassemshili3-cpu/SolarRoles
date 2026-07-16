@@ -1,159 +1,980 @@
 import type { Metadata } from 'next'
+
 import Link from 'next/link'
+
 import { Button } from '@/components/ui/button'
-import { Zap, Users, BarChart3, CheckCircle2 } from 'lucide-react'
+
+import {
+
+  Zap,
+
+  Users,
+
+  BarChart3,
+
+  CheckCircle2,
+
+  DollarSign,
+
+  Building2,
+
+  Globe2,
+
+  Sparkles,
+
+  Clock,
+
+  ShieldCheck,
+
+} from 'lucide-react'
+
 
 const CANONICAL_URL = 'https://www.oh-my-job.com/dashboard/post-a-job-free'
 
+
 export const metadata: Metadata = {
-  title: 'Post a Job for Free | Oh My Job',
+
+  title: 'Post a Job for Free — No Credit Card, No Subscription | Oh My Job',
+
   description:
-    'Post your job on Oh My Job for free and reach fresh grads, career changers, and job seekers across the US. No credit card, no subscription.',
+
+    'Post a job for free on Oh My Job and reach thousands of US job seekers, from fresh grads to career changers. No credit card. No subscription. Your listing goes live in minutes.',
+
+  keywords: [
+
+    'post a job for free',
+
+    'free job posting',
+
+    'free job board',
+
+    'post jobs online free',
+
+    'free job listing site',
+
+    'post a job no credit card',
+
+    'hire employees online',
+
+    'small business hiring',
+
+    'startup hiring',
+
+    'free hiring platform',
+
+  ],
+
   alternates: {
+
     canonical: CANONICAL_URL,
+
   },
+
+  robots: { index: true, follow: true },
+
   openGraph: {
-    title: 'Post a Job for Free | Oh My Job',
-    description: 'Reach thousands of active US job seekers. Post your job for free — no credit card required.',
+
+    title: 'Post a Job for Free — No Credit Card | Oh My Job',
+
+    description:
+
+      'Reach thousands of active US job seekers. Post a job for free on Oh My Job — no credit card, no subscription, live in minutes.',
+
     url: CANONICAL_URL,
+
     siteName: 'Oh My Job',
+
     type: 'website',
+
     images: [
+
       {
+
         url: 'https://www.oh-my-job.com/og-employer.png',
+
         width: 1200,
+
         height: 630,
+
         alt: 'Post a job for free on Oh My Job',
+
       },
+
     ],
+
   },
+
   twitter: {
+
     card: 'summary_large_image',
-    title: 'Post a Job for Free | Oh My Job',
-    description: 'Reach thousands of active US job seekers. Post your job for free.',
+
+    title: 'Post a Job for Free — No Credit Card | Oh My Job',
+
+    description:
+
+      'Reach thousands of active US job seekers. Post a job for free with no subscription.',
+
   },
+
 }
 
+
 const steps = [
-  { title: 'Sign in', description: 'Create your employer account in seconds.' },
-  { title: 'Post your job', description: 'Fill in the title, location, salary range and description.' },
-  { title: 'Track results', description: 'Follow clicks and applications live from your dashboard.' },
+
+  {
+
+    title: 'Create your free employer account',
+
+    description:
+
+      'Sign up with your work email in under a minute. No credit card, no commitment, no sales call.',
+
+  },
+
+  {
+
+    title: 'Post your job in five minutes',
+
+    description:
+
+      'Add the title, location, salary range, and a short description. You can also import an existing posting from another board.',
+
+  },
+
+  {
+
+    title: 'Track applications in real time',
+
+    description:
+
+      'Watch views, clicks, and applications roll in from your employer dashboard as candidates apply.',
+
+  },
+
 ]
+
 
 const benefits = [
-  { icon: Zap, title: 'Free, really', description: 'No credit card, no subscription, no hidden fees. Post as many jobs as you want.' },
-  { icon: Users, title: 'Reach the right people', description: 'Fresh grads, career changers, and people returning to the workforce actively browse Oh My Job.' },
-  { icon: BarChart3, title: 'Track everything', description: 'See clicks and applications on every job you post, in real time.' },
-  { icon: CheckCircle2, title: 'Live in minutes', description: 'No approval queue — your job goes live as soon as you post it.' },
+
+  {
+
+    icon: DollarSign,
+
+    title: 'Free, with no hidden fees',
+
+    description:
+
+      'No credit card. No subscription. No paywall. Post as many jobs as you want, for as long as the role is open.',
+
+  },
+
+  {
+
+    icon: Users,
+
+    title: 'Reach the candidates other boards miss',
+
+    description:
+
+      'Our audience is built around fresh grads, career changers, and people returning to work. The exact segments Indeed and LinkedIn tend to underweight.',
+
+  },
+
+  {
+
+    icon: BarChart3,
+
+    title: 'Track every click and application',
+
+    description:
+
+      'See how each posting performs from a clean dashboard. Compare roles, channels, and locations side by side.',
+
+  },
+
+  {
+
+    icon: Zap,
+
+    title: 'Live in minutes, indexed in hours',
+
+    description:
+
+      'No approval queue. Your job goes live the moment you publish it and shows up on Google and Bing within hours.',
+
+  },
+
 ]
+
+
+const audiences = [
+
+  {
+
+    title: 'Small businesses',
+
+    desc: 'Restaurants, retail, services, trades. Post hourly and entry level roles without a recruiter or a budget.',
+
+  },
+
+  {
+
+    title: 'Startups',
+
+    desc: 'Founding teams hiring their first five, ten, or fifty employees. No careers page required.',
+
+  },
+
+  {
+
+    title: 'Local employers',
+
+    desc: 'Healthcare practices, schools, construction firms, and city services hiring in their own market.',
+
+  },
+
+  {
+
+    title: 'Remote-first companies',
+
+    desc: 'Hiring across state lines for fully remote and hybrid roles across the US.',
+
+  },
+
+  {
+
+    title: 'Recruiting agencies',
+
+    desc: 'Manage multiple client listings from one employer dashboard with a single login.',
+
+  },
+
+  {
+
+    title: 'Enterprise teams',
+
+    desc: 'Pilot Oh My Job alongside your existing ATS for hard-to-fill roles and new locations.',
+
+  },
+
+]
+
+
+const jobTypes = [
+
+  'Full-time',
+
+  'Part-time',
+
+  'Contract',
+
+  'Temporary',
+
+  'Internship',
+
+  'Remote',
+
+  'Hybrid',
+
+  'Entry level',
+
+]
+
 
 const faqs = [
+
   {
+
     question: 'Is it really free to post a job on Oh My Job?',
-    answer: 'Yes. Posting a job on Oh My Job is completely free, with no credit card required and no hidden fees.',
+
+    answer:
+
+      'Yes. Posting a job is completely free, with no credit card, no subscription, and no hidden fees. You can post as many listings as you want and only pay if you choose to upgrade to a sponsored post later.',
+
   },
+
   {
+
     question: 'How long does my job listing stay active?',
-    answer: 'Your listing stays live for 30 days. You can repost it anytime from your dashboard.',
+
+    answer:
+
+      'Each listing stays live for 30 days. You can repost it anytime from your employer dashboard, or set it to auto-repost while the role is still open.',
+
   },
+
   {
+
     question: 'Do I need an account to post a job?',
-    answer: 'Yes, you need to sign in to post and manage your listings and track their performance.',
+
+    answer:
+
+      'Yes. You need a free employer account to post, edit, and track your jobs. Signing up takes about a minute and you can post your first job right after.',
+
   },
+
   {
+
     question: 'Can I edit or remove my job listing after posting it?',
-    answer: 'Yes, you can edit or remove any of your listings anytime from your employer dashboard.',
+
+    answer:
+
+      'Yes. You can edit, pause, or remove any of your listings anytime from your employer dashboard. Changes go live immediately.',
+
   },
+
+  {
+
+    question: 'What kinds of jobs can I post on Oh My Job?',
+
+    answer:
+
+      'You can post any legitimate US job, from entry level and hourly roles to senior and salaried positions. The platform works especially well for full-time, part-time, contract, internship, remote, and hybrid roles.',
+
+  },
+
+  {
+
+    question: 'Is Oh My Job a good fit for small businesses and startups?',
+
+    answer:
+
+      'Yes. Most of our employers are small teams, local businesses, and early stage startups. You do not need a careers page, a recruiter, or a hiring budget to get started.',
+
+  },
+
+  {
+
+    question: 'Where will my job listing appear?',
+
+    answer:
+
+      'Your job shows up on Oh My Job, in our category and city pages, in search engine results through Google and Bing, and in our weekly newsletter to active job seekers across the US.',
+
+  },
+
+  {
+
+    question: 'How is Oh My Job different from Indeed, LinkedIn, or ZipRecruiter?',
+
+    answer:
+
+      'Indeed, LinkedIn, and ZipRecruiter charge per posting or require a paid subscription. Oh My Job is free to post, and our audience is built around candidates who are actively looking, including the entry level and career changer segments those boards tend to overlook.',
+
+  },
+
+  {
+
+    question: 'How long does it take for my job to go live?',
+
+    answer:
+
+      'Your job is live within minutes of posting. There is no approval queue and no waiting period. It usually shows up on Google and Bing within a few hours.',
+
+  },
+
+  {
+
+    question: 'Do you offer sponsored or featured job listings?',
+
+    answer:
+
+      'Yes, but only as an option. Every job gets equal visibility by default. Employers who want more reach can promote a single listing to the top of search results and category pages.',
+
+  },
+
 ]
 
+
 export default function EmployerPage() {
+
   return (
+
     <div>
-      {/* FAQ structured data for rich results */}
+
+      {/* Structured data: FAQ + Service + Organization */}
+
       <script
+
         type="application/ld+json"
+
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map((faq) => ({
-              '@type': 'Question',
-              name: faq.question,
-              acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-            })),
-          }),
+
+          __html: JSON.stringify([
+
+            {
+
+              '@context': 'https://schema.org',
+
+              '@type': 'FAQPage',
+
+              mainEntity: faqs.map((faq) => ({
+
+                '@type': 'Question',
+
+                name: faq.question,
+
+                acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+
+              })),
+
+            },
+
+            {
+
+              '@context': 'https://schema.org',
+
+              '@type': 'Service',
+
+              serviceType: 'Free Job Posting',
+
+              provider: {
+
+                '@type': 'Organization',
+
+                name: 'Oh My Job',
+
+                url: 'https://www.oh-my-job.com',
+
+              },
+
+              areaServed: { '@type': 'Country', name: 'United States' },
+
+              description:
+
+                'Post a job for free on Oh My Job and reach thousands of active US job seekers.',
+
+              offers: {
+
+                '@type': 'Offer',
+
+                price: '0',
+
+                priceCurrency: 'USD',
+
+                availability: 'https://schema.org/InStock',
+
+              },
+
+            },
+
+          ]),
+
         }}
+
       />
 
+
       {/* Hero */}
+
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <h1 className="text-5xl font-bold text-[#1a2340] mb-6">
-          Post your job for free on Oh My Job
+
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-teal-600 mb-5">
+
+          <Sparkles className="w-3.5 h-3.5" />
+
+          Free for employers · No credit card
+
+        </span>
+
+        <h1 className="text-5xl md:text-6xl font-bold text-[#1a2340] mb-6 tracking-tighter leading-[1.05]">
+
+          Post a job for free on Oh My Job
+
         </h1>
-        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-          Reach fresh grads, career changers, and people ready to work. No credit card needed. 
+
+        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+
+          Reach the candidates other boards miss — fresh grads, career changers, and people ready to work. Your listing goes live in minutes, with no subscription and no sales call.
+
         </p>
+
+        <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8 flex-wrap">
+
+          <span className="inline-flex items-center gap-1.5">
+
+            <CheckCircle2 className="w-4 h-4 text-teal-600" />
+
+            400k+ monthly job seekers
+
+          </span>
+
+          <span className="inline-flex items-center gap-1.5">
+
+            <CheckCircle2 className="w-4 h-4 text-teal-600" />
+
+            Live in 5 minutes
+
+          </span>
+
+          <span className="inline-flex items-center gap-1.5">
+
+            <CheckCircle2 className="w-4 h-4 text-teal-600" />
+
+            Free forever
+
+          </span>
+
+        </div>
+
         <Button size="lg" asChild>
+
           <Link href="/auth/login">Post a job for free</Link>
+
         </Button>
+
       </section>
+
 
       {/* How it works */}
+
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-10 text-center">How it works</h2>
+
+        <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+
+          How posting a job works
+
+        </h2>
+
+        <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
+
+          Three steps from sign up to your first application. Most employers post their first job the same day they sign up.
+
+        </p>
+
         <div className="grid md:grid-cols-3 gap-8">
+
           {steps.map((step, i) => (
+
             <div key={step.title} className="text-center">
+
               <div className="w-10 h-10 rounded-full bg-teal-50 text-teal-600 font-bold flex items-center justify-center mx-auto mb-4">
+
                 {i + 1}
+
               </div>
+
               <h3 className="text-lg font-semibold text-[#1a2340] mb-2">{step.title}</h3>
-              <p className="text-muted-foreground">{step.description}</p>
+
+              <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+
             </div>
+
           ))}
+
         </div>
+
       </section>
+
 
       {/* Benefits */}
+
       <section className="bg-gray-50 py-16">
+
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-[#1a2340] mb-10 text-center">Why post with Oh My Job</h2>
+
+          <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+
+            Why employers post on Oh My Job
+
+          </h2>
+
+          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
+
+            Built for teams that want to hire without paying per posting, per click, or per seat.
+
+          </p>
+
           <div className="grid md:grid-cols-2 gap-6">
+
             {benefits.map((benefit) => (
-              <div key={benefit.title} className="bg-white rounded-2xl p-6 border border-gray-100">
+
+              <div
+
+                key={benefit.title}
+
+                className="bg-white rounded-2xl p-6 border border-gray-100"
+
+              >
+
                 <benefit.icon className="text-teal-600 mb-3" size={24} />
-                <h3 className="text-lg font-semibold text-[#1a2340] mb-2">{benefit.title}</h3>
-                <p className="text-muted-foreground">{benefit.description}</p>
+
+                <h3 className="text-lg font-semibold text-[#1a2340] mb-2">
+
+                  {benefit.title}
+
+                </h3>
+
+                <p className="text-muted-foreground leading-relaxed">
+
+                  {benefit.description}
+
+                </p>
+
               </div>
+
             ))}
+
           </div>
+
         </div>
+
       </section>
+
+
+      {/* Who posts with us (new SEO section) */}
+
+      <section className="max-w-5xl mx-auto px-6 py-16">
+
+        <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+
+          Built for anyone hiring
+
+        </h2>
+
+        <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
+
+          Whether you run a local shop with one opening or a startup scaling your team, posting a job on Oh My Job takes the same five minutes.
+
+        </p>
+
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+          {audiences.map((item) => (
+
+            <div
+
+              key={item.title}
+
+              className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-indigo-100 transition-colors"
+
+            >
+
+              <h3 className="text-base font-semibold text-[#1a2340] mb-1.5">
+
+                {item.title}
+
+              </h3>
+
+              <p className="text-sm text-muted-foreground leading-relaxed">
+
+                {item.desc}
+
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+
+        {/* Job types tag cloud */}
+
+        <div className="mt-12 text-center">
+
+          <p className="text-sm text-muted-foreground mb-3">
+
+            Job types you can post for free:
+
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-2">
+
+            {jobTypes.map((type) => (
+
+              <span
+
+                key={type}
+
+                className="text-xs font-medium text-[#1a2340] bg-white border border-gray-200 rounded-full px-3 py-1.5"
+
+              >
+
+                {type}
+
+              </span>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* Trust strip (new) */}
+
+      <section className="max-w-5xl mx-auto px-6 py-10">
+
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
+
+          <div className="flex items-center gap-3 shrink-0">
+
+            <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+
+              <ShieldCheck className="w-5 h-5 text-teal-600" />
+
+            </div>
+
+            <div>
+
+              <p className="font-semibold text-[#1a2340] text-sm">No spam, no scam applicants</p>
+
+              <p className="text-xs text-muted-foreground">
+
+                We screen for duplicate and suspicious applications before they reach your dashboard.
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="hidden md:block w-px h-12 bg-gray-200" />
+
+          <div className="flex items-center gap-3 shrink-0">
+
+            <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+
+              <Clock className="w-5 h-5 text-teal-600" />
+
+            </div>
+
+            <div>
+
+              <p className="font-semibold text-[#1a2340] text-sm">Average time to first application</p>
+
+              <p className="text-xs text-muted-foreground">
+
+                Less than 24 hours for most entry level and mid-skill roles.
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="hidden md:block w-px h-12 bg-gray-200" />
+
+          <div className="flex items-center gap-3 shrink-0">
+
+            <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+
+              <Globe2 className="w-5 h-5 text-teal-600" />
+
+            </div>
+
+            <div>
+
+              <p className="font-semibold text-[#1a2340] text-sm">US-wide reach</p>
+
+              <p className="text-xs text-muted-foreground">
+
+                Indexed on Google, Bing, and our own weekly newsletter.
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
 
       {/* FAQ */}
+
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-10 text-center">Frequently asked questions</h2>
+
+        <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+
+          Frequently asked questions
+
+        </h2>
+
+        <p className="text-muted-foreground text-center mb-10">
+
+          Everything employers ask before posting their first job.
+
+        </p>
+
         <div className="space-y-4">
+
           {faqs.map((faq) => (
-            <details key={faq.question} className="bg-white border border-gray-100 rounded-2xl p-6 group">
+
+            <details
+
+              key={faq.question}
+
+              className="bg-white border border-gray-100 rounded-2xl p-6 group"
+
+            >
+
               <summary className="font-semibold text-[#1a2340] cursor-pointer list-none flex justify-between items-center">
+
                 {faq.question}
-                <span className="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span>
+
+                <span className="text-teal-600 group-open:rotate-45 transition-transform text-xl">
+
+                  +
+
+                </span>
+
               </summary>
-              <p className="text-muted-foreground mt-3">{faq.answer}</p>
+
+              <p className="text-muted-foreground mt-3 leading-relaxed">{faq.answer}</p>
+
             </details>
+
           ))}
+
         </div>
+
       </section>
 
-      {/* Final CTA */}
-      <section className="max-w-5xl mx-auto px-6 py-16 text-center">
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-4">Ready to hire?</h2>
-        <p className="text-muted-foreground mb-8">Your next great hire is one free job post away.</p>
-        <Button size="lg" asChild>
-          <Link href="/auth/login?redirectTo=/dashboard/employer">Post a job for free</Link>
-        </Button>
+
+      {/* Related content (new — internal linking) */}
+
+      <section className="max-w-5xl mx-auto px-6 py-12">
+
+        <h2 className="text-2xl font-bold text-[#1a2340] mb-6 text-center tracking-tight">
+
+          Resources for employers
+
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-4">
+
+          <Link
+
+            href="/blog/healthcare-careers-two-years-or-less"
+
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-indigo-100 transition-colors"
+
+          >
+
+            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-600">
+
+              Career Guides
+
+            </span>
+
+            <h3 className="text-base font-semibold text-[#1a2340] mt-2 mb-1.5 leading-snug">
+
+              Hiring for healthcare? Start here.
+
+            </h3>
+
+            <p className="text-sm text-muted-foreground">
+
+              The three healthcare roles that are easiest to fill in 2026, and what candidates actually look for.
+
+            </p>
+
+          </Link>
+
+          <Link
+
+            href="/blog/workplace-loneliness-performance-risk"
+
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-indigo-100 transition-colors"
+
+          >
+
+            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-600">
+
+              Workplace Trends
+
+            </span>
+
+            <h3 className="text-base font-semibold text-[#1a2340] mt-2 mb-1.5 leading-snug">
+
+              Why your best people are interviewing elsewhere.
+
+            </h3>
+
+            <p className="text-sm text-muted-foreground">
+
+              Workplace loneliness is now a performance problem. What employers are doing about it.
+
+            </p>
+
+          </Link>
+
+          <Link
+
+            href="/jobs"
+
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-indigo-100 transition-colors"
+
+          >
+
+            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-600">
+
+              Job Market Data
+
+            </span>
+
+            <h3 className="text-base font-semibold text-[#1a2340] mt-2 mb-1.5 leading-snug">
+
+              See what candidates in your market are looking for.
+
+            </h3>
+
+            <p className="text-sm text-muted-foreground">
+
+              Browse open roles by state, title, and salary to understand local competition.
+
+            </p>
+
+          </Link>
+
+        </div>
+
       </section>
+
+
+      {/* Final CTA */}
+
+      <section className="max-w-5xl mx-auto px-6 py-16 text-center">
+
+        <h2 className="text-3xl font-bold text-[#1a2340] mb-4 tracking-tight">
+
+          Ready to hire?
+
+        </h2>
+
+        <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+
+          Your next great hire is one free job post away. No credit card. No subscription. No waiting.
+
+        </p>
+
+        <Button size="lg" asChild>
+
+          <Link href="/auth/login?redirectTo=/dashboard/employer">
+
+            Post a job for free
+
+          </Link>
+
+        </Button>
+
+        <p className="text-xs text-muted-foreground mt-4 flex items-center justify-center gap-1.5">
+
+          <ShieldCheck className="w-3.5 h-3.5" />
+
+          Free forever for employers
+
+        </p>
+
+      </section>
+
     </div>
+
   )
+
 }
