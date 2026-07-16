@@ -465,7 +465,7 @@ export default async function JobDetailPage({
                   )}
 
                   <ShareBar
-                    url={canonicalUrl}
+                    url={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
                     title={job.title}
                     company={job.company || ''}
                   />
