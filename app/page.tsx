@@ -328,8 +328,8 @@ export default async function Home() {
               </div>
               <h3 className="text-xl font-bold text-[#1a2340] mb-3">If you're starting out or switching lanes</h3>
               <p className="text-gray-500 leading-relaxed mb-5">
-                Fresh grad, career changer, or someone returning to the workforce after a break. We believe in your potential and the skills you bring.
-              
+                Fresh grad, career changer, or someone returning to the workforce after a break. We believe in your potential and the skills you bring,
+                and with transparent salary ranges on every listing, you'll always know what to expect before you apply.
               </p>
               {/* Lien "Find your role → /jobs" retiré ici — même destination que le CTA
                   "Browse open roles" du hero, juste au-dessus du pli. */}
@@ -345,9 +345,9 @@ export default async function Home() {
                 Posting on Oh My Job connects you with people who've actively proven their skills.
                 Our platform saves you time filtering and find better fits.
               </p>
-              <a href="mailto:contact@oh-my-job.com" className="text-teal-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
-                Talk to us 
-              </a>
+              <Link href="/dashboard/post-a-job-free" className="text-teal-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
+                Post a job for free 
+              </Link>
             </div>
 
           </div>

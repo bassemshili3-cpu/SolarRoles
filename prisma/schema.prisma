@@ -53,7 +53,9 @@ model Job {
   active         Boolean   @default(true)
   sourcePriority Int       @default(99)
   isFifo Boolean @default(false)
+  postedByUserId String?
 
+  @@index([postedByUserId])
   @@index([isFifo])
     @@index([active])
   @@index([fetchedAt])

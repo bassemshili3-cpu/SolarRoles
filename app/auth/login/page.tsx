@@ -11,8 +11,13 @@ export default function Login() {
   const supabase = createClient()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') || '/dashboard'
-  
+  const paramRedirect = searchParams.get('redirectTo')
+
+  const [userType, setUserType] = useState<'candidate' | 'employer'>(
+    paramRedirect?.startsWith('/dashboard/employer') ? 'employer' : 'candidate'
+  )
+  const redirectTo = paramRedirect || (userType === 'employer' ? '/dashboard/employer' : '/dashboard')
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -43,7 +48,7 @@ export default function Login() {
       setError(error.message)
       setIsLoading(false)
     } else {
-      router.push('/dashboard')
+      router.push(redirectTo)
       router.refresh()
     }
   }
@@ -106,7 +111,7 @@ export default function Login() {
               <p className="text-slate-400">Companies</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-white">75%</p>
+              <p className="text-3xl font-bold text-white">78%</p>
               <p className="text-slate-400">Hired within 30 days</p>
             </div>
           </div>
@@ -119,6 +124,30 @@ export default function Login() {
       {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12 lg:p-12 xl:p-16 bg-white">
         <div className="w-full max-w-md">
+          {/* Candidate / Employer toggle */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex items-center bg-slate-100 rounded-full p-1">
+              <button
+                type="button"
+                onClick={() => setUserType('candidate')}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+                  userType === 'candidate' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Job seeker
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType('employer')}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+                  userType === 'employer' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Employer
+              </button>
+            </div>
+          </div>
+
           <div className="lg:hidden mb-10">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
@@ -131,8 +160,12 @@ export default function Login() {
           </div>
 
           <div className="hidden lg:block mb-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome back</h2>
-            <p className="text-slate-500">Please enter your details to sign in</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+              {userType === 'employer' ? 'Employer sign in' : 'Welcome back'}
+            </h2>
+            <p className="text-slate-500">
+              {userType === 'employer' ? 'Sign in to post jobs and track applications' : 'Please enter your details to sign in'}
+            </p>
           </div>
 
           {error && (

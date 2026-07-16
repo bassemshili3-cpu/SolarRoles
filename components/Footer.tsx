@@ -32,8 +32,8 @@ export default function Footer() {
 
         <div>
           <div className="font-semibold mb-3">For Employers</div>
-          <Link href="/dashboard/employer" className="text-sm hover:underline">
-            Post a Job • Sponsored
+          <Link href="/dashboard/post-a-job-free" className="text-sm hover:underline">
+            Post a Job 
           </Link>
         </div>
       </div>
