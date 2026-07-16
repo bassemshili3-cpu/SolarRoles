@@ -8,7 +8,7 @@ import RoleDemandMap from '@/components/RoleDemandMap'
 import { resolveStateName, stateToSlug } from '@/lib/usStates'
 import { getRoleLocationStats } from '@/lib/roleLocationStats'
 import { Metadata } from 'next'
-import { notFound, permanentRedirect } from 'next/navigation'
+import { notFound } from 'next/navigation'   // ← permanentRedirect retiré
 import { Button } from '@/components/ui/button'
 import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import Link from 'next/link'
@@ -62,6 +62,34 @@ function formatPostedDate(date: Date | null): string {
   } catch {
     return 'Recently posted'
   }
+}
+
+// ─── Title helper (Bing/Google best practice: ≤ 60 chars) ────────────────────
+
+function buildPageTitle(job: JobDetail): string {
+  const company = job.company?.trim() || 'Company'
+  const brand = ' | Oh My Job'
+  const MAX = 60
+
+  // 1) Format complet: "{title} at {company} | Oh My Job"
+  const full = `${job.title} at ${company}${brand}`
+  if (full.length <= MAX) return full
+
+  // 2) Tronquer le titre, garder entreprise + brand
+  const suffix = ` at ${company}${brand}`
+  const roomForTitle = MAX - suffix.length
+  if (roomForTitle >= 15) {
+    const truncated =
+      job.title.length > roomForTitle - 1
+        ? job.title.slice(0, roomForTitle - 1).trimEnd() + '…'
+        : job.title
+    return `${truncated}${suffix}`
+  }
+
+  // 3) Entreprise trop longue → juste "{title} | Oh My Job" tronqué
+  const fallback = `${job.title}${brand}`
+  if (fallback.length <= MAX) return fallback
+  return job.title.slice(0, MAX - 1).trimEnd() + '…'
 }
 
 // ─── Schema ──────────────────────────────────────────────────────────────────
@@ -160,7 +188,7 @@ export async function generateMetadata(
       : ''
 
   return {
-    title: `${job.title} at ${job.company || 'Company'} | Oh My Job`,
+    title: buildPageTitle(job),   // ← tronqué à 60 chars
     description: `${job.title} position at ${job.company || 'a top employer'} in ${job.location || 'United States'}${salaryStr}. Apply now on Oh My Job.`,
     alternates: { canonical: canonicalUrl },
     openGraph: {
@@ -190,12 +218,10 @@ export default async function JobDetailPage({
   if (!raw) notFound()
 
   const job = getJobDetailWithSalary(raw)
-
-  // ── Slug pas à jour (titre changé, vieux lien, faute de frappe...) → redirect 301
   const canonicalSlug = buildJobSlug(job)
-  if (slug !== canonicalSlug) {
-    permanentRedirect(`/jobs/${id}/${canonicalSlug}`)
-  }
+  // ⚠️ On ne redirige PLUS sur slug mismatch — le canonical link dans <head>
+  //    suffit pour que Google/Bing consolident les signaux. Ça évite aussi
+  //    le meta refresh et garantit que le H1 est toujours rendu.
 
   const roleMatch = matchRoleCategory(job.title, job.description)
   const stateName = resolveStateName(job.addressRegion)
@@ -249,6 +275,9 @@ export default async function JobDetailPage({
 
   return (
     <>
+      {/* Canonical explicite — couvre tous les cas de slug mismatch */}
+      <link rel="canonical" href={canonicalUrl} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -259,17 +288,12 @@ export default async function JobDetailPage({
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-
-       
-
         <div className="flex gap-6 items-start">
-
           <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
             <PaycheckCalculatorCard salary={job.salary_min} state={job.location} compact />
           </div>
 
           <div className="flex-1 min-w-0">
-
             <div className="flex justify-end mb-2 px-1">
               {job.source === 'adzuna' && (
                 <a href="https://www.adzuna.com" target="_blank" rel="noopener noreferrer">
@@ -288,7 +312,6 @@ export default async function JobDetailPage({
             </div>
 
             <div className="bg-card border rounded-2xl shadow-sm overflow-hidden">
-
               {headerImage && (
                 <div className="relative h-48 sm:h-56">
                   <img
@@ -301,7 +324,6 @@ export default async function JobDetailPage({
               )}
 
               <div className="p-8">
-
                 <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
 
                 {job.company && (
