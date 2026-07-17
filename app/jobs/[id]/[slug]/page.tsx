@@ -275,9 +275,6 @@ export default async function JobDetailPage({
 
   return (
     <>
-      {/* Canonical explicite — couvre tous les cas de slug mismatch */}
-      <link rel="canonical" href={canonicalUrl} />
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}

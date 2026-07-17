@@ -6,6 +6,7 @@
 //
 // Adzuna paused: only Jooble, Lensa, and Careerjet are active.
 import { prisma } from './prisma'
+import { buildJobSlug } from './slugify'   // ← ajout
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
 const MIN_DESCRIPTION_LENGTH = 80
@@ -82,60 +83,119 @@ export async function searchJobsFromDb(params: {
 
 // ─── Récupère un job par ID ──────────────────────────────────────────────────
 export async function getJobFromDb(id: string): Promise<DbJob | null> {
+
   const job = await prisma.job.findUnique({
+
     where: { id },
+
   })
 
+
   if (!job || !job.active) return null
+
   if (!ACTIVE_SOURCES.includes(job.source)) return null
 
+
   return job as DbJob
+
 }
 
+
 // ─── URLs actives pour Google Indexing API + IndexNow ────────────────────────
-// Ne remonte que les jobs dont la description a un minimum de contenu
-// substantiel (≥ 80 caractères après nettoyage HTML), pour éviter de
-// soumettre des pages "thin content" qui nuisent au SEO global du domaine.
-// Distribution: ~50% Jooble, ~30% Lensa, ~20% Careerjet
+
 export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
+
   const joobleQuota = Math.floor(limit * 0.5)
+
   const lensaQuota = Math.floor(limit * 0.3)
+
   const careerjetQuota = limit - joobleQuota - lensaQuota
 
-  // On sur-fetch (x3) car une partie sera écartée par le filtre description,
-  // puis on tronque au quota exact après filtrage.
+
   const OVERFETCH_MULTIPLIER = 3
 
+
+  // ✅ Sélectionne les champs nécessaires au buildJobSlug
+
+  const JOB_SELECT = {
+
+    id: true,
+
+    title: true,
+
+    company: true,
+
+    location: true,
+
+    addressRegion: true,
+
+    source: true,
+
+    description: true,
+
+  } as const
+
+
   const [joobleJobs, lensaJobs, careerjetJobs] = await Promise.all([
+
     prisma.job.findMany({
+
       where: { active: true, source: 'jooble' },
-      select: { id: true, description: true },
+
+      select: JOB_SELECT,
+
       orderBy: { fetchedAt: 'desc' },
+
       take: joobleQuota * OVERFETCH_MULTIPLIER,
+
     }),
+
     prisma.job.findMany({
+
       where: { active: true, source: 'lensa' },
-      select: { id: true, description: true },
+
+      select: JOB_SELECT,
+
       orderBy: { fetchedAt: 'desc' },
+
       take: lensaQuota * OVERFETCH_MULTIPLIER,
+
     }),
+
     prisma.job.findMany({
+
       where: { active: true, source: 'careerjet' },
-      select: { id: true, description: true },
+
+      select: JOB_SELECT,
+
       orderBy: { fetchedAt: 'desc' },
+
       take: careerjetQuota * OVERFETCH_MULTIPLIER,
+
     }),
+
   ])
 
+
   const hasEnoughContent = (j: { description: string | null }) =>
+
     stripHtmlForLengthCheck(j.description || '').length >= MIN_DESCRIPTION_LENGTH
 
+
   const filteredJooble = joobleJobs.filter(hasEnoughContent).slice(0, joobleQuota)
+
   const filteredLensa = lensaJobs.filter(hasEnoughContent).slice(0, lensaQuota)
+
   const filteredCareerjet = careerjetJobs.filter(hasEnoughContent).slice(0, careerjetQuota)
 
+
   const all = [...filteredJooble, ...filteredLensa, ...filteredCareerjet]
-  return all.map((j) => `https://www.oh-my-job.com/jobs/${j.id}`)
+
+
+  // ✅ Construit l'URL COMPLÈTE avec le slug canonique
+
+  return all.map((j) => `https://www.oh-my-job.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
+
 }
 
 // ─── Stats pour le dashboard ─────────────────────────────────────────────────
