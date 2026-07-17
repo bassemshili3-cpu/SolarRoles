@@ -85,7 +85,10 @@ export function normalizeJooble(job: JoobleJob): UnifiedJob {
   }
 
   // Génère un ID stable à partir du lien (Jooble n'a pas toujours un ID unique fiable)
-  const stableId = job.id || Buffer.from(job.link).toString('base64').slice(0, 16)
+const rawId = job.id || Buffer.from(job.link).toString('base64').slice(0, 16)
+
+ // un double tiret dans l'URL finale ("jooble--123..." au lieu de "jooble-123...")
+const stableId = String(rawId).replace(/^-/, '')
 
   return {
     id: `jooble-${stableId}`,

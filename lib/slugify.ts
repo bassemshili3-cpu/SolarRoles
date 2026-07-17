@@ -10,5 +10,18 @@ export function slugify(input: string): string {
 }
 
 export function buildJobSlug(job: { title: string; location?: string | null }): string {
-  return slugify([job.title, job.location].filter(Boolean).join(' '))
+  const titleSlug = slugify(job.title)
+
+  if (!job.location) return titleSlug
+
+  const locationSlug = slugify(job.location)
+  if (!locationSlug) return titleSlug
+
+  // Certains titres source (Jooble notamment) contiennent déjà la ville/état
+  // en fin de titre → on évite de la dupliquer en la rajoutant une 2e fois.
+  if (titleSlug.endsWith(locationSlug)) {
+    return titleSlug.slice(0, 80)
+  }
+
+  return `${titleSlug}-${locationSlug}`.slice(0, 80)
 }

@@ -33,7 +33,7 @@ model NewsletterSubscriber {
 }
 
 model Job {
-  id             String    @id
+  id                       String   @id @default(cuid())
   source         String
   title          String
   company        String    @default("")
@@ -54,6 +54,8 @@ model Job {
   sourcePriority Int       @default(99)
   isFifo Boolean @default(false)
   postedByUserId String?
+  schemaDescription        String?
+  schemaDescriptionVersion Int      @default(0)
 
   @@index([postedByUserId])
   @@index([isFifo])

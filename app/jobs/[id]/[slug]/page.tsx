@@ -22,6 +22,8 @@ import { compareSalaryToMarket } from '@/lib/salaryComparison'
 import { getJobHeaderImage } from '@/lib/jobHeaderImage'
 import { getJobDetail, getJobDetailWithSalary, type JobDetail } from '@/lib/jobDetail'
 import { buildJobSlug } from '@/lib/slugify'
+import { extractJobTaxonomy } from '@/lib/jobTaxonomy'
+import { guessDomainFromName } from '@/lib/companyDomain'
 
 export const revalidate = 3600
 
@@ -94,38 +96,79 @@ function buildPageTitle(job: JobDetail): string {
 
 // ─── Schema ──────────────────────────────────────────────────────────────────
 
-function buildJobPostingSchema(job: JobDetail) {
-  const isRemote = (job.location || '').toLowerCase().includes('remote')
-  const employmentType = resolveEmploymentType(job)
+// ─── Schema helpers ─────────────────────────────────────────────────────────
 
-  const schema: Record<string, any> = {
+function parseLocationForSchema(location: string, stateCode: string) {
+  const trimmed = (location ?? '').trim()
+  const lower = trimmed.toLowerCase()
+  const isRemote = lower === 'remote' || lower.includes('anywhere') || lower.includes('wfh')
+  const city = trimmed.split(',')[0]?.trim() ?? ''
+  return { city, isRemote }
+}
+
+function inferExperienceRequirements(title: string): string | undefined {
+  const t = title.toLowerCase()
+  if (/\b(senior|sr\.|lead|principal|staff)\b/.test(t)) return 'SENIOR_LEVEL'
+  if (/\b(junior|jr\.|entry|associate|intern)\b/.test(t)) return 'ENTRY_LEVEL'
+  if (/\b(mid|intermediate)\b/.test(t)) return 'MID_LEVEL'
+  return undefined  // don't set if we can't infer confidently
+}
+
+// ─── Schema ─────────────────────────────────────────────────────────────────
+
+function buildJobPostingSchema(
+  job: JobDetail,
+  context: {
+    industry?: string
+    occupationalCategory?: string
+    skills?: string[]
+    companyDomain?: string
+  } = {},
+) {
+  const { city, isRemote } = parseLocationForSchema(job.location || '', job.addressRegion || '')
+  const employmentType = resolveEmploymentType(job)
+  const stateCode = job.addressRegion || ''
+
+  // ── hiringOrganization: name + logo (Clearbit) + sameAs (website) ──
+  const hiringOrganization: Record<string, unknown> = {
+    '@type': 'Organization',
+    name: job.company || 'Unknown',
+  }
+  if (context.companyDomain) {
+    hiringOrganization.logo = `https://logo.clearbit.com/${context.companyDomain}`
+    hiringOrganization.sameAs = [`https://${context.companyDomain}`]
+  } else if (job.company) {
+    // Fallback: derive a best-guess domain so Clearbit can still try
+    const guessed = job.company.toLowerCase().replace(/[^a-z0-9]+/g, '') + '.com'
+    hiringOrganization.logo = `https://logo.clearbit.com/${guessed}`
+  }
+
+  // ── base schema ──
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: job.title,
     description: buildSchemaDescription({
       title: job.title,
       company: job.company || '',
-      city: job.location || '',
-      state: job.addressRegion || '',
-      stateCode: job.addressRegion || '',
+      city,
+      state: stateCode,           // buildSchemaDescription maps code → full name
+      stateCode,
       description: job.description || '',
       salaryMin: job.salary_min,
       salaryMax: job.salary_max,
       employmentType,
       remote: isRemote,
     }),
-    hiringOrganization: {
-      '@type': 'Organization',
-      name: job.company || 'Unknown',
-    },
+    hiringOrganization,
     jobLocation: {
       '@type': 'Place',
       address: {
         '@type': 'PostalAddress',
-        addressLocality: job.location || '',
-        addressRegion: job.addressRegion || '',
+        addressLocality: city,           // ← just city, not "City, ST"
+        addressRegion: stateCode,        // ← "TX"
         addressCountry: 'US',
-        streetAddress: job.location || '',
+        streetAddress: '',               // ← empty: we don't have a real street
         postalCode: '',
       },
     },
@@ -137,6 +180,7 @@ function buildJobPostingSchema(job: JobDetail) {
     employmentType,
   }
 
+  // ── identifier (source attribution) ──
   const sourceNames: Record<string, string> = {
     adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble', careerjet: 'CareerJet',
   }
@@ -146,10 +190,12 @@ function buildJobPostingSchema(job: JobDetail) {
     value: job.id,
   }
 
+  // ── validThrough: 30 days (industry standard, not 60) ──
   const base = job.created ? new Date(job.created) : new Date()
-  base.setDate(base.getDate() + 60)
+  base.setDate(base.getDate() + 30)
   schema.validThrough = base.toISOString().split('T')[0]
 
+  // ── baseSalary ──
   if (job.salary_min && job.salary_max) {
     schema.baseSalary = {
       '@type': 'MonetaryAmount',
@@ -163,9 +209,25 @@ function buildJobPostingSchema(job: JobDetail) {
     }
   }
 
+  // ── remote handling ──
   if (isRemote) {
     schema.jobLocationType = 'TELECOMMUTE'
     schema.applicantLocationRequirements = { '@type': 'Country', name: 'US' }
+  }
+
+  // ── NEW: industry + occupationalCategory ──
+  if (context.industry) schema.industry = context.industry
+  if (context.occupationalCategory) schema.occupationalCategory = context.occupationalCategory
+
+  // ── NEW: experienceRequirements (inferred from title) ──
+  const expReq = inferExperienceRequirements(job.title)
+  if (expReq) {
+    schema.experienceRequirements = expReq  // valid schema.org enum value
+  }
+
+  // ── NEW: skills (when you have extraction — for now, empty) ──
+  if (context.skills && context.skills.length > 0) {
+    schema.skills = context.skills.join(', ')
   }
 
   return schema
@@ -180,6 +242,7 @@ export async function generateMetadata(
   const raw = await getJobDetail(id)
   if (!raw) notFound()
   const job = getJobDetailWithSalary(raw)
+
   const canonicalUrl = `https://www.oh-my-job.com/jobs/${id}/${buildJobSlug(job)}`
 
   const salaryStr =
@@ -200,6 +263,8 @@ export async function generateMetadata(
   }
 }
 
+
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function JobDetailPage({
@@ -218,6 +283,12 @@ export default async function JobDetailPage({
   if (!raw) notFound()
 
   const job = getJobDetailWithSalary(raw)
+
+  const taxonomy = extractJobTaxonomy({
+  title: job.title,
+  description: job.description || '',
+})
+
   const canonicalSlug = buildJobSlug(job)
   // ⚠️ On ne redirige PLUS sur slug mismatch — le canonical link dans <head>
   //    suffit pour que Google/Bing consolident les signaux. Ça évite aussi
@@ -260,7 +331,16 @@ export default async function JobDetailPage({
   })
   const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
 
-  const schema = buildJobPostingSchema(job)
+  const schema = buildJobPostingSchema(job, {
+
+  industry: taxonomy.industry,
+
+  occupationalCategory: taxonomy.occupationalCategory,
+
+  skills: taxonomy.skills,
+
+  
+})
 
   const applyConfig: Record<string, { label: string; className: string }> = {
     adzuna:    { label: 'Apply now on Adzuna', className: 'bg-green-600 text-white' },

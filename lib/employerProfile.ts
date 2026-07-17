@@ -7,6 +7,7 @@ export type EmployerProfile = {
   singleState: string | null // rempli seulement si TOUTES les offres sont dans un seul état
   avgSalaryMin: number | null
   avgSalaryMax: number | null
+   domain?: string | null  // ← ajoute ça
 }
 
 const MIN_OPENINGS_TO_SHOW = 3 // pas de bloc pour un employeur avec 1-2 annonces

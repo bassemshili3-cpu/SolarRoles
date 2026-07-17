@@ -16,7 +16,7 @@ export function buildBreadcrumbSegments(params: {
   stateName: string | null
   stateSlug: string | null
   roleLabel: string | null
-  roleSlug: string | null // slug /data/salaries/[slug], null si pas de rapport dédié
+  roleSlug: string | null
 }): BreadcrumbSegment[] {
   const segments: BreadcrumbSegment[] = [
     { name: 'Home', url: BASE_URL },
@@ -30,16 +30,24 @@ export function buildBreadcrumbSegments(params: {
     })
   }
 
-  if (params.roleLabel && params.roleSlug) {
+  // ✅ Skip si role === jobTitle (case-insensitive) ou === stateName
+  const jobTitleNorm = params.jobTitle.trim().toLowerCase()
+  const lastName = segments[segments.length - 1]?.name.trim().toLowerCase() ?? ''
+
+  const isDuplicate =
+    !params.roleLabel ||
+    !params.roleSlug ||
+    params.roleLabel.trim().toLowerCase() === jobTitleNorm ||
+    params.roleLabel.trim().toLowerCase() === lastName
+
+  if (!isDuplicate) {
     segments.push({
-      name: params.roleLabel,
-      url: `${BASE_URL}/data/salaries/${params.roleSlug}`,
+      name: params.roleLabel!,
+      url: `${BASE_URL}/data/salaries/${params.roleSlug!}`,
     })
   }
 
-  // Dernier élément : la page courante, sans URL (recommandation Google)
   segments.push({ name: params.jobTitle })
-
   return segments
 }
 
