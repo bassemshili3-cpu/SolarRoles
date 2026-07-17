@@ -12,6 +12,7 @@ import { searchCareerjetJobs, normalizeCareerjet } from './careerjet'
 import { normalizeJooble, UnifiedJob } from './jobs'
 import { extractSalaryFromText } from './extractSalary'
 import { isFifoJob } from './classifyJob'
+import { setCanonicalSlugFromJob, deleteCanonicalSlug } from '@/lib/jobSlugCache'
 
 const EXPIRY_DAYS = 30
 
@@ -96,7 +97,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
       expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
       const isFifo = isFifoJob(job.title, job.description)
 
-      await prisma.job.upsert({
+      const upserted = await prisma.job.upsert({
         where: { id: job.id },
         update: {
           title: job.title,
@@ -133,6 +134,13 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
         },
       })
       saved++
+
+      // ← AJOUT : sync du slug dans le cache KV
+      try {
+        await setCanonicalSlugFromJob(upserted as any)
+      } catch (cacheErr: any) {
+        console.error(`[slugCache] upsert failed for ${job.id}:`, cacheErr.message)
+      }
     } catch (e: any) {
       console.error(`❌ Upsert failed for ${job.id}:`, e.message)
     }
@@ -151,7 +159,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
       expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
       const isFifo = isFifoJob(job.title, job.description)
 
-      await prisma.job.upsert({
+      const upserted = await prisma.job.upsert({
         where: { id: job.id },
         update: {
           title: job.title,
@@ -165,9 +173,6 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           expiresAt,
           active: true,
           isFifo,
-          // Note: addressRegion volontairement absent ici — on ne veut
-          // jamais écraser une valeur déjà correcte par une extraction
-          // qui aurait échoué sur ce run précis.
         },
         create: {
           id: job.id,
@@ -176,7 +181,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           title: job.title,
           company: job.company,
           location: job.location,
-          addressRegion: job.addressRegion || '', // fix : était codé en dur à ''
+          addressRegion: job.addressRegion || '',
           description: job.description,
           url: job.url,
           applyUrl: job.applyUrl,
@@ -190,6 +195,13 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
         },
       })
       saved++
+
+      // ← AJOUT : sync du slug dans le cache KV
+      try {
+        await setCanonicalSlugFromJob(upserted as any)
+      } catch (cacheErr: any) {
+        console.error(`[slugCache] upsert failed for ${job.id}:`, cacheErr.message)
+      }
     } catch (e: any) {
       console.error(`❌ Upsert failed for ${job.id}:`, e.message)
     }
@@ -197,7 +209,6 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
 
   return saved
 }
-
 // ─── Upsert for Lensa ────────────────────────────────────────────────────────
 async function upsertLensaJobs(adverts: any[]): Promise<number> {
   let saved = 0
@@ -209,15 +220,13 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
       const id = `lensa-${advert.unique_id}`
       const location = [advert.city, advert.state].filter(Boolean).join(', ')
 
-      // Fallback : Lensa ne fournit pas de salaire structuré, on tente
-      // de l'extraire du texte comme pour Careerjet.
       const extracted = extractSalaryFromText(
         advert.cleaned_job_title || '',
         advert.description_digest || ''
       )
       const isFifo = isFifoJob(advert.cleaned_job_title, advert.description_digest)
 
-      await prisma.job.upsert({
+      const upserted = await prisma.job.upsert({
         where: { id },
         update: {
           title: advert.cleaned_job_title,
@@ -254,6 +263,13 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
         },
       })
       saved++
+
+      // ← AJOUT : sync du slug dans le cache KV
+      try {
+        await setCanonicalSlugFromJob(upserted as any)
+      } catch (cacheErr: any) {
+        console.error(`[slugCache] upsert failed for ${id}:`, cacheErr.message)
+      }
     } catch (e: any) {
       console.error(`❌ Lensa upsert failed:`, e.message)
     }
@@ -264,6 +280,15 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
 
 // ─── Deactivate expired ──────────────────────────────────────────────────────
 async function deactivateExpired(): Promise<number> {
+  // Récupérer les IDs avant de désactiver (pour le cache)
+  const expiringJobs = await prisma.job.findMany({
+    where: {
+      active: true,
+      expiresAt: { lt: new Date() },
+    },
+    select: { id: true },
+  })
+
   const result = await prisma.job.updateMany({
     where: {
       active: true,
@@ -271,6 +296,16 @@ async function deactivateExpired(): Promise<number> {
     },
     data: { active: false },
   })
+
+  // ← AJOUT : purger le cache pour les jobs expirés
+  for (const job of expiringJobs) {
+    try {
+      await deleteCanonicalSlug(job.id)
+    } catch (err: any) {
+      console.error(`[slugCache] delete failed for ${job.id}:`, err.message)
+    }
+  }
+
   return result.count
 }
 
