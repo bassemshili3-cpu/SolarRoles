@@ -1,11 +1,7 @@
+// app/sitemap.ts
 import { MetadataRoute } from 'next'
-import { prisma } from '@/lib/prisma'
-import { buildJobSlug } from '@/lib/slugify'
-
-export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://www.oh-my-job.com'
-const JOBS_PER_SITEMAP = 10000
 
 // ── Date de dernière refonte connue ──────────────────────────
 // À bumper manuellement à chaque changement structurel notable
@@ -14,13 +10,6 @@ const JOBS_PER_SITEMAP = 10000
 // le contenu a changé, même quand les données Prisma sous-jacentes
 // n'ont pas été re-synchronisées.
 const LAST_MAJOR_UPDATE = new Date('2026-07-08')
-
-// ── Helper date : jobs des 14 derniers jours uniquement ──────
-function getJobCutoff(): Date {
-  const cutoff = new Date()
-  cutoff.setDate(cutoff.getDate() - 14)
-  return cutoff
-}
 
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
@@ -102,7 +91,7 @@ const landingPages: string[] = [
   '/special-education-teacher-jobs',
   '/summer-camp-counselor-jobs',
   '/public-works-commission-jobs',
-   '/manufacturing-jobs',
+  '/manufacturing-jobs',
   '/physician-assistant-jobs',
   '/hr-jobs',
   '/preschool-jobs',
@@ -192,90 +181,43 @@ function toSitemapEntry(
   }
 }
 
-// ── generateSitemaps ─────────────────────────────────────────
-export async function generateSitemaps() {
-  const count = await prisma.job.count({
-    where: {
-      active: true,
-      expiresAt: { gt: new Date() },
-      fetchedAt: { gt: getJobCutoff() },
-    },
-  })
-
-  const jobBatchCount = Math.ceil(count / JOBS_PER_SITEMAP)
-
-  return [
-    { id: 0 },
-    ...Array.from({ length: jobBatchCount }, (_, i) => ({ id: i + 1 })),
+// ── Sitemap des pages statiques uniquement ────────────────────
+// IMPORTANT : ce fichier ne touche plus jamais la base de données.
+// Les job listings paginés vivent désormais dans app/sitemap/[id].xml/route.ts,
+// en dynamic = 'force-dynamic', pour ne plus jamais bloquer le build.
+export default function sitemap(): MetadataRoute.Sitemap {
+  const core: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}`,      lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'daily',  priority: 1.0 },
+    { url: `${BASE_URL}/jobs`, lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'hourly', priority: 0.9 },
   ]
-}
 
-// ── Sitemap par id ───────────────────────────────────────────
-export default async function sitemap({
-  id,
-}: {
-  id: number
-}): Promise<MetadataRoute.Sitemap> {
+  const priority = priorityLandingPages.map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.8 })
+  )
 
-  // id=0 : toutes les pages statiques
-  if (id === 0) {
-    const core: MetadataRoute.Sitemap = [
-      { url: `${BASE_URL}`,      lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'daily',  priority: 1.0 },
-      { url: `${BASE_URL}/jobs`, lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'hourly', priority: 0.9 },
-    ]
+  const standard = landingPages.map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.6 })
+  )
 
-    const priority = priorityLandingPages.map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.8 })
-    )
+  const topJobs = topJobsPages.map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.7 })
+  )
 
-    const standard = landingPages.map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.6 })
-    )
+  const paycheck = paycheckPages.map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.7 })
+  )
 
-    const topJobs = topJobsPages.map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.7 })
-    )
+  const data = [...dataPages, ...dataStatePages, ...dataSalaryPages].map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'daily', priority: 0.7 })
+  )
 
-    const paycheck = paycheckPages.map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.7 })
-    )
+  const blog = blogPosts.map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
+  )
 
-    const data = [...dataPages, ...dataStatePages, ...dataSalaryPages].map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'daily', priority: 0.7 })
-    )
+  const faq = faqArticles.map((slug) =>
+    toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
+  )
 
-    const blog = blogPosts.map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
-    )
-     const faq = faqArticles.map((slug) =>
-      toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
-    )
-
-    return [...core, ...priority, ...standard, ...topJobs, ...paycheck, ...data, ...blog, ...faq]
-  }
-
-  // id=1+ : batches de job detail pages (14 derniers jours uniquement)
-  const jobs = await prisma.job.findMany({
-  where: {
-    active: true,
-    expiresAt: { gt: new Date() },
-    fetchedAt: { gt: getJobCutoff() },
-  },
-  select: {
-    id: true,
-    title: true,
-    location: true,
-    fetchedAt: true,
-  },
-  orderBy: { fetchedAt: 'desc' },
-  skip: (id - 1) * JOBS_PER_SITEMAP,
-  take: JOBS_PER_SITEMAP,
-})
-
-return jobs.map((job) => ({
-  url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
-  lastModified: job.fetchedAt > LAST_MAJOR_UPDATE ? job.fetchedAt : LAST_MAJOR_UPDATE,
-  changeFrequency: 'daily' as const,
-  priority: 0.4,
-}))
+  return [...core, ...priority, ...standard, ...topJobs, ...paycheck, ...data, ...blog, ...faq]
 }
