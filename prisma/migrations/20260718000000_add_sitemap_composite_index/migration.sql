@@ -1,0 +1,1 @@
+CREATE INDEX CONCURRENTLY IF NOT EXISTS "Job_active_expiresAt_fetchedAt_idx" ON "Job"("active", "expiresAt", "fetchedAt");

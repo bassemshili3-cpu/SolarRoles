@@ -63,6 +63,7 @@ model Job {
   @@index([fetchedAt])
   @@index([title, company])
   @@index([sourcePriority, fetchedAt])
+  @@index([active, expiresAt, fetchedAt], map: "Job_active_expiresAt_fetchedAt_idx")
 }
 model RoleStateDemand {
   id        String   @id @default(cuid())
