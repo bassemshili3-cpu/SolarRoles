@@ -1,15 +1,8 @@
-// app/sitemap.ts
-import { MetadataRoute } from 'next'
+// app/sitemap-pages.xml/route.ts
+import { NextResponse } from 'next/server'
 
 const BASE_URL = 'https://www.oh-my-job.com'
-
-// ── Date de dernière refonte connue ──────────────────────────
-// À bumper manuellement à chaque changement structurel notable
-// (nouveau bloc, nouvelle section, refonte de template...).
-// Sert de lastModified plancher pour signaler à Bing/Google que
-// le contenu a changé, même quand les données Prisma sous-jacentes
-// n'ont pas été re-synchronisées.
-const LAST_MAJOR_UPDATE = new Date('2026-07-08')
+const LAST_MAJOR_UPDATE = '2026-07-18'
 
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
@@ -84,7 +77,6 @@ const landingPages: string[] = [
   '/social-media-supervisor',
   '/weekend-jobs',
   '/talent-acquisition-jobs',
-  // ── New keyword landing pages ──
   '/new-grad-nurse-jobs',
   '/language-pathologist-jobs',
   '/school-bus-driver-jobs',
@@ -98,7 +90,7 @@ const landingPages: string[] = [
   '/local-truck-driving-jobs',
 ]
 
-// ── Articles / FAQ hors blog (URL racine, sans préfixe /blog/) ──
+// ── Articles / FAQ hors blog ─────────────────────────────────
 const faqArticles: string[] = [
   '/could-you-collect-unemployment-if-you-quit-your-job',
   '/could-someone-get-fired-from-a-job-for-being-sick',
@@ -131,9 +123,7 @@ const paycheckPages: string[] = [
 ]
 
 // ── Data Center pages ────────────────────────────────────────
-const dataPages: string[] = [
-  '/data',
-]
+const dataPages: string[] = ['/data']
 
 const dataStatePages: string[] = [
   'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado',
@@ -164,60 +154,24 @@ const blogPosts: string[] = [
   '/blog/job-interview-questions',
 ]
 
-// ── Helper ───────────────────────────────────────────────────
-function toSitemapEntry(
-  slug: string,
-  options: {
-    changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']
-    priority: number
-    lastModified?: Date // optionnel : surcharge ponctuelle si une page précise a changé récemment
-  }
-): MetadataRoute.Sitemap[number] {
-  return {
-    url: `${BASE_URL}${slug}`,
-    lastModified: options.lastModified ?? LAST_MAJOR_UPDATE,
-    changeFrequency: options.changeFrequency,
-    priority: options.priority,
-  }
-}
-
-// ── Sitemap des pages statiques uniquement ────────────────────
-// IMPORTANT : ce fichier ne touche plus jamais la base de données.
-// Les job listings paginés vivent désormais dans app/sitemap/[id].xml/route.ts,
-// en dynamic = 'force-dynamic', pour ne plus jamais bloquer le build.
-export default function sitemap(): MetadataRoute.Sitemap {
-  const core: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}`,      lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'daily',  priority: 1.0 },
-    { url: `${BASE_URL}/jobs`, lastModified: LAST_MAJOR_UPDATE, changeFrequency: 'hourly', priority: 0.9 },
+// ── Handler ─────────────────────────────────────────────────
+export async function GET() {
+  const staticEntries: { url: string; priority: number }[] = [
+    { url: BASE_URL, priority: 1.0 },
+    { url: `${BASE_URL}/jobs`, priority: 0.9 },
+    ...priorityLandingPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.8 })),
+    ...landingPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.6 })),
+    ...topJobsPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.7 })),
+    ...paycheckPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.7 })),
+    ...[...dataPages, ...dataStatePages, ...dataSalaryPages].map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.7 })),
+    ...blogPosts.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.5 })),
+    ...faqArticles.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.5 })),
   ]
 
-  const priority = priorityLandingPages.map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.8 })
-  )
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${staticEntries.map((e) => `  <url><loc>${e.url}</loc><lastmod>${LAST_MAJOR_UPDATE}</lastmod><priority>${e.priority}</priority></url>`).join('\n')}
+</urlset>`
 
-  const standard = landingPages.map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.6 })
-  )
-
-  const topJobs = topJobsPages.map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'weekly', priority: 0.7 })
-  )
-
-  const paycheck = paycheckPages.map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.7 })
-  )
-
-  const data = [...dataPages, ...dataStatePages, ...dataSalaryPages].map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'daily', priority: 0.7 })
-  )
-
-  const blog = blogPosts.map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
-  )
-
-  const faq = faqArticles.map((slug) =>
-    toSitemapEntry(slug, { changeFrequency: 'monthly', priority: 0.5 })
-  )
-
-  return [...core, ...priority, ...standard, ...topJobs, ...paycheck, ...data, ...blog, ...faq]
+  return new NextResponse(xml, { headers: { 'Content-Type': 'application/xml' } })
 }

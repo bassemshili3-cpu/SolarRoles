@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 const BASE_URL = 'https://www.oh-my-job.com'
 const JOBS_PER_SITEMAP = 10000
 
@@ -18,26 +20,17 @@ export async function GET() {
       fetchedAt: { gt: getJobCutoff() },
     },
   })
-
   const jobBatchCount = Math.ceil(count / JOBS_PER_SITEMAP)
-  const now = new Date().toISOString()
 
-  const sitemapEntries = [
-    `<sitemap><loc>${BASE_URL}/sitemap/0.xml</loc><lastmod>${now}</lastmod></sitemap>`,
-    ...Array.from({ length: jobBatchCount }, (_, i) =>
-      `<sitemap><loc>${BASE_URL}/sitemap/${i + 1}.xml</loc><lastmod>${now}</lastmod></sitemap>`
-    ),
-  ].join('\n  ')
+  const entries = [
+    `${BASE_URL}/sitemap-pages.xml`,
+    ...Array.from({ length: jobBatchCount }, (_, i) => `${BASE_URL}/sitemap/${i + 1}.xml`),
+  ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${sitemapEntries}
+${entries.map((url) => `  <sitemap><loc>${url}</loc></sitemap>`).join('\n')}
 </sitemapindex>`
 
-  return new NextResponse(xml, {
-    headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-    },
-  })
+  return new NextResponse(xml, { headers: { 'Content-Type': 'application/xml' } })
 }
