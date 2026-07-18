@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 import { buildJobSlug } from '@/lib/slugify'
 
-export const revalidate = 86400
+export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://www.oh-my-job.com'
 const JOBS_PER_SITEMAP = 10000

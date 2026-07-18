@@ -6,7 +6,7 @@
  * "Boulder Valley School District" → "bouldervalleyschooldistrict.com"
  * Note: this is a guess. May not resolve to a real site.
  */
-export function guessDomainFromName(companyName: string): string | null {
+export function guessDomainFromName(companyName: string | undefined | null): string | null {
   if (!companyName) return null
 
   const cleaned = companyName
