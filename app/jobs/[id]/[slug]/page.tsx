@@ -268,7 +268,10 @@ function buildJobPostingSchema(
     '@context': 'https://schema.org',
 
     '@type': 'JobPosting',
+'@id': 'https://www.oh-my-job.com/#organization',
 
+  name: 'Oh My Job',
+  
     title: job.title,
 
     description: buildSchemaDescription({

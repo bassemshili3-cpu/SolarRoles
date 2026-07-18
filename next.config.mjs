@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+   experimental: {
+    staticGenerationMaxConcurrency: 1,
+  },
   images: {
     remotePatterns: [
       { hostname: 'adzuna.com' },
