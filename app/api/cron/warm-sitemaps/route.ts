@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export const maxDuration = 120 // ajuste selon le temps réel observé
+export const maxDuration = 800 // ajuste selon le temps réel observé
 
 const BASE_URL = 'https://www.oh-my-job.com'
 const JOBS_PER_SITEMAP = 10000
