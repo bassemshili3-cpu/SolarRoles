@@ -1,7 +1,19 @@
 // app/api/jobs-all/route.ts
 import { NextRequest, NextResponse } from 'next/server'
+import { unstable_cache } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { buildJobWhere, parseJobWhereParams } from '@/lib/job-where'
+import { buildJobWhere, parseJobWhereParams, type JobWhereParams } from '@/lib/job-where'
+
+// Clé de cache basée sur les params bruts (stables), pas sur whereClause
+// (qui contient un `new Date()` différent à chaque appel et casserait tout hit).
+const getCachedCount = unstable_cache(
+  async (params: JobWhereParams) => {
+    const whereClause = buildJobWhere(params)
+    return prisma.job.count({ where: whereClause })
+  },
+  ['jobs-count'],
+  { revalidate: 120 }
+)
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -10,28 +22,27 @@ export async function GET(request: NextRequest) {
   const resultsPerPage = parseInt(searchParams.get('results_per_page') || '30')
 
   try {
-    const whereClause = buildJobWhere(parseJobWhereParams(searchParams))
+    const params = parseJobWhereParams(searchParams)
+    const whereClause = buildJobWhere(params)
 
     const [dbJobs, count] = await Promise.all([
-  prisma.job.findMany({
-    where: whereClause,
-    select: {
-      id: true, title: true, company: true, location: true,
-      addressRegion: true, url: true, applyUrl: true,
-      salaryMin: true, salaryMax: true, salary: true,
-      contractType: true, contractTime: true, source: true, postedAt: true,
-      // description volontairement exclu ici : trop lourd pour une liste,
-      // à fetcher uniquement sur la page détail du job
-    },
-    orderBy: [
-      { sourcePriority: 'asc' },
-      { fetchedAt: 'desc' },
-    ],
-    skip: (page - 1) * resultsPerPage,
-    take: resultsPerPage,
-  }),
-  prisma.job.count({ where: whereClause }),
-])
+      prisma.job.findMany({
+        where: whereClause,
+        select: {
+          id: true, title: true, company: true, location: true,
+          addressRegion: true, url: true, applyUrl: true,
+          salaryMin: true, salaryMax: true, salary: true,
+          contractType: true, contractTime: true, source: true, postedAt: true,
+        },
+        orderBy: [
+          { sourcePriority: 'asc' },
+          { fetchedAt: 'desc' },
+        ],
+        skip: (page - 1) * resultsPerPage,
+        take: resultsPerPage,
+      }),
+      getCachedCount(params),   // ← params bruts, pas whereClause
+    ])
 
     const results = dbJobs.map((job) => ({
       id:            job.id,

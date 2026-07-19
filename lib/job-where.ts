@@ -8,6 +8,19 @@ import { STATES } from './usStates'
 
 export const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet'] as const
 
+const STOPWORDS = new Set([
+  'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
+  'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'or', 'that',
+  'the', 'to', 'was', 'were', 'will', 'with',
+])
+
+function meaningfulKeywords(input: string): string[] {
+  return input
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter((kw) => kw.length > 2 && !STOPWORDS.has(kw.toLowerCase()))
+}
+
 const JOB_TYPE_KEYWORDS: Record<string, string[]> = {
   'Full-time':  ['full-time', 'full time'],
   'Part-time':  ['part-time', 'part time'],
@@ -118,11 +131,12 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
 
   if (whatPhrases.length > 0) {
     AND.push({ OR: keywordOr(whatPhrases, ['title', 'description']) })
-  } else if (what) {
-    for (const kw of what.split(/\s+/).filter(Boolean)) {
-      AND.push({ OR: keywordOr([kw], ['title', 'company', 'description']) })
-    }
+ } else if (what) {
+  const keywords = meaningfulKeywords(what)
+  for (const kw of keywords) {
+    AND.push({ OR: keywordOr([kw], ['title', 'company', 'description']) })
   }
+}
 
   if (excludePhrases.length > 0) {
     AND.push({
