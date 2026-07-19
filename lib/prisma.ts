@@ -20,4 +20,7 @@ export const prisma =
     },
   })
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+// Toujours mettre en cache le singleton, y compris en production — évite toute
+// réinstanciation (donc reconnexion DB) si le module venait à être réévalué
+// dans un contexte serverless chaud. Coût nul, ne fait que sécuriser le pattern.
+globalForPrisma.prisma = prisma

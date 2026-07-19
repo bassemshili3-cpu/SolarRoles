@@ -1,6 +1,8 @@
 // app/sitemap-pages.xml/route.ts
 import { NextResponse } from 'next/server'
 
+ export const dynamic = 'force-static'
+
 const BASE_URL = 'https://www.oh-my-job.com'
 const LAST_MAJOR_UPDATE = '2026-07-08'
 

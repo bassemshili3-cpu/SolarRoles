@@ -23,11 +23,12 @@
       "path": "/api/cron/role-demand",
       "schedule": "0 * * * *"
     },
-    {"path": "/api/cron/warm-sitemaps",
-       "schedule": "0 */5 * * *" },
 
      { "path": "/api/cron/backfill-header-images", 
-       "schedule": "*/10 * * * *" }
+       "schedule": "*/10 * * * *" },
+
+       { "path": "/api/cron/generate-sitemaps",
+        "schedule": "0 */6 * * *" }
 
   ]
 }
