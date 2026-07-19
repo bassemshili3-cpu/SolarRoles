@@ -2,18 +2,16 @@
 //
 // Génère l'index + tous les batches de sitemaps jobs et les upload sur
 // Vercel Blob (accès public, pathname stable, overwrite à chaque run).
-// Les routes publiques (sitemap-index-route.ts, sitemap-batch-route.ts)
-// ne font plus AUCUNE requête DB : elles servent juste ce contenu déjà
-// généré, via lib/sitemap-blob.ts.
+// Les routes publiques ne font plus aucune requête DB : elles sont désormais
+// remplacées par un rewrite Vercel direct vers le CDN Blob (next.config.js) —
+// aucune Function n'est même invoquée pour les servir.
 //
 // Setup :
 //   1. Connecte un Blob store à ton projet Vercel (Storage > Create Store
-//      > Blob). BLOB_READ_WRITE_TOKEN est alors injecté automatiquement.
-//   2. Récupère la "Base URL" du store dans le dashboard et mets-la dans
-//      BLOB_BASE_URL (utilisée côté lecture, dans sitemap-blob.ts).
-//   3. Ajoute un cron dans vercel.json :
+//      > Blob). BLOB_STORE_ID est alors injecté automatiquement.
+//   2. Ajoute un cron dans vercel.json :
 //        { "path": "/api/cron/generate-sitemaps", "schedule": "0 */6 * * *" }
-//   4. Juste après ce déploiement, déclenche-le une fois à la main
+//   3. Juste après ce déploiement, déclenche-le une fois à la main
 //      (curl ci-dessous) pour que les fichiers existent avant le premier
 //      hit d'un crawler.
 //
@@ -54,7 +52,10 @@ async function uploadXml(pathname: string, xml: string) {
     access: 'public',
     addRandomSuffix: false, // pathname stable, sinon les routes proxy ne le retrouvent plus
     allowOverwrite: true, // on régénère le même fichier à chaque run du cron
-    contentType: 'application/xml',
+    // text/xml (et pas application/xml) : c'est le seul des deux que Vercel Blob
+    // reconnaît pour un Content-Disposition 'inline' — sinon le navigateur force
+    // le téléchargement du fichier au lieu de l'afficher.
+    contentType: 'text/xml',
     cacheControlMaxAge: 21600, // 6h, aligné sur la fréquence du cron
   })
 }
