@@ -53,67 +53,82 @@ export default async function StateDataPage({
   const addressRegionFilter = { in: [stateName, stateCode] }
 
   // ── Queries ──
-  const [
-    totalJobs,
-    salaryAgg,
-    topCompanies,
-    topTitles,
-    contractBreakdown,
-  ] = await Promise.all([
-    // Total active jobs in this state
-    prisma.job.count({
-      where: { active: true, addressRegion: addressRegionFilter },
-    }),
+  let totalJobs = 0
+  let salaryAgg: {
+    _avg: { salaryMin: number | null; salaryMax: number | null }
+    _min: { salaryMin: number | null }
+    _max: { salaryMax: number | null }
+    _count: { id: number }
+  } = {
+    _avg: { salaryMin: null, salaryMax: null },
+    _min: { salaryMin: null },
+    _max: { salaryMax: null },
+    _count: { id: 0 },
+  }
+  let topCompanies: { company: string; _count: { id: number } }[] = []
+  let topTitles: { title: string; _count: { id: number } }[] = []
+  let contractBreakdown: { contractTime: string | null; _count: { id: number } }[] = []
 
-    // Average salary — annuel uniquement
-    // FIX: filtre gte 20 000 et lte 600 000 pour exclure les valeurs horaires,
-    // mensuelles et les outliers. Sans ce filtre, les salaires horaires ($15)
-    // et mensuels ($1 200) tirent la moyenne vers le bas (ex: $11 957 affiché).
-    prisma.job.aggregate({
-      where: {
-        active: true,
-        addressRegion: addressRegionFilter,
-        salaryMin: {
-          gte: SALARY_MIN_THRESHOLD,
-          lte: SALARY_MAX_THRESHOLD,
+  try {
+    ;[totalJobs, salaryAgg, topCompanies, topTitles, contractBreakdown] = await Promise.all([
+      // Total active jobs in this state
+      prisma.job.count({
+        where: { active: true, addressRegion: addressRegionFilter },
+      }),
+
+      // Average salary — annuel uniquement
+      // FIX: filtre gte 20 000 et lte 600 000 pour exclure les valeurs horaires,
+      // mensuelles et les outliers. Sans ce filtre, les salaires horaires ($15)
+      // et mensuels ($1 200) tirent la moyenne vers le bas (ex: $11 957 affiché).
+      prisma.job.aggregate({
+        where: {
+          active: true,
+          addressRegion: addressRegionFilter,
+          salaryMin: {
+            gte: SALARY_MIN_THRESHOLD,
+            lte: SALARY_MAX_THRESHOLD,
+          },
+          salaryMax: {
+            gte: SALARY_MIN_THRESHOLD,
+            lte: SALARY_MAX_THRESHOLD,
+          },
         },
-        salaryMax: {
-          gte: SALARY_MIN_THRESHOLD,
-          lte: SALARY_MAX_THRESHOLD,
-        },
-      },
-      _avg: { salaryMin: true, salaryMax: true },
-      _min: { salaryMin: true },
-      _max: { salaryMax: true },
-      _count: { id: true },
-    }),
+        _avg: { salaryMin: true, salaryMax: true },
+        _min: { salaryMin: true },
+        _max: { salaryMax: true },
+        _count: { id: true },
+      }),
 
-    // Top 15 hiring companies
-    prisma.job.groupBy({
-      by: ['company'],
-      where: { active: true, addressRegion: addressRegionFilter, company: { not: '' } },
-      _count: { id: true },
-      orderBy: { _count: { id: 'desc' } },
-      take: 15,
-    }),
+      // Top 15 hiring companies
+      prisma.job.groupBy({
+        by: ['company'],
+        where: { active: true, addressRegion: addressRegionFilter, company: { not: '' } },
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+        take: 15,
+      }),
 
-    // Top 15 job titles
-    prisma.job.groupBy({
-      by: ['title'],
-      where: { active: true, addressRegion: addressRegionFilter },
-      _count: { id: true },
-      orderBy: { _count: { id: 'desc' } },
-      take: 15,
-    }),
+      // Top 15 job titles
+      prisma.job.groupBy({
+        by: ['title'],
+        where: { active: true, addressRegion: addressRegionFilter },
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+        take: 15,
+      }),
 
-    // Contract type breakdown
-    prisma.job.groupBy({
-      by: ['contractTime'],
-      where: { active: true, addressRegion: addressRegionFilter },
-      _count: { id: true },
-      orderBy: { _count: { id: 'desc' } },
-    }),
-  ])
+      // Contract type breakdown
+      prisma.job.groupBy({
+        by: ['contractTime'],
+        where: { active: true, addressRegion: addressRegionFilter },
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+      }),
+    ])
+  } catch (err) {
+    console.error(`StateDataPage query error (${stateName}):`, err)
+    // Fallbacks déjà initialisés — la page se génère avec des valeurs neutres.
+  }
 
   // Moyenne de (salaryMin + salaryMax) / 2 — uniquement sur les valeurs filtrées
   const avgSalary =

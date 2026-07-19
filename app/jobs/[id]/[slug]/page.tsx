@@ -40,8 +40,6 @@ import { formatDistanceToNow } from 'date-fns'
 
 import { compareSalaryToMarket } from '@/lib/salaryComparison'
 
-import { getJobHeaderImage } from '@/lib/jobHeaderImage'
-
 import { getJobDetail, getJobDetailWithSalary, type JobDetail } from '@/lib/jobDetail'
 
 import { buildJobSlug } from '@/lib/slugify'
@@ -268,10 +266,8 @@ function buildJobPostingSchema(
     '@context': 'https://schema.org',
 
     '@type': 'JobPosting',
-'@id': 'https://www.oh-my-job.com/#organization',
 
-  name: 'Oh My Job',
-  
+
     title: job.title,
 
     description: buildSchemaDescription({
@@ -541,10 +537,7 @@ export default async function JobDetailPage({
   const stateName = resolveStateName(job.addressRegion)
 
 
-  const headerImageQuery = roleMatch?.label || job.title
-
-
-  const [roleStats, similarJobs, roleDemand, employerProfile, headerImage] = await Promise.all([
+  const [roleStats, similarJobs, roleDemand, employerProfile] = await Promise.all([
 
     roleMatch && stateName
 
@@ -570,7 +563,6 @@ export default async function JobDetailPage({
 
       : Promise.resolve(null),
 
-    getJobHeaderImage(headerImageQuery),
 
   ])
 
@@ -706,25 +698,16 @@ export default async function JobDetailPage({
 
             <div className="bg-card border rounded-2xl shadow-sm overflow-hidden">
 
-              {headerImage && (
-
-                <div className="relative h-48 sm:h-56">
-
-                  <img
-
-                    src={headerImage}
-
-                    alt={`Illustration - ${job.title}`}
-
-                    className="w-full h-full object-cover opacity-70"
-
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-
-                </div>
-
-              )}
+              {job.headerImage && (
+  <div className="relative h-48 sm:h-56">
+    <img
+      src={job.headerImage}
+      alt={`Illustration - ${job.title}`}
+      className="w-full h-full object-cover opacity-70"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+  </div>
+)}
 
 
               <div className="p-8">

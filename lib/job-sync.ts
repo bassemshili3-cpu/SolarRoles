@@ -112,6 +112,8 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
           expiresAt,
           active: true,
           isFifo,
+          // ⚠️ Pas de needsHeaderImage ici : on ne veut pas réinitialiser
+          // le flag sur un job déjà backfillé à chaque re-sync périodique.
         },
         create: {
           id: job.id,
@@ -131,6 +133,7 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
           expiresAt,
           active: true,
           isFifo,
+          needsHeaderImage: true,   // ← uniquement à la création
         },
       })
       saved++
@@ -192,6 +195,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
           expiresAt,
           active: true,
           isFifo,
+          needsHeaderImage: true,   // ← uniquement à la création
         },
       })
       saved++
@@ -209,6 +213,7 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
 
   return saved
 }
+
 // ─── Upsert for Lensa ────────────────────────────────────────────────────────
 async function upsertLensaJobs(adverts: any[]): Promise<number> {
   let saved = 0
@@ -260,6 +265,7 @@ async function upsertLensaJobs(adverts: any[]): Promise<number> {
           expiresAt,
           active: true,
           isFifo,
+          needsHeaderImage: true,   // ← uniquement à la création
         },
       })
       saved++

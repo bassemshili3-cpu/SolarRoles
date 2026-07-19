@@ -34,36 +34,41 @@ model NewsletterSubscriber {
 
 model Job {
   id                       String   @id @default(cuid())
-  source         String
-  title          String
-  company        String    @default("")
-  location       String    @default("")
-  addressRegion  String    @default("")
-  description    String    @db.Text
-  url            String
-  applyUrl       String    @default("")
-  salaryMin      Int?
-  salaryMax      Int?
-  salary         String?
-  contractType   String?
-  contractTime   String?
-  postedAt       DateTime?
-  fetchedAt      DateTime  @default(now())
-  expiresAt      DateTime
-  active         Boolean   @default(true)
-  sourcePriority Int       @default(99)
-  isFifo Boolean @default(false)
-  postedByUserId String?
+  source                   String
+  title                    String
+  company                  String   @default("")
+  location                 String   @default("")
+  addressRegion            String   @default("")
+  description              String   @db.Text
+  url                      String
+  applyUrl                 String   @default("")
+  salaryMin                Int?
+  salaryMax                Int?
+  salary                   String?
+  contractType             String?
+  contractTime             String?
+  postedAt                 DateTime?
+  fetchedAt                DateTime @default(now())
+  expiresAt                DateTime
+  active                   Boolean  @default(true)
+  sourcePriority           Int      @default(99)
+  isFifo                   Boolean  @default(false)
+  postedByUserId           String?
+  headerImage              String?  // ← NOUVEAU (fix #3)
+   needsHeaderImage  Boolean  @default(true)  // ← NOUVEAU (queue pattern)
   schemaDescription        String?
   schemaDescriptionVersion Int      @default(0)
 
   @@index([postedByUserId])
   @@index([isFifo])
-    @@index([active])
+  @@index([active])
   @@index([fetchedAt])
   @@index([title, company])
   @@index([sourcePriority, fetchedAt])
   @@index([active, expiresAt, fetchedAt], map: "Job_active_expiresAt_fetchedAt_idx")
+  @@index([active, company])                              // ← NOUVEAU (employerProfile)
+  @@index([active, addressRegion, postedAt(sort: Desc)])  // ← NOUVEAU (similarJobs + roleLocationStats)
+    @@index([needsHeaderImage, headerImage])                // ← NOUVEAU (enrich script)
 }
 model RoleStateDemand {
   id        String   @id @default(cuid())

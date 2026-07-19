@@ -37,43 +37,56 @@ const SKILL_BARS = [
 ]
 
 export default async function DataCenterPage() {
-  const [totalJobs, avgSalaryResult, topStatesRaw, entryLevelCount] = await Promise.all([
-    prisma.job.count({ where: { active: true } }),
+  let totalJobs = 0
+  let avgSalaryResult: { _avg: { salaryMin: number | null; salaryMax: number | null } } = {
+    _avg: { salaryMin: null, salaryMax: null },
+  }
+  let topStatesRaw: { addressRegion: string | null; _count: { id: number } }[] = []
+  let entryLevelCount = 0
 
-    prisma.job.aggregate({
-      where: {
-        active: true,
-        salaryMin: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
-        salaryMax: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
-      },
-      _avg: { salaryMin: true, salaryMax: true },
-    }),
+  try {
+    ;[totalJobs, avgSalaryResult, topStatesRaw, entryLevelCount] = await Promise.all([
+      prisma.job.count({ where: { active: true } }),
 
-    // FIX Ln 86: on ne peut pas passer `not: null` sur un champ String? avec Prisma.
-    // On filtre côté JS après coup en excluant les valeurs null/vides.
-    // Rappel: addressRegion contient un code à 2 lettres ("TX"), pas le nom complet.
-    prisma.job.groupBy({
-      by: ['addressRegion'],
-      where: {
-        active: true,
-        addressRegion: { not: '' },
-      },
-      _count: { id: true },
-      orderBy: { _count: { id: 'desc' } },
-      take: 15, // on prend 15 pour avoir de la marge après filtre JS
-    }),
+      prisma.job.aggregate({
+        where: {
+          active: true,
+          salaryMin: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
+          salaryMax: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
+        },
+        _avg: { salaryMin: true, salaryMax: true },
+      }),
 
-    prisma.job.count({
-      where: {
-        active: true,
-        OR: [
-          { description: { contains: 'no experience', mode: 'insensitive' } },
-          { description: { contains: 'entry level',   mode: 'insensitive' } },
-          { description: { contains: 'entry-level',   mode: 'insensitive' } },
-        ],
-      },
-    }),
-  ])
+      // FIX Ln 86: on ne peut pas passer `not: null` sur un champ String? avec Prisma.
+      // On filtre côté JS après coup en excluant les valeurs null/vides.
+      // Rappel: addressRegion contient un code à 2 lettres ("TX"), pas le nom complet.
+      prisma.job.groupBy({
+        by: ['addressRegion'],
+        where: {
+          active: true,
+          addressRegion: { not: '' },
+        },
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+        take: 15, // on prend 15 pour avoir de la marge après filtre JS
+      }),
+
+      prisma.job.count({
+        where: {
+          active: true,
+          OR: [
+            { description: { contains: 'no experience', mode: 'insensitive' } },
+            { description: { contains: 'entry level',   mode: 'insensitive' } },
+            { description: { contains: 'entry-level',   mode: 'insensitive' } },
+          ],
+        },
+      }),
+    ])
+  } catch (err) {
+    console.error('DataCenterPage query error:', err)
+    // Fallbacks déjà initialisés ci-dessus — la page se génère quand même,
+    // avec des valeurs neutres. La prochaine revalidation (24h) réessaiera.
+  }
 
   // FIX Ln 219: filtre null côté JS + résout code -> nom complet + slug de route.
   // Les states sans page dédiée (ex: codes non reconnus comme "DC" selon config)

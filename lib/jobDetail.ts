@@ -18,6 +18,7 @@ export type JobDetail = {
   source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet'
   externalApplyUrl?: string | null
   apply_url?: string
+  headerImage?: string | null   // ← AJOUT
 }
 
 export async function getJobDetail(id: string): Promise<JobDetail | null> {
@@ -41,6 +42,7 @@ export async function getJobDetail(id: string): Promise<JobDetail | null> {
       apply_url: dbJob.applyUrl,
       contract_type: dbJob.contractType || undefined,
       contract_time: dbJob.contractTime || undefined,
+      headerImage: dbJob.headerImage,   // ← AJOUT
     }
   } catch (error: any) {
     console.error('DB error:', error.message)
