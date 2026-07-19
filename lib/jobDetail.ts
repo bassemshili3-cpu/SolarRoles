@@ -1,6 +1,7 @@
 // lib/jobDetail.ts
 import { prisma } from '@/lib/prisma'
 import { extractSalaryFromText } from '@/lib/extractSalary'
+import { cache } from 'react'
 
 export type JobDetail = {
   id: string
@@ -18,10 +19,10 @@ export type JobDetail = {
   source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet'
   externalApplyUrl?: string | null
   apply_url?: string
-  headerImage?: string | null   // ← AJOUT
+  headerImage?: string | null
 }
 
-export async function getJobDetail(id: string): Promise<JobDetail | null> {
+export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> => {
   try {
     const dbJob = await prisma.job.findUnique({ where: { id } })
     if (!dbJob || !dbJob.active) return null
@@ -42,13 +43,13 @@ export async function getJobDetail(id: string): Promise<JobDetail | null> {
       apply_url: dbJob.applyUrl,
       contract_type: dbJob.contractType || undefined,
       contract_time: dbJob.contractTime || undefined,
-      headerImage: dbJob.headerImage,   // ← AJOUT
+      headerImage: dbJob.headerImage,
     }
   } catch (error: any) {
     console.error('DB error:', error.message)
     return null
   }
-}
+})
 
 export function getJobDetailWithSalary(job: JobDetail): JobDetail {
   const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
