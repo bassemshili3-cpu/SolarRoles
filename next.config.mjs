@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+
+// Remplace <STORE_HOST> par l'URL publique réelle de ton store Blob
+// (Vercel Dashboard → Storage → ton store → clique un fichier existant pour voir son domaine —
+// ce n'est PAS la même valeur que BLOB_STORE_ID).
+const BLOB_PUBLIC_HOST = 'https://https://ovj48egcxlaw9gic.public.blob.vercel-storage.com.public.blob.vercel-storage.com'
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -16,9 +22,21 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap-index.xml',
+        destination: `${BLOB_PUBLIC_HOST}/sitemaps/index.xml`,
+      },
+      {
+        source: '/sitemap/:id.xml',
+        destination: `${BLOB_PUBLIC_HOST}/sitemaps/:id.xml`,
+      },
+    ]
+  },
   experimental: {
     cpus: 1,
-     staleTimes: {
+    staleTimes: {
       dynamic: 300, // secondes — garde le prefetch en cache le temps que l'utilisateur clique
     },
   },
