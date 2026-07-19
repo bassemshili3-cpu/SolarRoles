@@ -1,9 +1,9 @@
 'use client'
 import { useRouter, usePathname } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import { Button } from '@/components/ui/button'
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { Bell, Check, ChevronDown } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 
@@ -234,6 +234,7 @@ const canUseSSRInitialData =
   // ── AJOUT ────────────────────────────────────────────────
   const router = useRouter()
   const pathname = usePathname()
+  const queryClient = useQueryClient()
 
   function goToPage(newPage: number) {
     const params = new URLSearchParams(searchParams.toString())
@@ -244,14 +245,19 @@ const canUseSSRInitialData =
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
- 
+  // Construit l'URL ET les query params /api/jobs-all pour une page donnée.
+  // Factorisé pour être réutilisé par useQuery ET par le prefetch de la page suivante.
+  const buildPageHref = useCallback((targetPage: number) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (targetPage > 1) params.set('page', targetPage.toString())
+    else params.delete('page')
+    return `${pathname}?${params.toString()}`
+  }, [pathname, searchParams])
 
-  const { data, isLoading, isError, refetch } = useQuery({
-  queryKey: ['jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, resolvedWhere, salary_min, page, searchParams.toString()],
-  queryFn: async () => {
+  const buildJobsApiParams = useCallback((targetPage: number) => {
     const params = new URLSearchParams({
       where: resolvedWhere,
-      page: page.toString(),
+      page: targetPage.toString(),
       results_per_page: '30',
     })
     if (resolvedWhatPhrases) {
@@ -262,21 +268,59 @@ const canUseSSRInitialData =
     if (resolvedExcludePhrases) {
       params.set('exclude_phrases', resolvedExcludePhrases.join('|'))
     }
-    if (isFifo) params.set('is_fifo', 'true')   // ← ajout
+    if (isFifo) params.set('is_fifo', 'true')
     if (salary_min) params.set('salary_min', salary_min)
     for (const key of filterKeys) {
       const val = searchParams.get(key)
       if (val) params.set(key, val)
     }
+    return params
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolvedWhere, resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, salary_min, searchParams])
+
+  const jobsQueryKey = (targetPage: number) => [
+    'jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, resolvedWhere, salary_min, targetPage, searchParams.toString(),
+  ]
+
+  const fetchJobsPage = async (targetPage: number) => {
+    const params = buildJobsApiParams(targetPage)
     const res = await fetch(`/api/jobs-all?${params}`)
     if (!res.ok) throw new Error('Failed to fetch jobs')
     return res.json()
-  },
-  initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
-})
+  }
+
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: jobsQueryKey(page),
+    queryFn: () => fetchJobsPage(page),
+    initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
+    // Évite un refetch immédiat en arrière-plan juste après l'hydratation quand on a
+    // déjà les données SSR (initialData) : sans ça, React Query les considère stale
+    // dès 0ms et relance /api/jobs-all inutilement au moment le plus critique du chargement.
+    staleTime: 30_000,
+  })
 
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
   const jobType = searchLabel ?? (resolvedWhat ? `${resolvedWhat} ` : '')
+
+  // ── Prefetch de la page suivante en arrière-plan ────────────────────────
+  // 1. router.prefetch() précharge le shell/RSC de la route /jobs?page=N+1
+  // 2. queryClient.prefetchQuery() précharge les données JSON de /api/jobs-all
+  //    pour cette page, avec la MÊME queryKey que useQuery utilisera au clic
+  //    → au clic sur "Next", react-query lit le cache au lieu de refetcher.
+  useEffect(() => {
+    if (isLoading) return
+    const nextPage = page + 1
+    if (nextPage > totalPages) return
+
+    router.prefetch(buildPageHref(nextPage))
+
+    queryClient.prefetchQuery({
+      queryKey: jobsQueryKey(nextPage),
+      queryFn: () => fetchJobsPage(nextPage),
+      staleTime: 60_000, // évite de re-fetcher si déjà préchargé récemment
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, totalPages, isLoading, buildPageHref])
 
 
   const scrollRestoredRef = useRef(false)

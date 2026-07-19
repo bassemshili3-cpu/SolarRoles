@@ -18,6 +18,9 @@ const nextConfig = {
   },
   experimental: {
     cpus: 1,
+     staleTimes: {
+      dynamic: 300, // secondes — garde le prefetch en cache le temps que l'utilisateur clique
+    },
   },
 }
 
