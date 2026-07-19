@@ -3,7 +3,7 @@
 // Remplace <STORE_HOST> par l'URL publique réelle de ton store Blob
 // (Vercel Dashboard → Storage → ton store → clique un fichier existant pour voir son domaine —
 // ce n'est PAS la même valeur que BLOB_STORE_ID).
-const BLOB_PUBLIC_HOST = 'https://https://ovj48egcxlaw9gic.public.blob.vercel-storage.com.public.blob.vercel-storage.com'
+const BLOB_PUBLIC_HOST = 'https://ovj48egcxlaw9gic.public.blob.vercel-storage.com.public.blob.vercel-storage.com'
 
 const nextConfig = {
   images: {
