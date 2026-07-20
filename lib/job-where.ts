@@ -81,6 +81,7 @@ export interface JobWhereParams {
   what?: string
   whatPhrases?: string[]
   excludePhrases?: string[]
+  descriptionContainsAny?: string[]
   isFifo?: boolean 
   where?: string
   salaryMin?: number
@@ -113,6 +114,7 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
     what          = '',
     whatPhrases   = [],
     excludePhrases = [],
+    descriptionContainsAny = [],
     isFifo        = false, 
     where         = '',
     salaryMin,
@@ -141,6 +143,18 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
   if (excludePhrases.length > 0) {
     AND.push({
       NOT: { OR: keywordOr(excludePhrases, ['title', 'description']) },
+    })
+  }
+
+  // ── Description doit confirmer explicitement un âge éligible ────────────────
+  // AND indépendant de whatPhrases/what — pas un OR avec eux. Utilisé par les
+  // pages jobs-for-X-year-olds pour ne garder que les offres où l'employeur
+  // mentionne lui-même l'âge minimum accepté.
+  if (descriptionContainsAny.length > 0) {
+    AND.push({
+      OR: descriptionContainsAny.map((phrase) => ({
+        description: { contains: phrase, mode: 'insensitive' as const },
+      })),
     })
   }
 
@@ -260,6 +274,7 @@ export function parseJobWhereParams(searchParams: URLSearchParams): JobWherePara
     what:           searchParams.get('what')?.trim() || '',
     whatPhrases:    splitPhrasesParam(searchParams.get('what_phrases')),
     excludePhrases: splitPhrasesParam(searchParams.get('exclude_phrases')),
+    descriptionContainsAny: splitPhrasesParam(searchParams.get('description_contains_any')),
     isFifo:         searchParams.get('is_fifo') === 'true', 
     where:          searchParams.get('where')?.trim() || '',
     salaryMin:      searchParams.get('salary_min')     ? parseInt(searchParams.get('salary_min')!)    : undefined,

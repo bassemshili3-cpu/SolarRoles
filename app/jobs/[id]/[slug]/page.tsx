@@ -241,18 +241,12 @@ function buildJobPostingSchema(
   }
 
 
-  // Priority: passed domain → employerProfile.domain → guessed from name
-
-  const domain =
-
-    context.companyDomain ||
-
-    (job.company ? job.company.toLowerCase().replace(/[^a-z0-9]+/g, '') + '.com' : '')
+  const domain = context.companyDomain
 
 
   if (domain) {
 
-    hiringOrganization.logo = `https://logo.clearbit.com/${domain}`
+    hiringOrganization.logo = `https://img.logo.dev/${domain}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
 
     hiringOrganization.sameAs = [`https://${domain}`]
 
@@ -320,11 +314,8 @@ function buildJobPostingSchema(
 
     url: `https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`,
 
-    datePosted: job.created
-
-      ? new Date(job.created).toISOString().split('T')[0]
-
-      : new Date().toISOString().split('T')[0],
+  datePosted: new Date(job.postedAt).toISOString().split('T')[0],
+validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
     directApply: false,
 
@@ -604,7 +595,7 @@ export default async function JobDetailPage({
 
     skills: taxonomy.skills,
 
-    companyDomain: employerProfile?.domain || guessDomainFromName(job.company) || undefined,
+    companyDomain: employerProfile?.domain || undefined,
 
   })
 
@@ -628,16 +619,20 @@ export default async function JobDetailPage({
 
   const canonicalUrl = `https://www.oh-my-job.com/jobs/${id}/${canonicalSlug}`
 
+function safeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c')
+}
 
   return (
 
+    
     <>
 
       <script
 
         type="application/ld+json"
 
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
 
       />
 
@@ -645,7 +640,7 @@ export default async function JobDetailPage({
 
         type="application/ld+json"
 
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
 
       />
 

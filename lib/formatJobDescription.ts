@@ -247,13 +247,17 @@ function resolveConfig(config: FormatConfig) {
 
 function processHtmlInput(html: string, cfg: ReturnType<typeof resolveConfig>): FormatResult {
   const cleaned = cleanUpHtml(html)
-  return makeResult(cleaned, {
-    inputBytes: html.length,
-    outputBytes: cleaned.length,
-    inputWasHtml: true,
-    truncated: false,
-    blocks: { heading: 0, li: 0, text: 0 },
-  })
+   return makeResult(
+     cleaned,
+     {
+       inputBytes: html.length,
+       outputBytes: cleaned.length,
+       inputWasHtml: true,
+       truncated: false,
+      blocks: { heading: 0, li: 0, text: 0 },
+    },
+    cfg.sanitizer,
+   )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -605,13 +609,15 @@ function cleanUpHtml(html: string): string {
 // RESULT HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
 
-function makeResult(html: string, diagnostics: FormatDiagnostics): FormatResult {
-  // Final pass through the configured sanitizer (DOMPurify by default).
-  const sanitized = diagnostics.outputBytes > 0
-    ? (html.includes('<h3') || html.includes('<p') || html.includes('<ul'))
-      ? defaultSanitizer(html)
-      : html
-    : html
+ function makeResult(
+   html: string,
+  diagnostics: FormatDiagnostics,
+   sanitizer: (html: string) => string = defaultSanitizer,
+): FormatResult {
+   // Toujours sanitizer si non-vide — jamais de gate basé sur le contenu,
+   // ça ré-ouvre exactement le trou qu'on essaie de fermer.
+   const sanitized = diagnostics.outputBytes > 0 ? sanitizer(html) : html
+
 
   return {
     html: sanitized,

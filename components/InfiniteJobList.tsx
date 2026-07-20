@@ -103,6 +103,7 @@ interface JobListProps {
   what: string
   whatPhrases?: string[] // recherche OU sur des phrases complètes, prioritaire sur `what`
   excludePhrases?: string[]  
+  descriptionContainsAny?: string[] // AND indépendant : description doit contenir au moins une de ces phrases
   isFifo?: boolean  
   where: string
   salary_min?: string
@@ -173,7 +174,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, whatPhrases, excludePhrases, isFifo, where, salary_min, searchLabel, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, isFifo, where, salary_min, searchLabel, initialData }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -194,6 +195,7 @@ export default function JobList({ what, whatPhrases, excludePhrases, isFifo, whe
   const resolvedWhere = where || ''
   const resolvedWhatPhrases = whatPhrases && whatPhrases.length > 0 ? whatPhrases : undefined
    const resolvedExcludePhrases = excludePhrases && excludePhrases.length > 0 ? excludePhrases : undefined 
+   const resolvedDescriptionContainsAny = descriptionContainsAny && descriptionContainsAny.length > 0 ? descriptionContainsAny : undefined
 
   const filterKeys = [
     'job_type', 'arrangement', 'experience', 'education',
@@ -268,6 +270,9 @@ const canUseSSRInitialData =
     if (resolvedExcludePhrases) {
       params.set('exclude_phrases', resolvedExcludePhrases.join('|'))
     }
+    if (resolvedDescriptionContainsAny) {
+      params.set('description_contains_any', resolvedDescriptionContainsAny.join('|'))
+    }
     if (isFifo) params.set('is_fifo', 'true')
     if (salary_min) params.set('salary_min', salary_min)
     for (const key of filterKeys) {
@@ -279,7 +284,7 @@ const canUseSSRInitialData =
   }, [resolvedWhere, resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, salary_min, searchParams])
 
   const jobsQueryKey = (targetPage: number) => [
-    'jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, resolvedWhere, salary_min, targetPage, searchParams.toString(),
+    'jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedDescriptionContainsAny, isFifo, resolvedWhere, salary_min, targetPage, searchParams.toString(),
   ]
 
   const fetchJobsPage = async (targetPage: number) => {

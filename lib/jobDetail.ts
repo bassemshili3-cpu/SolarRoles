@@ -14,6 +14,9 @@ export type JobDetail = {
   salary_max?: number
   description?: string
   created?: string
+  postedAt: string
+  fetchedAt: string
+  expiresAt: string
   contract_type?: string
   contract_time?: string
   source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet'
@@ -38,6 +41,9 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       salary_max: dbJob.salaryMax || undefined,
       salary: dbJob.salary || undefined,
       created: dbJob.postedAt?.toISOString(),
+      postedAt: (dbJob.postedAt ?? dbJob.fetchedAt).toISOString(),
+      fetchedAt: dbJob.fetchedAt.toISOString(),
+      expiresAt: dbJob.expiresAt.toISOString(),
       source: dbJob.source as 'adzuna' | 'lensa' | 'jooble' | 'careerjet',
       externalApplyUrl: dbJob.applyUrl,
       apply_url: dbJob.applyUrl,

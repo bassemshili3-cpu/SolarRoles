@@ -5,6 +5,11 @@ import JobFilters from '@/components/JobFilters'
 import AIJobMatcherWrapper from '@/components/AIJobMatcherWrapper'
 import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, AlertTriangle, BookOpen, Users, TrendingUp } from 'lucide-react'
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
+import {
+  UNDER_16_JOB_PHRASES,
+  TEEN_EXCLUDE_PHRASES,
+  AGE_DESCRIPTION_PHRASES_15,
+} from '@/lib/teenJobPhrases'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -249,10 +254,26 @@ const faqs = [
 export default async function JobsFor15YearOldsPage({ searchParams }: any) {
   const params = await searchParams
 
-    const [{ count }, initialData] = await Promise.all([
-    getMergedJobCount({ what: params.what || 'jobs for 15 year olds', where: params.where || '' }),
-    searchMergedJobs({ what: params.what || 'jobs for 15 year olds', where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
-  ])
+const userSearch = typeof params.what === 'string' ? params.what.trim() : ''
+ 
+const searchArgs: {
+  what: string
+  whatPhrases?: string[]
+  excludePhrases?: string[]
+  descriptionContainsAny?: string[]
+} = userSearch
+  ? { what: userSearch, excludePhrases: TEEN_EXCLUDE_PHRASES }
+  : {
+      what: '',
+      whatPhrases: UNDER_16_JOB_PHRASES,
+      excludePhrases: TEEN_EXCLUDE_PHRASES,
+      descriptionContainsAny: AGE_DESCRIPTION_PHRASES_15,
+    }
+ 
+const [{ count }, initialData] = await Promise.all([
+  getMergedJobCount({ ...searchArgs, where: params.where || '' }),
+  searchMergedJobs({ ...searchArgs, where: params.where || '', results_per_page: 30, salary_min: params.salary_min ? Number(params.salary_min) : undefined }),
+])
 
   return (
     <>
@@ -274,7 +295,12 @@ export default async function JobsFor15YearOldsPage({ searchParams }: any) {
           <div className="flex-1">
             
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>
-              <InfiniteJobList what={params.what || 'jobs for 15 year olds'} where={params.where || ''} salary_min={params.salary_min} initialData={initialData} />
+              <InfiniteJobList
+                  {...searchArgs}
+                  where={params.where || ''}
+                  salary_min={params.salary_min}
+                  initialData={initialData}
+                />
             </Suspense>
           </div>
         </div>

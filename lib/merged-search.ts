@@ -73,6 +73,9 @@ function resolveString(v: string | string[] | undefined, fallback = ''): string 
 
 export async function getMergedJobCount(params: {
   what?:          string | string[]
+  whatPhrases?:   string[]
+  excludePhrases?: string[]
+  descriptionContainsAny?: string[] // AND indépendant : la description doit contenir au moins une de ces phrases
   where?:         string | string[]
   salary_min?:    number | string
   postedWithin?:  number
@@ -104,7 +107,53 @@ export async function getMergedJobCount(params: {
   try {
     const AND: any[] = []
 
-    
+    // What / whatPhrases — manquait entièrement avant : getMergedJobCount
+    // ignorait le terme de recherche, donc le count qu'il retournait ne
+    // correspondait à rien de filtré par mot-clé.
+    if (params.whatPhrases && params.whatPhrases.length > 0) {
+      AND.push({
+        OR: params.whatPhrases.flatMap((phrase) => [
+          { title:       { contains: phrase, mode: 'insensitive' } },
+          { company:     { contains: phrase, mode: 'insensitive' } },
+          { description: { contains: phrase, mode: 'insensitive' } },
+        ]),
+      })
+    } else if (what) {
+      for (const kw of what.split(/\s+/).filter(Boolean)) {
+        AND.push({
+          OR: [
+            { title:       { contains: kw, mode: 'insensitive' } },
+            { company:     { contains: kw, mode: 'insensitive' } },
+            { description: { contains: kw, mode: 'insensitive' } },
+          ],
+        })
+      }
+    }
+
+    // Exclude phrases — écarte une offre si elle contient un signal "poste
+    // pour adulte" malgré un titre qui matche whatPhrases.
+    if (params.excludePhrases && params.excludePhrases.length > 0) {
+      params.excludePhrases.forEach((phrase) => {
+        AND.push({
+          NOT: {
+            OR: [
+              { title:       { contains: phrase, mode: 'insensitive' } },
+              { description: { contains: phrase, mode: 'insensitive' } },
+            ],
+          },
+        })
+      })
+    }
+
+    // Description doit confirmer explicitement un âge éligible — AND
+    // indépendant du match whatPhrases (titre), pas un OR avec lui.
+    if (params.descriptionContainsAny && params.descriptionContainsAny.length > 0) {
+      AND.push({
+        OR: params.descriptionContainsAny.map((phrase) => ({
+          description: { contains: phrase, mode: 'insensitive' as const },
+        })),
+      })
+    }
 
     // Where
     if (where) {
@@ -227,6 +276,7 @@ export async function searchMergedJobs(params: {
   excludePhrases?:  string[]  // NEW: si une de ces phrases apparaît, l'offre est écartée
                                // même si elle matche whatPhrases. Utile pour désambiguïser
                                // un acronyme comme "FIFO" (rotation FIFO vs méthode d'inventaire).
+  descriptionContainsAny?: string[] // AND indépendant : la description doit contenir au moins une de ces phrases
   where?:           string | string[]
   salary_min?:      number | string
   results_per_page?: number
@@ -275,6 +325,15 @@ export async function searchMergedJobs(params: {
     })
   }
 
+  // Description doit confirmer explicitement un âge éligible — AND
+  // indépendant du match whatPhrases (titre), pas un OR avec lui.
+  if (params.descriptionContainsAny && params.descriptionContainsAny.length > 0) {
+    AND.push({
+      OR: params.descriptionContainsAny.map((phrase) => ({
+        description: { contains: phrase, mode: 'insensitive' as const },
+      })),
+    })
+  }
 
     if (where) {
       AND.push({
