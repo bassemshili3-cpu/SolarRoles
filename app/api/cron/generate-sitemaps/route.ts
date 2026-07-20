@@ -56,7 +56,7 @@ async function uploadXml(pathname: string, xml: string) {
     // reconnaît pour un Content-Disposition 'inline' — sinon le navigateur force
     // le téléchargement du fichier au lieu de l'afficher.
     contentType: 'text/xml',
-    cacheControlMaxAge: 21600, // 6h, aligné sur la fréquence du cron
+    cacheControlMaxAge: 22000, // 6h+, aligné sur la fréquence du cron
   })
 }
 

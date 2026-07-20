@@ -92,8 +92,13 @@ function getKeywordsForRun(page: number, count: number = 8): string[] {
 // ─── Upsert helper (Jooble) ──────────────────────────────────────────────────
 async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
   let saved = 0
+  const MIN_DESCRIPTION_LENGTH = 60
+
 
   for (const job of jobs) {
+    if (!job.description || job.description.trim().length < MIN_DESCRIPTION_LENGTH) {
+      continue
+    }
     try {
       const expiresAt = new Date()
       expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
@@ -157,8 +162,12 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
 // ─── Upsert for Careerjet (different shape) ──────────────────────────────────
 async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]): Promise<number> {
   let saved = 0
+  const MIN_DESCRIPTION_LENGTH = 60
 
   for (const job of jobs) {
+    if (!job.description || job.description.trim().length < MIN_DESCRIPTION_LENGTH) {
+      continue
+    }
     try {
       const expiresAt = new Date()
       expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
@@ -219,10 +228,14 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
 // ─── Upsert for Lensa ────────────────────────────────────────────────────────
 async function upsertLensaJobs(adverts: any[]): Promise<number> {
   let saved = 0
+  const MIN_DESCRIPTION_LENGTH = 60
   const expiresAt = new Date()
   expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
 
   for (const advert of adverts) {
+    if (!advert.description_digest || advert.description_digest.trim().length < MIN_DESCRIPTION_LENGTH) {
+      continue
+    }
     try {
       const id = `lensa-${advert.unique_id}`
       const location = [advert.city, advert.state].filter(Boolean).join(', ')
