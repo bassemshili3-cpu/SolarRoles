@@ -6,8 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { notifyGoogleBatch } from '@/lib/google-indexing'
-import { submitToIndexNow } from '@/lib/indexnow'
+
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization')
@@ -40,17 +39,9 @@ export async function GET(request: Request) {
     data: { active: false },
   })
 
-  const googleResults = await notifyGoogleBatch(
-    urls.map((url) => ({ url, action: 'URL_DELETED' as const }))
-  )
-  const indexNowResult = await submitToIndexNow(urls)
-
-  const succeeded = googleResults.filter((r) => r.success).length
 
   return NextResponse.json({
     deactivated: ids.length,
-    googleNotified: succeeded,
-    indexNow: indexNowResult.success,
     timestamp: new Date().toISOString(),
   })
 }
