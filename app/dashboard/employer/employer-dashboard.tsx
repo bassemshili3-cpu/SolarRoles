@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Plus, Search, Eye, Pencil, Pause, Play, Trash2, Briefcase } from 'lucide-react'
-
+import { buildJobSlug } from '@/lib/slugify'
 type JobStatus = 'active' | 'paused' | 'expired'
 
 interface EmployerJob {
@@ -18,20 +18,6 @@ interface EmployerJob {
   clicks: number
   applications: number
 }
-
-function daysAgoDate(n: number) {
-  const d = new Date()
-  d.setDate(d.getDate() - n)
-  return d
-}
-
-// TODO: replace with a real fetch, e.g. const jobs = await getEmployerJobs(userId)
-const initialJobs: EmployerJob[] = [
-  { id: '1', title: 'Warehouse Associate', location: 'Columbus, OH', postedAt: daysAgoDate(2), status: 'active', clicks: 312, applications: 18 },
-  { id: '2', title: 'Customer Support Representative', location: 'Remote', postedAt: daysAgoDate(6), status: 'active', clicks: 540, applications: 41 },
-  { id: '3', title: 'Certified Nursing Assistant', location: 'Tampa, FL', postedAt: daysAgoDate(14), status: 'active', clicks: 189, applications: 9 },
-  { id: '4', title: 'Delivery Driver', location: 'Phoenix, AZ', postedAt: daysAgoDate(31), status: 'expired', clicks: 402, applications: 27 },
-]
 
 function formatRelativeDate(date: Date) {
   const days = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
@@ -59,7 +45,7 @@ const iconButtonClass =
 
 type Filter = 'all' | JobStatus
 
-export default function EmployerDashboard() {
+export default function EmployerDashboard({ initialJobs }: { initialJobs: EmployerJob[] }) {
   const [jobs, setJobs] = useState<EmployerJob[]>(initialJobs)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
@@ -78,20 +64,27 @@ export default function EmployerDashboard() {
       .filter((j) => j.title.toLowerCase().includes(query.toLowerCase()))
   }, [jobs, filter, query])
 
-  function toggleStatus(id: string) {
+  async function toggleStatus(id: string, currentStatus: JobStatus) {
+    const action = currentStatus === 'active' ? 'pause' : 'activate'
+    const res = await fetch(`/api/employer/jobs/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
+    })
+    if (!res.ok) return alert('Something went wrong.')
+
     setJobs((prev) =>
       prev.map((j) =>
-        j.id === id
-          ? { ...j, status: j.status === 'active' ? 'paused' : j.status === 'paused' ? 'active' : j.status }
-          : j
+        j.id === id ? { ...j, status: action === 'pause' ? 'paused' : 'active' } : j
       )
     )
   }
 
-  function deleteJob(id: string) {
-    if (confirm('Delete this job listing? This cannot be undone.')) {
-      setJobs((prev) => prev.filter((j) => j.id !== id))
-    }
+  async function deleteJob(id: string) {
+    if (!confirm('Delete this job listing? This cannot be undone.')) return
+    const res = await fetch(`/api/employer/jobs/${id}`, { method: 'DELETE' })
+    if (!res.ok) return alert('Something went wrong.')
+    setJobs((prev) => prev.filter((j) => j.id !== id))
   }
 
   const statItems = [
@@ -199,14 +192,15 @@ export default function EmployerDashboard() {
                       <td className="py-4 px-5 text-right font-mono tabular-nums text-[#1a2340]">{job.applications}</td>
                       <td className="py-4 px-5">
                         <div className="flex items-center justify-end gap-1">
-                          <a href={`https://www.oh-my-job.com/jobs/${job.id}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  title="View listing"
-  className={iconButtonClass}
->
-  <Eye size={16} />
-</a>
+                          <a
+                            href={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="View listing"
+                            className={iconButtonClass}
+                          >
+                            <Eye size={16} />
+                          </a>
                           <Link href={`/dashboard/employer/${job.id}/edit`} title="Edit" className={iconButtonClass}>
                             <Pencil size={16} />
                           </Link>
@@ -214,7 +208,7 @@ export default function EmployerDashboard() {
                             <button
                               type="button"
                               title={job.status === 'active' ? 'Pause' : 'Activate'}
-                              onClick={() => toggleStatus(job.id)}
+                              onClick={() => toggleStatus(job.id, job.status)}
                               className={iconButtonClass}
                             >
                               {job.status === 'active' ? <Pause size={16} /> : <Play size={16} />}

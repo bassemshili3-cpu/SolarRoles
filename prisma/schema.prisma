@@ -8,7 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model JobAlert {
   id         String    @id @default(cuid())
   email      String
@@ -24,11 +23,11 @@ model JobAlert {
 }
 
 model NewsletterSubscriber {
-  id         String   @id @default(cuid())
-  email      String   @unique
-  active     Boolean  @default(true)
+  id         String    @id @default(cuid())
+  email      String    @unique
+  active     Boolean   @default(true)
   sentSlugs  String[]
-  createdAt  DateTime @default(now())
+  createdAt  DateTime  @default(now())
   lastSentAt DateTime?
 }
 
@@ -54,10 +53,16 @@ model Job {
   sourcePriority           Int      @default(99)
   isFifo                   Boolean  @default(false)
   postedByUserId           String?
-  headerImage              String?  // ← NOUVEAU (fix #3)
-   needsHeaderImage  Boolean  @default(true)  // ← NOUVEAU (queue pattern)
+  headerImage              String?
+  needsHeaderImage         Boolean  @default(true)
   schemaDescription        String?
   schemaDescriptionVersion Int      @default(0)
+  pausedAt                 DateTime?
+  clickCount               Int      @default(0)
+  deletedAt                DateTime?
+  isOwn                    Boolean  @default(false)
+
+  applications             JobApplication[]
 
   @@index([postedByUserId])
   @@index([isFifo])
@@ -66,11 +71,25 @@ model Job {
   @@index([title, company])
   @@index([sourcePriority, fetchedAt])
   @@index([active, expiresAt, fetchedAt], map: "Job_active_expiresAt_fetchedAt_idx")
-  @@index([active, company])                              // ← NOUVEAU (employerProfile)
-  @@index([active, addressRegion, postedAt(sort: Desc)])  // ← NOUVEAU (similarJobs + roleLocationStats)
-    @@index([needsHeaderImage, headerImage])                // ← NOUVEAU (enrich script)
-     isOwn Boolean @default(false)
+  @@index([active, company])
+  @@index([active, addressRegion, postedAt(sort: Desc)])
+  @@index([needsHeaderImage, headerImage])
 }
+
+model JobApplication {
+  id         String   @id @default(cuid())
+  jobId      String
+  job        Job      @relation(fields: [jobId], references: [id])
+  name       String
+  email      String
+  resumeUrl  String?
+  message    String?
+  createdAt  DateTime @default(now())
+
+  @@index([jobId])
+  @@index([jobId, createdAt])
+}
+
 model RoleStateDemand {
   id        String   @id @default(cuid())
   roleSlug  String

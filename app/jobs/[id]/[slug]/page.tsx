@@ -1009,17 +1009,11 @@ function safeJsonLd(data: unknown): string {
                 <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
                   {applyUrl ? (
-
-                    <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
-
-                      <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-
-                        {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
-
-                      </a>
-
-                    </Button>
-
+  <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
+    <a href={`/jobs/${job.id}/go`} target="_blank" rel="noopener noreferrer">
+      {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
+    </a>
+  </Button>
                   ) : (
 
                     <Button disabled size="lg" className="w-full sm:w-auto">
