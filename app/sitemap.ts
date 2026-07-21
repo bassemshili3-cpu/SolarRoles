@@ -199,19 +199,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── Jobs "own" (indexables) ──────────────────────────────
   // Adapte le `where` à ton schema exact (status actif, etc.)
-  const ownJobs = await prisma.job.findMany({
-    where: { isOwn: true, status: "ACTIVE" },
-    select: { id: true, updatedAt: true },
-  })
+const ownJobs = await prisma.job.findMany({
+  where: { postedByUserId: { not: null }, active: true },
+  select: { id: true, postedAt: true, fetchedAt: true },
+})
 
-  for (const job of ownJobs) {
-    entries.push({
-      url: `${BASE_URL}/jobs/${job.id}`,
-      lastModified: job.updatedAt,
-      changeFrequency: "daily",
-      priority: 0.7,
-    })
-  }
+for (const job of ownJobs) {
+  entries.push({
+    url: `${BASE_URL}/jobs/${job.id}`,
+    lastModified: job.postedAt ?? job.fetchedAt,
+    changeFrequency: "daily",
+    priority: 0.7,
+  })
+}
 
   // Sécurité anti-doublons si jamais une route apparaît dans
   // deux tableaux/sources par erreur
