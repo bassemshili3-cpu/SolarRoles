@@ -19,7 +19,7 @@ export type JobDetail = {
   expiresAt: string
   contract_type?: string
   contract_time?: string
-  source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet'
+  source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet' | 'employer'
   externalApplyUrl?: string | null
   apply_url?: string
   headerImage?: string | null
@@ -44,7 +44,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       postedAt: (dbJob.postedAt ?? dbJob.fetchedAt).toISOString(),
       fetchedAt: dbJob.fetchedAt.toISOString(),
       expiresAt: dbJob.expiresAt.toISOString(),
-      source: dbJob.source as 'adzuna' | 'lensa' | 'jooble' | 'careerjet',
+      source: dbJob.source as 'adzuna' | 'lensa' | 'jooble' | 'careerjet' | 'employer',
       externalApplyUrl: dbJob.applyUrl,
       apply_url: dbJob.applyUrl,
       contract_type: dbJob.contractType || undefined,

@@ -330,6 +330,8 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
     adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble', careerjet: 'CareerJet',
 
+    employer: 'Oh My Job',
+
   }
 
   schema.identifier = {
@@ -349,7 +351,7 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
   base.setDate(base.getDate() + 30)
 
-  schema.validThrough = base.toISOString().split('T')[0]
+
 
 
   // ── baseSalary ──
@@ -440,6 +442,7 @@ export async function generateMetadata(
   const job = getJobDetailWithSalary(raw)
 
 
+
   const canonicalUrl = `https://www.oh-my-job.com/jobs/${id}/${buildJobSlug(job)}`
 
 
@@ -451,6 +454,7 @@ export async function generateMetadata(
 
       : ''
 
+        const isIndexable = job.source === 'employer'
 
   return {
 
@@ -459,6 +463,10 @@ export async function generateMetadata(
     description: `${job.title} position at ${job.company || 'a top employer'} in ${job.location || 'United States'}${salaryStr}. Apply now on Oh My Job.`,
 
     alternates: { canonical: canonicalUrl },
+
+     robots: isIndexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
 
     openGraph: {
 
@@ -469,6 +477,7 @@ export async function generateMetadata(
       type: 'website',
 
       url: canonicalUrl,
+
 
     },
 
@@ -610,10 +619,11 @@ export default async function JobDetailPage({
 
     careerjet: { label: 'Apply on Company Site', className: 'bg-slate-700 text-white' },
 
+    employer:  { label: 'Apply',            className: 'bg-slate-900 text-white' },
   }
 
 
-  const apply = applyConfig[job.source] || applyConfig.adzuna
+ const apply = applyConfig[job.source] || { label: 'Apply now', className: 'bg-slate-900 text-white' }
 
   const applyUrl = job.externalApplyUrl || job.apply_url
 

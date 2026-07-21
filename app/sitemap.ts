@@ -1,7 +1,9 @@
 // app/sitemap.ts
 
 import type { MetadataRoute } from "next";
+import { buildJobSlug } from "@/lib/slugify";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
+import { JobDetail } from "@/lib/jobDetail";
 
 const BASE_URL = 'https://www.oh-my-job.com'
 const LAST_MAJOR_UPDATE = new Date('2026-07-08')
@@ -201,12 +203,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Adapte le `where` à ton schema exact (status actif, etc.)
 const ownJobs = await prisma.job.findMany({
   where: { postedByUserId: { not: null }, active: true },
-  select: { id: true, postedAt: true, fetchedAt: true },
+  select: {
+    id: true,
+    title: true,
+    location: true,
+    postedAt: true,
+    fetchedAt: true,
+  },
 })
 
 for (const job of ownJobs) {
   entries.push({
-    url: `${BASE_URL}/jobs/${job.id}`,
+    url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
     lastModified: job.postedAt ?? job.fetchedAt,
     changeFrequency: "daily",
     priority: 0.7,

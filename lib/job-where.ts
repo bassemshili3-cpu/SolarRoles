@@ -6,7 +6,7 @@ import { STATES } from './usStates'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-export const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet'] as const
+export const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet', 'employer'] as const
 
 const STOPWORDS = new Set([
   'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
