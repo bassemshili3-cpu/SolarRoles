@@ -1,6 +1,7 @@
 // app/sitemap.ts
 
 import type { MetadataRoute } from "next";
+import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
 
 const BASE_URL = 'https://www.oh-my-job.com'
 const LAST_MAJOR_UPDATE = new Date('2026-07-08')
@@ -153,17 +154,16 @@ const blogPosts: string[] = [
 
 // ── Config par section : priorité, fréquence, date ─────────
 // IMPORTANT : ne mets ici QUE des pages à forte valeur ajoutée.
-// Les pages job listing générées depuis le flux Jooble
-// (/jobs/jooble--id...) ne doivent PAS apparaître dans ce
-// sitemap : elles doivent être en noindex + bloquées au crawl
-// tant que le domaine récupère la confiance de Google.
+// Les pages job listing agrégées (/jobs/{source}-{id}...),
+// CareerJet/Jooble/Lensa/Adzuna, ne doivent PAS apparaître dans
+// ce sitemap : elles sont en noindex + bloquées au crawl (voir
+// robots.ts) tant que le domaine récupère la confiance de Google.
+// Les jobs "own" (postés par les employeurs, isOwn: true) sont
+// injectés dynamiquement plus bas, eux sont indexables.
 const sections: {
   routes: string[]
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]
   priority: number
-  // lastModified réel si tu l'as (ex: date de dernière édition
-  // en base), sinon on retombe sur LAST_MAJOR_UPDATE plutôt
-  // que "maintenant" à chaque build
   lastModified?: Date
 }[] = [
   { routes: priorityLandingPages, changeFrequency: "monthly", priority: 0.8 },
@@ -176,7 +176,7 @@ const sections: {
   { routes: blogPosts, changeFrequency: "monthly", priority: 0.6 },
 ]
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -197,8 +197,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
+  // ── Jobs "own" (indexables) ──────────────────────────────
+  // Adapte le `where` à ton schema exact (status actif, etc.)
+  const ownJobs = await prisma.job.findMany({
+    where: { isOwn: true, status: "ACTIVE" },
+    select: { id: true, updatedAt: true },
+  })
+
+  for (const job of ownJobs) {
+    entries.push({
+      url: `${BASE_URL}/jobs/${job.id}`,
+      lastModified: job.updatedAt,
+      changeFrequency: "daily",
+      priority: 0.7,
+    })
+  }
+
   // Sécurité anti-doublons si jamais une route apparaît dans
-  // deux tableaux par erreur
+  // deux tableaux/sources par erreur
   const seen = new Set<string>()
   return entries.filter((entry) => {
     if (seen.has(entry.url)) return false
