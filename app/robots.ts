@@ -5,12 +5,12 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/auth/'],
+        allow: '/jobs/own-',
+        disallow: ['/api/', '/jobs/', '/auth/'],
       },
     ],
     sitemap: [
-      'https://www.oh-my-job.com/sitemap-index.xml',
+      'https://www.oh-my-job.com/sitemap.xml',
     ],
   }
 }

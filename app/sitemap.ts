@@ -1,10 +1,9 @@
-// app/sitemap-pages.xml/route.ts
-import { NextResponse } from 'next/server'
+// app/sitemap.ts
 
- export const dynamic = 'force-static'
+import type { MetadataRoute } from "next";
 
 const BASE_URL = 'https://www.oh-my-job.com'
-const LAST_MAJOR_UPDATE = '2026-07-08'
+const LAST_MAJOR_UPDATE = new Date('2026-07-08')
 
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
@@ -12,10 +11,6 @@ const priorityLandingPages: string[] = [
   '/jobs-for-15-year-olds',
   '/jobs-for-16-year-olds',
   '/fifo-jobs',
-]
-
-// ── Landing pages SEO standard ──────────────────────────────
-const landingPages: string[] = [
   '/allied-universal-jobs',
   '/cna-jobs',
   '/dental-assistant-jobs',
@@ -156,24 +151,58 @@ const blogPosts: string[] = [
   '/blog/job-interview-questions',
 ]
 
-// ── Handler ─────────────────────────────────────────────────
-export async function GET() {
-  const staticEntries: { url: string; priority: number }[] = [
-    { url: BASE_URL, priority: 1.0 },
-    { url: `${BASE_URL}/jobs`, priority: 0.9 },
-    ...priorityLandingPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.8 })),
-    ...landingPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.6 })),
-    ...topJobsPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.7 })),
-    ...paycheckPages.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.7 })),
-    ...[...dataPages, ...dataStatePages, ...dataSalaryPages].map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.7 })),
-    ...blogPosts.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.5 })),
-    ...faqArticles.map((s) => ({ url: `${BASE_URL}${s}`, priority: 0.5 })),
+// ── Config par section : priorité, fréquence, date ─────────
+// IMPORTANT : ne mets ici QUE des pages à forte valeur ajoutée.
+// Les pages job listing générées depuis le flux Jooble
+// (/jobs/jooble--id...) ne doivent PAS apparaître dans ce
+// sitemap : elles doivent être en noindex + bloquées au crawl
+// tant que le domaine récupère la confiance de Google.
+const sections: {
+  routes: string[]
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]
+  priority: number
+  // lastModified réel si tu l'as (ex: date de dernière édition
+  // en base), sinon on retombe sur LAST_MAJOR_UPDATE plutôt
+  // que "maintenant" à chaque build
+  lastModified?: Date
+}[] = [
+  { routes: priorityLandingPages, changeFrequency: "monthly", priority: 0.8 },
+  { routes: faqArticles, changeFrequency: "yearly", priority: 0.5 },
+  { routes: topJobsPages, changeFrequency: "monthly", priority: 0.7 },
+  { routes: paycheckPages, changeFrequency: "monthly", priority: 0.6 },
+  { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
+  { routes: dataStatePages, changeFrequency: "weekly", priority: 0.8 },
+  { routes: dataSalaryPages, changeFrequency: "weekly", priority: 0.8 },
+  { routes: blogPosts, changeFrequency: "monthly", priority: 0.6 },
+]
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const entries: MetadataRoute.Sitemap = [
+    {
+      url: BASE_URL,
+      lastModified: LAST_MAJOR_UPDATE,
+      changeFrequency: "weekly",
+      priority: 1,
+    },
   ]
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticEntries.map((e) => `  <url><loc>${e.url}</loc><lastmod>${LAST_MAJOR_UPDATE}</lastmod><priority>${e.priority}</priority></url>`).join('\n')}
-</urlset>`
+  for (const section of sections) {
+    for (const route of section.routes) {
+      entries.push({
+        url: `${BASE_URL}${route}`,
+        lastModified: section.lastModified ?? LAST_MAJOR_UPDATE,
+        changeFrequency: section.changeFrequency,
+        priority: section.priority,
+      })
+    }
+  }
 
-  return new NextResponse(xml, { headers: { 'Content-Type': 'application/xml' } })
+  // Sécurité anti-doublons si jamais une route apparaît dans
+  // deux tableaux par erreur
+  const seen = new Set<string>()
+  return entries.filter((entry) => {
+    if (seen.has(entry.url)) return false
+    seen.add(entry.url)
+    return true
+  })
 }

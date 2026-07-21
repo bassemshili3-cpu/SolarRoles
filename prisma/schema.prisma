@@ -69,6 +69,7 @@ model Job {
   @@index([active, company])                              // ← NOUVEAU (employerProfile)
   @@index([active, addressRegion, postedAt(sort: Desc)])  // ← NOUVEAU (similarJobs + roleLocationStats)
     @@index([needsHeaderImage, headerImage])                // ← NOUVEAU (enrich script)
+     isOwn Boolean @default(false)
 }
 model RoleStateDemand {
   id        String   @id @default(cuid())

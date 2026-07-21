@@ -7,7 +7,7 @@ import { Briefcase, Clock, Shield, FileText, DollarSign, MapPin, CheckCircle, Bo
 import { getMergedJobCount, searchMergedJobs } from '@/lib/merged-search'
 export const revalidate = 3600 // Cache ISR 1h — réduit les appels Adzuna
 export const metadata: Metadata = {
-  title: 'City of Reno Jobs — Police, Fire, Public Works & Admin Openings in Reno NV',
+  title: 'City of Reno Jobs — Police, Fire, Public Works & Admin Openings',
   description: 'Reno city jobs span public safety, parks, administration, and infrastructure. Salary bands and civil service exam requirements shown per department.',
   keywords: 'city of reno jobs, reno city government careers, city of reno police hiring, reno firefighter jobs, reno public works employment, city of reno NV openings, reno municipal jobs',
   openGraph: {
