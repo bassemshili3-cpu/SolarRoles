@@ -485,7 +485,9 @@ export default function EmployerPage() {
 
         <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
 
-          Reach the candidates other boards miss: fresh grads, career changers, and people ready to work. Your listing goes live in minutes, with no subscription and no sales call.
+          All of our candidates are from the United States. Our audience ranges from fresh grads 
+          to experienced professionals, across every career stage. 
+          
 
         </p>
 
@@ -496,7 +498,7 @@ export default function EmployerPage() {
 
             <CheckCircle2 className="w-4 h-4 text-teal-600" />
 
-            Live in 5 minutes
+            Live in 15 minutes
 
           </span>
 
@@ -510,11 +512,13 @@ export default function EmployerPage() {
 
         </div>
 
-        <Button size="lg" asChild>
-
-          <Link href="/auth/login">Post a job for free</Link>
-
-        </Button>
+        <Button
+  size="lg"
+  asChild
+  className="px-8 py-6 text-lg font-semibold bg-teal-600 hover:bg-teal-700 shadow-lg shadow-teal-600/25 hover:shadow-xl hover:shadow-teal-600/30 transition-all"
+>
+  <Link href="/auth/login">Post a job for free</Link>
+</Button>
 
       </section>
 
@@ -648,7 +652,7 @@ export default function EmployerPage() {
 
         <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
 
-          Whether you run a local shop with one opening or a startup scaling your team, posting a job on Oh My Job takes the same five minutes.
+          Whether you run a local shop with one opening or a startup scaling your team, posting a job on Oh My Job takes the same fifteen minutes.
 
         </p>
 
