@@ -142,6 +142,7 @@ export default function CookiePolicyPage() {
                 {[
                   ['Google Analytics', 'Site analytics and usage measurement', 'https://policies.google.com/privacy', 'policies.google.com'],
                   ['Google Ads', 'Conversion tracking and job ad targeting', 'https://policies.google.com/privacy', 'policies.google.com'],
+                  ['Google AdSense', 'Displays third-party advertising based on your visit to this and other websites', 'https://policies.google.com/technologies/ads', 'policies.google.com'],
                   ['Vercel', 'Hosting and performance monitoring', 'https://vercel.com/legal/privacy-policy', 'vercel.com'],
                 ].map(([provider, purpose, url, label], i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
@@ -211,6 +212,18 @@ export default function CookiePolicyPage() {
                 </a>.
               </p>
             </div>
+
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+  <h3 className="font-semibold text-gray-900 mb-1">Google Ad Settings</h3>
+  <p className="text-gray-600 text-sm leading-relaxed">
+    Google uses cookies to serve ads based on your prior visits to this and other websites.
+    You can opt out of personalized advertising by visiting{' '}
+    <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer"
+      className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+      Google Ad Settings
+    </a>.
+  </p>
+</div>
 
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-1">Do Not Track</h3>

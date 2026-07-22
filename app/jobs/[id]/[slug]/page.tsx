@@ -1,4 +1,5 @@
 // app/jobs/[id]/[slug]/page.tsx
+import { AdUnit } from '@/components/AdUnit'
 
 import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
 
@@ -70,6 +71,7 @@ function resolveEmploymentType(job: JobDetail): string {
     intern: 'INTERN',
 
   }
+
 
   const contractTypeMap: Record<string, string> = {
 
@@ -1004,7 +1006,7 @@ function safeJsonLd(data: unknown): string {
                   </div>
 
                 )}
-
+ {job.source === 'employer' && <AdUnit slot="job-detail" />}
 
                 <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 

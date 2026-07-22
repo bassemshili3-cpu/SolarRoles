@@ -6,6 +6,8 @@ import { Providers } from './providers'
 import { FilterDrawerProvider } from '@/contexts/filter-drawer-context'
 import CookieBanner from '@/components/CookieBanner'
 import { Analytics } from "@vercel/analytics/next"
+import Script from 'next/script'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +35,7 @@ const organizationJsonLd = {
   ],
 }
 
+
 export default function RootLayout({
   children,
 }: {
@@ -41,10 +44,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
+
+         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3314706503607251"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+
       </head>
       <body className={inter.className}>
         <Providers>

@@ -25,6 +25,7 @@ export type JobDetail = {
   headerImage?: string | null
 }
 
+
 export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> => {
   try {
     const dbJob = await prisma.job.findUnique({ where: { id } })
@@ -77,4 +78,6 @@ export function getJobDetailWithSalary(job: JobDetail): JobDetail {
   }
 
   return job
+  
 }
+
