@@ -202,7 +202,7 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
           <Button asChild>
             <Link href="/dashboard/employer/new">
               Post your first job
-              <ArrowRight size={16} className="ml-2" />
+             
             </Link>
           </Button>
         </div>

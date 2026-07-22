@@ -15,10 +15,10 @@ const employmentTypes = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Int
 const MIN_DESCRIPTION_LENGTH = 1500
 
 const fieldClass =
-  'h-11 px-3.5 w-full bg-white border border-slate-200 rounded-md text-[15px] text-[#1a2340] placeholder:text-slate-400 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors'
+  'h-11 px-3.5 w-full bg-white border border-slate-300 rounded-md text-base text-[#1a2340] placeholder:text-slate-500 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors'
 
 const inputClass =
-  'h-11 rounded-md border-slate-200 focus-visible:ring-[#1a2340] focus-visible:ring-offset-1'
+  'h-11 text-base rounded-md border-slate-300 focus-visible:ring-[#1a2340] focus-visible:ring-offset-1'
 
 export default function PostJobForm() {
   const router = useRouter()
@@ -97,7 +97,7 @@ export default function PostJobForm() {
     <div className="max-w-2xl mx-auto px-6 py-10 md:py-14">
       {/* Header */}
       <header className="mb-10 md:mb-12">
-        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-slate-500 font-medium mb-5">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.14em] text-slate-500 font-medium mb-5">
           <Link
             href="/dashboard/employer"
             className="hover:text-[#1a2340] transition-colors"
@@ -110,14 +110,12 @@ export default function PostJobForm() {
         <h1 className="text-[32px] md:text-[36px] leading-[1.1] font-semibold tracking-[-0.02em] text-[#1a2340]">
           Post a new job
         </h1>
-        <p className="text-[15px] text-slate-500 mt-2.5 leading-relaxed">
-          Free, no credit card. Your listing goes live as soon as you submit it.
-        </p>
+       
       </header>
 
       {error && (
         <div className="mb-8 px-4 py-3 border border-red-200 rounded-md bg-red-50">
-          <p className="text-[13px] text-red-700">{error}</p>
+          <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
 
@@ -165,7 +163,7 @@ export default function PostJobForm() {
         <section>
           <SectionHeader number="02" title="Location" />
           <div className="space-y-4">
-            <label className="flex items-center gap-2.5 text-[13px] text-slate-600 cursor-pointer select-none">
+            <label className="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={remote}
@@ -199,7 +197,7 @@ export default function PostJobForm() {
               </div>
             )}
             {!remote && (
-              <p className="text-[12.5px] text-slate-400">
+              <p className="text-sm text-slate-400">
                 Adding a ZIP code helps your listing rank better in nearby search results.
               </p>
             )}
@@ -220,7 +218,7 @@ export default function PostJobForm() {
                     key={period}
                     type="button"
                     onClick={() => setSalaryPeriod(period)}
-                    className={`px-2.5 py-1 rounded text-[12px] font-medium transition-colors ${
+                    className={`px-2.5 py-1 rounded text-sm font-medium transition-colors ${
                       salaryPeriod === period
                         ? 'bg-white text-[#1a2340]'
                         : 'text-slate-500 hover:text-[#1a2340]'
@@ -233,7 +231,7 @@ export default function PostJobForm() {
             </div>
             <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[15px] pointer-events-none">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">
                   $
                 </span>
                 <Input
@@ -246,7 +244,7 @@ export default function PostJobForm() {
               </div>
               <ArrowRight size={14} className="text-slate-300" />
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[15px] pointer-events-none">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">
                   $
                 </span>
                 <Input
@@ -258,7 +256,7 @@ export default function PostJobForm() {
                 />
               </div>
             </div>
-            <p className="text-[12.5px] text-slate-400">
+            <p className="text-sm text-slate-400">
               Required on every listing. Show candidates what you actually pay.
             </p>
           </div>
@@ -272,10 +270,10 @@ export default function PostJobForm() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Tell candidates about the role, what a typical day looks like, who they'd work with, and what makes this a great opportunity..."
-              className="w-full bg-white border border-slate-200 rounded-md text-[15px] text-[#1a2340] placeholder:text-slate-400 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors px-3.5 min-h-[320px] py-3 leading-relaxed resize-y"
+              className="w-full bg-white border border-slate-300 rounded-md text-base text-[#1a2340] placeholder:text-slate-500 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors px-3.5 min-h-[320px] py-3 leading-relaxed resize-y"
             />
             <div className="mt-2.5 flex items-center justify-between gap-4 flex-wrap">
-              <p className="text-[12.5px] text-slate-400">
+              <p className="text-sm text-slate-400">
                 Cover the role, day-to-day, team, and what you&apos;re looking for.
               </p>
               <div className="flex items-center gap-2.5 shrink-0">
@@ -288,7 +286,7 @@ export default function PostJobForm() {
                   />
                 </div>
                 <span
-                  className={`text-[12px] tabular-nums font-medium ${
+                  className={`text-sm tabular-nums font-medium ${
                     descriptionReached ? 'text-emerald-600' : 'text-slate-500'
                   }`}
                 >
@@ -315,7 +313,7 @@ export default function PostJobForm() {
               type="email"
               className={inputClass}
             />
-            <p className="text-[12.5px] text-slate-400 mt-1.5">
+            <p className="text-sm text-slate-400 mt-1.5">
               Candidates apply on Oh My Job. We&apos;ll email every application to this
               address.
             </p>
@@ -324,7 +322,7 @@ export default function PostJobForm() {
 
         {/* Submit */}
         <div className="pt-2">
-          <Button type="submit" className="w-full h-12 rounded-md" disabled={isSubmitting}>
+          <Button type="submit" className="w-full h-12 rounded-md text-base" disabled={isSubmitting}>
             {isSubmitting ? 'Posting your job...' : 'Post job'}
           </Button>
         </div>
@@ -336,8 +334,8 @@ export default function PostJobForm() {
 function SectionHeader({ number, title }: { number: string; title: string }) {
   return (
     <div className="flex items-baseline gap-3 mb-5">
-      <span className="text-[11px] font-mono text-slate-300 tabular-nums">{number}</span>
-      <h2 className="text-[15px] font-semibold tracking-[-0.005em] text-[#1a2340]">
+      <span className="text-xs font-mono text-slate-300 tabular-nums">{number}</span>
+      <h2 className="text-base font-semibold tracking-[-0.005em] text-[#1a2340]">
         {title}
       </h2>
     </div>
@@ -355,7 +353,7 @@ function FieldLabel({
 }) {
   return (
     <label
-      className={`text-[13px] font-medium text-slate-700 mb-1.5 block ${className}`}
+      className={`text-sm font-medium text-slate-700 mb-1.5 block ${className}`}
     >
       {children}
       {required && <span className="text-slate-400"> *</span>}
