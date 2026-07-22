@@ -7,12 +7,15 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, Check } from 'lucide-react'
+import { STATES } from '@/lib/usStates'
 
 type SalaryPeriod = 'year' | 'hour'
 
 const employmentTypes = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
 
-const MIN_DESCRIPTION_LENGTH = 1500
+const stateOptions = Object.entries(STATES).sort(([a], [b]) => a.localeCompare(b))
+
+const MIN_DESCRIPTION_LENGTH = 1000
 
 const fieldClass =
   'h-11 px-3.5 w-full bg-white border border-slate-300 rounded-md text-base text-[#1a2340] placeholder:text-slate-500 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors'
@@ -28,7 +31,7 @@ export default function PostJobForm() {
   const [employmentType, setEmploymentType] = useState(employmentTypes[0])
   const [remote, setRemote] = useState(false)
   const [city, setCity] = useState('')
-  const [stateCode, setStateCode] = useState('')
+  const [stateName, setStateName] = useState('')
   const [zipCode, setZipCode] = useState('')
   const [salaryMin, setSalaryMin] = useState('')
   const [salaryMax, setSalaryMax] = useState('')
@@ -47,10 +50,14 @@ export default function PostJobForm() {
     setError('')
     if (!company.trim()) return setError('Add your company name.')
     if (!title.trim()) return setError('Add a job title.')
-    if (!remote && (!city.trim() || !stateCode.trim()))
+    if (!remote && (!city.trim() || !stateName.trim()))
       return setError('Add a location, or mark this job as remote.')
-    if (!remote && zipCode.trim() && !/^\d{5}(-\d{4})?$/.test(zipCode.trim()))
-      return setError('Enter a valid ZIP code.')
+    if (!remote && !STATES[stateName.trim()])
+      return setError('Select a valid US state from the list.')
+    if (!remote && !zipCode.trim())
+      return setError('Add a ZIP code.')
+    if (!remote && !/^\d{5}(-\d{4})?$/.test(zipCode.trim()))
+      return setError('Enter a valid US ZIP code (e.g. 90210 or 90210-1234).')
     if (!salaryMin || !salaryMax)
       return setError('Add a salary range. It is required on every listing.')
     if (Number(salaryMin) > Number(salaryMax))
@@ -64,6 +71,7 @@ export default function PostJobForm() {
     if (!/^\S+@\S+\.\S+$/.test(notificationEmail.trim()))
       return setError('Enter a valid email address.')
 
+    const resolvedStateCode = remote ? null : STATES[stateName.trim()]
     setIsSubmitting(true)
     try {
       const res = await fetch('/api/employer/jobs', {
@@ -75,8 +83,8 @@ export default function PostJobForm() {
           employmentType,
           remote,
           city: remote ? null : city.trim(),
-          state: remote ? null : stateCode.trim(),
-          zipCode: remote ? null : zipCode.trim() || null,
+          state: resolvedStateCode,
+          zipCode: remote ? null : zipCode.trim(),
           salaryMin: Number(salaryMin),
           salaryMax: Number(salaryMax),
           salaryPeriod,
@@ -143,7 +151,7 @@ export default function PostJobForm() {
               />
             </div>
             <div>
-              <FieldLabel>Employment type</FieldLabel>
+              <FieldLabel required>Employment type</FieldLabel>
               <select
                 value={employmentType}
                 onChange={(e) => setEmploymentType(e.target.value)}
@@ -179,26 +187,41 @@ export default function PostJobForm() {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="City"
+                    
                     className={inputClass}
                   />
+                 
+                </div>
+                <div>
+                  <Input
+                    value={stateName}
+                    onChange={(e) => setStateName(e.target.value)}
+                    onBlur={() => {
+                      if (stateName.trim() && !STATES[stateName.trim()]) setStateName('')
+                    }}
+                    placeholder="State"
+                    list="state-suggestions"
+                    className={inputClass}
+                  />
+                  <datalist id="state-suggestions">
+                    {stateOptions.map(([name]) => (
+                      <option key={name} value={name} />
+                    ))}
+                  </datalist>
                 </div>
                 <Input
-                  value={stateCode}
-                  onChange={(e) => setStateCode(e.target.value)}
-                  placeholder="State (e.g. OH)"
-                  className={inputClass}
-                />
-                <Input
                   value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
-                  placeholder="ZIP code"
+                  onChange={(e) => setZipCode(e.target.value.replace(/[^\d-]/g, ''))}
+                  placeholder="ZIP code *"
+                  inputMode="numeric"
+                  maxLength={10}
                   className={inputClass}
                 />
               </div>
             )}
             {!remote && (
               <p className="text-sm text-slate-400">
-                Adding a ZIP code helps your listing rank better in nearby search results.
+                Required — helps your listing rank better in nearby search results.
               </p>
             )}
           </div>
@@ -266,6 +289,9 @@ export default function PostJobForm() {
         <section>
           <SectionHeader number="04" title="Description" />
           <div>
+            <FieldLabel required className="sr-only">
+              Description
+            </FieldLabel>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}

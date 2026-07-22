@@ -483,7 +483,7 @@ export default function EmployerPage() {
 
         </h1>
 
-        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed mt-10">
 
           All of our candidates are from the United States. Our audience ranges from fresh grads 
           to experienced professionals, across every career stage. 
@@ -494,28 +494,14 @@ export default function EmployerPage() {
         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8 flex-wrap">
 
 
-          <span className="inline-flex items-center gap-1.5">
-
-            <CheckCircle2 className="w-4 h-4 text-teal-600" />
-
-            Live in 15 minutes
-
-          </span>
-
-          <span className="inline-flex items-center gap-1.5">
-
-            <CheckCircle2 className="w-4 h-4 text-teal-600" />
-
-            Free forever
-
-          </span>
+          
 
         </div>
 
         <Button
   size="lg"
   asChild
-  className="px-8 py-6 text-lg font-semibold bg-teal-600 hover:bg-teal-700 shadow-lg shadow-teal-600/25 hover:shadow-xl hover:shadow-teal-600/30 transition-all"
+  className="px-8 py-6 text-lg font-semibold bg-teal-600 hover:bg-teal-700 text-white"
 >
   <Link href="/auth/login">Post a job for free</Link>
 </Button>
@@ -726,7 +712,7 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-10">
 
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
+       <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-center gap-6">
 
           <div className="flex items-center gap-3 shrink-0">
 
@@ -742,7 +728,7 @@ export default function EmployerPage() {
 
               <p className="text-xs text-muted-foreground">
 
-                We screen for duplicate and suspicious applications before they reach your dashboard.
+                We screen for duplicate and suspicious applications.
 
               </p>
 
@@ -812,12 +798,6 @@ export default function EmployerPage() {
           Frequently asked questions
 
         </h2>
-
-        <p className="text-muted-foreground text-center mb-10">
-
-          Everything employers ask before posting their first job.
-
-        </p>
 
         <div className="space-y-4">
 
