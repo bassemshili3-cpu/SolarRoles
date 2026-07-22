@@ -16,6 +16,10 @@ export default function Navbar() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
   }, [])
 
   const signOut = async () => {
@@ -43,12 +47,12 @@ export default function Navbar() {
           {user ? (
             <>
               <Link href="/dashboard">
-                <Button variant="outline" size="sm" className="gap-1.5 sm:gap-2 px-2.5 sm:px-4">
-                  <User className="w-4 h-4" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                <Button variant="ghost" size="sm" className="px-3 sm:px-4">
+                  <User className="w-4 h-4 mr-1.5" />
+                  Dashboard
                 </Button>
               </Link>
-              <Button variant="ghost" size="sm" onClick={signOut} className="px-2.5 sm:px-4">
+              <Button variant="outline" size="sm" className="px-3 sm:px-4" onClick={signOut}>
                 Log out
               </Button>
             </>

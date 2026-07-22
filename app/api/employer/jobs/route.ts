@@ -30,20 +30,8 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json()
-  const {
-    title,
-    company,
-    employmentType,
-    remote,
-    city,
-    state,
-    salaryMin,
-    salaryMax,
-    salaryPeriod,
-    description,
-    applyMethod,
-    applyValue,
-  } = body
+const { title, company, employmentType, remote, city, state, salaryMin, salaryMax, salaryPeriod, description, notificationEmail } = body
+
 
   if (typeof title !== 'string' || !title.trim()) {
     return NextResponse.json({ error: 'A job title is required.' }, { status: 400 })
@@ -63,12 +51,9 @@ export async function POST(request: Request) {
   if (typeof description !== 'string' || description.trim().length < 50) {
     return NextResponse.json({ error: 'A description of at least 50 characters is required.' }, { status: 400 })
   }
-  if (applyMethod === 'url' && !/^https?:\/\//.test(applyValue || '')) {
-    return NextResponse.json({ error: 'A valid application link is required.' }, { status: 400 })
-  }
-  if (applyMethod === 'email' && !/^\S+@\S+\.\S+$/.test(applyValue || '')) {
-    return NextResponse.json({ error: 'A valid application email is required.' }, { status: 400 })
-  }
+ if (typeof notificationEmail !== 'string' || !/^\S+@\S+\.\S+$/.test(notificationEmail.trim())) {
+  return NextResponse.json({ error: 'A valid notification email is required.' }, { status: 400 })
+}
 
   const id = `employer-${randomUUID()}`
   const { contractType, contractTime } = EMPLOYMENT_TYPE_MAP[employmentType]
@@ -85,7 +70,7 @@ export async function POST(request: Request) {
       addressRegion: remote ? '' : state.trim(),
       description: description.trim(),
       url: `https://www.oh-my-job.com/jobs/${id}`,
-      applyUrl: applyMethod === 'email' ? `mailto:${applyValue.trim()}` : applyValue.trim(),
+      applyUrl: `mailto:${notificationEmail.trim()}`,
       salaryMin: annualizedSalary(salaryMinValue, salaryPeriod),
       salaryMax: annualizedSalary(salaryMaxValue, salaryPeriod),
       salary: `$${salaryMinValue.toLocaleString()} - $${salaryMaxValue.toLocaleString()} ${salaryPeriod === 'hour' ? 'an hour' : 'a year'}`,

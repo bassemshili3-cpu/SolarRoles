@@ -1,4 +1,6 @@
 // app/jobs/[id]/[slug]/page.tsx
+import ApplyForm from '../apply-form'
+
 import { AdUnit } from '@/components/AdUnit'
 
 import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
@@ -319,7 +321,7 @@ function buildJobPostingSchema(
   datePosted: new Date(job.postedAt).toISOString().split('T')[0],
 validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
-    directApply: false,
+    directApply: job.source === 'employer',
 
     employmentType,
 
@@ -1008,36 +1010,29 @@ function safeJsonLd(data: unknown): string {
                 )}
  {job.source === 'employer' && <AdUnit slot="job-detail" />}
 
-                <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+               <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  {job.source === 'employer' ? (
+    <div className="w-full">
+      <ApplyForm jobId={job.id} jobTitle={job.title} />
+    </div>
+  ) : applyUrl ? (
+    <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
+      <a href={`/jobs/${job.id}/go`} target="_blank" rel="noopener noreferrer">
+        {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
+      </a>
+    </Button>
+  ) : (
+    <Button disabled size="lg" className="w-full sm:w-auto">
+      Apply link unavailable
+    </Button>
+  )}
 
-                  {applyUrl ? (
-  <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
-    <a href={`/jobs/${job.id}/go`} target="_blank" rel="noopener noreferrer">
-      {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
-    </a>
-  </Button>
-                  ) : (
-
-                    <Button disabled size="lg" className="w-full sm:w-auto">
-
-                      Apply link unavailable
-
-                    </Button>
-
-                  )}
-
-
-                  <ShareBar
-
-                    url={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
-
-                    title={job.title}
-
-                    company={job.company || ''}
-
-                  />
-
-                </div>
+  <ShareBar
+    url={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
+    title={job.title}
+    company={job.company || ''}
+  />
+</div>
 
 
                 {roleMatch && (

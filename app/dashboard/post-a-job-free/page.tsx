@@ -127,7 +127,7 @@ const steps = [
 
     description:
 
-      'Sign up with your work email in under a minute. No credit card, no commitment, no sales call.',
+      'Sign up with your work email in under a minute. ',
 
   },
 
@@ -137,7 +137,7 @@ const steps = [
 
     description:
 
-      'Add the title, location, salary range, and a short description. You can also import an existing posting from another board.',
+      'Add the title, location, salary range, and a description. You can also import an existing posting from another board.',
 
   },
 
@@ -147,7 +147,7 @@ const steps = [
 
     description:
 
-      'Watch views, clicks, and applications roll in from your employer dashboard as candidates apply.',
+      'Keep track of key statistics from your employer dashboard as candidates apply.',
 
   },
 
@@ -160,11 +160,11 @@ const benefits = [
 
     icon: DollarSign,
 
-    title: 'Free, with no hidden fees',
+    title: '100% free',
 
     description:
 
-      'No credit card. No subscription. No paywall. Post as many jobs as you want, for as long as the role is open.',
+      'Post as many jobs as you want, for as long as the role is open.',
 
   },
 
@@ -176,7 +176,7 @@ const benefits = [
 
     description:
 
-      'Our audience is built around fresh grads, career changers, and people returning to work. The exact segments Indeed and LinkedIn tend to underweight.',
+      'Our audience spans career stages, from fresh grads to experienced professionals switching industries.',
 
   },
 
@@ -485,19 +485,12 @@ export default function EmployerPage() {
 
         <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
 
-          Reach the candidates other boards miss — fresh grads, career changers, and people ready to work. Your listing goes live in minutes, with no subscription and no sales call.
+          Reach the candidates other boards miss: fresh grads, career changers, and people ready to work. Your listing goes live in minutes, with no subscription and no sales call.
 
         </p>
 
         <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8 flex-wrap">
 
-          <span className="inline-flex items-center gap-1.5">
-
-            <CheckCircle2 className="w-4 h-4 text-teal-600" />
-
-            400k+ monthly job seekers
-
-          </span>
 
           <span className="inline-flex items-center gap-1.5">
 
@@ -525,6 +518,27 @@ export default function EmployerPage() {
 
       </section>
 
+{/* Google for Jobs structured data (new) */}
+<section className="max-w-5xl mx-auto px-6 py-16">
+  <div className="bg-gradient-to-br from-teal-50 to-white border border-teal-100 rounded-3xl p-8 md:p-12 text-center">
+    <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-teal-600 mb-4">
+      <Globe2 className="w-3.5 h-3.5" />
+      Structured for Google for Jobs
+    </span>
+    <h2 className="text-3xl font-bold text-[#1a2340] mb-4 tracking-tight">
+      Your listing is built to Google's job search standard
+    </h2>
+    <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
+      Every job posted on Oh My Job is automatically formatted with Google's official job posting markup.
+    </p>
+    <div className="grid sm:grid-cols-3 gap-4 text-left max-w-3xl mx-auto">
+      <div className="bg-white rounded-xl p-4 border border-gray-100">
+        <p className="text-sm font-semibold text-[#1a2340] mb-1">Automatic</p>
+        <p className="text-xs text-muted-foreground">Structured data added in order to appear on Google Jobs the moment you publish.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* How it works */}
 
@@ -538,7 +552,7 @@ export default function EmployerPage() {
 
         <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
 
-          Three steps from sign up to your first application. Most employers post their first job the same day they sign up.
+          Three steps from sign up to your first application. 
 
         </p>
 
@@ -581,7 +595,7 @@ export default function EmployerPage() {
 
           <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
 
-            Built for teams that want to hire without paying per posting, per click, or per seat.
+            Built for teams that want to hire without paying per posting.
 
           </p>
 
@@ -748,7 +762,7 @@ export default function EmployerPage() {
 
               <p className="text-xs text-muted-foreground">
 
-                Less than 24 hours for most entry level and mid-skill roles.
+                Less than 72 hours for most entry level and mid-skill roles.
 
               </p>
 
@@ -962,14 +976,6 @@ export default function EmployerPage() {
           </Link>
 
         </Button>
-
-        <p className="text-xs text-muted-foreground mt-4 flex items-center justify-center gap-1.5">
-
-          <ShieldCheck className="w-3.5 h-3.5" />
-
-          Free forever for employers
-
-        </p>
 
       </section>
 
