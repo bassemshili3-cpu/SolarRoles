@@ -636,11 +636,6 @@ export default function EmployerPage() {
 
         </h2>
 
-        <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
-
-          Whether you run a local shop with one opening or a startup scaling your team, posting a job on Oh My Job takes the same fifteen minutes.
-
-        </p>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
 
@@ -724,7 +719,7 @@ export default function EmployerPage() {
 
             <div>
 
-              <p className="font-semibold text-[#1a2340] text-sm">No spam, no scam applicants</p>
+              <p className="font-semibold text-[#1a2340] text-sm">No spam or scam applicants</p>
 
               <p className="text-xs text-muted-foreground">
 
@@ -896,7 +891,7 @@ export default function EmployerPage() {
 
             <p className="text-sm text-muted-foreground">
 
-              Workplace loneliness is now a performance problem. What employers are doing about it.
+              Workplace loneliness is now a performance problem. Find out what employers are doing about it.
 
             </p>
 
@@ -947,7 +942,7 @@ export default function EmployerPage() {
 
         <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
 
-          Your next great hire is one free job post away. No credit card. No subscription. No waiting.
+          Your next great hire is one free job post away.
 
         </p>
 

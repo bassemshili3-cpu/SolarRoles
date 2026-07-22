@@ -5,13 +5,14 @@ import { createClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Moon, Sun, User } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { FilterDrawerTrigger } from '@/components/filter-drawer-trigger'
 
 export default function Navbar() {
   const supabase = createClient()
   const { theme, setTheme } = useTheme()
   const router = useRouter()
+  const pathname = usePathname()
   const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
@@ -24,7 +25,11 @@ export default function Navbar() {
 
   const signOut = async () => {
     await supabase.auth.signOut()
-    router.refresh()
+    if (pathname?.startsWith('/dashboard')) {
+      router.push('/')
+    } else {
+      router.refresh()
+    }
   }
 
   return (
