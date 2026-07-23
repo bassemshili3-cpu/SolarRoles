@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'Mediapartners-Google',
         allow: '/jobs/employer-',
-        disallow: ['/api/', '/jobs/', '/auth/'],
+        disallow: ['/api/', '/jobs/', '/auth/', '/admin/'],
       },
     ],
     sitemap: ['https://www.oh-my-job.com/sitemap.xml'],

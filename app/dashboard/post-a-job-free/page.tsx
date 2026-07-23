@@ -503,7 +503,7 @@ export default function EmployerPage() {
   asChild
   className="px-8 py-6 text-lg font-semibold bg-teal-600 hover:bg-teal-700 text-white"
 >
-  <Link href="/auth/login">Post a job for free</Link>
+  <Link href="/auth/login?redirectTo=/dashboard/employer">Post a job for free</Link>
 </Button>
 
       </section>
