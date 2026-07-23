@@ -1,13 +1,14 @@
 // app/dashboard/employer/new/post-job-form.tsx
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, Check } from 'lucide-react'
 import { STATES } from '@/lib/usStates'
+import { createClient } from '@/lib/supabase'
 
 type SalaryPeriod = 'year' | 'hour'
 
@@ -17,14 +18,32 @@ const stateOptions = Object.entries(STATES).sort(([a], [b]) => a.localeCompare(b
 
 const MIN_DESCRIPTION_LENGTH = 1000
 
+const DRAFT_KEY = 'ohMyJob_jobDraft'
+
 const fieldClass =
   'h-11 px-3.5 w-full bg-white border border-slate-300 rounded-md text-base text-[#1a2340] placeholder:text-slate-500 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors'
 
 const inputClass =
   'h-11 text-base rounded-md border-slate-300 focus-visible:ring-[#1a2340] focus-visible:ring-offset-1'
 
+type DraftPayload = {
+  title: string
+  company: string
+  employmentType: string
+  remote: boolean
+  city: string
+  stateName: string
+  zipCode: string
+  salaryMin: string
+  salaryMax: string
+  salaryPeriod: SalaryPeriod
+  description: string
+  notificationEmail: string
+}
+
 export default function PostJobForm() {
   const router = useRouter()
+  const supabase = createClient()
 
   const [title, setTitle] = useState('')
   const [company, setCompany] = useState('')
@@ -40,39 +59,96 @@ export default function PostJobForm() {
   const [notificationEmail, setNotificationEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [restoredDraft, setRestoredDraft] = useState(false)
+
+  // Restore a draft saved before being sent to login, if any.
+  useEffect(() => {
+    const raw = sessionStorage.getItem(DRAFT_KEY)
+    if (!raw) return
+    try {
+      const draft: DraftPayload = JSON.parse(raw)
+      setTitle(draft.title)
+      setCompany(draft.company)
+      setEmploymentType(draft.employmentType)
+      setRemote(draft.remote)
+      setCity(draft.city)
+      setStateName(draft.stateName)
+      setZipCode(draft.zipCode)
+      setSalaryMin(draft.salaryMin)
+      setSalaryMax(draft.salaryMax)
+      setSalaryPeriod(draft.salaryPeriod)
+      setDescription(draft.description)
+      setNotificationEmail(draft.notificationEmail)
+      setRestoredDraft(true)
+    } catch {
+      // corrupted draft, ignore
+    } finally {
+      sessionStorage.removeItem(DRAFT_KEY)
+    }
+  }, [])
 
   const descriptionLength = description.trim().length
   const descriptionReached = descriptionLength >= MIN_DESCRIPTION_LENGTH
   const descriptionProgress = Math.min(descriptionLength / MIN_DESCRIPTION_LENGTH, 1)
 
+  function validate(): string | null {
+    if (!company.trim()) return 'Add your company name.'
+    if (!title.trim()) return 'Add a job title.'
+    if (!remote && (!city.trim() || !stateName.trim()))
+      return 'Add a location, or mark this job as remote.'
+    if (!remote && !STATES[stateName.trim()]) return 'Select a valid US state from the list.'
+    if (!remote && !zipCode.trim()) return 'Add a ZIP code.'
+    if (!remote && !/^\d{5}(-\d{4})?$/.test(zipCode.trim()))
+      return 'Enter a valid US ZIP code (e.g. 90210 or 90210-1234).'
+    if (!salaryMin || !salaryMax) return 'Add a salary range. It is required on every listing.'
+    if (Number(salaryMin) > Number(salaryMax))
+      return 'Minimum salary cannot be higher than the maximum.'
+    if (!description.trim() || description.trim().length < MIN_DESCRIPTION_LENGTH)
+      return `Add a description of at least ${MIN_DESCRIPTION_LENGTH.toLocaleString()} characters.`
+    if (!notificationEmail.trim())
+      return 'Add the email where you want to receive applications.'
+    if (!/^\S+@\S+\.\S+$/.test(notificationEmail.trim())) return 'Enter a valid email address.'
+    return null
+  }
+
+  function saveDraft() {
+    const draft: DraftPayload = {
+      title,
+      company,
+      employmentType,
+      remote,
+      city,
+      stateName,
+      zipCode,
+      salaryMin,
+      salaryMax,
+      salaryPeriod,
+      description,
+      notificationEmail,
+    }
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
-    if (!company.trim()) return setError('Add your company name.')
-    if (!title.trim()) return setError('Add a job title.')
-    if (!remote && (!city.trim() || !stateName.trim()))
-      return setError('Add a location, or mark this job as remote.')
-    if (!remote && !STATES[stateName.trim()])
-      return setError('Select a valid US state from the list.')
-    if (!remote && !zipCode.trim())
-      return setError('Add a ZIP code.')
-    if (!remote && !/^\d{5}(-\d{4})?$/.test(zipCode.trim()))
-      return setError('Enter a valid US ZIP code (e.g. 90210 or 90210-1234).')
-    if (!salaryMin || !salaryMax)
-      return setError('Add a salary range. It is required on every listing.')
-    if (Number(salaryMin) > Number(salaryMax))
-      return setError('Minimum salary cannot be higher than the maximum.')
-    if (!description.trim() || description.trim().length < MIN_DESCRIPTION_LENGTH)
-      return setError(
-        `Add a description of at least ${MIN_DESCRIPTION_LENGTH.toLocaleString()} characters.`
-      )
-    if (!notificationEmail.trim())
-      return setError('Add the email where you want to receive applications.')
-    if (!/^\S+@\S+\.\S+$/.test(notificationEmail.trim()))
-      return setError('Enter a valid email address.')
+
+    const validationError = validate()
+    if (validationError) return setError(validationError)
+
+    setIsSubmitting(true)
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      saveDraft()
+      router.push('/auth/login?redirectTo=/dashboard/employer/new')
+      return
+    }
 
     const resolvedStateCode = remote ? null : STATES[stateName.trim()]
-    setIsSubmitting(true)
     try {
       const res = await fetch('/api/employer/jobs', {
         method: 'POST',
@@ -118,8 +194,15 @@ export default function PostJobForm() {
         <h1 className="text-[32px] md:text-[36px] leading-[1.1] font-semibold tracking-[-0.02em] text-[#1a2340]">
           Post a new job
         </h1>
-       
       </header>
+
+      {restoredDraft && (
+        <div className="mb-8 px-4 py-3 border border-emerald-200 rounded-md bg-emerald-50">
+          <p className="text-sm text-emerald-700">
+            Welcome back — we saved what you filled in. Just hit Post job to publish.
+          </p>
+        </div>
+      )}
 
       {error && (
         <div className="mb-8 px-4 py-3 border border-red-200 rounded-md bg-red-50">
@@ -187,10 +270,8 @@ export default function PostJobForm() {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="City"
-                    
                     className={inputClass}
                   />
-                 
                 </div>
                 <div>
                   <Input

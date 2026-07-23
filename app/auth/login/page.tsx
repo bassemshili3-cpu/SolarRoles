@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const supabase = createClient()
@@ -20,6 +21,7 @@ export default function Login() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -66,7 +68,7 @@ export default function Login() {
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }} />
         </div>
-        
+
         <div className="relative z-10 flex flex-col justify-center px-16 xl:px-24">
           <div className="flex items-center gap-3 mb-16" />
 
@@ -74,47 +76,27 @@ export default function Login() {
             Find your next<br />
             <span className="text-blue-400">dream career</span>
           </h1>
-          
+
           <p className="text-lg text-slate-300 mb-12 max-w-md">
-            Join thousands of professionals who found their perfect job through Oh My Job
+            Salaries shown upfront, smart filters, and a growing list of US employers hiring across every state.
           </p>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-            <div className="flex items-center gap-1 mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <svg key={star} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <p className="text-white/90 text-lg italic mb-4">
-              "I found my dream job in just 2 weeks. The platform made it so easy to connect with amazing companies."
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                SJ
-              </div>
-              <div>
-                <p className="text-white font-medium">Sarah Johnson</p>
-                <p className="text-slate-400 text-sm">Software Engineer at TechCorp</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-12 mt-12">
-            <div>
-              <p className="text-3xl font-bold text-white">400k+</p>
-              <p className="text-slate-400">Active Jobs</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-white">50K+</p>
-              <p className="text-slate-400">Companies</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-white">78%</p>
-              <p className="text-slate-400">Hired within 30 days</p>
-            </div>
-          </div>
+          <ul className="space-y-4">
+            {[
+              'Salary ranges shown before you click',
+              'No account needed to browse jobs',
+              'New listings added every day',
+            ].map((text) => (
+              <li key={text} className="flex items-center gap-3 text-slate-200">
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 border border-white/10 shrink-0">
+                  <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <span className="text-sm font-medium">{text}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl" />
@@ -148,16 +130,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="lg:hidden mb-10">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-slate-900">Oh My Job</span>
-            </div>
-          </div>
+          
 
           <div className="hidden lg:block mb-10">
             <h2 className="text-3xl font-bold text-slate-900 mb-2">
@@ -214,10 +187,11 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={handleKeyPress}
+                autoComplete="email"
                 className="h-12 text-base px-4 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all"
               />
             </div>
-            
+
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <label className="text-sm font-semibold text-slate-700">Password</label>
@@ -225,17 +199,28 @@ export default function Login() {
                   Forgot password?
                 </Link>
               </div>
-              <Input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyPress}
-                className="h-12 text-base px-4 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  autoComplete="current-password"
+                  className="h-12 text-base px-4 pr-11 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
 
-            <Button 
+            <Button
               className="w-full h-14 text-base font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-600/25 transition-all duration-200 hover:shadow-xl hover:shadow-blue-600/30"
               onClick={loginWithEmail}
               disabled={isLoading}
