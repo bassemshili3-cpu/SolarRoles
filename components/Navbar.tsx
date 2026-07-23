@@ -51,14 +51,20 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           {user ? (
             <>
-              <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="px-3 sm:px-4">
-                  <User className="w-4 h-4 mr-1.5" />
-                  Dashboard
+              <Link href="/dashboard" title="Dashboard">
+                <Button variant="ghost" size="sm" className="px-2 sm:px-4">
+                  <User className="w-4 h-4 sm:mr-1.5" />
+                  <span className="hidden sm:inline">Dashboard</span>
                 </Button>
               </Link>
-              <Button variant="outline" size="sm" className="px-3 sm:px-4" onClick={signOut}>
-                Log out
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 sm:px-4"
+                onClick={signOut}
+              >
+                <span className="hidden sm:inline">Log out</span>
+                <span className="sm:hidden">Out</span>
               </Button>
             </>
           ) : (
