@@ -9,6 +9,7 @@ export type JobDetail = {
   company?: string
   location?: string
   addressRegion?: string
+  postalCode?: string
   salary?: string
   salary_min?: number
   salary_max?: number
@@ -37,6 +38,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       company: dbJob.company,
       location: dbJob.location,
       addressRegion: dbJob.addressRegion,
+      postalCode: dbJob.postalCode || undefined,
       description: dbJob.description,
       salary_min: dbJob.salaryMin || undefined,
       salary_max: dbJob.salaryMax || undefined,
@@ -78,6 +80,5 @@ export function getJobDetailWithSalary(job: JobDetail): JobDetail {
   }
 
   return job
-  
-}
 
+}
