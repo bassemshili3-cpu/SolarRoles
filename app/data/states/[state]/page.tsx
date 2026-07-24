@@ -157,15 +157,15 @@ export default async function StateDataPage({
 
       <div className="max-w-5xl mx-auto px-6 py-16">
 
-        <Link href="/data" className="flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-8 text-sm">
+        <Link href="/data" className="flex items-center gap-2 text-gray-500 hover:text-[#C9991F] mb-8 text-sm">
           <ArrowLeft className="w-4 h-4" /> Back to Data Center
         </Link>
 
         {/* ── HEADER ── */}
         <header className="mb-12">
           <div className="flex items-center gap-3 mb-3">
-            <MapPin className="w-6 h-6 text-blue-600" />
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <MapPin className="w-6 h-6 text-[#3D1654]" />
+            <h1 className="text-3xl md:text-4xl font-bold text-[#3D1654]">
               {stateName} Job Market Data
             </h1>
           </div>
@@ -176,15 +176,15 @@ export default async function StateDataPage({
 
         {/* ── STATS CARDS ── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
-            <p className="text-2xl font-bold text-gray-900">{fmt(totalJobs)}</p>
+          <div className="border border-[#EDE5F0] rounded-xl p-5 text-center">
+            <p className="text-2xl font-bold text-[#3D1654]">{fmt(totalJobs)}</p>
             <p className="text-xs text-gray-500 mt-1">Active listings</p>
           </div>
 
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
+          <div className="border border-[#EDE5F0] rounded-xl p-5 text-center">
             {avgSalary != null ? (
               <>
-                <p className="text-2xl font-bold text-gray-900">${fmt(avgSalary)}</p>
+                <p className="text-2xl font-bold text-[#3D1654]">${fmt(avgSalary)}</p>
                 <p className="text-xs text-gray-500 mt-1">Avg. salary ({fmt(salaryCount)} with data)</p>
               </>
             ) : (
@@ -195,10 +195,10 @@ export default async function StateDataPage({
             )}
           </div>
 
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
+          <div className="border border-[#EDE5F0] rounded-xl p-5 text-center">
             {minSalary != null ? (
               <>
-                <p className="text-2xl font-bold text-gray-900">${fmt(minSalary)}</p>
+                <p className="text-2xl font-bold text-[#3D1654]">${fmt(minSalary)}</p>
                 <p className="text-xs text-gray-500 mt-1">Lowest listed</p>
               </>
             ) : (
@@ -209,10 +209,10 @@ export default async function StateDataPage({
             )}
           </div>
 
-          <div className="border border-gray-200 rounded-xl p-5 text-center">
+          <div className="border border-[#EDE5F0] rounded-xl p-5 text-center">
             {maxSalary != null ? (
               <>
-                <p className="text-2xl font-bold text-gray-900">${fmt(maxSalary)}</p>
+                <p className="text-2xl font-bold text-[#3D1654]">${fmt(maxSalary)}</p>
                 <p className="text-xs text-gray-500 mt-1">Highest listed</p>
               </>
             ) : (
@@ -229,14 +229,14 @@ export default async function StateDataPage({
           {/* ── TOP EMPLOYERS ── */}
           <section>
             <div className="flex items-center gap-2 mb-4">
-              <Building2 className="w-5 h-5 text-amber-600" />
-              <h2 className="text-xl font-bold text-gray-900">Top Hiring Companies</h2>
+              <Building2 className="w-5 h-5 text-[#C9991F]" />
+              <h2 className="text-xl font-bold text-[#3D1654]">Top Hiring Companies</h2>
             </div>
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
+            <div className="border border-[#EDE5F0] rounded-xl overflow-hidden">
               {topCompanies.map((company, i) => (
                 <div
                   key={company.company}
-                  className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                  className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7FC]'}`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-bold text-gray-400 w-5">{i + 1}</span>
@@ -254,14 +254,14 @@ export default async function StateDataPage({
           {/* ── TOP JOB TITLES ── */}
           <section>
             <div className="flex items-center gap-2 mb-4">
-              <Briefcase className="w-5 h-5 text-blue-600" />
-              <h2 className="text-xl font-bold text-gray-900">Most In-Demand Roles</h2>
+              <Briefcase className="w-5 h-5 text-[#3D1654]" />
+              <h2 className="text-xl font-bold text-[#3D1654]">Most In-Demand Roles</h2>
             </div>
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
+            <div className="border border-[#EDE5F0] rounded-xl overflow-hidden">
               {topTitles.map((title, i) => (
                 <div
                   key={title.title}
-                  className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                  className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7FC]'}`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-bold text-gray-400 w-5">{i + 1}</span>
@@ -280,23 +280,23 @@ export default async function StateDataPage({
         {/* ── CONTRACT TYPE BREAKDOWN ── */}
         {totalJobs > 0 && (
           <section className="mt-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Employment Type Breakdown</h2>
+            <h2 className="text-xl font-bold text-[#3D1654] mb-4">Employment Type Breakdown</h2>
             <div className="flex gap-4">
               {fullTimeCount > 0 && (
-                <div className="flex-1 border border-gray-200 rounded-xl p-5 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{fmt(fullTimeCount)}</p>
+                <div className="flex-1 border border-[#EDE5F0] rounded-xl p-5 text-center">
+                  <p className="text-2xl font-bold text-[#3D1654]">{fmt(fullTimeCount)}</p>
                   <p className="text-xs text-gray-500 mt-1">Full-time</p>
-                  <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(fullTimeCount / totalJobs) * 100}%` }} />
+                  <div className="mt-2 h-2 bg-[#F5EEF7] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#3D1654] rounded-full" style={{ width: `${(fullTimeCount / totalJobs) * 100}%` }} />
                   </div>
                 </div>
               )}
               {partTimeCount > 0 && (
-                <div className="flex-1 border border-gray-200 rounded-xl p-5 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{fmt(partTimeCount)}</p>
+                <div className="flex-1 border border-[#EDE5F0] rounded-xl p-5 text-center">
+                  <p className="text-2xl font-bold text-[#3D1654]">{fmt(partTimeCount)}</p>
                   <p className="text-xs text-gray-500 mt-1">Part-time</p>
-                  <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: `${(partTimeCount / totalJobs) * 100}%` }} />
+                  <div className="mt-2 h-2 bg-[#F5EEF7] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#C9991F] rounded-full" style={{ width: `${(partTimeCount / totalJobs) * 100}%` }} />
                   </div>
                 </div>
               )}
@@ -305,19 +305,19 @@ export default async function StateDataPage({
         )}
 
         {/* ── CTA ── */}
-        <section className="mt-16 bg-blue-50 border border-blue-200 rounded-2xl p-8 text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Browse {stateName} Jobs</h2>
+        <section className="mt-16 bg-[#F5EEF7] border border-[#E8D5F0] rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-[#3D1654] mb-2">Browse {stateName} Jobs</h2>
           <p className="text-sm text-gray-500 mb-4">See all {fmt(totalJobs)} active listings in {stateName}</p>
           <Link
             href={`/jobs?where=${encodeURIComponent(stateName)}`}
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="inline-block bg-[#C9991F] text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-[#B0841A] transition-colors"
           >
             View {stateName} Jobs
           </Link>
         </section>
 
         {/* ── DISCLAIMER ── */}
-        <footer className="mt-16 border-t border-gray-200 pt-8">
+        <footer className="mt-16 border-t border-[#EDE5F0] pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
             Data computed from active job listings in the Oh My Job database. Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits. Updated daily. This page does not constitute employment or financial advice.
           </p>

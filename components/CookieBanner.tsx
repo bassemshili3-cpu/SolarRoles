@@ -106,7 +106,7 @@ export default function CookieBanner() {
               hover:opacity-90 active:scale-95
             "
             style={{
-              background: 'linear-gradient(135deg, #3b41d2 0%, #4f46e5 100%)',
+              background: 'linear-gradient(135deg, #2A1140 0%, #2A1140 100%)',
               boxShadow: '0 2px 8px rgba(79,70,229,0.35)',
             }}
           >

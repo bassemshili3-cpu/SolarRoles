@@ -256,24 +256,24 @@ const ARTICLES = [
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
 
-  'Career Advice': { bg: '#EEF2FF', color: '#2B4ACB' },
+  'Career Advice': { bg: '#F5EEF7', color: '#3D1654' },
 
-  'Interview Tips': { bg: '#F0FDF4', color: '#16A34A' },
+  'Interview Tips': { bg: '#FCF4DD', color: '#C9991F' },
 
-  'Salary Insights': { bg: '#FFF7ED', color: '#C2410C' },
+  'Salary Insights': { bg: '#F5EEF7', color: '#5B1F7A' },
 
-  'Remote Work': { bg: '#F0F9FF', color: '#0369A1' },
+  'Remote Work': { bg: '#FCE9A8', color: '#B0841A' },
 
-  'Tech Jobs': { bg: '#FAF5FF', color: '#7C3AED' },
+  'Tech Jobs': { bg: '#F5EEF7', color: '#3D1654' },
 
-  'Industry Trends': { bg: '#FDF2F8', color: '#BE185D' },
+  'Industry Trends': { bg: '#FCF4DD', color: '#C9991F' },
 
 };
 
 
 function CategoryBadge({ category }: { category: string }) {
 
-  const style = CATEGORY_COLORS[category] || { bg: '#F3F4F6', color: '#374151' };
+  const style = CATEGORY_COLORS[category] || { bg: '#F5EEF7', color: '#3D1654' };
 
   return (
 
@@ -341,7 +341,7 @@ export default function BlogPage() {
 
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 
-        background: '#F8F9FC',
+        background: '#FAF7FC',
 
         color: '#111827',
 
@@ -368,7 +368,7 @@ export default function BlogPage() {
 
           padding: 40px 0 32px;
 
-          border-bottom: 1px solid #E5E7EB;
+          border-bottom: 1px solid #EDE5F0;
 
           background: #fff;
 
@@ -386,7 +386,7 @@ export default function BlogPage() {
 
           font-size: 26px; font-weight: 700;
 
-          color: #0F1B3D; letter-spacing: -0.5px;
+          color: #3D1654; letter-spacing: -0.5px;
 
           margin-bottom: 6px;
 
@@ -407,7 +407,7 @@ export default function BlogPage() {
 
           background: #fff;
 
-          border: 1px solid #E5E7EB;
+          border: 1px solid #EDE5F0;
 
           border-radius: 10px;
 
@@ -445,7 +445,7 @@ export default function BlogPage() {
 
           letter-spacing: 1px; text-transform: uppercase;
 
-          color: #2B4ACB; margin-bottom: 12px;
+          color: #C9991F; margin-bottom: 12px;
 
         }
 
@@ -453,7 +453,7 @@ export default function BlogPage() {
 
           font-size: 22px; font-weight: 700;
 
-          line-height: 1.35; color: #0F1B3D;
+          line-height: 1.35; color: #3D1654;
 
           margin-bottom: 12px; letter-spacing: -0.3px;
 
@@ -463,7 +463,7 @@ export default function BlogPage() {
 
         }
 
-        .featured-title:hover { color: #2B4ACB; }
+        .featured-title:hover { color: #C9991F; }
 
         .featured-subtitle {
 
@@ -510,7 +510,7 @@ export default function BlogPage() {
 
           border-radius: 20px;
 
-          border: 1px solid #E5E7EB;
+          border: 1px solid #EDE5F0;
 
           background: #fff;
 
@@ -524,13 +524,13 @@ export default function BlogPage() {
 
         }
 
-        .filter-btn:hover { border-color: #2B4ACB; color: #2B4ACB; }
+        .filter-btn:hover { border-color: #C9991F; color: #C9991F; }
 
         .filter-btn.active {
 
-          background: #2B4ACB; color: #fff;
+          background: #C9991F; color: #fff;
 
-          border-color: #2B4ACB;
+          border-color: #C9991F;
 
         }
 
@@ -566,7 +566,7 @@ export default function BlogPage() {
 
           background: #fff;
 
-          border: 1px solid #E5E7EB;
+          border: 1px solid #EDE5F0;
 
           border-radius: 8px; overflow: hidden;
 
@@ -578,7 +578,7 @@ export default function BlogPage() {
 
         }
 
-        .img-card:hover { box-shadow: 0 4px 16px rgba(43,74,203,0.1); border-color: #C7D2FE; }
+        .img-card:hover { box-shadow: 0 4px 16px rgba(201,153,31,0.12); border-color: #F5C842; }
 
         .img-card img { width: 100%; height: 168px; object-fit: cover; display: block; }
 
@@ -596,7 +596,7 @@ export default function BlogPage() {
 
         }
 
-        .img-card:hover .img-card-title { color: #2B4ACB; }
+        .img-card:hover .img-card-title { color: #C9991F; }
 
         .img-card-meta {
 
@@ -617,9 +617,9 @@ export default function BlogPage() {
 
           gap: 1px;
 
-          background: #E5E7EB;
+          background: #EDE5F0;
 
-          border: 1px solid #E5E7EB;
+          border: 1px solid #EDE5F0;
 
           border-radius: 8px; overflow: hidden;
 
@@ -639,7 +639,7 @@ export default function BlogPage() {
 
         }
 
-        .list-article-item:hover { background: #F8F9FC; }
+        .list-article-item:hover { background: #FAF7FC; }
 
         .list-article-cat { margin-bottom: 8px; }
 
@@ -653,7 +653,7 @@ export default function BlogPage() {
 
         }
 
-        .list-article-item:hover .list-article-title { color: #2B4ACB; }
+        .list-article-item:hover .list-article-title { color: #C9991F; }
 
         .list-article-meta {
 
@@ -674,7 +674,7 @@ export default function BlogPage() {
 
           color: #9CA3AF; font-size: 15px;
 
-          background: #fff; border: 1px solid #E5E7EB;
+          background: #fff; border: 1px solid #EDE5F0;
 
           border-radius: 8px;
 
@@ -685,7 +685,7 @@ export default function BlogPage() {
 
         .newsletter-wrap {
 
-          background: #0F1B3D;
+          background: #3D1654;
 
           border-radius: 10px;
 
@@ -711,7 +711,7 @@ export default function BlogPage() {
 
         .newsletter-text p {
 
-          font-size: 14px; color: #9CA3AF; line-height: 1.5;
+          font-size: 14px; color: #C4A8D4; line-height: 1.5;
 
         }
 
@@ -725,9 +725,9 @@ export default function BlogPage() {
 
           padding: 10px 16px;
 
-          border: 1px solid #374151;
+          border: 1px solid #5B1F7A;
 
-          background: #1F2D52;
+          background: #2D0F3F;
 
           color: #fff; border-radius: 6px;
 
@@ -739,15 +739,15 @@ export default function BlogPage() {
 
         }
 
-        .newsletter-input::placeholder { color: #6B7280; }
+        .newsletter-input::placeholder { color: #9CA3AF; }
 
-        .newsletter-input:focus { border-color: #2B4ACB; }
+        .newsletter-input:focus { border-color: #C9991F; }
 
         .newsletter-btn {
 
           padding: 10px 20px;
 
-          background: #2B4ACB; color: #fff;
+          background: #C9991F; color: #fff;
 
           border: none; border-radius: 6px;
 
@@ -761,7 +761,7 @@ export default function BlogPage() {
 
         }
 
-        .newsletter-btn:hover { background: #2240B0; }
+        .newsletter-btn:hover { background: #B0841A; }
 
 
         /* Stats */
@@ -770,7 +770,7 @@ export default function BlogPage() {
 
           background: #fff;
 
-          border: 1px solid #E5E7EB;
+          border: 1px solid #EDE5F0;
 
           border-radius: 8px;
 
@@ -792,7 +792,7 @@ export default function BlogPage() {
 
           padding: 0 24px;
 
-          border-right: 1px solid #E5E7EB;
+          border-right: 1px solid #EDE5F0;
 
         }
 
@@ -802,7 +802,7 @@ export default function BlogPage() {
 
           font-size: 28px; font-weight: 700;
 
-          color: #0F1B3D; letter-spacing: -0.5px;
+          color: #3D1654; letter-spacing: -0.5px;
 
           margin-bottom: 4px;
 
@@ -835,7 +835,7 @@ export default function BlogPage() {
 
           .stat-item:nth-child(2) { border-right: none; }
 
-          .stat-item:nth-child(3), .stat-item:nth-child(4) { border-top: 1px solid #E5E7EB; border-right: none; }
+          .stat-item:nth-child(3), .stat-item:nth-child(4) { border-top: 1px solid #EDE5F0; border-right: none; }
 
           .stat-item:nth-child(4) { border-right: none; }
 
@@ -1071,7 +1071,7 @@ export default function BlogPage() {
 
           {subscribed ? (
 
-            <div style={{ color: '#86EFAC', fontWeight: 600, fontSize: '15px', flexShrink: 0 }}>
+            <div style={{ color: '#F5D67A', fontWeight: 600, fontSize: '15px', flexShrink: 0 }}>
 
               You&apos;re in. See you Tuesday.
 
