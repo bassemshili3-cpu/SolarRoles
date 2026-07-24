@@ -159,13 +159,13 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
 
            <a
             href={externalApplyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center px-3 py-1 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
-          >
-            Apply 
-          </a>
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(e) => e.stopPropagation()}
+  className="inline-flex items-center px-3 py-1 rounded-md bg-[#5B2A7F] hover:bg-[#2A1140] text-white text-xs font-semibold transition-colors"
+>
+  Apply 
+</a>
         </div>
       </div>
     </div>

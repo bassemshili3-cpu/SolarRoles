@@ -41,6 +41,11 @@ export const metadata: Metadata = {
 // pas question de les relancer à chaque requête utilisateur
 export const revalidate = 3600
 
+// ── Palette ──
+// Prune         : #5B2A7F (accent principal / fonds clairs)
+// Prune foncée  : #2A1140 (titres, boutons, sections sombres)
+// Or            : #E8B84B (accents chauds, liens, badges)
+
 // ── Data ──
 const rankings = [
   {
@@ -112,24 +117,24 @@ const credentialFeatures = [
 ]
 
 const categories = [
-  { label: 'FIFO Jobs',           icon: Plane,         bg: 'bg-blue-600',   href: '/fifo-jobs' },
+  { label: 'FIFO Jobs',           icon: Plane,         bg: 'bg-[#5B2A7F]', href: '/fifo-jobs' },
   { label: 'Executive Assistant', icon: ClipboardList, bg: 'bg-pink-600',   href: '/executive-assistant-jobs' },
   { label: 'CNA Jobs',            icon: HeartPulse,    bg: 'bg-green-600',  href: '/cna-jobs' },
-  { label: 'Electrician',         icon: Zap,           bg: 'bg-orange-600', href: '/electrician-jobs' },
+  { label: 'Electrician',         icon: Zap,           bg: 'bg-[#E8B84B]', href: '/electrician-jobs' },
   { label: 'Customer Service',    icon: Headphones,    bg: 'bg-purple-600', href: '/customer-service-jobs' },
   { label: 'Data Analyst',        icon: BarChart2,     bg: 'bg-yellow-600', href: '/entry-level-data-analyst-jobs' }, // ⚠️ vérifie l'orthographe de ce slug
   { label: 'Dental Assistant',    icon: Stethoscope,   bg: 'bg-red-600',    href: '/dental-assistant-jobs' },
   { label: 'Property Management', icon: Building2,     bg: 'bg-slate-600',  href: '/jobs-at-property-management' },
   { label: 'Part-Time Jobs',      icon: Clock,          bg: 'bg-teal-600',   href: '/part-time-jobs' },
   { label: 'Childcare',           icon: Baby,           bg: 'bg-cyan-600',   href: '/childcare-jobs' },
-  { label: 'Engineering',         icon: HardHat,        bg: 'bg-indigo-600', href: '/engineering-jobs' },
-  { label: 'Patient transporter',         icon: HardHat,        bg: 'bg-indigo-900', href: '/patient-transporter-jobs' },
+  { label: 'Engineering',         icon: HardHat,        bg: 'bg-[#2A1140]', href: '/engineering-jobs' },
+  { label: 'Patient transporter',         icon: HardHat,        bg: 'bg-[#1F0D30]', href: '/patient-transporter-jobs' },
 ]
 
 const CATEGORY_BADGE_COLORS: Record<string, { bg: string; color: string }> = {
-  'Career Advice':    { bg: '#EEF2FF', color: '#2B4ACB' },
+  'Career Advice':    { bg: '#EAF1F1', color: '#5B2A7F' },
   'Interview Tips':   { bg: '#F0FDF4', color: '#16A34A' },
-  'Salary Insights':  { bg: '#FFF7ED', color: '#C2410C' },
+  'Salary Insights':  { bg: '#FDEEE3', color: '#E8B84B' },
   'Remote Work':      { bg: '#F0F9FF', color: '#0369A1' },
   'Tech Jobs':        { bg: '#FAF5FF', color: '#7C3AED' },
   'Industry Trends':  { bg: '#FDF2F8', color: '#BE185D' },
@@ -225,9 +230,9 @@ export default async function Home() {
   return (
     <>
       {/* ── Hero ── */}
-      <section className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white pt-24 pb-36">
+      <section className="bg-gradient-to-br from-[#2A1140] to-[#5B2A7F] text-white pt-24 pb-36">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <p className="text-blue-200 text-sm font-semibold tracking-widest uppercase mb-4">
+          <p className="text-[#F3DFA0] text-sm font-semibold tracking-widest uppercase mb-4">
             Smart job search across all 50 states
           </p>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-tight">
@@ -242,7 +247,7 @@ export default async function Home() {
         <div className="max-w-5xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-x-12 gap-y-8">
           {stats.map(({ value, label }) => (
             <div key={label} className="text-center min-w-[100px]">
-              <p className="text-4xl font-extrabold text-[#1a2340] tracking-tight">{value}</p>
+              <p className="text-4xl font-extrabold text-[#2A1140] tracking-tight">{value}</p>
               <p className="text-sm text-gray-500 mt-1">{label}</p>
             </div>
           ))}
@@ -252,8 +257,8 @@ export default async function Home() {
       {/* ── Vision ── */}
       <section className="bg-gray-50 py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-4">Our take</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#1a2340] leading-tight mb-8 tracking-tight">
+          <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-4">Our take</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#2A1140] leading-tight mb-8 tracking-tight">
             Getting a first job shouldn't require having had a first job.
           </h2>
           <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
@@ -265,7 +270,7 @@ export default async function Home() {
           <div className="mt-10 flex gap-4 flex-wrap">
             <Link
               href="/jobs"
-              className="inline-flex items-center gap-2 bg-[#1a2340] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1a2340]/90 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#2A1140] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1F0D30] transition-colors"
             >
               Browse open roles 
             </Link>
@@ -278,31 +283,31 @@ export default async function Home() {
       
 
       {/* ── Skills & Credentials ── */}
-      <section className="bg-[#1a2340] py-24 px-6">
+      <section className="bg-[#2A1140] py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-xs font-bold tracking-widest text-indigo-400 uppercase mb-4">Where we're headed</p>
+              <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-4">Where we're headed</p>
               <h2 className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
                 Your skills matters.
               </h2>
-              <p className="text-gray-400 leading-relaxed mb-5">
+              <p className="text-gray-300 leading-relaxed mb-5">
                 A résumé tells people what you've done and we want employers to see what you can actually do.
                 That means real skill assessments, verifiable credentials, and badges that carry weight over time.
               </p>
-              <p className="text-gray-400 leading-relaxed mb-10">
+              <p className="text-gray-300 leading-relaxed mb-10">
                 We're building a credential layer for Oh My Job aligned with open industry standards, so what you prove here belongs to you and follows you.
                 Our team is currently actively working on integrations with the leading digital credential platforms, and will share details as partnerships are confirmed.
               </p>
-              <p className="text-indigo-300 text-sm font-medium">
+              <p className="text-[#F0D18A] text-sm font-medium">
                 Credential partnerships in progress. More soon.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {credentialFeatures.map(({ icon: Icon, label }) => (
                 <div key={label} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-                    <Icon className="text-indigo-300" size={20} />
+                  <div className="w-10 h-10 rounded-xl bg-[#E8B84B]/20 flex items-center justify-center">
+                    <Icon className="text-[#E8B84B]" size={20} />
                   </div>
                   <p className="text-white text-sm font-semibold leading-snug">{label}</p>
                 </div>
@@ -316,17 +321,17 @@ export default async function Home() {
       <section className="bg-gray-50 py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-3">Who it's for</p>
-            <h2 className="text-4xl font-bold text-[#1a2340] tracking-tight">Two sides, one goal</h2>
+            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Who it's for</p>
+            <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight">Two sides, one goal</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Candidates */}
             <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-5">
-                <Users className="text-indigo-600" size={24} />
+              <div className="w-12 h-12 rounded-2xl bg-[#5B2A7F]/10 flex items-center justify-center mb-5">
+                <Users className="text-[#5B2A7F]" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-[#1a2340] mb-3">If you're starting out or switching lanes</h3>
+              <h3 className="text-xl font-bold text-[#2A1140] mb-3">If you're starting out or switching lanes</h3>
               <p className="text-gray-500 leading-relaxed mb-5">
                 Fresh grad, career changer, or someone returning to the workforce after a break. We believe in your potential and the skills you bring,
                 and with transparent salary ranges on every listing, you'll always know what to expect before you apply.
@@ -337,15 +342,15 @@ export default async function Home() {
 
             {/* Employers */}
             <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center mb-5">
-                <Briefcase className="text-teal-600" size={24} />
+              <div className="w-12 h-12 rounded-2xl bg-[#E8B84B]/10 flex items-center justify-center mb-5">
+                <Briefcase className="text-[#E8B84B]" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-[#1a2340] mb-3">If you're hiring and tired of screening the same profiles</h3>
+              <h3 className="text-xl font-bold text-[#2A1140] mb-3">If you're hiring and tired of screening the same profiles</h3>
               <p className="text-gray-500 leading-relaxed mb-5">
                 Posting on Oh My Job connects you with people who've actively proven their skills.
                 Our platform saves you time filtering and find better fits.
               </p>
-              <Link href="/dashboard/post-a-job-free" className="text-teal-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
+              <Link href="/dashboard/post-a-job-free" className="text-[#E8B84B] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
                 Post a job for free 
               </Link>
             </div>
@@ -358,8 +363,8 @@ export default async function Home() {
       <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-3">Fresh listings</p>
-            <h2 className="text-4xl font-bold text-[#1a2340] tracking-tight mb-3">Latest jobs posted</h2>
+            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Fresh listings</p>
+            <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight mb-3">Latest jobs posted</h2>
            
           </div>
           {latestJobs.length > 0 ? (
@@ -368,18 +373,18 @@ export default async function Home() {
                 <Link
                   key={job.id}
                   href={`/jobs/${job.id}`}
-                  className="flex items-start gap-4 p-5 rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all"
+                  className="flex items-start gap-4 p-5 rounded-2xl border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#5B2A7F]/10 flex items-center justify-center">
                     <CompanyLogo company={job.company} size={40} />
                     
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-semibold text-[#1a2340] text-sm leading-snug truncate">{job.title}</h3>
+                    <h3 className="font-semibold text-[#2A1140] text-sm leading-snug truncate">{job.title}</h3>
                     <p className="text-sm text-gray-500 mt-0.5">
                       {job.company}{job.addressRegion ? ` · ${job.addressRegion}` : ''}
                     </p>
-                    <p className="text-xs text-indigo-600 font-medium mt-1">{timeAgo(job.postedAt)}</p>
+                    <p className="text-xs text-[#E8B84B] font-medium mt-1">{timeAgo(job.postedAt)}</p>
                   </div>
                 </Link>
               ))}
@@ -394,8 +399,8 @@ export default async function Home() {
       <section className="bg-gray-50 py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-3">Explore by field</p>
-            <h2 className="text-4xl font-bold text-[#1a2340] tracking-tight mb-3">Browse top job categories</h2>
+            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Explore by field</p>
+            <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight mb-3">Browse top job categories</h2>
             <p className="text-gray-500">From software engineering to healthcare, find opportunities across every industry.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
@@ -416,7 +421,7 @@ export default async function Home() {
           <div className="text-center mt-4">
             <Link
               href="/jobs"
-              className="border border-[#1a2340] text-[#1a2340] rounded-full px-6 py-2.5 text-sm font-semibold hover:bg-[#1a2340] hover:text-white transition-colors inline-block"
+              className="border border-[#2A1140] text-[#2A1140] rounded-full px-6 py-2.5 text-sm font-semibold hover:bg-[#2A1140] hover:text-white transition-colors inline-block"
             >
               View all jobs
             </Link>
@@ -429,23 +434,23 @@ export default async function Home() {
   <div className="max-w-5xl mx-auto">
     <div className="text-center mb-6">
       
-      <h2 className="text-4xl font-bold text-[#1a2340] tracking-tight mb-3">Rankings</h2>
+      <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight mb-3">Rankings</h2>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {rankings.map(({ rank, label, body, href, trending }) => (
         <Link
           key={href}
           href={href}
-          className="group flex items-start gap-5 p-6 rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all"
+          className="group flex items-start gap-5 p-6 rounded-2xl border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all"
         >
-          <span className="text-3xl font-extrabold text-gray-400 group-hover:text-indigo-500 transition-colors leading-none">
+          <span className="text-3xl font-extrabold text-gray-400 group-hover:text-[#E8B84B] transition-colors leading-none">
             {rank}
           </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold text-[#1a2340] text-base leading-snug">{label}</h3>
+              <h3 className="font-semibold text-[#2A1140] text-base leading-snug">{label}</h3>
               {trending && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#E8B84B] bg-[#E8B84B]/10 px-1.5 py-0.5 rounded-full">
                   <TrendingUp size={10} /> Trending
                 </span>
               )}
@@ -462,8 +467,8 @@ export default async function Home() {
       <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-3">Job market data</p>
-            <h2 className="text-2xl font-bold text-[#1a2340] tracking-tight mb-3">States with the most active listings right now</h2>
+            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Job market data</p>
+            <h2 className="text-2xl font-bold text-[#2A1140] tracking-tight mb-3">States with the most active listings right now</h2>
            
             
           </div>
@@ -472,10 +477,10 @@ export default async function Home() {
   <Link
     key={state}
     href={`/data/states/${codeToSlug(state)}`}
-    className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all"
+    className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all"
   >
-    <MapPin className="text-indigo-600" size={18} />
-    <span className="font-semibold text-[#1a2340] text-sm">{STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}</span>
+    <MapPin className="text-[#5B2A7F]" size={18} />
+    <span className="font-semibold text-[#2A1140] text-sm">{STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}</span>
     <span className="text-xs text-gray-500">{count.toLocaleString()} jobs</span>
   </Link>
 ))}
@@ -483,7 +488,7 @@ export default async function Home() {
           <div className="text-center">
             <Link
               href="/data"
-              className="text-indigo-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
+              className="text-[#5B2A7F] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
             >
               See full job market data 
             </Link>
@@ -496,10 +501,10 @@ export default async function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="text-xs font-bold tracking-widest text-teal-600 uppercase mb-2">Career resources</p>
-              <h2 className="text-3xl font-bold text-[#1a2340] tracking-tight">From the blog</h2>
+              <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-2">Career resources</p>
+              <h2 className="text-3xl font-bold text-[#2A1140] tracking-tight">From the blog</h2>
             </div>
-            <Link href="/blog" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1 transition-colors">
+            <Link href="/blog" className="text-sm font-semibold text-[#5B2A7F] hover:text-[#2A1140] inline-flex items-center gap-1 transition-colors">
               All articles <ArrowRight size={14} />
             </Link>
           </div>
@@ -510,7 +515,7 @@ export default async function Home() {
                 <Link
                   key={article.slug}
                   href={article.url}
-                  className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-indigo-100 hover:shadow-sm transition-all flex flex-col gap-4"
+                  className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all flex flex-col gap-4"
                 >
                   <span
                     style={{ background: badge.bg, color: badge.color }}
@@ -518,9 +523,9 @@ export default async function Home() {
                   >
                     {article.category}
                   </span>
-                  <h3 className="font-semibold text-[#1a2340] leading-snug text-base">{article.title}</h3>
+                  <h3 className="font-semibold text-[#2A1140] leading-snug text-base">{article.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed flex-1">{article.excerpt}</p>
-                  <span className="text-indigo-600 text-sm font-semibold inline-flex items-center gap-1">
+                  <span className="text-[#5B2A7F] text-sm font-semibold inline-flex items-center gap-1">
                     Read more <ArrowRight size={13} />
                   </span>
                 </Link>
@@ -531,17 +536,17 @@ export default async function Home() {
       </section>
 
       {/* ── Newsletter ── */}
-      <section className="bg-gradient-to-br from-indigo-700 to-blue-600 py-20 px-6">
+      <section className="bg-gradient-to-br from-[#2A1140] to-[#5B2A7F] py-20 px-6">
         <div className="max-w-2xl mx-auto text-center">
           
           <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
             Oh My News
           </h2>
-          <p className="text-blue-100 leading-relaxed mb-8 text-base">
+          <p className="text-[#F0DFA8] leading-relaxed mb-8 text-base">
             Every Tuesday, one piece from our career resources blog. Practical advice on the employment field & market data.
           </p>
           <NewsletterForm />
-          <p className="text-blue-200/60 text-xs mt-5">Unsubscribe anytime.</p>
+          <p className="text-[#F0DFA8]/60 text-xs mt-5">Unsubscribe anytime.</p>
         </div>
       </section>
     </>

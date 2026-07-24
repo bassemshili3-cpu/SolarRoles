@@ -469,15 +469,15 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
 
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-sky-600 mb-5">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-[#E8B84B] mb-5">
 
           <Sparkles className="w-3.5 h-3.5" />
 
-          Free for employers · No credit card
+          No credit card
 
         </span>
 
-        <h1 className="text-5xl md:text-6xl font-bold text-[#1a2340] mb-6 tracking-tighter leading-[1.05]">
+        <h1 className="text-5xl md:text-6xl font-bold text-[#2A1140] mb-6 tracking-tighter leading-[1.05]">
 
           Post a job for free on Oh My Job
 
@@ -501,21 +501,21 @@ export default function EmployerPage() {
         <Button
   size="lg"
   asChild
-  className="px-8 py-6 text-lg font-semibold bg-sky-600 hover:bg-sky-700 text-white"
+  className="px-8 py-6 text-lg font-semibold bg-[#5B2A7F] hover:bg-[#2A1140] text-white"
 >
-  <Link href="/dashboard/employer/new">Post a job for free</Link>
+  <Link href="/dashboard/employer/new">Post a job</Link>
 </Button>
 
       </section>
 
 {/* Google for Jobs structured data (new) */}
 <section className="max-w-5xl mx-auto px-6 py-16">
-  <div className="bg-gradient-to-br from-sky-50 to-white border border-sky-100 rounded-3xl p-8 md:p-12 text-center">
-    <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-sky-600 mb-4">
+  <div className="bg-gradient-to-br from-[#5B2A7F]/5 to-white border border-[#5B2A7F]/15 rounded-3xl p-8 md:p-12 text-center">
+    <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-[#E8B84B] mb-4">
       <Globe2 className="w-3.5 h-3.5" />
       Structured for Google for Jobs
     </span>
-    <h2 className="text-3xl font-bold text-[#1a2340] mb-4 tracking-tight">
+    <h2 className="text-3xl font-bold text-[#2A1140] mb-4 tracking-tight">
       Your listing is built to Google's job search standard
     </h2>
     <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
@@ -523,7 +523,7 @@ export default function EmployerPage() {
     </p>
     <div className="grid sm:grid-cols-3 gap-4 text-left max-w-3xl mx-auto">
       <div className="bg-white rounded-xl p-4 border border-gray-100">
-        <p className="text-sm font-semibold text-[#1a2340] mb-1">Automatic</p>
+        <p className="text-sm font-semibold text-[#2A1140] mb-1">Automatic</p>
         <p className="text-xs text-muted-foreground">Structured data added in order to appear on Google Jobs the moment you publish.</p>
       </div>
     </div>
@@ -534,7 +534,7 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-16">
 
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+        <h2 className="text-3xl font-bold text-[#2A1140] mb-3 text-center tracking-tight">
 
           How posting a job works
 
@@ -552,13 +552,13 @@ export default function EmployerPage() {
 
             <div key={step.title} className="text-center">
 
-              <div className="w-10 h-10 rounded-full bg-sky-50 text-sky-600 font-bold flex items-center justify-center mx-auto mb-4">
+              <div className="w-10 h-10 rounded-full bg-[#5B2A7F]/10 text-[#5B2A7F] font-bold flex items-center justify-center mx-auto mb-4">
 
                 {i + 1}
 
               </div>
 
-              <h3 className="text-lg font-semibold text-[#1a2340] mb-2">{step.title}</h3>
+              <h3 className="text-lg font-semibold text-[#2A1140] mb-2">{step.title}</h3>
 
               <p className="text-muted-foreground leading-relaxed">{step.description}</p>
 
@@ -577,7 +577,7 @@ export default function EmployerPage() {
 
         <div className="max-w-5xl mx-auto px-6">
 
-          <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+          <h2 className="text-3xl font-bold text-[#2A1140] mb-3 text-center tracking-tight">
 
             Why employers post on Oh My Job
 
@@ -601,9 +601,9 @@ export default function EmployerPage() {
 
               >
 
-                <benefit.icon className="text-sky-600 mb-3" size={24} />
+                <benefit.icon className="text-[#5B2A7F] mb-3" size={24} />
 
-                <h3 className="text-lg font-semibold text-[#1a2340] mb-2">
+                <h3 className="text-lg font-semibold text-[#2A1140] mb-2">
 
                   {benefit.title}
 
@@ -630,7 +630,7 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-16">
 
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+        <h2 className="text-3xl font-bold text-[#2A1140] mb-3 text-center tracking-tight">
 
           Built for anyone hiring
 
@@ -645,11 +645,11 @@ export default function EmployerPage() {
 
               key={item.title}
 
-              className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-sky-100 transition-colors"
+              className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-[#5B2A7F]/25 transition-colors"
 
             >
 
-              <h3 className="text-base font-semibold text-[#1a2340] mb-1.5">
+              <h3 className="text-base font-semibold text-[#2A1140] mb-1.5">
 
                 {item.title}
 
@@ -686,7 +686,7 @@ export default function EmployerPage() {
 
                 key={type}
 
-                className="text-xs font-medium text-[#1a2340] bg-white border border-gray-200 rounded-full px-3 py-1.5"
+                className="text-xs font-medium text-[#2A1140] bg-white border border-gray-200 rounded-full px-3 py-1.5"
 
               >
 
@@ -711,15 +711,15 @@ export default function EmployerPage() {
 
           <div className="flex items-center gap-3 shrink-0">
 
-            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#5B2A7F]/10 flex items-center justify-center">
 
-              <ShieldCheck className="w-5 h-5 text-sky-600" />
+              <ShieldCheck className="w-5 h-5 text-[#5B2A7F]" />
 
             </div>
 
             <div>
 
-              <p className="font-semibold text-[#1a2340] text-sm">No spam or scam applicants</p>
+              <p className="font-semibold text-[#2A1140] text-sm">No spam or scam applicants</p>
 
               <p className="text-xs text-muted-foreground">
 
@@ -735,15 +735,15 @@ export default function EmployerPage() {
 
           <div className="flex items-center gap-3 shrink-0">
 
-            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#5B2A7F]/10 flex items-center justify-center">
 
-              <Clock className="w-5 h-5 text-sky-600" />
+              <Clock className="w-5 h-5 text-[#5B2A7F]" />
 
             </div>
 
             <div>
 
-              <p className="font-semibold text-[#1a2340] text-sm">Average time to first application</p>
+              <p className="font-semibold text-[#2A1140] text-sm">Average time to first application</p>
 
               <p className="text-xs text-muted-foreground">
 
@@ -759,15 +759,15 @@ export default function EmployerPage() {
 
           <div className="flex items-center gap-3 shrink-0">
 
-            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#5B2A7F]/10 flex items-center justify-center">
 
-              <Globe2 className="w-5 h-5 text-sky-600" />
+              <Globe2 className="w-5 h-5 text-[#5B2A7F]" />
 
             </div>
 
             <div>
 
-              <p className="font-semibold text-[#1a2340] text-sm">US-wide reach</p>
+              <p className="font-semibold text-[#2A1140] text-sm">US-wide reach</p>
 
               <p className="text-xs text-muted-foreground">
 
@@ -788,7 +788,7 @@ export default function EmployerPage() {
 
       <section className="max-w-3xl mx-auto px-6 py-16">
 
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-3 text-center tracking-tight">
+        <h2 className="text-3xl font-bold text-[#2A1140] mb-3 text-center tracking-tight">
 
           Frequently asked questions
 
@@ -806,11 +806,11 @@ export default function EmployerPage() {
 
             >
 
-              <summary className="font-semibold text-[#1a2340] cursor-pointer list-none flex justify-between items-center">
+              <summary className="font-semibold text-[#2A1140] cursor-pointer list-none flex justify-between items-center">
 
                 {faq.question}
 
-                <span className="text-sky-600 group-open:rotate-45 transition-transform text-xl">
+                <span className="text-[#E8B84B] group-open:rotate-45 transition-transform text-xl">
 
                   +
 
@@ -833,7 +833,7 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-12">
 
-        <h2 className="text-2xl font-bold text-[#1a2340] mb-6 text-center tracking-tight">
+        <h2 className="text-2xl font-bold text-[#2A1140] mb-6 text-center tracking-tight">
 
           Resources for employers
 
@@ -845,17 +845,17 @@ export default function EmployerPage() {
 
             href="/blog/healthcare-careers-two-years-or-less"
 
-            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-sky-100 transition-colors"
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#5B2A7F]/25 transition-colors"
 
           >
 
-            <span className="text-[10px] font-bold tracking-widest uppercase text-sky-600">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[#E8B84B]">
 
               Career Guides
 
             </span>
 
-            <h3 className="text-base font-semibold text-[#1a2340] mt-2 mb-1.5 leading-snug">
+            <h3 className="text-base font-semibold text-[#2A1140] mt-2 mb-1.5 leading-snug">
 
               Hiring for healthcare? Start here.
 
@@ -873,17 +873,17 @@ export default function EmployerPage() {
 
             href="/blog/workplace-loneliness-performance-risk"
 
-            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-sky-100 transition-colors"
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#5B2A7F]/25 transition-colors"
 
           >
 
-            <span className="text-[10px] font-bold tracking-widest uppercase text-sky-600">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[#E8B84B]">
 
               Workplace Trends
 
             </span>
 
-            <h3 className="text-base font-semibold text-[#1a2340] mt-2 mb-1.5 leading-snug">
+            <h3 className="text-base font-semibold text-[#2A1140] mt-2 mb-1.5 leading-snug">
 
               Why your best people are interviewing elsewhere.
 
@@ -901,17 +901,17 @@ export default function EmployerPage() {
 
             href="/jobs"
 
-            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-sky-100 transition-colors"
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#5B2A7F]/25 transition-colors"
 
           >
 
-            <span className="text-[10px] font-bold tracking-widest uppercase text-sky-600">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[#E8B84B]">
 
               Job Market Data
 
             </span>
 
-            <h3 className="text-base font-semibold text-[#1a2340] mt-2 mb-1.5 leading-snug">
+            <h3 className="text-base font-semibold text-[#2A1140] mt-2 mb-1.5 leading-snug">
 
               See what candidates in your market are looking for.
 
@@ -934,7 +934,7 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-16 text-center">
 
-        <h2 className="text-3xl font-bold text-[#1a2340] mb-4 tracking-tight">
+        <h2 className="text-3xl font-bold text-[#2A1140] mb-4 tracking-tight">
 
           Ready to hire?
 
@@ -946,7 +946,7 @@ export default function EmployerPage() {
 
         </p>
 
-        <Button size="lg" asChild>
+        <Button size="lg" asChild className="bg-[#5B2A7F] hover:bg-[#2A1140] text-white">
 
           <Link href="/dashboard/employer/new">
 

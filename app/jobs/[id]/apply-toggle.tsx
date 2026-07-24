@@ -16,7 +16,7 @@ export default function ApplyToggle({ jobId, jobTitle }: { jobId: string; jobTit
     <div className="rounded-xl border p-6">
       
       
-      <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
+      <Button size="lg" className="w-full sm:w-auto bg-[#5B2A7F] hover:bg-blue-700 text-white"
        onClick={() => setShowForm(true)}>
         Apply for this job
       </Button>

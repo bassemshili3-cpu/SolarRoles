@@ -47,43 +47,33 @@ export default function AIJobMatcher({ onFiltersChange }: Props) {
   const isNearLimit = description.length > MAX * 0.85
 
   return (
-    <div className="mt-4 mb-6">
-      {/* max-w-sm → max-w-md, p-3 → p-4 */}
-      <div className="group relative rounded-xl bg-slate-50/80 backdrop-blur-sm p-4 shadow-sm ring-1 ring-gray-200/60 max-w-md">
+    <div className="mt-4 mb-6 text-left">
+  {/* max-w-sm → max-w-md, p-3 → p-4 */}
+  <div className="group relative rounded-xl bg-slate-50/80 backdrop-blur-sm p-4 shadow-sm ring-1 ring-gray-200/60 max-w-md">
 
         {/* Header */}
-        <div className="mb-3">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2.5">
-              {/* Logo h-6 w-6 → h-7 w-7 */}
-              <div className="flex h-7 w-7 items-center justify-center rounded-md shadow-sm">
-                <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="48" height="48" rx="10" fill="url(#gradient_logo)"/>
-                  <circle cx="20" cy="20" r="10" stroke="white" strokeWidth="4" fill="none"/>
-                  <path d="M30 30L42 42" stroke="white" strokeWidth="5" strokeLinecap="round"/>
-                  <defs>
-                    <linearGradient id="gradient_logo" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#3B82F6"/>
-                      <stop offset="1" stopColor="#8B5CF6"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
-              {/* text-sm → text-base */}
-              <h3 className="text-base font-semibold text-gray-800 tracking-wide">
-                Describe your job
-              </h3>
-            </div>
+<div className="mb-3">
+  <div className="flex items-center justify-between mb-2">
+    <div className="flex items-center gap-2.5">
+      {/* Logo h-6 w-6 → h-7 w-7 */}
+      <div className="flex items-center justify-center rounded-md shadow-sm">
+        
+      </div>
+      {/* text-sm → text-base */}
+      <h3 className="text-base font-semibold text-gray-800 tracking-wide text-left">
+        Describe your job
+      </h3>
+    </div>
 
-            {/* Badge px-2 py-0.5 → px-2.5 py-1 */}
-           
-          </div>
+    {/* Badge px-2 py-0.5 → px-2.5 py-1 */}
+   
+  </div>
 
-          {/* text-xs → text-sm */}
-          <p className="text-sm text-gray-500">
-            In a few words, AI finds the perfect matches for you.
-          </p>
-        </div>
+  {/* text-xs → text-sm */}
+  <p className="text-sm text-gray-500 text-left">
+    In a few words, AI finds the perfect matches for you.
+  </p>
+</div>
 
         {/* Textarea — rows 3 → 4, px-3 py-2.5 → px-3.5 py-3 */}
         <div className="relative">

@@ -880,7 +880,7 @@ function safeJsonLd(data: unknown): string {
 
                 {roleStats && stateName && roleMatch && (
 
-                  <div className="mt-16 rounded-xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-900">
+                  <div className="mt-10 rounded-xl border border-blue-100 bg-violet-50 p-5 text-sm text-[#5B2A7F]-900">
 
                     <p>
 
