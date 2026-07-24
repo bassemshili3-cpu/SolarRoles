@@ -15,6 +15,7 @@ import { isFifoJob } from './classifyJob'
 import { setCanonicalSlugFromJob, deleteCanonicalSlug } from '@/lib/jobSlugCache'
 
 const EXPIRY_DAYS = 30
+const MIN_DESCRIPTION_LENGTH = 60
 
 const SOURCE_PRIORITY: Record<string, number> = {
   careerjet: 1,
@@ -92,8 +93,6 @@ function getKeywordsForRun(page: number, count: number = 8): string[] {
 // ─── Upsert helper (Jooble) ──────────────────────────────────────────────────
 async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
   let saved = 0
-  const MIN_DESCRIPTION_LENGTH = 100
-
 
   for (const job of jobs) {
     if (!job.description || job.description.trim().length < MIN_DESCRIPTION_LENGTH) {
@@ -162,7 +161,6 @@ async function upsertJobs(jobs: UnifiedJob[], source: string): Promise<number> {
 // ─── Upsert for Careerjet (different shape) ──────────────────────────────────
 async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]): Promise<number> {
   let saved = 0
-  const MIN_DESCRIPTION_LENGTH = 100
 
   for (const job of jobs) {
     if (!job.description || job.description.trim().length < MIN_DESCRIPTION_LENGTH) {
@@ -228,7 +226,6 @@ async function upsertCareerjetJobs(jobs: ReturnType<typeof normalizeCareerjet>[]
 // ─── Upsert for Lensa ────────────────────────────────────────────────────────
 async function upsertLensaJobs(adverts: any[]): Promise<number> {
   let saved = 0
-  const MIN_DESCRIPTION_LENGTH = 100
   const expiresAt = new Date()
   expiresAt.setDate(expiresAt.getDate() + EXPIRY_DAYS)
 

@@ -1,7 +1,7 @@
 // app/dashboard/employer/employer-dashboard.tsx
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,6 +9,7 @@ import {
   Search, Pencil, Pause, Play, Trash2, Briefcase, ArrowRight,
 } from 'lucide-react'
 import { buildJobSlug } from '@/lib/slugify'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 type JobStatus = 'active' | 'paused' | 'expired'
 
@@ -55,6 +56,16 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
   const [jobs, setJobs] = useState<EmployerJob[]>(initialJobs)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
+
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const justPosted = searchParams.get('posted') === '1'
+
+  useEffect(() => {
+    if (justPosted) {
+      router.replace('/dashboard/employer', { scroll: false })
+    }
+  }, [justPosted, router])
 
   const stats = useMemo(() => {
     const active = jobs.filter((j) => j.status === 'active').length
@@ -139,6 +150,17 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10 md:py-14">
+
+      {justPosted && (
+        <div className="mb-8 px-5 py-4 border border-emerald-200 rounded-md bg-emerald-50">
+          <p className="text-sm font-medium text-emerald-800">
+            Welcome to your employer dashboard — your job has been posted successfully.
+          </p>
+          <p className="text-sm text-emerald-700 mt-0.5">
+            Track clicks and applications for all your listings below.
+          </p>
+        </div>
+      )}
       {/* Header */}
       <header className="mb-10 md:mb-14">
         <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-slate-500 font-medium mb-5">
