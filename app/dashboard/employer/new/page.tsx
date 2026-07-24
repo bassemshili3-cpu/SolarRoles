@@ -1,6 +1,6 @@
 // app/dashboard/employer/new/page.tsx
-import PostJobForm from './post-job-form'
+import JobForm from '../job-form'
 
 export default function NewJobPage() {
-  return <PostJobForm />
+  return <JobForm mode="create" />
 }
