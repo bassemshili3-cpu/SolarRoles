@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/jobs/employer-',
-        disallow: ['/api/', '/jobs/', '/auth/'],
+        disallow: ['/api/', '/jobs/', '/auth/', '/admin/'],
       },
       {
         userAgent: 'Mediapartners-Google',

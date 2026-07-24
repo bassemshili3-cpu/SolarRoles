@@ -1,4 +1,4 @@
-// app/dashboard/employer/new/post-job-form.tsx
+// app/dashboard/employer/job-form.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -13,11 +13,8 @@ import { createClient } from '@/lib/supabase'
 type SalaryPeriod = 'year' | 'hour'
 
 const employmentTypes = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
-
 const stateOptions = Object.entries(STATES).sort(([a], [b]) => a.localeCompare(b))
-
 const MIN_DESCRIPTION_LENGTH = 1000
-
 const DRAFT_KEY = 'ohMyJob_jobDraft'
 
 const fieldClass =
@@ -26,7 +23,7 @@ const fieldClass =
 const inputClass =
   'h-11 text-base rounded-md border-slate-300 focus-visible:ring-[#1a2340] focus-visible:ring-offset-1'
 
-type DraftPayload = {
+export type JobFormInitialData = {
   title: string
   company: string
   employmentType: string
@@ -41,28 +38,39 @@ type DraftPayload = {
   notificationEmail: string
 }
 
-export default function PostJobForm() {
+type DraftPayload = JobFormInitialData
+
+export default function JobForm({
+  mode,
+  jobId,
+  initialData,
+}: {
+  mode: 'create' | 'edit'
+  jobId?: string
+  initialData?: JobFormInitialData
+}) {
   const router = useRouter()
   const supabase = createClient()
 
-  const [title, setTitle] = useState('')
-  const [company, setCompany] = useState('')
-  const [employmentType, setEmploymentType] = useState(employmentTypes[0])
-  const [remote, setRemote] = useState(false)
-  const [city, setCity] = useState('')
-  const [stateName, setStateName] = useState('')
-  const [zipCode, setZipCode] = useState('')
-  const [salaryMin, setSalaryMin] = useState('')
-  const [salaryMax, setSalaryMax] = useState('')
-  const [salaryPeriod, setSalaryPeriod] = useState<SalaryPeriod>('year')
-  const [description, setDescription] = useState('')
-  const [notificationEmail, setNotificationEmail] = useState('')
+  const [title, setTitle] = useState(initialData?.title ?? '')
+  const [company, setCompany] = useState(initialData?.company ?? '')
+  const [employmentType, setEmploymentType] = useState(initialData?.employmentType ?? employmentTypes[0])
+  const [remote, setRemote] = useState(initialData?.remote ?? false)
+  const [city, setCity] = useState(initialData?.city ?? '')
+  const [stateName, setStateName] = useState(initialData?.stateName ?? '')
+  const [zipCode, setZipCode] = useState(initialData?.zipCode ?? '')
+  const [salaryMin, setSalaryMin] = useState(initialData?.salaryMin ?? '')
+  const [salaryMax, setSalaryMax] = useState(initialData?.salaryMax ?? '')
+  const [salaryPeriod, setSalaryPeriod] = useState<SalaryPeriod>(initialData?.salaryPeriod ?? 'year')
+  const [description, setDescription] = useState(initialData?.description ?? '')
+  const [notificationEmail, setNotificationEmail] = useState(initialData?.notificationEmail ?? '')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [restoredDraft, setRestoredDraft] = useState(false)
 
-  // Restore a draft saved before being sent to login, if any.
+  // Draft restore only applies to job creation (post-login redirect flow).
   useEffect(() => {
+    if (mode !== 'create') return
     const raw = sessionStorage.getItem(DRAFT_KEY)
     if (!raw) return
     try {
@@ -85,7 +93,7 @@ export default function PostJobForm() {
     } finally {
       sessionStorage.removeItem(DRAFT_KEY)
     }
-  }, [])
+  }, [mode])
 
   const descriptionLength = description.trim().length
   const descriptionReached = descriptionLength >= MIN_DESCRIPTION_LENGTH
@@ -113,18 +121,8 @@ export default function PostJobForm() {
 
   function saveDraft() {
     const draft: DraftPayload = {
-      title,
-      company,
-      employmentType,
-      remote,
-      city,
-      stateName,
-      zipCode,
-      salaryMin,
-      salaryMax,
-      salaryPeriod,
-      description,
-      notificationEmail,
+      title, company, employmentType, remote, city, stateName, zipCode,
+      salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
     }
     sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
   }
@@ -138,37 +136,52 @@ export default function PostJobForm() {
 
     setIsSubmitting(true)
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    if (mode === 'create') {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
 
-    if (!user) {
-      saveDraft()
-      router.push('/auth/login?redirectTo=/dashboard/employer/new')
-      return
+      if (!user) {
+        saveDraft()
+        router.push('/auth/login?redirectTo=/dashboard/employer/new')
+        return
+      }
     }
 
     const resolvedStateCode = remote ? null : STATES[stateName.trim()]
+    const payload = {
+      title: title.trim(),
+      company: company.trim(),
+      employmentType,
+      remote,
+      city: remote ? null : city.trim(),
+      state: resolvedStateCode,
+      zipCode: remote ? null : zipCode.trim(),
+      salaryMin: Number(salaryMin),
+      salaryMax: Number(salaryMax),
+      salaryPeriod,
+      description: description.trim(),
+      notificationEmail: notificationEmail.trim(),
+    }
+
     try {
-      const res = await fetch('/api/employer/jobs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: title.trim(),
-          company: company.trim(),
-          employmentType,
-          remote,
-          city: remote ? null : city.trim(),
-          state: resolvedStateCode,
-          zipCode: remote ? null : zipCode.trim(),
-          salaryMin: Number(salaryMin),
-          salaryMax: Number(salaryMax),
-          salaryPeriod,
-          description: description.trim(),
-          notificationEmail: notificationEmail.trim(),
-        }),
-      })
-      if (!res.ok) throw new Error('Something went wrong. Try again.')
+      const res =
+        mode === 'create'
+          ? await fetch('/api/employer/jobs', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+          : await fetch(`/api/employer/jobs/${jobId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        throw new Error(data?.error || 'Something went wrong. Try again.')
+      }
       router.push('/dashboard/employer')
       router.refresh()
     } catch (err) {
@@ -179,20 +192,16 @@ export default function PostJobForm() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-10 md:py-14">
-      {/* Header */}
       <header className="mb-10 md:mb-12">
         <div className="flex items-center gap-2 text-xs uppercase tracking-[0.14em] text-slate-500 font-medium mb-5">
-          <Link
-            href="/dashboard/employer"
-            className="hover:text-[#1a2340] transition-colors"
-          >
+          <Link href="/dashboard/employer" className="hover:text-[#1a2340] transition-colors">
             Employer
           </Link>
           <span className="text-slate-300">/</span>
-          <span className="text-[#1a2340]">Post a job</span>
+          <span className="text-[#1a2340]">{mode === 'create' ? 'Post a job' : 'Edit job'}</span>
         </div>
         <h1 className="text-[32px] md:text-[36px] leading-[1.1] font-semibold tracking-[-0.02em] text-[#1a2340]">
-          Post a new job
+          {mode === 'create' ? 'Post a new job' : 'Edit your job posting'}
         </h1>
       </header>
 
@@ -211,46 +220,28 @@ export default function PostJobForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-12">
-        {/* 01 — Job basics */}
         <section>
           <SectionHeader number="01" title="Job basics" />
           <div className="space-y-5">
             <div>
               <FieldLabel required>Job title</FieldLabel>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Warehouse Associate"
-                className={inputClass}
-              />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Warehouse Associate" className={inputClass} />
             </div>
             <div>
               <FieldLabel required>Company name</FieldLabel>
-              <Input
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                placeholder="e.g. Acme Logistics"
-                className={inputClass}
-              />
+              <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Acme Logistics" className={inputClass} />
             </div>
             <div>
               <FieldLabel required>Employment type</FieldLabel>
-              <select
-                value={employmentType}
-                onChange={(e) => setEmploymentType(e.target.value)}
-                className={fieldClass}
-              >
+              <select value={employmentType} onChange={(e) => setEmploymentType(e.target.value)} className={fieldClass}>
                 {employmentTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
+                  <option key={type} value={type}>{type}</option>
                 ))}
               </select>
             </div>
           </div>
         </section>
 
-        {/* 02 — Location */}
         <section>
           <SectionHeader number="02" title="Location" />
           <div className="space-y-4">
@@ -266,12 +257,7 @@ export default function PostJobForm() {
             {!remote && (
               <div className="grid grid-cols-4 gap-3">
                 <div className="col-span-2">
-                  <Input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="City"
-                    className={inputClass}
-                  />
+                  <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="City" className={inputClass} />
                 </div>
                 <div>
                   <Input
@@ -308,14 +294,11 @@ export default function PostJobForm() {
           </div>
         </section>
 
-        {/* 03 — Compensation */}
         <section>
           <SectionHeader number="03" title="Compensation" />
           <div className="space-y-4">
             <div className="flex items-center justify-between gap-4 flex-wrap">
-              <FieldLabel required className="mb-0">
-                Salary range
-              </FieldLabel>
+              <FieldLabel required className="mb-0">Salary range</FieldLabel>
               <div className="flex gap-0.5 bg-slate-100 rounded-md p-0.5">
                 {(['year', 'hour'] as SalaryPeriod[]).map((period) => (
                   <button
@@ -323,9 +306,7 @@ export default function PostJobForm() {
                     type="button"
                     onClick={() => setSalaryPeriod(period)}
                     className={`px-2.5 py-1 rounded text-sm font-medium transition-colors ${
-                      salaryPeriod === period
-                        ? 'bg-white text-[#1a2340]'
-                        : 'text-slate-500 hover:text-[#1a2340]'
+                      salaryPeriod === period ? 'bg-white text-[#1a2340]' : 'text-slate-500 hover:text-[#1a2340]'
                     }`}
                   >
                     Per {period}
@@ -335,44 +316,23 @@ export default function PostJobForm() {
             </div>
             <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">
-                  $
-                </span>
-                <Input
-                  type="number"
-                  value={salaryMin}
-                  onChange={(e) => setSalaryMin(e.target.value)}
-                  placeholder="Min"
-                  className={`${inputClass} pl-8`}
-                />
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">$</span>
+                <Input type="number" value={salaryMin} onChange={(e) => setSalaryMin(e.target.value)} placeholder="Min" className={`${inputClass} pl-8`} />
               </div>
               <ArrowRight size={14} className="text-slate-300" />
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">
-                  $
-                </span>
-                <Input
-                  type="number"
-                  value={salaryMax}
-                  onChange={(e) => setSalaryMax(e.target.value)}
-                  placeholder="Max"
-                  className={`${inputClass} pl-8`}
-                />
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">$</span>
+                <Input type="number" value={salaryMax} onChange={(e) => setSalaryMax(e.target.value)} placeholder="Max" className={`${inputClass} pl-8`} />
               </div>
             </div>
-            <p className="text-sm text-slate-400">
-              Required on every listing. Show candidates what you actually pay.
-            </p>
+            <p className="text-sm text-slate-400">Required on every listing. Show candidates what you actually pay.</p>
           </div>
         </section>
 
-        {/* 04 — Description */}
         <section>
           <SectionHeader number="04" title="Description" />
           <div>
-            <FieldLabel required className="sr-only">
-              Description
-            </FieldLabel>
+            <FieldLabel required className="sr-only">Description</FieldLabel>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -380,35 +340,23 @@ export default function PostJobForm() {
               className="w-full bg-white border border-slate-300 rounded-md text-base text-[#1a2340] placeholder:text-slate-500 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors px-3.5 min-h-[320px] py-3 leading-relaxed resize-y"
             />
             <div className="mt-2.5 flex items-center justify-between gap-4 flex-wrap">
-              <p className="text-sm text-slate-400">
-                Cover the role, day-to-day, team, and what you&apos;re looking for.
-              </p>
+              <p className="text-sm text-slate-400">Cover the role, day-to-day, team, and what you&apos;re looking for.</p>
               <div className="flex items-center gap-2.5 shrink-0">
                 <div className="w-24 h-1 bg-slate-100 rounded-full overflow-hidden">
                   <div
-                    className={`h-full transition-all duration-300 ${
-                      descriptionReached ? 'bg-emerald-500' : 'bg-[#1a2340]'
-                    }`}
+                    className={`h-full transition-all duration-300 ${descriptionReached ? 'bg-emerald-500' : 'bg-[#1a2340]'}`}
                     style={{ width: `${descriptionProgress * 100}%` }}
                   />
                 </div>
-                <span
-                  className={`text-sm tabular-nums font-medium ${
-                    descriptionReached ? 'text-emerald-600' : 'text-slate-500'
-                  }`}
-                >
-                  {descriptionLength.toLocaleString()} /{' '}
-                  {MIN_DESCRIPTION_LENGTH.toLocaleString()}
+                <span className={`text-sm tabular-nums font-medium ${descriptionReached ? 'text-emerald-600' : 'text-slate-500'}`}>
+                  {descriptionLength.toLocaleString()} / {MIN_DESCRIPTION_LENGTH.toLocaleString()}
                 </span>
-                {descriptionReached && (
-                  <Check size={14} className="text-emerald-600" strokeWidth={2.5} />
-                )}
+                {descriptionReached && <Check size={14} className="text-emerald-600" strokeWidth={2.5} />}
               </div>
             </div>
           </div>
         </section>
 
-        {/* 05 — Notifications */}
         <section>
           <SectionHeader number="05" title="Notifications" />
           <div>
@@ -421,16 +369,16 @@ export default function PostJobForm() {
               className={inputClass}
             />
             <p className="text-sm text-slate-400 mt-1.5">
-              Candidates apply on Oh My Job. We&apos;ll email every application to this
-              address.
+              Candidates apply on Oh My Job. We&apos;ll email every application to this address.
             </p>
           </div>
         </section>
 
-        {/* Submit */}
         <div className="pt-2">
           <Button type="submit" className="w-full h-12 rounded-md text-base" disabled={isSubmitting}>
-            {isSubmitting ? 'Posting your job...' : 'Post job'}
+            {isSubmitting
+              ? mode === 'create' ? 'Posting your job...' : 'Saving changes...'
+              : mode === 'create' ? 'Post job' : 'Save changes'}
           </Button>
         </div>
       </form>
@@ -442,26 +390,14 @@ function SectionHeader({ number, title }: { number: string; title: string }) {
   return (
     <div className="flex items-baseline gap-3 mb-5">
       <span className="text-xs font-mono text-slate-300 tabular-nums">{number}</span>
-      <h2 className="text-base font-semibold tracking-[-0.005em] text-[#1a2340]">
-        {title}
-      </h2>
+      <h2 className="text-base font-semibold tracking-[-0.005em] text-[#1a2340]">{title}</h2>
     </div>
   )
 }
 
-function FieldLabel({
-  children,
-  required,
-  className = '',
-}: {
-  children: React.ReactNode
-  required?: boolean
-  className?: string
-}) {
+function FieldLabel({ children, required, className = '' }: { children: React.ReactNode; required?: boolean; className?: string }) {
   return (
-    <label
-      className={`text-sm font-medium text-slate-700 mb-1.5 block ${className}`}
-    >
+    <label className={`text-sm font-medium text-slate-700 mb-1.5 block ${className}`}>
       {children}
       {required && <span className="text-slate-400"> *</span>}
     </label>

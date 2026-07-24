@@ -1,5 +1,5 @@
 // app/jobs/[id]/[slug]/page.tsx
-import ApplyForm from '../apply-form'
+import ApplyToggle from '../apply-toggle'
 
 import { AdUnit } from '@/components/AdUnit'
 
@@ -298,21 +298,16 @@ function buildJobPostingSchema(
 
       '@type': 'Place',
 
-      address: {
-
-        '@type': 'PostalAddress',
-
-        addressLocality: city,
-
-        addressRegion: stateCode,
-
-        addressCountry: 'US',
-
-        streetAddress: '',
-
-        postalCode: '',
-
-      },
+      address: (() => {
+  const addr: Record<string, unknown> = {
+    '@type': 'PostalAddress',
+    addressCountry: 'US',
+  }
+  if (city) addr.addressLocality = city
+  if (stateCode) addr.addressRegion = stateCode
+  if (job.postalCode) addr.postalCode = job.postalCode
+  return addr
+})(),
 
     },
 
@@ -347,16 +342,6 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
     value: job.id,
 
   }
-
-
-  // ── validThrough: 30 days ──
-
-  const base = job.created ? new Date(job.created) : new Date()
-
-  base.setDate(base.getDate() + 30)
-
-
-
 
   // ── baseSalary ──
 
@@ -1008,14 +993,14 @@ function safeJsonLd(data: unknown): string {
                   </div>
 
                 )}
- {job.source === 'employer' && <AdUnit slot="job-detail" />}
+
 
                <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-  {job.source === 'employer' ? (
-    <div className="w-full">
-      <ApplyForm jobId={job.id} jobTitle={job.title} />
-    </div>
-  ) : applyUrl ? (
+ {job.source === 'employer' ? (
+  <div className="w-full">
+    <ApplyToggle jobId={job.id} jobTitle={job.title} />
+  </div>
+) : applyUrl ? (
     <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
       <a href={`/jobs/${job.id}/go`} target="_blank" rel="noopener noreferrer">
         {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
@@ -1026,6 +1011,8 @@ function safeJsonLd(data: unknown): string {
       Apply link unavailable
     </Button>
   )}
+
+   {job.source === 'employer' && <AdUnit slot="job-detail" />}
 
   <ShareBar
     url={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}

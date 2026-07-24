@@ -39,6 +39,7 @@ model Job {
   location                 String   @default("")
   addressRegion            String   @default("")
   postalCode               String?
+  salaryPeriod             String?
   description              String   @db.Text
   url                      String
   applyUrl                 String   @default("")
