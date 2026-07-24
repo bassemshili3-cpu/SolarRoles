@@ -13,12 +13,11 @@ export default function ApplyToggle({ jobId, jobTitle }: { jobId: string; jobTit
   }
 
   return (
-    <div className="rounded-2xl border p-6 text-center">
-      <h3 className="text-lg font-semibold text-foreground mb-1">Ready to apply?</h3>
-      <p className="text-sm text-muted-foreground mb-4">
-        Takes less than a minute — no account needed.
-      </p>
-      <Button size="lg" className="w-full sm:w-auto" onClick={() => setShowForm(true)}>
+    <div className="rounded-xl border p-6 text-center">
+      
+      
+      <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
+       onClick={() => setShowForm(true)}>
         Apply for this job
       </Button>
     </div>

@@ -14,16 +14,23 @@ export default function Login() {
   const searchParams = useSearchParams()
   const paramRedirect = searchParams.get('redirectTo')
 
-  const [userType, setUserType] = useState<'candidate' | 'employer'>(
-    paramRedirect?.startsWith('/dashboard/employer') ? 'employer' : 'candidate'
-  )
-  const redirectTo = paramRedirect || (userType === 'employer' ? '/dashboard/employer' : '/dashboard')
-
+  const [userType, setUserType] = useState<'candidate' | 'employer'>('candidate')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const setUserTypeAndPersist = async (type: 'candidate' | 'employer') => {
+    setUserType(type)
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      await supabase.auth.updateUser({ data: { accountType: type } })
+    }
+  }
+
+  const redirectTo = paramRedirect || (userType === 'employer' ? '/dashboard/employer' : '/dashboard')
+
 
   const loginWithGoogle = async () => {
     setIsLoading(true)
@@ -111,7 +118,7 @@ export default function Login() {
             <div className="inline-flex items-center bg-slate-100 rounded-full p-1">
               <button
                 type="button"
-                onClick={() => setUserType('candidate')}
+                onClick={() => setUserTypeAndPersist('candidate')}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
                   userType === 'candidate' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 }`}
@@ -120,7 +127,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                onClick={() => setUserType('employer')}
+                onClick={() => setUserTypeAndPersist('employer')}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
                   userType === 'employer' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 }`}
@@ -239,12 +246,15 @@ export default function Login() {
             </Button>
           </div>
 
-          <p className="text-center text-slate-500 mt-8">
-            New to Oh My Job?{' '}
-            <Link href="/auth/signup" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-              Create a free account
-            </Link>
-          </p>
+         <p className="text-center text-slate-500 mt-8">
+  New to Oh My Job?{' '}
+  <Link
+    href={paramRedirect ? `/auth/signup?redirectTo=${paramRedirect}` : '/auth/signup'}
+    className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+  >
+    Create a free account
+  </Link>
+</p>
 
           <p className="text-center text-xs text-slate-400 mt-6">
             By signing in, you agree to our{' '}

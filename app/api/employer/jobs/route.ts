@@ -66,7 +66,7 @@ const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)
 
 let job
   for (let attempt = 0; attempt < 3; attempt++) {
-    const id = `e-${nanoid()}`
+    const id = `employer-${nanoid()}`
     try {
       job = await prisma.job.create({
         data: {

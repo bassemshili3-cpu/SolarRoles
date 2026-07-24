@@ -323,7 +323,14 @@ export default function JobForm({
             {!remote && (
               <div className="grid grid-cols-4 gap-3">
                 <div className="col-span-2">
-                  <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="City" className={inputClass} />
+                  <Input
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="City"
+                    list="city-suggestions"
+                    className={inputClass}
+                  />
+                 
                 </div>
                 <div>
                   <Input

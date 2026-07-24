@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   Sparkles,
@@ -21,6 +21,9 @@ import {
 export default function Signup() {
   const supabase = createClient()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const paramRedirect = searchParams.get('redirectTo')
+  const redirectTo = paramRedirect || '/dashboard'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -32,7 +35,7 @@ export default function Signup() {
   const signupWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: `${window.location.origin}/auth/callback?redirectTo=${redirectTo}` },
     })
   }
 
@@ -53,7 +56,7 @@ export default function Signup() {
         email: email.trim(),
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?redirectTo=${redirectTo}`,
         },
       })
 
@@ -63,7 +66,7 @@ export default function Signup() {
 
       // If email confirmation is required, there's no active session yet.
       if (data.session) {
-        router.push('/dashboard')
+        router.push(redirectTo)
         router.refresh()
       } else {
         setCheckEmail(true)
@@ -249,7 +252,7 @@ export default function Signup() {
                 <p className="text-center text-sm text-gray-500">
                   Already have an account?{' '}
                   <Link
-                    href="/auth/login"
+                    href={paramRedirect ? `/auth/login?redirectTo=${paramRedirect}` : '/auth/login'}
                     className="font-medium text-indigo-600 hover:underline underline-offset-2"
                   >
                     Log in
