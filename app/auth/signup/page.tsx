@@ -86,10 +86,10 @@ export default function Signup() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-white">
       {/* ───────── LEFT — brand panel ───────── */}
-      <aside className="relative hidden lg:flex flex-col justify-between p-10 xl:p-14 bg-gradient-to-br from-blue-600 via-indigo-700 to-[#1a2340] text-white overflow-hidden">
+      <aside className="relative hidden lg:flex flex-col justify-between p-10 xl:p-14 bg-gradient-to-br from-[#C9991F] via-[#5B1F7A] to-[#2D0F3F] text-white overflow-hidden">
         {/* Decorative glows */}
-        <div className="pointer-events-none absolute -top-32 -right-32 w-[28rem] h-[28rem] bg-indigo-400/30 rounded-full blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-40 -left-32 w-[28rem] h-[28rem] bg-blue-400/25 rounded-full blur-3xl" />
+        <div className="pointer-events-none absolute -top-32 -right-32 w-[28rem] h-[28rem] bg-[#E8B339]/30 rounded-full blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-40 -left-32 w-[28rem] h-[28rem] bg-[#9D4EDD]/25 rounded-full blur-3xl" />
         {/* Subtle grid pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
@@ -102,7 +102,7 @@ export default function Signup() {
 
         <Link
           href="/"
-          className="relative z-10 inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-blue-100 hover:text-white transition-colors"
+          className="relative z-10 inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#FCE9A8] hover:text-white transition-colors"
         >
           <Briefcase className="w-4 h-4" />
           Oh My Job
@@ -110,34 +110,29 @@ export default function Signup() {
 
         <div className="relative z-10 space-y-8 max-w-md">
           <h2 className="text-4xl xl:text-5xl font-bold tracking-tighter leading-[1.05]">
-            Your next opportunity
+            Start matching with roles 
             <br />
-            <span className="bg-gradient-to-r from-blue-200 to-white bg-clip-text text-transparent">
-              is one click away.
+            <span className="bg-gradient-to-r from-[#FCE9A8] to-white bg-clip-text text-transparent">
+              that fit you in under 30 seconds.
             </span>
           </h2>
 
-          <p className="text-blue-100/85 text-base leading-relaxed">
-            Create your free account and get matched with roles across all 50
-            states with salary upfront & smart filters.
-          </p>
-
           <ul className="space-y-3 pt-2">
             {perks.map(({ icon: Icon, text }) => (
-              <li key={text} className="flex items-center gap-3 text-blue-50">
-                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
-                  <Icon className="w-4 h-4 text-blue-100" />
+              <li key={text} className="flex items-center gap-3 text-white">
+                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#E8B339]/15 backdrop-blur-sm border border-[#E8B339]/25">
+                  <Icon className="w-4 h-4 text-[#FCE9A8]" />
                 </span>
                 <span className="text-sm font-medium">{text}</span>
-                <Check className="w-4 h-4 text-teal-300 ml-auto opacity-80" />
+                <Check className="w-4 h-4 text-[#FCE9A8] ml-auto opacity-80" />
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="relative z-10 flex items-center gap-3 text-xs text-blue-200/70">
+        <div className="relative z-10 flex items-center gap-3 text-xs text-[#C4A8D4]/70">
           <span>© {new Date().getFullYear()} Oh My Job</span>
-          <span className="w-1 h-1 rounded-full bg-blue-200/40" />
+          <span className="w-1 h-1 rounded-full bg-[#E8B339]/40" />
           <span>Smart job search</span>
         </div>
       </aside>
@@ -148,7 +143,7 @@ export default function Signup() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="lg:hidden inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-indigo-600"
+            className="lg:hidden inline-flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-[#C9991F]"
           >
             <Briefcase className="w-4 h-4" />
             Oh My Job
@@ -160,26 +155,23 @@ export default function Signup() {
           <div className="w-full max-w-md space-y-8">
             {checkEmail ? (
               <div className="text-center space-y-4 py-8">
-                <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto">
-                  <Mail className="w-6 h-6 text-indigo-600" />
+                <div className="w-14 h-14 rounded-2xl bg-[#F5EEF7] flex items-center justify-center mx-auto">
+                  <Mail className="w-6 h-6 text-[#3D1654]" />
                 </div>
-                <h1 className="text-2xl font-bold tracking-tight text-[#1a2340]">
+                <h1 className="text-2xl font-bold tracking-tight text-[#3D1654]">
                   Check your email
                 </h1>
                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
-                  We sent a confirmation link to <span className="font-medium text-[#1a2340]">{email}</span>.
+                  We sent a confirmation link to <span className="font-medium text-[#3D1654]">{email}</span>.
                   Click it to activate your account.
                 </p>
               </div>
             ) : (
               <>
                 <div className="space-y-3">
-                  <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-[#1a2340] leading-[1.05]">
+                  <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-[#3D1654] leading-[1.05]">
                     Create your account
                   </h1>
-                  <p className="text-gray-500 text-base leading-relaxed">
-                    Start matching with roles that fit you in under 30 seconds.
-                  </p>
                 </div>
 
                 {error && (
@@ -193,20 +185,20 @@ export default function Signup() {
                   onClick={signupWithGoogle}
                   variant="outline"
                   size="lg"
-                  className="group relative w-full h-14 text-base font-semibold rounded-2xl border-gray-200 bg-white hover:bg-gray-50 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-200"
+                  className="group relative w-full h-14 text-base font-semibold rounded-2xl border-[#EDE5F0] bg-white hover:bg-[#FAF7FC] hover:border-[#E8D5F0] hover:shadow-lg hover:shadow-[#C9991F]/5 transition-all duration-200"
                 >
                   <GoogleIcon className="w-5 h-5 mr-3" />
                   Sign up with Google
-                  <ArrowRight className="w-4 h-4 ml-2 text-gray-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all duration-200" />
+                  <ArrowRight className="w-4 h-4 ml-2 text-gray-400 group-hover:text-[#C9991F] group-hover:translate-x-1 transition-all duration-200" />
                 </Button>
 
                 {/* Divider */}
                 <div className="flex items-center gap-3">
-                  <div className="h-px flex-1 bg-gray-200" />
+                  <div className="h-px flex-1 bg-[#EDE5F0]" />
                   <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Or
                   </span>
-                  <div className="h-px flex-1 bg-gray-200" />
+                  <div className="h-px flex-1 bg-[#EDE5F0]" />
                 </div>
 
                 {/* Email + password form */}
@@ -217,7 +209,7 @@ export default function Signup() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     autoComplete="email"
-                    className="h-12 rounded-xl"
+                    className="h-12 rounded-xl border-[#EDE5F0] focus-visible:ring-[#F5EEF7] focus-visible:border-[#3D1654]"
                   />
                   <div className="relative">
                     <Input
@@ -226,7 +218,7 @@ export default function Signup() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Create a password"
                       autoComplete="new-password"
-                      className="h-12 rounded-xl pr-11"
+                      className="h-12 rounded-xl pr-11 border-[#EDE5F0] focus-visible:ring-[#F5EEF7] focus-visible:border-[#3D1654]"
                     />
                     <button
                       type="button"
@@ -243,7 +235,7 @@ export default function Signup() {
                     type="submit"
                     size="lg"
                     disabled={isSubmitting}
-                    className="w-full h-12 rounded-xl text-base font-semibold"
+                    className="w-full h-12 rounded-xl text-base font-semibold bg-[#C9991F] hover:bg-[#B0841A]"
                   >
                     {isSubmitting ? 'Creating account...' : 'Create account'}
                   </Button>
@@ -253,28 +245,13 @@ export default function Signup() {
                   Already have an account?{' '}
                   <Link
                     href={paramRedirect ? `/auth/login?redirectTo=${paramRedirect}` : '/auth/login'}
-                    className="font-medium text-indigo-600 hover:underline underline-offset-2"
+                    className="font-medium text-[#C9991F] hover:underline underline-offset-2"
                   >
                     Log in
                   </Link>
                 </p>
 
-                {/* Perks grid */}
-                <div className="grid grid-cols-3 gap-2.5 pt-2">
-                  {perks.map(({ icon: Icon, text }) => (
-                    <div
-                      key={text}
-                      className="group flex flex-col items-center gap-2.5 p-3.5 rounded-2xl bg-gray-50/80 border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50/40 transition-all"
-                    >
-                      <div className="w-9 h-9 rounded-xl bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-colors">
-                        <Icon className="w-4 h-4 text-indigo-600 group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="text-[11px] font-semibold text-[#1a2340] text-center leading-tight">
-                        {text}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+               
 
                 {/* Trust + legal */}
                 <div className="space-y-3 pt-2">
