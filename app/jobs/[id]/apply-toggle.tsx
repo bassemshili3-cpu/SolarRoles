@@ -13,7 +13,7 @@ export default function ApplyToggle({ jobId, jobTitle }: { jobId: string; jobTit
   }
 
   return (
-    <div className="rounded-xl border p-6 text-center">
+    <div className="rounded-xl border p-6">
       
       
       <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"

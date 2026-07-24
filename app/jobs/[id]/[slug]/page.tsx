@@ -252,7 +252,6 @@ function buildJobPostingSchema(
 
     hiringOrganization.logo = `https://img.logo.dev/${domain}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
 
-    hiringOrganization.sameAs = [`https://${domain}`]
 
   }
 
