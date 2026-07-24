@@ -469,7 +469,7 @@ export default function EmployerPage() {
 
       <section className="max-w-5xl mx-auto px-6 py-20 text-center">
 
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-teal-600 mb-5">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-sky-600 mb-5">
 
           <Sparkles className="w-3.5 h-3.5" />
 
@@ -501,7 +501,7 @@ export default function EmployerPage() {
         <Button
   size="lg"
   asChild
-  className="px-8 py-6 text-lg font-semibold bg-teal-600 hover:bg-teal-700 text-white"
+  className="px-8 py-6 text-lg font-semibold bg-sky-600 hover:bg-sky-700 text-white"
 >
   <Link href="/dashboard/employer/new">Post a job for free</Link>
 </Button>
@@ -510,8 +510,8 @@ export default function EmployerPage() {
 
 {/* Google for Jobs structured data (new) */}
 <section className="max-w-5xl mx-auto px-6 py-16">
-  <div className="bg-gradient-to-br from-teal-50 to-white border border-teal-100 rounded-3xl p-8 md:p-12 text-center">
-    <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-teal-600 mb-4">
+  <div className="bg-gradient-to-br from-sky-50 to-white border border-sky-100 rounded-3xl p-8 md:p-12 text-center">
+    <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-sky-600 mb-4">
       <Globe2 className="w-3.5 h-3.5" />
       Structured for Google for Jobs
     </span>
@@ -552,7 +552,7 @@ export default function EmployerPage() {
 
             <div key={step.title} className="text-center">
 
-              <div className="w-10 h-10 rounded-full bg-teal-50 text-teal-600 font-bold flex items-center justify-center mx-auto mb-4">
+              <div className="w-10 h-10 rounded-full bg-sky-50 text-sky-600 font-bold flex items-center justify-center mx-auto mb-4">
 
                 {i + 1}
 
@@ -601,7 +601,7 @@ export default function EmployerPage() {
 
               >
 
-                <benefit.icon className="text-teal-600 mb-3" size={24} />
+                <benefit.icon className="text-sky-600 mb-3" size={24} />
 
                 <h3 className="text-lg font-semibold text-[#1a2340] mb-2">
 
@@ -645,7 +645,7 @@ export default function EmployerPage() {
 
               key={item.title}
 
-              className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-indigo-100 transition-colors"
+              className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-sky-100 transition-colors"
 
             >
 
@@ -711,9 +711,9 @@ export default function EmployerPage() {
 
           <div className="flex items-center gap-3 shrink-0">
 
-            <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
 
-              <ShieldCheck className="w-5 h-5 text-teal-600" />
+              <ShieldCheck className="w-5 h-5 text-sky-600" />
 
             </div>
 
@@ -735,9 +735,9 @@ export default function EmployerPage() {
 
           <div className="flex items-center gap-3 shrink-0">
 
-            <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
 
-              <Clock className="w-5 h-5 text-teal-600" />
+              <Clock className="w-5 h-5 text-sky-600" />
 
             </div>
 
@@ -759,9 +759,9 @@ export default function EmployerPage() {
 
           <div className="flex items-center gap-3 shrink-0">
 
-            <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
 
-              <Globe2 className="w-5 h-5 text-teal-600" />
+              <Globe2 className="w-5 h-5 text-sky-600" />
 
             </div>
 
@@ -810,7 +810,7 @@ export default function EmployerPage() {
 
                 {faq.question}
 
-                <span className="text-teal-600 group-open:rotate-45 transition-transform text-xl">
+                <span className="text-sky-600 group-open:rotate-45 transition-transform text-xl">
 
                   +
 
@@ -845,11 +845,11 @@ export default function EmployerPage() {
 
             href="/blog/healthcare-careers-two-years-or-less"
 
-            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-indigo-100 transition-colors"
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-sky-100 transition-colors"
 
           >
 
-            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-600">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-sky-600">
 
               Career Guides
 
@@ -873,11 +873,11 @@ export default function EmployerPage() {
 
             href="/blog/workplace-loneliness-performance-risk"
 
-            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-indigo-100 transition-colors"
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-sky-100 transition-colors"
 
           >
 
-            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-600">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-sky-600">
 
               Workplace Trends
 
@@ -901,11 +901,11 @@ export default function EmployerPage() {
 
             href="/jobs"
 
-            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-indigo-100 transition-colors"
+            className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-sky-100 transition-colors"
 
           >
 
-            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-600">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-sky-600">
 
               Job Market Data
 
