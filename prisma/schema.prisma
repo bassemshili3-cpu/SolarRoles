@@ -63,6 +63,9 @@ model Job {
   clickCount               Int      @default(0)
   deletedAt                DateTime?
   isOwn                    Boolean  @default(false)
+  flaggedAt      DateTime?
+  flagReasons    String[]  @default([])
+
 
   applications             JobApplication[]
 

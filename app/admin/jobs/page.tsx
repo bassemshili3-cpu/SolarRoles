@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { isAdminAuthenticated } from '@/lib/adminAuth'
 import AdminJobsDashboard from './admin-jobs-dashboard'
 
+type JobStatus = 'active' | 'paused' | 'expired' | 'flagged'
+
 export default async function AdminJobsPage() {
   const authed = await isAdminAuthenticated()
   if (!authed) redirect('/admin/login')
@@ -19,13 +21,16 @@ export default async function AdminJobsPage() {
     company: job.company,
     location: job.location,
     postedAt: job.postedAt ?? job.fetchedAt,
-    status: (job.pausedAt
-      ? 'paused'
-      : job.expiresAt < new Date()
-        ? 'expired'
-        : 'active') as 'active' | 'paused' | 'expired',
+    status: (job.flaggedAt
+      ? 'flagged'
+      : job.pausedAt
+        ? 'paused'
+        : job.expiresAt < new Date()
+          ? 'expired'
+          : 'active') as JobStatus,
     clicks: job.clickCount,
     applications: job._count.applications,
+    flagReasons: job.flagReasons ?? undefined,
   }))
 
   return <AdminJobsDashboard initialJobs={jobs} />

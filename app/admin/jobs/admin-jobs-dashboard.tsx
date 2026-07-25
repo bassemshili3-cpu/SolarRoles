@@ -3,10 +3,10 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
-import { Search, Pencil, Pause, Play, Trash2, Copy, Check } from 'lucide-react'
+import { Search, Pencil, Pause, Play, Trash2, Copy, Check, ShieldAlert, ShieldCheck } from 'lucide-react'
 import { buildJobSlug } from '@/lib/slugify'
 
-type JobStatus = 'active' | 'paused' | 'expired'
+type JobStatus = 'active' | 'paused' | 'expired' | 'flagged'
 
 interface AdminJob {
   id: string
@@ -17,6 +17,7 @@ interface AdminJob {
   status: JobStatus
   clicks: number
   applications: number
+  flagReasons?: string[]
 }
 
 function formatRelativeDate(date: Date) {
@@ -32,12 +33,22 @@ const statusBar: Record<JobStatus, string> = {
   active: 'bg-emerald-500',
   paused: 'bg-amber-500',
   expired: 'bg-slate-300',
+  flagged: 'bg-red-500',
 }
 
 const statusText: Record<JobStatus, string> = {
   active: 'text-emerald-700',
   paused: 'text-amber-700',
   expired: 'text-slate-500',
+  flagged: 'text-red-700',
+}
+
+// Ordre de priorité d'affichage : les annonces suspectes remontent toujours en premier
+const statusOrder: Record<JobStatus, number> = {
+  flagged: 0,
+  active: 1,
+  paused: 2,
+  expired: 3,
 }
 
 export default function AdminJobsDashboard({ initialJobs }: { initialJobs: AdminJob[] }) {
@@ -47,10 +58,14 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
 
   const filteredJobs = useMemo(() => {
     const q = query.toLowerCase()
-    return jobs.filter(
-      (j) => j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)
-    )
+    return jobs
+      .filter(
+        (j) => j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)
+      )
+      .sort((a, b) => statusOrder[a.status] - statusOrder[b.status])
   }, [jobs, query])
+
+  const flaggedCount = jobs.filter((j) => j.status === 'flagged').length
 
   function jobUrl(job: AdminJob) {
     return `https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`
@@ -77,6 +92,18 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
     )
   }
 
+  async function approveJob(id: string) {
+    const res = await fetch(`/api/admin/jobs/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'approve' }),
+    })
+    if (!res.ok) return alert('Something went wrong.')
+    setJobs((prev) =>
+      prev.map((j) => (j.id === id ? { ...j, status: 'active', flagReasons: undefined } : j))
+    )
+  }
+
   async function deleteJob(id: string) {
     if (!confirm('Delete this job listing? This cannot be undone.')) return
     const res = await fetch(`/api/admin/jobs/${id}`, { method: 'DELETE' })
@@ -90,7 +117,14 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
         <h1 className="text-[32px] font-semibold tracking-[-0.02em] text-[#1a2340]">
           All employer job postings
         </h1>
-        <p className="text-[15px] text-slate-500 mt-2">{jobs.length} listings total</p>
+        <p className="text-[15px] text-slate-500 mt-2">
+          {jobs.length} listings total
+          {flaggedCount > 0 && (
+            <span className="ml-2 inline-flex items-center gap-1 text-red-600 font-medium">
+              · {flaggedCount} flagged for review
+            </span>
+          )}
+        </p>
       </header>
 
       <div className="relative w-full sm:w-80 mb-6">
@@ -107,13 +141,18 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
         {filteredJobs.map((job) => (
           <li
             key={job.id}
-            className="group relative flex items-center gap-4 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+            className={`group relative flex items-center gap-4 py-4 border-b border-slate-100 transition-colors ${
+              job.status === 'flagged' ? 'bg-red-50/50 hover:bg-red-50' : 'hover:bg-slate-50/50'
+            }`}
           >
             <div
               className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-10 rounded-r-full ${statusBar[job.status]}`}
             />
             <div className="flex-1 min-w-0 pl-4">
               <div className="flex items-center gap-2.5 flex-wrap">
+                {job.status === 'flagged' && (
+                  <ShieldAlert size={15} className="text-red-500 shrink-0" />
+                )}
                 <Link
                   href={jobUrl(job)}
                   target="_blank"
@@ -133,6 +172,16 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
                 <span className="text-slate-300">·</span>
                 <span>Posted {formatRelativeDate(job.postedAt)}</span>
               </div>
+              {job.status === 'flagged' && job.flagReasons && job.flagReasons.length > 0 && (
+                <ul className="mt-2 space-y-0.5">
+                  {job.flagReasons.map((reason, i) => (
+                    <li key={i} className="text-[12px] text-red-600 flex items-start gap-1.5">
+                      <span className="text-red-400 mt-0.5">•</span>
+                      {reason}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <div className="hidden sm:flex items-center gap-7 text-right shrink-0">
@@ -151,6 +200,16 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
             </div>
 
             <div className="flex items-center gap-0.5 shrink-0">
+              {job.status === 'flagged' && (
+                <button
+                  type="button"
+                  title="Approve (not a scam)"
+                  onClick={() => approveJob(job.id)}
+                  className="w-8 h-8 flex items-center justify-center rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                >
+                  <ShieldCheck size={15} />
+                </button>
+              )}
               <button
                 type="button"
                 title="Copy URL"
@@ -166,7 +225,7 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
               >
                 <Pencil size={15} />
               </Link>
-              {job.status !== 'expired' && (
+              {job.status !== 'expired' && job.status !== 'flagged' && (
                 <button
                   type="button"
                   title={job.status === 'active' ? 'Pause' : 'Activate'}

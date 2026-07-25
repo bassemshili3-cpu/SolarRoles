@@ -18,6 +18,11 @@ export async function PATCH(
       await prisma.job.update({ where: { id }, data: { pausedAt: new Date() } })
     } else if (action === 'activate') {
       await prisma.job.update({ where: { id }, data: { pausedAt: null } })
+    } else if (action === 'approve') {
+      await prisma.job.update({
+        where: { id },
+        data: { flaggedAt: null, flagReasons: [] },
+      })
     } else {
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
     }
