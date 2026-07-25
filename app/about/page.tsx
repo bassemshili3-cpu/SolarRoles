@@ -17,13 +17,13 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="bg-[#1a2340] text-white">
+      <section className="bg-[#3D1654] text-white">
         <div className="max-w-3xl mx-auto px-6 py-20">
-          <p className="text-[#6b8cff] text-sm font-semibold tracking-wider uppercase mb-5">About Oh My Job</p>
+          <p className="text-[#E8B339] text-sm font-semibold tracking-wider uppercase mb-5">About Oh My Job</p>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
             The job market judges you<br />by where you've been.
             <br />
-            <span className="text-[#6b8cff]">We think that's backwards.</span>
+            <span className="text-[#E8B339]">We think that's backwards.</span>
           </h1>
           <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
             We're building a job board that focuses on what people can actually do, not where they went to school or who they've worked for before.
@@ -33,7 +33,7 @@ export default function AboutPage() {
 
       {/* The problem */}
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">The problem we're solving</h2>
+        <h2 className="text-2xl font-bold text-[#3D1654] mb-6">The problem we're solving</h2>
         <div className="space-y-5 text-gray-600 leading-relaxed text-lg">
           <p>
             Getting a first job still requires having had a first job. Changing careers at 35 is still treated like starting from zero. And a self-taught developer with the skills to do the work gets screened out before a recruiter ever reads their resume.
@@ -48,38 +48,38 @@ export default function AboutPage() {
       </section>
 
       {/* What we're building */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-[#FAF7FC] py-16">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">What we're building</h2>
+          <h2 className="text-2xl font-bold text-[#3D1654] mb-8">What we're building</h2>
           <div className="space-y-8">
             <div className="flex gap-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2B4ACB] text-white text-sm font-bold flex items-center justify-center mt-0.5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#C9991F] text-white text-sm font-bold flex items-center justify-center mt-0.5">
                 1
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-2">A job board that actually works</h3>
+                <h3 className="font-semibold text-[#3D1654] text-lg mb-2">A job board that actually works</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Over 300,000 US jobs updated daily, with filters that go beyond the basics. Job type, salary, experience level, remote work, visa sponsorship. Everything you need to find something worth applying to, without scrolling through pages of irrelevant listings.
                 </p>
               </div>
             </div>
             <div className="flex gap-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2B4ACB] text-white text-sm font-bold flex items-center justify-center mt-0.5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#C9991F] text-white text-sm font-bold flex items-center justify-center mt-0.5">
                 2
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-2">Skills over pedigree</h3>
+                <h3 className="font-semibold text-[#3D1654] text-lg mb-2">Skills over pedigree</h3>
                 <p className="text-gray-600 leading-relaxed">
                   We're working toward a world where you can prove what you know. Verified digital credentials, skills assessments, and portable badges will let candidates demonstrate competence, not just claim it. This is where we're going, and we're building toward it deliberately.
                 </p>
               </div>
             </div>
             <div className="flex gap-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2B4ACB] text-white text-sm font-bold flex items-center justify-center mt-0.5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#C9991F] text-white text-sm font-bold flex items-center justify-center mt-0.5">
                 3
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-2">Built for who actually needs it</h3>
+                <h3 className="font-semibold text-[#3D1654] text-lg mb-2">Built for who actually needs it</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Recent grads, career changers, people without traditional degrees — the ones the system wasn't designed for. Our goal is to give them the same shot as everyone else, based on what they can do today.
                 </p>
@@ -91,48 +91,32 @@ export default function AboutPage() {
 
       {/* What we believe */}
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">What we believe</h2>
+        <h2 className="text-2xl font-bold text-[#3D1654] mb-8">What we believe</h2>
         <div className="grid sm:grid-cols-2 gap-8">
           <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Skills are the real signal</h3>
+            <h3 className="font-semibold text-[#3D1654] mb-2">Skills are the real signal</h3>
             <p className="text-gray-600 leading-relaxed">
               A degree is one data point. A portfolio of verifiable skills is a much better one. We want to help candidates build that portfolio and share it with employers who are paying attention.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Free for job seekers, always</h3>
+            <h3 className="font-semibold text-[#3D1654] mb-2">Free for job seekers, always</h3>
             <p className="text-gray-600 leading-relaxed">
               No premium tiers, no paywalls on search results. If you're looking for work, you get the full platform from day one.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Real listings</h3>
+            <h3 className="font-semibold text-[#3D1654] mb-2">Real listings</h3>
             <p className="text-gray-600 leading-relaxed">
               We aggregate from verified sources and filter aggressively. No ghost jobs, no positions that were filled three months ago, no bait-and-switch.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Transparency</h3>
+            <h3 className="font-semibold text-[#3D1654] mb-2">Transparency</h3>
             <p className="text-gray-600 leading-relaxed">
               Salary ranges when we have them. Clear requirements. Honest about what we know and what we don't. No hidden ranking by paid placement.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-[#1a2340] py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Ready to find your next role?</h2>
-          <p className="text-white/60 mb-8 max-w-lg mx-auto">
-            Browse thousands of US jobs and set up alerts so you never miss the right opportunity.
-          </p>
-          <Link
-            href="/"
-            className="inline-block bg-white text-[#1a2340] font-semibold px-8 py-3 rounded-lg hover:bg-white/90 transition-colors"
-          >
-            Start searching
-          </Link>
         </div>
       </section>
     </main>

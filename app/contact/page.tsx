@@ -52,15 +52,15 @@ export default function ContactPage() {
     <main className="min-h-screen bg-white">
 
       {/* Hero */}
-      <section className="bg-[#1a2340] text-white">
+      <section className="bg-[#3D1654] text-white">
         <div className="max-w-3xl mx-auto px-6 py-20">
-          <p className="text-[#6b8cff] text-sm font-semibold tracking-wider uppercase mb-5">Get in touch</p>
+          <p className="text-[#E8B339] text-sm font-semibold tracking-wider uppercase mb-5">Get in touch</p>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
             We read every message.<br />
-            <span className="text-[#6b8cff]">Every single one.</span>
+            
           </h1>
           <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-            Whether you have a question about job listings, a partnership idea, or just want to say hello — we are here.
+            Whether you have a question about job listings, a partnership idea, or just want to say hello - we are here.
           </p>
         </div>
       </section>
@@ -71,13 +71,13 @@ export default function ContactPage() {
         {/* Left: info */}
         <aside className="md:col-span-2 space-y-8">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Contact</h2>
+            <h2 className="text-lg font-bold text-[#3D1654] mb-3">Contact</h2>
             <p className="text-gray-600 text-sm leading-relaxed mb-3">
               For all inquiries, reach us directly at:
             </p>
             <a
               href="mailto:contact@oh-my-job.com"
-              className="inline-flex items-center gap-2 text-[#2B4ACB] font-semibold text-sm hover:underline"
+              className="inline-flex items-center gap-2 text-[#C9991F] font-semibold text-sm hover:underline"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect width="20" height="16" x="2" y="4" rx="2" />
@@ -88,14 +88,14 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Response time</h2>
+            <h2 className="text-lg font-bold text-[#3D1654] mb-3">Response time</h2>
             <p className="text-gray-600 text-sm leading-relaxed">
               We typically respond within <span className="font-semibold text-gray-800">1–2 business days</span>. For urgent issues, include "URGENT" in your subject line.
             </p>
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Common topics</h2>
+            <h2 className="text-lg font-bold text-[#3D1654] mb-3">Common topics</h2>
             <ul className="space-y-2 text-sm text-gray-600">
               {[
                 ['Job listing inaccuracy', 'Missing salary, wrong location, expired post'],
@@ -104,41 +104,34 @@ export default function ContactPage() {
                 ['Bug reports', 'Something broken? Tell us exactly what happened'],
               ].map(([title, desc]) => (
                 <li key={title} className="flex gap-2">
-                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#2B4ACB] flex-shrink-0" />
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#C9991F] flex-shrink-0" />
                   <span><span className="font-medium text-gray-800">{title}</span> — {desc}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Other pages</h2>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/about" className="text-[#2B4ACB] hover:underline">About Oh My Job</Link></li>
-              <li><Link href="/privacy" className="text-[#2B4ACB] hover:underline">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-[#2B4ACB] hover:underline">Terms of Service</Link></li>
-            </ul>
-          </div>
+          
         </aside>
 
         {/* Right: form */}
         <div className="md:col-span-3">
           {status === 'success' ? (
-            <div className="rounded-xl border border-green-200 bg-green-50 px-8 py-10 flex flex-col items-start gap-4">
+            <div className="rounded-xl border border-[#E8D5F0] bg-[#F5EEF7] px-8 py-10 flex flex-col items-start gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#C9991F] flex items-center justify-center flex-shrink-0">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
                 </div>
-                <h2 className="text-lg font-bold text-green-800">Message sent successfully!</h2>
+                <h2 className="text-lg font-bold text-[#3D1654]">Message sent successfully!</h2>
               </div>
-              <p className="text-green-700 text-sm leading-relaxed">
+              <p className="text-[#5B1F7A] text-sm leading-relaxed">
                 Thanks for reaching out. We have received your message and will get back to you within 1–2 business days at the email address you provided.
               </p>
               <button
                 onClick={() => setStatus('idle')}
-                className="mt-2 text-sm font-semibold text-green-700 hover:text-green-900 underline underline-offset-2"
+                className="mt-2 text-sm font-semibold text-[#5B1F7A] hover:text-[#3D1654] underline underline-offset-2"
               >
                 Send another message
               </button>
@@ -157,7 +150,7 @@ export default function ContactPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Jane Smith"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-[#2B4ACB] focus:ring-2 focus:ring-[#2B4ACB]/20"
+                    className="w-full rounded-lg border border-[#EDE5F0] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-[#3D1654] focus:ring-2 focus:ring-[#3D1654]/20"
                   />
                 </div>
                 <div>
@@ -171,7 +164,7 @@ export default function ContactPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="jane@example.com"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-[#2B4ACB] focus:ring-2 focus:ring-[#2B4ACB]/20"
+                    className="w-full rounded-lg border border-[#EDE5F0] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-[#3D1654] focus:ring-2 focus:ring-[#3D1654]/20"
                   />
                 </div>
               </div>
@@ -185,7 +178,7 @@ export default function ContactPage() {
                   required
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none transition focus:border-[#2B4ACB] focus:ring-2 focus:ring-[#2B4ACB]/20 appearance-none cursor-pointer"
+                  className="w-full rounded-lg border border-[#EDE5F0] bg-white px-4 py-2.5 text-sm text-gray-900 outline-none transition focus:border-[#3D1654] focus:ring-2 focus:ring-[#3D1654]/20 appearance-none cursor-pointer"
                 >
                   <option value="" disabled>Select a topic...</option>
                   {SUBJECTS.map((s) => (
@@ -205,7 +198,7 @@ export default function ContactPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell us what's on your mind..."
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-[#2B4ACB] focus:ring-2 focus:ring-[#2B4ACB]/20 resize-none"
+                  className="w-full rounded-lg border border-[#EDE5F0] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-[#3D1654] focus:ring-2 focus:ring-[#3D1654]/20 resize-none"
                 />
               </div>
 
@@ -218,7 +211,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                className="inline-flex items-center gap-2 bg-[#2B4ACB] text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-[#1a2340] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 bg-[#C9991F] text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-[#B0841A] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {status === 'sending' ? (
                   <>
@@ -248,23 +241,6 @@ export default function ContactPage() {
           )}
         </div>
       </section>
-
-      {/* Bottom CTA */}
-      <section className="bg-[#1a2340] py-14">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold text-white mb-3">Looking for a job?</h2>
-          <p className="text-white/60 mb-7 max-w-md mx-auto text-sm">
-            Browse hundreds of thousands of US job listings updated daily.
-          </p>
-          <Link
-            href="/jobs"
-            className="inline-block bg-white text-[#1a2340] font-semibold px-8 py-3 rounded-lg hover:bg-white/90 transition-colors text-sm"
-          >
-            Search jobs
-          </Link>
-        </div>
-      </section>
-
     </main>
   )
 }
