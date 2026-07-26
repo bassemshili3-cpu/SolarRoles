@@ -1,5 +1,5 @@
 import { isCyberSecurityRole } from './cyber-taxonomy';
-import type { AtsCompanySeed } from './company-seeds';
+import type { AtsCompanySeed } from './company-seed';
 
 interface AshbyJob {
   id: string;
