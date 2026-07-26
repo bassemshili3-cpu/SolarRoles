@@ -79,7 +79,7 @@ const faqSchema = {
       name: 'What retirement benefits do City of Laredo employees receive?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'City of Laredo employees are enrolled in the Texas Municipal Retirement System (TMRS), a defined-benefit pension plan covering municipal workers across Texas. The city makes matching contributions on top of the employee\'s own contributions, and vesting typically occurs after five years of credited service. TMRS is considered one of the stronger public sector retirement programs available to Texas city employees.',
+        text: 'City of Laredo Employees are enrolled in the Texas Municipal Retirement System (TMRS), a defined-benefit pension plan covering municipal workers across Texas. The city makes matching contributions on top of the employee\'s own contributions, and vesting typically occurs after five years of credited service. TMRS is considered one of the stronger public sector retirement programs available to Texas city employees.',
       },
     },
     {
