@@ -1,5 +1,5 @@
 import { isCyberSecurityRole } from './cyber-taxonomy';
-import type { AtsCompanySeed } from './company-seeds';
+import type { AtsCompanySeed } from './company-seed';
 import type { NormalizedJob } from './ashby';
 
 // NOTE: field names below are based on Pinpoint's documented public
