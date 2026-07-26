@@ -287,7 +287,7 @@ export default async function BartendingJobsPage({ searchParams }: any) {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">State-by-State Minimum Age Limits</h2>
               <p className="text-gray-700 mb-6">
-                State laws heavily regulate bartending jobs. The National Conference of State Legislatures (NCSL) outlines that the legal age to mix and serve alcohol shifts dramatically depending on your zip code. Review the breakdown of major markets below, and always double-check with local authorities before applying for your next gig.
+                State laws heavily regulate bartending jobsZ. The National Conference of State Legislatures (NCSL) outlines that the legal age to mix and serve alcohol shifts dramatically depending on your zip code. Review the breakdown of major markets below, and always double-check with local authorities before applying for your next gig.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
