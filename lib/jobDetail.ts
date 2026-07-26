@@ -39,7 +39,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       location: dbJob.location,
       addressRegion: dbJob.addressRegion,
       postalCode: dbJob.postalCode || undefined,
-      description: dbJob.description,
+      description: dbJob.seoDescription || dbJob.description,  // ← priorité au rewrite
       salary_min: dbJob.salaryMin || undefined,
       salary_max: dbJob.salaryMax || undefined,
       salary: dbJob.salary || undefined,
@@ -59,7 +59,6 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
     return null
   }
 })
-
 export function getJobDetailWithSalary(job: JobDetail): JobDetail {
   const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
 

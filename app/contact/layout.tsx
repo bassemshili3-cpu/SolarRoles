@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Oh My Job',
-  description: 'Get in touch with the Oh My Job team. Questions about job listings, partnerships, or anything else — we read every message.',
-  alternates: { canonical: 'https://www.oh-my-job.com/contact' },
+  title: 'Contact Us | Solar Roles',
+  description: 'Get in touch with the Solar Roles team. Questions about job listings, partnerships, or anything else',
+  alternates: { canonical: 'https://www.solarroles.com/contact' },
   openGraph: {
-    title: 'Contact Us | Oh My Job',
+    title: 'Contact Us | Solar Roles',
     description: 'Get in touch with the Oh My Job team.',
-    url: 'https://www.oh-my-job.com/contact',
+    url: 'https://www.solarroles.com/contact',
     type: 'website',
   },
 }

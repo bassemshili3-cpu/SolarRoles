@@ -1,5 +1,5 @@
 // scripts/seed-jobs.ts
-// Run with: npm run seed
+// npx tsx scripts/seed-solar-jobs.ts
 import { syncAllJobs } from '../lib/job-sync'
 
 const TOTAL_PAGES = 30

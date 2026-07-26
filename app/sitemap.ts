@@ -5,7 +5,7 @@ import { buildJobSlug } from "@/lib/slugify";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
 import { JobDetail } from "@/lib/jobDetail";
 
-const BASE_URL = 'https://www.oh-my-job.com'
+const BASE_URL = 'https://www.solarroles.com'
 const LAST_MAJOR_UPDATE = new Date('2026-07-26')
 
 // ── Landing pages SEO prioritaires ──────────────────────────
@@ -18,12 +18,7 @@ const priorityLandingPages: string[] = [
 // ── Top Jobs ranking pages ───────────────────────────────────
 const topJobsPages: string[] = [
   '/best-jobs-in-united-states-2026',
-  '/best-jobs-without-a-degree-2026',
-  '/best-paying-jobs-in-finance-2026',
-  '/best-paying-easy-jobs-us',
-  '/best-paying-blue-collar-jobs',
-  '/best-paying-entry-level-jobs',
-  '/best-paying-nursing-jobs-2026',
+ 
 ]
 
 // ── Paycheck calculator pages ────────────────────────────────
@@ -58,13 +53,13 @@ const dataStatePages: string[] = [
 ].map(s => `/data/states/${s}`)
 
 const dataSalaryPages: string[] = [
-  'registered-nurse', 'software-engineer', 'data-analyst',
+  'Solar Photovoltaic Installer', 'Lead Solar Installer',
   
 ].map(s => `/data/salaries/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────
 const blogPosts: string[] = [
-  '/blog/how-to-quit-a-job',
+  'how-to-land-first-solar-job',
  
 ]
 

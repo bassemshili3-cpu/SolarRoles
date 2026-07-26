@@ -11,18 +11,18 @@ import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const SITE_URL = 'https://www.oh-my-job.com'
+const SITE_URL = 'https://www.solarroles.com'
 
 export const metadata = {
-  title: 'Oh My Job - Smart Job Search USA',
-  description: 'Search and compare real job listings across the U.S. Salary ranges shown upfront — no account or sign-up required.',
+  title: 'Solar Roles - Solar installers Jobs USA',
+  description: 'Search and compare Solar installers across the U.S.',
   metadataBase: new URL(SITE_URL),
 }
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Oh My Job',
+  name: 'Solar Roles',
   url: SITE_URL,
   logo: {
     '@type': 'ImageObject',
@@ -30,9 +30,7 @@ const organizationJsonLd = {
     width: 512,
     height: 512,
   },
-  sameAs: [
-    'https://www.facebook.com/ohmyjob',
-  ],
+  
 }
 
 

@@ -40,7 +40,7 @@ export default function CCPAPage() {
           <p className="text-gray-700 leading-relaxed">
             Solar Roles, Inc. ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>") operates{' '}
             <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-              oh-my-job.com
+              solarroles.com
             </a>
             , an online job search platform that aggregates employment listings across the United States.
           </p>
@@ -163,13 +163,6 @@ export default function CCPAPage() {
             To exercise your rights, submit a verifiable consumer request by:
           </p>
           <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4">
-            <li>
-              Emailing us at{' '}
-              <a href="bcito.pro@gmail.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                privacy@ohmyjob.com
-              </a>{' '}
-              with subject line <em>"CCPA Request"</em>
-            </li>
             <li>Writing to us at: Solar Roles, Inc., 27 rue de plaisance, 42400 Saint-Chamond, France</li>
           </ul>
           <p className="text-gray-700 leading-relaxed mb-3">
@@ -201,10 +194,7 @@ export default function CCPAPage() {
             California Civil Code Section 1798.83 permits California residents to request a list of
             third parties to whom we disclosed personal information for direct marketing purposes in
             the preceding calendar year. We do not share personal information with third parties for
-            their direct marketing purposes. You may still send such a request to{' '}
-            <a href="mailto:privacy@ohmyjob.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-              privacy@ohmyjob.com
-            </a>.
+            their direct marketing purposes. 
           </p>
         </section>
 
@@ -226,13 +216,13 @@ export default function CCPAPage() {
             <p className="text-gray-700 mb-1">Privacy Team</p>
             <p className="text-gray-700 mb-1">
               Email:{' '}
-              <a href="mailto:privacy@ohmyjob.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                privacy@ohmyjob.com
+              <a href="mailto:contact@solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+                contact@solarroles.com
               </a>
             </p>
             <p className="text-gray-700">Website:{' '}
-              <a href="https://www.oh-my-job.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                www.oh-my-job.com
+              <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+                www.solarroles.com
               </a>
             </p>
           </div>

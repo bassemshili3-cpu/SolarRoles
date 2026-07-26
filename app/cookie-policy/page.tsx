@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Cookie Policy | Solar Roles',
   description: 'Learn how Solar Roles uses cookies and similar tracking technologies on our job search platform.',
   alternates: {
-    canonical: 'https://www.oh-my-job.com/cookie-policy',
+    canonical: 'https://www.solarroles.col/cookie-policy',
   },
 }
 
@@ -23,8 +23,8 @@ export default function CookiePolicyPage() {
           <p className="text-gray-700 leading-relaxed">
             This Cookie Policy explains how Solar Roles, Inc. ("<strong>Company</strong>", "<strong>we</strong>",
             "<strong>us</strong>") uses cookies and similar tracking technologies when you visit{' '}
-            <a href="https://www.oh-my-job.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-              oh-my-job.com
+            <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+              solarroles.com
             </a>{' '}
             (the "<strong>Site</strong>"). It should be read alongside our{' '}
             <a href="/privacy-policy" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
@@ -271,16 +271,16 @@ export default function CookiePolicyPage() {
             <p className="text-gray-700 mb-1"><strong>Solar roles, Inc.</strong></p>
             <p className="text-gray-700 mb-1">
               Email:{' '}
-              <a href="mailto:privacy@ohmyjob.com"
+              <a href="mailto:contact@solarroles.com"
                 className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                privacy@ohmyjob.com
+                contact@solarroles.com
               </a>
             </p>
             <p className="text-gray-700">
               Website:{' '}
-              <a href="https://www.oh-my-job.com"
+              <a href="https://www.solarroles.com"
                 className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                www.oh-my-job.com
+                www.solarroles.com
               </a>
             </p>
           </div>
