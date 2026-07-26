@@ -7,7 +7,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
-import { ASHBY_COMPANIES, PINPOINT_COMPANIES } from '../lib/ats/company-seeds';
+import { ASHBY_COMPANIES, PINPOINT_COMPANIES } from '../lib/ats/company-seed';
 import { fetchAshbyJobs, type NormalizedJob } from '../lib/ats/ashby';
 import { fetchPinpointJobs } from '../lib/ats/pinpoint';
 
