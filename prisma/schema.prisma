@@ -65,7 +65,8 @@ model Job {
   isOwn                    Boolean  @default(false)
   flaggedAt      DateTime?
   flagReasons    String[]  @default([])
-
+ seoDescription        String?
+  seoDescriptionVersion Int     @default(0)
 
   applications             JobApplication[]
 
