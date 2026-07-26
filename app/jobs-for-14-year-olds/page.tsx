@@ -77,7 +77,7 @@ const faqSchema = {
       name: 'What is the minimum wage for a 14 year old?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The federal minimum is $7.25 per hour, though the majority of states enforce a higher rate that takes precedence.',
+        text: 'The federal minimum is $7.30 per hour, though the majority of states enforce a higher rate that takes precedence.',
       },
     },
     {
