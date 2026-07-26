@@ -29,7 +29,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Patient Transporter Jobs',
-  description: 'Find patient transporter jobs hiring now across the United States. Browse openings at hospitals, surgery centers, rehabilitation facilities, and long term care settings.',
+  description: 'Find Patient transporter jobs hiring now across the United States. Browse openings at hospitals, surgery centers, rehabilitation facilities, and long term care settings.',
   url: 'https://www.oh-my-job.com/patient-transporter-jobs',
   mainEntity: {
     '@type': 'ItemList',
