@@ -10,7 +10,6 @@ const LAST_MAJOR_UPDATE = new Date('2026-07-08')
 
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
-  '/dashboard/post-a-job-free',
   '/jobs-for-14-year-olds',
   '/jobs-for-15-year-olds',
   '/jobs-for-16-year-olds',
