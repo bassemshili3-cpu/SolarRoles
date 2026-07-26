@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   keywords: 'oil rig jobs, oil rig hiring now, offshore oil rig jobs, onshore oil rig jobs, roughneck jobs, roustabout jobs, oil rig no experience, oil field jobs, drilling jobs',
   openGraph: {
     title: 'Oil Rig Jobs | Gulf Coast, Permian & Bakken Openings',
-    description: 'Oil rigs across the US Gulf Coast, Permian Basin, and Bakken are actively hiring. High-paying rotational positions with full room and board. Apply today.',
+    description: 'Oil Rigs across the US Gulf Coast, Permian Basin, and Bakken are actively hiring. High-paying rotational positions with full room and board. Apply today.',
     type: 'website',
   },
   twitter: {
