@@ -115,7 +115,7 @@ const faqs = [
 
 const tips = [
   {
-    title: 'Tailor Your Application to UCSD Values',
+    title: 'Tailor Your Application to UCSD Valuess',
     description: 'Highlight experience that aligns with UCSD’s mission of research excellence, diversity, and public service. The university specifically looks for candidates who demonstrate collaboration and innovation.',
   },
   {
