@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'US Job Market Data Center | Salary Stats, Hiring Trends & More',
   description: 'Live job market data pulled from thousands of active listings across the US. Average salaries by state, top hiring companies, job market snapshots, and more. Updated daily.',
   keywords: 'US job market data, average salary by state, top hiring companies, job market statistics 2026, employment data',
-  alternates: { canonical: 'https://www.oh-my-job.com/data' },
+  alternates: { canonical: 'https://www.solarroles.com/data' },
 }
 
 const jsonLd = {
@@ -19,7 +19,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'US Job Market Data Center',
   description: 'Live job market statistics from active US job listings. Updated daily.',
-  url: 'https://www.oh-my-job.com/data',
+  url: 'https://www.solarroles.com/data',
 }
 
 // ── Salary sanity bounds ──
@@ -342,7 +342,7 @@ export default async function DataCenterPage() {
         {/* ── DISCLAIMER ── */}
         <footer className="border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
-            All data is computed from active job listings in the Oh My Job database sourced from third-party APIs.
+            All data is computed from active job listings in the Solar Roles database sourced from third-party APIs.
             Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits.
             Numbers update daily and represent a snapshot, not a comprehensive census of the US labor market.
           </p>

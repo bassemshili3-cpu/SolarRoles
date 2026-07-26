@@ -1,4 +1,5 @@
-import { isCyberSecurityRole } from './cyber-taxonomy';
+import { isSolarInstallerRole } from './solar-taxonomy';
+import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { AtsCompanySeed } from './company-seed';
 
 interface AshbyJob {
@@ -26,6 +27,7 @@ export interface NormalizedJob {
   title: string;
   company: string;
   location: string;
+  addressRegion?: string;
   description: string;
   url: string;
   applyUrl: string;
@@ -34,7 +36,7 @@ export interface NormalizedJob {
   salary?: string;
 }
 
-const USER_AGENT = 'oh-my-job.com job aggregator (contact: hello@oh-my-job.com)';
+const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
 export async function fetchAshbyJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
   const endpoint = `https://api.ashbyhq.com/posting-api/job-board/${company.slug}?includeCompensation=true`;
@@ -48,7 +50,7 @@ export async function fetchAshbyJobs(company: AtsCompanySeed): Promise<Normalize
 
   const data = (await res.json()) as AshbyBoardResponse;
   const jobs = data.jobs ?? [];
-  const filtered = jobs.filter((j) => isCyberSecurityRole(j.title));
+  const filtered = jobs.filter((j) => isSolarInstallerRole(j.title));
 
   return filtered.map((j) => ({
     source: 'ashby',
@@ -56,6 +58,7 @@ export async function fetchAshbyJobs(company: AtsCompanySeed): Promise<Normalize
     title: j.title,
     company: company.name,
     location: j.location ?? '',
+    addressRegion: extractStateFromLocation(j.location ?? ''),
     description: j.descriptionHtml ?? j.descriptionPlain ?? '',
     url: j.jobUrl ?? `https://jobs.ashbyhq.com/${company.slug}/${j.id}`,
     applyUrl: j.applyUrl ?? j.jobUrl ?? '',

@@ -31,7 +31,6 @@ export default function Login() {
 
   const redirectTo = paramRedirect || (userType === 'employer' ? '/dashboard/employer' : '/dashboard')
 
-
   const loginWithGoogle = async () => {
     setIsLoading(true)
     setError('')
@@ -68,8 +67,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#2D0F3F] via-[#3D1654] to-[#2D0F3F] relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#0B1A2E] via-[#1E3A5F] to-[#0B1A2E] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -77,26 +75,24 @@ export default function Login() {
         </div>
 
         <div className="relative z-10 flex flex-col justify-center px-16 xl:px-24">
-          <div className="flex items-center gap-3 mb-16" />
-
           <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
-            Find your next<br />
-            <span className="text-[#E8B339]">dream career</span>
+            Build your next<br />
+            <span className="text-[#F5B819]">solar career</span>
           </h1>
 
-          <p className="text-lg text-[#C4A8D4] mb-12 max-w-md">
-            Salaries shown upfront, smart filters, and a growing list of US employers hiring across every state.
+          <p className="text-lg text-slate-300 mb-12 max-w-md">
+            Salary shown upfront. Solar-only roles. Hiring across all 50 states.
           </p>
 
           <ul className="space-y-4">
             {[
-              'Salary ranges shown before you click',
+              'Salary shown before you click',
               'No account needed to browse jobs',
-              'New listings added every day',
+              'Solar-only listings, no off-trade noise',
             ].map((text) => (
               <li key={text} className="flex items-center gap-3 text-slate-200">
-                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#E8B339]/10 border border-[#E8B339]/20 shrink-0">
-                  <svg className="w-4 h-4 text-[#E8B339]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#F5B819]/10 border border-[#F5B819]/20 shrink-0">
+                  <svg className="w-4 h-4 text-[#F5B819]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
@@ -106,21 +102,19 @@ export default function Login() {
           </ul>
         </div>
 
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#C9991F]/20 rounded-full blur-3xl" />
-        <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#9D4EDD]/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#F5B819]/20 rounded-full blur-3xl" />
+        <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#1E3A5F]/40 rounded-full blur-3xl" />
       </div>
 
-      {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12 lg:p-12 xl:p-16 bg-white">
         <div className="w-full max-w-md">
-          {/* Candidate / Employer toggle */}
           <div className="flex justify-center mb-8">
-            <div className="inline-flex items-center bg-[#F5EEF7] rounded-full p-1">
+            <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
               <button
                 type="button"
                 onClick={() => setUserTypeAndPersist('candidate')}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
-                  userType === 'candidate' ? 'bg-white text-[#3D1654] shadow-sm' : 'text-slate-500 hover:text-[#3D1654]'
+                  userType === 'candidate' ? 'bg-white text-[#0B1A2E] shadow-sm' : 'text-slate-500 hover:text-[#0B1A2E]'
                 }`}
               >
                 Job seeker
@@ -129,7 +123,7 @@ export default function Login() {
                 type="button"
                 onClick={() => setUserTypeAndPersist('employer')}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
-                  userType === 'employer' ? 'bg-white text-[#3D1654] shadow-sm' : 'text-slate-500 hover:text-[#3D1654]'
+                  userType === 'employer' ? 'bg-white text-[#0B1A2E] shadow-sm' : 'text-slate-500 hover:text-[#0B1A2E]'
                 }`}
               >
                 Employer
@@ -137,10 +131,8 @@ export default function Login() {
             </div>
           </div>
 
-          
-
           <div className="hidden lg:block mb-10">
-            <h2 className="text-3xl font-bold text-[#3D1654] mb-2">
+            <h2 className="text-3xl font-bold text-[#0B1A2E] mb-2">
               {userType === 'employer' ? 'Employer sign in' : 'Welcome back'}
             </h2>
             <p className="text-slate-500">
@@ -159,7 +151,7 @@ export default function Login() {
 
           <Button
             variant="outline"
-            className="w-full flex items-center justify-center gap-3 h-14 text-base font-medium border-2 border-[#EDE5F0] hover:bg-[#FAF7FC] hover:border-[#E8D5F0] transition-all duration-200 rounded-xl mb-6"
+            className="w-full flex items-center justify-center gap-3 h-14 text-base font-medium border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 rounded-xl mb-6"
             onClick={loginWithGoogle}
             disabled={isLoading}
           >
@@ -180,9 +172,9 @@ export default function Login() {
           </Button>
 
           <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-[#EDE5F0]" />
+            <div className="flex-1 h-px bg-gray-200" />
             <span className="text-sm text-slate-400 font-medium">or sign in with email</span>
-            <div className="flex-1 h-px bg-[#EDE5F0]" />
+            <div className="flex-1 h-px bg-gray-200" />
           </div>
 
           <div className="space-y-5">
@@ -195,14 +187,14 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={handleKeyPress}
                 autoComplete="email"
-                className="h-12 text-base px-4 border-[#EDE5F0] rounded-xl focus:ring-2 focus:ring-[#F5EEF7] focus:border-[#3D1654] transition-all"
+                className="h-12 text-base px-4 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0F9FF] focus:border-[#0B1A2E] transition-all"
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <label className="text-sm font-semibold text-slate-700">Password</label>
-                <Link href="/auth/forgot-password" className="text-sm font-medium text-[#C9991F] hover:text-[#B0841A] transition-colors">
+                <Link href="/auth/forgot-password" className="text-sm font-medium text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors">
                   Forgot password?
                 </Link>
               </div>
@@ -214,7 +206,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={handleKeyPress}
                   autoComplete="current-password"
-                  className="h-12 text-base px-4 pr-11 border-[#EDE5F0] rounded-xl focus:ring-2 focus:ring-[#F5EEF7] focus:border-[#3D1654] transition-all"
+                  className="h-12 text-base px-4 pr-11 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0F9FF] focus:border-[#0B1A2E] transition-all"
                 />
                 <button
                   type="button"
@@ -228,7 +220,7 @@ export default function Login() {
             </div>
 
             <Button
-              className="w-full h-14 text-base font-semibold bg-[#C9991F] hover:bg-[#B0841A] rounded-xl shadow-lg shadow-[#C9991F]/25 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9991F]/30"
+              className="w-full h-14 text-base font-semibold bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] rounded-xl shadow-lg shadow-[#F5B819]/25 transition-all duration-200 hover:shadow-xl hover:shadow-[#F5B819]/30"
               onClick={loginWithEmail}
               disabled={isLoading}
             >
@@ -241,20 +233,20 @@ export default function Login() {
                   Signing in...
                 </span>
               ) : (
-                <span className="text-white">Sign In</span>
+                <span>Sign In</span>
               )}
             </Button>
           </div>
 
-         <p className="text-center text-slate-500 mt-8">
-  New to Oh My Job?{' '}
-  <Link
-    href={paramRedirect ? `/auth/signup?redirectTo=${paramRedirect}` : '/auth/signup'}
-    className="font-semibold text-[#C9991F] hover:text-[#B0841A] transition-colors"
-  >
-    Create a free account
-  </Link>
-</p>
+          <p className="text-center text-slate-500 mt-8">
+            New to Solar Roles?{' '}
+            <Link
+              href={paramRedirect ? `/auth/signup?redirectTo=${paramRedirect}` : '/auth/signup'}
+              className="font-semibold text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors"
+            >
+              Create a free account
+            </Link>
+          </p>
 
           <p className="text-center text-xs text-slate-400 mt-6">
             By signing in, you agree to our{' '}

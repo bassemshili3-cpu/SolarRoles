@@ -135,7 +135,7 @@ function buildPageTitle(job: JobDetail): string {
 
   const company = job.company?.trim() || 'Company'
 
-  const brand = ' | Oh My Job'
+  const brand = ' | Solar Roles'
 
   const MAX = 60
 
@@ -310,7 +310,7 @@ function buildJobPostingSchema(
 
     },
 
-    url: `https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`,
+    url: `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`,
 
   datePosted: new Date(job.postedAt).toISOString().split('T')[0],
 validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
@@ -328,7 +328,7 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
     adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble', careerjet: 'CareerJet',
 
-    employer: 'Oh My Job',
+    employer: 'Solar Roles',
 
   }
 
@@ -431,7 +431,7 @@ export async function generateMetadata(
 
 
 
-  const canonicalUrl = `https://www.oh-my-job.com/jobs/${id}/${buildJobSlug(job)}`
+  const canonicalUrl = `https://www.solarroles.com/jobs/${id}/${buildJobSlug(job)}`
 
 
   const salaryStr =
@@ -448,7 +448,7 @@ export async function generateMetadata(
 
     title: buildPageTitle(job),
 
-    description: `${job.title} position at ${job.company || 'a top employer'} in ${job.location || 'United States'}${salaryStr}. Apply now on Oh My Job.`,
+    description: `${job.title} position at ${job.company || 'a top employer'} in ${job.location || 'United States'}${salaryStr}. Apply now on Solar Roles.`,
 
     alternates: { canonical: canonicalUrl },
 
@@ -615,7 +615,7 @@ export default async function JobDetailPage({
 
   const applyUrl = job.externalApplyUrl || job.apply_url
 
-  const canonicalUrl = `https://www.oh-my-job.com/jobs/${id}/${canonicalSlug}`
+  const canonicalUrl = `https://www.solarroles/jobs/${id}/${canonicalSlug}`
 
 function safeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c')
@@ -941,7 +941,7 @@ function safeJsonLd(data: unknown): string {
 
                     <p className="font-semibold text-foreground mb-2">
 
-                      {job.company} on Oh My Job
+                      {job.company} on Solar Roles
 
                     </p>
 
@@ -1014,7 +1014,7 @@ function safeJsonLd(data: unknown): string {
    {job.source === 'employer' && <AdUnit slot="job-detail" />}
 
   <ShareBar
-    url={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
+    url={`https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`}
     title={job.title}
     company={job.company || ''}
   />

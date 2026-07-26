@@ -1,554 +1,985 @@
 import type { Metadata } from 'next'
+
 import SearchHero from '@/components/SearchHero'
+
 import NewsletterForm from '@/components/NewsletterForm'
-import { BLOG_ARTICLES } from '@/lib/blog-articles'
-import { prisma } from '@/lib/prisma' // ⚠️ adapte le chemin si ton client Prisma est exporté ailleurs
+
+import { prisma } from '@/lib/prisma'
+
 import Link from 'next/link'
+
 import {
-  DollarSign, Search, Zap, ShieldCheck,
-  BarChart2, Award, Globe, Users, ArrowRight, Briefcase,
-  Plane, ClipboardList, HeartPulse, Headphones, Stethoscope, Building2,
-  Clock, MapPin, Baby, HardHat, TrendingUp
+
+  DollarSign,
+
+  Search,
+
+  ShieldCheck,
+
+  Award,
+
+  Globe,
+
+  Users,
+
+  Briefcase,
+
+  MapPin,
+
+  HardHat,
+
+  TrendingUp,
+
+  ArrowRight,
+
+  Eye,
+
 } from 'lucide-react'
 
 import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
+
+import { matchRoleCategory } from '@/lib/roleCategories'
+
 import CompanyLogo from '@/components/CompanyLogo'
-import { matchRoleCategory, getRoleKeywords } from '@/lib/roleCategories'
-import { resolveStateName } from '@/lib/usStates'
-import { getRoleLocationStats } from '@/lib/roleLocationStats'
+
+
+// Sources we no longer aggregate from. Any job in the DB with one of these
+
+// sources is hidden from the homepage sections below.
+
+const EXCLUDED_SOURCES = ['careerjet', 'jooble', 'lens', 'adzuna', 'greenhouse']
+
 
 async function getTopStates() {
+
   const results = await prisma.job.groupBy({
+
     by: ['addressRegion'] as const,
-    where: { addressRegion: { not: '' } },
+
+    where: {
+
+      addressRegion: { not: '' },
+
+      source: { notIn: EXCLUDED_SOURCES },
+
+    },
+
     _count: { addressRegion: true },
+
     orderBy: { _count: { addressRegion: 'desc' } },
+
     take: 12,
+
   })
+
   return results
+
     .map(r => ({ state: r.addressRegion, count: r._count.addressRegion }))
+
     .filter(({ state }) => codeToSlug(state) !== null)
+
     .slice(0, 8)
+
 }
+
 
 export const metadata: Metadata = {
-  title: 'Oh My Job | US Job Board with Salary Ranges & Smart Filters',
+
+  title: 'Solar Roles | US Job Board for Solar PV Installers',
+
   description:
-    'Search 400 000+ US job listings updated daily, with salaries shown upfront. Filter by title, location, job type, and experience level. No account is required.',
+
+    'Solar PV installer jobs across the US. Pay ranges on every listing. Filter by state, NABCEP, and system type. No account needed to browse.',
+
 }
 
-// Revalidation horaire — les requêtes ci-dessous tapent une table de 400k+ lignes,
-// pas question de les relancer à chaque requête utilisateur
+
 export const revalidate = 3600
 
-// ── Palette ──
-// Prune         : #5B2A7F (accent principal / fonds clairs)
-// Prune foncée  : #2A1140 (titres, boutons, sections sombres)
-// Or            : #E8B84B (accents chauds, liens, badges)
 
-// ── Data ──
-const rankings = [
-  {
-    rank: '01',
-    label: 'Best Paying Blue-Collar Jobs',
-    body: 'Skilled trades and manual roles with the strongest pay.',
-    href: '/best-paying-blue-collar-jobs',
-    trending: true,
-  },
-  {
-    rank: '02',
-    label: 'Best Paying Jobs in Finance',
-    body: 'Where finance salaries top out across the US in 2026.',
-    href: '/best-paying-jobs-in-finance-2026',
-    trending: true,
-  },
-  {
-    rank: '03',
-    label: 'Best Jobs Without a Degree',
-    body: 'High-paying roles that don\u2019t require a 4-year degree.',
-    href: '/best-jobs-without-a-degree-2026',
-    trending: false,
-  },
-  {
-    rank: '04',
-    label: 'Best Jobs in the United States',
-    body: 'The overall ranking across every industry and state.',
-    href: '/best-jobs-in-united-states-2026',
-    trending: false,
-  },
+const featuredValueProps = [
+
+  { icon: DollarSign, title: 'Wages on every listing', body: 'Pay range before you click. No "competitive" guessing.' },
+
+  { icon: Search, title: 'Filters for solar work', body: 'NABCEP cert, system type, region, travel per diem.' },
+
+  { icon: Eye, title: 'Browse without an account', body: 'Create a profile only when you decide to apply.' },
+
 ]
 
-// ── Data ──────────────────────────────────────────────────────────────────────
 
 const stats = [
-  { value: '400k+', label: 'Active listings' },
-  { value: '$78K', label: 'Median salary shown' },
-  { value: '50',   label: 'States covered' },
+
+  { value: '12k+', label: 'Active solar jobs' },
+
+  { value: '$62K', label: 'Median installer salary' },
+
+  { value: '50', label: 'States covered' },
+
 ]
 
-const strengths = [
-  {
-    icon: DollarSign,
-    title: 'Salary on every listing',
-    body: 'No "competitive salary" guessing games. Every job on Oh My Job displays a pay range before you click so you apply with numbers in hand.',
-  },
-  {
-    icon: Search,
-    title: 'No account required',
-    body: 'Browse freely. Search like you would Google and create a profile only when you decide it makes sense.',
-  },
-  {
-    icon: Zap,
-    title: 'Multi-source in real time',
-    body: 'We pull from multiple job feeds across all 50 states and deduplicate in real time.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'AI-assisted matching',
-    body: 'Our matching layer surfaces roles that fit your actual skills and situation.',
-  },
-]
 
 const credentialFeatures = [
-  { icon: Award,  label: 'Verified skill assessments' },
-  { icon: Globe,  label: 'Open credential standards' },
-  { icon: ShieldCheck, label: 'Anti-fraud verification' },
-  { icon: Users,  label: 'Portable across employers' },
+
+  { icon: Award, label: 'NABCEP-aligned assessments' },
+
+  { icon: Globe, label: 'Open credential standards' },
+
+  { icon: ShieldCheck, label: 'License & OSHA verification' },
+
+  { icon: Users, label: 'Portable across employers' },
+
 ]
+
 
 const categories = [
-  { label: 'FIFO Jobs',           icon: Plane,         bg: 'bg-[#5B2A7F]', href: '/fifo-jobs' },
-  { label: 'Executive Assistant', icon: ClipboardList, bg: 'bg-pink-600',   href: '/executive-assistant-jobs' },
-  { label: 'CNA Jobs',            icon: HeartPulse,    bg: 'bg-green-600',  href: '/cna-jobs' },
-  { label: 'Electrician',         icon: Zap,           bg: 'bg-[#E8B84B]', href: '/electrician-jobs' },
-  { label: 'Customer Service',    icon: Headphones,    bg: 'bg-purple-600', href: '/customer-service-jobs' },
-  { label: 'Data Analyst',        icon: BarChart2,     bg: 'bg-yellow-600', href: '/entry-level-data-analyst-jobs' }, // ⚠️ vérifie l'orthographe de ce slug
-  { label: 'Dental Assistant',    icon: Stethoscope,   bg: 'bg-red-600',    href: '/dental-assistant-jobs' },
-  { label: 'Property Management', icon: Building2,     bg: 'bg-slate-600',  href: '/jobs-at-property-management' },
-  { label: 'Part-Time Jobs',      icon: Clock,          bg: 'bg-teal-600',   href: '/part-time-jobs' },
-  { label: 'Childcare',           icon: Baby,           bg: 'bg-cyan-600',   href: '/childcare-jobs' },
-  { label: 'Engineering',         icon: HardHat,        bg: 'bg-[#2A1140]', href: '/engineering-jobs' },
-  { label: 'Patient transporter',         icon: HardHat,        bg: 'bg-[#1F0D30]', href: '/patient-transporter-jobs' },
+
+  { label: 'PV Installer', icon: HardHat, bg: 'bg-[#0B1A2E]', href: '/pv-installer-jobs' },
+
+  { label: 'Lead Installer', icon: Award, bg: 'bg-[#1E3A5F]', href: '/lead-solar-installer-jobs' },
+
 ]
 
+
 const CATEGORY_BADGE_COLORS: Record<string, { bg: string; color: string }> = {
-  'Career Advice':    { bg: '#EAF1F1', color: '#5B2A7F' },
-  'Interview Tips':   { bg: '#F0FDF4', color: '#16A34A' },
-  'Salary Insights':  { bg: '#FDEEE3', color: '#E8B84B' },
-  'Remote Work':      { bg: '#F0F9FF', color: '#0369A1' },
-  'Tech Jobs':        { bg: '#FAF5FF', color: '#7C3AED' },
-  'Industry Trends':  { bg: '#FDF2F8', color: '#BE185D' },
+
+  'Career Advice': { bg: '#EAF1F1', color: '#1E3A5F' },
+
+  'Interview Tips': { bg: '#F0FDF4', color: '#16A34A' },
+
+  'Salary Insights': { bg: '#FDEEE3', color: '#B45309' },
+
+  'Remote Work': { bg: '#F0F9FF', color: '#0369A1' },
+
+  'Tech Jobs': { bg: '#FAF5FF', color: '#7C3AED' },
+
+  'Industry Trends': { bg: '#FDF2F8', color: '#BE185D' },
+
+  'Solar Careers': { bg: '#FEF3C7', color: '#B45309' },
+
 }
 
-// ── Data fetching ─────────────────────────────────────────────────────────────
+
+const FEATURED_ARTICLE = {
+
+  category: 'Solar Careers',
+
+  title: 'How to Land Your First Solar Job in 2026 (Even Without Experience)',
+
+  subtitle:
+
+    'Breaking into solar doesn\u2019t require a 4-year degree, a NABCEP cert, or years of rooftop experience. Here\u2019s the playbook for landing your first PV installer role \u2014 from the apprenticeship route to the direct-hire path.',
+
+  author: 'Solar Roles Editorial Team',
+
+  date: 'Coming July 2026',
+
+  readTime: '8 min read',
+
+  url: '/blog/how-to-land-first-solar-job',
+
+  image: '/solar-featured.jpg',
+
+}
+
+
+const rankTitles = [
+
+  {
+
+    rank: '01',
+
+    label: 'Best Paying Solar Installer Jobs',
+
+    body: 'Where PV installer salaries top out across the US in 2026.',
+
+    href: '/best-paying-solar-installer-jobs',
+
+    trending: true,
+
+  },
+
+  {
+
+    rank: '02',
+
+    label: 'Best Solar Apprenticeships',
+
+    body: 'Paid apprenticeship programs to break into the solar industry.',
+
+    href: '/best-solar-apprenticeships-2026',
+
+    trending: true,
+
+  },
+
+  {
+
+    rank: '03',
+
+    label: 'Best Solar Jobs Without a Degree',
+
+    body: 'High-paying solar roles that don\u2019t require a 4-year degree.',
+
+    href: '/best-solar-jobs-without-a-degree-2026',
+
+    trending: false,
+
+  },
+
+  {
+
+    rank: '04',
+
+    label: 'Best Solar Jobs in the United States',
+
+    body: 'The overall ranking across every solar discipline and state.',
+
+    href: '/best-solar-jobs-united-states-2026',
+
+    trending: false,
+
+  },
+
+]
+
 
 async function getLatestJobs() {
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
 
-  const candidateSelect = {
-    id: true,
-    title: true,
-    description: true,      // nécessaire pour matchRoleCategory
-    company: true,
-    addressRegion: true,
-    postedAt: true,
-  }
+  const jobs = await prisma.job.findMany({
 
-  const CANDIDATE_POOL_SIZE = 40
+    where: { source: { notIn: EXCLUDED_SOURCES } },
 
-  // Pools de candidats (plus large que le besoin final de 6, car tous ne passeront pas le filtre SEO)
-  const [careerjetCandidates, allCandidates] = await Promise.all([
-    prisma.job.findMany({
-      where: { source: 'careerjet', postedAt: { gte: sevenDaysAgo } },
-      orderBy: { postedAt: 'desc' },
-      take: CANDIDATE_POOL_SIZE,
-      select: candidateSelect,
-    }),
-    prisma.job.findMany({
-      where: { source: { in: ['careerjet', 'jooble'] }, postedAt: { gte: sevenDaysAgo } },
-      orderBy: { postedAt: 'desc' },
-      take: CANDIDATE_POOL_SIZE,
-      select: candidateSelect,
-    }),
-  ])
+    orderBy: { postedAt: 'desc' },
 
-  // Reproduit exactement la condition d'affichage du bloc SEO bleu sur la page détail
-  async function isEligibleForSeoBlock(job: { title: string; description: string | null; addressRegion: string | null }) {
-    const roleMatch = matchRoleCategory(job.title, job.description || '')
-    if (!roleMatch) return false
-    const stateName = resolveStateName(job.addressRegion)
-    if (!stateName) return false
-    const roleStats = await getRoleLocationStats(
-      getRoleKeywords(roleMatch),
-      stateName,
-      !!roleMatch.matchInDescription
-    )
-    return !!roleStats
-  }
+    take: 50,
 
-  async function filterEligible<T extends { title: string; description: string | null; addressRegion: string | null }>(jobs: T[]) {
-    const flags = await Promise.all(jobs.map(isEligibleForSeoBlock))
-    return jobs.filter((_, i) => flags[i])
-  }
+    select: {
 
-  const eligibleCareerjet = (await filterEligible(careerjetCandidates)).slice(0, 2)
+      id: true,
 
-  const eligibleOthers = (await filterEligible(allCandidates))
-    .filter(job => !eligibleCareerjet.some(cj => cj.id === job.id))
-    .slice(0, 6 - eligibleCareerjet.length)
+      title: true,
 
-  return [...eligibleCareerjet, ...eligibleOthers]
-    .sort((a, b) => new Date(b.postedAt ?? 0).getTime() - new Date(a.postedAt ?? 0).getTime())
-    .map(({ description, ...job }) => job) // nettoie le champ ajouté juste pour le filtre, inutile côté affichage
+      description: true,
+
+      company: true,
+
+      addressRegion: true,
+
+      postedAt: true,
+
+    },
+
+  })
+
+
+  return jobs
+
+    .filter(job => matchRoleCategory(job.title, job.description || '') !== null)
+
+    .slice(0, 6)
+
+    .map(({ description, ...job }) => job)
+
 }
 
-  
-
-
-
-function stateSlug(state: string) {
-  return state.toLowerCase().trim().replace(/\s+/g, '-')
-}
 
 function timeAgo(date: Date | null) {
+
   if (!date) return 'Recently'
+
   const days = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
+
   if (days <= 0) return 'Today'
-  if (days === 1) return '1 day ago'
-  return `${days} days ago`
+
+  if (days === 1) return '1d ago'
+
+  return `${days}d ago`
+
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function Home() {
-  const recentArticles = BLOG_ARTICLES.slice(0, 3)
-  const [latestJobs, topStates] = await Promise.all([
-    getLatestJobs(),
-    getTopStates(),
-  ])
+
+  const [latestJobs, topStates] = await Promise.all([getLatestJobs(), getTopStates()])
+
+  const badge = CATEGORY_BADGE_COLORS[FEATURED_ARTICLE.category] || { bg: '#FEF3C7', color: '#B45309' }
+
 
   return (
+
     <>
-      {/* ── Hero ── */}
-      <section className="bg-gradient-to-br from-[#2A1140] to-[#5B2A7F] text-white pt-24 pb-36">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <p className="text-[#F3DFA0] text-sm font-semibold tracking-widest uppercase mb-4">
-            Smart job search across all 50 states
-          </p>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-tight">
-            Your next opportunity<br />is one click away
-          </h1>
-          <SearchHero />
-        </div>
-      </section>
 
-      {/* ── Stats ── */}
-      <section className="bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-x-12 gap-y-8">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="text-center min-w-[100px]">
-              <p className="text-4xl font-extrabold text-[#2A1140] tracking-tight">{value}</p>
-              <p className="text-sm text-gray-500 mt-1">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <section className="relative bg-gradient-to-br from-[#0B1A2E] via-[#0F2440] to-[#1E3A5F] text-white pt-24 pb-32 overflow-hidden">
 
-      {/* ── Vision ── */}
-      <section className="bg-gray-50 py-24 px-6">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-4">Our take</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#2A1140] leading-tight mb-8 tracking-tight">
-            Getting a first job shouldn't require having had a first job.
-          </h2>
-          <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
-            <p>
-              Oh My Job is a job board built on a different premise. Because the best hire isn't always the most experienced one, but rather the most capable one.
-              And the only way to find that person is to actually look at what they can do.
+        {/* Uncomment to add a hero image:
+
+            <div className="absolute inset-0 bg-[url('/hero-solar.jpg')] bg-cover bg-center opacity-50" />
+
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1A2E]/95 via-[#0B1A2E]/60 to-transparent" /> */}
+
+        <div className="relative max-w-6xl mx-auto px-6">
+
+          <div className="max-w-2xl">
+
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
+
+              Solar PV installer jobs<br />across the US.
+
+            </h1>
+
+            <p className="text-lg text-white/80 mb-8 max-w-xl">
+
+              Pay ranges on every listing. No account needed to browse.
+
             </p>
+
+            <SearchHero />
+
           </div>
-          <div className="mt-10 flex gap-4 flex-wrap">
+
+        </div>
+
+      </section>
+
+
+      <section className="bg-white py-16 px-6">
+
+        <div className="max-w-6xl mx-auto">
+
+          <div className="flex items-end justify-between mb-8">
+
+            <h2 className="text-2xl font-bold text-[#0B1A2E]">Latest jobs</h2>
+
             <Link
+
               href="/jobs"
-              className="inline-flex items-center gap-2 bg-[#2A1140] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1F0D30] transition-colors"
+
+              className="text-sm font-semibold text-[#1E3A5F] hover:text-[#0B1A2E] inline-flex items-center gap-1"
+
             >
-              Browse open roles 
+
+              View all jobs <ArrowRight size={14} />
+
             </Link>
-            {/* Bouton "Career resources" retiré ici — doublon avec le lien /blog
-                de la section "Blog preview" plus bas. */}
+
           </div>
-        </div>
-      </section>
 
-      
+          {latestJobs.length > 0 ? (
 
-      {/* ── Skills & Credentials ── */}
-      <section className="bg-[#2A1140] py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-4">Where we're headed</p>
-              <h2 className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
-                Your skills matters.
-              </h2>
-              <p className="text-gray-300 leading-relaxed mb-5">
-                A résumé tells people what you've done and we want employers to see what you can actually do.
-                That means real skill assessments, verifiable credentials, and badges that carry weight over time.
-              </p>
-              <p className="text-gray-300 leading-relaxed mb-10">
-                We're building a credential layer for Oh My Job aligned with open industry standards, so what you prove here belongs to you and follows you.
-                Our team is currently actively working on integrations with the leading digital credential platforms, and will share details as partnerships are confirmed.
-              </p>
-              <p className="text-[#F0D18A] text-sm font-medium">
-                Credential partnerships in progress. More soon.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {credentialFeatures.map(({ icon: Icon, label }) => (
-                <div key={label} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#E8B84B]/20 flex items-center justify-center">
-                    <Icon className="text-[#E8B84B]" size={20} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+              {latestJobs.map(job => (
+
+                <Link
+
+                  key={job.id}
+
+                  href={`/jobs/${job.id}`}
+
+                  className="flex items-start gap-4 p-5 rounded-2xl border border-gray-200 hover:border-[#F5B819]/50 hover:shadow-sm transition-all bg-white"
+
+                >
+
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden">
+
+                    <CompanyLogo company={job.company} size={40} />
+
                   </div>
-                  <p className="text-white text-sm font-semibold leading-snug">{label}</p>
-                </div>
+
+                  <div className="min-w-0 flex-1">
+
+                    <h3 className="font-semibold text-[#0B1A2E] text-sm leading-snug mb-1 truncate">
+
+                      {job.title}
+
+                    </h3>
+
+                    <p className="text-sm text-gray-600 mb-2 truncate">
+
+                      {job.company}{job.addressRegion ? ` \u00b7 ${job.addressRegion}` : ''}
+
+                    </p>
+
+                    <div className="flex items-center gap-1.5 flex-wrap">
+
+                      <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
+
+                        Full-time
+
+                      </span>
+
+                      <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
+
+                        On-site
+
+                      </span>
+
+                      <span className="text-xs text-gray-500 ml-auto">{timeAgo(job.postedAt)}</span>
+
+                    </div>
+
+                  </div>
+
+                </Link>
+
               ))}
+
             </div>
-          </div>
+
+          ) : (
+
+            <p className="text-center text-gray-400 text-sm">No listings yet \u2014 check back soon.</p>
+
+          )}
+
         </div>
+
       </section>
 
-      {/* ── For who ── */}
+
+      <section className="bg-gray-50 border-y border-gray-100 py-10 px-6">
+
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          {featuredValueProps.map(({ icon: Icon, title, body }) => (
+
+            <div key={title} className="flex items-start gap-3">
+
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#F5B819]/15 flex items-center justify-center">
+
+                <Icon className="text-[#B45309]" size={20} />
+
+              </div>
+
+              <div className="min-w-0">
+
+                <h3 className="font-semibold text-[#0B1A2E] text-sm mb-0.5">{title}</h3>
+
+                <p className="text-sm text-gray-600 leading-relaxed">{body}</p>
+
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+
+      <section className="bg-white border-b border-gray-100">
+
+        <div className="max-w-5xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-x-12 gap-y-8">
+
+          {stats.map(({ value, label }) => (
+
+            <div key={label} className="text-center min-w-[100px]">
+
+              <p className="text-4xl font-extrabold text-[#0B1A2E] tracking-tight">{value}</p>
+
+              <p className="text-sm text-gray-500 mt-1">{label}</p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+
       <section className="bg-gray-50 py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Who it's for</p>
-            <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight">Two sides, one goal</h2>
+
+        <div className="max-w-3xl mx-auto">
+
+          <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">Why we built this</p>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-[#0B1A2E] leading-tight mb-8 tracking-tight">
+
+            Solar jobs shouldn&apos;t hide the pay.
+
+          </h2>
+
+          <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
+
+            <p>
+
+              Existing job boards either bury PV installer roles under generic &ldquo;construction&rdquo; tags, or list wages as &ldquo;competitive&rdquo; and leave you guessing. Solar Roles pulls solar-specific listings, normalizes pay ranges, and surfaces the filters that matter: NABCEP, system type, travel per diem.
+
+            </p>
+
           </div>
+
+          <div className="mt-10 flex gap-4 flex-wrap">
+
+            <Link
+
+              href="/jobs"
+
+              className="inline-flex items-center gap-2 bg-[#0B1A2E] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+
+            >
+
+              Browse open roles <ArrowRight size={14} />
+
+            </Link>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section className="bg-[#0B1A2E] py-24 px-6">
+
+        <div className="max-w-5xl mx-auto">
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            <div>
+
+              <p className="text-xs font-bold tracking-widest text-[#F5B819] uppercase mb-4">Coming for job seekers</p>
+
+              <h2 className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
+
+                Skills you can show, not just list.
+
+              </h2>
+
+              <p className="text-gray-300 leading-relaxed mb-5">
+
+                A credential layer aligned with NABCEP and other open standards, so what you prove on Solar Roles follows you across employers.
+
+              </p>
+
+              <p className="text-[#F5B819] text-sm font-medium">
+
+                Partnerships in progress.
+
+              </p>
+
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+
+              {credentialFeatures.map(({ icon: Icon, label }) => (
+
+                <div key={label} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-3">
+
+                  <div className="w-10 h-10 rounded-xl bg-[#F5B819]/20 flex items-center justify-center">
+
+                    <Icon className="text-[#F5B819]" size={20} />
+
+                  </div>
+
+                  <p className="text-white text-sm font-semibold leading-snug">{label}</p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section className="bg-gray-50 py-24 px-6">
+
+        <div className="max-w-5xl mx-auto">
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            {/* Candidates */}
             <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-[#5B2A7F]/10 flex items-center justify-center mb-5">
-                <Users className="text-[#5B2A7F]" size={24} />
+
+              <div className="w-12 h-12 rounded-2xl bg-[#1E3A5F]/10 flex items-center justify-center mb-5">
+
+                <Users className="text-[#1E3A5F]" size={24} />
+
               </div>
-              <h3 className="text-xl font-bold text-[#2A1140] mb-3">If you're starting out or switching lanes</h3>
+
+              <h3 className="text-xl font-bold text-[#0B1A2E] mb-3">For installers</h3>
+
               <p className="text-gray-500 leading-relaxed mb-5">
-                Fresh grad, career changer, or someone returning to the workforce after a break. We believe in your potential and the skills you bring,
-                and with transparent salary ranges on every listing, you'll always know what to expect before you apply.
+
+                Apprentices, journeymen, lead installers, electricians moving into PV. Browse free, apply when ready.
+
               </p>
-              {/* Lien "Find your role → /jobs" retiré ici — même destination que le CTA
-                  "Browse open roles" du hero, juste au-dessus du pli. */}
-            </div>
 
-            {/* Employers */}
-            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-[#E8B84B]/10 flex items-center justify-center mb-5">
-                <Briefcase className="text-[#E8B84B]" size={24} />
-              </div>
-              <h3 className="text-xl font-bold text-[#2A1140] mb-3">If you're hiring and tired of screening the same profiles</h3>
-              <p className="text-gray-500 leading-relaxed mb-5">
-                Posting on Oh My Job connects you with people who've actively proven their skills.
-                Our platform saves you time filtering and find better fits.
-              </p>
-              <Link href="/dashboard/post-a-job-free" className="text-[#E8B84B] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
-                Post a job for free 
-              </Link>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── Latest jobs posted (NOUVEAU) ── */}
-      <section className="bg-white py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Fresh listings</p>
-            <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight mb-3">Latest jobs posted</h2>
-           
-          </div>
-          {latestJobs.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {latestJobs.map(job => (
-                <Link
-                  key={job.id}
-                  href={`/jobs/${job.id}`}
-                  className="flex items-start gap-4 p-5 rounded-2xl border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all"
-                >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#5B2A7F]/10 flex items-center justify-center">
-                    <CompanyLogo company={job.company} size={40} />
-                    
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-[#2A1140] text-sm leading-snug truncate">{job.title}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">
-                      {job.company}{job.addressRegion ? ` · ${job.addressRegion}` : ''}
-                    </p>
-                    <p className="text-xs text-[#E8B84B] font-medium mt-1">{timeAgo(job.postedAt)}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-gray-400 text-sm">No new listings in the last 7 days — check back soon.</p>
-          )}
-        </div>
-      </section>
-
-      {/* ── Browse categories ── */}
-      <section className="bg-gray-50 py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Explore by field</p>
-            <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight mb-3">Browse top job categories</h2>
-            <p className="text-gray-500">From software engineering to healthcare, find opportunities across every industry.</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
-            {categories.map(({ label, icon: Icon, bg, href }) => (
               <Link
-                key={label}
-                href={href}
-                className={`relative overflow-hidden rounded-2xl h-32 flex flex-col items-start p-5 group ${bg}`}
+
+                href="/jobs"
+
+                className="text-[#1E3A5F] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
+
               >
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                <div className="relative z-10 flex flex-col gap-2.5">
-                  <Icon className="text-white drop-shadow" size={22} />
-                  <span className="text-sm font-bold text-white drop-shadow">{label}</span>
-                </div>
+
+                Browse jobs <ArrowRight size={14} />
+
               </Link>
-            ))}
-          </div>
-          <div className="text-center mt-4">
-            <Link
-              href="/jobs"
-              className="border border-[#2A1140] text-[#2A1140] rounded-full px-6 py-2.5 text-sm font-semibold hover:bg-[#2A1140] hover:text-white transition-colors inline-block"
-            >
-              View all jobs
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* ── Rankings (jus SEO homepage → listicles) ── */}
-<section className="bg-white py-20 px-6">
-  <div className="max-w-5xl mx-auto">
-    <div className="text-center mb-6">
-      
-      <h2 className="text-4xl font-bold text-[#2A1140] tracking-tight mb-3">Rankings</h2>
-    </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {rankings.map(({ rank, label, body, href, trending }) => (
-        <Link
-          key={href}
-          href={href}
-          className="group flex items-start gap-5 p-6 rounded-2xl border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all"
-        >
-          <span className="text-3xl font-extrabold text-gray-400 group-hover:text-[#E8B84B] transition-colors leading-none">
-            {rank}
-          </span>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold text-[#2A1140] text-base leading-snug">{label}</h3>
-              {trending && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#E8B84B] bg-[#E8B84B]/10 px-1.5 py-0.5 rounded-full">
-                  <TrendingUp size={10} /> Trending
-                </span>
-              )}
             </div>
-            <p className="text-sm text-gray-500 leading-relaxed">{body}</p>
-          </div>
-        </Link>
-      ))}
-    </div>
-  </div>
-</section>
 
-      {/* ── Job market data (NOUVEAU) ── */}
-      <section className="bg-white py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-3">Job market data</p>
-            <h2 className="text-2xl font-bold text-[#2A1140] tracking-tight mb-3">States with the most active listings right now</h2>
-           
-            
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+
+              <div className="w-12 h-12 rounded-2xl bg-[#F5B819]/15 flex items-center justify-center mb-5">
+
+                <Briefcase className="text-[#B45309]" size={24} />
+
+              </div>
+
+              <h3 className="text-xl font-bold text-[#0B1A2E] mb-3">For employers</h3>
+
+              <p className="text-gray-500 leading-relaxed mb-5">
+
+                Reach installers actively looking. From apprentices to NABCEP-certified leads.
+
+              </p>
+
+              <Link
+
+                href="/employers/post-a-job"
+
+                className="text-[#B45309] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
+
+              >
+
+                Post a job <ArrowRight size={14} />
+
+              </Link>
+
+            </div>
+
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-           {topStates.map(({ state, count }) => (
-  <Link
-    key={state}
-    href={`/data/states/${codeToSlug(state)}`}
-    className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all"
-  >
-    <MapPin className="text-[#5B2A7F]" size={18} />
-    <span className="font-semibold text-[#2A1140] text-sm">{STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}</span>
-    <span className="text-xs text-gray-500">{count.toLocaleString()} jobs</span>
-  </Link>
-))}
-          </div>
-          <div className="text-center">
-            <Link
-              href="/data"
-              className="text-[#5B2A7F] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
-            >
-              See full job market data 
-            </Link>
-          </div>
+
         </div>
+
       </section>
 
-      {/* ── Blog preview ── */}
+
       <section className="bg-gray-50 py-20 px-6">
+
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <p className="text-xs font-bold tracking-widest text-[#E8B84B] uppercase mb-2">Career resources</p>
-              <h2 className="text-3xl font-bold text-[#2A1140] tracking-tight">From the blog</h2>
-            </div>
-            <Link href="/blog" className="text-sm font-semibold text-[#5B2A7F] hover:text-[#2A1140] inline-flex items-center gap-1 transition-colors">
-              All articles <ArrowRight size={14} />
+
+          <div className="text-center mb-12">
+
+            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Browse by role</h2>
+
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+
+            {categories.map(({ label, icon: Icon, bg, href }) => (
+
+              <Link
+
+                key={label}
+
+                href={href}
+
+                className={`relative overflow-hidden rounded-2xl h-32 flex flex-col items-start p-5 group ${bg}`}
+
+              >
+
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+
+                <div className="relative z-10 flex flex-col gap-2.5">
+
+                  <Icon className="text-white drop-shadow" size={22} />
+
+                  <span className="text-sm font-bold text-white drop-shadow">{label}</span>
+
+                </div>
+
+              </Link>
+
+            ))}
+
+          </div>
+
+          <div className="text-center mt-4">
+
+            <Link
+
+              href="/jobs"
+
+              className="border border-[#0B1A2E] text-[#0B1A2E] rounded-full px-6 py-2.5 text-sm font-semibold hover:bg-[#0B1A2E] hover:text-white transition-colors inline-block"
+
+            >
+
+              View all jobs
+
             </Link>
+
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {recentArticles.map(article => {
-              const badge = CATEGORY_BADGE_COLORS[article.category] || { bg: '#F3F4F6', color: '#374151' }
-              return (
-                <Link
-                  key={article.slug}
-                  href={article.url}
-                  className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#5B2A7F]/30 hover:shadow-sm transition-all flex flex-col gap-4"
-                >
-                  <span
-                    style={{ background: badge.bg, color: badge.color }}
-                    className="self-start text-xs font-semibold px-2.5 py-1 rounded-md"
-                  >
-                    {article.category}
-                  </span>
-                  <h3 className="font-semibold text-[#2A1140] leading-snug text-base">{article.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed flex-1">{article.excerpt}</p>
-                  <span className="text-[#5B2A7F] text-sm font-semibold inline-flex items-center gap-1">
-                    Read more <ArrowRight size={13} />
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
+
         </div>
+
       </section>
 
-      {/* ── Newsletter ── */}
-      <section className="bg-gradient-to-br from-[#2A1140] to-[#5B2A7F] py-20 px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          
-          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
-            Oh My News
-          </h2>
-          <p className="text-[#F0DFA8] leading-relaxed mb-8 text-base">
-            Every Tuesday, one piece from our career resources blog. Practical advice on the employment field & market data.
-          </p>
-          <NewsletterForm />
-          <p className="text-[#F0DFA8]/60 text-xs mt-5">Unsubscribe anytime.</p>
+
+      <section className="bg-white py-20 px-6">
+
+        <div className="max-w-5xl mx-auto">
+
+          <div className="text-center mb-6">
+
+            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Rankings</h2>
+
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            {rankTitles.map(({ rank, label, body, href, trending }) => (
+
+              <Link
+
+                key={href}
+
+                href={href}
+
+                className="group flex items-start gap-5 p-6 rounded-2xl border border-gray-100 hover:border-[#1E3A5F]/30 hover:shadow-sm transition-all"
+
+              >
+
+                <span className="text-3xl font-extrabold text-gray-400 group-hover:text-[#F5B819] transition-colors leading-none">
+
+                  {rank}
+
+                </span>
+
+                <div className="min-w-0">
+
+                  <div className="flex items-center gap-2 mb-1">
+
+                    <h3 className="font-semibold text-[#0B1A2E] text-base leading-snug">{label}</h3>
+
+                    {trending && (
+
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#B45309] bg-[#F5B819]/15 px-1.5 py-0.5 rounded-full">
+
+                        <TrendingUp size={10} /> Trending
+
+                      </span>
+
+                    )}
+
+                  </div>
+
+                  <p className="text-sm text-gray-500 leading-relaxed">{body}</p>
+
+                </div>
+
+              </Link>
+
+            ))}
+
+          </div>
+
         </div>
+
       </section>
+
+
+      <section className="bg-white py-20 px-6">
+
+        <div className="max-w-5xl mx-auto">
+
+          <div className="text-center mb-12">
+
+            <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-3">Job market data</p>
+
+            <h2 className="text-2xl font-bold text-[#0B1A2E] tracking-tight">States with the most active solar listings right now</h2>
+
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+
+            {topStates.map(({ state, count }) => (
+
+              <Link
+
+                key={state}
+
+                href={`/data/states/${codeToSlug(state)}`}
+
+                className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-[#1E3A5F]/30 hover:shadow-sm transition-all"
+
+              >
+
+                <MapPin className="text-[#1E3A5F]" size={18} />
+
+                <span className="font-semibold text-[#0B1A2E] text-sm">
+
+                  {STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}
+
+                </span>
+
+                <span className="text-xs text-gray-500">{count.toLocaleString()} jobs</span>
+
+              </Link>
+
+            ))}
+
+          </div>
+
+          <div className="text-center">
+
+            <Link
+
+              href="/data"
+
+              className="text-[#1E3A5F] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
+
+            >
+
+              See full job market data <ArrowRight size={14} />
+
+            </Link>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section className="bg-gray-50 py-20 px-6">
+
+        <div className="max-w-5xl mx-auto">
+
+          <div className="flex items-end justify-between mb-10">
+
+            <div>
+
+              <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-2">From the blog</p>
+
+              <h2 className="text-3xl font-bold text-[#0B1A2E] tracking-tight">Career resources</h2>
+
+            </div>
+
+            <Link
+
+              href="/blog"
+
+              className="text-sm font-semibold text-[#1E3A5F] hover:text-[#0B1A2E] inline-flex items-center gap-1 transition-colors"
+
+            >
+
+              All articles <ArrowRight size={14} />
+
+            </Link>
+
+          </div>
+
+          <Link
+
+            href={FEATURED_ARTICLE.url}
+
+            className="group block bg-white rounded-2xl border border-gray-100 hover:border-[#F5B819] hover:shadow-md transition-all overflow-hidden"
+
+          >
+
+            <div className="grid grid-cols-1 md:grid-cols-5">
+
+              <div className="md:col-span-2 bg-gradient-to-br from-[#0B1A2E] via-[#0F2440] to-[#1E3A5F] min-h-[240px] md:min-h-[320px] flex items-center justify-center">
+
+                {/* Replace with: <img src={FEATURED_ARTICLE.image} alt={FEATURED_ARTICLE.title} className="w-full h-full object-cover" /> */}
+
+                <span className="text-[#F5B819]/30 text-xs font-bold tracking-[0.3em] uppercase">Cover</span>
+
+              </div>
+
+              <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
+
+                <div className="flex items-center gap-3 mb-4">
+
+                  <span className="text-[11px] font-bold tracking-widest uppercase text-[#B45309]">Featured</span>
+
+                  <span
+
+                    style={{ background: badge.bg, color: badge.color }}
+
+                    className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md"
+
+                  >
+
+                    {FEATURED_ARTICLE.category}
+
+                  </span>
+
+                </div>
+
+                <h3 className="text-2xl md:text-[26px] font-bold text-[#0B1A2E] leading-tight mb-3 group-hover:text-[#B45309] transition-colors">
+
+                  {FEATURED_ARTICLE.title}
+
+                </h3>
+
+                <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-4">
+
+                  {FEATURED_ARTICLE.subtitle}
+
+                </p>
+
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+
+                  <strong className="text-gray-700 font-semibold">{FEATURED_ARTICLE.author}</strong>
+
+                  <span className="text-gray-300">&middot;</span>
+
+                  <span>{FEATURED_ARTICLE.date}</span>
+
+                  <span className="text-gray-300">&middot;</span>
+
+                  <span>{FEATURED_ARTICLE.readTime}</span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </Link>
+
+        </div>
+
+      </section>
+
+
+      <section className="bg-gradient-to-br from-[#0B1A2E] to-[#1E3A5F] py-20 px-6">
+
+        <div className="max-w-2xl mx-auto text-center">
+
+          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
+
+            Solar Pulse
+
+          </h2>
+
+          <p className="text-[#F5B819]/80 leading-relaxed mb-8 text-base">
+
+            One email every Tuesday. Solar advice for installers at every level.
+
+          </p>
+
+          <NewsletterForm />
+
+          <p className="text-[#F5B819]/60 text-xs mt-5">Unsubscribe anytime.</p>
+
+        </div>
+
+      </section>
+
     </>
+
   )
+
 }
+

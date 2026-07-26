@@ -162,7 +162,7 @@ export default function Privacy() {
             <section id="introduction" className="scroll-mt-24">
               <h2>1. Introduction</h2>
               <p>
-                Oh My Job ("<strong>Oh My Job</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>"), operated by <strong>Bassem SHILI</strong> as a French sole proprietorship (<em>auto-entrepreneur</em>), SIRET No. <strong>884 808 205 00022</strong>, operates the website located at{' '}
+                Solar Roles ("<strong>Solar Roles</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>"), operated by <strong>Bassem SHILI</strong> as a French sole proprietorship (<em>auto-entrepreneur</em>), SIRET No. <strong>884 808 205 00022</strong>, operates the website located at{' '}
                 <a href="https://www.oh-my-job.com">www.oh-my-job.com</a>{' '}
                 (the "<strong>Service</strong>"). We are committed to protecting your privacy and ensuring you understand how we collect, use, disclose, and safeguard your personal information.
               </p>
@@ -242,7 +242,7 @@ export default function Privacy() {
                 <li>Comply with legal obligations and respond to lawful requests</li>
                 <li>Enforce our terms of service and other policies</li>
                 <li>Detect, prevent, and address fraud, unauthorized access, or other illegal activities</li>
-                <li>Protect the rights, property, or safety of Oh My Job, our users, or others</li>
+                <li>Protect the rights, property, or safety of Solar Roles, our users, or others</li>
               </ul>
             </section>
 
@@ -253,7 +253,7 @@ export default function Privacy() {
               <h3>We Do NOT Sell Your Personal Information</h3>
               <div className="not-prose bg-amber-50 border-l-4 border-amber-500 p-5 my-6 rounded-r-md">
                 <p className="text-amber-800 leading-relaxed">
-                  <strong className="text-amber-900">Important:</strong> Oh My Job does not sell your personal information for monetary consideration. We do not share your personal information with third parties for their direct marketing purposes.
+                  <strong className="text-amber-900">Important:</strong> Solar Roles does not sell your personal information for monetary consideration. We do not share your personal information with third parties for their direct marketing purposes.
                 </p>
               </div>
 
@@ -370,7 +370,7 @@ export default function Privacy() {
               <p>To exercise any of these rights, please contact us:</p>
               <ul>
                 <li><strong>Email</strong>: <a href="mailto:privacy@oh-my-job.com">privacy@oh-my-job.com</a></li>
-                <li><strong>Mail</strong>: Oh My Job, Attn: Privacy Rights, 27 Rue de Plaisance, 42400 Saint-Chamond, France</li>
+                <li><strong>Mail</strong>: Solar Roles, Attn: Privacy Rights, 27 Rue de Plaisance, 42400 Saint-Chamond, France</li>
               </ul>
               <p>
                 For opt-out requests specifically, you may also use our{' '}
@@ -390,7 +390,7 @@ export default function Privacy() {
             <section id="gdpr-rights" className="scroll-mt-24">
               <h2>9. GDPR Rights</h2>
               <p>
-                Oh My Job is established in France. As a result, the General Data Protection Regulation (GDPR) applies to our processing activities regardless of where you are located. If you are in the European Economic Area (EEA), the United Kingdom (UK), or elsewhere, you have the following rights over your personal data:
+                Solar Roles is established in France. As a result, the General Data Protection Regulation (GDPR) applies to our processing activities regardless of where you are located. If you are in the European Economic Area (EEA), the United Kingdom (UK), or elsewhere, you have the following rights over your personal data:
               </p>
               <ul>
                 <li><strong>Right to Access</strong>: You may obtain confirmation as to whether we process your personal data and access your data</li>
@@ -418,7 +418,7 @@ export default function Privacy() {
             <section id="international" className="scroll-mt-24">
               <h2>10. International Data Transfers</h2>
               <p>
-                Oh My Job is established in France. Because our Service is directed at users in the United States, most of the personal information we collect concerns individuals located in the US. To operate the Service, we rely on certain service providers (such as cloud hosting, analytics, and email delivery providers) that may process data in the United States or other countries outside the EEA.
+                Solar Roles is established in France. Because our Service is directed at users in the United States, most of the personal information we collect concerns individuals located in the US. To operate the Service, we rely on certain service providers (such as cloud hosting, analytics, and email delivery providers) that may process data in the United States or other countries outside the EEA.
               </p>
               <p>
                 Where we transfer personal data of individuals located in the EEA/UK to countries outside the EEA/UK, including the United States, we rely on appropriate safeguards, such as Standard Contractual Clauses (SCCs) approved by the European Commission, or other legally available mechanisms.
@@ -448,7 +448,7 @@ export default function Privacy() {
                 If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="not-prose bg-gradient-to-br from-purple-50 to-amber-50 border border-purple-200 p-6 rounded-lg mt-6">
-                <p className="font-bold text-purple-900 mb-4 text-lg">Oh My Job</p>
+                <p className="font-bold text-purple-900 mb-4 text-lg">Solar Roles</p>
                 <p className="text-gray-700 mb-1">Operated by Bassem SHILI</p>
                 <p className="text-gray-700 mb-1">Auto-entrepreneur — SIRET: 884 808 205 00022</p>
                 <p className="text-gray-700 mb-2">27 Rue de Plaisance</p>
@@ -470,7 +470,7 @@ export default function Privacy() {
             {/* Footer */}
             <footer className="not-prose mt-16 pt-8 border-t-2 border-amber-400">
               <p className="text-sm text-gray-500">
-                © 2026 Oh My Job. All rights reserved. ·{' '}
+                © 2026 Solar Roles. All rights reserved. ·{' '}
                 <a href="/terms" className="text-amber-600 hover:underline font-medium">Terms of Service</a>
                 {' · '}
                 <a href="/cookies" className="text-amber-600 hover:underline font-medium">Cookie Policy</a>

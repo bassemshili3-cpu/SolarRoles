@@ -1,13 +1,16 @@
-<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Oh My Job">
-  <rect width="512" height="512" rx="112" fill="#2A1140"/>
-  <text
-    x="256"
-    y="330"
-    text-anchor="middle"
-    font-family="Inter, 'Arial Black', Arial, sans-serif"
-    font-size="260"
-    font-weight="900"
-    fill="#E8B84B"
-    letter-spacing="-8"
-  >Oh</text>
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SolarRoles">
+  <rect width="512" height="512" rx="112" fill="#0B1A2E"/>
+  <g transform="translate(256,256)">
+    <g stroke="#F5B819" stroke-width="26" stroke-linecap="round">
+      <line x1="0" y1="-165" x2="0" y2="-125"/>
+      <line x1="0" y1="125" x2="0" y2="165"/>
+      <line x1="-165" y1="0" x2="-125" y2="0"/>
+      <line x1="125" y1="0" x2="165" y2="0"/>
+      <line x1="-117" y1="-117" x2="-88" y2="-88"/>
+      <line x1="88" y1="88" x2="117" y2="117"/>
+      <line x1="-117" y1="117" x2="-88" y2="88"/>
+      <line x1="88" y1="-88" x2="117" y2="-117"/>
+    </g>
+    <circle cx="0" cy="0" r="95" fill="#F5B819"/>
+  </g>
 </svg>

@@ -115,7 +115,7 @@ export default function Terms() {
               <span className="text-amber-600 font-medium">May 18, 2026</span>
             </div>
             <p className="mt-4 text-gray-600 leading-relaxed">
-              Please read these Terms of Service ("Terms") carefully before using the Oh My Job platform.
+              Please read these Terms of Service ("Terms") carefully before using the Solar Roles platform.
             </p>
           </header>
 
@@ -156,7 +156,7 @@ export default function Terms() {
             <section id="acceptance" className="scroll-mt-24">
               <h2>1. Acceptance of Terms</h2>
               <p>
-                Welcome to Oh My Job. These Terms of Service ("Terms") constitute a legally binding agreement between you ("<strong>User</strong>," "<strong>you</strong>," or "<strong>your</strong>") and Oh My Job, operated by <strong>Bassem SHILI</strong>, a French sole proprietorship (<em>auto-entrepreneur / entreprise individuelle</em>) registered under SIRET No. <strong>884 808 205 00022</strong> ("<strong>Oh My Job</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>").
+                Welcome to Solar Roles. These Terms of Service ("Terms") constitute a legally binding agreement between you ("<strong>User</strong>," "<strong>you</strong>," or "<strong>your</strong>") and Solar Roles, operated by <strong>Bassem SHILI</strong>, a French sole proprietorship (<em>auto-entrepreneur / entreprise individuelle</em>) registered under SIRET No. <strong>884 808 205 00022</strong> ("<strong>Solar Roles</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>").
               </p>
               <p>
                 By accessing or using our website located at{' '}
@@ -182,7 +182,7 @@ export default function Terms() {
               </ul>
               <p>
                 By using the Platform, you represent and warrant that you meet all eligibility requirements.
-                Oh My Job reserves the right to refuse service, terminate accounts, or restrict access to the Platform for anyone who fails to meet these requirements.
+                Solar Roles reserves the right to refuse service, terminate accounts, or restrict access to the Platform for anyone who fails to meet these requirements.
               </p>
             </section>
 
@@ -201,7 +201,7 @@ export default function Terms() {
               </ul>
 
               <h3>Account Types</h3>
-              <p>Oh My Job offers different account types:</p>
+              <p>Solar Roles offers different account types:</p>
               <ul>
                 <li><strong>Job Seeker Account</strong>: For individuals seeking employment opportunities</li>
                 <li><strong>Employer Account</strong>: For companies and recruiters posting jobs</li>
@@ -209,7 +209,7 @@ export default function Terms() {
               </ul>
               <p>
                 You are solely responsible for all actions taken through your account, whether authorized by you or not.
-                Oh My Job shall not be liable for any damage arising from your failure to comply with these obligations.
+                Solar Roles shall not be liable for any damage arising from your failure to comply with these obligations.
               </p>
             </section>
 
@@ -219,11 +219,11 @@ export default function Terms() {
               <div className="not-prose bg-amber-50 border-l-4 border-amber-500 p-5 my-6 rounded-r-md">
                 <p className="font-semibold text-amber-900 mb-2">Important Notice</p>
                 <p className="text-amber-800 leading-relaxed">
-                  Oh My Job is a <strong>platform</strong> and <strong>venue</strong> for connecting job seekers with employers.
+                  Solar Roles is a <strong>platform</strong> and <strong>venue</strong> for connecting job seekers with employers.
                   We are <strong>not</strong> an employer, recruiter, or hiring agency. We do not make hiring decisions, and we do not control the terms of employment offered by employers.
                 </p>
               </div>
-              <p>Oh My Job provides a Service that allows employers to post job openings and job seekers to search and apply for those positions. We do not:</p>
+              <p>Solar Roles provides a Service that allows employers to post job openings and job seekers to search and apply for those positions. We do not:</p>
               <ul>
                 <li>Employ, hire, or terminate any job seekers</li>
                 <li>Verify the accuracy of job postings or employer representations</li>
@@ -233,7 +233,7 @@ export default function Terms() {
               </ul>
               <p>
                 Any communication or transaction between job seekers and employers is solely between those parties.
-                Oh My Job disclaims all liability arising from such interactions.
+                Solar Roles disclaims all liability arising from such interactions.
               </p>
             </section>
 
@@ -254,7 +254,7 @@ export default function Terms() {
 
               <h3>Your Rights and License</h3>
               <p>
-                You retain ownership of your User Content. However, by submitting User Content to Oh My Job, you grant us a{' '}
+                You retain ownership of your User Content. However, by submitting User Content to Solar Roles, you grant us a{' '}
                 <strong>worldwide, non-exclusive, royalty-free, sublicensable, and transferable license</strong> to use, reproduce, distribute, prepare derivative works of, display, and perform your User Content in connection with the Platform and our business operations.
               </p>
 
@@ -267,14 +267,14 @@ export default function Terms() {
                 <li>Your User Content complies with these Terms and all applicable laws</li>
               </ul>
               <p>
-                Oh My Job does not pre-screen User Content but reserves the right to remove, edit, or restrict any content that violates these Terms or applicable law.
+                Solar Roles does not pre-screen User Content but reserves the right to remove, edit, or restrict any content that violates these Terms or applicable law.
               </p>
             </section>
 
             {/* 6. Employer Responsibilities */}
             <section id="employer-terms" className="scroll-mt-24">
               <h2>6. Employer Responsibilities</h2>
-              <p>Employers posting jobs on Oh My Job agree to the following additional terms:</p>
+              <p>Employers posting jobs on Solar Roles agree to the following additional terms:</p>
 
               <h3>Compliance with Employment Laws</h3>
               <p>Employers must comply with all applicable federal, state, and local employment laws, including but not limited to:</p>
@@ -347,7 +347,7 @@ export default function Terms() {
               <h2>8. Fees and Payments</h2>
 
               <h3>Free Services</h3>
-              <p>Oh My Job provides certain basic features free of charge, including:</p>
+              <p>Solar Roles provides certain basic features free of charge, including:</p>
               <ul>
                 <li>Creating a basic job seeker profile</li>
                 <li>Searching and viewing job listings</li>
@@ -371,7 +371,7 @@ export default function Terms() {
 
               <h3>Fee Changes</h3>
               <p>
-                Oh My Job reserves the right to modify fees at any time. Any fee change will become effective at the end of your current billing cycle. Your continued use of premium services after a fee change constitutes your agreement to pay the new fees.
+                Solar Roles reserves the right to modify fees at any time. Any fee change will become effective at the end of your current billing cycle. Your continued use of premium services after a fee change constitutes your agreement to pay the new fees.
               </p>
             </section>
 
@@ -381,16 +381,16 @@ export default function Terms() {
 
               <h3>Our Intellectual Property</h3>
               <p>
-                The Platform and all content, features, and functionality (including but not limited to text, graphics, logos, icons, images, audio clips, video clips, data compilations, software, and code) are owned by Oh My Job and are protected by applicable copyright, trademark, trade secret, and other intellectual property laws.
+                The Platform and all content, features, and functionality (including but not limited to text, graphics, logos, icons, images, audio clips, video clips, data compilations, software, and code) are owned by Solar Roles and are protected by applicable copyright, trademark, trade secret, and other intellectual property laws.
               </p>
               <p>You may not copy, modify, distribute, sell, lease, or reverse engineer any part of the Platform without our prior written consent.</p>
 
               <h3>Trademarks</h3>
-              <p>"Oh My Job" and our logo are used by Oh My Job as identifying marks of the Platform. You may not use these marks without our prior written permission.</p>
+              <p>"Solar Roles" and our logo are used by Solar Roles as identifying marks of the Platform. You may not use these marks without our prior written permission.</p>
 
               <h3>Feedback</h3>
               <p>
-                If you provide suggestions, ideas, or feedback about the Platform ("Feedback"), you hereby assign to Oh My Job all right, title, and interest in such Feedback, and Oh My Job shall be entitled to use such Feedback without restriction or obligation.
+                If you provide suggestions, ideas, or feedback about the Platform ("Feedback"), you hereby assign to Solar Roles all right, title, and interest in such Feedback, and Solar Roles shall be entitled to use such Feedback without restriction or obligation.
               </p>
             </section>
 
@@ -398,7 +398,7 @@ export default function Terms() {
             <section id="dmca" className="scroll-mt-24">
               <h2>10. DMCA Policy</h2>
               <p>
-                Oh My Job respects the intellectual property rights of others and expects users to do the same. Although Oh My Job is not a US-based entity, we voluntarily respond to claims of copyright infringement in a manner consistent with the Digital Millennium Copyright Act (DMCA), given our US audience.
+                Solar Roles respects the intellectual property rights of others and expects users to do the same. Although Solar Roles is not a US-based entity, we voluntarily respond to claims of copyright infringement in a manner consistent with the Digital Millennium Copyright Act (DMCA), given our US audience.
               </p>
 
               <h3>DMCA Notice Procedure</h3>
@@ -417,7 +417,7 @@ export default function Terms() {
               <ul>
                 <li>Identification of the material removed</li>
                 <li>A statement under penalty of perjury that you have a good faith belief the material was removed by mistake</li>
-                <li>Your name, address, and consent to the jurisdiction of a judicial district where Oh My Job may be found</li>
+                <li>Your name, address, and consent to the jurisdiction of a judicial district where Solar Roles may be found</li>
               </ul>
 
               <p>
@@ -513,9 +513,9 @@ export default function Terms() {
                 <li>Using the account deletion feature in your account settings</li>
               </ul>
 
-              <h3>Termination by Oh My Job</h3>
+              <h3>Termination by Solar Roles</h3>
               <p>
-                Oh My Job may terminate or suspend your account, access to the Platform, or any services immediately, without prior notice or liability, for any reason, including but not limited to:
+                Solar Roles may terminate or suspend your account, access to the Platform, or any services immediately, without prior notice or liability, for any reason, including but not limited to:
               </p>
               <ul>
                 <li>Breach of these Terms</li>
@@ -534,7 +534,7 @@ export default function Terms() {
             {/* 16. Changes */}
             <section id="changes" className="scroll-mt-24">
               <h2>16. Changes to These Terms</h2>
-              <p>Oh My Job reserves the right to modify these Terms at any time. When we make material changes, we will:</p>
+              <p>Solar Roles reserves the right to modify these Terms at any time. When we make material changes, we will:</p>
               <ul>
                 <li>Update the "Last updated" date at the top of these Terms</li>
                 <li>Post the revised Terms on the Platform</li>
@@ -552,7 +552,7 @@ export default function Terms() {
                 If you have any questions, concerns, or requests regarding these Terms or the Platform, please contact us:
               </p>
               <div className="not-prose bg-gradient-to-br from-purple-50 to-amber-50 border border-purple-200 p-6 rounded-lg mt-6">
-                <p className="font-bold text-purple-900 mb-4 text-lg">Oh My Job</p>
+                <p className="font-bold text-purple-900 mb-4 text-lg">Solar Roles</p>
                 <p className="text-gray-700 mb-1">Operated by Bassem SHILI</p>
                 <p className="text-gray-700 mb-1">Auto-entrepreneur — SIRET: 884 808 205 00022</p>
                 <p className="text-gray-700 mb-2">27 rue de Plaisance</p>
@@ -567,7 +567,7 @@ export default function Terms() {
             {/* Footer */}
             <footer className="not-prose mt-16 pt-8 border-t-2 border-amber-400">
               <p className="text-sm text-gray-500">
-                © 2026 Oh My Job. All rights reserved. ·{' '}
+                © 2026 Solar Roles. All rights reserved. ·{' '}
                 <a href="/privacy" className="text-amber-600 hover:underline font-medium">Privacy Policy</a>
                 {' · '}
                 <a href="/cookies" className="text-amber-600 hover:underline font-medium">Cookie Policy</a>

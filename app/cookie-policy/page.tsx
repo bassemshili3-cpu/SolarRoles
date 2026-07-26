@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy | Oh My Job',
-  description: 'Learn how Oh My Job uses cookies and similar tracking technologies on our job search platform.',
+  title: 'Cookie Policy | Solar Roles',
+  description: 'Learn how Solar Roles uses cookies and similar tracking technologies on our job search platform.',
   alternates: {
     canonical: 'https://www.oh-my-job.com/cookie-policy',
   },
@@ -21,7 +21,7 @@ export default function CookiePolicyPage() {
         {/* Intro */}
         <section>
           <p className="text-gray-700 leading-relaxed">
-            This Cookie Policy explains how Oh My Job, Inc. ("<strong>Company</strong>", "<strong>we</strong>",
+            This Cookie Policy explains how Solar Roles, Inc. ("<strong>Company</strong>", "<strong>we</strong>",
             "<strong>us</strong>") uses cookies and similar tracking technologies when you visit{' '}
             <a href="https://www.oh-my-job.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               oh-my-job.com
@@ -268,7 +268,7 @@ export default function CookiePolicyPage() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">7. Contact Us</h2>
           <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-            <p className="text-gray-700 mb-1"><strong>Oh My Job, Inc.</strong></p>
+            <p className="text-gray-700 mb-1"><strong>Solar roles, Inc.</strong></p>
             <p className="text-gray-700 mb-1">
               Email:{' '}
               <a href="mailto:privacy@ohmyjob.com"
@@ -290,7 +290,7 @@ export default function CookiePolicyPage() {
         <section className="border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 leading-relaxed">
             <strong>Disclaimer:</strong> This Cookie Policy is provided for informational purposes only and
-            does not constitute legal advice. Oh My Job, Inc. recommends consulting qualified legal counsel
+            does not constitute legal advice. Solar Roles, Inc. recommends consulting qualified legal counsel
             to ensure full compliance with applicable privacy and cookie laws.
           </p>
         </section>

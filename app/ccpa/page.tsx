@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'California Privacy Rights (CCPA/CPRA) | Oh My Job',
-  description: 'California Consumer Privacy Act notice for Oh My Job. Learn about your privacy rights as a California resident.',
+  title: 'California Privacy Rights (CCPA/CPRA) | Solar Roles',
+  description: 'California Consumer Privacy Act notice for Solar Roles. Learn about your privacy rights as a California resident.',
   alternates: {
-    canonical: 'https://www.oh-my-job.com/ccpa',
+    canonical: 'https://www.solarroles.com/ccpa',
   },
 }
 
@@ -23,7 +23,7 @@ export default function CCPAPage() {
         {/* Intro */}
         <section>
           <p className="text-gray-700 leading-relaxed">
-            This California Privacy Notice supplements the Oh My Job{' '}
+            This California Privacy Notice supplements the Solar Roles{' '}
             <a href="/privacy-policy" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               Privacy Policy
             </a>{' '}
@@ -38,8 +38,8 @@ export default function CCPAPage() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">1. Who We Are</h2>
           <p className="text-gray-700 leading-relaxed">
-            Oh My Job, Inc. ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>") operates{' '}
-            <a href="https://www.oh-my-job.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+            Solar Roles, Inc. ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>") operates{' '}
+            <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               oh-my-job.com
             </a>
             , an online job search platform that aggregates employment listings across the United States.
@@ -170,7 +170,7 @@ export default function CCPAPage() {
               </a>{' '}
               with subject line <em>"CCPA Request"</em>
             </li>
-            <li>Writing to us at: Oh My Job, Inc., 27 rue de plaisance, 42400 Saint-Chamond, France</li>
+            <li>Writing to us at: Solar Roles, Inc., 27 rue de plaisance, 42400 Saint-Chamond, France</li>
           </ul>
           <p className="text-gray-700 leading-relaxed mb-3">
             We will need to verify your identity before processing your request. We will respond within{' '}
@@ -222,7 +222,7 @@ export default function CCPAPage() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">10. Contact Us</h2>
           <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-            <p className="text-gray-700 mb-1"><strong>Oh My Job, Inc.</strong></p>
+            <p className="text-gray-700 mb-1"><strong>Solar Roles, Inc.</strong></p>
             <p className="text-gray-700 mb-1">Privacy Team</p>
             <p className="text-gray-700 mb-1">
               Email:{' '}
@@ -242,7 +242,7 @@ export default function CCPAPage() {
         <section className="border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 leading-relaxed">
             <strong>Disclaimer:</strong> This notice is provided for informational purposes and reflects our
-            current data practices. It does not constitute legal advice. Oh My Job, Inc. recommends consulting
+            current data practices. It does not constitute legal advice. Solar Roles, Inc. recommends consulting
             qualified legal counsel to ensure full compliance with applicable California privacy laws.
           </p>
         </section>
