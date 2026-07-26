@@ -1,5 +1,5 @@
 // lib/jobSlugCache.ts
-import { Redis } from '@upstash/redis'
+import { Redis } from '@upstash/redis/cloudflare'  // au lieu de '@upstash/redis'
 import { buildJobSlug } from '@/lib/slugify'
 import type { JobDetail } from '@/lib/jobDetail'
 
