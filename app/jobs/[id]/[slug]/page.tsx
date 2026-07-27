@@ -50,6 +50,7 @@ import { buildJobSlug } from '@/lib/slugify'
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
 import { guessDomainFromName } from '@/lib/companyDomain'
+import Breadcrumb from '@/components/Breadcrumb'
 
 
 export const revalidate = 3600
@@ -693,6 +694,7 @@ function safeJsonLd(data: unknown): string {
 
             </div>
 
+<Breadcrumb segments={breadcrumbSegments} />
 
             <div className="bg-card border rounded-2xl shadow-sm overflow-hidden">
 

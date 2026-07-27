@@ -8,6 +8,16 @@ import { JobDetail } from "@/lib/jobDetail";
 const BASE_URL = 'https://www.solarroles.com'
 const LAST_MAJOR_UPDATE = new Date('2026-07-26')
 
+const ATS_SOURCES = [
+  'ashby',
+  'smartrecruiters',
+  'lever',
+  'workable',
+  'pinpoint',
+  'jobvite',
+  'greenhouse',
+]
+
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
   '/solar-pv-installer-jobs',
@@ -103,16 +113,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── Jobs "own" (indexables) ──────────────────────────────
   // Adapte le `where` à ton schema exact (status actif, etc.)
-const ownJobs = await prisma.job.findMany({
-  where: { postedByUserId: { not: null }, active: true },
-  select: {
-    id: true,
-    title: true,
-    location: true,
-    postedAt: true,
-    fetchedAt: true,
-  },
-})
+// ── Jobs indexables : "own" (postés employeurs) + ATS directs ──
+  const ownJobs = await prisma.job.findMany({
+    where: {
+      active: true,
+      OR: [
+        { postedByUserId: { not: null } },
+        { source: { in: ATS_SOURCES } },
+      ],
+    },
+    select: {
+      id: true,
+      title: true,
+      location: true,
+      postedAt: true,
+      fetchedAt: true,
+    },
+  })
 
 for (const job of ownJobs) {
   entries.push({
