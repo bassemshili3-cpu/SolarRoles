@@ -26,6 +26,11 @@ function defaultSanitizer(html: string): string {
     ALLOW_DATA_ATTR: false,
   })
 }
+export function sanitizeStructuredHtml(html: string): string {
+  if (!html || !html.trim()) return ''
+  const cleaned = cleanUpHtml(html)
+  return defaultSanitizer(cleaned)
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES

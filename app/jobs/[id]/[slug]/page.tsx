@@ -31,7 +31,7 @@ import Link from 'next/link'
 
 import PaycheckCalculatorCard from '@/components/PaycheckCalculatorCard'
 
-import { formatJobDescription } from '@/lib/formatJobDescription'
+import { formatJobDescription, sanitizeStructuredHtml } from '@/lib/formatJobDescription'
 
 import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
 
@@ -852,11 +852,11 @@ function safeJsonLd(data: unknown): string {
 
                     className="job-description"
 
-                    dangerouslySetInnerHTML={{
-
-                      __html: formatJobDescription(job.description || ''),
-
-                    }}
+                   dangerouslySetInnerHTML={{
+  __html: job.seoDescription
+    ? sanitizeStructuredHtml(job.seoDescription)
+    : formatJobDescription(job.description || ''),
+}}
 
                   />
 

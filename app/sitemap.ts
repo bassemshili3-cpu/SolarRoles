@@ -10,14 +10,14 @@ const LAST_MAJOR_UPDATE = new Date('2026-07-26')
 
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
-  '/jobs-for-14-year-olds',
+  '/solar-pv-installer-jobs',
   
 ]
 
 
 // ── Top Jobs ranking pages ───────────────────────────────────
 const topJobsPages: string[] = [
-  '/best-jobs-in-united-states-2026',
+  '/best-jobs-in-united-states',
  
 ]
 

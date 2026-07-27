@@ -5,6 +5,48 @@ export type AtsCompanySeed = {
   verified: boolean;
 };
 
+export const ASHBY_COMPANIES: AtsCompanySeed[] = [
+
+  { slug: 'Ambrosia-Energy',  name: 'Ambrosia Energy',         verified: true }, // ★★★ Solar Installer El Paso TX $30-40/hr
+
+  { slug: 'span',             name: 'SPAN',                    verified: true }, // smart panel + installer tools
+
+  { slug: 'euclid-power',     name: 'Euclid Power',            verified: true }, // utility-scale solar
+
+  { slug: 'transgrid-energy', name: 'TransGrid Energy',        verified: true }, // solar+BESS utility
+
+  { slug: 't1energy',         name: 'T1 Energy',               verified: true }, // solar module mfg
+
+  { slug: 'tandempv',         name: 'Tandem PV',               verified: true }, // tandem solar tech
+
+  { slug: 'enpal',            name: 'Enpal',                   verified: true }, // plus gros installateur EU
+
+  { slug: 'Ostrom',           name: 'Ostrom',                  verified: false },
+
+  { slug: '1komma5grad',      name: '1Komma5°',                verified: false }, // EU résidentiel
+
+  { slug: 'zolar',            name: 'Zolar',                   verified: false }, // DE
+
+  { slug: 'everoze',          name: 'Everoze',                 verified: false },
+
+  { slug: 'piclo',            name: 'Piclo',                   verified: false },
+
+  { slug: 'Lightsource-bp',   name: 'Lightsource bp',          verified: false },
+
+];
+
+export const SMARTRECRUITERS_COMPANIES: AtsCompanySeed[] = [
+  { slug: 'KingspanEnergy',    name: 'Kingspan Energy',          verified: true }, // ★ Ops Manager Solar/Lighting CT
+  { slug: 'ib-vogt-GmbH',      name: 'ib vogt GmbH',             verified: true }, // ★ Solar & BESS Engineer APAC
+  { slug: 'EcoEnergySolutions',name: 'EcoEnergy Solutions',      verified: true }, // Solar Technician Pakistan
+  { slug: 'WunderCapital',     name: 'Wunder Capital',           verified: true },
+  { slug: 'SOLV-Energy',       name: 'SOLV Energy',              verified: false },
+  { slug: 'Moss-Construction', name: 'Moss Construction',        verified: false },
+  { slug: 'Heliene',           name: 'Heliene',                  verified: false },
+  { slug: 'SolarMax',          name: 'SolarMax',                 verified: false },
+  { slug: 'CanadianSolar',     name: 'Canadian Solar',           verified: false },
+];
+
 // Lever — jobs.lever.co/<slug>
 export const LEVER_COMPANIES: AtsCompanySeed[] = [
   // ── déjà en seed ──
@@ -69,3 +111,46 @@ export const PINPOINT_COMPANIES: AtsCompanySeed[] = [
   { slug: 'bright-solar', name: 'Bright Solar', verified: false }, // ⚠️ verify
   { slug: 'next-generation-solar', name: 'Next Generation Solar', verified: false }, // ⚠️ verify
 ];
+
+// ───────────────────────────────────────────────────────────
+// JOBVITE  →  https://jobs.jobvite.com/{slug}/jobs
+// Pas d'API publique, HTML scraping, mid-market peu agrégé
+// ───────────────────────────────────────────────────────────
+export const JOBVITE_COMPANIES: AtsCompanySeed[] = [
+  // ★★★ Goldmine — Solar Installer I/II/III dans 15+ états US
+  { slug: 'freedomforever', name: 'Freedom Forever', verified: true  },
+  // Field Service Tech Solar/PV
+  { slug: 'enphase-energy', name: 'Enphase Energy',  verified: true  },
+  // Solar Field Engineer / Tech utility-scale
+  { slug: 'resgroup',       name: 'RES',             verified: true  },
+  { slug: 'canadian-solar', name: 'Canadian Solar',  verified: true  },
+];
+
+// ───────────────────────────────────────────────────────────
+// GREENHOUSE  →  https://boards-api.greenhouse.io/v1/boards/{slug}/jobs
+// JSON API publique. Très agrégé (Indeed/LinkedIn l'indexent) mais c'est
+// LE seul ATS avec une vraie densité de jobs solar installer/technician.
+// ───────────────────────────────────────────────────────────
+export const GREENHOUSE_COMPANIES: AtsCompanySeed[] = [
+  // ★★★ 20+ solar field service jobs — utility-scale O&M
+  { slug: 'pearceservices',     name: 'Pearce Services',         verified: true },
+  // ★★★ Solar Technician I/II/III ($54-107K)
+  { slug: 'clearwayjobs',       name: 'Clearway Energy',         verified: true },
+  // ★★★ 5/5 jobs sont Solar Electrician/Technician (utility-scale)
+  { slug: 'origisenergytechs',  name: 'Origis Energy Services',  verified: true },
+  // ★★ Regional Commercial Solar Technician 4
+  { slug: 'hanwhaconvergence',  name: 'Hanwha Convergence USA',  verified: true },
+  // Solar Field Service Tech (LA/MS/...)
+  { slug: 'posigen',            name: 'PosiGen',                 verified: true },
+  // plus software/ops
+  { slug: 'palmettocleantech',  name: 'Palmetto Clean Tech',     verified: true },
+  // Solar Construction PM
+  { slug: 'ampliform',          name: 'Ampliform',               verified: true },
+  // thin-film solar manufacturer
+  { slug: 'swiftsolar',         name: 'Swift Solar',             verified: false },
+  // C&I solar firm
+  { slug: 'coastenergy',        name: 'Coast Energy',            verified: false },
+  { slug: 'kineticsolarcareers',name: 'Kinetic Solar',           verified: false },
+  { slug: 'energysolutions',    name: 'Energy Solutions',        verified: false },
+];
+
