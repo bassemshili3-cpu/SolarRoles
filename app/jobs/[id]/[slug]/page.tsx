@@ -47,7 +47,7 @@ import { getJobDetail, getJobDetailWithSalary, type JobDetail } from '@/lib/jobD
 
 import { buildJobSlug } from '@/lib/slugify'
 
-import { extractJobTaxonomy } from '@/lib/jobTaxonomy'
+import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
 import { guessDomainFromName } from '@/lib/companyDomain'
 
@@ -509,7 +509,7 @@ export default async function JobDetailPage({
   const job = getJobDetailWithSalary(raw)
 
 
-  const taxonomy = extractJobTaxonomy({
+  const taxonomy = extractSolarJobTaxonomy({
 
     title: job.title,
 

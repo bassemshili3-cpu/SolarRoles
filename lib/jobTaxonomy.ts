@@ -25,6 +25,8 @@
  *   }
  */
 
+// Alias rétrocompatible — anciens appels générés avant le renommage
+
 export type ExperienceLevel = 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEVEL'
 
 export type SolarSpecialty =
@@ -51,7 +53,7 @@ export interface JobTaxonomyInput {
 // Journeyman License, etc.) in a "Preferred qualifications" section near
 // the END of the description — a generic-board cap of 2000 chars was
 // truncating those out on longer postings (e.g. multi-page O&M/field
-// tech listings). Raised to 4000, still capped for predictability/speed.
+// tech listings). Raised to 6000, still capped for predictability/speed.
 const MAX_TEXT_LENGTH = 6000
 
 // ─────────────────────────────────────────────────────────────────────────────
