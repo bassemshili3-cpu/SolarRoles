@@ -12,14 +12,14 @@ export async function POST(req: Request) {
     }
 
     await resend.emails.send({
-      from: 'Oh My Job <noreply@oh-my-job.com>',
+      from: 'Solar Roles <noreply@solarroles.com>',
       to: 'contact@oh-my-job.com',
       replyTo: email,
       subject: `[Contact] ${subject}`,
       html: `
         <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#1A1A1A">
           <h2 style="font-size:20px;font-weight:700;margin-bottom:24px;border-bottom:2px solid #1a2340;padding-bottom:12px">
-            New contact message — Oh My Job
+            New contact message — Solar Roles
           </h2>
           <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
             <tr>

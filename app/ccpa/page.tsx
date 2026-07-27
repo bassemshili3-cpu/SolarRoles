@@ -15,7 +15,7 @@ export default function CCPAPage() {
         California Privacy Rights
       </h1>
       <p className="text-sm text-gray-500 mb-10">
-        Last updated: March 1, 2026 — Effective as of January 1, 2023
+        Last updated: June 22, 2026 — Effective as of January 1, 2023
       </p>
 
       <div className="prose prose-gray max-w-none space-y-10">

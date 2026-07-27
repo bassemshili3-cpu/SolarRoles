@@ -13,7 +13,7 @@ export default function ShareBar({ url, title, company }: ShareBarProps) {
   const [copied, setCopied] = useState(false)
 
   const encodedUrl = encodeURIComponent(url)
-  const encodedText = encodeURIComponent(`${title} at ${company} — Apply now on Oh My Job`)
+  const encodedText = encodeURIComponent(`${title} at ${company} — Apply now on Solar Roles`)
 
   const links = [
     {

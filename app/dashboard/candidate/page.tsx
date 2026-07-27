@@ -163,7 +163,7 @@ export default function CandidateDashboard() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="font-bold text-[#1a2340]">
-            Oh My <span className="text-[#2B4ACB]">Job</span>
+            Solar <span className="text-[#2B4ACB]">Roles</span>
           </Link>
           <div className="flex items-center gap-5">
             <span className="text-sm text-gray-500 hidden sm:block">{user.email}</span>

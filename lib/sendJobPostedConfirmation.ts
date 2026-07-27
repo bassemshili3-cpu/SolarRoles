@@ -19,11 +19,11 @@ export async function sendJobPostedConfirmation(params: {
 
   try {
     await resend.emails.send({
-      from: 'Oh My Job <applications@oh-my-job.com>',
+      from: 'Solar Roles <applications@solarroles.com>',
       to: employerEmail,
       subject: `Your job is live: ${jobTitle}`,
       text: [
-        `Your listing "${jobTitle}" is now live on Oh My Job.`,
+        `Your listing "${jobTitle}" is now live on Solar Roles.`,
         ``,
         `View it here: ${jobUrl}`,
         ``,

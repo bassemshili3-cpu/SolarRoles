@@ -4,7 +4,7 @@
 // Les segments État/Métier sont optionnels selon les données disponibles
 // pour ce job précis — le schema et l'UI restent valides dans tous les cas.
 
-const BASE_URL = 'https://www.oh-my-job.com'
+const BASE_URL = 'https://www.solarroles.com'
 
 export type BreadcrumbSegment = {
   name: string

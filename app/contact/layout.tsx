@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.solarroles.com/contact' },
   openGraph: {
     title: 'Contact Us | Solar Roles',
-    description: 'Get in touch with the Oh My Job team.',
+    description: 'Get in touch with the Solar Roles team.',
     url: 'https://www.solarroles.com/contact',
     type: 'website',
   },

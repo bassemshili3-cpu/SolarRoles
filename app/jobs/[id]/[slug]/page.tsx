@@ -324,13 +324,22 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
   // ── identifier (source attribution) ──
 
-  const sourceNames: Record<string, string> = {
+ const sourceNames: Record<string, string> = {
+  adzuna: 'Adzuna',
+  lensa: 'Lensa',
+  jooble: 'Jooble',
+  careerjet: 'CareerJet',
+  employer: 'Solar Roles',
 
-    adzuna: 'Adzuna', lensa: 'Lensa', jooble: 'Jooble', careerjet: 'CareerJet',
-
-    employer: 'Solar Roles',
-
-  }
+  // ── ATS directs (nouveaux, cf. lib/ats/company-seed.ts) ──
+  ashby: 'Ashby',
+  smartrecruiters: 'SmartRecruiters',
+  lever: 'Lever',
+  workable: 'Workable',
+  pinpoint: 'Pinpoint',
+  jobvite: 'Jobvite',
+  greenhouse: 'Greenhouse',
+}
 
   schema.identifier = {
 

@@ -44,7 +44,7 @@ export async function fetchGreenhouseJobs(boardToken: string): Promise<Greenhous
 
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'OhMyJob/1.0 (+https://www.oh-my-job.com)',
+      'User-Agent': 'Solar Roles/1.0 (+https://www.solarroles.com)',
       Accept: 'application/json',
     },
     next: { revalidate: 3600 },

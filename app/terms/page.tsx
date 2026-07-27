@@ -160,7 +160,7 @@ export default function Terms() {
               </p>
               <p>
                 By accessing or using our website located at{' '}
-                <a href="https://www.oh-my-job.com">www.oh-my-job.com</a>{' '}
+                <a href="https://www.solarroles.com">www.solarroles.com</a>{' '}
                 (the "<strong>Platform</strong>" or "<strong>Service</strong>"), you agree to be bound by these Terms.
                 If you do not agree to these Terms, you may not access or use the Platform.
               </p>
@@ -357,7 +357,7 @@ export default function Terms() {
               <h3>Premium Services</h3>
               <p>
                 We offer premium subscription plans and add-on services for both job seekers and employers. Current pricing and features are available on our{' '}
-                <a href="https://www.oh-my-job.com/pricing">Pricing Page</a>.
+                <a href="https://www.solarroles.com/pricing">Pricing Page</a>.
               </p>
 
               <h3>Payment Terms</h3>
@@ -422,7 +422,7 @@ export default function Terms() {
 
               <p>
                 Please send copyright notices to:{' '}
-                <a href="mailto:contact@oh-my-job.com">contact@oh-my-job.com</a>
+                <a href="mailto:contact@solarroles.com">contact@solarroles.com</a>
               </p>
             </section>
 
@@ -476,7 +476,7 @@ export default function Terms() {
               <h3>Informal Resolution First</h3>
               <p>
                 Before pursuing any formal legal action, you agree to first contact us at{' '}
-                <a href="mailto:contact@oh-my-job.com">contact@oh-my-job.com</a>{' '}
+                <a href="mailto:contact@solarroles.com">contact@solarroles.com</a>{' '}
                 so we can attempt, in good faith, to resolve the dispute informally. Most disagreements can be resolved this way within a reasonable timeframe.
               </p>
 
@@ -509,7 +509,7 @@ export default function Terms() {
               <h3>Termination by You</h3>
               <p>You may terminate your account at any time by:</p>
               <ul>
-                <li>Contacting our support team at <a href="mailto:contact@oh-my-job.com">contact@oh-my-job.com</a></li>
+                <li>Contacting our support team at <a href="mailto:contact@solarroles.com">contact@solarroles.com</a></li>
                 <li>Using the account deletion feature in your account settings</li>
               </ul>
 
@@ -559,7 +559,7 @@ export default function Terms() {
                 <p className="text-gray-700 mb-4">42400 Saint-Chamond, France</p>
                 <p className="text-gray-700 mb-2">
                   <strong className="text-purple-900">All Inquiries</strong>:{' '}
-                  <a href="mailto:contact@oh-my-job.com" className="text-amber-600 hover:underline">contact@oh-my-job.com</a>
+                  <a href="mailto:contact@solarroles.com" className="text-amber-600 hover:underline">contact@solarroles.com</a>
                 </p>
               </div>
             </section>

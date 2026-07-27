@@ -88,7 +88,7 @@ export default function Privacy() {
                 Under CCPA/CPRA, you have the right to opt-out of the sale of your personal information.
               </p>
               <a
-                href="mailto:privacy@oh-my-job.com?subject=Do+Not+Sell+My+Personal+Information"
+                href="mailto:privacy@solarroles.com?subject=Do+Not+Sell+My+Personal+Information"
                 className="inline-flex items-center text-sm text-amber-700 hover:text-amber-800 font-semibold group"
               >
                 Do Not Sell My Info
@@ -163,7 +163,7 @@ export default function Privacy() {
               <h2>1. Introduction</h2>
               <p>
                 Solar Roles ("<strong>Solar Roles</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>"), operated by <strong>Bassem SHILI</strong> as a French sole proprietorship (<em>auto-entrepreneur</em>), SIRET No. <strong>884 808 205 00022</strong>, operates the website located at{' '}
-                <a href="https://www.oh-my-job.com">www.oh-my-job.com</a>{' '}
+                <a href="https://www.solarroles.com">www.solarroles.com</a>{' '}
                 (the "<strong>Service</strong>"). We are committed to protecting your privacy and ensuring you understand how we collect, use, disclose, and safeguard your personal information.
               </p>
               <p>
@@ -332,7 +332,7 @@ export default function Privacy() {
               </ul>
               <p>
                 While we strive to protect your personal information, no method of transmission over the Internet or electronic storage is 100% secure. We cannot guarantee absolute security. If you have reason to believe that your account is no longer secure, please contact us immediately at{' '}
-                <a href="mailto:security@oh-my-job.com">security@oh-my-job.com</a>.
+                <a href="mailto:security@solarroles.com">security@solarroles.com</a>.
               </p>
             </section>
 
@@ -341,7 +341,7 @@ export default function Privacy() {
               <h2>7. Children's Privacy</h2>
               <p>
                 Our Service is not intended for children under 13 years of age (or 16 in certain jurisdictions). We do not knowingly collect personal information from children under 13 (or 16). If you are a parent or guardian and believe your child has provided us with personal information without your consent, please contact us at{' '}
-                <a href="mailto:privacy@oh-my-job.com">privacy@oh-my-job.com</a>. If we become aware that we have collected personal information from a child without verified parental consent, we will take steps to remove that information from our systems.
+                <a href="mailto:privacy@solarroles.com">privacy@solarroles.com</a>. If we become aware that we have collected personal information from a child without verified parental consent, we will take steps to remove that information from our systems.
               </p>
             </section>
 
@@ -369,12 +369,12 @@ export default function Privacy() {
               <h4>Exercising Your California Rights</h4>
               <p>To exercise any of these rights, please contact us:</p>
               <ul>
-                <li><strong>Email</strong>: <a href="mailto:privacy@oh-my-job.com">privacy@oh-my-job.com</a></li>
+                <li><strong>Email</strong>: <a href="mailto:privacysolarroles.com">privacy@solarroles.com</a></li>
                 <li><strong>Mail</strong>: Solar Roles, Attn: Privacy Rights, 27 Rue de Plaisance, 42400 Saint-Chamond, France</li>
               </ul>
               <p>
                 For opt-out requests specifically, you may also use our{' '}
-                <a href="mailto:privacy@oh-my-job.com?subject=Do+Not+Sell+My+Personal+Information">Do Not Sell My Personal Information</a> form.
+                <a href="mailto:privacy@solarroles.com?subject=Do+Not+Sell+My+Personal+Information">Do Not Sell My Personal Information</a> form.
               </p>
               <p>
                 We will verify your request by asking for information that matches the information we have on file. You may also designate an authorized agent to make requests on your behalf.
@@ -409,7 +409,7 @@ export default function Privacy() {
               </ul>
               <p>
                 To exercise these rights, please contact us at{' '}
-                <a href="mailto:privacy@oh-my-job.com">privacy@oh-my-job.com</a>. You also have the right to lodge a complaint with a supervisory authority, including the French data protection authority (CNIL), at{' '}
+                <a href="mailto:privacy@solarroles.com">privacy@solarroles.com</a>. You also have the right to lodge a complaint with a supervisory authority, including the French data protection authority (CNIL), at{' '}
                 <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>.
               </p>
             </section>
@@ -456,7 +456,7 @@ export default function Privacy() {
               
                 <p className="text-gray-700 mb-2">
                   <strong className="text-purple-900">General Inquiries</strong>:{' '}
-                  <a href="mailto:contact@oh-my-job.com" className="text-amber-600 hover:underline">contact@oh-my-job.com</a>
+                  <a href="mailto:contact@solarroles.com" className="text-amber-600 hover:underline">contact@solarroles.com</a>
                 </p>
               </div>
               <p className="mt-6 text-sm text-gray-600">

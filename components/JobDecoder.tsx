@@ -96,11 +96,11 @@ export default function JobDecoder({ jobDescription }: JobDecoderProps) {
   function copyResults() {
     if (!result) return;
     const icons: Record<Severity, string> = { red: "🚩", yellow: "⚠️", green: "✅" };
-    let text = `Job Decoded by Oh My Job\n${"─".repeat(30)}\n\n`;
+    let text = `Job Decoded by Solar Roles\n${"─".repeat(30)}\n\n`;
     result.flags.forEach((f) => {
       text += `${icons[f.severity]} ${f.category.toUpperCase()}\n"${f.original}"\n→ ${f.translation}\n\n`;
     });
-    text += `Verdict: ${result.verdict}\n\noh-my-job.com`;
+    text += `Verdict: ${result.verdict}\n\nsolarroles.com`;
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);

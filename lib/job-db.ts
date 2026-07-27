@@ -194,7 +194,7 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
   // ✅ Construit l'URL COMPLÈTE avec le slug canonique
 
-  return all.map((j) => `https://www.oh-my-job.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
+  return all.map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
 
 }
 

@@ -15,11 +15,11 @@ export async function sendApplicationNotification(params: {
 
   try {
     await resend.emails.send({
-      from: 'Oh My Job <applications@oh-my-job.com>',
+      from: 'Solar Roles <applications@solarroles.com>',
       to: employerEmail,
       subject: `New application: ${jobTitle}`,
       text: [
-        `${candidateName} applied to "${jobTitle}" on Oh My Job.`,
+        `${candidateName} applied to "${jobTitle}" on Solar Roles.`,
         ``,
         `Email: ${candidateEmail}`,
         resumeUrl ? `Resume: ${resumeUrl}` : null,

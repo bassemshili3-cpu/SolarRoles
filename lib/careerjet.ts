@@ -90,7 +90,7 @@ export async function searchCareerjetJobs(params: SearchParams): Promise<Careerj
     headers: {
       Authorization: getAuthHeader(),
       Accept: 'application/json',
-      Referer: process.env.NEXT_PUBLIC_APP_URL || 'https://www.oh-my-job.com',
+      Referer: process.env.NEXT_PUBLIC_APP_URL || 'https://www.solarroles.com',
     },
     ...(params.noCache ? { cache: 'no-store' } : { next: { revalidate: 3600 } }),
   })

@@ -33,7 +33,7 @@ export async function generateMetadata(
     title: `${stateName} Job Market Data 2026 | Salaries, Top Employers & Hiring Trends`,
     description: `Live job market statistics for ${stateName}. Average salaries, top hiring companies, most in-demand roles, and more. Computed from real job listings. Updated daily.`,
     keywords: `${stateName} job market, ${stateName} average salary, ${stateName} hiring companies, ${stateName} employment data 2026`,
-    alternates: { canonical: `https://www.oh-my-job.com/data/states/${slug}` },
+    alternates: { canonical: `https://www.solarroles.com/data/states/${slug}` },
   }
 }
 
@@ -148,7 +148,7 @@ export default async function StateDataPage({
     '@type': 'WebPage',
     name: `${stateName} Job Market Data 2026`,
     description: `Live job market statistics for ${stateName} including salary data and top employers.`,
-    url: `https://www.oh-my-job.com/data/states/${slug}`,
+    url: `https://www.solarroles.com/data/states/${slug}`,
   }
 
   return (
@@ -319,7 +319,7 @@ export default async function StateDataPage({
         {/* ── DISCLAIMER ── */}
         <footer className="mt-16 border-t border-[#EDE5F0] pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
-            Data computed from active job listings in the Oh My Job database. Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits. Updated daily. This page does not constitute employment or financial advice.
+            Data computed from active job listings in the Solar Roles database. Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits. Updated daily. This page does not constitute employment or financial advice.
           </p>
         </footer>
       </div>
