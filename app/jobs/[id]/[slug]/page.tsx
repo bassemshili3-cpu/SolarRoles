@@ -850,15 +850,7 @@ function safeJsonLd(data: unknown): string {
 
                   <div
 
-                    className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed
-
-                      prose-h3:text-lg prose-h3:font-semibold prose-h3:text-foreground prose-h3:mt-10 prose-h3:mb-4 prose-h3:border-b prose-h3:border-border prose-h3:pb-2
-
-                      prose-p:my-4
-
-                      prose-ul:my-4 prose-ul:pl-6 prose-ul:list-disc
-
-                      prose-li:text-muted-foreground prose-li:my-2 prose-li:leading-relaxed"
+                    className="job-description"
 
                     dangerouslySetInnerHTML={{
 

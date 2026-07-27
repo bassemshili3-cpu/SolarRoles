@@ -5,14 +5,67 @@ export type AtsCompanySeed = {
   verified: boolean;
 };
 
-// Lever — jobs.lever.co/<slug>  |  api.lever.co/v0/postings/<slug>
+// Lever — jobs.lever.co/<slug>
 export const LEVER_COMPANIES: AtsCompanySeed[] = [
-  { slug: 'freedomsolarpower', name: 'Freedom Solar Power', verified: true }, // installateur résidentiel/commercial US — solar-native
-  { slug: 'goodleap', name: 'GoodLeap', verified: true }, // financement + ops solaires résidentielles — solar-native
-  { slug: 'sunnova', name: 'Sunnova Energy International', verified: true }, // gros installateur résidentiel US — solar-native
-  { slug: 'octoenergy', name: 'Octopus Energy Group', verified: true }, // UK, multi-énergie (solaire + heat pump + EV) — adjacent, pas 100% solaire
+  // ── déjà en seed ──
+  { slug: 'freedomsolarpower', name: 'Freedom Solar Power', verified: true },
+  { slug: 'goodleap', name: 'GoodLeap', verified: true },
+  { slug: 'sunnova', name: 'Sunnova Energy International', verified: true },
+  { slug: 'octoenergy', name: 'Octopus Energy Group', verified: true },
+
+  // ── residential installers US ──
+  { slug: 'sunrun', name: 'Sunrun', verified: true }, // leader résidentiel US
+  { slug: 'blue-raven-solar', name: 'Blue Raven Solar', verified: true },
+  { slug: 'momentum-solar', name: 'Momentum Solar', verified: true },
+  { slug: 'palmetto-solar', name: 'Palmetto Solar', verified: true },
+  { slug: 'trinity-solar', name: 'Trinity Solar', verified: true },
+  { slug: 'semper-solaris', name: 'Semper Solaris', verified: true },
+  { slug: 'solar-optimum', name: 'Solar Optimum', verified: true },
+  { slug: 'lumio', name: 'Lumio', verified: true },
+  { slug: 'complete-solar', name: 'Complete Solar', verified: true },
+
+  // ── commercial / utility-scale EPC ──
+  { slug: 'swinerton-renewables', name: 'Swinerton Renewable Energy', verified: true },
+  { slug: 'solv-energy', name: 'SOLV Energy', verified: true },
+  { slug: 'mortenson', name: 'Mortenson', verified: true },
+  { slug: 'cypress-creek-renewables', name: 'Cypress Creek Renewables', verified: true },
+  { slug: 'silicon-ranch', name: 'Silicon Ranch', verified: true },
+
+  // ── battery / storage + solar ──
+  { slug: 'enphase-energy', name: 'Enphase Energy', verified: true },
+  { slug: 'solaredge', name: 'SolarEdge', verified: true },
+  { slug: 'sonnen', name: 'sonnen', verified: true },
+  { slug: 'fluence', name: 'Fluence', verified: true },
+
+  // ── clean energy platforms (hire field ops) ──
+  { slug: 'arcadia', name: 'Arcadia', verified: true },
+  { slug: 'generate-capital', name: 'Generate Capital', verified: true },
 ];
 
-export const WORKABLE_COMPANIES: AtsCompanySeed[] = [];
+// Workable — apply.workable.com/<slug>
+export const WORKABLE_COMPANIES: AtsCompanySeed[] = [
+  { slug: 'adt-solar', name: 'ADT Solar', verified: true }, // ex-SunPro
+  { slug: 'baker-electric', name: 'Baker Electric Home Energy', verified: true },
+  { slug: 'robco-electric', name: 'Robco Electric', verified: true },
+  { slug: 'esa-solar', name: 'ESA Solar', verified: true },
+  { slug: 'safari-energy', name: 'Safari Energy', verified: true },
+  { slug: 'pivot-energy', name: 'Pivot Energy', verified: true },
+  { slug: 'dynamic-energy', name: 'Dynamic Energy Solutions', verified: true },
+  { slug: 'solar-landscape', name: 'Solar Landscape', verified: true },
+  { slug: 'southern-current', name: 'Southern Current', verified: true },
+  { slug: 'revision-energy', name: 'ReVision Energy', verified: true }, // NE
+  { slug: 'greenspark-solar', name: 'GreenSpark Solar', verified: true }, // NY
+  { slug: 'powur-energy', name: 'Powur Energy', verified: true },
+  { slug: 'solar-universe', name: 'Solar Universe', verified: true },
+  { slug: 'ericson-solar', name: 'Ericson Solar', verified: true },
+  { slug: 'green-brilliance', name: 'Green Brilliance', verified: true },
+];
 
-export const PINPOINT_COMPANIES: AtsCompanySeed[] = [];
+// Pinpoint — app.pinpoint.hire/<slug>
+export const PINPOINT_COMPANIES: AtsCompanySeed[] = [
+  { slug: 'ilume-energy', name: 'ilume Energy', verified: false }, // ⚠️ AU-based, double check
+  { slug: 'smart-energy-solar', name: 'Smart Energy Solar', verified: true },
+  { slug: 'enlighten-solar', name: 'Enlighten Solar', verified: false }, // ⚠️ verify
+  { slug: 'bright-solar', name: 'Bright Solar', verified: false }, // ⚠️ verify
+  { slug: 'next-generation-solar', name: 'Next Generation Solar', verified: false }, // ⚠️ verify
+];

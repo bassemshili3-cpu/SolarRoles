@@ -6,14 +6,14 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/jobs/employer-',
-        disallow: ['/api/', '/jobs/', '/auth/', '/admin/'],
+        disallow: ['/api/', '/auth/', '/admin/'],
       },
       {
         userAgent: 'Mediapartners-Google',
         allow: '/jobs/employer-',
-        disallow: ['/api/', '/jobs/', '/auth/', '/admin/'],
+        disallow: ['/api/', '/auth/', '/admin/'],
       },
     ],
-    sitemap: ['https://www.oh-my-job.com/sitemap.xml'],
+    sitemap: ['https://www.solarroles.com/sitemap.xml'],
   }
 }
