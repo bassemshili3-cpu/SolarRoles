@@ -48,13 +48,13 @@ const dataStatePages: string[] = [
 ].map(s => `/data/states/${s}`)
 
 const dataSalaryPages: string[] = [
-  'Solar Photovoltaic Installer', 'Lead Solar Installer',
+  'solar-photovoltaic-installer', 'lead-solar-installer',
   
 ].map(s => `/data/salaries/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────
 const blogPosts: string[] = [
-  'how-to-land-first-solar-job',
+  '/how-to-land-first-solar-job',
  
 ]
 
