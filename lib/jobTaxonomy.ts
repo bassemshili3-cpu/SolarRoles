@@ -25,8 +25,6 @@
  *   }
  */
 
-// Alias rétrocompatible — anciens appels générés avant le renommage
-
 export type ExperienceLevel = 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEVEL'
 
 export type SolarSpecialty =
@@ -321,3 +319,6 @@ export function extractSolarJobTaxonomy(input: JobTaxonomyInput): JobTaxonomy {
     experienceLevel,
   }
 }
+
+// Alias rétrocompatible — anciens appels générés avant le renommage
+export const extractJobTaxonomy = extractSolarJobTaxonomy

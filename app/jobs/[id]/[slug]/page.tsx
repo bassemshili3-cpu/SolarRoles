@@ -585,17 +585,12 @@ export default async function JobDetailPage({
   const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
 
 
-  const schema = buildJobPostingSchema(job, {
-
-    industry: taxonomy.industry,
-
-    occupationalCategory: taxonomy.occupationalCategory,
-
-    skills: taxonomy.skills,
-
-    companyDomain: employerProfile?.domain || undefined,
-
-  })
+const schema = buildJobPostingSchema(job, {
+  industry: taxonomy.specialty,   // ✅ remplace industry par specialty
+  occupationalCategory: taxonomy.occupationalCategory,
+  skills: taxonomy.skills,
+  companyDomain: employerProfile?.domain || undefined,
+})
 
 
   const applyConfig: Record<string, { label: string; className: string }> = {
