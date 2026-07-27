@@ -24,7 +24,7 @@ interface PinpointResponse {
   postings?: PinpointPosting[];
 }
 
-const USER_AGENT = 'oh-my-job.com job aggregator (contact: hello@oh-my-job.com)';
+const USER_AGENT = 'solarroles.com job aggregator (contact: contact@solarroles.com)';
 
 export async function fetchPinpointJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
   const endpoint = `https://${company.slug}.pinpointhq.com/postings.json`;
