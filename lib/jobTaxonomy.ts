@@ -1,689 +1,321 @@
 /**
-
- * jobTaxonomy.ts
-
+ * solarJobTaxonomy.ts
  *
-
- * Extracts structured job metadata (industry, occupational category, skills,
-
- * experience level) from raw job title + description. Used to enrich the
-
- * JobPosting JSON-LD schema with fields Google uses for filtering and
-
- * categorization.
-
+ * Extracts structured job metadata (specialty, occupational category,
+ * skills, experience level) from raw job title + description, for
+ * SolarRoles.com — a niche board for solar PV installers / lead installers.
+ * Used to enrich the JobPosting JSON-LD schema with fields Google uses for
+ * filtering and categorization.
  *
-
+ * Unlike a general multi-industry board, every job that reaches this
+ * extractor has already passed `isSolarInstallerRole()` — so `industry`
+ * doesn't need 15 branching categories. Instead we categorize by
+ * *installation specialty* (residential / commercial / utility-scale /
+ * battery storage / general), which is what actually varies within the
+ * niche and what a job seeker filters on.
+ *
  * Approach: deterministic keyword/pattern matching. No API calls, no ML
-
  * inference, sub-millisecond per call. Trade-off: limited coverage vs
-
  * external APIs, but predictable, debuggable, and free.
-
  *
-
  * Usage:
-
- *   const taxonomy = extractJobTaxonomy({ title, description })
-
- *   // → { industry, occupationalCategory, skills, experienceLevel }
-
+ *   if (isSolarInstallerRole(title)) {
+ *     const taxonomy = extractSolarJobTaxonomy({ title, description })
+ *     // → { specialty, occupationalCategory, skills, experienceLevel }
+ *   }
  */
-
 
 export type ExperienceLevel = 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEVEL'
 
+export type SolarSpecialty =
+  | 'Residential Solar'
+  | 'Commercial Solar'
+  | 'Utility-Scale Solar'
+  | 'Battery Storage'
+  | 'Solar Electrical'
+  | 'General Solar Installation'
 
 export interface JobTaxonomy {
-
-  industry: string
-
+  specialty: SolarSpecialty
   occupationalCategory: string
-
   skills: string[]
-
   experienceLevel?: ExperienceLevel
-
 }
-
 
 export interface JobTaxonomyInput {
-
   title: string
-
   description?: string
-
 }
 
-
-const MAX_TEXT_LENGTH = 2000  // cap to keep extraction fast & predictable
-
-
-// ─────────────────────────────────────────────────────────────────────────────
-
-// INDUSTRY RULES
-
-// Order matters: first match wins. More specific rules come first.
+// Solar postings routinely put the highest-value signals (NABCEP, OSHA 30,
+// Journeyman License, etc.) in a "Preferred qualifications" section near
+// the END of the description — a generic-board cap of 2000 chars was
+// truncating those out on longer postings (e.g. multi-page O&M/field
+// tech listings). Raised to 4000, still capped for predictability/speed.
+const MAX_TEXT_LENGTH = 6000
 
 // ─────────────────────────────────────────────────────────────────────────────
-
-
-const INDUSTRY_RULES: ReadonlyArray<{ industry: string; patterns: RegExp[] }> = [
-
-  {
-
-    industry: 'Healthcare',
-
-    patterns: [
-
-      /\b(nurse|nursing|rn\b|lpn|cna|medical assistant|medical\b|clinical|physician|doctor|hospital|pharmacy|pharmacist|dental|dentist|surgeon|therapist|patient care|healthcare|emt\b|paramedic|home health|hospice|icu|operating room|or tech|cna|medical records|health information|optomet|chiropract|podiatr|pediatric|obstetric|oncology|cardiology|radiology|phlebotom|respiratory)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Technology',
-
-    patterns: [
-
-      /\b(software|developer|engineer|programmer|devops|sre\b|cloud|frontend|backend|fullstack|full-stack|web developer|mobile developer|ios developer|android developer|data engineer|data scientist|ml engineer|ai engineer|qa\b|tester|sdet|architect|tech lead|engineering manager|principal engineer|staff engineer|solutions architect|web developer|front end|back end|systems? administrator|network engineer|security engineer|cyber(?:security|security)|penetration|site reliability)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Finance',
-
-    patterns: [
-
-      /\b(financial|banker|teller|accountant|accounting|auditor|cpa\b|bookkeeper|tax(?:es)?|loan officer|mortgage|investment|trader|broker|financial analyst|controller|treasury|payroll|credit analyst|underwriter|actuary|claims adjuster|portfolio|equity|fixed income|hedge fund|wealth management|private equity)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Education',
-
-    patterns: [
-
-      /\b(teacher|professor|instructor|tutor|school|university|college|principal|counselor|education|academic|lecturer|adjunct|faculty|esl\b|kindergarten|elementary|secondary|high school|middle school|special education|reading specialist)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Marketing',
-
-    patterns: [
-
-      /\b(marketing manager|seo\b|content marketing|content strategist|social media manager|brand manager|advertising|pr\b|public relations|communications|email marketing|digital marketing|growth marketing|product marketing|marketing coordinator|marketing director|copywriter|content writer|campaign manager|hubspot|mailchimp|marketo|google analytics|google ads|meta ads|facebook ads)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Sales',
-
-    patterns: [
-
-      /\b(sales|account executive|account manager|bdr|sdr|sales development rep|retail|store|cashier|sales associate|stocker|sales rep|sales representative|outside sales|inside sales|territory manager|district manager|store manager|assistant store manager)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Construction',
-
-    patterns: [
-
-      /\b(construction|carpenter|electrician|plumber|hvac|roofer|construction worker|general labor|laborer|pipefitter|ironworker|mason|concrete|concrete finisher|fram|framing| drywall|painter|construction superintendent|construction manager|crane operator|equipment operator|excavator|loader)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Transportation',
-
-    patterns: [
-
-      /\b(truck driver|cdl|delivery driver|logistics|warehouse|forklift|shipping|dispatch|transportation|freight|loader|packer|warehouse associate|warehouse worker|supply chain|inventory|material handler|cdl-a|cdl-b|otr|local driver|delivery|route driver|parcel)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Hospitality',
-
-    patterns: [
-
-      /\b(restaurant|hotel|barista|server|host|chef|cook|housekeeping|bartender|food service|hospitality|dishwasher|prep cook|line cook|banquet|catering|front desk|concierge|valet|busser|kitchen|food prep|short order)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Manufacturing',
-
-    patterns: [
-
-      /\b(manufacturing|production|factory|operator|machinist|welder|assembly|assembler|press operator|line operator|production worker|cnc|cnc operator|cnc machinist|quality control|quality assurance|manufacturing engineer|industrial|millwright|tool and die|stamping|forging|extrusion|injection molding)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Customer Service',
-
-    patterns: [
-
-      /\b(customer service|customer support|customer success|call center|help desk|client services|member services|client support|tier [12]\b|support specialist|support analyst)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Administrative',
-
-    patterns: [
-
-      /\b(admin|office|administrative|assistant|coordinator|clerk|receptionist|data entry|secretary|office manager|office administrator|executive assistant|personal assistant|administrative assistant|scheduler|document specialist)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Legal',
-
-    patterns: [
-
-      /\b(lawyer|attorney|paralegal|legal|counsel|compliance|litigation|corporate counsel|legal assistant|legal secretary|contracts|jd\b|law firm|legal counsel|general counsel)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Human Resources',
-
-    patterns: [
-
-      /\b(human resources|\bhr\b|recruiter|recruiting|talent acquisition|people operations|benefits|compensation|payroll|onboarding|hr generalist|hr specialist|hr manager|hr director|workday|adp\b|bamboo|talent management)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Engineering',
-
-    patterns: [
-
-      /\b(mechanical engineer|electrical engineer|civil engineer|chemical engineer|industrial engineer|aerospace engineer|biomedical engineer|structural engineer|project engineer|manufacturing engineer|process engineer|design engineer|field engineer|test engineer|applications engineer|firmware engineer|hardware engineer|systems engineer)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Insurance',
-
-    patterns: [
-
-      /\b(insurance|underwriter|claims|adjuster|actuary|insurance agent|insurance producer|claims processor|claims examiner|risk management)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Real Estate',
-
-    patterns: [
-
-      /\b(real estate|realtor|property manager|leasing|leasing agent|broker|real estate agent|property management|escrow|title)\b/i,
-
-    ],
-
-  },
-
-  {
-
-    industry: 'Government',
-
-    patterns: [
-
-      /\b(government|federal|state|city|county|public sector|military|army|navy|air force|marines|coast guard|postal service|usps|govt)\b/i,
-
-    ],
-
-  },
-
+// GATE: is this even a solar PV installer role?
+// Filtering runs on the job title (cheap, reliable, low false-positive
+// rate). We deliberately do NOT match on description text — too noisy
+// (e.g. a random construction job mentioning "solar-ready roofing" in its
+// description would false-positive on a naive "solar" match).
+//
+// Deliberately narrow: sales/appointment-setter/consultant roles are
+// excluded even though they're "solar industry" — the niche is hands-on
+// installers, not solar sales.
+//
+// Tune this list as you see false positives/negatives in production.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const INCLUDE_PATTERNS: RegExp[] = [
+  /solar\s*(panel)?\s*install(er|ation)/i,
+  /\bpv\s*install(er|ation)/i,
+  /photovoltaic\s*install(er|ation)/i,
+  /solar\s*(field|service)\s*tech(nician)?/i,
+  /solar\s*tech(nician)?\b/i,
+  /solar\s*electrician/i,
+  /lead\s*(solar\s*)?install(er)?/i,
+  /solar\s*(crew|foreman)/i,
+  /residential\s*solar\s*install/i,
+  /commercial\s*solar\s*install/i,
+  /rooftop\s*solar/i,
+  /solar\s*racking/i,
+  /solar\s*apprentice/i,
+  /solar\s*mechanic/i,
+  /battery\s*storage\s*install(er)?/i,
+  /energy\s*storage\s*install(er)?/i,
+  /\bnabcep\b/i,
 ]
 
+// Filtered out even if an include pattern also matches — protects against
+// common false positives like non-solar trades, or solar-adjacent
+// sales/office roles outside the installer niche.
+const EXCLUDE_PATTERNS: RegExp[] = [
+  /solar\s*system(s)?\b(?!.*install)/i, // "solar system" astronomy/edu, unless still says "install"
+  /software\s*install(er)?/i,
+  /window\s*install(er)?/i,
+  /flooring\s*install(er)?/i,
+  /carpet\s*install(er)?/i,
+  /security\s*install(er)?/i,
+  /alarm\s*install(er)?/i,
+  /cable\s*install(er)?/i,
+  /solar\s*turbines/i, // Solar Turbines Inc. — gas turbine manufacturer, unrelated to PV
+  /solar\s*(sales|consultant|advisor)/i,
+  /appointment\s*setter/i,
+]
 
-// ─────────────────────────────────────────────────────────────────────────────
-
-// OCCUPATIONAL CATEGORIES (BLS standard, simplified)
-
-// Maps industry → 2-digit BLS major group label
-
-// ─────────────────────────────────────────────────────────────────────────────
-
-
-const OCCUPATIONAL_CATEGORY_MAP: Record<string, string> = {
-
-  'Technology': 'Computer and Mathematical',
-
-  'Engineering': 'Architecture and Engineering',
-
-  'Finance': 'Business and Financial Operations',
-
-  'Healthcare': 'Healthcare Practitioners and Technical',
-
-  'Education': 'Educational Instruction and Library',
-
-  'Sales': 'Sales',
-
-  'Marketing': 'Arts, Design, Entertainment, Sports, and Media',
-
-  'Customer Service': 'Office and Administrative Support',
-
-  'Manufacturing': 'Production',
-
-  'Construction': 'Construction and Extraction',
-
-  'Transportation': 'Transportation and Material Moving',
-
-  'Hospitality': 'Food Preparation and Serving',
-
-  'Administrative': 'Office and Administrative Support',
-
-  'Legal': 'Legal',
-
-  'Human Resources': 'Business and Financial Operations',
-
-  'Real Estate': 'Sales',
-
-  'Insurance': 'Business and Financial Operations',
-
-  'Government': 'Office and Administrative Support',
-
+export function isSolarInstallerRole(title: string): boolean {
+  if (!title) return false
+  if (EXCLUDE_PATTERNS.some((re) => re.test(title))) return false
+  return INCLUDE_PATTERNS.some((re) => re.test(title))
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
+// SPECIALTY RULES
+// Order matters: first match wins. More specific rules come first.
+// Runs on title + description (unlike the include/exclude gate above,
+// which only trusts the title) since specialty is a lower-stakes,
+// enrichment-only classification — a wrong guess here just picks the
+// wrong filter facet, it doesn't let a non-solar job onto the board.
 // ─────────────────────────────────────────────────────────────────────────────
 
+const SPECIALTY_RULES: ReadonlyArray<{ specialty: SolarSpecialty; patterns: RegExp[] }> = [
+  {
+    specialty: 'Battery Storage',
+    patterns: [
+      /\bbattery\s*storage\b/i,
+      /\benergy\s*storage\b/i,
+      /\bess\b/i,
+      /\bpowerwall\b/i,
+      /\bbess\b/i,
+    ],
+  },
+  {
+    specialty: 'Utility-Scale Solar',
+    patterns: [
+      /\butility[- ]?scale\b/i,
+      /\bsolar\s*farm\b/i,
+      /\bground[- ]?mount(ed)?\s*solar\b/i,
+      /\bsolar\s*field\b/i,
+      /\bepc\b.*solar|solar.*\bepc\b/i,
+      /\butility\s*solar\b/i,
+    ],
+  },
+  {
+    specialty: 'Commercial Solar',
+    patterns: [
+      /\bcommercial\s*solar\b/i,
+      /\bc&i\s*solar\b/i,
+      /\bcommercial\s*(pv|photovoltaic)\b/i,
+      /\brooftop\s*commercial\b/i,
+    ],
+  },
+  {
+    specialty: 'Solar Electrical',
+    patterns: [
+      /solar\s*electrician/i,
+      /\bnabcep\b.*electric/i,
+      /electrical.*solar|solar.*electrical/i,
+      /\bstring(ing)?\s*(wire|inverter)/i,
+    ],
+  },
+  {
+    specialty: 'Residential Solar',
+    patterns: [
+      /\bresidential\s*solar\b/i,
+      /\bresidential\s*(pv|photovoltaic)\b/i,
+      /\brooftop\s*residential\b/i,
+      /\bhome\s*solar\b/i,
+    ],
+  },
+]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// OCCUPATIONAL CATEGORY
+// Every role on SolarRoles falls under the same BLS major group —
+// Solar Photovoltaic Installers (SOC 47-2231) sits within Construction
+// and Extraction Occupations — so this is fixed rather than looked up
+// per-industry the way a general board would.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const OCCUPATIONAL_CATEGORY = 'Construction and Extraction'
+
+// ─────────────────────────────────────────────────────────────────────────────
 // SKILL RULES
-
-// Common technical and soft skills, ordered by specificity (longest first)
-
+// Solar-installer-specific skills/certs/tools, ordered by specificity.
 // ─────────────────────────────────────────────────────────────────────────────
-
 
 interface SkillRule {
-
   skill: string
-
   patterns: RegExp[]
-
 }
 
-
 const SKILL_RULES: ReadonlyArray<SkillRule> = [
-
-  // Programming languages
-
-  { skill: 'JavaScript', patterns: [/\bjavascript\b/i] },
-
-  { skill: 'TypeScript', patterns: [/\btypescript\b/i] },
-
-  { skill: 'Python', patterns: [/\bpython\b/i] },
-
-  { skill: 'Java', patterns: [/\bjava\b(?!\s*script)/i] },
-
-  { skill: 'C++', patterns: [/\bc\+\+/i] },
-
-  { skill: 'C#', patterns: [/\bc#\b/i] },
-
-  { skill: 'Go', patterns: [/\bgolang\b|\bgo (developer|engineer|backend)\b/i] },
-
-  { skill: 'Rust', patterns: [/\brust\b/i] },
-
-  { skill: 'Ruby', patterns: [/\bruby\b(?!\s*redmond)/i] },
-
-  { skill: 'PHP', patterns: [/\bphp\b/i] },
-
-  { skill: 'Swift', patterns: [/\bswift\b/i] },
-
-  { skill: 'Kotlin', patterns: [/\bkotlin\b/i] },
-
-  { skill: 'Scala', patterns: [/\bscala\b/i] },
-
-  { skill: 'R', patterns: [/\br programming\b|\br language\b|\brstudio\b/i] },
-
-
-  // Frontend frameworks
-
-  { skill: 'React', patterns: [/\breact\b(?!\s*native)/i, /\breact\.js\b/i] },
-
-  { skill: 'React Native', patterns: [/\breact native\b/i] },
-
-  { skill: 'Angular', patterns: [/\bangular\b(?!\s*js)/i] },
-
-  { skill: 'Vue.js', patterns: [/\bvue\.?js\b/i] },
-
-  { skill: 'Next.js', patterns: [/\bnext\.?js\b/i] },
-
-  { skill: 'Svelte', patterns: [/\bsvelte\b/i] },
-
-
-  // Backend frameworks
-
-  { skill: 'Node.js', patterns: [/\bnode\.?js\b/i] },
-
-  { skill: 'Django', patterns: [/\bdjango\b/i] },
-
-  { skill: 'Flask', patterns: [/\bflask\b/i] },
-
-  { skill: 'Express.js', patterns: [/\bexpress\.?js\b/i] },
-
-  { skill: 'Spring', patterns: [/\bspring boot\b/i] },
-
-  { skill: 'Laravel', patterns: [/\blaravel\b/i] },
-
-  { skill: 'Rails', patterns: [/\bruby on rails\b|\brails\b/i] },
-
-  { skill: '.NET', patterns: [/\b\.net\b/i] },
-
-
-  // Cloud & DevOps
-
-  { skill: 'AWS', patterns: [/\baws\b|amazon web services/i] },
-
-  { skill: 'Azure', patterns: [/\bazure\b/i] },
-
-  { skill: 'GCP', patterns: [/\bgcp\b|google cloud\b/i] },
-
-  { skill: 'Docker', patterns: [/\bdocker\b/i] },
-
-  { skill: 'Kubernetes', patterns: [/\bkubernetes\b|\bk8s\b/i] },
-
-  { skill: 'Terraform', patterns: [/\bterraform\b/i] },
-
-  { skill: 'CI/CD', patterns: [/\bci\/cd\b/i] },
-
-  { skill: 'Jenkins', patterns: [/\bjenkins\b/i] },
-
-  { skill: 'GitHub Actions', patterns: [/\bgithub actions\b/i] },
-
-
-  // Databases
-
-  { skill: 'SQL', patterns: [/\bsql\b/i] },
-
-  { skill: 'PostgreSQL', patterns: [/\bpostgres(?:ql)?\b/i] },
-
-  { skill: 'MySQL', patterns: [/\bmysql\b/i] },
-
-  { skill: 'MongoDB', patterns: [/\bmongodb\b/i] },
-
-  { skill: 'Redis', patterns: [/\bredis\b/i] },
-
-  { skill: 'Elasticsearch', patterns: [/\belasticsearch\b/i] },
-
-  { skill: 'DynamoDB', patterns: [/\bdynamodb\b/i] },
-
-
-  // Data / ML
-
-  { skill: 'Machine Learning', patterns: [/\bmachine learning\b/i] },
-
-  { skill: 'TensorFlow', patterns: [/\btensorflow\b/i] },
-
-  { skill: 'PyTorch', patterns: [/\bpytorch\b/i] },
-
-  { skill: 'Pandas', patterns: [/\bpandas\b/i] },
-
-  { skill: 'Tableau', patterns: [/\btableau\b/i] },
-
-  { skill: 'Power BI', patterns: [/\bpower bi\b/i] },
-
-
-  // Design tools
-
-  { skill: 'Figma', patterns: [/\bfigma\b/i] },
-
-  { skill: 'Adobe Photoshop', patterns: [/\bphotoshop\b/i] },
-
-  { skill: 'Adobe Illustrator', patterns: [/\billustrator\b/i] },
-
-  { skill: 'Adobe Premiere', patterns: [/\bpremiere\b/i] },
-
-  { skill: 'Adobe Creative Suite', patterns: [/\badobe creative suite\b|\badobe cc\b/i] },
-
-  { skill: 'Sketch', patterns: [/\bsketch\b/i] },
-
-  { skill: 'AutoCAD', patterns: [/\bautocad\b/i] },
-
-  { skill: 'SolidWorks', patterns: [/\bsolidworks\b/i] },
-
-
-  // Productivity
-
-  { skill: 'Microsoft Excel', patterns: [/\bexcel\b/i] },
-
-  { skill: 'Microsoft Word', patterns: [/\bmicrosoft word\b/i] },
-
-  { skill: 'Microsoft PowerPoint', patterns: [/\bpowerpoint\b/i] },
-
-  { skill: 'Microsoft Office', patterns: [/\bmicrosoft office\b|\bmsoffice\b/i] },
-
-  { skill: 'Google Workspace', patterns: [/\bgoogle workspace\b|\bg suite\b/i] },
-
-
-  // CRM / Sales tools
-
-  { skill: 'Salesforce', patterns: [/\bsalesforce\b/i] },
-
-  { skill: 'HubSpot', patterns: [/\bhubspot\b/i] },
-
-  { skill: 'SAP', patterns: [/\bsap\b/i] },
-
-  { skill: 'Oracle', patterns: [/\boracle\b/i] },
-
-  { skill: 'QuickBooks', patterns: [/\bquickbooks\b/i] },
-
-
-  // Marketing tools
-
-  { skill: 'SEO', patterns: [/\bseo\b/i] },
-
-  { skill: 'Google Analytics', patterns: [/\bgoogle analytics\b/i] },
-
-  { skill: 'Google Ads', patterns: [/\bgoogle ads\b/i] },
-
-  { skill: 'Meta Ads', patterns: [/\bmeta ads\b|\bfacebook ads\b/i] },
-
-  { skill: 'Mailchimp', patterns: [/\bmailchimp\b/i] },
-
-  { skill: 'Marketo', patterns: [/\bmarketo\b/i] },
-
-
-  // Version control & methods
-
-  { skill: 'Git', patterns: [/\bgit\b/i] },
-
-  { skill: 'Agile', patterns: [/\bagile\b/i] },
-
-  { skill: 'Scrum', patterns: [/\bscrum\b/i] },
-
-  { skill: 'Kanban', patterns: [/\bkanban\b/i] },
-
-
-  // Industry-specific certifications / skills
-
-  { skill: 'HIPAA', patterns: [/\bhipaa\b/i] },
-
-  { skill: 'BLS Certification', patterns: [/\bbls\b|basic life support\b/i] },
-
-  { skill: 'ACLS', patterns: [/\bacls\b/i] },
-
-  { skill: 'GAAP', patterns: [/\bgaap\b/i] },
-
+  // Certifications
+  { skill: 'NABCEP Certified', patterns: [/\bnabcep\b/i] },
+  { skill: 'OSHA 10', patterns: [/\bosha[\s-]?10\b/i] },
+  { skill: 'OSHA 30', patterns: [/\bosha[\s-]?30\b/i] },
+  { skill: 'OSHA Certified', patterns: [/\bosha\b/i] },
   { skill: 'CDL', patterns: [/\bcdl[- ]?[ab]?\b/i] },
-
-  { skill: 'Food Safety', patterns: [/\bfood safety\b|servsafe\b/i] },
-
-  { skill: 'OSHA', patterns: [/\bosha\b/i] },
-
   { skill: 'Forklift Certification', patterns: [/\bforklift (certified|certification|operator)\b/i] },
+  { skill: 'Journeyman Electrician', patterns: [/\bjourneyman\b/i] },
+  { skill: 'Master Electrician', patterns: [/\bmaster\s*electrician\b/i] },
+  { skill: 'Electrical License', patterns: [/\belectrical\s*license\b|\blicensed\s*electrician\b/i] },
+  { skill: 'Fall Protection Certified', patterns: [/\bfall\s*protection\b/i] },
+  { skill: 'First Aid/CPR', patterns: [/\bfirst\s*aid\b|\bcpr\b/i] },
 
+  // Core installation skills
+  { skill: 'Solar Panel Installation', patterns: [/\bsolar\s*panel\s*install/i, /\bpanel\s*mount(ing)?\b/i] },
+  { skill: 'Racking & Mounting', patterns: [/\bracking\b|\bmounting\s*system/i] },
+  { skill: 'Roofing', patterns: [/\broofing\b|\brooftop\s*work\b/i] },
+  { skill: 'Ground Mount Systems', patterns: [/\bground[- ]?mount/i] },
+  { skill: 'Wire Management', patterns: [/\bwire\s*management\b|\bconduit\b/i] },
+  { skill: 'DC/AC Wiring', patterns: [/\bdc\/ac\b|\bdc\s*wiring\b|\bac\s*wiring\b/i] },
+  { skill: 'String Inverters', patterns: [/\bstring\s*inverter/i] },
+  { skill: 'Microinverters', patterns: [/\bmicroinverter/i] },
+  // Note: deliberately NOT matching bare "energy storage" — that phrase
+  // shows up constantly in solar company "About us" boilerplate (e.g. "we
+  // provide O&M for Solar and Energy Storage Systems") without the role
+  // actually touching batteries. "battery storage" / "powerwall" are
+  // specific enough to keep as signals.
+  { skill: 'Battery Storage Installation', patterns: [/\bbattery\s*storage\b|\bpowerwall\b/i] },
+  { skill: 'Electrical Panel Upgrades', patterns: [/\bpanel\s*upgrade\b|\bmain\s*service\s*panel\b/i] },
+  { skill: 'Site Assessment', patterns: [/\bsite\s*assessment\b|\bsite\s*survey\b/i] },
+  { skill: 'Blueprint Reading', patterns: [/\bblueprint\b|\bschematic\b|\bplan\s*reading\b/i] },
+  { skill: 'System Commissioning', patterns: [/\bcommissioning\b/i] },
+  { skill: 'Troubleshooting/Repair', patterns: [/\btroubleshoot/i, /\brepair\b/i] },
 
-  // Soft skills (lower priority, only if explicitly mentioned)
+  // Tools & equipment
+  { skill: 'Power Tools', patterns: [/\bpower\s*tools\b/i] },
+  { skill: 'Multimeter Use', patterns: [/\bmultimeter\b/i] },
+  { skill: 'Crane/Lift Operation', patterns: [/\bcrane\b|\bboom\s*lift\b|\bscissor\s*lift\b/i] },
+  { skill: 'Ladder Safety', patterns: [/\bladder\s*safety\b/i] },
 
-  { skill: 'Leadership', patterns: [/\bleadership\b/i] },
+  // Physical / logistics
+  { skill: 'Heavy Lifting', patterns: [/\b(lift|carry)\s*(up to\s*)?\d{2,3}\s*(lbs|pounds)\b/i] },
+  { skill: 'Travel Required', patterns: [/\btravel\s*(required|up to)\b/i] },
+  { skill: 'Valid Driver\u2019s License', patterns: [/\bvalid\s*driver.?s?\s*license\b/i] },
 
-  { skill: 'Project Management', patterns: [/\bproject management\b|\bpmp\b/i] },
-
+  // Soft skills
+  { skill: 'Leadership', patterns: [/\bleadership\b|\bcrew\s*lead\b/i] },
+  { skill: 'Team Management', patterns: [/\bteam\s*management\b|\bsupervis(e|ing|or)\b/i] },
+  { skill: 'Bilingual (Spanish)', patterns: [/\bbilingual\b.*spanish|\bspanish\b.*bilingual/i] },
 ]
-
 
 const MAX_SKILLS = 10
 
-
 // ─────────────────────────────────────────────────────────────────────────────
-
 // EXPERIENCE LEVEL DETECTION
-
+// Solar installer crews commonly use "Lead Installer" as the senior title
+// (rather than "manager"/"director" as in a general-purpose board), so
+// that's folded into the SENIOR_LEVEL pattern alongside the usual terms.
 // ─────────────────────────────────────────────────────────────────────────────
-
 
 function detectExperienceLevel(title: string): ExperienceLevel | undefined {
-
   const t = title.toLowerCase()
-
-  if (/\b(senior|sr\.?|lead|principal|staff|director|vp\b|vice president|chief|head of|manager|supervisor)\b/.test(t)) {
-
+  if (/\b(lead|senior|sr\.?|foreman|crew\s*lead|principal|supervisor|superintendent|manager)\b/.test(t)) {
     return 'SENIOR_LEVEL'
-
   }
-
-  if (/\b(junior|jr\.?|entry[- ]level|associate|intern|internship|apprentice|trainee|helper|assistant|coordinator|technician)\b/.test(t)) {
-
+  if (/\b(junior|jr\.?|entry[- ]level|apprentice|trainee|helper|intern|internship)\b/.test(t)) {
     return 'ENTRY_LEVEL'
-
   }
-
-  if (/\b(mid[- ]level|intermediate)\b/.test(t)) {
-
+  if (/\b(mid[- ]level|intermediate|journeyman)\b/.test(t)) {
     return 'MID_LEVEL'
-
   }
-
   return undefined
-
 }
 
-
 // ─────────────────────────────────────────────────────────────────────────────
-
 // MAIN EXTRACTION
-
 // ─────────────────────────────────────────────────────────────────────────────
 
+function detectSpecialty(title: string, fullText: string): SolarSpecialty {
+  // Prefer the title: it's what the employer chose to describe the role
+  // as. The description often contains "About us" boilerplate (e.g. "we
+  // provide O&M for Solar and Energy Storage Systems") that describes the
+  // *company's* full scope, not this specific job — matching on the full
+  // text alone lets that boilerplate override a clear, specific title
+  // (a "Commercial Solar Technician" role getting mislabeled "Battery
+  // Storage" because the employer also happens to service batteries).
+  for (const rule of SPECIALTY_RULES) {
+    if (rule.patterns.some((p) => p.test(title))) {
+      return rule.specialty
+    }
+  }
+  // Title didn't tell us anything specific — fall back to the full text.
+  for (const rule of SPECIALTY_RULES) {
+    if (rule.patterns.some((p) => p.test(fullText))) {
+      return rule.specialty
+    }
+  }
+  return 'General Solar Installation'
+}
 
-export function extractJobTaxonomy(input: JobTaxonomyInput): JobTaxonomy {
-
-  const text = `${input.title || ''} ${input.description || ''}`
-
+export function extractSolarJobTaxonomy(input: JobTaxonomyInput): JobTaxonomy {
+  const title = input.title || ''
+  const text = `${title} ${input.description || ''}`
     .slice(0, MAX_TEXT_LENGTH)
-
     .trim()
 
-
-  // Industry: first match wins (rules are ordered by priority)
-
-  let industry = 'General'
-
-  for (const rule of INDUSTRY_RULES) {
-
-    if (rule.patterns.some(p => p.test(text))) {
-
-      industry = rule.industry
-
-      break
-
-    }
-
-  }
-
-
-  // Occupational category from industry
-
-  const occupationalCategory = OCCUPATIONAL_CATEGORY_MAP[industry] ?? 'Other'
-
+  const specialty = detectSpecialty(title, text)
 
   // Skills: collect all matches, cap to MAX_SKILLS
-
   const skills: string[] = []
-
   for (const rule of SKILL_RULES) {
-
     if (skills.length >= MAX_SKILLS) break
-
-    if (rule.patterns.some(p => p.test(text))) {
-
+    if (rule.patterns.some((p) => p.test(text))) {
       skills.push(rule.skill)
-
     }
-
   }
-
 
   // Experience level from title only
-
   const experienceLevel = detectExperienceLevel(input.title || '')
 
-
   return {
-
-    industry,
-
-    occupationalCategory,
-
+    specialty,
+    occupationalCategory: OCCUPATIONAL_CATEGORY,
     skills,
-
     experienceLevel,
-
   }
-
 }
-
