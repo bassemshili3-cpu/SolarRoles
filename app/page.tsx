@@ -108,16 +108,6 @@ const featuredValueProps = [
 ]
 
 
-const stats = [
-
-  { value: '12k+', label: 'Active solar jobs' },
-
-  { value: '$62K', label: 'Median installer salary' },
-
-  { value: '50', label: 'States covered' },
-
-]
-
 
 const credentialFeatures = [
 
@@ -134,7 +124,7 @@ const credentialFeatures = [
 
 const categories = [
 
-  { label: 'PV Installer', icon: HardHat, bg: 'bg-[#0B1A2E]', href: '/pv-installer-jobs' },
+  { label: 'PV Installer', icon: HardHat, bg: 'bg-[#0B1A2E]', href: '/solar-pv-installer-jobs' },
 
   { label: 'Lead Installer', icon: Award, bg: 'bg-[#1E3A5F]', href: '/lead-solar-installer-jobs' },
 
@@ -182,66 +172,6 @@ const FEATURED_ARTICLE = {
 
 }
 
-
-const rankTitles = [
-
-  {
-
-    rank: '01',
-
-    label: 'Best Paying Solar Installer Jobs',
-
-    body: 'Where PV installer salaries top out across the US in 2026.',
-
-    href: '/best-paying-solar-installer-jobs',
-
-    trending: true,
-
-  },
-
-  {
-
-    rank: '02',
-
-    label: 'Best Solar Apprenticeships',
-
-    body: 'Paid apprenticeship programs to break into the solar industry.',
-
-    href: '/best-solar-apprenticeships-2026',
-
-    trending: true,
-
-  },
-
-  {
-
-    rank: '03',
-
-    label: 'Best Solar Jobs Without a Degree',
-
-    body: 'High-paying solar roles that don\u2019t require a 4-year degree.',
-
-    href: '/best-solar-jobs-without-a-degree-2026',
-
-    trending: false,
-
-  },
-
-  {
-
-    rank: '04',
-
-    label: 'Best Solar Jobs in the United States',
-
-    body: 'The overall ranking across every solar discipline and state.',
-
-    href: '/best-solar-jobs-united-states-2026',
-
-    trending: false,
-
-  },
-
-]
 
 
 async function getLatestJobs() {
@@ -469,27 +399,6 @@ export default async function Home() {
       </section>
 
 
-      <section className="bg-white border-b border-gray-100">
-
-        <div className="max-w-5xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-x-12 gap-y-8">
-
-          {stats.map(({ value, label }) => (
-
-            <div key={label} className="text-center min-w-[100px]">
-
-              <p className="text-4xl font-extrabold text-[#0B1A2E] tracking-tight">{value}</p>
-
-              <p className="text-sm text-gray-500 mt-1">{label}</p>
-
-            </div>
-
-          ))}
-
-        </div>
-
-      </section>
-
-
       <section className="bg-gray-50 py-24 px-6">
 
         <div className="max-w-3xl mx-auto">
@@ -644,7 +553,7 @@ export default async function Home() {
 
               <Link
 
-                href="/employers/post-a-job"
+                href="/dashboard/post-a-job-free"
 
                 className="text-[#B45309] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
 
@@ -716,69 +625,6 @@ export default async function Home() {
               View all jobs
 
             </Link>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <section className="bg-white py-20 px-6">
-
-        <div className="max-w-5xl mx-auto">
-
-          <div className="text-center mb-6">
-
-            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Rankings</h2>
-
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-            {rankTitles.map(({ rank, label, body, href, trending }) => (
-
-              <Link
-
-                key={href}
-
-                href={href}
-
-                className="group flex items-start gap-5 p-6 rounded-2xl border border-gray-100 hover:border-[#1E3A5F]/30 hover:shadow-sm transition-all"
-
-              >
-
-                <span className="text-3xl font-extrabold text-gray-400 group-hover:text-[#F5B819] transition-colors leading-none">
-
-                  {rank}
-
-                </span>
-
-                <div className="min-w-0">
-
-                  <div className="flex items-center gap-2 mb-1">
-
-                    <h3 className="font-semibold text-[#0B1A2E] text-base leading-snug">{label}</h3>
-
-                    {trending && (
-
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#B45309] bg-[#F5B819]/15 px-1.5 py-0.5 rounded-full">
-
-                        <TrendingUp size={10} /> Trending
-
-                      </span>
-
-                    )}
-
-                  </div>
-
-                  <p className="text-sm text-gray-500 leading-relaxed">{body}</p>
-
-                </div>
-
-              </Link>
-
-            ))}
 
           </div>
 

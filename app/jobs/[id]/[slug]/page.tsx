@@ -442,7 +442,8 @@ export async function generateMetadata(
 
       : ''
 
-        const isIndexable = job.source === 'employer'
+      const NON_INDEXABLE_SOURCES = ['adzuna', 'jooble', 'careerjet', 'lensa']
+const isIndexable = !NON_INDEXABLE_SOURCES.includes(job.source)
 
   return {
 

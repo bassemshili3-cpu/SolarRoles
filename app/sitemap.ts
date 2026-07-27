@@ -11,14 +11,9 @@ const LAST_MAJOR_UPDATE = new Date('2026-07-26')
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
   '/solar-pv-installer-jobs',
+'/lead-solar-installer-jobs',
   
-]
-
-
-// ── Top Jobs ranking pages ───────────────────────────────────
-const topJobsPages: string[] = [
-  '/best-jobs-in-united-states',
- 
+  
 ]
 
 // ── Paycheck calculator pages ────────────────────────────────
@@ -78,7 +73,6 @@ const sections: {
   lastModified?: Date
 }[] = [
   { routes: priorityLandingPages, changeFrequency: "monthly", priority: 0.8 },
-  { routes: topJobsPages, changeFrequency: "monthly", priority: 0.7 },
   { routes: paycheckPages, changeFrequency: "monthly", priority: 0.6 },
   { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
   { routes: dataStatePages, changeFrequency: "weekly", priority: 0.8 },
