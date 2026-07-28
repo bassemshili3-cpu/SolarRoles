@@ -19,6 +19,7 @@ import { fetchPinpointJobs } from '../lib/ats/pinpoint';
 import { fetchAshbyJobs } from '../lib/ats/ashby';
 import { fetchSmartRecruitersJobs } from '../lib/ats/smartrecruiters';
 import { fetchJobviteJobs } from '../lib/ats/jobvite';
+import { isUSJob } from '../lib/ats/geo';
 
 const prisma = new PrismaClient();
 
@@ -36,7 +37,7 @@ const PROVIDERS: AtsProvider[] = [
   { name: 'ashby',            companies: ASHBY_COMPANIES,            fetch: fetchAshbyJobs },
   { name: 'smartrecruiters',  companies: SMARTRECRUITERS_COMPANIES,  fetch: fetchSmartRecruitersJobs },
   { name: 'jobvite',          companies: JOBVITE_COMPANIES,          fetch: fetchJobviteJobs },
-{ name: 'greenhouse',       companies: GREENHOUSE_COMPANIES,       fetch: fetchGreenhouseJobs },
+  { name: 'greenhouse',       companies: GREENHOUSE_COMPANIES,       fetch: fetchGreenhouseJobs },
 ];
 
 async function upsertJob(job: NormalizedJob): Promise<'created' | 'updated'> {
@@ -92,6 +93,7 @@ async function upsertJob(job: NormalizedJob): Promise<'created' | 'updated'> {
 async function main() {
   let created = 0;
   let updated = 0;
+  let skippedNonUS = 0;
 
   for (const provider of PROVIDERS) {
     for (const company of provider.companies) {
@@ -99,13 +101,21 @@ async function main() {
       const jobs = await provider.fetch(company);
       console.log(`[${provider.name}] ${company.slug}: ${jobs.length} solar installer role(s) matched`);
       for (const job of jobs) {
+        // allowBareRemote: false — un installeur solar ne travaille jamais
+        // "remote" au sens tech; un "Remote" seul, sans state/pays, est plus
+        // souvent une erreur de parsing côté ATS qu'un vrai signal US.
+        if (!isUSJob(job, { allowBareRemote: false })) {
+          skippedNonUS++;
+          console.log(`  ↳ skipped (non-US): ${job.title} — "${job.location}"`);
+          continue;
+        }
         const result = await upsertJob(job);
         result === 'created' ? created++ : updated++;
       }
     }
   }
 
-  console.log(`\nDone. Created: ${created}, Updated: ${updated}`);
+  console.log(`\nDone. Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}`);
   await prisma.$disconnect();
 }
 

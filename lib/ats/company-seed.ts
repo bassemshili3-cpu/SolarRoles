@@ -101,6 +101,8 @@ export const WORKABLE_COMPANIES: AtsCompanySeed[] = [
   { slug: 'solar-universe', name: 'Solar Universe', verified: true },
   { slug: 'ericson-solar', name: 'Ericson Solar', verified: true },
   { slug: 'green-brilliance', name: 'Green Brilliance', verified: true },
+  { slug: 'solar-alternatives', name: 'Solar Alternatives',    verified: true }, // Louisiane, "Solar Technician and Installer"
+{ slug: 'esselenvironmental', name: 'Essel Environmental',   verified: true }, // Rancho Cucamonga CA, Solar Installer
 ];
 
 // Pinpoint — app.pinpoint.hire/<slug>
@@ -152,5 +154,8 @@ export const GREENHOUSE_COMPANIES: AtsCompanySeed[] = [
   { slug: 'coastenergy',        name: 'Coast Energy',            verified: false },
   { slug: 'kineticsolarcareers',name: 'Kinetic Solar',           verified: false },
   { slug: 'energysolutions',    name: 'Energy Solutions',        verified: false },
+  { slug: 'fluenthome',       name: 'Fluent Solar',            verified: true }, // ★ Roof/Solar Installer, plusieurs villes US (ex-Fluent Home)
+{ slug: 'brightcoreenergy', name: 'Brightcore Energy',       verified: true }, // installateur géothermie/solaire commercial, IGSHPA certifié requis
+{ slug: 'soligent',         name: 'Soligent',                verified: false }, // plus gros distributeur solaire US — jobs surtout ops/warehouse, peu d'"installer" pur
 ];
 

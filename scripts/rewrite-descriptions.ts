@@ -31,6 +31,7 @@ async function main() {
     where: {
       active: true,
       seoDescriptionVersion: { lt: SEO_REWRITE_VERSION },
+      source: { not: 'adzuna' }, // Adzuna interdit la réécriture de ses descriptions dans ses CGU
     },
     take: BATCH_SIZE,
     orderBy: { fetchedAt: 'desc' },
