@@ -154,6 +154,7 @@ export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
   // direct — "site" est une déduction (probablement 'Careers'), à
   // confirmer avant de faire confiance à ce verified:true.
   { tenant: 'rosendin', host: 'wd1', site: 'Careers', name: 'Rosendin Electric', verified: false },
+  { tenant: 'solvenergy', host: 'wd1', site: 'SOLV_External_Career', name: 'SOLV Energy', verified: false },
 ];
 
 // ───────────────────────────────────────────────────────────

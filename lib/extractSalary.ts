@@ -132,24 +132,22 @@ function detectPeriodFromContext(
 ): 'hour' | 'day' | 'week' | 'month' | 'year' {
   const c = context.toLowerCase()
 
-  // Explicit period words (within the context window)
-  if (/\b(?:per\s+hour|hourly|\/\s*hr|\/\s*hour|an\s+hour)\b/.test(c)) return 'hour'
-  if (/\b(?:per\s+day|daily|\/\s*day|a\s+day)\b/.test(c)) return 'day'
-  if (/\b(?:per\s+week|weekly|\/\s*wk|\/\s*week|a\s+week)\b/.test(c)) return 'week'
-  if (/\b(?:per\s+month|monthly|\/\s*mo|\/\s*month|a\s+month)\b/.test(c)) return 'month'
-  if (/\b(?:per\s+year|yearly|annually|annual|\/\s*yr|\/\s*year|a\s+year)\b/.test(c)) return 'year'
+  if (/\/\s*hr\b|\/\s*hour\b|\bper\s+hour\b|\bhourly\b|\ban\s+hour\b/.test(c)) return 'hour'
+  if (/\/\s*day\b|\bper\s+day\b|\bdaily\b|\ba\s+day\b/.test(c)) return 'day'
+  if (/\/\s*wk\b|\/\s*week\b|\bper\s+week\b|\bweekly\b|\ba\s+week\b/.test(c)) return 'week'
+  if (/\/\s*mo\b|\/\s*month\b|\bper\s+month\b|\bmonthly\b|\ba\s+month\b/.test(c)) return 'month'
+  if (/\/\s*yr\b|\/\s*year\b|\bper\s+year\b|\byearly\b|\bannually\b|\bannual\b/.test(c)) return 'year'
 
-  // Infer from value range
   return inferPeriodFromValue(low, high)
 }
 
 function extractExplicitPeriod(context: string): 'hour' | 'day' | 'week' | 'month' | 'year' | null {
   const c = context.toLowerCase()
-  if (/\b(?:per\s+hour|hourly|\/\s*hr|\/\s*hour)\b/.test(c)) return 'hour'
-  if (/\b(?:per\s+day|daily|\/\s*day)\b/.test(c)) return 'day'
-  if (/\b(?:per\s+week|weekly|\/\s*wk|\/\s*week)\b/.test(c)) return 'week'
-  if (/\b(?:per\s+month|monthly|\/\s*mo|\/\s*month)\b/.test(c)) return 'month'
-  if (/\b(?:per\s+year|yearly|annually|annual|\/\s*yr|\/\s*year)\b/.test(c)) return 'year'
+  if (/\/\s*hr\b|\bper\s+hour\b|\bhourly\b/.test(c)) return 'hour'
+  if (/\/\s*day\b|\bper\s+day\b|\bdaily\b/.test(c)) return 'day'
+  if (/\/\s*wk\b|\/\s*week\b|\bper\s+week\b|\bweekly\b/.test(c)) return 'week'
+  if (/\/\s*mo\b|\/\s*month\b|\bper\s+month\b|\bmonthly\b/.test(c)) return 'month'
+  if (/\/\s*yr\b|\/\s*year\b|\bper\s+year\b|\byearly\b|\bannually\b|\bannual\b/.test(c)) return 'year'
   return null
 }
 
