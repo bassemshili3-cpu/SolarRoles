@@ -14,6 +14,11 @@ interface ScrapedJobRow {
   location: string;
 }
 
+interface JobDetail {
+  description: string;
+  location: string;
+}
+
 // Conteneurs de ligne possibles, du plus spécifique au plus générique.
 // On essaie chacun dans l'ordre et on garde le premier qui donne un
 // ancêtre réel (row.length > 0) — avant on ne testait qu'une seule
@@ -27,10 +32,11 @@ const ROW_CONTAINER_SELECTORS = [
   'li',
 ];
 
-// Sélecteurs dédiés à la location quand le markup les expose — plus
-// fiable que "tout le texte de la ligne moins le titre", qui casse dès
-// que la ligne contient d'autres bouts de texte (département, tag
-// "remote", etc.) en plus du titre et de la location.
+// Sélecteurs dédiés à la location sur la page LISTE, quand le markup
+// les expose. Gardé comme fallback de dernier recours seulement — en
+// pratique la location de la page detail (DETAIL_LOCATION_SELECTORS
+// plus bas) s'est révélée bien plus fiable, donc c'est elle la source
+// principale désormais.
 const LOCATION_SELECTORS = [
   '.jv-job-list-location',
   '.jv-job-list-job-location',
@@ -38,8 +44,15 @@ const LOCATION_SELECTORS = [
   '[class*="location"]',
 ];
 
-// Fallback conservé au cas où le rendu s'avère bien JS-dépendant sur certaines
-// entreprises — permet de le réactiver ciblé sans tout réécrire.
+// Sélecteurs de location sur la page DETAIL d'un job — c'est la source
+// principale maintenant (voir fetchJobDetail).
+const DETAIL_LOCATION_SELECTORS = [
+  '.jv-job-detail-location',
+  '.jv-page-header [class*="location"]',
+  '[data-testid="job-detail-location"]',
+  '[class*="location"]',
+];
+
 async function fetchHtml(url: string): Promise<string> {
   const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -63,7 +76,9 @@ function extractLocationFromTitle(title: string): string {
   return loc;
 }
 
-function extractLocation($: cheerio.CheerioAPI, row: cheerio.Cheerio<any> | null, title: string): string {
+// Extraction "best effort" depuis la page liste — utilisée seulement
+// comme dernier filet de sécurité si la page detail ne donne rien.
+function extractListLocation($: cheerio.CheerioAPI, row: cheerio.Cheerio<any> | null, title: string): string {
   if (row) {
     for (const selector of LOCATION_SELECTORS) {
       const loc = row.find(selector).first().text().trim();
@@ -72,12 +87,8 @@ function extractLocation($: cheerio.CheerioAPI, row: cheerio.Cheerio<any> | null
     const stripped = row.text().replace(title, '').trim();
     if (stripped) return stripped;
   }
-
-  // Dernier recours : parser le titre lui-même.
   return extractLocationFromTitle(title);
 }
-
-
 
 function parseJobRows(html: string): ScrapedJobRow[] {
   const $ = cheerio.load(html);
@@ -100,7 +111,7 @@ function parseJobRows(html: string): ScrapedJobRow[] {
       if (!title || !href) return;
 
       const row = findRowContainer($, a);
-      const location = extractLocation($, row, title);
+      const location = extractListLocation($, row, title);
 
       rows.push({
         title,
@@ -109,15 +120,7 @@ function parseJobRows(html: string): ScrapedJobRow[] {
       });
     });
 
-    if (rows.length > 0) {
-      const emptyLocations = rows.filter((r) => !r.location).length;
-      if (emptyLocations > 0) {
-        console.warn(
-          `[jobvite] ${emptyLocations}/${rows.length} ligne(s) sans location détectée avec le sélecteur "${selector}" — markup à vérifier manuellement.`
-        );
-      }
-      return rows;
-    }
+    if (rows.length > 0) return rows;
   }
 
   return [];
@@ -128,20 +131,32 @@ function extractIdFromHref(href: string): string {
   return match ? match[1] : href;
 }
 
-async function fetchJobDescription(href: string): Promise<string> {
+// Va chercher la description ET la location sur la page detail d'un
+// job — la location y est quasi toujours présente et fiable, contrairement
+// à la page liste dont le markup varie trop d'une entreprise à l'autre.
+async function fetchJobDetail(href: string): Promise<JobDetail> {
   try {
     const html = await fetchHtml(href);
     const $ = cheerio.load(html);
-    // Sélecteur à ajuster si besoin — Jobvite met en général le détail
-    // dans un conteneur type .jv-job-detail-description ou similaire.
-    const container = $('.jv-job-detail-description, .jv-page-body, main').first();
-    const text = (container.length ? container.text() : $('body').text())
+
+    const descContainer = $('.jv-job-detail-description, .jv-page-body, main').first();
+    const description = (descContainer.length ? descContainer.text() : $('body').text())
       .replace(/\s+/g, ' ')
       .trim();
-    return text;
+
+    let location = '';
+    for (const selector of DETAIL_LOCATION_SELECTORS) {
+      const loc = $(selector).first().text().trim();
+      if (loc) {
+        location = loc;
+        break;
+      }
+    }
+
+    return { description, location };
   } catch (err) {
-    console.warn(`[jobvite] échec récupération description ${href}: ${(err as Error).message}`);
-    return '';
+    console.warn(`[jobvite] échec récupération détail ${href}: ${(err as Error).message}`);
+    return { description: '', location: '' };
   }
 }
 
@@ -163,36 +178,44 @@ export async function fetchJobviteJobs(company: AtsCompanySeed): Promise<Normali
   }
 
   const results: NormalizedJob[] = [];
+  let emptyLocationCount = 0;
 
   for (const r of rows) {
-    // Tier 1 : le titre seul suffit, pas besoin de description.
-    if (isSolarInstallerRole(r.title)) {
-      results.push(normalize(r, company, ''));
-      continue;
-    }
+    // Pré-filtre sur le titre seul pour éviter de fetcher le detail de
+    // chaque job du board (ex. "Marketing Manager" n'a aucune raison
+    // d'être fetché) — mais dès qu'un titre est candidat (solaire clair
+    // OU générique à vérifier), on va chercher le detail dans tous les
+    // cas, pour la description ET pour une location fiable.
+    if (!isSolarInstallerRole(r.title) && !isGenericInstallerTitle(r.title)) continue;
 
-    // Tier 2 : titre générique → on va chercher la description sur la
-    // page détail, uniquement pour ces cas-là (pour limiter les requêtes).
-    if (isGenericInstallerTitle(r.title)) {
-      const description = await fetchJobDescription(r.href);
-      if (isSolarInstallerRole(r.title, description)) {
-        results.push(normalize(r, company, description));
-      }
-    }
+    const { description, location: detailLocation } = await fetchJobDetail(r.href);
+
+    if (!isSolarInstallerRole(r.title, description)) continue;
+
+    const location = detailLocation || r.location;
+    if (!location) emptyLocationCount++;
+
+    results.push(normalize(r, company, description, location));
+  }
+
+  if (emptyLocationCount > 0) {
+    console.warn(
+      `[jobvite] ${company.slug}: ${emptyLocationCount} job(s) matché(s) sans location (ni page detail, ni liste) — à vérifier manuellement.`
+    );
   }
 
   return results;
 }
 
-function normalize(r: ScrapedJobRow, company: AtsCompanySeed, description: string): NormalizedJob {
+function normalize(r: ScrapedJobRow, company: AtsCompanySeed, description: string, location: string): NormalizedJob {
   const id = extractIdFromHref(r.href);
   return {
     source: 'jobvite',
     externalId: id,
     title: r.title,
     company: company.name,
-    location: r.location,
-    addressRegion: extractStateFromLocation(r.location),
+    location,
+    addressRegion: extractStateFromLocation(location),
     description,
     url: r.href,
     applyUrl: r.href,

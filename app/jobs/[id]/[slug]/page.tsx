@@ -210,16 +210,16 @@ function inferExperienceRequirements(title: string): string | undefined {
 // renvoyé par inferExperienceRequirements) en texte libre valide pour
 // schema.org JobPosting. Google rejette un enum brut type "SENIOR_LEVEL"
 // dans experienceRequirements — ce champ attend du texte, pas un enum.
-function toSchemaExperienceRequirements(level: string): string | undefined {
+function toSchemaExperienceRequirements(level: string) {
   switch (level) {
     case 'ENTRY_LEVEL':
-      return 'No prior experience required — entry-level position'
+      return { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: 0 }
     case 'MID_LEVEL':
-      return '2-5 years of relevant experience preferred'
+      return { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: 24 }
     case 'SENIOR_LEVEL':
-      return '5+ years of relevant experience required'
+      return { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: 60 }
     default:
-      return undefined // on omet plutôt que d'injecter une valeur non reconnue
+      return undefined
   }
 }
 

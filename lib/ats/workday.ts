@@ -168,22 +168,16 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   const results: NormalizedJob[] = [];
 
-  for (const p of postings) {
-    let description = '';
+// workday.ts — remplace la boucle dans fetchWorkdayJobs
 
-    if (isSolarInstallerRole(p.title)) {
-      results.push(normalize(company, p, description));
-      continue;
-    }
+for (const p of postings) {
+  const description = await fetchJobDescription(company, p.externalPath);
+  await sleep(REQUEST_DELAY_MS);
 
-    if (isGenericInstallerTitle(p.title)) {
-      description = await fetchJobDescription(company, p.externalPath);
-      await sleep(REQUEST_DELAY_MS);
-      if (isSolarInstallerRole(p.title, description)) {
-        results.push(normalize(company, p, description));
-      }
-    }
+  if (isSolarInstallerRole(p.title, description)) {
+    results.push(normalize(company, p, description));
   }
+}
 
   return results;
 }
