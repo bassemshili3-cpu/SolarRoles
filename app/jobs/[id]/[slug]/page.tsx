@@ -206,10 +206,24 @@ function inferExperienceRequirements(title: string): string | undefined {
 
 }
 
+// Convertit le niveau interne (SENIOR_LEVEL/MID_LEVEL/ENTRY_LEVEL, tel que
+// renvoyé par inferExperienceRequirements) en texte libre valide pour
+// schema.org JobPosting. Google rejette un enum brut type "SENIOR_LEVEL"
+// dans experienceRequirements — ce champ attend du texte, pas un enum.
+function toSchemaExperienceRequirements(level: string): string | undefined {
+  switch (level) {
+    case 'ENTRY_LEVEL':
+      return 'No prior experience required — entry-level position'
+    case 'MID_LEVEL':
+      return '2-5 years of relevant experience preferred'
+    case 'SENIOR_LEVEL':
+      return '5+ years of relevant experience required'
+    default:
+      return undefined // on omet plutôt que d'injecter une valeur non reconnue
+  }
+}
 
 // ─── Schema ─────────────────────────────────────────────────────────────────
-
-
 function buildJobPostingSchema(
 
   job: JobDetail,
@@ -340,6 +354,7 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
   pinpoint: 'Pinpoint',
   jobvite: 'Jobvite',
   greenhouse: 'Greenhouse',
+  workday: 'Workday',
 }
 
   schema.identifier = {
@@ -397,13 +412,13 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
   if (context.occupationalCategory) schema.occupationalCategory = context.occupationalCategory
 
 
-  // ── experienceRequirements (inferred from title) ──
+// ── experienceRequirements (inferred from title) ──
 
   const expReq = inferExperienceRequirements(job.title)
 
   if (expReq) {
 
-    schema.experienceRequirements = expReq
+    schema.experienceRequirements = toSchemaExperienceRequirements(expReq)
 
   }
 

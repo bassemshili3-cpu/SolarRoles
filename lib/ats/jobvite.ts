@@ -1,40 +1,12 @@
-/**
- * Jobvite ATS provider — https://jobs.jobvite.com/{slug}/jobs
- *
- * Jobvite career sites sont des SPA : le HTML initial ne contient PAS la
- * liste des jobs (juste un placeholder "There are currently no open jobs"
- * tant que le JS n'a pas résolu son appel XHR interne). Un simple fetch()
- * ne peut donc rien extraire — on rend la page avec Playwright et on
- * attend que le DOM soit hydraté avant de parser.
- *
- * ⚠️ Les sélecteurs CSS ci-dessous (JOB_ITEM_SELECTORS) sont une best
- * guess basée sur les classes jv-* documentées publiquement — je n'ai
- * pas pu inspecter le DOM hydraté réel. Avant de lancer ça en prod,
- * lance `npx tsx scripts/debug-jobvite.ts freedomforever` (fourni plus
- * bas) et ajuste JOB_ITEM_SELECTORS si le count reste à 0.
- */
-
-import { chromium, type Browser } from 'playwright';
-import { isSolarInstallerRole } from './solar-taxonomy';
+import * as cheerio from 'cheerio';
+import { isSolarInstallerRole, isGenericInstallerTitle } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
-import type { NormalizedJob } from './ashby';
+import type { NormalizedJob } from './types'; // adapte si ton fichier partagé s'appelle autrement
 import type { AtsCompanySeed } from './company-seed';
+
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 const LIST_URL = (slug: string) => `https://jobs.jobvite.com/${slug}/jobs`;
-
-// Délai max pour laisser le XHR interne de Jobvite se résoudre.
-const NAV_TIMEOUT_MS = 20_000;
-const HYDRATION_WAIT_MS = 1_500;
-
-// Plusieurs sélecteurs candidats, essayés dans l'ordre — Jobvite ne
-// documente pas ses classes publiquement et elles varient parfois d'un
-// tenant à l'autre selon le thème appliqué au career site.
-const JOB_ITEM_SELECTORS = [
-  '.jv-job-list .jv-job-list-name a',
-  '[data-testid="job-list-item"] a',
-  'a[href*="/job/"]',
-];
 
 interface ScrapedJobRow {
   title: string;
@@ -42,103 +14,190 @@ interface ScrapedJobRow {
   location: string;
 }
 
-let sharedBrowser: Browser | null = null;
+// Conteneurs de ligne possibles, du plus spécifique au plus générique.
+// On essaie chacun dans l'ordre et on garde le premier qui donne un
+// ancêtre réel (row.length > 0) — avant on ne testait qu'une seule
+// liste de sélecteurs, donc si aucun ne matchait pour le site en cours
+// on retombait silencieusement sur a.parent(), qui ne contient que le
+// titre lui-même => location toujours vide (bug enphase-energy).
+const ROW_CONTAINER_SELECTORS = [
+  '.jv-job-list-single',
+  'li.jv-job-list-item',
+  '[data-testid="job-list-item"]',
+  'li',
+];
 
-async function getBrowser(): Promise<Browser> {
-  if (!sharedBrowser) {
-    sharedBrowser = await chromium.launch({ headless: true });
-  }
-  return sharedBrowser;
+// Sélecteurs dédiés à la location quand le markup les expose — plus
+// fiable que "tout le texte de la ligne moins le titre", qui casse dès
+// que la ligne contient d'autres bouts de texte (département, tag
+// "remote", etc.) en plus du titre et de la location.
+const LOCATION_SELECTORS = [
+  '.jv-job-list-location',
+  '.jv-job-list-job-location',
+  '[data-testid="job-list-location"]',
+  '[class*="location"]',
+];
+
+// Fallback conservé au cas où le rendu s'avère bien JS-dépendant sur certaines
+// entreprises — permet de le réactiver ciblé sans tout réécrire.
+async function fetchHtml(url: string): Promise<string> {
+  const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.text();
 }
 
-export async function closeJobviteBrowser(): Promise<void> {
-  if (sharedBrowser) {
-    await sharedBrowser.close();
-    sharedBrowser = null;
+function findRowContainer($: cheerio.CheerioAPI, anchor: cheerio.Cheerio<any>) {
+  for (const selector of ROW_CONTAINER_SELECTORS) {
+    const row = anchor.closest(selector);
+    if (row.length) return row;
   }
+  return null;
 }
 
-async function scrapeJobRows(slug: string): Promise<ScrapedJobRow[]> {
-  const browser = await getBrowser();
-  const page = await browser.newPage({ userAgent: USER_AGENT });
+function extractLocationFromTitle(title: string): string {
+  const dashIndex = title.lastIndexOf(' - ');
+  if (dashIndex === -1) return '';
 
-  try {
-    await page.goto(LIST_URL(slug), {
-      waitUntil: 'networkidle',
-      timeout: NAV_TIMEOUT_MS,
+  let loc = title.slice(dashIndex + 3).trim();
+  loc = loc.replace(/\(.*?\)\s*$/, '').trim(); // vire "(6 month Temporary Assignment)"
+  return loc;
+}
+
+function extractLocation($: cheerio.CheerioAPI, row: cheerio.Cheerio<any> | null, title: string): string {
+  if (row) {
+    for (const selector of LOCATION_SELECTORS) {
+      const loc = row.find(selector).first().text().trim();
+      if (loc) return loc;
+    }
+    const stripped = row.text().replace(title, '').trim();
+    if (stripped) return stripped;
+  }
+
+  // Dernier recours : parser le titre lui-même.
+  return extractLocationFromTitle(title);
+}
+
+
+
+function parseJobRows(html: string): ScrapedJobRow[] {
+  const $ = cheerio.load(html);
+
+  const SELECTORS = [
+    '.jv-job-list .jv-job-list-name a',
+    '[data-testid="job-list-item"] a',
+    'a[href*="/job/"]',
+  ];
+
+  for (const selector of SELECTORS) {
+    const anchors = $(selector);
+    if (anchors.length === 0) continue;
+
+    const rows: ScrapedJobRow[] = [];
+    anchors.each((_, el) => {
+      const a = $(el);
+      const href = a.attr('href') ?? '';
+      const title = a.text().trim();
+      if (!title || !href) return;
+
+      const row = findRowContainer($, a);
+      const location = extractLocation($, row, title);
+
+      rows.push({
+        title,
+        href: href.startsWith('http') ? href : new URL(href, LIST_URL('')).toString(),
+        location,
+      });
     });
 
-    // Laisse un peu de marge après networkidle : certains career sites
-    // Jobvite font un second appel (pagination/lazy-load) juste après
-    // le rendu initial.
-    await page.waitForTimeout(HYDRATION_WAIT_MS);
-
-    let rows: ScrapedJobRow[] = [];
-
-    for (const selector of JOB_ITEM_SELECTORS) {
-      const found = await page.$$eval(selector, (els) =>
-        els
-          .map((el) => {
-            const a = el as HTMLAnchorElement;
-            // La location est souvent dans un élément frère/parent proche —
-            // on remonte au conteneur de la ligne et on prend son texte,
-            // en retirant le titre pour ne garder que le reste (location).
-            const row = a.closest('li, .jv-job-list-item, [data-testid="job-list-item"]') ?? a.parentElement;
-            const rowText = row?.textContent?.replace(a.textContent ?? '', '').trim() ?? '';
-            return {
-              title: a.textContent?.trim() ?? '',
-              href: a.href,
-              location: rowText,
-            };
-          })
-          .filter((j) => j.title && j.href),
-      );
-
-      if (found.length > 0) {
-        rows = found;
-        break;
+    if (rows.length > 0) {
+      const emptyLocations = rows.filter((r) => !r.location).length;
+      if (emptyLocations > 0) {
+        console.warn(
+          `[jobvite] ${emptyLocations}/${rows.length} ligne(s) sans location détectée avec le sélecteur "${selector}" — markup à vérifier manuellement.`
+        );
       }
+      return rows;
     }
-
-    return rows;
-  } finally {
-    await page.close();
   }
+
+  return [];
 }
 
 function extractIdFromHref(href: string): string {
-  // ex: https://jobs.jobvite.com/freedomforever/job/ofPgufwy → "ofPgufwy"
   const match = href.match(/\/job\/([a-zA-Z0-9_-]+)/);
   return match ? match[1] : href;
+}
+
+async function fetchJobDescription(href: string): Promise<string> {
+  try {
+    const html = await fetchHtml(href);
+    const $ = cheerio.load(html);
+    // Sélecteur à ajuster si besoin — Jobvite met en général le détail
+    // dans un conteneur type .jv-job-detail-description ou similaire.
+    const container = $('.jv-job-detail-description, .jv-page-body, main').first();
+    const text = (container.length ? container.text() : $('body').text())
+      .replace(/\s+/g, ' ')
+      .trim();
+    return text;
+  } catch (err) {
+    console.warn(`[jobvite] échec récupération description ${href}: ${(err as Error).message}`);
+    return '';
+  }
 }
 
 export async function fetchJobviteJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
   let rows: ScrapedJobRow[];
 
   try {
-    rows = await scrapeJobRows(company.slug);
+    const html = await fetchHtml(LIST_URL(company.slug));
+    rows = parseJobRows(html);
   } catch (err) {
-    console.warn(`[jobvite] ${company.slug}: scrape failed, skipping — ${(err as Error).message}`);
+    console.warn(`[jobvite] ${company.slug}: fetch/parse échoué, skipping — ${(err as Error).message}`);
     return [];
   }
 
-  const matched = rows.filter((r) => isSolarInstallerRole(r.title));
+  if (rows.length === 0) {
+    console.warn(
+      `[jobvite] ${company.slug}: 0 ligne trouvée — soit pas d'offres, soit le rendu nécessite du JS (à vérifier manuellement).`
+    );
+  }
 
-  return matched.map((r) => {
-    const id = extractIdFromHref(r.href);
-    return {
-      source: 'jobvite',
-      externalId: id,
-      title: r.title,
-      company: company.name,
-      location: r.location,
-      addressRegion: extractStateFromLocation(r.location),
-      description: '', // detail page = 2e call si tu veux le JD complet plus tard
-      url: r.href,
-      applyUrl: r.href,
-      contractType: undefined,
-      postedAt: undefined, // pas fiable à extraire du DOM listing — à faire depuis la page détail si besoin
-      salary: undefined,
-    };
-  });
+  const results: NormalizedJob[] = [];
+
+  for (const r of rows) {
+    // Tier 1 : le titre seul suffit, pas besoin de description.
+    if (isSolarInstallerRole(r.title)) {
+      results.push(normalize(r, company, ''));
+      continue;
+    }
+
+    // Tier 2 : titre générique → on va chercher la description sur la
+    // page détail, uniquement pour ces cas-là (pour limiter les requêtes).
+    if (isGenericInstallerTitle(r.title)) {
+      const description = await fetchJobDescription(r.href);
+      if (isSolarInstallerRole(r.title, description)) {
+        results.push(normalize(r, company, description));
+      }
+    }
+  }
+
+  return results;
+}
+
+function normalize(r: ScrapedJobRow, company: AtsCompanySeed, description: string): NormalizedJob {
+  const id = extractIdFromHref(r.href);
+  return {
+    source: 'jobvite',
+    externalId: id,
+    title: r.title,
+    company: company.name,
+    location: r.location,
+    addressRegion: extractStateFromLocation(r.location),
+    description,
+    url: r.href,
+    applyUrl: r.href,
+    contractType: undefined,
+    postedAt: undefined,
+    salary: undefined,
+  };
 }

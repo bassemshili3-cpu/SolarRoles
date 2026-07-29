@@ -67,6 +67,10 @@ model Job {
   flagReasons    String[]  @default([])
  seoDescription        String?
   seoDescriptionVersion Int     @default(0)
+   specialty            String?
+  occupationalCategory String?
+  skills               String[] @default([])
+  experienceLevel      String?
 
   applications             JobApplication[]
 

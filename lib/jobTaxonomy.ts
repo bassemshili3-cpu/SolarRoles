@@ -19,10 +19,13 @@
  * external APIs, but predictable, debuggable, and free.
  *
  * Usage:
- *   if (isSolarInstallerRole(title)) {
+ *   if (isSolarInstallerRole(title, description)) {
  *     const taxonomy = extractSolarJobTaxonomy({ title, description })
  *     // → { specialty, occupationalCategory, skills, experienceLevel }
  *   }
+ *   // description is optional — title-only gating still works, just
+ *   // with lower recall on generic titles ("Installer II") at solar-only
+ *   // employers.
  */
 
 export type ExperienceLevel = 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEVEL'
@@ -86,6 +89,22 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /battery\s*storage\s*install(er)?/i,
   /energy\s*storage\s*install(er)?/i,
   /\bnabcep\b/i,
+  // Added after auditing ATS titles that were slipping past the gate —
+  // common industry phrasings that don't fit the "solar + install(er/
+  // ation)" shape above.
+  /solar\s*install(ation)?\s*specialist/i,
+  /\b(pv|photovoltaic)\s*systems?\s*tech(nician)?/i,
+  // "array" and "module" scoped to solar/PV context to avoid false
+  // positives from unrelated fields (antenna arrays, software modules,
+  // training modules, etc.) — bare "array installer" or "module
+  // installer" are too ambiguous to match on their own.
+  /\b(solar|pv)\s*array\s*(install(er|ation)?|tech(nician)?)/i,
+  /\b(solar|pv|photovoltaic)\s*module\s*install(er|ation)?/i,
+  // "BOS" (balance of system) is a niche-specific acronym but too
+  // ambiguous on its own (bill of sale, basic operating system) —
+  // require the spelled-out form or explicit solar/pv context.
+  /balance\s*of\s*system\s*install(er)?/i,
+  /\b(solar|pv)\s*bos\s*(install(er)?|tech(nician)?)/i,
 ]
 
 // Filtered out even if an include pattern also matches — protects against
@@ -105,10 +124,35 @@ const EXCLUDE_PATTERNS: RegExp[] = [
   /appointment\s*setter/i,
 ]
 
-export function isSolarInstallerRole(title: string): boolean {
+// Runs the include/exclude gate against a single block of text (title,
+// or title + description). Kept separate from isSolarInstallerRole so
+// title-only and title+description checks share identical logic.
+function matchesInstallerPatterns(text: string): boolean {
+  if (EXCLUDE_PATTERNS.some((re) => re.test(text))) return false
+  return INCLUDE_PATTERNS.some((re) => re.test(text))
+}
+
+// title is checked first and alone: it's the cheap, reliable, low-noise
+// signal. Only if the title doesn't resolve it do we fall back to the
+// description — this is noisier (a random construction job can mention
+// "solar-ready roofing" in passing) but titles alone were missing a real
+// slice of postings (generic titles like "Installer II", "Field
+// Technician", "Crew Member" at solar-only employers). The exclude list
+// still runs against the combined text, so a description mentioning
+// "software installer" etc. can still veto a match.
+export function isSolarInstallerRole(title: string, description?: string): boolean {
   if (!title) return false
-  if (EXCLUDE_PATTERNS.some((re) => re.test(title))) return false
-  return INCLUDE_PATTERNS.some((re) => re.test(title))
+  if (matchesInstallerPatterns(title)) {
+    // still confirm nothing in the description vetoes it (e.g. title is
+    // generic/ambiguous-adjacent and description reveals it's actually
+    // "software installer" or similar)
+    if (description && EXCLUDE_PATTERNS.some((re) => re.test(description))) return false
+    return true
+  }
+  if (!description) return false
+  const truncatedDescription = description.slice(0, MAX_TEXT_LENGTH)
+  if (EXCLUDE_PATTERNS.some((re) => re.test(truncatedDescription))) return false
+  return INCLUDE_PATTERNS.some((re) => re.test(truncatedDescription))
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

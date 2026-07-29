@@ -60,30 +60,42 @@ export async function fetchGreenhouseJobs(company: AtsCompanySeed): Promise<Norm
     return [];
   }
 
-  const data = (await res.json()) as { jobs?: GreenhouseJob[] };
-  const jobs = data.jobs ?? [];
+const data = (await res.json()) as { jobs?: GreenhouseJob[] };
+const jobs = data.jobs ?? [];
+
+// DEBUG temporaire
+if (company.slug === 'hanwhaconvergence') {
+  console.log(`[debug] ${company.slug}: ${jobs.length} jobs bruts reçus`);
+  const target = jobs.find((j) => String(j.id) === '4323539009');
+  console.log(`[debug] job cible présent dans le payload brut ?`, !!target);
+  if (target) {
+    console.log(`[debug] titre: "${target.title}"`);
+    console.log(`[debug] isSolarInstallerRole(title seul):`, isSolarInstallerRole(target.title));
+  }
+  // vérifie aussi si l'API pagine
+  console.log(`[debug] header Link:`, res.headers.get('link'));
+}
 
   // Filtre : on matche sur titre + département + office pour ne rien rater
-  const matched = jobs.filter((j) => {
-    const text = `${j.title} ${j.departments?.map((d) => d.name).join(' ') ?? ''} ${j.offices?.map((o) => o.name).join(' ') ?? ''}`;
-    return isSolarInstallerRole(j.title) || isSolarInstallerRole(text);
-  });
+  const matched = jobs
+  .map((j) => ({ j, description: stripHtml(j.content ?? '') }))
+  .filter(({ j, description }) => isSolarInstallerRole(j.title, description));
 
-  return matched.map((j) => {
-    const location = j.location?.name ?? '';
-    return {
-      source: 'greenhouse',
-      externalId: String(j.id),
-      title: j.title,
-      company: company.name,
-      location,
-      addressRegion: extractStateFromLocation(location),
-      description: stripHtml(j.content ?? ''),
-      url: j.absolute_url,
-      applyUrl: j.absolute_url,
-      contractType: undefined,
-      postedAt: j.created_at ? new Date(j.created_at) : undefined,
-      salary: getSalary(j),
-    };
+return matched.map(({ j, description }) => {
+  const location = j.location?.name ?? '';
+  return {
+    source: 'greenhouse',
+    externalId: String(j.id),
+    title: j.title,
+    company: company.name,
+    location,
+    addressRegion: extractStateFromLocation(location),
+    description,
+    url: j.absolute_url,
+    applyUrl: j.absolute_url,
+    contractType: undefined,
+    postedAt: j.created_at ? new Date(j.created_at) : undefined,
+    salary: getSalary(j),
+  };
   });
 }

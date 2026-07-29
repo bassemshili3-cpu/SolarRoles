@@ -1,4 +1,6 @@
 // lib/ats/company-seed.ts
+import type { WorkdayCompanySeed } from './workday';
+
 export type AtsCompanySeed = {
   slug: string;
   name: string;
@@ -126,6 +128,32 @@ export const JOBVITE_COMPANIES: AtsCompanySeed[] = [
   // Solar Field Engineer / Tech utility-scale
   { slug: 'resgroup',       name: 'RES',             verified: true  },
   { slug: 'canadian-solar', name: 'Canadian Solar',  verified: true  },
+];
+
+// ───────────────────────────────────────────────────────────
+// JAZZHR  →  https://<slug>.applytojob.com/apply  (subdomain = slug)
+// Confirmé "Powered by JazzHR" sur les offres Venture Solar.
+// ───────────────────────────────────────────────────────────
+export const JAZZHR_COMPANIES: AtsCompanySeed[] = [
+  // ★ Résidentiel Solar Installer, NY (Hicksville) — $20-30/hr
+  { slug: 'venturesolar', name: 'Venture Solar', verified: true },
+];
+
+// WORKDAY  →  https://{tenant}.{host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs
+// Gros installateurs/EPC nationaux — pas de "slug" unique, il faut les
+// 3 valeurs (tenant/host/site). NE PAS mettre verified:true sans avoir
+// réellement testé le fetch — c'est le piège qu'on a mis des heures à
+// débusquer sur company-seed Greenhouse (posigen, fluenthome...).
+// ───────────────────────────────────────────────────────────
+export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
+  // ★★★ confirmé — page carrière + tenant Workday vérifiés le 29/07/2026
+  { tenant: 'sunrun', host: 'wd5', site: 'Sunrun_Careers', name: 'Sunrun', verified: true },
+
+  // ⚠️ tenant/host repérés via un lien de login sur rosendin.com/careers,
+  // mais l'endpoint /wday/cxs/.../jobs n'a PAS encore été testé en
+  // direct — "site" est une déduction (probablement 'Careers'), à
+  // confirmer avant de faire confiance à ce verified:true.
+  { tenant: 'rosendin', host: 'wd1', site: 'Careers', name: 'Rosendin Electric', verified: false },
 ];
 
 // ───────────────────────────────────────────────────────────

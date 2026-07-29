@@ -1,4 +1,4 @@
-import { isCyberSecurityRole } from './cyber-taxonomy';
+import { isSolarInstallerRole } from './solar-taxonomy';
 import type { AtsCompanySeed } from './company-seed';
 import type { NormalizedJob } from './ashby';
 
@@ -38,7 +38,7 @@ export async function fetchPinpointJobs(company: AtsCompanySeed): Promise<Normal
 
   const data = (await res.json()) as PinpointResponse;
   const postings = data.data ?? data.postings ?? [];
-  const filtered = postings.filter((p) => isCyberSecurityRole(p.title));
+  const filtered = postings.filter((p) => isSolarInstallerRole(p.title, p.description ?? ''));
 
   return filtered.map((p) => ({
     source: 'pinpoint',

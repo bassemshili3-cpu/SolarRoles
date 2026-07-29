@@ -50,7 +50,9 @@ export async function fetchLeverJobs(company: AtsCompanySeed): Promise<Normalize
   }
 
   const postings = (await res.json()) as LeverPosting[];
-  const filtered = postings.filter((p) => isSolarInstallerRole(p.text));
+ const filtered = postings.filter((p) =>
+  isSolarInstallerRole(p.text, p.descriptionPlain ?? p.descriptionBodyPlain)
+);
 
   return filtered.map((p) => {
     const location = p.categories?.location ?? '';
