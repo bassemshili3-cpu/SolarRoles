@@ -8,11 +8,14 @@ import { useFilterDrawer } from '@/contexts/filter-drawer-context'
 import { useState, useEffect, useRef } from 'react'
 import {
   Search, MapPin, X, ChevronDown, ChevronUp,
-  Clock, Briefcase, Monitor, DollarSign, TrendingUp,
-  GraduationCap, Building2, Gift, Zap,
+  Clock, Briefcase, Sun, DollarSign, HardHat,
+  Award, Building2, Gift, Zap,
 } from 'lucide-react'
 
 // Data
+// Identite visuelle Solar Roles : palette "cellule solaire" (graphite + or solaire),
+// distincte du style gris/pilule d'oh-my-job. Voir commentaires plus bas pour le detail
+// des tokens couleur/typo.
 
 const US_LOCATIONS = [
   'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ',
@@ -38,7 +41,7 @@ const US_LOCATIONS = [
 ]
 
 const DATE_OPTIONS = [
-  { label: 'Any time',     value: '' },
+  { label: 'Any time',      value: '' },
   { label: 'Last 24 hours', value: '1' },
   { label: 'Last 3 days',   value: '3' },
   { label: 'Last 7 days',   value: '7' },
@@ -47,38 +50,38 @@ const DATE_OPTIONS = [
 ]
 
 const JOB_TYPES = [
-  'Full-time', 'Part-time', 'Contract', 'Internship',
-  'Temporary', 'Freelance', 'Per diem',
+  'Full-time', 'Part-time', 'Contract', 'Apprenticeship',
+  'Temporary', 'Union', 'Per diem',
 ]
 
-const ARRANGEMENTS = ['On-site', 'Hybrid', 'Remote']
+const ARRANGEMENTS = ['Field / On-site', 'Shop & field', 'Office / Remote']
 
 const EXPERIENCE_LEVELS = [
-  { label: 'Any level',        value: '' },
-  { label: 'Internship',       value: 'internship' },
-  { label: 'Entry / Junior',   value: 'entry' },
-  { label: 'Mid-Level',        value: 'mid' },
-  { label: 'Senior',           value: 'senior' },
-  { label: 'Manager / Lead',   value: 'manager' },
-  { label: 'Director',         value: 'director' },
-  { label: 'Executive / VP+',  value: 'executive' },
+  { label: 'Any level',            value: '' },
+  { label: 'Apprentice / Trainee',  value: 'apprentice' },
+  { label: 'Helper / Entry-level',  value: 'entry' },
+  { label: 'Installer',             value: 'installer' },
+  { label: 'Lead / Crew foreman',   value: 'lead' },
+  { label: 'Superintendent',        value: 'superintendent' },
+  { label: 'Project manager',       value: 'manager' },
+  { label: 'Director / Executive',  value: 'executive' },
 ]
 
-const EDUCATION_LEVELS = [
-  { label: 'No requirement',   value: '' },
-  { label: 'High school',      value: 'high_school' },
-  { label: 'Associate degree', value: 'associate' },
-  { label: "Bachelor's degree", value: 'bachelor' },
-  { label: "Master's degree",  value: 'master' },
-  { label: 'PhD / Doctorate',  value: 'phd' },
+const CERTIFICATIONS = [
+  { label: 'No certification required', value: '' },
+  { label: 'OSHA 10',                    value: 'osha10' },
+  { label: 'OSHA 30',                    value: 'osha30' },
+  { label: 'NABCEP PV Associate',        value: 'nabcep_associate' },
+  { label: 'NABCEP PV Installer',        value: 'nabcep_installer' },
+  { label: "Journeyman electrician's license", value: 'journeyman' },
 ]
 
 const COMPANY_SIZES = [
-  'Startup (1-50)',
-  'Small (51-200)',
+  'Local crew (1-50)',
+  'Regional installer (51-200)',
   'Mid-size (201-1k)',
-  'Large (1k-5k)',
-  'Enterprise (5k+)',
+  'National EPC (1k-5k)',
+  'Utility-scale (5k+)',
 ]
 
 const BENEFITS = [
@@ -86,11 +89,11 @@ const BENEFITS = [
   'Dental & Vision',
   '401(k) match',
   'Paid time off',
-  'Stock options / RSU',
-  'Remote stipend',
-  'Tuition reimbursement',
-  'Parental leave',
-  'Wellness perks',
+  'Per diem / travel pay',
+  'Tool allowance',
+  'Company vehicle',
+  'Certification reimbursement',
+  'Overtime / prevailing wage',
 ]
 
 // Sub-components
@@ -108,19 +111,23 @@ function Section({
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-t pt-4">
+    <div className="border-t border-[#E7E2D9] pt-4">
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
         className="flex items-center justify-between w-full mb-3 group"
       >
-        <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">{icon}</span>
-          <span className="font-semibold text-sm">{title}</span>
+        <div className="flex items-center gap-2.5">
+          <span className="flex items-center justify-center w-6 h-6 rounded-[4px] bg-[#1C2126] text-[#F2A93B]">
+            {icon}
+          </span>
+          <span className="font-semibold text-[11px] uppercase tracking-[0.14em] text-[#1C2126]">
+            {title}
+          </span>
         </div>
         {open
-          ? <ChevronUp className="h-4 w-4 text-muted-foreground" />
-          : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+          ? <ChevronUp className="h-4 w-4 text-[#8A8578]" />
+          : <ChevronDown className="h-4 w-4 text-[#8A8578]" />}
       </button>
       {open && <div className="space-y-1.5">{children}</div>}
     </div>
@@ -158,21 +165,21 @@ function RadioOption({
       }}
       className={
         checked
-          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors bg-gray-100 text-gray-900 font-medium'
-          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors hover:bg-accent text-foreground'
+          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors bg-[#1C2126] text-[#F2A93B] font-medium'
+          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors hover:bg-[#FBF7EE] text-[#2B2E32]'
       }
     >
       <span
         className={
           checked
-            ? 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-gray-900 bg-white'
-            : 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-gray-300 bg-white'
+            ? 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-[#F2A93B] bg-[#1C2126]'
+            : 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-[#D8D2C3] bg-white'
         }
       >
-        {checked && <span className="w-2 h-2 rounded-full bg-gray-900" />}
+        {checked && <span className="w-2 h-2 rounded-full bg-[#F2A93B]" />}
       </span>
-      <input type="radio" className="sr-only" checked={checked} readOnly />
       {label}
+      <input type="radio" className="sr-only" checked={checked} readOnly />
     </label>
   )
 }
@@ -185,19 +192,19 @@ function CheckOption({ label, checked, onChange }: {
       onClick={onChange}
       className={
         checked
-          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors select-none bg-gray-100 text-gray-900 font-medium'
-          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer text-sm transition-colors select-none hover:bg-accent text-foreground'
+          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none bg-[#1C2126] text-[#F2A93B] font-medium'
+          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none hover:bg-[#FBF7EE] text-[#2B2E32]'
       }
     >
       <div
         className={
           checked
-            ? 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors bg-white border-gray-900'
-            : 'w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors bg-white border-gray-300'
+            ? 'w-4.5 h-4.5 rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-[#F2A93B] border-[#F2A93B]'
+            : 'w-4.5 h-4.5 rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-white border-[#D8D2C3]'
         }
       >
         {checked && (
-          <svg className="w-3.5 h-3.5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <svg className="w-3 h-3 text-[#1C2126]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         )}
@@ -232,7 +239,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const [arrangements, setArrangements] = useState<string[]>([])
   const [salary, setSalary] = useState(0)
   const [experience, setExperience] = useState('')
-  const [education, setEducation] = useState('')
+  const [certification, setCertification] = useState('')
   const [companySizes, setCompanySizes] = useState<string[]>([])
   const [benefits, setBenefits] = useState<string[]>([])
   const [easyApply, setEasyApply] = useState(false)
@@ -247,7 +254,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     setJobTypes(splitParam(searchParams.get('job_type')))
     setArrangements(splitParam(searchParams.get('arrangement')))
     setExperience(searchParams.get('experience') || '')
-    setEducation(searchParams.get('education') || '')
+    setCertification(searchParams.get('certification') || '')
     setCompanySizes(splitParam(searchParams.get('company_size')))
     setBenefits(splitParam(searchParams.get('benefits')))
     setEasyApply(searchParams.get('easy_apply') === 'true')
@@ -303,7 +310,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     setOrDelete(params, 'job_type', jobTypes.join(','))
     setOrDelete(params, 'arrangement', arrangements.join(','))
     setOrDelete(params, 'experience', experience)
-    setOrDelete(params, 'education', education)
+    setOrDelete(params, 'certification', certification)
     setOrDelete(params, 'company_size', companySizes.join(','))
     setOrDelete(params, 'benefits', benefits.join(','))
     setOrDelete(params, 'easy_apply', easyApply ? 'true' : '')
@@ -322,7 +329,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
     setJobTypes([])
     setArrangements([])
     setExperience('')
-    setEducation('')
+    setCertification('')
     setCompanySizes([])
     setBenefits([])
     setEasyApply(false)
@@ -333,7 +340,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   }
 
   const activeCount = [
-    postedWithin, ...jobTypes, ...arrangements, experience, education,
+    postedWithin, ...jobTypes, ...arrangements, experience, certification,
     ...companySizes, ...benefits,
     easyApply ? 'ea' : '', visaSponsorship ? 'vs' : '', salary > 0 ? 's' : '',
   ].filter(Boolean).length
@@ -344,7 +351,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
       <div
         onClick={close}
         aria-hidden="true"
-        className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-[60] bg-black/60 transition-opacity duration-300 md:hidden ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       />
@@ -353,22 +360,25 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
       <div
         className={`
           fixed top-0 right-0 z-[70] h-full w-[85vw] max-w-sm
-          bg-white dark:bg-neutral-950 border-l shadow-2xl overflow-y-auto
+          bg-white border-l border-[#E7E2D9] shadow-2xl overflow-y-auto
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
           md:sticky md:top-20 md:right-auto md:z-auto md:h-auto
           md:w-auto md:max-w-none md:translate-x-0 md:transition-none
-          md:bg-card md:rounded-2xl md:border md:border-l md:shadow-lg
+          md:bg-white md:rounded-xl md:border md:border-[#E7E2D9] md:shadow-sm
           md:max-h-[calc(100vh-6rem)]
         `}
       >
-        {/* Header */}
-        <div className="p-4 md:p-5 pb-0">
+        {/* Header : bandeau graphite, evoque le cadre d'un panneau solaire */}
+        <div className="bg-[#1C2126] px-4 md:px-5 py-4 md:rounded-t-xl">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-bold text-foreground">Filter Jobs</h2>
+            <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-white">
+              <Sun className="h-4 w-4 text-[#F2A93B]" />
+              Filter Jobs
+            </h2>
             <div className="flex items-center gap-2">
               {activeCount > 0 && (
-                <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5 font-semibold">
+                <span className="text-xs bg-[#F2A93B] text-[#1C2126] rounded-[4px] px-2 py-0.5 font-bold">
                   {activeCount}
                 </span>
               )}
@@ -376,7 +386,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
                 type="button"
                 onClick={close}
                 aria-label="Fermer les filtres"
-                className="md:hidden p-1.5 -mr-1.5 rounded-lg hover:bg-accent transition-colors"
+                className="md:hidden p-1.5 -mr-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -385,20 +395,20 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
 
           {/* Keywords */}
           <div className="relative mb-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
             <input
               type="text"
-              placeholder="Job title, keywords, or company"
+              placeholder="Installer, electrician, foreman..."
               value={keywords}
               onChange={e => setKeywords(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && applyFilters()}
-              className="w-full pl-10 pr-4 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/10 border border-white/15 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#F2A93B] focus:border-transparent text-sm"
             />
           </div>
 
           {/* Location */}
           <div className="relative mb-4" ref={locationInputRef}>
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
             <input
               type="text"
               placeholder="City, State, or Remote"
@@ -406,25 +416,25 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
               onChange={e => setLocation(e.target.value)}
               onFocus={() => location.length > 0 && setShowSuggestions(true)}
               onKeyDown={e => e.key === 'Enter' && applyFilters()}
-              className="w-full pl-10 pr-8 py-2.5 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+              className="w-full pl-10 pr-8 py-2.5 bg-white/10 border border-white/15 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#F2A93B] focus:border-transparent text-sm"
             />
             {location && (
               <button
                 onClick={() => setLocation('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
             )}
             {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className="absolute z-[100] w-full mt-1 rounded-lg shadow-2xl max-h-64 overflow-y-auto bg-white border border-gray-200">
+              <div className="absolute z-[100] w-full mt-1 rounded-lg shadow-2xl max-h-64 overflow-y-auto bg-white border border-[#E7E2D9]">
                 {filteredSuggestions.map((loc, i) => (
                   <button
                     key={i}
                     onClick={() => { setLocation(loc); setShowSuggestions(false) }}
-                    className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-blue-50 border-b border-gray-100 last:border-b-0 text-gray-900"
+                    className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-[#FBF7EE] border-b border-[#F1EDE3] last:border-b-0 text-[#1C2126]"
                   >
-                    <MapPin className="h-4 w-4 flex-shrink-0 text-gray-400" />
+                    <MapPin className="h-4 w-4 flex-shrink-0 text-[#B8AF9C]" />
                     <span className="truncate font-medium">{loc}</span>
                   </button>
                 ))}
@@ -434,7 +444,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
 
           <Button
             onClick={applyFilters}
-            className="w-full py-2.5 text-sm font-semibold active:scale-[0.97] transition-all"
+            className="w-full py-2.5 text-sm font-semibold bg-[#F2A93B] hover:bg-[#D88A1E] text-[#1C2126] active:scale-[0.97] transition-all"
           >
             <Search className="h-4 w-4 mr-2" />
             Search Jobs
@@ -445,7 +455,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
         <div className="p-4 md:p-5 space-y-0">
 
           {/* Date Posted */}
-          <Section icon={<Clock className="h-4 w-4" />} title="Date Posted">
+          <Section icon={<Clock className="h-3.5 w-3.5" />} title="Date Posted">
             {DATE_OPTIONS.map(opt => (
               <RadioOption
                 key={opt.value}
@@ -457,7 +467,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
           </Section>
 
           {/* Job Type */}
-          <Section icon={<Briefcase className="h-4 w-4" />} title="Job Type">
+          <Section icon={<Briefcase className="h-3.5 w-3.5" />} title="Job Type">
             {JOB_TYPES.map(type => (
               <CheckOption
                 key={type}
@@ -469,7 +479,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
           </Section>
 
           {/* Work Arrangement */}
-          <Section icon={<Monitor className="h-4 w-4" />} title="Work Arrangement">
+          <Section icon={<HardHat className="h-3.5 w-3.5" />} title="Work Setting">
             {ARRANGEMENTS.map(arr => (
               <CheckOption
                 key={arr}
@@ -480,49 +490,49 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
             ))}
           </Section>
 
-          {/* Salary */}
-          <Section icon={<DollarSign className="h-4 w-4" />} title="Minimum Salary">
-            <div className="py-2 px-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl">
+          {/* Salary : jauge "gain solaire", du graphite vers l'or a mesure que le minimum monte */}
+          <Section icon={<DollarSign className="h-3.5 w-3.5" />} title="Minimum Pay">
+            <div className="py-3 px-3 bg-[#1C2126] rounded-lg">
               <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground whitespace-nowrap">$0</span>
+                <span className="text-[10px] font-mono text-white/50 whitespace-nowrap">$0</span>
                 <div className="flex-1">
                   <Slider
                     value={[salary]}
                     onValueChange={v => setSalary(v[0])}
                     min={0}
-                    max={300000}
-                    step={5000}
-                    className="py-2"
+                    max={150000}
+                    step={2500}
+                    className="py-2 [&_[role=slider]]:bg-[#F2A93B] [&_[role=slider]]:border-[#F2A93B] [&_.bg-primary]:bg-[#F2A93B]"
                   />
                 </div>
-                <span className="text-xs text-muted-foreground whitespace-nowrap">$300k</span>
+                <span className="text-[10px] font-mono text-white/50 whitespace-nowrap">$150k</span>
+              </div>
+              <div className="mt-2 text-center">
+                <span className="text-lg font-mono font-semibold text-[#F2A93B]">
+                  ${salary.toLocaleString('en-US')}
+                </span>
+                <span className="text-[10px] uppercase tracking-wide text-white/40 ml-1.5">/ yr min.</span>
               </div>
             </div>
-            <div className="flex items-center justify-center bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
-              <div className="text-center">
-                <div className="text-xs text-muted-foreground uppercase tracking-wide">Min.</div>
-                <div className="text-xl font-semibold text-primary">${salary.toLocaleString('en-US')}</div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {[50000, 75000, 100000, 125000, 150000, 200000].map(p => (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {[22, 30, 45, 65, 85, 110].map(k => (
                 <button
-                  key={p}
-                  onClick={() => setSalary(p === salary ? 0 : p)}
-                  className={`text-xs px-2.5 py-1 rounded-full transition-all ${
-                    salary === p
-                      ? 'bg-primary text-primary-foreground font-semibold'
-                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  key={k}
+                  onClick={() => setSalary(k * 1000 === salary ? 0 : k * 1000)}
+                  className={`text-xs font-mono px-2.5 py-1 rounded-[4px] transition-all ${
+                    salary === k * 1000
+                      ? 'bg-[#1C2126] text-[#F2A93B] font-semibold'
+                      : 'bg-[#F5F2EA] text-[#5C574C] hover:bg-[#EDE8DA]'
                   }`}
                 >
-                  ${p / 1000}k
+                  ${k}k
                 </button>
               ))}
             </div>
           </Section>
 
           {/* Experience Level */}
-          <Section icon={<TrendingUp className="h-4 w-4" />} title="Experience Level">
+          <Section icon={<Zap className="h-3.5 w-3.5" />} title="Experience Level">
             {EXPERIENCE_LEVELS.map(opt => (
               <RadioOption
                 key={opt.value}
@@ -533,20 +543,20 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
             ))}
           </Section>
 
-          {/* Education */}
-          <Section icon={<GraduationCap className="h-4 w-4" />} title="Education Required" defaultOpen={false}>
-            {EDUCATION_LEVELS.map(opt => (
+          {/* Certification */}
+          <Section icon={<Award className="h-3.5 w-3.5" />} title="Certification" defaultOpen={false}>
+            {CERTIFICATIONS.map(opt => (
               <RadioOption
                 key={opt.value}
                 label={opt.label}
-                checked={education === opt.value}
-                onChange={() => setEducation(p => (p === opt.value ? '' : opt.value))}
+                checked={certification === opt.value}
+                onChange={() => setCertification(p => (p === opt.value ? '' : opt.value))}
               />
             ))}
           </Section>
 
           {/* Company Size */}
-          <Section icon={<Building2 className="h-4 w-4" />} title="Company Size" defaultOpen={false}>
+          <Section icon={<Building2 className="h-3.5 w-3.5" />} title="Company Size" defaultOpen={false}>
             {COMPANY_SIZES.map(size => (
               <CheckOption
                 key={size}
@@ -558,7 +568,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
           </Section>
 
           {/* Benefits */}
-          <Section icon={<Gift className="h-4 w-4" />} title="Benefits & Perks" defaultOpen={false}>
+          <Section icon={<Gift className="h-3.5 w-3.5" />} title="Benefits & Perks" defaultOpen={false}>
             {BENEFITS.map(b => (
               <CheckOption
                 key={b}
@@ -570,7 +580,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
           </Section>
 
           {/* Quick Filters */}
-          <Section icon={<Zap className="h-4 w-4" />} title="Quick Filters">
+          <Section icon={<Sun className="h-3.5 w-3.5" />} title="Quick Filters">
             <CheckOption
               label="Easy Apply"
               checked={easyApply}
@@ -590,7 +600,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="w-full text-sm active:scale-[0.97] transition-all"
+            className="w-full text-sm border-[#D8D2C3] text-[#1C2126] hover:bg-[#F5F2EA] active:scale-[0.97] transition-all"
           >
             {activeCount > 0 ? `Clear ${activeCount} filter${activeCount > 1 ? 's' : ''}` : 'Clear All Filters'}
           </Button>

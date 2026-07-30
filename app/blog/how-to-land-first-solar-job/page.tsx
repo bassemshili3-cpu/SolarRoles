@@ -211,15 +211,13 @@ export default function ArticlePage() {
             The pay jump between month 3 and month 12 is significant. A good lead installer at a residential company in 2026 makes $28 to $38 an hour depending on the state. Commercial and utility-scale installers with NABCEP certs and a few years of experience clear six figures. The ceiling is high if you’re good.
           </p>
 
-          <h2>The one thing most people get wrong</h2>
+          <h2>One thing to realize</h2>
+        
           <p>
-            They wait to feel ready before they apply.
+            The NABCEP study guide is intimidating. The OSHA videos can be boring & the job descriptions list skills you don’t have. Apply anyway. The first solar job teaches you 10x more than any certification or course ever will.
           </p>
           <p>
-            You’re not going to feel ready. The NABCEP study guide is intimidating. The OSHA videos are boring. The job descriptions list skills you don’t have. Apply anyway. The first solar job teaches you 10x more than any certification or course ever will.
-          </p>
-          <p>
-            The industry is short on people who actually want to be there. That’s you, presumably, or you wouldn’t have read this far. Send the application. Make the call. Show up in person if you can.
+            The industry is short on people who actually want to be there. That’s you, presumably, or you wouldn’t have read this far. Send the application and show up in person if you can.
           </p>
           <p>
             The rooftops are waiting.

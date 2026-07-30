@@ -52,7 +52,7 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /photovoltaic\s*install(er|ation)/i,
   /solar\s*(field|service)\s*tech(nician)?/i,
   /solar\s*tech(nician)?\b/i,
-  /lead\s*(solar\s*)?install(er)?/i,
+  /lead\s*solar\s*install(er)?/i, // "solar" obligatoire ici — sinon matche n'importe quel "Lead Installer" (télécom, etc.)
   /solar\s*(crew|foreman)/i,
   /residential\s*solar\s*install/i,
   /commercial\s*solar\s*install/i,
@@ -144,6 +144,7 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\bmaintenance\s*tech(nician)?\b/i,
   /\bcommissioning\s*tech(nician)?\b/i,
   /\belectrician\s*(i{1,3}|1|2|3)?$/i,
+  /\blead\s*install(er)?\b/i, // ex. "Lead Installer" ou "Telecommunications Lead Installer" sans "solar" dans le titre
 ];
 
 // Strong, specific solar signals to look for in a description when the
@@ -175,7 +176,7 @@ export function isSolarInstallerRole(title: string, description?: string): boole
 
   // Excludes always win, whether tripped by title or description.
   if (EXCLUDE_PATTERNS.some((re) => re.test(title))) return false;
-  if (EXCLUDE_PATTERNS.some((re) => re.test(title))) return false;
+  if (description && EXCLUDE_PATTERNS.some((re) => re.test(description))) return false;
 
   // Tier 1: title alone carries a solar signal for one of the covered roles.
   if (INCLUDE_PATTERNS.some((re) => re.test(title))) return true;

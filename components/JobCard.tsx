@@ -162,7 +162,7 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
   target="_blank"
   rel="noopener noreferrer"
   onClick={(e) => e.stopPropagation()}
-  className="inline-flex items-center px-3 py-1 rounded-md bg-[#5B2A7F] hover:bg-[#2A1140] text-white text-xs font-semibold transition-colors"
+ className="inline-flex items-center px-3 py-1 rounded-md bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
 >
   Apply 
 </a>

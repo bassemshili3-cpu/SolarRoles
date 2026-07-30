@@ -40,8 +40,8 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
-    { href: '/employers',  label: 'Employers' },
-    { href: '/resources',  label: 'Resources' },
+    { href: '/post-a-job-free',  label: 'Employers' },
+    { href: '/blog',  label: 'Blog' },
     { href: '/about',      label: 'About' },
   ]
 
@@ -99,7 +99,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-          <Link href="/employers/post-a-job" className="hidden sm:inline-flex">
+          <Link href="/post-a-job-free" className="hidden sm:inline-flex">
             <Button
               size="sm"
               className="bg-[#F5B819] hover:bg-[#E5A810] active:bg-[#D4960D] text-[#0B1A2E] font-semibold rounded-full px-4 h-9"
@@ -141,16 +141,6 @@ export default function Navbar() {
             </Link>
           )}
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden sm:inline-flex relative h-9 w-9 text-gray-600 hover:text-[#0B1A2E]"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            aria-label="Toggle theme"
-          >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          </Button>
 
           <FilterDrawerTrigger />
 

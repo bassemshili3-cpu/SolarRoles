@@ -240,37 +240,39 @@ export default async function Home() {
 
     <>
 
-      <section className="relative bg-gradient-to-br from-[#0B1A2E] via-[#0F2440] to-[#1E3A5F] text-white pt-24 pb-32 overflow-hidden">
+      <section className="relative bg-[#0B1A2E] text-white pt-24 pb-32 overflow-hidden">
+  {/* Vidéo de fond en boucle, sujet cadré à droite */}
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    poster="/hero-solar-poster.jpg"
+    className="absolute inset-0 w-full h-full object-cover"
+    style={{ objectPosition: '80% center' }}
+  >
+    <source src="/video_solar_worker.mp4" type="video/mp4" />
+  </video>
 
-        {/* Uncomment to add a hero image:
+  {/* Voile à 70% pour garder l'identité graphite du site */}
+  <div className="absolute inset-0 bg-[#0B1A2E]/70" />
 
-            <div className="absolute inset-0 bg-[url('/hero-solar.jpg')] bg-cover bg-center opacity-50" />
+  {/* Dégradé additionnel pour garantir la lisibilité du texte à gauche,
+      peu importe ce qui se passe dans la vidéo à cet endroit */}
+  <div className="absolute inset-0 bg-gradient-to-r from-[#0B1A2E] via-[#0B1A2E]/70 to-transparent" />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1A2E]/95 via-[#0B1A2E]/60 to-transparent" /> */}
-
-        <div className="relative max-w-6xl mx-auto px-6">
-
-          <div className="max-w-2xl">
-
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
-
-              Solar PV installer jobs<br />across the US.
-
-            </h1>
-
-            <p className="text-lg text-white/80 mb-8 max-w-xl">
-
-              Pay ranges on every listing. No account needed to browse.
-
-            </p>
-
-            <SearchHero />
-
-          </div>
-
-        </div>
-
-      </section>
+  <div className="relative z-10 max-w-6xl mx-auto px-6">
+    <div className="max-w-2xl">
+      <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
+        Solar PV installer jobs<br />across the US.
+      </h1>
+      <p className="text-lg text-white/80 mb-8 max-w-xl">
+        Pay ranges on every listing. No account needed to browse.
+      </p>
+      <SearchHero />
+    </div>
+  </div>
+</section>
 
 
       <section className="bg-white py-16 px-6">

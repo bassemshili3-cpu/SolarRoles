@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Can You Become a Solar Installer With No Experience? (2026 Guide)',
     description:
-      'Yes — most US solar contractors hire and train entry-level installers. Here\u2019s what they look for, what it pays in 2026, and how fast you can move up.',
+      'Most US solar contractors hire and train entry-level installers. Here\u2019s what they look for, what it pays in 2026, and how fast you can move up.',
     url: 'https://www.solarroles.com/blog/become-solar-installer-no-experience',
     siteName: 'Solar Roles',
     type: 'article',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Can You Become a Solar Installer With No Experience? (2026 Guide)',
     description:
-      'Yes — most US solar contractors hire and train entry-level installers. Here\u2019s what they look for and what it pays in 2026.',
+      'Most US solar contractors hire and train entry-level installers. Here\u2019s what they look for and what it pays in 2026.',
   },
 }
 
@@ -79,15 +79,15 @@ export default function Page() {
       />
       <article className="mx-auto max-w-2xl px-4 py-12">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="text-3xl font-bold font-serif tracking-tight sm:text-4xl">
             Is It Possible to Become a Solar Installer With No Experience?
           </h1>
           <p className="mt-3 text-sm text-gray-500">Updated July 2026</p>
         </header>
 
-        <div className="prose prose-neutral max-w-none">
+        <div className="prose prose-neutral max-w-none prose-p:my-6 prose-h2:font-bold prose-h2:font-serif prose-h2:mt-10 prose-h2:mb-4">
           <p>
-            Short answer: yes. Most solar contractors hire helpers with zero
+            Most solar contractors hire helpers with zero
             background in the trade and train them on the crew.
           </p>
 
@@ -112,8 +112,8 @@ export default function Page() {
           <p>
             Entry-level &ldquo;no experience&rdquo; solar installer roles are
             averaging around $22&ndash;26/hour nationally in 2026, according
-            to ZipRecruiter data — with real variation by state. California
-            and the Northeast tend to run higher; Texas and other
+            to ZipRecruiter data, with real variation by state.
+            California and the Northeast tend to run higher; Texas and other
             lower-cost markets sit a bit under the national average.
             Utility-scale projects often add a per diem on top of the
             hourly rate if you&rsquo;re traveling to job sites.
@@ -145,15 +145,15 @@ export default function Page() {
             Generic job boards bury solar postings under sales and
             consultant roles that have nothing to do with hands-on
             installation. If you&rsquo;re specifically after tools-in-hand
-            installer work, a board built just for that role — like{' '}
-            <a href="https://www.solarroles.com">Solar Roles</a> — cuts out
+            installer work, a board built just for that role, like{' '}
+            <a href="https://www.solarroles.com">Solar Roles</a>, cuts out
             the noise and shows you only PV installer, electrician, and
             O&amp;M openings.
           </p>
 
           <p>
-            No experience isn&rsquo;t the barrier here. Showing up reliably
-            and being willing to learn on a roof is.
+            Reliability and a willingness to learn on a roof will get you
+            hired faster than any prior experience on your resume.
           </p>
         </div>
       </article>
