@@ -66,7 +66,7 @@ const dataSalaryPages: string[] = [
 const blogPosts: string[] = [
   '/how-to-land-first-solar-job',
  '/become-solar-installer-no-experience',
- 'what-does-a-solar-installer-do',
+ '/what-does-a-solar-installer-do',
 ]
 
 // ── Config par section : priorité, fréquence, date ─────────
