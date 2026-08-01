@@ -1,6 +1,7 @@
 // lib/roleCategories.ts
-// Catégories canoniques de métiers, utilisées à la fois pour /data/salaries/[title]
-// et pour matcher le titre libre d'un job à une catégorie exploitable en stats.
+// Catégories canoniques de métiers SOLAIRES, utilisées à la fois pour
+// /data/salaries/[title] et pour matcher le titre libre d'un job à une
+// catégorie exploitable en stats sur Solar Roles.
 //
 // Deux façons de définir les mots-clés d'une catégorie :
 //
@@ -9,15 +10,27 @@
 //
 // 2. `keywordGroups: string[][]` — chaque sous-tableau est un groupe ET, et la catégorie
 //    matche si AU MOINS UN groupe est entièrement présent (logique OU entre groupes).
-//    Utile pour les synonymes/abréviations d'un même métier, ex: CNA / Certified Nursing
-//    Assistant / Patient Care Assistant sont le même poste sous des libellés différents.
+//    Utile pour les synonymes/abréviations d'un même métier, ex: PV Installer / Solar
+//    Panel Installer / Photovoltaic Installer sont le même poste sous des libellés
+//    différents selon l'employeur.
 //
 // Si les deux champs sont présents, `keywordGroups` est prioritaire.
-// La liste est parcourue dans l'ordre : mets les catégories les plus spécifiques en premier.
+// La liste est parcourue dans l'ordre : mets les catégories les plus spécifiques en
+// premier — ex: "Solar Electrician" et "Lead Installer / Foreman" doivent être
+// évalués AVANT le catch-all générique "PV Installer", sinon un "Lead Solar
+// Installer" tomberait dans la catégorie générique au lieu de sa catégorie propre.
 //
-// ⚠️ Cette liste est synchronisée avec SLUG_TO_TITLE dans app/data/salaries/[title]/page.tsx.
-// Chaque slug qui a une vraie page là-bas doit avoir : (1) une entrée ici pour le matching,
-// et (2) une entrée dans KNOWN_SALARY_REPORT_SLUGS plus bas pour que le lien SEO s'affiche.
+// ⚠️ Cette liste doit être synchronisée avec SLUG_TO_TITLE dans
+// app/data/salaries/[title]/page.tsx. Chaque slug qui a une vraie page là-bas doit
+// avoir : (1) une entrée ici pour le matching, et (2) une entrée dans
+// KNOWN_SALARY_REPORT_SLUGS plus bas pour que le lien SEO s'affiche.
+// KNOWN_SALARY_REPORT_SLUGS ci-dessous est un point de départ, PAS une liste
+// vérifiée contre tes pages réelles — à confirmer avant mise en prod.
+//
+// Rappel de scope (cohérent avec lib/ats/oh-my-job-taxonomy.ts) : on reste sur
+// des rôles de terrain (installation, électricité, O&M, stockage, ventes
+// techniques liées à NABCEP). Les rôles de bureau purs (Project Manager solaire,
+// Permitting Specialist...) sont volontairement absents pour l'instant.
 
 export type RoleCategory = {
   slug: string
@@ -27,358 +40,203 @@ export type RoleCategory = {
   // Si true, matchRoleCategory() peut matcher cette catégorie sur le texte de la
   // description (en plus du titre) quand le titre seul ne suffit pas. À réserver
   // aux catégories dont les mots-clés sont assez spécifiques pour ne pas générer
-  // de faux positifs sur un long texte libre (ex: 'fly in fly out' + 'mining').
-  // Les catégories à mots-clés génériques combinés (ex: 'operations' + 'manager')
-  // ne doivent PAS activer ce flag : ces deux mots peuvent apparaître incidemment
-  // n'importe où dans une description sans rapport avec le poste réel.
+  // de faux positifs sur un long texte libre. Aucune catégorie solaire ci-dessous
+  // n'active ce flag pour l'instant : même "solar installer" peut apparaître de
+  // façon incidente dans une description sans rapport (ex: "notre bureau
+  // fonctionne à l'énergie solaire"), donc on reste prudent et on matche sur le
+  // titre uniquement.
   matchInDescription?: boolean
 }
 
 export const ROLE_CATEGORIES: RoleCategory[] = [
-  // ── santé : nursing (CNA séparé de "Nursing Assistant", qui a sa propre page) ──
-  {
-    slug: 'certified-nursing-assistant',
-    label: 'Certified Nursing Assistant',
-    keywordGroups: [
-      ['certified nursing assistant'],
-      ['cna'],
-      // NB: 'nursing assistant' retiré volontairement de ce groupe : ce libellé a
-      // maintenant sa propre page (slug 'nursing-assistant'), donc son synonyme ne
-      // doit plus être aspiré ici, sinon il ne matchera jamais sa propre catégorie.
-      ['patient care assistant'],
-      ['nurse aide'],
-      ['nursing aide'],
-      ['pca'],
-    ],
-  },
-  { slug: 'nursing-assistant', label: 'Nursing Assistant', keywords: ['nursing assistant'] },
-  { slug: 'registered-nurse',  label: 'Registered Nurse',  keywords: ['registered nurse'] },
+  // ── entrée de métier ──
+  { slug: 'solar-apprentice', label: 'Solar Apprentice', keywords: ['solar apprentice'] },
 
-  { slug: 'software-engineer', label: 'Software Engineer', keywords: ['software engineer'] },
-  { slug: 'data-analyst',      label: 'Data Analyst',      keywords: ['data analyst'] },
-  { slug: 'project-manager',   label: 'Project Manager',   keywords: ['project manager'] },
-  { slug: 'dental-assistant',  label: 'Dental Assistant',  keywords: ['dental assistant'] },
-  { slug: 'electrician',       label: 'Electrician',       keywords: ['electrician'] },
-  { slug: 'medical-assistant', label: 'Medical Assistant', keywords: ['medical assistant'] },
-  { slug: 'truck-driver',      label: 'Truck Driver',      keywords: ['truck driver'] },
-  { slug: 'accountant',        label: 'Accountant',        keywords: ['accountant'] },
-  { slug: 'customer-service',  label: 'Customer Service',  keywords: ['customer service'] },
-  { slug: 'sales-associate',   label: 'Sales Associate',   keywords: ['sales associate'] },
-  { slug: 'pharmacy-technician', label: 'Pharmacy Technician', keywords: ['pharmacy technician'] },
-  { slug: 'ux-writer', label: 'UX Writer', keywords: ['ux writer'] },
-
-  // ── tech ──
-  { slug: 'data-scientist',   label: 'Data Scientist',   keywords: ['data scientist'] },
-  { slug: 'devops-engineer',  label: 'DevOps Engineer',  keywords: ['devops engineer'] },
-  { slug: 'product-manager',  label: 'Product Manager',  keywords: ['product manager'] },
-  { slug: 'ux-designer',      label: 'UX Designer',      keywords: ['ux designer'] },
-  { slug: 'it-support',       label: 'IT Support',       keywords: ['it support'] },
-  { slug: 'cybersecurity',    label: 'Cybersecurity',    keywords: ['cybersecurity'] },
-  { slug: 'cloud-engineer',   label: 'Cloud Engineer',   keywords: ['cloud engineer'] },
-
-  // ── santé (autres) ──
-  { slug: 'physical-therapist',      label: 'Physical Therapist',      keywords: ['physical therapist'] },
-  { slug: 'home-health-aide',        label: 'Home Health Aide',        keywords: ['home health aide'] },
-  { slug: 'medical-receptionist',    label: 'Medical Receptionist',    keywords: ['medical receptionist'] },
-  { slug: 'mental-health-counselor', label: 'Mental Health Counselor', keywords: ['mental health counselor'] },
-  { slug: 'radiologic-technologist', label: 'Radiologic Technologist', keywords: ['radiologic technologist'] },
-  { slug: 'patient-care-technician', label: 'Patient Care Technician', keywords: ['patient care technician'] },
-  { slug: 'patient-transporter',     label: 'Patient Transporter',     keywords: ['patient transporter'] },
-  { slug: 'pediatric-nurse-practitioner', label: 'Pediatric Nurse Practitioner', keywords: ['pediatric nurse practitioner'] },
-  { slug: 'new-grad-nurse',          label: 'New Grad Nurse',          keywords: ['new grad nurse'] },
+  // ── encadrement terrain (avant le catch-all générique) ──
   {
-    slug: 'labor-and-delivery-nurse',
-    label: 'Labor and Delivery Nurse',
+    slug: 'lead-installer-foreman',
+    label: 'Lead Installer / Foreman',
     keywordGroups: [
-      ['labor and delivery nurse'],
-      ['labor & delivery nurse'],
-      ['l&d nurse'],
-    ],
-  },
-  { slug: 'school-nurse',            label: 'School Nurse',            keywords: ['school nurse'] },
-  { slug: 'respiratory-therapist',   label: 'Respiratory Therapist',   keywords: ['respiratory therapist'] },
-  {
-    slug: 'surgical-tech',
-    label: 'Surgical Tech',
-    keywordGroups: [
-      ['surgical tech'],
-      ['surgical technologist'],
-      ['surgical technician'],
+      ['lead solar installer'],
+      ['solar installation lead'],
+      ['solar foreman'],
+      ['solar crew lead'],
+      ['solar install lead'],
     ],
   },
   {
-    slug: 'sterile-processing-technician',
-    label: 'Sterile Processing Technician',
+    slug: 'solar-site-supervisor',
+    label: 'Solar Site Supervisor',
     keywordGroups: [
-      ['sterile processing technician'],
-      ['sterile processing tech'],
-    ],
-  },
-  {
-    slug: 'emt',
-    label: 'EMT',
-    keywordGroups: [
-      ['emt'],
-      ['emergency medical technician'],
-    ],
-  },
-  {
-    slug: 'ekg-technician',
-    label: 'EKG Technician',
-    keywordGroups: [
-      ['ekg technician'],
-      ['ekg tech'],
-      ['ecg technician'],
-    ],
-  },
-  {
-    slug: 'speech-language-pathologist',
-    label: 'Speech-Language Pathologist',
-    keywordGroups: [
-      ['speech-language pathologist'],
-      ['speech language pathologist'],
-      ['slp'],
-    ],
-  },
-  {
-    slug: 'assisted-reproductive-technology',
-    label: 'Assisted Reproductive Technology',
-    // NB: pas d'abréviation "art" ajoutée ici, ça collisionnerait massivement
-    // avec 'art-teacher' et tout titre contenant le mot "art".
-    keywords: ['assisted reproductive technology'],
-  },
-
-  // ── éducation / petite enfance ──
-  { slug: 'art-teacher',              label: 'Art Teacher',              keywords: ['art teacher'] },
-  { slug: 'substitute-teacher',       label: 'Substitute Teacher',       keywords: ['substitute teacher'] },
-  { slug: 'special-education-teacher', label: 'Special Education Teacher', keywords: ['special education teacher'] },
-  { slug: 'social-studies-teacher',   label: 'Social Studies Teacher',   keywords: ['social studies teacher'] },
-  { slug: 'paraprofessional',         label: 'Paraprofessional',         keywords: ['paraprofessional'] },
-  { slug: 'summer-camp-counselor',    label: 'Summer Camp Counselor',    keywords: ['summer camp counselor'] },
-  { slug: 'school-counselor',         label: 'School Counselor',         keywords: ['school counselor'] },
-  { slug: 'tutor',                    label: 'Tutor',                    keywords: ['tutor'] },
-  { slug: 'preschool-teacher',        label: 'Preschool Teacher',        keywords: ['preschool teacher'] },
-  { slug: 'childcare',                label: 'Childcare',                keywords: ['childcare'] },
-  { slug: 'daycare',                  label: 'Daycare',                  keywords: ['daycare'] },
-  { slug: 'nanny',                    label: 'Nanny',                    keywords: ['nanny'] },
-
-  // ── métiers manuels / terrain ──
-  { slug: 'plumber',              label: 'Plumber',              keywords: ['plumber'] },
-  { slug: 'carpenter',            label: 'Carpenter',            keywords: ['carpenter'] },
-  { slug: 'welder',               label: 'Welder',               keywords: ['welder'] },
-  {
-    slug: 'auto-mechanic',
-    label: 'Auto Mechanic',
-    keywordGroups: [
-      ['auto mechanic'],
-      ['automotive mechanic'],
-    ],
-  },
-  { slug: 'construction-worker',  label: 'Construction Worker',  keywords: ['construction worker'] },
-  { slug: 'landscaper',           label: 'Landscaper',           keywords: ['landscaper'] },
-  { slug: 'hvac',                 label: 'HVAC',                 keywords: ['hvac'] },
-  {
-    slug: 'lineman',
-    label: 'Lineman',
-    keywordGroups: [
-      ['lineman'],
-      ['lineworker'],
-      ['line worker'],
-    ],
-  },
-  { slug: 'heavy-equipment-operator', label: 'Heavy Equipment Operator', keywords: ['heavy equipment operator'] },
-  { slug: 'general-labor',        label: 'General Labor',        keywords: ['general labor'] },
-  { slug: 'school-bus-driver',    label: 'School Bus Driver',    keywords: ['school bus driver'] },
-  {
-    slug: 'fly-in-fly-out-mining',
-    label: 'Fly In Fly Out Mining',
-    // Ces offres mentionnent quasi systématiquement "FIFO"/"fly in fly out" dans
-    // la description plutôt que dans le titre (ex: "Scanning Technician" avec
-    // "Fly In, Fly Out" + "mining" quelque part dans le texte). D'où le fallback.
-    matchInDescription: true,
-    keywordGroups: [
-      ['fly in fly out mining'],
-      ['fifo mining'],
-      // Variantes où "fly in fly out" et le mot-clé industrie ne sont pas collés,
-      // et où la virgule ("Fly In, Fly Out") casse le match en phrase unique.
-      ['fly in fly out', 'mining'],
-      ['fly in, fly out', 'mining'],
-      ['fifo', 'mining'],
-      ['fly in fly out roster'],
-     ['fly in fly out rotation schedule'],
-    ],
-  },
-  {
-    slug: 'fly-in-fly-out-oil-gas',
-    label: 'Fly In Fly Out Oil & Gas',
-    matchInDescription: true,
-    keywordGroups: [
-      ['fly in fly out oil & gas'],
-      ['fly in fly out oil and gas'],
-      ['fly in fly out oil gas'],
-      ['fifo oil & gas'],
-      ['fifo oil and gas'],
-      ['fly in fly out', 'oil'],
-      ['fly in fly out', 'gas'],
-      ['fly in, fly out', 'oil'],
-      ['fly in, fly out', 'gas'],
-      ['fifo', 'oil'],
-      ['fifo', 'gas'],
-      ['fly in fly out roster'],
-     ['fly in fly out rotation schedule'],
+      ['solar site supervisor'],
+      ['solar site superintendent'],
+      ['solar superintendent'],
+      ['solar field supervisor'],
     ],
   },
 
-  // ── business / bureau ──
-  { slug: 'bookkeeper',        label: 'Bookkeeper',        keywords: ['bookkeeper'] },
-  { slug: 'financial-analyst', label: 'Financial Analyst', keywords: ['financial analyst'] },
+  // ── électricien (licence requise, distinct de l'installateur généraliste) ──
   {
-    slug: 'administrative-assistant',
-    label: 'Administrative Assistant',
+    slug: 'solar-electrician',
+    label: 'Solar Electrician',
     keywordGroups: [
-      ['administrative assistant'],
-      ['admin assistant'],
+      ['solar electrician'],
+      ['pv electrician'],
+      ['solar wireman'],
     ],
   },
-  { slug: 'executive-assistant', label: 'Executive Assistant', keywords: ['executive assistant'] },
-  { slug: 'operations-manager',  label: 'Operations Manager',  keywords: ['operations', 'manager'] },
-  { slug: 'office-manager',      label: 'Office Manager',      keywords: ['office', 'manager'] },
-  { slug: 'business-analyst',    label: 'Business Analyst',    keywords: ['business analyst'] },
-  { slug: 'case-manager',        label: 'Case Manager',        keywords: ['case', 'manager'] },
 
-  // ── retail / service ──
-  { slug: 'cashier',        label: 'Cashier',        keywords: ['cashier'] },
-  { slug: 'retail-manager', label: 'Retail Manager', keywords: ['retail', 'manager'] },
-  { slug: 'hostess',        label: 'Hostess',        keywords: ['hostess'] },
-  { slug: 'barista',        label: 'Barista',        keywords: ['barista'] },
-  { slug: 'bartender',      label: 'Bartender',      keywords: ['bartender'] },
-  { slug: 'housekeeping',   label: 'Housekeeping',   keywords: ['housekeeping'] },
-  { slug: 'dog-walker',     label: 'Dog Walker',     keywords: ['dog walker'] },
+  // ── O&M / service après installation ──
+  {
+    slug: 'om-technician',
+    label: 'O&M Technician',
+    keywordGroups: [
+      ['solar o&m technician'],
+      ['solar om technician'],
+      ['pv o&m technician'],
+      ['solar operations and maintenance technician'],
+      ['solar maintenance technician'],
+      ['solar service technician'],
+      ['solar repair technician'],
+      ['solar troubleshooting technician'],
+    ],
+  },
+  {
+    slug: 'solar-field-service-technician',
+    label: 'Solar Field Service Technician',
+    keywordGroups: [
+      ['solar field service technician'],
+      ['pv field service technician'],
+      ['solar field service engineer'],
+    ],
+  },
+  {
+    slug: 'inverter-technician',
+    label: 'Solar Inverter Technician',
+    keywordGroups: [
+      ['solar inverter technician'],
+      ['pv inverter technician'],
+      ['string inverter technician'],
+    ],
+  },
 
-  // ── logistique ──
-  { slug: 'warehouse-worker',      label: 'Warehouse Worker',      keywords: ['warehouse worker'] },
-  { slug: 'forklift-operator',     label: 'Forklift Operator',     keywords: ['forklift operator'] },
-  { slug: 'delivery-driver',       label: 'Delivery Driver',       keywords: ['delivery driver'] },
-  { slug: 'shipping-clerk',        label: 'Shipping Clerk',        keywords: ['shipping clerk'] },
-  { slug: 'inventory-specialist',  label: 'Inventory Specialist',  keywords: ['inventory specialist'] },
-  // Pas de page dédiée pour ce slug (volontaire, cf. KNOWN_SALARY_REPORT_SLUGS),
-  // mais catégorie resserrée à une phrase exacte pour ne plus avaler "Warehouse Worker".
-  { slug: 'warehouse-associate',   label: 'Warehouse Associate',   keywords: ['warehouse', 'associate'] },
+  // ── commissioning / QA-QC ──
+  {
+    slug: 'commissioning-technician',
+    label: 'Commissioning Technician',
+    keywordGroups: [
+      ['solar commissioning technician'],
+      ['pv commissioning technician'],
+      ['commissioning technician', 'solar'],
+      ['commissioning and startup technician', 'solar'],
+    ],
+  },
+  {
+    slug: 'solar-qa-qc-inspector',
+    label: 'Solar QA/QC Inspector',
+    keywordGroups: [
+      ['solar qa/qc inspector'],
+      ['solar qa qc inspector'],
+      ['pv system inspector'],
+      ['solar quality inspector'],
+      ['solar qc inspector'],
+      ['nabcep pv system inspector'],
+    ],
+  },
 
-  // ── marketing / vente ──
-  { slug: 'marketing-manager',      label: 'Marketing Manager',      keywords: ['marketing', 'manager'] },
-  { slug: 'digital-marketing',      label: 'Digital Marketing',      keywords: ['digital marketing'] },
-  { slug: 'content-writer',         label: 'Content Writer',         keywords: ['content writer'] },
-  { slug: 'social-media-manager',   label: 'Social Media Manager',   keywords: ['social media', 'manager'] },
-  { slug: 'social-media-supervisor', label: 'Social Media Supervisor', keywords: ['social media supervisor'] },
-  { slug: 'account-executive',      label: 'Account Executive',      keywords: ['account executive'] },
-  { slug: 'sales-representative',   label: 'Sales Representative',   keywords: ['sales representative'] },
+  // ── stockage / batterie ──
+  {
+    slug: 'energy-storage-installer',
+    label: 'Energy Storage Installer',
+    keywordGroups: [
+      ['battery storage installer'],
+      ['energy storage installer'],
+      ['ess installer'],
+      ['solar battery installer'],
+    ],
+  },
+
+  // ── construction ground-mount / utility-scale ──
+  {
+    slug: 'racking-tracker-technician',
+    label: 'Solar Racking & Tracker Technician',
+    keywordGroups: [
+      ['solar racking technician'],
+      ['solar tracker technician'],
+      ['solar tracker installer'],
+      ['single-axis tracker technician'],
+      ['single axis tracker technician'],
+    ],
+  },
+
+  // ── thermique (crédential NABCEP distinct du PV) ──
+  {
+    slug: 'solar-thermal-installer',
+    label: 'Solar Thermal Installer',
+    keywordGroups: [
+      ['solar thermal installer'],
+      ['solar hot water installer'],
+      ['solar water heater installer'],
+    ],
+  },
+
+  // ── ventes techniques (carve-out volontairement étroit, cf. NABCEP PV
+  // Technical Sales — pas de vente générique/porte-à-porte ici) ──
+  {
+    slug: 'solar-technical-sales',
+    label: 'Solar Technical Sales',
+    keywordGroups: [
+      ['solar technical sales'],
+      ['pv technical sales'],
+      ['solar sales engineer'],
+      ['solar design and sales'],
+    ],
+  },
+
+  // ── catch-all générique — DOIT rester en dernier ──
+  // Toute catégorie ci-dessus plus spécifique doit avoir la priorité ; celle-ci
+  // absorbe tout ce qui reste ("PV Installer", "Solar Panel Installer",
+  // "Photovoltaic Installer", "Installer II" côté solaire, etc.).
+  {
+    slug: 'pv-installer',
+    label: 'PV Installer',
+    keywordGroups: [
+      ['pv installer'],
+      ['solar panel installer'],
+      ['solar installer'],
+      ['photovoltaic installer'],
+      ['rooftop solar installer'],
+      ['residential solar installer'],
+      ['commercial solar installer'],
+      ['module installer'],
+      ['array installer'],
+      ['bos installer'],
+      ['balance of system installer'],
+    ],
+  },
 ]
 
 // Slugs pour lesquels /data/salaries/[title] existe vraiment aujourd'hui.
-// Généré à partir de SLUG_TO_TITLE dans app/data/salaries/[title]/page.tsx.
-// Contient à la fois la forme kebab-case (slug) et le libellé Title Case, pour
-// rester compatible avec le format déjà utilisé ailleurs dans le code.
+// ⚠️ PLACEHOLDER — cette liste reprend simplement tous les slugs déclarés
+// ci-dessus. Elle n'a PAS été vérifiée contre tes pages réelles dans
+// app/data/salaries/[title]/page.tsx. Retire tout slug qui n'a pas encore de
+// page correspondante avant de merger, sinon le lien SEO "Learn more" pointera
+// vers une page 404.
 export const KNOWN_SALARY_REPORT_SLUGS = new Set([
-  'registered-nurse', 'Registered Nurse',
-  'software-engineer', 'Software Engineer',
-  'data-analyst', 'Data Analyst',
-  'project-manager', 'Project Manager',
-  'dental-assistant', 'Dental Assistant',
-  'electrician', 'Electrician',
-  'medical-assistant', 'Medical Assistant',
-  'truck-driver', 'Truck Driver',
-  'accountant', 'Accountant',
-  'customer-service', 'Customer Service',
-  'sales-associate', 'Sales Associate',
-  'pharmacy-technician', 'Pharmacy Technician',
-
-  'data-scientist', 'Data Scientist',
-  'devops-engineer', 'DevOps Engineer',
-  'product-manager', 'Product Manager',
-  'ux-designer', 'UX Designer',
-  'it-support', 'IT Support',
-  'cybersecurity', 'Cybersecurity',
-  'cloud-engineer', 'Cloud Engineer',
-
-  'nursing-assistant', 'Nursing Assistant',
-  'physical-therapist', 'Physical Therapist',
-  'home-health-aide', 'Home Health Aide',
-  'medical-receptionist', 'Medical Receptionist',
-  'mental-health-counselor', 'Mental Health Counselor',
-  'radiologic-technologist', 'Radiologic Technologist',
-  'certified-nursing-assistant', 'Certified Nursing Assistant',
-  'patient-care-technician', 'Patient Care Technician',
-  'patient-transporter', 'Patient Transporter',
-  'pediatric-nurse-practitioner', 'Pediatric Nurse Practitioner',
-  'new-grad-nurse', 'New Grad Nurse',
-  'labor-and-delivery-nurse', 'Labor and Delivery Nurse',
-  'school-nurse', 'School Nurse',
-  'respiratory-therapist', 'Respiratory Therapist',
-  'surgical-tech', 'Surgical Tech',
-  'sterile-processing-technician', 'Sterile Processing Technician',
-  'emt', 'EMT',
-  'ekg-technician', 'EKG Technician',
-  'speech-language-pathologist', 'Speech-Language Pathologist',
-  'assisted-reproductive-technology', 'Assisted Reproductive Technology',
-
-  'art-teacher', 'Art Teacher',
-  'substitute-teacher', 'Substitute Teacher',
-  'special-education-teacher', 'Special Education Teacher',
-  'social-studies-teacher', 'Social Studies Teacher',
-  'paraprofessional', 'Paraprofessional',
-  'summer-camp-counselor', 'Summer Camp Counselor',
-  'school-counselor', 'School Counselor',
-  'tutor', 'Tutor',
-  'preschool-teacher', 'Preschool Teacher',
-  'childcare', 'Childcare',
-  'daycare', 'Daycare',
-  'nanny', 'Nanny',
-
-  'plumber', 'Plumber',
-  'carpenter', 'Carpenter',
-  'welder', 'Welder',
-  'auto-mechanic', 'Auto Mechanic',
-  'construction-worker', 'Construction Worker',
-  'landscaper', 'Landscaper',
-  'hvac', 'HVAC',
-  'lineman', 'Lineman',
-  'heavy-equipment-operator', 'Heavy Equipment Operator',
-  'general-labor', 'General Labor',
-  'school-bus-driver', 'School Bus Driver',
-  'fly-in-fly-out-mining', 'Fly In Fly Out Mining',
-  'fly-in-fly-out-oil-gas', 'Fly In Fly Out Oil & Gas',
-
-  'bookkeeper', 'Bookkeeper',
-  'financial-analyst', 'Financial Analyst',
-  'administrative-assistant', 'Administrative Assistant',
-  'executive-assistant', 'Executive Assistant',
-  'operations-manager', 'Operations Manager',
-  'office-manager', 'Office Manager',
-  'business-analyst', 'Business Analyst',
-  'case-manager', 'Case Manager',
-
-  'cashier', 'Cashier',
-  'retail-manager', 'Retail Manager',
-  'hostess', 'Hostess',
-  'barista', 'Barista',
-  'bartender', 'Bartender',
-  'housekeeping', 'Housekeeping',
-  'dog-walker', 'Dog Walker',
-
-  'warehouse-worker', 'Warehouse Worker',
-  'forklift-operator', 'Forklift Operator',
-  'delivery-driver', 'Delivery Driver',
-  'shipping-clerk', 'Shipping Clerk',
-  'inventory-specialist', 'Inventory Specialist',
-
-  'marketing-manager', 'Marketing Manager',
-  'digital-marketing', 'Digital Marketing',
-  'content-writer', 'Content Writer',
-  'social-media-manager', 'Social Media Manager',
-  'social-media-supervisor', 'Social Media Supervisor',
-  'account-executive', 'Account Executive',
-  'sales-representative', 'Sales Representative',
+  'solar-apprentice', 'Solar Apprentice',
+  'lead-installer-foreman', 'Lead Installer / Foreman',
+  'solar-site-supervisor', 'Solar Site Supervisor',
+  'solar-electrician', 'Solar Electrician',
+  'om-technician', 'O&M Technician',
+  'solar-field-service-technician', 'Solar Field Service Technician',
+  'inverter-technician', 'Solar Inverter Technician',
+  'commissioning-technician', 'Commissioning Technician',
+  'solar-qa-qc-inspector', 'Solar QA/QC Inspector',
+  'energy-storage-installer', 'Energy Storage Installer',
+  'racking-tracker-technician', 'Solar Racking & Tracker Technician',
+  'solar-thermal-installer', 'Solar Thermal Installer',
+  'solar-technical-sales', 'Solar Technical Sales',
+  'pv-installer', 'PV Installer',
 ])
 
 function escapeRegExp(str: string): string {
@@ -386,9 +244,9 @@ function escapeRegExp(str: string): string {
 }
 
 // Recherche par mot entier (\b) plutôt que simple .includes(), pour éviter les faux
-// positifs sur les acronymes courts (ex: "pca" ne doit pas matcher à l'intérieur
-// d'un autre mot) et sur les phrases qui seraient un prefixe d'un mot plus long
-// (ex: "software engineer" ne doit pas matcher "software engineering").
+// positifs sur les acronymes courts et sur les phrases qui seraient un préfixe d'un
+// mot plus long (ex: "solar installer" ne doit pas matcher "solar installation
+// company" de façon incidente sur le seul mot "install").
 function containsWholeWordPhrase(haystack: string, phrase: string): boolean {
   const pattern = new RegExp(`\\b${escapeRegExp(phrase)}\\b`, 'i')
   return pattern.test(haystack)
@@ -408,11 +266,11 @@ function categoryMatches(category: RoleCategory, haystack: string): boolean {
 
 // `description` est optionnel : les appelants qui n'ont qu'un titre libre (ex: les
 // pages /data/salaries/[title]) continuent de fonctionner à l'identique.
-// Passe 1 : titre seul, sur TOUTES les catégories (comportement historique, le
-// plus fiable — un titre est court et ciblé, peu de risque de faux positif).
+// Passe 1 : titre seul, sur TOUTES les catégories (comportement principal, le plus
+// fiable — un titre est court et ciblé, peu de risque de faux positif).
 // Passe 2 : titre + description, mais UNIQUEMENT sur les catégories qui ont
-// explicitement `matchInDescription: true`, pour éviter qu'une catégorie à
-// mots-clés génériques ne se déclenche sur un mot isolé perdu dans un long texte.
+// explicitement `matchInDescription: true` — aucune pour l'instant côté solaire,
+// voir le commentaire sur le champ plus haut.
 export function matchRoleCategory(title: string, description?: string): RoleCategory | null {
   const lowerTitle = title.toLowerCase()
 

@@ -40,7 +40,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
-    { href: '/post-a-job-free',  label: 'Employers' },
+    { href: '/dashboard/post-a-job-free',  label: 'Employers' },
     { href: '/resources',  label: 'Resources' },
     { href: '/about',      label: 'About' },
   ]

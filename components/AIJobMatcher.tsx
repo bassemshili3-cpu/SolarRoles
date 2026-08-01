@@ -89,7 +89,7 @@ export default function AIJobMatcher({ onFiltersChange }: Props) {
               onChange={(e) => setDescription(e.target.value.slice(0, MAX))}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              placeholder="Example: Senior React Developer in New York, remote friendly..."
+              placeholder="Example: NABCEP-certified solar installer in Austin, TX, open to relocation..."
               disabled={loading}
               className="w-full resize-none rounded-lg bg-white px-3.5 py-3 pr-12 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
               rows={4}

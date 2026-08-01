@@ -406,48 +406,105 @@ export default async function Home() {
       </section>
 
 
-      <section className="bg-gray-50 py-24 px-6">
-
-        <div className="max-w-3xl mx-auto">
-
-          <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">Why we built this</p>
-
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0B1A2E] leading-tight mb-8 tracking-tight">
-
-            Solar jobs shouldn&apos;t hide the pay.
-
-          </h2>
-
-          <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
-
-            <p>
-
-              Existing job boards either bury PV installer roles under generic &ldquo;construction&rdquo; tags, or list wages as &ldquo;competitive&rdquo; and leave you guessing. Solar Roles pulls solar-specific listings, normalizes pay ranges, and surfaces the filters that matter: NABCEP, system type, travel per diem.
-
-            </p>
-
+     <section className="bg-gray-50 py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="max-w-3xl mb-14">
+            <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">Who we are</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#0B1A2E] leading-tight mb-8 tracking-tight">
+              A job board built and maintained for the US solar workforce.
+            </h2>
+            <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
+              <p>
+                Solar Roles tracks PV installer, lead installer, and electrician
+                openings across all 50 states, and only that: no sales roles,
+                no corporate listings buried under a generic &ldquo;renewable
+                energy&rdquo; tag. Sign in with Google to save searches and
+                apply faster &mdash; we only use your name and email to set
+                up your profile, nothing more.
+              </p>
+              <p>
+                We also publish independent guides on the credentials that
+                actually apply to this trade: which certifications are
+                legally required versus which ones just help you get hired,
+                how NABCEP compares to ETA International and state
+                electrician licenses, and how apprenticeship paths stack up
+                against paying for training up front. The goal is the same
+                one that got us building the job board in the first place:
+                make the confusing parts of a solar career easier to sort
+                through.
+              </p>
+            </div>
           </div>
 
-          <div className="mt-10 flex gap-4 flex-wrap">
-
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link
-
-              href="/jobs"
-
-              className="inline-flex items-center gap-2 bg-[#0B1A2E] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
-
+              href="/resources/solar-certifications-by-job-role"
+              className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#F5B819]/50 hover:shadow-sm transition-all"
             >
-
-              Browse open roles <ArrowRight size={14} />
-
+              <div className="w-10 h-10 rounded-xl bg-[#F5B819]/15 flex items-center justify-center mb-4">
+                <Award className="text-[#B45309]" size={20} />
+              </div>
+              <h3 className="font-semibold text-[#0B1A2E] text-sm mb-1.5">
+                Certifications by job role
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed mb-3">
+                One table mapping each solar role to what&apos;s required,
+                recommended, and optional.
+              </p>
+              <span className="text-[#1E3A5F] text-sm font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                See the table <ArrowRight size={13} />
+              </span>
             </Link>
 
+            <Link
+              href="/resources/osha-safety-guide-solar-installers"
+              className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#F5B819]/50 hover:shadow-sm transition-all"
+            >
+              <div className="w-10 h-10 rounded-xl bg-[#1E3A5F]/10 flex items-center justify-center mb-4">
+                <ShieldCheck className="text-[#1E3A5F]" size={20} />
+              </div>
+              <h3 className="font-semibold text-[#0B1A2E] text-sm mb-1.5">
+                OSHA safety, explained
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed mb-3">
+                OSHA 10 vs 30, fall protection, and the electrical hazards
+                specific to PV work.
+              </p>
+              <span className="text-[#1E3A5F] text-sm font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                Read the guide <ArrowRight size={13} />
+              </span>
+            </Link>
+
+            <Link
+              href="/resources/solar-installer-apprenticeship-programs"
+              className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-[#F5B819]/50 hover:shadow-sm transition-all"
+            >
+              <div className="w-10 h-10 rounded-xl bg-[#F5B819]/15 flex items-center justify-center mb-4">
+                <Users className="text-[#B45309]" size={20} />
+              </div>
+              <h3 className="font-semibold text-[#0B1A2E] text-sm mb-1.5">
+                Paid apprenticeship paths
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed mb-3">
+                How Registered Apprenticeship Programs work, and how to
+                actually get into one.
+              </p>
+              <span className="text-[#1E3A5F] text-sm font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                Learn more <ArrowRight size={13} />
+              </span>
+            </Link>
           </div>
 
+          <div className="mt-8">
+            <Link
+              href="/resources"
+              className="inline-flex items-center gap-2 bg-[#0B1A2E] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+            >
+              Browse all resources <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
-
       </section>
-
 
       <section className="bg-[#0B1A2E] py-24 px-6">
 
