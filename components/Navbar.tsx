@@ -41,7 +41,7 @@ export default function Navbar() {
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
     { href: '/post-a-job-free',  label: 'Employers' },
-    { href: '/blog',  label: 'Blog' },
+    { href: '/resources',  label: 'Resources' },
     { href: '/about',      label: 'About' },
   ]
 
@@ -177,7 +177,7 @@ export default function Navbar() {
             })}
             <div className="pt-2 mt-2 border-t border-gray-100 space-y-1">
               <Link
-                href="/employers/post-a-job"
+                href="/dashboard/post-a-job-free"
                 className="block px-3 py-2.5 rounded-full text-sm font-semibold bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] text-center transition-colors"
               >
                 Post a Job

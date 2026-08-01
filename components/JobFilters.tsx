@@ -1,21 +1,26 @@
 ﻿'use client'
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+
 import { Button } from '@/components/ui/button'
+
 import { Slider } from '@/components/ui/slider'
+
 import { useFilterDrawer } from '@/contexts/filter-drawer-context'
 
 import { useState, useEffect, useRef } from 'react'
+
 import {
   Search, MapPin, X, ChevronDown, ChevronUp,
   Clock, Briefcase, Sun, DollarSign, HardHat,
   Award, Building2, Gift, Zap,
 } from 'lucide-react'
 
-// Data
-// Identite visuelle Solar Roles : palette "cellule solaire" (graphite + or solaire),
-// distincte du style gris/pilule d'oh-my-job. Voir commentaires plus bas pour le detail
-// des tokens couleur/typo.
+// Identite visuelle Solar Roles : panneau en graphite doux (degrade legerement
+// plus clair en haut qu'en bas) pour ne pas creer une rupture brutale avec
+// la page blanche. Le gold reste la signature visuelle uniquement sur les
+// points d'interaction cles (CTA principal, pastilles selectionnees, icones
+// de section, badge du nombre de filtres actifs), pas en aplat de fond.
 
 const US_LOCATIONS = [
   'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ',
@@ -111,23 +116,23 @@ function Section({
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-t border-[#E7E2D9] pt-4">
+    <div className="border-t border-black/[0.08] pt-4">
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
         className="flex items-center justify-between w-full mb-3 group"
       >
         <div className="flex items-center gap-2.5">
-          <span className="flex items-center justify-center w-6 h-6 rounded-[4px] bg-[#1C2126] text-[#F2A93B]">
+          <span className="flex items-center justify-center w-6 h-6 rounded-[4px] bg-[#F2A93B]/15 text-[#F2A93B]">
             {icon}
           </span>
-          <span className="font-semibold text-[11px] uppercase tracking-[0.14em] text-[#1C2126]">
+          <span className="font-semibold text-[11px] uppercase tracking-[0.14em] text-white/90">
             {title}
           </span>
         </div>
         {open
-          ? <ChevronUp className="h-4 w-4 text-[#8A8578]" />
-          : <ChevronDown className="h-4 w-4 text-[#8A8578]" />}
+          ? <ChevronUp className="h-4 w-4 text-white/40" />
+          : <ChevronDown className="h-4 w-4 text-white/40" />}
       </button>
       {open && <div className="space-y-1.5">{children}</div>}
     </div>
@@ -141,6 +146,10 @@ function Section({
 // peut etre purgee si elle n'apparait nulle part ailleurs en clair dans le projet.
 // En ecrivant la classe complete en dur a chaque branche, le scanner la voit
 // systematiquement et la genere, peu importe le contexte d'execution.
+//
+// Etat "checked" rendu en pastille or PLEINE (fond clair, texte graphite) :
+// sur un panneau graphite doux, un simple changement de teinte de texte
+// ne suffit plus a signaler la selection, il faut un vrai contraste de fond.
 
 function RadioOption({
   label,
@@ -165,18 +174,18 @@ function RadioOption({
       }}
       className={
         checked
-          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors bg-[#1C2126] text-[#F2A93B] font-medium'
-          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors hover:bg-[#FBF7EE] text-[#2B2E32]'
+          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors bg-[#F2A93B] text-[#1C2126] font-medium'
+          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors hover:bg-white/[0.06] text-white/80'
       }
     >
       <span
         className={
           checked
-            ? 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-[#F2A93B] bg-[#1C2126]'
-            : 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-[#D8D2C3] bg-white'
+            ? 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-[#1C2126] bg-white'
+            : 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-white/30 bg-transparent'
         }
       >
-        {checked && <span className="w-2 h-2 rounded-full bg-[#F2A93B]" />}
+        {checked && <span className="w-2 h-2 rounded-full bg-[#1C2126]" />}
       </span>
       {label}
       <input type="radio" className="sr-only" checked={checked} readOnly />
@@ -192,19 +201,19 @@ function CheckOption({ label, checked, onChange }: {
       onClick={onChange}
       className={
         checked
-          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none bg-[#1C2126] text-[#F2A93B] font-medium'
-          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none hover:bg-[#FBF7EE] text-[#2B2E32]'
+          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none bg-[#F2A93B] text-[#1C2126] font-medium'
+          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none hover:bg-white/[0.06] text-white/80'
       }
     >
       <div
         className={
           checked
-            ? 'w-4.5 h-4.5 rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-[#F2A93B] border-[#F2A93B]'
-            : 'w-4.5 h-4.5 rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-white border-[#D8D2C3]'
+            ? 'w-[18px] h-[18px] rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-[#1C2126] border-[#1C2126]'
+            : 'w-[18px] h-[18px] rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-transparent border-white/30'
         }
       >
         {checked && (
-          <svg className="w-3 h-3 text-[#1C2126]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+          <svg className="w-3 h-3 text-[#F2A93B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         )}
@@ -351,26 +360,32 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
       <div
         onClick={close}
         aria-hidden="true"
-        className={`fixed inset-0 z-[60] bg-black/60 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-[60] bg-black/40 transition-opacity duration-300 md:hidden ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       />
 
-      {/* Panneau : drawer plein ecran depuis la droite sur mobile, sidebar sticky sur desktop */}
+      {/* Panneau : drawer plein ecran depuis la droite sur mobile, sidebar sticky sur desktop.
+          Graphite doux en degrade plutot que noir dur, avec un ring + ombre subtile
+          pour le faire respirer sans rupture brutale sur la page blanche. */}
       <div
         className={`
           fixed top-0 right-0 z-[70] h-full w-[85vw] max-w-sm
-          bg-white border-l border-[#E7E2D9] shadow-2xl overflow-y-auto
+          bg-gradient-to-b from-[#2E3540] to-[#262D36] border-l border-black/[0.08]
+          shadow-[0_4px_32px_-4px_rgba(0,0,0,0.18)] overflow-y-auto
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
           md:sticky md:top-20 md:right-auto md:z-auto md:h-auto
           md:w-auto md:max-w-none md:translate-x-0 md:transition-none
-          md:bg-white md:rounded-xl md:border md:border-[#E7E2D9] md:shadow-sm
+          md:bg-gradient-to-b md:from-[#2E3540] md:to-[#262D36]
+          md:rounded-xl md:border md:border-black/[0.08]
+          md:shadow-[0_2px_28px_-4px_rgba(0,0,0,0.10),0_0_0_1px_rgba(0,0,0,0.04)]
           md:max-h-[calc(100vh-6rem)]
         `}
       >
-        {/* Header : bandeau graphite, evoque le cadre d'un panneau solaire */}
-        <div className="bg-[#1C2126] px-4 md:px-5 py-4 md:rounded-t-xl">
+        {/* Header : meme fond graphite que le reste, separe par une ligne fine
+            plutot qu'un bloc de couleur distinct */}
+        <div className="px-4 md:px-5 py-4 border-b border-black/[0.08]">
           <div className="flex items-center justify-between mb-4">
             <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-white">
               <Sun className="h-4 w-4 text-[#F2A93B]" />
@@ -395,20 +410,20 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
 
           {/* Keywords */}
           <div className="relative mb-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/45" />
             <input
               type="text"
               placeholder="Installer, electrician, foreman..."
               value={keywords}
               onChange={e => setKeywords(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && applyFilters()}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/10 border border-white/15 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#F2A93B] focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/[0.08] border border-white/[0.12] rounded-lg text-white placeholder:text-white/45 focus:outline-none focus:ring-2 focus:ring-[#F2A93B] focus:border-transparent text-sm"
             />
           </div>
 
           {/* Location */}
           <div className="relative mb-4" ref={locationInputRef}>
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/45" />
             <input
               type="text"
               placeholder="City, State, or Remote"
@@ -416,25 +431,25 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
               onChange={e => setLocation(e.target.value)}
               onFocus={() => location.length > 0 && setShowSuggestions(true)}
               onKeyDown={e => e.key === 'Enter' && applyFilters()}
-              className="w-full pl-10 pr-8 py-2.5 bg-white/10 border border-white/15 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#F2A93B] focus:border-transparent text-sm"
+              className="w-full pl-10 pr-8 py-2.5 bg-white/[0.08] border border-white/[0.12] rounded-lg text-white placeholder:text-white/45 focus:outline-none focus:ring-2 focus:ring-[#F2A93B] focus:border-transparent text-sm"
             />
             {location && (
               <button
                 onClick={() => setLocation('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
             )}
             {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className="absolute z-[100] w-full mt-1 rounded-lg shadow-2xl max-h-64 overflow-y-auto bg-white border border-[#E7E2D9]">
+              <div className="absolute z-[100] w-full mt-1 rounded-lg shadow-[0_8px_32px_-4px_rgba(0,0,0,0.20)] max-h-64 overflow-y-auto bg-[#2C333B] border border-white/[0.08]">
                 {filteredSuggestions.map((loc, i) => (
                   <button
                     key={i}
                     onClick={() => { setLocation(loc); setShowSuggestions(false) }}
-                    className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-[#FBF7EE] border-b border-[#F1EDE3] last:border-b-0 text-[#1C2126]"
+                    className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-white/[0.05] border-b border-white/[0.05] last:border-b-0 text-white"
                   >
-                    <MapPin className="h-4 w-4 flex-shrink-0 text-[#B8AF9C]" />
+                    <MapPin className="h-4 w-4 flex-shrink-0 text-white/40" />
                     <span className="truncate font-medium">{loc}</span>
                   </button>
                 ))}
@@ -444,7 +459,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
 
           <Button
             onClick={applyFilters}
-            className="w-full py-2.5 text-sm font-semibold bg-[#F2A93B] hover:bg-[#D88A1E] text-[#1C2126] active:scale-[0.97] transition-all"
+            className="w-full py-2.5 text-sm font-semibold bg-[#F2A93B] hover:bg-[#E0A030] text-[#1C2126] active:scale-[0.97] transition-all"
           >
             <Search className="h-4 w-4 mr-2" />
             Search Jobs
@@ -490,11 +505,12 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
             ))}
           </Section>
 
-          {/* Salary : jauge "gain solaire", du graphite vers l'or a mesure que le minimum monte */}
+          {/* Salary : jauge "gain solaire", conteneur legerement plus fonce
+              que le panneau pour se detacher malgre le fond deja graphite */}
           <Section icon={<DollarSign className="h-3.5 w-3.5" />} title="Minimum Pay">
-            <div className="py-3 px-3 bg-[#1C2126] rounded-lg">
+            <div className="py-3 px-3 bg-black/[0.18] border border-white/[0.06] rounded-lg">
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-mono text-white/50 whitespace-nowrap">$0</span>
+                <span className="text-[10px] font-mono text-white/45 whitespace-nowrap">$0</span>
                 <div className="flex-1">
                   <Slider
                     value={[salary]}
@@ -505,7 +521,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
                     className="py-2 [&_[role=slider]]:bg-[#F2A93B] [&_[role=slider]]:border-[#F2A93B] [&_.bg-primary]:bg-[#F2A93B]"
                   />
                 </div>
-                <span className="text-[10px] font-mono text-white/50 whitespace-nowrap">$150k</span>
+                <span className="text-[10px] font-mono text-white/45 whitespace-nowrap">$150k</span>
               </div>
               <div className="mt-2 text-center">
                 <span className="text-lg font-mono font-semibold text-[#F2A93B]">
@@ -521,8 +537,8 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
                   onClick={() => setSalary(k * 1000 === salary ? 0 : k * 1000)}
                   className={`text-xs font-mono px-2.5 py-1 rounded-[4px] transition-all ${
                     salary === k * 1000
-                      ? 'bg-[#1C2126] text-[#F2A93B] font-semibold'
-                      : 'bg-[#F5F2EA] text-[#5C574C] hover:bg-[#EDE8DA]'
+                      ? 'bg-[#F2A93B] text-[#1C2126] font-semibold'
+                      : 'bg-white/[0.06] text-white/60 hover:bg-white/[0.10]'
                   }`}
                 >
                   ${k}k
@@ -600,7 +616,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="w-full text-sm border-[#D8D2C3] text-[#1C2126] hover:bg-[#F5F2EA] active:scale-[0.97] transition-all"
+            className="w-full text-sm border-white/[0.15] text-white hover:bg-white/[0.06] active:scale-[0.97] transition-all"
           >
             {activeCount > 0 ? `Clear ${activeCount} filter${activeCount > 1 ? 's' : ''}` : 'Clear All Filters'}
           </Button>

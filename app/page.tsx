@@ -240,26 +240,31 @@ export default async function Home() {
 
     <>
 
-      <section className="relative bg-[#0B1A2E] text-white pt-24 pb-32 overflow-hidden">
-  {/* Vidéo de fond en boucle, sujet cadré à droite */}
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    poster="/hero-solar-poster.jpg"
-    className="absolute inset-0 w-full h-full object-cover"
-    style={{ objectPosition: '80% center' }}
-  >
-    <source src="/video_solar_worker.mp4" type="video/mp4" />
-  </video>
+     <section className="relative bg-[#0B1A2E] text-white pt-24 pb-32 overflow-hidden">
+  {/* Vidéo de fond en boucle, zoomée pour créer de la marge horizontale,
+      sujet cadré plus à droite */}
+  <div className="absolute inset-0 overflow-hidden">
+    <video
+      autoPlay
+      loop
+      muted
+      playsInline
+      poster="/hero-solar-poster.jpg"
+      className="absolute inset-0 w-full h-full object-cover scale-125"
+      style={{ objectPosition: '100% center' }}
+    >
+      <source src="/video_solar_worker.mp4" type="video/mp4" />
+    </video>
+  </div>
 
-  {/* Voile à 70% pour garder l'identité graphite du site */}
-  <div className="absolute inset-0 bg-[#0B1A2E]/70" />
+  {/* Un seul voile : dégradé gauche→droite, fort à gauche pour la lisibilité
+      du texte, quasi nul à droite pour laisser respirer le sujet */}
+  <div className="absolute inset-0 bg-gradient-to-r from-[#0B1A2E] via-[#0B1A2E]/60 to-[#0B1A2E]/10" />
 
-  {/* Dégradé additionnel pour garantir la lisibilité du texte à gauche,
-      peu importe ce qui se passe dans la vidéo à cet endroit */}
-  <div className="absolute inset-0 bg-gradient-to-r from-[#0B1A2E] via-[#0B1A2E]/70 to-transparent" />
+  {/* Rayon de lumière signature qui balaie la hero, comme un reflet
+      de soleil sur un panneau — se met en pause si l'utilisateur
+      préfère moins d'animation */}
+
 
   <div className="relative z-10 max-w-6xl mx-auto px-6">
     <div className="max-w-2xl">
@@ -267,7 +272,7 @@ export default async function Home() {
         Solar PV installer jobs<br />across the US.
       </h1>
       <p className="text-lg text-white/80 mb-8 max-w-xl">
-        Pay ranges on every listing. No account needed to browse.
+        Your time to Shine.
       </p>
       <SearchHero />
     </div>
