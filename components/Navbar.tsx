@@ -8,6 +8,7 @@ import { Moon, Sun, User, Menu, X } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { usePathname, useRouter } from 'next/navigation'
 import { FilterDrawerTrigger } from '@/components/filter-drawer-trigger'
+import { CertificationsNavCta } from '@/components/CertificationsNavCta'
 
 export default function Navbar() {
   const supabase = createClient()
@@ -99,14 +100,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-          <Link href="/post-a-job-free" className="hidden sm:inline-flex">
-            <Button
-              size="sm"
-              className="bg-[#F5B819] hover:bg-[#E5A810] active:bg-[#D4960D] text-[#0B1A2E] font-semibold rounded-full px-4 h-9"
-            >
-              Post a Job
-            </Button>
-          </Link>
+        <CertificationsNavCta />
 
           {user ? (
             <>

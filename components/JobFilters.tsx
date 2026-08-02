@@ -253,6 +253,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const [benefits, setBenefits] = useState<string[]>([])
   const [easyApply, setEasyApply] = useState(false)
   const [visaSponsorship, setVisaSponsorship] = useState(false)
+const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
   // Sync from URL
   useEffect(() => {
@@ -459,14 +460,36 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
 
           <Button
             onClick={applyFilters}
-            className="w-full py-2.5 text-sm font-semibold bg-[#F2A93B] hover:bg-[#E0A030] text-[#1C2126] active:scale-[0.97] transition-all"
+            className="mx-auto block py-2 px-6 text-sm font-semibold bg-[#F2A93B] hover:bg-[#E0A030] text-[#1C2126] active:scale-[0.97] transition-all"
           >
-            <Search className="h-4 w-4 mr-2" />
+            <Search className="h-3.5 w-3.5 mr-2 inline" />
             Search Jobs
           </Button>
         </div>
 
+
+
+          {/* Toggle qui replie l'ensemble des sections de filtres pour ne pas
+              monopoliser toute la hauteur de la sidebar (une bannière ou
+              d'autres modules peuvent alors s'afficher juste en dessous) */}
+          <button
+            type="button"
+            onClick={() => setSectionsExpanded(v => !v)}
+            className="w-full flex items-center justify-center gap-1.5 mt-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-white/70 hover:text-white transition-colors"
+          >
+            {sectionsExpanded ? 'Hide filters' : 'More filters'}
+            {activeCount > 0 && !sectionsExpanded && (
+              <span className="text-[10px] bg-[#F2A93B] text-[#1C2126] rounded-[4px] px-1.5 py-0.5 font-bold ml-1">
+                {activeCount}
+              </span>
+            )}
+            {sectionsExpanded
+              ? <ChevronUp className="h-3.5 w-3.5" />
+              : <ChevronDown className="h-3.5 w-3.5" />}
+          </button>
+          
         {/* Filter sections */}
+        {sectionsExpanded && (
         <div className="p-4 md:p-5 space-y-0">
 
           {/* Date Posted */}
@@ -608,8 +631,9 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
               onChange={() => setVisaSponsorship(v => !v)}
             />
           </Section>
-
-        </div>
+</div>
+        )}
+        
 
         {/* Footer */}
         <div className="p-4 md:p-5 pt-2">

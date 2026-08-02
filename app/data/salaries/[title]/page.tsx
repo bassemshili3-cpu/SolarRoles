@@ -10,9 +10,13 @@ export const revalidate = 86400
 // On pourra en ajouter (Solar Electrician, Solar Project Manager...) une fois qu'on
 // a assez de data par state pour que la page ait du sens (≥ 3 listings par state).
 const SLUG_TO_TITLE: Record<string, string> = {
-  'solar-photovoltaic-installers': 'Solar Photovoltaic Installer',
-  'lead-solar-installer': 'Lead Solar Installer',
+  'solar Photovoltaic Installers': 'solar-photovoltaic-installer',
+  'lead Solar Installer': 'lead-solar-installer',
+  'solar-pv-installer': 'solar-pv-installer',
+  'Solar Electrician': 'solar-electrician',
 }
+
+
 
 // Pour le bloc "career path": chaque rôle pointe vers son pendant.
 const CAREER_PATH: Record<string, { slug: string; title: string; direction: 'up' | 'down' }> = {

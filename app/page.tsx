@@ -41,6 +41,7 @@ import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
 import { matchRoleCategory } from '@/lib/roleCategories'
 
 import CompanyLogo from '@/components/CompanyLogo'
+import HeroTagline from '@/components/HeroTagline'
 
 
 // Sources we no longer aggregate from. Any job in the DB with one of these
@@ -240,7 +241,7 @@ export default async function Home() {
 
     <>
 
-     <section className="relative bg-[#0B1A2E] text-white pt-24 pb-32 overflow-hidden">
+     <section className="relative bg-[#0B1A2E] text-white pt-24 pb-40 overflow-hidden">
   {/* Vidéo de fond en boucle, zoomée pour créer de la marge horizontale,
       sujet cadré plus à droite */}
   <div className="absolute inset-0 overflow-hidden">
@@ -249,11 +250,11 @@ export default async function Home() {
       loop
       muted
       playsInline
-      poster="/hero-solar-poster.jpg"
-      className="absolute inset-0 w-full h-full object-cover scale-125"
+      poster="/solar-hero.mp4"
+      className="absolute inset-0 w-full h-full object-cover scale-100"
       style={{ objectPosition: '100% center' }}
     >
-      <source src="/video_solar_worker.mp4" type="video/mp4" />
+      <source src="/solar-hero.mp4" type="video/mp4" />
     </video>
   </div>
 
@@ -269,11 +270,9 @@ export default async function Home() {
   <div className="relative z-10 max-w-6xl mx-auto px-6">
     <div className="max-w-2xl">
       <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
-        Solar PV installer jobs<br />across the US.
+        Solar PV jobs<br />across the US
       </h1>
-      <p className="text-lg text-white/80 mb-8 max-w-xl">
-        Your time to Shine.
-      </p>
+      <HeroTagline />
       <SearchHero />
     </div>
   </div>
@@ -869,13 +868,13 @@ export default async function Home() {
 
           <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
 
-            Solar Pulse
+            Solar Crew
 
           </h2>
 
           <p className="text-[#F5B819]/80 leading-relaxed mb-8 text-base">
 
-            One email every Tuesday. Solar advice for installers at every level.
+            One email every Tuesday. Receive guides, resources, and news in the solar field.
 
           </p>
 

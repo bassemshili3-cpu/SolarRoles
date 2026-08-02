@@ -5,6 +5,7 @@ import JobFilters from '@/components/JobFilters'
 import { HardHat, ClipboardCheck, DollarSign, ShieldCheck, Award, Users } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 
+
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -131,7 +132,10 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Lead Solar Installer Jobs</h1>
         </header>
 
+        
+
         <div className="flex flex-col lg:flex-row gap-10">
+          
           <aside className="lg:w-80"><JobFilters /></aside>
           <div className="flex-1">
             <Suspense fallback={<div className="animate-pulse bg-gray-100 rounded-lg h-96" />}>

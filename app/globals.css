@@ -501,3 +501,66 @@
     }
   }
 }
+  /* Navbar CTA "Get your Certifications" — dégradé animé + pulsation + reflet */
+  @keyframes cert-cta-shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .animate-cert-cta-shimmer {
+    animation: cert-cta-shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes cert-cta-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 184, 25, 0.45); }
+    50% { box-shadow: 0 0 0 6px rgba(245, 184, 25, 0); }
+  }
+
+  .animate-cert-cta-pulse {
+    animation: cert-cta-pulse 2.2s ease-in-out infinite;
+  }
+
+  .cert-cta-sheen {
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    animation: cert-cta-sheen-sweep 3.5s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  @keyframes cert-cta-sheen-sweep {
+    0% { left: -40%; }
+    20% { left: 130%; }
+    100% { left: 130%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-cert-cta-shimmer,
+    .animate-cert-cta-pulse,
+    .cert-cta-sheen {
+      animation: none;
+    }
+  }
+   /* Hero tagline "Your time to Shine." — curseur machine a ecrire */
+  @keyframes hero-tagline-caret-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .hero-tagline-caret {
+    animation: hero-tagline-caret-blink 0.9s steps(1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-tagline-caret {
+      animation: none;
+      display: none;
+    }
+  }
+

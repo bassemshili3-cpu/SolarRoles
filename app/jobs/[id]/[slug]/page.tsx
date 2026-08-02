@@ -49,7 +49,8 @@ import { buildJobSlug } from '@/lib/slugify'
 
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
-import { guessDomainFromName } from '@/lib/companyDomain'
+import { detectCertifications } from '@/lib/certification-detector'
+
 import Breadcrumb from '@/components/Breadcrumb'
 
 
@@ -455,7 +456,6 @@ export async function generateMetadata(
   const job = getJobDetailWithSalary(raw)
 
 
-
   const canonicalUrl = `https://www.solarroles.com/jobs/${id}/${buildJobSlug(job)}`
 
 
@@ -533,7 +533,7 @@ export default async function JobDetailPage({
 
   const job = getJobDetailWithSalary(raw)
 
-
+  const matchedCerts = detectCertifications(`${job.title} ${job.description}`)
   const taxonomy = extractSolarJobTaxonomy({
 
     title: job.title,
@@ -637,6 +637,7 @@ const schema = buildJobPostingSchema(job, {
   const applyUrl = job.externalApplyUrl || job.apply_url
 
   const canonicalUrl = `https://www.solarroles/jobs/${id}/${canonicalSlug}`
+
 
 function safeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c')
@@ -883,6 +884,8 @@ function safeJsonLd(data: unknown): string {
                   />
 
                 </div>
+
+                
 
 
                 <div className="mt-8 lg:hidden">
