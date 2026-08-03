@@ -112,10 +112,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
 
       <h1>Solar Installer Apprenticeships: How They Actually Work</h1>
       <p className="resource-intro">
-        Most "how to become a solar installer" guides mention apprenticeships
-        in a single line and move straight back to paid training courses.
-        That's backwards for a lot of people. A Registered Apprenticeship
-        pays you while you train, which matters a great deal if a
+       A Registered Apprenticeship pays you while you train, which matters a great deal if a
         NABCEP-approved course running several hundred dollars isn't
         realistic right now. Here's what these programs are, why the paperwork
         behind them is stranger than it looks, and why more employers started
@@ -148,7 +145,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </div>
 
       <section className="resource-section">
-        <h2>The odd detail nobody explains: solar installer isn't "apprenticeable"</h2>
+        <h2>Solar installer isn't "apprenticeable"</h2>
         <p>
           To register an apprenticeship with the Department of Labor, the
           occupation has to be formally recognized as apprenticeable. As of
@@ -172,7 +169,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </section>
 
       <section className="resource-section">
-        <h2>Why employers suddenly care: the IRA apprenticeship requirement</h2>
+        <h2>The IRA apprenticeship requirement</h2>
         <p>
           Apprenticeships existed in solar before this, just unevenly.
           What changed the math for a lot of employers is the Inflation
