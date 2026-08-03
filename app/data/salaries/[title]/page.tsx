@@ -10,18 +10,16 @@ export const revalidate = 86400
 // On pourra en ajouter (Solar Electrician, Solar Project Manager...) une fois qu'on
 // a assez de data par state pour que la page ait du sens (≥ 3 listings par state).
 const SLUG_TO_TITLE: Record<string, string> = {
-  'solar Photovoltaic Installers': 'solar-photovoltaic-installer',
-  'lead Solar Installer': 'lead-solar-installer',
-  'solar-pv-installer': 'solar-pv-installer',
-  'Solar Electrician': 'solar-electrician',
+  'solar-pv-installer': 'Solar Photovoltaic Installer',
+  'lead-solar-installer': 'Lead Solar Installer',
+  'solar-electrician': 'Solar Electrician',
 }
-
 
 
 // Pour le bloc "career path": chaque rôle pointe vers son pendant.
 const CAREER_PATH: Record<string, { slug: string; title: string; direction: 'up' | 'down' }> = {
-  'solar-photovoltaic-installers': { slug: 'lead-solar-installer', title: 'Lead Solar Installer', direction: 'up' },
-  'lead-solar-installer': { slug: 'solar-photovoltaic-installers', title: 'Solar Photovoltaic Installer', direction: 'down' },
+  'solar-photovoltaic-installer': { slug: 'lead-solar-installer', title: 'Lead Solar Installer', direction: 'up' },
+  'lead-solar-installer': { slug: 'solar-photovoltaic-installer', title: 'Solar Photovoltaic Installer', direction: 'down' },
 }
 
 // Contenu éditorial statique par rôle. Écrit une fois, à la main — ce n'est pas
@@ -30,7 +28,7 @@ const CAREER_PATH: Record<string, { slug: string; title: string; direction: 'up'
 // TODO (à vérifier/actualiser par vous-même avant publication) : les chiffres de
 // certification et de timeline sont des ordres de grandeur NABCEP, à confirmer.
 const ROLE_EDITORIAL: Record<string, { dayToDay: string; certification: string; progression: string }> = {
-  'solar-photovoltaic-installers': {
+  'solar-photovoltaic-installer': {
     dayToDay:
       'A Solar Photovoltaic Installer mounts racking, places panels, runs conduit, and wires arrays on residential and commercial roofs or ground mounts. Most of the day is physical: carrying panels, working at height, and following an electrician or lead installer\'s directions on wiring and layout. Crews typically run 3 to 5 installs a week depending on system size and season.',
     certification:

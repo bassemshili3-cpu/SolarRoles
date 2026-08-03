@@ -52,6 +52,7 @@ import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 import { detectCertifications } from '@/lib/certification-detector'
 
 import Breadcrumb from '@/components/Breadcrumb'
+import { CertificationBanner } from '@/components/CertificationBanner'
 
 
 export const revalidate = 3600
@@ -533,7 +534,10 @@ export default async function JobDetailPage({
 
   const job = getJobDetailWithSalary(raw)
 
-  const matchedCerts = detectCertifications(`${job.title} ${job.description}`)
+const matchedCerts = detectCertifications(`${job.title} ${job.description}`)
+const cert = matchedCerts[0] // undefined si aucune certif détectée
+
+
   const taxonomy = extractSolarJobTaxonomy({
 
     title: job.title,
@@ -672,6 +676,7 @@ function safeJsonLd(data: unknown): string {
           <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
 
             <PaycheckCalculatorCard salary={job.salary_min} state={job.location} compact />
+           {cert && <CertificationBanner cert={cert} />}
 
           </div>
 
@@ -1028,7 +1033,7 @@ function safeJsonLd(data: unknown): string {
     </Button>
   )}
 
-   {job.source === 'employer' && <AdUnit slot="job-detail" />}
+   {job.source === 'employer'}
 
   <ShareBar
     url={`https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`}

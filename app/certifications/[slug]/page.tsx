@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { CertificationBanner } from '@/components/CertificationBanner'
 import {
   ArrowRight,
   CheckCircle2,
@@ -181,6 +182,7 @@ export default function CertificationPage({ params }: PageProps) {
                 ))}
               </ul>
             </nav>
+            <CertificationBanner cert={cert} />
           </div>
         </aside>
 
@@ -353,6 +355,8 @@ export default function CertificationPage({ params }: PageProps) {
             </p>
           </Section>
 
+
+
           {/* ── REIMBURSEMENT ───────────────────────────────── */}
           {cert.reimbursement.available && (
             <Section id="reimbursement" title="Reimbursement & funding">
@@ -374,7 +378,9 @@ export default function CertificationPage({ params }: PageProps) {
                 ))}
               </ul>
             </Section>
+            
           )}
+
 
           {/* ── SALARY ──────────────────────────────────────── */}
           <Section id="salary" title="What it pays">
@@ -398,82 +404,36 @@ export default function CertificationPage({ params }: PageProps) {
             </div>
           </Section>
 
-          {/* ── HEATSPRING CTA — boxed Onisep-style ──────────── */}
-          <section id="why-heatspring" className="scroll-mt-24 mb-12">
-            <BoxedSection accent="gold" className="bg-gradient-to-br from-[#FFFBEB] to-white">
-              <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-3">
-                Where we'd get it
-              </p>
-              <h2 className="text-2xl font-bold text-[#0B1A2E] mb-4">
-                HeatSpring is our pick for this one
-              </h2>
-              <ul className="space-y-2.5 mb-6">
-                {cert.whyHeatSpring.map((reason, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-3 text-gray-700"
-                  >
-                    <CheckCircle2
-                      className="text-[#B45309] flex-shrink-0 mt-0.5"
-                      size={18}
-                    />
-                    <span>{reason}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={cert.heatspringUrl}
-                target="_blank"
-                rel="noopener noreferrer sponsored"
-                className="inline-flex items-center gap-2 bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] px-6 py-3 rounded-full font-bold transition-colors shadow-sm"
-              >
-                Get started on HeatSpring <ExternalLink size={14} />
-              </a>
-              <p className="text-xs text-gray-500 mt-4">
-                Solar Roles may earn a commission if you enroll through this
-                link, at no extra cost to you. It doesn't change our assessment
-                above — see our full, unsponsored comparison of{' '}
-                <Link
-                  href="/resources/nabcep-training-providers-compared"
-                  className="underline hover:text-gray-700"
-                >
-                  training providers
-                </Link>{' '}
-                if you'd like to weigh other options.
-              </p>
-            </BoxedSection>
-          </section>
-
-          {/* ── EXPIRATION ──────────────────────────────────── */}
-          <Section id="renewal" title="Expiration & renewal">
-            <div className="rounded-xl border-2 border-gray-100 p-5">
-              <p className="text-sm font-bold text-[#0B1A2E] mb-1.5">
-                Valid for : {cert.expirationRenewal.validityPeriod}
-              </p>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                {cert.expirationRenewal.renewalRequirement}
-              </p>
-            </div>
-          </Section>
-
-          {/* ── OTHER CERTS ─────────────────────────────────── */}
-          <section>
-            <SectionTitle>Other certifications</SectionTitle>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {CERTIFICATIONS.filter(c => c.slug !== cert.slug).map(c => (
-                <Link
-                  key={c.slug}
-                  href={`/certifications/${c.slug}`}
-                  className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-100 hover:border-[#F5B819] hover:shadow-sm transition-all"
-                >
-                  <span className="text-sm font-bold text-[#0B1A2E]">
-                    {c.shortLabel}
-                  </span>
-                  <ArrowRight size={14} className="text-[#F5B819]" />
-                </Link>
-              ))}
-            </div>
-          </section>
+         {/* ── HEATSPRING CTA — simplified "Get started today" ─── */}
+<section id="why-heatspring" className="scroll-mt-24 mb-12">
+  <h2 className="text-2xl font-bold text-[#0B1A2E] mb-4">
+    Get started today
+  </h2>
+  <p className="text-gray-700 leading-relaxed mb-6">
+    {cert.heatspringFitReason}
+  </p>
+  <div className="flex justify-center mt-8">
+    
+     <a href={cert.heatspringUrl}
+      target="_blank"
+      rel="noopener noreferrer sponsored"
+      className="inline-flex items-center gap-2 bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] px-6 py-3 rounded-full font-bold transition-colors shadow-sm"
+    >
+      Get Started <ExternalLink size={14} />
+    </a>
+  </div>
+  <p className="text-xs text-gray-500 mt-8 text-center">
+    *Solar Roles may earn a commission if you enroll through this link, at
+    no extra cost to you. See our full, unsponsored comparison of{' '}
+    <Link
+      href="/resources/nabcep-training-providers-compared"
+      className="underline hover:text-gray-700"
+    >
+      training providers
+    </Link>{' '}
+    if you'd like to weigh other options.
+  </p>
+</section>
         </main>
       </div>
     </article>

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   GraduationCap, Route, Award, Shield, Briefcase, HelpCircle,
-  ArrowRight, Play, BookOpen, Wrench, HardHat, Users, Zap, 
-  FileCheck, Sun, ChevronRight,
+  ArrowRight, Wrench, HardHat, Users, Zap, Sun,
 } from "lucide-react";
+import { ResourceLibrary, type ResourceItem } from "@/components/ResourceLibrary";
 
 // ----------------------------------------------------------------------------
 // SEO metadata (keep your existing structure exactly)
@@ -32,8 +32,17 @@ export const metadata: Metadata = {
 };
 
 // ----------------------------------------------------------------------------
-// Data: categories (top of page), featured (essential learning equivalents),
-// career path (resources for your role equivalent), and the existing groups.
+// Data: categories (top of page), unified resource library, and career path.
+// ----------------------------------------------------------------------------
+//
+// NOTE: `ALL_RESOURCES` is passed as a prop from this Server Component down
+// to <ResourceLibrary>, which is a Client Component ("use client"). Props
+// crossing that boundary must be serializable — so `icon` here is a STRING
+// (an IconName key), not a component reference. The actual lucide-react
+// component is resolved inside ResourceLibrary.tsx via a local ICON_MAP.
+// Do not put icon components (BookOpen, HardHat, etc.) directly in this
+// array — that's what caused the "Functions cannot be passed directly to
+// Client Components" runtime error.
 // ----------------------------------------------------------------------------
 
 const CATEGORIES = [
@@ -75,35 +84,88 @@ const CATEGORIES = [
   },
 ];
 
-const FEATURED = [
+// Liste unique — une seule source de vérité, plus de duplication
+// entre l'ancien "Featured" et l'ancien "All resources by group".
+const ALL_RESOURCES: ResourceItem[] = [
   {
     title: "Solar Certifications by Job Role",
     description:
       "One table mapping each solar job to what's legally required, what's most valued, and what's optional.",
     href: "/resources/solar-certifications-by-job-role",
-    icon: BookOpen,
-    type: "guide" as const,
+    icon: "BookOpen",
+    type: "guide",
+    category: "Start here",
+  },
+  {
+    title: "How to Become a Solar Installer",
+    description:
+      "The realistic path from zero experience to your first solar job — no degree required.",
+    href: "/resources/how-to-become-a-solar-installer",
+    icon: "HardHat",
+    type: "guide",
+    category: "Start here",
   },
   {
     title: "NABCEP Training Providers Compared",
     description:
       "HeatSpring, Everblue, SEI, and in-person options, side by side on price, hours, and exam fees.",
     href: "/resources/nabcep-training-providers-compared",
-    icon: FileCheck,
-    type: "guide" as const,
+    icon: "FileCheck",
+    type: "compare",
+    category: "Certifications & training",
+  },
+  {
+    title: "NABCEP vs ETA vs State Licenses",
+    description:
+      "Four different credential types explained: which are voluntary, which are legally required, and how they overlap.",
+    href: "/resources/nabcep-vs-eta-vs-state-licenses",
+    icon: "Award",
+    type: "guide",
+    category: "Certifications & training",
+  },
+  {
+    title: "Tesla, Enphase & SolarEdge Certifications",
+    description:
+      "Company-level partner programs vs. individual online certifications, and which is which.",
+    href: "/resources/manufacturer-certifications-tesla-enphase-solaredge",
+    icon: "Award",
+    type: "guide",
+    category: "Certifications & training",
   },
   {
     title: "OSHA Safety Guide for Solar Installers",
     description:
       "OSHA 10 vs 30, fall protection thresholds on the roof, and the electrical hazards specific to PV.",
     href: "/resources/osha-safety-guide-solar-installers",
-    icon: Shield,
-    type: "video" as const,
+    icon: "Shield",
+    type: "video",
+    category: "Safety",
+  },
+  {
+    title: "Solar Installer Apprenticeship Programs",
+    description:
+      "How Registered Apprenticeship Programs work, who sponsors them, and why solar isn't officially apprenticeable yet.",
+    href: "/resources/solar-installer-apprenticeship-programs",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Apprenticeships",
+  },
+  {
+    title: "How to Land a Solar Apprenticeship",
+    description:
+      "The application, testing, and ranking process, and what actually moves you up the list.",
+    href: "/resources/how-to-get-a-solar-apprenticeship",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Apprenticeships",
   },
 ];
 
 // Career path nodes - structured like a solar panel wiring diagram.
 // 5 stops, each links to the most relevant resource on your site.
+// These icons stay as component references because CareerPathStep is
+// rendered here, in the Server Component — they never cross into a
+// Client Component as props.
 const CAREER_PATH = [
   {
     label: "Helper",
@@ -142,107 +204,8 @@ const CAREER_PATH = [
   },
 ];
 
-interface ResourceItem {
-  title: string;
-  description: string;
-  href: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  type?: "guide" | "video" | "compare";
-}
-
-interface ResourceGroup {
-  label: string;
-  items: ResourceItem[];
-}
-
-const GROUP_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  "Start here": BookOpen,
-  "Certifications & training": Award,
-  "Safety": Shield,
-  "Apprenticeships": Briefcase,
-};
-
-const GROUPS: ResourceGroup[] = [
-  {
-    label: "Start here",
-    items: [
-      {
-        title: "Solar Certifications by Job Role",
-        description:
-          "One table mapping each solar job to what's legally required, what's most valued, and what's optional.",
-        href: "/resources/solar-certifications-by-job-role",
-        icon: BookOpen,
-        type: "guide",
-      },
-    ],
-  },
-  {
-    label: "Certifications & training",
-    items: [
-      {
-        title: "NABCEP Training Providers Compared",
-        description:
-          "HeatSpring, Everblue, SEI, and in-person options, side by side on price, hours, and exam fees.",
-        href: "/resources/nabcep-training-providers-compared",
-        icon: FileCheck,
-        type: "compare",
-      },
-      {
-        title: "NABCEP vs ETA vs State Licenses",
-        description:
-          "Four different credential types explained: which are voluntary, which are legally required, and how they overlap.",
-        href: "/resources/nabcep-vs-eta-vs-state-licenses",
-        icon: Award,
-        type: "guide",
-      },
-      {
-        title: "Tesla, Enphase & SolarEdge Certifications",
-        description:
-          "Company-level partner programs vs. individual online certifications, and which is which.",
-        href: "/resources/manufacturer-certifications-tesla-enphase-solaredge",
-        icon: Award,
-        type: "guide",
-      },
-    ],
-  },
-  {
-    label: "Safety",
-    items: [
-      {
-        title: "OSHA Safety Guide for Solar Installers",
-        description:
-          "OSHA 10 vs 30, fall protection thresholds on the roof, and the electrical hazards specific to PV.",
-        href: "/resources/osha-safety-guide-solar-installers",
-        icon: Shield,
-        type: "guide",
-      },
-    ],
-  },
-  {
-    label: "Apprenticeships",
-    items: [
-      {
-        title: "Solar Installer Apprenticeship Programs",
-        description:
-          "How Registered Apprenticeship Programs work, who sponsors them, and why solar isn't officially apprenticeable yet.",
-        href: "/resources/solar-installer-apprenticeship-programs",
-        icon: Briefcase,
-        type: "guide",
-      },
-      {
-        title: "How to Land a Solar Apprenticeship",
-        description:
-          "The application, testing, and ranking process, and what actually moves you up the list.",
-        href: "/resources/how-to-get-a-solar-apprenticeship",
-        icon: Briefcase,
-        type: "guide",
-      },
-    ],
-  },
-];
-
 // ----------------------------------------------------------------------------
-// JSON-LD (unchanged from your original)
+// JSON-LD
 // ----------------------------------------------------------------------------
 
 const jsonLd = {
@@ -251,13 +214,11 @@ const jsonLd = {
   name: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   url: `${SITE_URL}${PAGE_PATH}`,
-  hasPart: GROUPS.flatMap((group) =>
-    group.items.map((item) => ({
-      "@type": "Article",
-      name: item.title,
-      url: `${SITE_URL}${item.href}`,
-    })),
-  ),
+  hasPart: ALL_RESOURCES.map((item) => ({
+    "@type": "Article",
+    name: item.title,
+    url: `${SITE_URL}${item.href}`,
+  })),
 };
 
 // ----------------------------------------------------------------------------
@@ -307,90 +268,6 @@ function CategoryPill({
   );
 }
 
-// The flagship "solar panel" card.
-// Top section = a stylized solar panel (graphite + gold grid pattern + central icon).
-// On hover: the grid brightens, a gold light sweeps across, the card lifts.
-// Bottom section = title, description, CTA.
-function SolarCard({
-  title,
-  description,
-  href,
-  icon: Icon,
-  type = "guide",
-  small = false,
-}: {
-  title: string;
-  description: string;
-  href: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  type?: "guide" | "video" | "compare";
-  small?: boolean;
-}) {
-  const TypeLabel =
-    type === "video" ? "Video" : type === "compare" ? "Comparison" : "Guide";
-  return (
-    <Link
-      href={href}
-      className="group relative block bg-white rounded-2xl overflow-hidden border border-[#F2A93B]/10 transition-all duration-500 hover:-translate-y-1.5 hover:border-[#F2A93B]/30 hover:shadow-[0_16px_48px_-12px_rgba(242,169,59,0.25)]"
-    >
-      {/* Top "panel" section */}
-      <div
-        className={`relative ${
-          small ? "aspect-[16/8]" : "aspect-[16/9]"
-        } bg-gradient-to-br from-[#1C2126] via-[#232A33] to-[#1C2126] overflow-hidden`}
-      >
-        {/* Solar cell grid - visible on hover */}
-        <div
-          className="absolute inset-0 opacity-[0.10] group-hover:opacity-[0.22] transition-opacity duration-500"
-          style={SOLAR_GRID_STYLE}
-        />
-
-        {/* Central icon or play button */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {type === "video" ? (
-            <div className="w-14 h-14 rounded-full bg-[#F2A93B] flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_40px_rgba(242,169,59,0.7)]">
-              <Play className="h-5 w-5 text-[#1C2126] ml-0.5 fill-[#1C2126]" />
-            </div>
-          ) : (
-            <div className="w-14 h-14 rounded-full bg-[#F2A93B]/10 border-2 border-[#F2A93B] flex items-center justify-center transition-all duration-500 group-hover:bg-[#F2A93B] group-hover:scale-110">
-              {Icon && (
-                <Icon className="h-6 w-6 text-[#F2A93B] group-hover:text-[#1C2126] transition-colors duration-500" />
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Energy sweep on hover - gold light crossing the panel */}
-        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-[#F2A93B]/25 to-transparent pointer-events-none" />
-
-        {/* Gold corner accent on hover */}
-        <div className="absolute top-0 right-0 w-0 h-0 border-t-[44px] border-t-[#F2A93B] border-l-[44px] border-l-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
-
-      {/* Content section */}
-      <div className="p-5">
-        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
-          {TypeLabel}
-        </div>
-        <h3
-          className={`${
-            small ? "text-base" : "text-lg"
-          } font-bold text-[#1C2126] leading-snug mb-2`}
-        >
-          {title}
-        </h3>
-        <p className="text-sm text-[#1C2126]/65 leading-relaxed line-clamp-2">
-          {description}
-        </p>
-        <div className="mt-4 inline-flex items-center text-sm font-semibold text-[#F2A93B] transition-all group-hover:gap-2.5">
-          <span>Read guide</span>
-          <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
-        </div>
-      </div>
-    </Link>
-  );
-}
-
 // Career path step - a "node" in the wiring diagram
 function CareerPathStep({
   label,
@@ -398,14 +275,12 @@ function CareerPathStep({
   time,
   icon: Icon,
   href,
-  isLast,
 }: {
   label: string;
   salary: string;
   time: string;
   icon: React.ComponentType<{ className?: string }>;
   href: string;
-  isLast: boolean;
 }) {
   return (
     <Link
@@ -466,31 +341,17 @@ export default function ResourcesHub() {
         </div>
       </section>
 
-      {/* FEATURED RESOURCES (Essential Learnings equivalent) */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
-              Start here
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1C2126] tracking-tight">
-              Essential resources
-            </h2>
+      {/* RESOURCE LIBRARY — remplace Featured + All resources by group */}
+      <section id="all" className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
+        <div className="mb-8">
+          <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
+            Resources
           </div>
-          <Link
-            href="/resources#all"
-            className="hidden md:inline-flex items-center text-sm font-semibold text-[#1C2126]/70 hover:text-[#F2A93B] transition-colors group"
-          >
-            See all
-            <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1C2126] tracking-tight">
+            Browse by category
+          </h2>
         </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURED.map((item) => (
-            <SolarCard key={item.href} {...item} />
-          ))}
-        </div>
+        <ResourceLibrary items={ALL_RESOURCES} />
       </section>
 
       {/* CAREER PATH FLOW (Resources for your role equivalent) */}
@@ -513,12 +374,8 @@ export default function ResourcesHub() {
             {/* Connecting "wiring" line behind the nodes */}
             <div className="absolute top-7 md:top-10 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#F2A93B]/20 via-[#F2A93B] to-[#F2A93B]/20 -z-0" />
             <div className="relative flex items-start justify-between gap-2 md:gap-4 max-w-5xl mx-auto">
-              {CAREER_PATH.map((step, i) => (
-                <CareerPathStep
-                  key={step.label}
-                  {...step}
-                  isLast={i === CAREER_PATH.length - 1}
-                />
+              {CAREER_PATH.map((step) => (
+                <CareerPathStep key={step.label} {...step} />
               ))}
             </div>
           </div>
@@ -532,49 +389,6 @@ export default function ResourcesHub() {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* ALL RESOURCES BY GROUP */}
-      <section id="all" className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
-        <div className="mb-10">
-          <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
-            The full library
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1C2126] tracking-tight">
-            All resources
-          </h2>
-        </div>
-
-        <div className="space-y-12">
-          {GROUPS.map((group) => {
-            const GroupIcon = GROUP_ICONS[group.label] || BookOpen;
-            return (
-              <div key={group.label}>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-9 h-9 rounded-lg bg-[#FEF7EB] border border-[#F2A93B]/20 flex items-center justify-center">
-                    <GroupIcon className="h-4 w-4 text-[#F2A93B]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1C2126]">
-                    {group.label}
-                  </h3>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {group.items.map((item) => (
-                    <SolarCard
-                      key={item.href}
-                      title={item.title}
-                      description={item.description}
-                      href={item.href}
-                      icon={item.icon}
-                      type={item.type}
-                      small
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
         </div>
       </section>
 

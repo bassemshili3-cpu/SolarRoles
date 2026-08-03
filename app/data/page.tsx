@@ -2,7 +2,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { Building2, MapPin, DollarSign, TrendingUp, Briefcase, Brain } from 'lucide-react'
+import { Building2, MapPin, DollarSign, TrendingUp, Briefcase } from 'lucide-react'
 import { STATES, STATE_CODE_TO_NAME, stateToSlug, codeToSlug } from '@/lib/usStates'
 
 export const revalidate = 86400
@@ -26,12 +26,17 @@ const jsonLd = {
 const SALARY_MIN_THRESHOLD = 20_000
 const SALARY_MAX_THRESHOLD = 600_000
 
+// Titre affiché -> slug réel de la page salaire (/data/salaries/[slug])
+const SALARY_TITLE_TO_SLUG: Record<string, string> = {
+  'Solar Photovoltaic Installer': 'solar-photovoltaic-installer',
+  'Lead Solar Installer': 'lead-solar-installer',
+  'Solar Electrician': 'solar-electrician',
+}
+
 const SKILL_BARS = [
   { skill: 'Certifications required', mentions: 2748, pct: 100, color: 'bg-violet-500' },
   { skill: 'Communication skills',    mentions: 2510, pct: 91,  color: 'bg-violet-400' },
   { skill: 'Customer service',        mentions: 2007, pct: 73,  color: 'bg-violet-300' },
-  { skill: 'Prompt / AI fluency',     mentions: 328,  pct: 12,  color: 'bg-blue-500'   },
-  { skill: 'AI tools',                mentions: 256,  pct: 9,   color: 'bg-blue-400'   },
   { skill: 'Bilingual',               mentions: 234,  pct: 9,   color: 'bg-green-500'  },
   { skill: 'Empathy',                 mentions: 195,  pct: 7,   color: 'bg-green-400'  },
 ]
@@ -220,21 +225,21 @@ export default async function DataCenterPage() {
           </div>
         </section>
 
-        {/* ── SECTION: AI & Entry-Level Insights ── */}
+        {/* ── SECTION: Entry-Level Hiring Insights ── */}
         <section className="mb-20">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
-              <Brain className="w-5 h-5 text-violet-600" />
+              <Briefcase className="w-5 h-5 text-violet-600" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">AI & Entry-Level Hiring Insights</h2>
+              <h2 className="text-xl font-bold text-gray-900">Entry-Level Hiring Insights</h2>
               <p className="text-sm text-gray-500">
                 Based on {totalJobs.toLocaleString('en-US')} active US listings — June 2026
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <div className="border border-gray-200 rounded-2xl p-6 bg-white">
               <p className="text-4xl font-bold text-violet-600">{entryLevelPct}%</p>
               <p className="text-sm font-medium text-gray-800 mt-2">
@@ -243,13 +248,6 @@ export default async function DataCenterPage() {
               <p className="text-xs text-gray-400 mt-2">
                 {entryLevelCount.toLocaleString('en-US')} out of {totalJobs.toLocaleString('en-US')} active postings
               </p>
-            </div>
-            <div className="border border-gray-200 rounded-2xl p-6 bg-white">
-              <p className="text-4xl font-bold text-violet-600">256</p>
-              <p className="text-sm font-medium text-gray-800 mt-2">
-                listings already require AI tools proficiency — including 33 mentioning ChatGPT by name
-              </p>
-              <p className="text-xs text-gray-400 mt-2">An emerging trend in job descriptions</p>
             </div>
             <div className="border border-gray-200 rounded-2xl p-6 bg-white">
               <p className="text-4xl font-bold text-violet-600">2,748</p>
@@ -287,8 +285,8 @@ export default async function DataCenterPage() {
               <span className="font-semibold">What the data suggests: </span>
               With only {entryLevelPct}% of US job postings explicitly open to candidates without experience,
               the traditional entry point into the workforce has narrowed significantly. Meanwhile, demand for
-              certifications, communication skills, and AI fluency is rising — signaling a shift toward
-              skills-based hiring over degree or experience requirements.
+              certifications and communication skills is rising — signaling a shift toward
+              skills-based and credential-based hiring over experience requirements.
             </p>
           </div>
         </section>
@@ -301,19 +299,14 @@ export default async function DataCenterPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Salary Reports by Job Title</h2>
-              <p className="text-sm text-gray-500">Average pay across states for popular roles</p>
+              <p className="text-sm text-gray-500">Average pay across states for solar industry roles</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {[
-              'Registered Nurse', 'Software Engineer', 'Data Analyst',
-              'Project Manager', 'Dental Assistant', 'Electrician',
-              'Medical Assistant', 'Truck Driver', 'Accountant',
-              'Customer Service', 'Sales Associate', 'Pharmacy Technician',
-            ].map((title) => (
+            {Object.entries(SALARY_TITLE_TO_SLUG).map(([title, slug]) => (
               <Link
-                key={title}
-                href={`/data/salaries/${title.toLowerCase().replace(/\s+/g, '-')}`}
+                key={slug}
+                href={`/data/salaries/${slug}`}
                 className="px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-purple-400 hover:bg-purple-50 hover:text-purple-700 transition-all flex items-center gap-2"
               >
                 <Briefcase className="w-3.5 h-3.5" />

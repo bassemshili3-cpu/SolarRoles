@@ -4,6 +4,7 @@ import type { MetadataRoute } from "next";
 import { buildJobSlug } from "@/lib/slugify";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
 import { JobDetail } from "@/lib/jobDetail";
+import { CERTIFICATIONS } from "@/app/certifications/[slug]/certifications-data"
 
 const BASE_URL = 'https://www.solarroles.com'
 const LAST_MAJOR_UPDATE = new Date('2026-07-26')
@@ -21,10 +22,13 @@ const ATS_SOURCES = [
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
   '/solar-pv-installer-jobs',
-'/lead-solar-installer-jobs',
-  
-  
+  '/lead-solar-installer-jobs',
 ]
+
+// ── Certifications (pages piliers affiliées) ────────────────
+const certificationPages: string[] = CERTIFICATIONS.map(
+  c => `/certifications/${c.slug}`
+)
 
 // ── Paycheck calculator pages ────────────────────────────────
 const paycheckPages: string[] = [
@@ -59,14 +63,27 @@ const dataStatePages: string[] = [
 
 const dataSalaryPages: string[] = [
   'solar-photovoltaic-installer', 'lead-solar-installer',
-  
+'solar-electrician',
 ].map(s => `/data/salaries/${s}`)
+
+// ── Resources (guides carrière / certifications) ────────────
+const resourcePages: string[] = [
+  'how-to-become-a-solar-installer',
+  'how-to-get-a-solar-apprenticeship',
+  'manufacturer-certifications-tesla-enphase-solaredge',
+  'nabcep-training-providers-compared',
+  'nabcep-vs-eta-vs-state-licenses',
+  'osha-safety-guide-solar-installers',
+  'solar-certifications-by-job-role',
+  'solar-installer-apprenticeship-programs',
+  'solar-installer-certification',
+].map(s => `/resources/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────
 const blogPosts: string[] = [
   '/how-to-land-first-solar-job',
- '/become-solar-installer-no-experience',
- '/what-does-a-solar-installer-do',
+  '/become-solar-installer-no-experience',
+  '/what-does-a-solar-installer-do',
 ]
 
 // ── Config par section : priorité, fréquence, date ─────────
@@ -84,10 +101,12 @@ const sections: {
   lastModified?: Date
 }[] = [
   { routes: priorityLandingPages, changeFrequency: "monthly", priority: 0.8 },
+  { routes: certificationPages, changeFrequency: "monthly", priority: 0.8 },
   { routes: paycheckPages, changeFrequency: "monthly", priority: 0.6 },
   { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
   { routes: dataStatePages, changeFrequency: "weekly", priority: 0.8 },
   { routes: dataSalaryPages, changeFrequency: "weekly", priority: 0.8 },
+  { routes: resourcePages, changeFrequency: "monthly", priority: 0.7 },
   { routes: blogPosts, changeFrequency: "monthly", priority: 0.6 },
 ]
 
@@ -113,8 +132,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // ── Jobs "own" (indexables) ──────────────────────────────
-  // Adapte le `where` à ton schema exact (status actif, etc.)
-// ── Jobs indexables : "own" (postés employeurs) + ATS directs ──
   const ownJobs = await prisma.job.findMany({
     where: {
       active: true,
@@ -132,14 +149,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   })
 
-for (const job of ownJobs) {
-  entries.push({
-    url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
-    lastModified: job.postedAt ?? job.fetchedAt,
-    changeFrequency: "daily",
-    priority: 0.7,
-  })
-}
+  for (const job of ownJobs) {
+    entries.push({
+      url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
+      lastModified: job.postedAt ?? job.fetchedAt,
+      changeFrequency: "daily",
+      priority: 0.7,
+    })
+  }
 
   // Sécurité anti-doublons si jamais une route apparaît dans
   // deux tableaux/sources par erreur

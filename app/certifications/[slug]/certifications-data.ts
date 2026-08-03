@@ -64,6 +64,7 @@ export interface SalaryPageLink {
 
 export interface CertificationEntry {
   slug: string
+   bannerImageSrc: string 
   name: string
   shortLabel: string
   acronymExpansion: string
@@ -79,6 +80,7 @@ export interface CertificationEntry {
   reimbursement: Reimbursement
   expirationRenewal: ExpirationRenewal
   relatedSalaryPages: SalaryPageLink[]
+  heatspringFitReason: string 
   // Champs legacy conservés pour compatibilité avec les composants existants
   // (CertificationBanner, cartes de listing, etc.) qui affichent un résumé
   // court plutôt que les objets structurés ci-dessus.
@@ -107,6 +109,7 @@ export const TOC_SECTIONS: { id: string; label: string }[] = [
 export const CERTIFICATIONS: CertificationEntry[] = [
   {
     slug: 'nabcep-pv-associate',
+    bannerImageSrc: '/nabcep_pva.png',
     name: 'NABCEP PV Associate',
     shortLabel: 'PV Associate',
     acronymExpansion:
@@ -171,6 +174,9 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       'A pass guarantee on this specific course: fail the exam after completing it, and the retake (course and exam) is covered.',
       'Reported pass rate above 88% among students who complete the course, plus a full year of access to review materials.',
     ],
+    heatspringFitReason:
+  "For NABCEP PV Associate, we point people to HeatSpring because the course is built on Dr. Sean White's materials — the same reference texts used across the industry — and it comes with a pass guarantee: fail after completing it, and your retake is covered. Students who finish the course report a pass rate above 88%, well above what most beginners manage studying alone.",
+
     heatspringUrl:
       'https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq',
     bannerHeadline: 'New to solar? Start with NABCEP Associate.',
@@ -178,6 +184,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
   },
   {
     slug: 'nabcep-pv-installation-professional',
+    bannerImageSrc: '/nabcep_pvip.png',
     name: 'NABCEP PV Installation Professional',
     shortLabel: 'PV Installer',
     acronymExpansion:
@@ -247,6 +254,8 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       'Instructors with direct field installation background, not just classroom credentials.',
       'One purchase satisfies the full advanced-hours requirement, instead of stitching together multiple shorter courses from different providers.',
     ],
+    heatspringFitReason:
+  "For PV Installation Professional, HeatSpring's prep is built specifically around the official PVIP Job Task Analysis and covers the full 58-hour advanced-training requirement in one course, taught by instructors with real field installation experience — instead of you stitching together several shorter courses just to qualify for the exam.",
     heatspringUrl:
       'https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq',
     bannerHeadline: 'Ready for NABCEP PV Installer?',
@@ -254,6 +263,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
   },
   {
     slug: 'osha-10',
+    bannerImageSrc: '/osha_10.png',
     name: 'OSHA 10-Hour Construction',
     shortLabel: 'OSHA 10',
     acronymExpansion:
@@ -315,12 +325,16 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       'Team/group pricing available if you\'re getting certified alongside a crew.',
       'Available in Spanish as well as English.',
     ],
+    heatspringFitReason:
+  "For OSHA 10, HeatSpring runs the course through the OSHA Education Center at the University of South Florida, a DOL-authorized provider, so the card you earn is valid nationwide. It's offered in Spanish as well as English, with group pricing if you're getting certified alongside your crew.",
+
     heatspringUrl: 'https://www.heatspring.com/courses/osha-10-hour-construction?aff_id=9f_wlq',
     bannerHeadline: 'Most jobsites require OSHA 10.',
     bannerSubtext: 'Get certified online, in a weekend, through an authorized provider on HeatSpring.',
   },
   {
     slug: 'osha-30',
+    bannerImageSrc: '/osha_30.png',
     name: 'OSHA 30-Hour Construction',
     shortLabel: 'OSHA 30',
     acronymExpansion:
@@ -371,7 +385,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
         'As with OSHA 10, some states and employers require retraining every 3–5 years by policy rather than federal mandate — and there\'s no shorter refresher version, so renewal means retaking the full 30-hour course.',
     },
     relatedSalaryPages: [
-      { label: 'Lead Installer / Foreman salary', slug: 'lead-installer' },
+      { label: 'Lead Installer / Foreman salary', slug: 'lead-solar-installer' },
     ],
     format: 'Online, self-paced',
     duration: '30 hours',
@@ -381,6 +395,8 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       'Group/team pricing for companies certifying multiple supervisors at once.',
       'Available in Spanish as well as English.',
     ],
+    heatspringFitReason:
+  "For OSHA 30, HeatSpring uses the same authorized-provider partnership as their OSHA 10 course, so your card is valid nationwide. It's available in Spanish as well as English, with group pricing for companies certifying several supervisors at once.",
     heatspringUrl: 'https://www.heatspring.com/courses/osha-30-hour-construction?aff_id=9f_wlq',
     bannerHeadline: 'Leading a crew? You need OSHA 30.',
     bannerSubtext: "HeatSpring's authorized 30-hour course, online and self-paced.",
