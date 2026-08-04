@@ -1125,7 +1125,7 @@ export default function SolarInstallerCertification() {
     <div data-label="Who">Crew leads &amp; supervisors</div>
     <div data-label="Training hours">30 hrs, deeper safety scope</div>
     <div data-label="Exam cost">$130 – $190</div>  {/* OSHA 30 */}
-    <div data-label="Typical pay" className="sr2-recognition">
+    <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
@@ -1143,7 +1143,7 @@ export default function SolarInstallerCertification() {
     <div data-label="Who">Anyone doing licensed wiring work</div>
     <div data-label="Training hours">Varies by state</div>
     <div data-label="Exam cost">$50 – $150</div> 
-    <div data-label="Typical pay" className="sr2-recognition">
+    <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Required by state</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
@@ -1162,7 +1162,7 @@ export default function SolarInstallerCertification() {
     <div data-label="Who">Installers a few months in</div>
     <div data-label="Training hours">No fixed minimum — typical prep courses run ~40 hrs</div>
     <div data-label="Exam cost">$150</div> 
-    <div data-label="Typical pay" className="sr2-recognition">
+    <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">
   Recognized stepping stone to PVIP
 </span>
@@ -1184,7 +1184,7 @@ export default function SolarInstallerCertification() {
     <div data-label="Who">Lead installer, commercial bids</div>
     <div data-label="Training hours">58 documented training hours</div>
     <div data-label="Exam cost">$500</div> 
-    <div data-label="Typical pay" className="sr2-recognition">
+    <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition sr2-recognition--highlight">
   Only US solar installer credential accredited to ISO/IEC 17024 (ANSI)
   <span className="sr2-recognition-source">Source: NABCEP / ANAB</span>
@@ -1207,7 +1207,7 @@ export default function SolarInstallerCertification() {
     <div data-label="Who">Installers specializing in that equipment</div>
     <div data-label="Training hours">Enphase: ~5 hrs SolarEdge: 2-12 hrs Tesla: weeks-to-months</div>
     <div data-label="Exam cost">Free – $150</div>
-    <div data-label="Typical pay" className="sr2-recognition">
+    <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Manufacturer-specific recognition only</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
