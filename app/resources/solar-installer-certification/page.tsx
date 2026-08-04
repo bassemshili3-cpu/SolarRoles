@@ -460,13 +460,7 @@ const css = `
 
 }
 
-.sr2-table-note::before {
 
-  content: ""; width: 4px; height: 4px; border-radius: 50%;
-
-  background: var(--ink-400);
-
-}
 
 
 /* ── CERTIFICATION CHEAT SHEET TABLE (7 cols) ────────────────────── */
@@ -1086,13 +1080,13 @@ export default function SolarInstallerCertification() {
 
           <h2 id="table" className="sr2-first"><span className="n">01</span>The cheat sheet</h2>
 <p className="sr2-table-note">
-  Pay ranges reflect BLS OEWS May 2024 (SOC 47-2231) plus current
+  *Pay ranges reflect BLS OEWS May 2024 (SOC 47-2231) plus current
   industry surveys — see sources at the bottom of the page.
-</p>
-<p className="sr2-affiliate-disclosure">
-  This table contains affiliate links. We may earn a commission if
+<br></br>
+  *This table contains affiliate links. We may earn a commission if
   you enroll through them, at no extra cost to you.
 </p>
+
 
 <div className="sr2-cert-table">
   <div className="sr2-cert-head">
@@ -1153,7 +1147,7 @@ export default function SolarInstallerCertification() {
       <span className="sr2-recognition">Required by state</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="AFFILIATE_LINK_ELECTRICAL" className="sr2-cta-btn">
+      <a href="https://www.nascla.org" className="sr2-cta-btn">
         Start Today
       </a>
     </div>
@@ -1217,7 +1211,7 @@ export default function SolarInstallerCertification() {
       <span className="sr2-recognition">Manufacturer-specific recognition only</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="AFFILIATE_LINK_MANUFACTURER" className="sr2-cta-btn">
+      <a href="https://www.tesla.com/support/energy/tesla-certified-installer" className="sr2-cta-btn">
         Start Today
       </a>
     </div>
