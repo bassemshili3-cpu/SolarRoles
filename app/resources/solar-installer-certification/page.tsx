@@ -9,11 +9,11 @@ const PAGE_PATH = "/resources/solar-installer-certification";
 
 const PAGE_TITLE =
 
-  "Solar Installer Certifications (2026): What to Get & What Each One Pays";
+  "Solar Installer Certifications: What to Get & Which Course Fits Your Path";
 
 const PAGE_DESCRIPTION =
 
-  "Every solar installer credential, the pay bump each one unlocks, and the path that pays off fastest.";
+  "Every solar installer credential and the specifics of each course.";
 
 
 export const metadata: Metadata = {
@@ -1020,7 +1020,7 @@ export default function SolarInstallerCertification() {
 
         <h1>
 
-          Solar Installer <span className="accent">Certifications</span>: What to Get & What Each One Pays
+          Solar Installer <span className="accent">Certifications</span>: What to Get & Which Course Fits Your Path
 
         </h1>
 
@@ -1160,7 +1160,7 @@ export default function SolarInstallerCertification() {
     </div>
     <div data-label="Status">Recommended</div>
     <div data-label="Who">Installers a few months in</div>
-    <div data-label="Training hours">No field experience required to sit the exam</div>
+    <div data-label="Training hours">No fixed minimum — typical prep courses run ~40 hrs</div>
     <div data-label="Exam cost">$150</div> 
     <div data-label="Typical pay" className="sr2-recognition">
       <span className="sr2-recognition">
@@ -1205,7 +1205,7 @@ export default function SolarInstallerCertification() {
     </div>
     <div data-label="Status">Optional</div>
     <div data-label="Who">Installers specializing in that equipment</div>
-    <div data-label="Training hours">Adds on top of NABCEP — not a substitute</div>
+    <div data-label="Training hours">Enphase: ~5 hrs SolarEdge: 2-12 hrs Tesla: weeks-to-months</div>
     <div data-label="Exam cost">Free – $150</div>
     <div data-label="Typical pay" className="sr2-recognition">
       <span className="sr2-recognition">Manufacturer-specific recognition only</span>
