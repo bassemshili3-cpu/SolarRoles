@@ -33,19 +33,26 @@ const NAV_CERTIFICATIONS = [
 
 export function CertificationsNavCta() {
   return (
-    <div className="hidden sm:inline-flex relative group">
+    <div className="inline-flex relative group">
       <Link href="/certifications">
-        <Button
-          size="sm"
-          className="relative overflow-hidden rounded-full px-4 h-9 font-semibold text-[#0B1A2E]
-                     bg-[length:200%_100%] animate-cert-cta-shimmer
-                     bg-gradient-to-r from-[#F5B819] via-[#FF6A3D] to-[#F5B819]
-                     animate-cert-cta-pulse
-                     transition-transform hover:scale-[1.03] active:scale-[0.97]"
-        >
-          <span className="relative z-10">Get your Certifications</span>
-          <span className="cert-cta-sheen" aria-hidden="true" />
-        </Button>
+       <Button
+  size="sm"
+  className="relative overflow-hidden rounded-full px-4 h-9 font-semibold text-black
+             bg-[length:200%_100%] animate-cert-cta-shimmer
+             bg-gradient-to-r from-[#F5B819] via-[#FF6A3D] to-[#F5B819]
+             animate-cert-cta-pulse
+             transition-transform hover:scale-[1.03] active:scale-[0.97]"
+>
+  <span
+  className="relative z-10"
+  style={{
+    WebkitTextStroke: '0.5px #fff',
+    paintOrder: 'stroke fill',
+  }}
+>
+  Certifications
+</span>
+</Button>
       </Link>
 
       {/* Zone tampon invisible : évite que le survol se coupe entre

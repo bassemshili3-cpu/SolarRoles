@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-become-a-solar-installer";
 const PAGE_TITLE =
@@ -26,7 +25,6 @@ export const metadata: Metadata = {
     description: PAGE_DESCRIPTION,
   },
 };
-
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -52,12 +50,10 @@ const jsonLd = {
     },
   ],
 };
-
 /* ────────────────────────────────────────────────────────────────────────── */
-/*  Solar Roles palette (extracted from solarroles.com)                       */
-/*  Navy  #0B1A2E · #1E3A5F   Gold  #F5B819   Amber #B45309   Coral #FF6A3D  */
+/* Solar Roles palette (extracted from solarroles.com) */
+/* Navy #0B1A2E · #1E3A5F Gold #F5B819 Amber #B45309 Coral #FF6A3D */
 /* ────────────────────────────────────────────────────────────────────────── */
-
 const css = `
 .sr2-page {
   --navy-900: #0B1A2E;
@@ -65,7 +61,7 @@ const css = `
   --navy-700: #1a2340;
   --navy-600: #1E3A5F;
   --navy-100: #E5EAF2;
-  --navy-50:  #F2F5FA;
+  --navy-50: #F2F5FA;
   --gold-500: #F5B819;
   --gold-600: #E5A810;
   --amber-600: #B45309;
@@ -77,7 +73,7 @@ const css = `
   --ink-600: #3F4A5C;
   --ink-500: #5A6577;
   --ink-400: #6B7484;
-  --line:     #E5E9F0;
+  --line: #E5E9F0;
   --line-soft:#EEF1F6;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--ink-900);
@@ -87,7 +83,6 @@ const css = `
   font-size: 15px;
   line-height: 1.55;
 }
-
 /* ── EDITORIAL BYLINE STRIP ───────────────────────────────────────────── */
 .sr2-bylines {
   max-width: 1280px;
@@ -190,7 +185,6 @@ const css = `
   line-height: 1.6;
   color: var(--ink-500);
 }
-
 /* ── HERO IMAGE ─────────────────────────────────────────────────────── */
 .sr2-hero-img {
   max-width: 1280px;
@@ -252,7 +246,6 @@ const css = `
   backdrop-filter: blur(6px);
   padding: 4px 8px; border-radius: 4px;
 }
-
 /* ── MAIN LAYOUT ────────────────────────────────────────────────────── */
 .sr2-shell {
   max-width: 1280px;
@@ -271,7 +264,6 @@ const css = `
   .sr2-shell { grid-template-columns: 1fr; gap: 24px; }
   .sr2-toc-col { position: static !important; }
 }
-
 /* ── LEFT: TABLE OF CONTENTS ───────────────────────────────────────── */
 .sr2-toc-col {
   position: sticky;
@@ -326,7 +318,6 @@ const css = `
   color: var(--amber-600);
   min-width: 22px;
 }
-
 /* ── CENTER: ARTICLE ───────────────────────────────────────────────── */
 .sr2-article {
   font-size: 16.5px;
@@ -364,7 +355,6 @@ const css = `
 .sr2-article a:hover { color: var(--navy-900); border-bottom-color: var(--gold-500); }
 .sr2-article ul { margin: 0 0 20px; padding-left: 22px; }
 .sr2-article li { margin: 6px 0; }
-
 .sr2-h2-intro {
   font-size: 17px;
   line-height: 1.65;
@@ -399,7 +389,6 @@ const css = `
   background: #DC2626;
   box-shadow: 0 0 0 3px rgba(220,38,38,0.15);
 }
-
 /* ── INTERACTIVE WIDGET: ROUTE FINDER ─────────────────────────────── */
 .sr2-widget {
   margin: 40px 0;
@@ -428,7 +417,6 @@ const css = `
   color: rgba(255,255,255,0.75);
 }
 .sr2-widget-body { padding: 22px 26px 26px; }
-
 .sr2-progress {
   display: flex; align-items: center; gap: 10px;
   font-size: 11px;
@@ -494,7 +482,6 @@ const css = `
 .sr2-opt:hover .check { border-color: var(--gold-500); background: var(--gold-500); }
 .sr2-opt .arrow { margin-left: auto; color: var(--ink-400); }
 .sr2-opt:hover .arrow { color: var(--amber-600); transform: translateX(2px); }
-
 /* ── PAY GRID ─────────────────────────────────────────────────────── */
 .sr2-paygrid {
   display: grid; grid-template-columns: repeat(3, 1fr);
@@ -528,7 +515,6 @@ const css = `
 }
 .sr2-paycard .rate .per { font-size: 13px; color: var(--ink-400); font-weight: 600; }
 .sr2-paycard .desc { font-size: 13px; color: var(--ink-600); margin-top: 8px; line-height: 1.5; }
-
 /* ── CALLOUT ─────────────────────────────────────────────────────── */
 .sr2-callout {
   margin: 24px 0;
@@ -562,7 +548,6 @@ const css = `
   position: relative; z-index: 1;
 }
 .sr2-callout p { margin: 0; position: relative; z-index: 1; font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.92); }
-
 /* ── HEATSPRING INLINE CTA ───────────────────────────────────────── */
 .sr2-heatspring-cta {
   text-align: center;
@@ -591,7 +576,6 @@ const css = `
   color: var(--ink-400);
   text-align: center;
 }
-
 /* ── RIGHT SIDEBAR: AUTHOR + CTA ─────────────────────────────────── */
 .sr2-sidebar { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 18px; }
 .sr2-card {
@@ -621,7 +605,6 @@ const css = `
 .sr2-author-card .nm .mark { color: var(--gold-500); }
 .sr2-author-card .role { font-size: 13px; color: var(--ink-500); }
 .sr2-author-card + p { font-size: 13.5px; line-height: 1.55; color: var(--ink-600); margin: 14px 0 0; }
-
 .sr2-badges {
   list-style: none; margin: 14px 0 0; padding: 0;
   display: flex; flex-direction: column; gap: 8px;
@@ -643,12 +626,6 @@ const css = `
   background-position: center;
 }
 
-.sr2-trust {
-  display: flex; gap: 10px; flex-wrap: wrap;
-  margin: 14px 0 0;
-  padding-top: 14px;
-  border-top: 1px dashed var(--line-soft);
-}
 .sr2-trust .pill {
   font-size: 11px; font-weight: 800;
   background: var(--navy-50);
@@ -659,7 +636,6 @@ const css = `
   display: inline-flex; align-items: center; gap: 5px;
 }
 .sr2-trust .pill .star { color: var(--gold-500); }
-
 /* ── FORM CARD (sidebar) ─────────────────────────────────────────── */
 .sr2-form-card { background: #fff; }
 .sr2-form-card h4 {
@@ -706,7 +682,6 @@ const css = `
 }
 .sr2-form-foot span { display: inline-flex; align-items: center; gap: 4px; }
 .sr2-form-foot .ok { color: var(--amber-600); }
-
 /* ── CTA STRIP AT BOTTOM OF ARTICLE ─────────────────────────────── */
 .sr2-cta-strip {
   margin: 48px 0 0;
@@ -753,7 +728,6 @@ const css = `
   transition: all .15s;
 }
 .sr2-cta-strip .ghost:hover { background: rgba(255,255,255,0.12); }
-
 /* ── FINE PRINT ─────────────────────────────────────────────────── */
 .sr2-fine {
   margin: 36px 0 0;
@@ -770,7 +744,6 @@ const css = `
   color: var(--navy-900); margin-bottom: 8px;
 }
 `;
-
 export default function HowToBecomeASolarInstaller() {
   return (
     <div className="sr2-page">
@@ -779,7 +752,6 @@ export default function HowToBecomeASolarInstaller() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
       <div className="sr2-title">
   <span className="eyebrow">
     <span className="d" />
@@ -792,13 +764,12 @@ export default function HowToBecomeASolarInstaller() {
     {PAGE_DESCRIPTION}
   </p>
 </div>
-
 <div className="sr2-meta-strip flex justify-center items-center gap-2">
   <span><strong>Last reviewed:</strong> 3 August, 2026</span>
   <span className="dot" />
   <span className="changes">Changes — updated for Q3 2026 market data</span>
 </div>
-      
+     
       {/* ═══════ MAIN SHELL: TOC · ARTICLE · SIDEBAR ═══════ */}
       <div className="sr2-shell">
         {/* TOC */}
@@ -809,60 +780,26 @@ export default function HowToBecomeASolarInstaller() {
               Table of Contents
             </div>
             <ol className="sr2-toc-list">
-              <li><a href="#job">You want to become a solar installer</a></li>
-              <li><a href="#paths">The four real ways in</a></li>
-              <li><a href="#nabcep">Where NABCEP actually fits</a></li>
-              <li><a href="#pay">What it actually pays</a></li>
-              <li><a href="#market">The market in 2026</a></li>
-              <li><a href="#brochure">Important informations</a></li>
-              <li><a href="#growth">Where the job leads</a></li>
-              <li><a href="#mistakes">Common mistakes early on</a></li>
-              <li><a href="#next">Next step</a></li>
-              <li><a href="#refs">References &amp; sources</a></li>
+              <li><a href="#paths">Entry Pathways</a></li>
+              <li><a href="#nabcep">NABCEP Certification</a></li>
+              <li><a href="#pay">Compensation Overview</a></li>
+              <li><a href="#market">2026 Market Outlook</a></li>
+              <li><a href="#brochure">Safety Considerations</a></li>
+              <li><a href="#growth">Career Progression</a></li>
+              <li><a href="#mistakes">Common Early Mistakes</a></li>
+              <li><a href="#next">Recommended Next Steps</a></li>
             </ol>
           </div>
         </aside>
-
         {/* ARTICLE */}
         <article className="sr2-article">
-          <h2 id="job"><span className="n">01</span>You want to become a solar installer</h2>
-          <p>
-            If yes, we cover everything you need to go from beginner to fully
-            qualified — without the brochure-talk. This guide was built from
-            active job listings, federal labor data, and conversations with
-            working installers across residential, commercial, and utility-scale
-            segments.
-          </p>
-
-          <h2 id="start"><span className="n">02</span>But I have no idea where to start</h2>
-          <p className="sr2-h2-intro">
-            These are some of the most common questions people bring to this
-            page. The correct route all depends on what you need.
-          </p>
-          <ul>
-            <li>Do I need an apprenticeship?</li>
-            <li>Do I need a degree?</li>
-            <li>Do I need prior construction or electrical experience?</li>
-            <li>Do I need a high school diploma or GED?</li>
-            <li>How long does it actually take to start working?</li>
-          </ul>
-          <p>
-            If you&apos;re a <strong>30-year-old career changer</strong> with a
-            mortgage and bills, the advice is going to look different than for
-            an <strong>18-year-old</strong> still living with their parents. Use
-            the route finder below to skip straight to the path that matches
-            your situation.
-          </p>
-
-         
-
-          <h2 id="paths"><span className="n">03</span>Four ways in, and what each one costs you</h2>
+          <h2 id="paths"><span className="n">01</span>Entry Pathways</h2>
           <p>
             There&apos;s no single accepted route into this job. Which one
             makes sense depends on your background, how much you can afford to
             earn while training, and how fast you want to move.
           </p>
-         
+        
          <p>
   <strong>Direct hire plus on-the-job training.</strong> The most
   common path. A company hires you with no solar experience, pairs
@@ -871,7 +808,6 @@ export default function HowToBecomeASolarInstaller() {
   independently. You get paid from day one, which is the main
   advantage, but it comes with downsides that should be known:
 </p>
-
 <ul className="sr2-downsides">
   <li>Some states require or prefer NABCEP certification for installs to qualify for public incentives.</li>
   <li>NABCEP-certified installers earn $3–$8/hour more than non-certified workers at the same experience level.</li>
@@ -898,8 +834,7 @@ export default function HowToBecomeASolarInstaller() {
             roofers, and general construction workers already have most of the
             physical and technical foundation.
           </p>
-
-          <h2 id="nabcep"><span className="n">04</span>Where NABCEP actually fits</h2>
+          <h2 id="nabcep"><span className="n">02</span>NABCEP Certification</h2>
           <p>
            The NABCEP 2024 survey revealed that 36% of solar employers were ranking certifications
            as the number one hiring criterion. What NABCEP does is signal to an employer that you
@@ -922,14 +857,14 @@ export default function HowToBecomeASolarInstaller() {
               OSHA safety guide
             </Link>
           </p>
-          
+         
        <p>
   <strong>HeatSpring</strong> is one of the top-rated providers for
   NABCEP PV Associate training, with an 88% exam pass rate among
   students who complete their course.
 </p>
 <div className="sr2-heatspring-cta">
-  
+ 
    <a href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
     target="_blank"
     rel="noopener noreferrer sponsored"
@@ -941,13 +876,11 @@ export default function HowToBecomeASolarInstaller() {
 <p className="sr2-heatspring-disclosure">
   * We may earn a commission if you enroll through this link, at no extra cost to you.
 </p>
-
-      <h2 id="pay"><span className="n">05</span>What it actually pays</h2>
+      <h2 id="pay"><span className="n">03</span>Compensation Overview</h2>
           <p className="sr2-h2-intro">
             Three stages, three pay bands. The jump between them is almost
             always tied to documented field hours + certification.
           </p>
-
           <div className="sr2-paygrid">
             <div className="sr2-paycard">
               <div className="stage">Stage 1 · Entry</div>
@@ -965,7 +898,6 @@ export default function HowToBecomeASolarInstaller() {
               <div className="desc">Lead installer / foreman. Manages a crew.</div>
             </div>
           </div>
-
           <p>
             For actual numbers by state rather than national averages, see our{" "}
             <Link href="/data/salaries/solar-photovoltaic-installer">
@@ -977,8 +909,7 @@ export default function HowToBecomeASolarInstaller() {
             </Link>
             , both pulled from active listings rather than surveys.
           </p>
-
-          <h2 id="market"><span className="n">06</span>The market in 2026</h2>
+          <h2 id="market"><span className="n">04</span>2026 Market Outlook</h2>
           <p>
             Most guides to this career still quote growth projections written
             before the residential tax credit changes that took effect at the
@@ -990,8 +921,7 @@ export default function HowToBecomeASolarInstaller() {
             utility-scale, and battery storage installation are still
             expanding.
           </p>
-
-          <h2 id="brochure"><span className="n">07</span>Important informations</h2>
+          <h2 id="brochure"><span className="n">05</span>Safety Considerations</h2>
           <p>
             Falls are the leading cause of death in this trade, and it&apos;s
             not close. Federal workplace safety investigations have documented
@@ -1000,8 +930,7 @@ export default function HowToBecomeASolarInstaller() {
             reason to avoid the job. It&apos;s a reason to treat fall
             protection training as non-negotiable rather than a box to check.
           </p>
-
-          <h2 id="growth"><span className="n">08</span>Where the job leads</h2>
+          <h2 id="growth"><span className="n">06</span>Career Progression</h2>
           <p>
             Most installers who stay in the trade move up after one to three
             years, once they can run a small crew, read a permit set without
@@ -1010,8 +939,7 @@ export default function HowToBecomeASolarInstaller() {
             electrician licensure, site supervision, or a move into system
             design and commissioning.
           </p>
-
-          <h2 id="mistakes"><span className="n">09</span>Common mistakes early on</h2>
+          <h2 id="mistakes"><span className="n">07</span>Common Early Mistakes</h2>
           <p>
             <strong>Skipping OSHA 10</strong> because an employer
             doesn&apos;t require it yet. <strong>Not tracking training hours
@@ -1020,8 +948,7 @@ export default function HowToBecomeASolarInstaller() {
             NABCEP or a state license in place. See the full breakdown in the
             next section.
           </p>
-
-          <h2 id="next"><span className="n">10</span>Next step</h2>
+          <h2 id="next"><span className="n">08</span>Recommended Next Steps</h2>
           <p>
             If you&apos;re ready to see what&apos;s actually being posted right
             now, browse current{" "}
@@ -1039,7 +966,6 @@ export default function HowToBecomeASolarInstaller() {
             </Link>{" "}
             are the two most useful next reads.
           </p>
-
           {/* CTA STRIP */}
           <div className="sr2-cta-strip">
             <span className="label">Ready to start?</span>
@@ -1058,7 +984,6 @@ export default function HowToBecomeASolarInstaller() {
               </Link>
             </div>
           </div>
-
           <p className="sr2-fine">
             Pay figures reflect national data and active listing ranges as of
             2026 and will vary by state, employer, and experience. Market
@@ -1068,7 +993,6 @@ export default function HowToBecomeASolarInstaller() {
             and NABCEP directly before making training or licensing decisions.
           </p>
         </article>
-
         {/* SIDEBAR */}
         <aside className="sr2-sidebar">
           <div className="sr2-card">
@@ -1077,26 +1001,17 @@ export default function HowToBecomeASolarInstaller() {
               <div>
                 <div className="by">By Editorial Team</div>
                 <div className="nm">Solar<span className="mark">Roles</span></div>
-               
+              
               </div>
             </div>
-            <p>
-              Based on real training delivery, learner outcomes, and current US
-              labor market data for solar installation.
-            </p>
+          
             <ul className="sr2-badges">
               <li className="sr2-badge">NABCEP-aligned data</li>
-              <li className="sr2-badge">4.8 ★ across verified reviews</li>
-              <li className="sr2-badge">12,000+ installer jobs indexed</li>
-              <li className="sr2-badge">BLS + IREC cross-referenced</li>
+              <li className="sr2-badge">Listing of hundreds active solar jobs</li>
+           
             </ul>
-            <div className="sr2-trust">
-              <span className="pill"><span className="star">★</span> 4.8 Trustpilot</span>
-              <span className="pill">IBEW Recognized</span>
-              <span className="pill">NABCEP-aligned</span>
-            </div>
+       
           </div>
-
           <div className="sr2-card sr2-form-card">
             <h4>Get the salary data in your inbox</h4>
             <p className="sub">State-by-state pay for solar installers, updated monthly.</p>

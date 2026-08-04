@@ -404,6 +404,51 @@ export default async function Home() {
 
       </section>
 
+<section className="bg-white py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">
+                Why now
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1A2E] leading-tight tracking-tight mb-5">
+                Solar is short on hands, right when demand is spiking.
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Federal tax-credit deadlines are pulling installation
+                timelines forward across the country, and the workforce
+                hasn&apos;t caught up. That means faster hiring, real
+                urgency behind job postings, and more room to move up
+                without waiting years for the &ldquo;next opening.&rdquo;
+              </p>
+              <p className="text-gray-500 text-sm">
+                Source: 2025 U.S. Energy &amp; Employment Report (USEER) &amp;
+                IREC National Solar Jobs Census
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-[#FEF3C7] rounded-2xl p-6 border border-[#F5B819]/20">
+                <p className="text-4xl font-bold text-[#0B1A2E] tracking-tight mb-1">
+                  53,000
+                </p>
+                <p className="text-sm text-[#B45309] font-semibold leading-snug">
+                  worker shortfall projected by late 2026
+                </p>
+              </div>
+              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                <p className="text-4xl font-bold text-[#0B1A2E] tracking-tight mb-1">
+                  86%
+                </p>
+                <p className="text-sm text-gray-600 font-semibold leading-snug">
+                  of solar employers say hiring is difficult right now
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
 
      <section className="bg-gray-50 py-24 px-6">
         <div className="max-w-5xl mx-auto">
