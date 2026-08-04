@@ -930,7 +930,7 @@ export default function HowToBecomeASolarInstaller() {
 </p>
 <div className="sr2-heatspring-cta">
   
-   <a href="TON_LIEN_AFFILIATION_HEATSPRING"
+   <a href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
     target="_blank"
     rel="noopener noreferrer sponsored"
     className="sr2-heatspring-btn"
