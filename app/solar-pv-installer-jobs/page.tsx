@@ -4,7 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { Sun, Wrench, DollarSign, ShieldCheck, Award, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
-import { CertificationBanner } from '@/components/CertificationBanner'
+
 import { getPrimaryCertificationForCategory } from '@/lib/certification-detector' // ajustez le chemin
 
 export const revalidate = 3600
@@ -141,7 +141,7 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Solar PV Installer Jobs</h1>
         </header>
 
-{cert && <CertificationBanner cert={cert} />}
+
 
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="lg:w-80"><JobFilters /></aside>

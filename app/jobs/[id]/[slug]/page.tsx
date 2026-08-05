@@ -52,7 +52,7 @@ import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 import { detectCertifications } from '@/lib/certification-detector'
 
 import Breadcrumb from '@/components/Breadcrumb'
-import { CertificationBanner } from '@/components/CertificationBanner'
+
 
 
 export const revalidate = 3600
@@ -676,7 +676,7 @@ function safeJsonLd(data: unknown): string {
           <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
 
             <PaycheckCalculatorCard salary={job.salary_min} state={job.location} compact />
-           {cert && <CertificationBanner cert={cert} />}
+         
 
           </div>
 
