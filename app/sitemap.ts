@@ -77,6 +77,7 @@ const resourcePages: string[] = [
   'solar-certifications-by-job-role',
   'solar-installer-apprenticeship-programs',
   'solar-installer-certification',
+  'how-to-get-nabcep-certified',
 ].map(s => `/resources/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────

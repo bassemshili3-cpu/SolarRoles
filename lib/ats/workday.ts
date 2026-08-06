@@ -63,17 +63,42 @@ const US_STATE_ABBR = new Set([
 // Workday renvoie souvent "ST, City" (ex: "NJ, Somerset") au lieu du
 // format habituel "City, ST" attendu par isUSJob()/extractStateFromLocation()
 // dans le reste du pipeline. On normalise ici, à la source.
+// Reconnaît un code d'état US isolé (entouré de non-lettres) n'importe où
+// dans la chaîne — couvre "NJ, Somerset" ET "BRANCH - CA - Bay Area South".
 function normalizeWorkdayLocation(raw: string): string {
-  const match = raw.trim().match(/^([A-Za-z]{2}),\s*(.+)$/);
-  if (match && US_STATE_ABBR.has(match[1].toUpperCase())) {
-    const [, state, city] = match;
+  const trimmed = raw.trim();
+
+  // Cas 1 (déjà géré) : "ST, City"
+  const commaMatch = trimmed.match(/^([A-Za-z]{2}),\s*(.+)$/);
+  if (commaMatch && US_STATE_ABBR.has(commaMatch[1].toUpperCase())) {
+    const [, state, city] = commaMatch;
     return `${city}, ${state.toUpperCase()}`;
   }
-  return raw;
+
+  // Cas 2 (nouveau) : état isolé n'importe où, ex "BRANCH - CA - Bay Area South",
+  // "Region: TX - Austin", etc. On prend le token qui matche exactement un
+  // abbr d'état US et on reconstruit "reste, ST".
+  const tokens = trimmed.split(/[\s\-–,]+/).filter(Boolean);
+  const stateToken = tokens.find((t) => US_STATE_ABBR.has(t.toUpperCase()));
+  if (stateToken) {
+    const rest = tokens.filter((t) => t !== stateToken).join(' ');
+    return `${rest}, ${stateToken.toUpperCase()}`;
+  }
+
+  return raw; // ni virgule ni token d'état trouvé — laissé tel quel, sera géré par le fallback détail
 }
 
-function resolveLocation(p: WorkdayJobPosting): string {
+function resolveLocation(p: WorkdayJobPosting, detailLocation?: string): string {
   const raw = p.locationsText ?? p.bulletFields?.[0] ?? '';
+
+  // "N Locations" (ou vide) n'est pas exploitable : on préfère la
+  // localisation renvoyée par l'appel détail (jobPostingInfo.location),
+  // récupérée en même temps que la description.
+  if (/^\d+\s+Location/i.test(raw.trim()) || !raw.trim()) {
+    if (detailLocation) return normalizeWorkdayLocation(detailLocation);
+    return raw;
+  }
+
   return normalizeWorkdayLocation(raw);
 }
 
@@ -304,6 +329,26 @@ async function fetchJobDescription(company: WorkdayCompanySeed, page: Page, exte
   }
 }
 
+async function fetchJobDetail(
+  company: WorkdayCompanySeed,
+  page: Page,
+  externalPath: string
+): Promise<{ description: string; location?: string }> {
+  try {
+    const path = externalPath.replace(/^\/job/, '');
+    const result = await fetchInPage<WorkdayJobDetailResponse>(page, `${cxsBaseUrl(company)}/job${path}`);
+    if (!result.ok) return { description: '' };
+    return {
+      description: stripHtml(result.data.jobPostingInfo?.jobDescription ?? ''),
+      location: result.data.jobPostingInfo?.location,
+    };
+  } catch (err) {
+    console.warn(`[workday] échec récupération description ${externalPath}: ${(err as Error).message}`);
+    return { description: '' };
+  }
+}
+
+
 export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<NormalizedJob[]> {
   const context = await createCompanyContext();
   let page: Page;
@@ -331,13 +376,13 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   try {
     for (const p of postings) {
-      const description = await fetchJobDescription(company, page, p.externalPath);
-      await sleep(REQUEST_DELAY_MS);
+  const detail = await fetchJobDetail(company, page, p.externalPath);
+  await sleep(REQUEST_DELAY_MS);
 
-      if (isSolarInstallerRole(p.title, description)) {
-        results.push(normalize(company, p, description));
-      }
-    }
+  if (isSolarInstallerRole(p.title, detail.description)) {
+    results.push(normalize(company, p, detail.description, detail.location));
+  }
+}
   } finally {
     await context.close();
   }
@@ -345,8 +390,13 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
   return results;
 }
 
-function normalize(company: WorkdayCompanySeed, p: WorkdayJobPosting, description: string): NormalizedJob {
-  const location = resolveLocation(p);
+function normalize(
+  company: WorkdayCompanySeed,
+  p: WorkdayJobPosting,
+  description: string,
+  detailLocation?: string
+): NormalizedJob {
+  const location = resolveLocation(p, detailLocation);
   const url = `https://${company.tenant}.${company.host}.myworkdayjobs.com/${company.site}${p.externalPath}`;
   return {
     source: 'workday',

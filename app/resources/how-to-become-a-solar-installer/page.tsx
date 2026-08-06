@@ -36,8 +36,6 @@ const jsonLd = {
       dateModified: "2026-08-03",
       author: [
         { "@type": "Person", name: "Maya Okonkwo" },
-        { "@type": "Person", name: "Daniel Reyes" },
-        { "@type": "Person", name: "Priya Shah" },
       ],
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
@@ -682,52 +680,11 @@ const css = `
 }
 .sr2-form-foot span { display: inline-flex; align-items: center; gap: 4px; }
 .sr2-form-foot .ok { color: var(--amber-600); }
-/* ── CTA STRIP AT BOTTOM OF ARTICLE ─────────────────────────────── */
-.sr2-cta-strip {
-  margin: 48px 0 0;
-  background:
-    radial-gradient(500px 240px at 100% 0%, rgba(245,184,25,0.18), transparent 60%),
-    linear-gradient(135deg, #0B1A2E 0%, #1E3A5F 100%);
-  border-radius: 16px;
-  padding: 28px 28px;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-}
-.sr2-cta-strip::after {
-  content: ""; position: absolute; right: -50px; top: -50px;
-  width: 220px; height: 220px;
-  border: 1px solid rgba(245,184,25,0.2);
-  border-radius: 50%;
-}
-.sr2-cta-strip .label {
-  display: inline-block;
-  font-size: 11px; font-weight: 800; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--gold-500);
-  margin-bottom: 8px;
-}
-.sr2-cta-strip h3 {
-  font-size: 22px; font-weight: 800; line-height: 1.2;
-  letter-spacing: -0.01em; margin: 0 0 8px;
-  position: relative; z-index: 1;
-}
-.sr2-cta-strip p {
-  font-size: 14px; color: rgba(255,255,255,0.78);
-  margin: 0 0 18px;
-  position: relative; z-index: 1;
-}
-.sr2-cta-strip .actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
-.sr2-cta-strip .ghost {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 11px 18px;
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
-  text-decoration: none; font-weight: 600; font-size: 14px;
-  transition: all .15s;
-}
-.sr2-cta-strip .ghost:hover { background: rgba(255,255,255,0.12); }
+
+
+
+
+
 /* ── FINE PRINT ─────────────────────────────────────────────────── */
 .sr2-fine {
   margin: 36px 0 0;
@@ -737,12 +694,7 @@ const css = `
   border-left: 3px solid var(--gold-500);
   font-size: 12.5px; line-height: 1.65; color: var(--ink-600);
 }
-.sr2-fine::before {
-  content: "Methodology & sources";
-  display: block; font-size: 11px; font-weight: 800;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--navy-900); margin-bottom: 8px;
-}
+
 `;
 export default function HowToBecomeASolarInstaller() {
   return (
@@ -783,7 +735,7 @@ export default function HowToBecomeASolarInstaller() {
               <li><a href="#paths">Entry Pathways</a></li>
               <li><a href="#nabcep">NABCEP Certification</a></li>
               <li><a href="#pay">Compensation Overview</a></li>
-              <li><a href="#market">2026 Market Outlook</a></li>
+              <li><a href="#market">What Employers Screens For</a></li>
               <li><a href="#brochure">Safety Considerations</a></li>
               <li><a href="#growth">Career Progression</a></li>
               <li><a href="#mistakes">Common Early Mistakes</a></li>
@@ -795,14 +747,14 @@ export default function HowToBecomeASolarInstaller() {
         <article className="sr2-article">
           <h2 id="paths"><span className="n">01</span>Entry Pathways</h2>
           <p>
-            There&apos;s no single accepted route into this job. Which one
+            There&apos;s 4 common routes into this job. Which one
             makes sense depends on your background, how much you can afford to
             earn while training, and how fast you want to move.
           </p>
         
          <p>
-  <strong>Direct hire plus on-the-job training.</strong> The most
-  common path. A company hires you with no solar experience, pairs
+  <strong>Direct hire plus on-the-job training.</strong> 
+  A company hires you with no solar experience, pairs
   you with an experienced crew, and you learn by doing. OJT typically
   runs from one month to a year before you&apos;re working
   independently. You get paid from day one, which is the main
@@ -842,14 +794,12 @@ export default function HowToBecomeASolarInstaller() {
             as you aim for lead installer or electrician-adjacent roles.
           </p>
           <p>
-            The credential path itself trips people up more than the exam does.
             The PV Installation Professional certification requires 58
-            documented training hours split across specific categories, and
-            getting that math right is where most confusion happens. The PV
+            documented training hours split across specific categories. The PV
             Associate credential is the more common early milestone: no
             experience prerequisite, and a reasonable target once you&apos;ve
             got a few months on the tools. See our{" "}
-            <Link href="/resources/solar-certifications-by-job-role">
+            <Link href="/certifications">
               certifications by job role
             </Link>{" "}
             reference, and the{" "}
@@ -859,9 +809,11 @@ export default function HowToBecomeASolarInstaller() {
           </p>
          
        <p>
-  <strong>HeatSpring</strong> is one of the top-rated providers for
-  NABCEP PV Associate training, with an 88% exam pass rate among
-  students who complete their course.
+  <strong>HeatSpring</strong> is a NABCEP Registered Provider and the official PV Associate 
+  training partner for the 2026 NABCEP CE Conference. Courses are taught by instructors who
+  helped write the NABCEP exam content itself. Sean White, for example, contributed to the 
+  PV Installation Professional job task analysis. Their PV Associate program comes with a 
+  pass guarantee: if you don't clear the exam on the first attempt, the retake is free.
 </p>
 <div className="sr2-heatspring-cta">
  
@@ -909,17 +861,30 @@ export default function HowToBecomeASolarInstaller() {
             </Link>
             , both pulled from active listings rather than surveys.
           </p>
-          <h2 id="market"><span className="n">04</span>2026 Market Outlook</h2>
+          <h2 id="market"><span className="n">04</span>What Employers Screens For</h2>
           <p>
-            Most guides to this career still quote growth projections written
-            before the residential tax credit changes that took effect at the
-            end of 2025. Those projections are now out of date. Industry
-            analysts expect residential installation volume to drop rather than
-            grow in 2026, and estimates of tens of thousands of solar jobs at
-            risk nationally have circulated since the credit expired. The
-            slowdown is concentrated in residential rooftop work. Commercial,
-            utility-scale, and battery storage installation are still
-            expanding.
+         04
+04
+What Employers Screen For
+Certification remains the strongest single signal in the hiring
+process, but it is evaluated alongside a separate
+set of practical criteria before a candidate is placed on a crew.
+
+Physical capacity is assessed first: the role requires climbing,
+kneeling, and carrying panels weighing 40–60 lbs on roofs or
+racking systems for most of a shift. A valid driver's license is
+commonly a hard requirement, as crews typically travel to job
+sites together in a company vehicle. Familiarity with basic hand
+tools — drill, impact driver, wire strippers, multimeter is
+expected, though not mastery.
+
+Attendance reliability is weighted heavily for entry-level
+positions without a certification already in place, since crew-
+based work depends on consistent staffing. Candidates who arrive with NABCEP PV
+Associate or equivalent training typically clear this initial
+screening faster, since certification substitutes for much of what
+these criteria are designed to verify.
+
           </p>
           <h2 id="brochure"><span className="n">05</span>Safety Considerations</h2>
           <p>
@@ -966,32 +931,11 @@ export default function HowToBecomeASolarInstaller() {
             </Link>{" "}
             are the two most useful next reads.
           </p>
-          {/* CTA STRIP */}
-          <div className="sr2-cta-strip">
-            <span className="label">Ready to start?</span>
-            <h3>See what solar employers are hiring for this week.</h3>
-            <p>
-              Every listing on Solar Roles is pulled from an actual employer
-              posting — no scraped duplicates, no recruiter spam.
-            </p>
-            <div className="actions">
-              <Link href="/jobs?what=Solar%20Installer" className="sr2-btn-gold">
-                Browse open installer jobs
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </Link>
-              <Link href="/resources/solar-installer-apprenticeship-programs" className="ghost">
-                Read the apprenticeship guide
-              </Link>
-            </div>
-          </div>
-          <p className="sr2-fine">
-            Pay figures reflect national data and active listing ranges as of
-            2026 and will vary by state, employer, and experience. Market
-            conditions referenced here reflect conditions at the time of
-            writing and are subject to change as policy and industry demand
-            shift. Confirm current requirements with your state licensing board
-            and NABCEP directly before making training or licensing decisions.
-          </p>
+         
+
+
+
+         
         </article>
         {/* SIDEBAR */}
         <aside className="sr2-sidebar">

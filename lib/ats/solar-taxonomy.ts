@@ -123,6 +123,23 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /energy\s*storage\s*install(er)?/i,
   /\bess\s*install(er|ation)?/i, // "energy storage system"
 
+  // --- BESS / battery storage (expanded) ---
+/\bbess\b/i, // "Battery Energy Storage System" acronym, common standalone in titles
+/battery\s*energy\s*storage\s*(system)?\s*(tech(nician)?|install(er)?|engineer)?/i,
+/battery\s*(systems?)\s*tech(nician)?/i,
+/storage\s*commissioning\s*tech(nician)?/i,
+/storage\s*(field\s*)?tech(nician)?/i,
+
+// --- commercial & industrial (C&I is the standard industry shorthand) ---
+/\bc\s*&\s*i\s*solar/i,
+/commercial\s*(&|and)\s*industrial\s*solar/i,
+/commercial\s*solar\s*(tech(nician)?|electrician|foreman)/i,
+
+// --- utility-scale / ground-mount (expanded) ---
+/ground[\s-]?mount(ed)?\s*(solar|pv)\s*(install(er)?|construction|tech(nician)?)/i,
+/utility\s*solar\s*tech(nician)?/i,
+/utility[\s-]*scale\s*(solar|pv)\s*(tech(nician)?|install(er)?)/i,
+
   // --- QA/QC & inspection (solar-specific) ---
   /solar\s*qa\s*[\/-]?\s*qc\s*(tech(nician)?|inspector)?/i,
   /pv\s*(system\s*)?inspector/i,
@@ -214,6 +231,9 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\binspector\b/i,
   /\bwireman\b/i,
   /\bepc\s*(field\s*)?tech(nician)?\b/i, // "EPC Field Technician" — common in utility-scale
+/\bbess\s*(tech(nician)?|install(er)?)?\b/i,
+/\bbattery\s*tech(nician)?\b/i,
+/\bstorage\s*tech(nician)?\b/i,
 ];
 
 // Strong, specific solar signals to look for in a description when the
@@ -248,6 +268,11 @@ const DESCRIPTION_STRONG_SIGNALS: RegExp[] = [
   /nabcep\s*(pv\s*system\s*)?inspector/i,
   /solar\s*thermal|solar\s*hot\s*water/i,
   /quality\s*(assurance|control)\s*.*solar\s*(install|array|system)/i,
+  /battery\s*energy\s*storage\s*system/i,
+/\bbess\b/i,
+/\bc\s*&\s*i\s*solar/i,
+/commercial\s*(&|and)\s*industrial\s*solar/i,
+/ground[\s-]?mount(ed)?\s*(solar|array|pv)/i,
 ];
 
 export function isSolarInstallerRole(title: string, description?: string): boolean {
@@ -309,7 +334,7 @@ export function getSolarRoleFamily(title: string): SolarRoleFamily {
   if (/supervisor|superintendent|crew\s*lead|foreman/i.test(title)) return 'supervisor';
   if (/commissioning/i.test(title)) return 'commissioning';
   if (/(o&m|om\s*tech|service\s*tech|maintenance\s*tech|repair\s*tech|troubleshoot|field\s*service)/i.test(title)) return 'om';
-  if (/(battery|storage|\bess\b)/i.test(title)) return 'storage';
+  if (/battery|storage|\bbess\b/i.test(title)) return 'storage';
   if (/qa\s*[\/-]?\s*qc|inspector/i.test(title)) return 'qa_qc';
   if (/thermal|hot\s*water/i.test(title)) return 'thermal';
   if (/install|racking|array|module|crew|apprentice|journeyman|tracker|helper|laborer/i.test(title)) return 'installer';
