@@ -502,14 +502,14 @@ export default function HowToGetNabcepCertified() {
 
         {/* ARTICLE */}
         <article className="sr2-article">
-            <h2 id="eligibility"><span className="n">02</span>Registration</h2>
+            <h2 id="eligibility"><span className="n">01</span>Registration</h2>
           <p>
             Registration itself works differently depending on the path.
             We'll explain each step throughout this guide.
           </p>
          
 
-          <h2 id="which"><span className="n">01</span>Which Credential Fits You</h2>
+          <h2 id="which"><span className="n">02</span>Which Credential Fits You</h2>
         
             
             
@@ -576,7 +576,7 @@ export default function HowToGetNabcepCertified() {
             employer&apos;s only role is signing off on your logged hours,
             they don&apos;t register you or apply on your behalf.</p>
 
-          <h2 id="eligibility"><span className="n">02</span>Eligibility &amp; Hour Requirements</h2>
+          <h2 id="eligibility"><span className="n">03</span>Eligibility &amp; Hour Requirements</h2>
           <p>
             PV Associate has no prerequisite hours, only a training-hour
             minimum that most short courses or bootcamps satisfy in a single
@@ -598,7 +598,7 @@ export default function HowToGetNabcepCertified() {
           </p>
          
 
-          <h2 id="exam"><span className="n">03</span>Exam Format &amp; Scoring</h2>
+          <h2 id="exam"><span className="n">04</span>Exam Format &amp; Scoring</h2>
           <p>
             All three exams are computer-based, multiple choice, proctored,
             and timed. PV Associate is the shorter, more foundational test —
@@ -619,7 +619,7 @@ export default function HowToGetNabcepCertified() {
 
           
 
-          <h2 id="timeline"><span className="n">04</span>Study Timeline</h2>
+          <h2 id="timeline"><span className="n">05</span>Study Timeline</h2>
           <table className="sr2-credtable">
             <thead>
               <tr>
