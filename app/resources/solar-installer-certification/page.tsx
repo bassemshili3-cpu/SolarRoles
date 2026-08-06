@@ -433,17 +433,6 @@ const css = `
 
 .sr2-article strong { color: var(--navy-900); font-weight: 700; }
 
-.sr2-article a {
-
-  color: var(--amber-600);
-
-  text-decoration: none;
-
-  font-weight: 600;
-
-  border-bottom: 1.5px solid rgba(180,83,9,0.3);
-
-}
 
 .sr2-article a:hover { color: var(--navy-900); border-bottom-color: var(--gold-500); }
 
@@ -483,7 +472,7 @@ const css = `
 
 .sr2-cert-head {
   display: grid;
-  grid-template-columns: 1.4fr 0.85fr 1fr 1.05fr 0.85fr 1.1fr 0.85fr;
+  grid-template-columns: 1.4fr 0.75fr 0.95fr 1fr 0.8fr 0.9fr 1.05fr 0.85fr;
   gap: 6px;
   padding: 16px 16px 0;
   background: #fff;
@@ -531,11 +520,10 @@ const css = `
 
 .sr2-cert-row {
   display: grid;
-  grid-template-columns: 1.4fr 0.85fr 1fr 1.05fr 0.85fr 1.1fr 0.85fr;
+  grid-template-columns: 1.4fr 0.75fr 0.95fr 1fr 0.8fr 0.9fr 1.05fr 0.85fr;
   border-top: 1px solid var(--line-soft);
   background: #fff;
 }
-
 .sr2-cert-row:nth-child(even) { background: #FBF6EE; }
 
 /* ── AFFILIATE DISCLOSURE ─────────────────────────────────────────── */
@@ -544,6 +532,35 @@ const css = `
   color: var(--ink-400);
   margin: 4px 0 0;
   font-style: italic;
+}
+ /* ── WHY HEATSPRING (below table) ────────────────────────────────── */
+.sr2-why-callout {
+  margin: 20px 0 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-600);
+}
+  .sr2-why-callout a {
+  color: var(--amber-600);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sr2-why-callout a:hover {
+  color: var(--navy-900);
+}
+
+.sr2-why-callout .heading {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-900);
+  margin-bottom: 8px;
 }
 
 /* ── CTA CELL / BUTTON ────────────────────────────────────────────── */
@@ -613,18 +630,16 @@ const css = `
 }
 
 .sr2-cert-name {
-
   font-weight: 800;
-
   color: var(--navy-900);
-
-  flex-direction: column; align-items: flex-start !important; gap: 3px;
-
+  flex-direction: column;
+  align-items: flex-start !important;
+  justify-content: center;   /* NOUVEAU */
+  gap: 3px;
   border-left: 3px solid var(--amber-700);
-
   padding-left: 13px !important;
-
 }
+  
 
 .sr2-cert-row.sr2-pva-row .sr2-cert-name {
 
@@ -634,6 +649,14 @@ const css = `
 
 .sr2-cert-name .sub { font-weight: 500; font-size: 12px; color: var(--ink-500); }
 
+.sr2-cert-name a {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1,5px;
+  text-underline-offset: 3px;
+
+}
 
 .sr2-recognition {
   font-weight: 600;
@@ -767,117 +790,40 @@ const css = `
 
 /* ── CTA STRIP AT BOTTOM ─────────────────────────────────────────── */
 
-.sr2-cta-strip {
-
-  margin: 40px 0 0;
-
-  background:
-
-    radial-gradient(500px 240px at 100% 0%, rgba(245,184,25,0.18), transparent 60%),
-
-    linear-gradient(135deg, #0B1A2E 0%, #1E3A5F 100%);
-
-  border-radius: 16px;
-
-  padding: 28px 28px;
-
-  color: #fff;
-
-  position: relative;
-
-  overflow: hidden;
-
+.sr2-next-step {
+  margin: 40px 0 32px;  /* ajout d'un bottom de 32px */
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-600);
 }
 
-.sr2-cta-strip::after {
-
-  content: ""; position: absolute; right: -50px; top: -50px;
-
-  width: 220px; height: 220px;
-
-  border: 1px solid rgba(245,184,25,0.2);
-
-  border-radius: 50%;
-
-}
-
-.sr2-cta-strip .label {
-
-  display: inline-block;
-
-  font-size: 11px; font-weight: 800; letter-spacing: 0.18em;
-
-  text-transform: uppercase; color: var(--gold-500);
-
+.sr2-next-step .label {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-900);
   margin-bottom: 8px;
-
 }
 
-.sr2-cta-strip h3 {
-
-  font-size: 22px; font-weight: 800; line-height: 1.2;
-
-  letter-spacing: -0.01em; margin: 0 0 8px;
-
-  position: relative; z-index: 1;
-
+.sr2-next-step p {
+  margin: 0;
 }
 
-.sr2-cta-strip p {
-
-  font-size: 14px; color: rgba(255,255,255,0.78);
-
-  margin: 0 0 18px;
-
-  position: relative; z-index: 1;
-
+.sr2-next-step a {
+  color: var(--amber-600);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
-.sr2-cta-strip .actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
-
-.sr2-cta-strip .gold-btn {
-
-  display: inline-flex; align-items: center; gap: 6px;
-
-  padding: 13px 18px;
-
-  background: var(--gold-500);
-
+.sr2-next-step a:hover {
   color: var(--navy-900);
-
-  border-radius: 10px;
-
-  text-decoration: none; font-weight: 800; font-size: 14.5px;
-
-  box-shadow: 0 6px 18px -6px rgba(245,184,25,0.55);
-
-  transition: all .15s;
-
 }
-
-.sr2-cta-strip .gold-btn:hover { background: #FFD23E; transform: translateY(-1px); }
-
-.sr2-cta-strip .ghost {
-
-  display: inline-flex; align-items: center; gap: 6px;
-
-  padding: 11px 18px;
-
-  background: rgba(255,255,255,0.06);
-
-  color: #fff;
-
-  border: 1px solid rgba(255,255,255,0.2);
-
-  border-radius: 8px;
-
-  text-decoration: none; font-weight: 600; font-size: 14px;
-
-  transition: all .15s;
-
-}
-
-.sr2-cta-strip .ghost:hover { background: rgba(255,255,255,0.12); }
 
 
 /* ── FINE PRINT ─────────────────────────────────────────────────── */
@@ -1081,18 +1027,20 @@ export default function SolarInstallerCertification() {
     <span>Who needs it</span>
     <span>Training hours</span>
     <span>Exam cost</span>
+    <span>Training cost</span>  {/* NOUVEAU */}
     <span>Recognition</span>
     <span>Get started</span>
   </div>
 
   <div className="sr2-cert-row">
-    <div className="sr2-cert-name" data-label="Credential">
-      OSHA 10
-    </div>
+   <div className="sr2-cert-name" data-label="Credential">
+  <Link href="/certifications/osha-10">OSHA 10</Link>
+</div>
     <div data-label="Status">Employer-required</div>
     <div data-label="Who">Anyone starting on a roof crew</div>
     <div data-label="Training hours">10 hrs, no prerequisite</div>
-   <div data-label="Exam cost">$50 – $150</div>   
+   <div data-label="Exam cost">$59</div>   
+<div data-label="Training cost">Often bundled with exam</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
@@ -1104,13 +1052,14 @@ export default function SolarInstallerCertification() {
   </div>
 
   <div className="sr2-cert-row">
-    <div className="sr2-cert-name" data-label="Credential">
-      OSHA 30
-    </div>
+   <div className="sr2-cert-name" data-label="Credential">
+  <Link href="/certifications/osha-30">OSHA 30</Link>
+</div>
     <div data-label="Status">Recommended</div>
     <div data-label="Who">Crew leads &amp; supervisors</div>
     <div data-label="Training hours">30 hrs, deeper safety scope</div>
-    <div data-label="Exam cost">$130 – $190</div>  {/* OSHA 30 */}
+    <div data-label="Exam cost">$159</div>  {/* OSHA 30 */}
+<div data-label="Training cost">Often bundled with exam</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
@@ -1127,8 +1076,9 @@ export default function SolarInstallerCertification() {
     </div>
     <div data-label="Status">Legally required*</div>
     <div data-label="Who">Anyone doing licensed wiring work</div>
-    <div data-label="Training hours">Varies by state</div>
-    <div data-label="Exam cost">$50 – $150</div> 
+    <div data-label="Training hours">Varies by state</div> 
+    <div data-label="Exam cost">$50 – $150</div>
+<div data-label="Training cost">Varies by state program</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Required by state</span>
     </div>
@@ -1141,13 +1091,14 @@ export default function SolarInstallerCertification() {
 
   <div className="sr2-cert-row sr2-pva-row">
     <div className="sr2-cert-name" data-label="Credential">
-      NABCEP PV Associate
+      <Link href="/certifications/nabcep-pv-associate">NABCEP PV Associate</Link>
       <span className="sub">Entry-level credential</span>
     </div>
     <div data-label="Status">Recommended</div>
     <div data-label="Who">Installers a few months in</div>
-    <div data-label="Training hours">No fixed minimum — typical prep courses run ~40 hrs</div>
+    <div data-label="Training hours">18 hours</div>
     <div data-label="Exam cost">$150</div> 
+<div data-label="Training cost">$895 prep course</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">
   Recognized stepping stone to PVIP
@@ -1163,13 +1114,13 @@ export default function SolarInstallerCertification() {
 
   <div className="sr2-cert-row">
     <div className="sr2-cert-name" data-label="Credential">
-      NABCEP PVIP
-      <span className="sub">Installation Professional</span>
+       <Link href="/certifications/nabcep-pv-installation-professional">NABCEP PVIP</Link>
     </div>
     <div data-label="Status">Expected for lead roles</div>
     <div data-label="Who">Lead installer, commercial bids</div>
     <div data-label="Training hours">58 documented training hours</div>
     <div data-label="Exam cost">$500</div> 
+    <div data-label="Training cost">$1,795 prep course</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition sr2-recognition--highlight">
   Only US solar installer credential accredited to ISO/IEC 17024 (ANSI)
@@ -1193,6 +1144,7 @@ export default function SolarInstallerCertification() {
     <div data-label="Who">Installers specializing in that equipment</div>
     <div data-label="Training hours">Enphase: ~5 hrs SolarEdge: 2-12 hrs Tesla: weeks-to-months</div>
     <div data-label="Exam cost">Free – $150</div>
+    <div data-label="Training cost">Usually included</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Manufacturer-specific recognition only</span>
     </div>
@@ -1204,7 +1156,19 @@ export default function SolarInstallerCertification() {
   </div>
 </div>
 
-
+<div className="sr2-why-callout">
+  <span className="heading"></span>
+  HeatSpring is recomended for solar training courses because their NABCEP PV Associate prep course reports an 88% first-time pass
+  rate — well above the exam's scaled passing score of 65 (out of 99),
+  which trips up a lot of self-taught candidates. HeatSpring also
+  guarantees a pass: if you don't clear the exam on your first attempt,
+  they cover your retake fee. That's the main reason we point to them
+  first. You also could check out our
+  our{" "}
+  <Link href="/resources/nabcep-training-providers-compared">
+    full breakdown of NABCEP training providers
+  </Link>.
+</div>
 
 
 
@@ -1247,63 +1211,33 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
           </div>
 
 
-          <p>
 
-            That's the whole picture in 30 seconds. The table above covers
-
-            every credential you'll see on a solar job posting and what each
-
-            one actually pays. Everything below is the long version, if you
-
-            want it.
-
-          </p>
-
-
-          <h2 id="law"><span className="n">03</span>What's actually required by law</h2>
+          <h2 id="law"><span className="n">03</span>Requirements by law</h2>
 
           <p>
 
-            Shorter than most people expect, and it varies by state rather
-
-            than being one national rule. No federal law requires any
-
-            certification to install solar panels. What can be legally
-
-            required, depending on where you work, is a state electrical
-
-            license for certain wiring tasks, and OSHA safety training that
-
-            most employers treat as mandatory even where it technically
-
-            isn't. A NABCEP credential is not a license — it doesn't let
-
-            you pull a permit or pass a final inspection on its own, in any
-
-            state. If your job involves signing off on electrical work, your
-
-            state license is what carries the legal weight, not your NABCEP
-
-            card.
-
+           Shorter than most people expect, and it varies by state rather than being
+one national rule. No federal law requires any certification to install
+solar panels. What can be legally required, depending on where you work,
+is a state electrical license for certain wiring tasks, and OSHA safety
+training that most employers treat as mandatory even where it technically
+isn't.
           </p>
 
           <p>
 
-            The practical takeaway: a state electrical license and the
-
-            NABCEP PVA are not competing credentials. The license is a slow,
-
-            multi-year path that gates certain work. The PVA is a months-long
-
-            move that raises what you earn on every job you're allowed to
-
-            do. Most installers end up wanting both eventually.
+           NABCEP works differently: it's a professional
+credential. Employers use it as a hiring filter, and insurers and
+utilities increasingly reference it on commercial projects. it's
+often what separates a $45k installer from a $60k lead. Your state
+license is what lets you legally sign off on wiring whereas your NABCEP
+credential is what tells an employer you're worth promoting past entry
+level.
 
           </p>
 
 
-          <h2 id="payoff"><span className="n">04</span>Where the pay jump actually happens</h2>
+          <h2 id="payoff"><span className="n">04</span>Pay jump</h2>
 
           <p>
 
@@ -1311,15 +1245,13 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
 
             NABCEP PV Associate. Entry-level installers without the PVA
 
-            generally top out around $42k. Adding the PVA — which has no
+            generally top out around $42k. Adding the PVA, which has no
 
             field-experience prerequisite to sit the exam — moves the same
 
             installer into the $45-55k band, often within the first year on
 
-            the crew. The PVA doesn't change the work; it changes what
-
-            companies will pay you for it.
+            the crew.
 
           </p>
 
@@ -1338,39 +1270,19 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
           </p>
 
 
-          <div className="sr2-cta-strip">
-
-            <span className="label">Next step</span>
-
-            <h3>See who's hiring solar installers this week.</h3>
-
-            <p>
-
-              Every listing on Solar Roles is pulled from an actual employer
-
-              posting — no scraped duplicates, no recruiter spam.
-
-            </p>
-
-            <div className="actions">
-
-              <Link href="/jobs?what=Solar%20Installer" className="gold-btn">
-
-                Browse open installer jobs
-
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-
-              </Link>
-
-              <Link href="/resources/how-to-become-a-solar-installer" className="ghost">
-
-                Full career guide
-
-              </Link>
-
-            </div>
-
-          </div>
+          <div className="sr2-next-step">
+  <span className="label">Next step</span>
+  <p>
+    See who's hiring solar installers this week {" "}
+    <Link href="/jobs?what=Solar%20Installer">
+      browse open installer jobs
+    </Link>
+    {" "}or read the{" "}
+    <Link href="/resources/how-to-become-a-solar-installer">
+      full career guide
+    </Link>.
+  </p>
+</div>
 
 
           <p className="sr2-fine">
