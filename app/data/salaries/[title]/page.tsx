@@ -1,49 +1,156 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, DollarSign, TrendingUp, Clock, Zap } from 'lucide-react'
 
 export const revalidate = 86400
 
-// Quality over quantity — uniquement les 2 rôles solar core.
-// On pourra en ajouter (Solar Electrician, Solar Project Manager...) une fois qu'on
-// a assez de data par state pour que la page ait du sens (≥ 3 listings par state).
-const SLUG_TO_TITLE: Record<string, string> = {
-  'solar-pv-installer': 'Solar Photovoltaic Installer',
-  'lead-solar-installer': 'Lead Solar Installer',
-  'solar-electrician': 'Solar Electrician',
+// ─────────────────────────────────────────────────────────────────────────
+// SOURCE DE VÉRITÉ UNIQUE : un seul slug par métier, utilisé pour la route,
+// le career path, l'éditorial ET le matching DB. Plus de maps séparées qui
+// peuvent diverger.
+//
+// `include` / `exclude` sont construits à partir d'un audit réel des titres
+// en base (voir conversation) — pas de "Solar Photovoltaic Installer" en
+// toutes lettres dans les offres, donc on matche des fragments courants et
+// on exclut explicitement les rôles voisins + le bruit (management,
+// formation, RH...) pour éviter les chevauchements entre buckets.
+// ─────────────────────────────────────────────────────────────────────────
+
+type Role = {
+  title: string
+  include: string[]
+  exclude: string[]
+  careerPath?: { slug: string; title: string; direction: 'up' | 'down' }
+  editorial: { dayToDay: string; certification: string; progression: string }
 }
 
+// Bruit générique à exclure de tous les rôles : ce sont des offres qui
+// contiennent "solar installer" dans le titre mais ne sont pas un poste
+// d'installateur terrain (ex. "Director of Solar Installer Partnerships").
+const NOISE = [
+  'manager',
+  'instructor',
+  'trainer',
+  'facilitator',
+  'director',
+  'partnership',
+  'material handler',
+  'superintendent',
+]
 
-// Pour le bloc "career path": chaque rôle pointe vers son pendant.
-const CAREER_PATH: Record<string, { slug: string; title: string; direction: 'up' | 'down' }> = {
-  'solar-photovoltaic-installer': { slug: 'lead-solar-installer', title: 'Lead Solar Installer', direction: 'up' },
-  'lead-solar-installer': { slug: 'solar-photovoltaic-installer', title: 'Solar Photovoltaic Installer', direction: 'down' },
-}
-
-// Contenu éditorial statique par rôle. Écrit une fois, à la main — ce n'est pas
-// généré depuis la DB, donc la page a du contenu même quand les données de salaire
-// par state sont trop maigres pour être affichées.
-// TODO (à vérifier/actualiser par vous-même avant publication) : les chiffres de
-// certification et de timeline sont des ordres de grandeur NABCEP, à confirmer.
-const ROLE_EDITORIAL: Record<string, { dayToDay: string; certification: string; progression: string }> = {
+const ROLES: Record<string, Role> = {
   'solar-photovoltaic-installer': {
-    dayToDay:
-      'A Solar Photovoltaic Installer mounts racking, places panels, runs conduit, and wires arrays on residential and commercial roofs or ground mounts. Most of the day is physical: carrying panels, working at height, and following an electrician or lead installer\'s directions on wiring and layout. Crews typically run 3 to 5 installs a week depending on system size and season.',
-    certification:
-      'Entry into the role rarely requires a license. Many installers start through an employer\'s in-house training or a community college solar program lasting a few weeks. A NABCEP PV Associate credential is a common early milestone and signals baseline knowledge of system design and safety to employers, even before full installer certification.',
-    progression:
-      'Installers typically move up after 1 to 3 years on the tools, once they can run a crew, read a permit set unsupervised, and troubleshoot a string fault without escalating. That track usually leads to Lead Installer, then site supervisor or a design role.',
+    title: 'Solar Photovoltaic Installer',
+    include: [
+      'solar installer',
+      'pv installer',
+      'solar panel installer',
+      'installation technician',
+      'install technician',
+      'solar / pv installer',
+    ],
+    exclude: [
+      'lead',
+      'foreman',
+      'crew lead',
+      'second in command',
+      'sr.',
+      'senior',
+      'electrician',
+      ...NOISE,
+    ],
+    careerPath: { slug: 'lead-solar-installer', title: 'Lead Solar Installer', direction: 'up' },
+    editorial: {
+      dayToDay:
+        'A Solar Photovoltaic Installer mounts racking, places panels, runs conduit, and wires arrays on residential and commercial roofs or ground mounts. Most of the day is physical: carrying panels, working at height, and following an electrician or lead installer\'s directions on wiring and layout. Crews typically run 3 to 5 installs a week depending on system size and season.',
+      certification:
+        'Entry into the role rarely requires a license. Many installers start through an employer\'s in-house training or a community college solar program lasting a few weeks. A NABCEP PV Associate credential is a common early milestone and signals baseline knowledge of system design and safety to employers, even before full installer certification.',
+      progression:
+        'Installers typically move up after 1 to 3 years on the tools, once they can run a crew, read a permit set unsupervised, and troubleshoot a string fault without escalating. That track usually leads to Lead Installer, then site supervisor or a design role.',
+    },
   },
   'lead-solar-installer': {
-    dayToDay:
-      'A Lead Solar Installer runs the crew on site: assigns tasks, checks the install against the permit set and engineering plans, handles the trickier electrical terminations, and is the point of contact for the inspector or the project manager. Less time on the roof carrying panels, more time making sure the job passes inspection the first time.',
-    certification:
-      'Most leads hold a NABCEP PV Installation Professional certification or are actively working toward one, plus several years of hands-on installs. Some states also require an electrical license or a state-specific solar contractor credential to sign off on certain work — this varies enough by state that it is worth checking with your state licensing board directly.',
-    progression:
-      'From Lead Installer, the common next steps are site supervisor, install operations manager, or moving into system design and permitting, where the NABCEP PV Design Specialist credential becomes relevant.',
+    title: 'Lead Solar Installer',
+    include: [
+      'lead solar installer',
+      'crew lead',
+      'foreman',
+      'second in command',
+      'sr. solar installer',
+      'senior solar installer',
+    ],
+    exclude: [...NOISE],
+    careerPath: {
+      slug: 'solar-photovoltaic-installer',
+      title: 'Solar Photovoltaic Installer',
+      direction: 'down',
+    },
+    editorial: {
+      dayToDay:
+        'A Lead Solar Installer runs the crew on site: assigns tasks, checks the install against the permit set and engineering plans, handles the trickier electrical terminations, and is the point of contact for the inspector or the project manager. Less time on the roof carrying panels, more time making sure the job passes inspection the first time.',
+      certification:
+        'Most leads hold a NABCEP PV Installation Professional certification or are actively working toward one, plus several years of hands-on installs. Some states also require an electrical license or a state-specific solar contractor credential to sign off on certain work — this varies enough by state that it is worth checking with your state licensing board directly.',
+      progression:
+        'From Lead Installer, the common next steps are site supervisor, install operations manager, or moving into system design and permitting, where the NABCEP PV Design Specialist credential becomes relevant.',
+    },
   },
+  'solar-electrician': {
+    title: 'Solar Electrician',
+    include: ['electrician'],
+    exclude: [...NOISE],
+    editorial: {
+      dayToDay:
+        'A Solar Electrician handles the electrical side of an install: DC and AC wiring, combiner boxes, inverters, rapid shutdown devices, and the interconnection to the grid or to a battery system. On mixed crews they often work alongside mechanical installers who handle racking and panel placement, stepping in for terminations, troubleshooting, and code compliance.',
+      certification:
+        'Unlike a general PV installer role, this one typically requires a state electrical license (journeyman or master, depending on the state and the scope of work) on top of solar-specific knowledge. A NABCEP PV Installation Professional credential is common in addition to the electrical license, especially for anyone signing off on system design.',
+      progression:
+        'Solar Electricians often move toward electrical foreman roles, solar-specific master electrician status, or into system design and commissioning, where the electrical license combined with NABCEP credentials opens up higher-paying design and QA positions.',
+    },
+  },
+}
+
+function fmt(n: number): string {
+  return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
+}
+
+function timeAgo(date: Date): string {
+  const hours = Math.floor((Date.now() - date.getTime()) / 3_600_000)
+  if (hours < 1) return 'less than an hour ago'
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  return `${days}d ago`
+}
+
+// Construit le WHERE (title LIKE p1 OR title LIKE p2 ...) AND NOT (title LIKE e1 OR ...)
+// pour la requête raw, à partir des patterns include/exclude d'un rôle.
+function titleFilterSql(role: Role) {
+  const include = Prisma.join(
+    role.include.map((p) => Prisma.sql`LOWER(title) LIKE ${'%' + p.toLowerCase() + '%'}`),
+    ' OR '
+  )
+  const exclude = role.exclude.length
+    ? Prisma.sql`AND NOT (${Prisma.join(
+        role.exclude.map((p) => Prisma.sql`LOWER(title) LIKE ${'%' + p.toLowerCase() + '%'}`),
+        ' OR '
+      )})`
+    : Prisma.empty
+
+  return Prisma.sql`(${include}) ${exclude}`
+}
+
+// Équivalent include/exclude pour les requêtes Prisma classiques (aggregate, findFirst, count).
+function titleFilterPrisma(role: Role) {
+  return {
+    AND: [
+      { OR: role.include.map((p) => ({ title: { contains: p, mode: 'insensitive' as const } })) },
+      role.exclude.length
+        ? { NOT: { OR: role.exclude.map((p) => ({ title: { contains: p, mode: 'insensitive' as const } })) } }
+        : {},
+    ],
+  }
 }
 
 // Regroupement census region — sert de repli quand un state a moins de 3 listings
@@ -60,33 +167,21 @@ const STATE_TO_REGION: Record<string, string> = {
   AK: 'West', CA: 'West', HI: 'West', OR: 'West', WA: 'West',
 }
 
-function fmt(n: number): string {
-  return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
-}
-
-function timeAgo(date: Date): string {
-  const hours = Math.floor((Date.now() - date.getTime()) / 3_600_000)
-  if (hours < 1) return 'less than an hour ago'
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  return `${days}d ago`
-}
-
 export async function generateStaticParams() {
-  return Object.keys(SLUG_TO_TITLE).map((slug) => ({ title: slug }))
+  return Object.keys(ROLES).map((slug) => ({ title: slug }))
 }
 
 export async function generateMetadata(
   { params }: { params: Promise<{ title: string }> }
 ): Promise<Metadata> {
   const { title: slug } = await params
-  const jobTitle = SLUG_TO_TITLE[slug]
-  if (!jobTitle) return { title: 'Not Found' }
+  const role = ROLES[slug]
+  if (!role) return { title: 'Not Found' }
 
   return {
-    title: `${jobTitle} Salary by State 2026 | Average Pay Across the US`,
-    description: `How much does a ${jobTitle} make in each state? Live salary data from real solar job listings. Compare average pay across all 50 states. Updated daily.`,
-    keywords: `${jobTitle} salary, ${jobTitle} average pay, ${jobTitle} salary by state, how much does a ${jobTitle} make 2026, ${jobTitle} pay 2026`,
+    title: `${role.title} Salary by State 2026 | Average Pay Across the US`,
+    description: `How much does a ${role.title} make in each state? Live salary data from real solar job listings. Compare average pay across all 50 states. Updated daily.`,
+    keywords: `${role.title} salary, ${role.title} average pay, ${role.title} salary by state, how much does a ${role.title} make 2026, ${role.title} pay 2026`,
     alternates: { canonical: `https://www.solarroles.com/data/salaries/${slug}` },
   }
 }
@@ -97,11 +192,10 @@ export default async function SalaryReportPage({
   params: Promise<{ title: string }>
 }) {
   const { title: slug } = await params
-  const jobTitle = SLUG_TO_TITLE[slug]
-  if (!jobTitle) notFound()
+  const role = ROLES[slug]
+  if (!role) notFound()
 
-  const editorial = ROLE_EDITORIAL[slug]
-  const careerPath = CAREER_PATH[slug]
+  const { title: jobTitle, careerPath, editorial } = role
 
   // Salaire moyen par state — pas de HAVING ici, on filtre en JS pour pouvoir
   // regrouper les states sous-représentés en région plutôt que de les faire disparaître.
@@ -120,7 +214,7 @@ export default async function SalaryReportPage({
       AND "salaryMin" > 0
       AND "salaryMax" IS NOT NULL
       AND "salaryMax" > 0
-      AND LOWER(title) LIKE ${`%${jobTitle.toLowerCase()}%`}
+      AND ${titleFilterSql(role)}
     GROUP BY "addressRegion"
     ORDER BY "avgSalary" DESC
   `
@@ -147,9 +241,9 @@ export default async function SalaryReportPage({
   const nationalAgg = await prisma.job.aggregate({
     where: {
       active: true,
-      title: { contains: jobTitle, mode: 'insensitive' },
       salaryMin: { not: null, gt: 0 },
       salaryMax: { not: null, gt: 0 },
+      ...titleFilterPrisma(role),
     },
     _avg: { salaryMin: true, salaryMax: true },
     _count: { id: true },
@@ -162,13 +256,14 @@ export default async function SalaryReportPage({
 
   // Career path differential — moyenne nationale du rôle "en face" (installer <-> lead)
   // pour donner un vrai signal de progression, calculé nulle part ailleurs.
-  const partnerAgg = careerPath
+  const partnerRole = careerPath ? ROLES[careerPath.slug] : null
+  const partnerAgg = partnerRole
     ? await prisma.job.aggregate({
         where: {
           active: true,
-          title: { contains: careerPath.title, mode: 'insensitive' },
           salaryMin: { not: null, gt: 0 },
           salaryMax: { not: null, gt: 0 },
+          ...titleFilterPrisma(partnerRole),
         },
         _avg: { salaryMin: true, salaryMax: true },
         _count: { id: true },
@@ -188,8 +283,8 @@ export default async function SalaryReportPage({
   const latestJob = await prisma.job.findFirst({
     where: {
       active: true,
-      title: { contains: jobTitle, mode: 'insensitive' },
       postedAt: { not: null },
+      ...titleFilterPrisma(role),
     },
     orderBy: { postedAt: 'desc' },
     select: { postedAt: true },
@@ -197,8 +292,8 @@ export default async function SalaryReportPage({
   const newThisWeek = await prisma.job.count({
     where: {
       active: true,
-      title: { contains: jobTitle, mode: 'insensitive' },
       postedAt: { gte: new Date(Date.now() - 7 * 86_400_000) },
+      ...titleFilterPrisma(role),
     },
   })
 
@@ -268,7 +363,7 @@ export default async function SalaryReportPage({
         </div>
 
         {/* CAREER PATH DIFFERENTIAL — donnée propriétaire, calculée nulle part ailleurs */}
-        {showCareerPath && (
+        {showCareerPath && careerPath && (
           <section className="mb-12 bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="w-5 h-5 text-[#B45309]" />
@@ -291,22 +386,20 @@ export default async function SalaryReportPage({
         )}
 
         {/* EDITORIAL — contenu fixe, comble le vide quand la table de données est maigre */}
-        {editorial && (
-          <section className="mb-12 space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">What a {jobTitle} actually does</h2>
-              <p className="text-sm text-gray-600 leading-relaxed">{editorial.dayToDay}</p>
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">Certification and entry path</h2>
-              <p className="text-sm text-gray-600 leading-relaxed">{editorial.certification}</p>
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">Where this role leads</h2>
-              <p className="text-sm text-gray-600 leading-relaxed">{editorial.progression}</p>
-            </div>
-          </section>
-        )}
+        <section className="mb-12 space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">What a {jobTitle} actually does</h2>
+            <p className="text-sm text-gray-600 leading-relaxed">{editorial.dayToDay}</p>
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">Certification and entry path</h2>
+            <p className="text-sm text-gray-600 leading-relaxed">{editorial.certification}</p>
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">Where this role leads</h2>
+            <p className="text-sm text-gray-600 leading-relaxed">{editorial.progression}</p>
+          </div>
+        </section>
 
         {/* STATE TABLE */}
         <section className="mb-12">
