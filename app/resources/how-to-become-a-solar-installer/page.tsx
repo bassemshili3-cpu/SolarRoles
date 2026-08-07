@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AffiliateLink } from '@/components/click_affiliate_link';
+
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-become-a-solar-installer";
 const PAGE_TITLE =
   "How to Become a Solar Installer (2026): Real Timeline, Pay, and What the Job Is Actually Like";
 const PAGE_DESCRIPTION =
-  "Our step-by-step complete guide"
+  "Learn how to become a solar installer in 2026: entry pathways, NABCEP certification, real pay by stage, and what the job is actually like.";
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
@@ -735,7 +737,7 @@ export default function HowToBecomeASolarInstaller() {
               <li><a href="#paths">Entry Pathways</a></li>
               <li><a href="#nabcep">NABCEP Certification</a></li>
               <li><a href="#pay">Compensation Overview</a></li>
-              <li><a href="#market">What Employers Screens For</a></li>
+              <li><a href="#market">What Employers Screen For</a></li>
               <li><a href="#brochure">Safety Considerations</a></li>
               <li><a href="#growth">Career Progression</a></li>
               <li><a href="#mistakes">Common Early Mistakes</a></li>
@@ -747,13 +749,14 @@ export default function HowToBecomeASolarInstaller() {
         <article className="sr2-article">
           <h2 id="paths"><span className="n">01</span>Entry Pathways</h2>
           <p>
-            There&apos;s 4 common routes into this job. Which one
-            makes sense depends on your background, how much you can afford to
+            If you&apos;re figuring out how to become a solar installer,
+            there are four common routes into the job. Which one makes
+            sense depends on your background, how much you can afford to
             earn while training, and how fast you want to move.
           </p>
         
          <p>
-  <strong>Direct hire plus on-the-job training.</strong> 
+  <strong>Direct hire plus on-the-job training: </strong> 
   A company hires you with no solar experience, pairs
   you with an experienced crew, and you learn by doing. OJT typically
   runs from one month to a year before you&apos;re working
@@ -766,14 +769,14 @@ export default function HowToBecomeASolarInstaller() {
   <li>Candidates with formal training tend to get hired faster and promoted sooner.</li>
 </ul>
            <p>
-            <strong>A short paid training program.</strong> Community colleges
+            <strong>A short paid training program:</strong> Community colleges
             and workforce boards run programs that compress the basics into a
             few weeks: electrical fundamentals, racking and mounting, OSHA
             safety, and hands-on install practice, often with job placement
             built in.
           </p>
           <p>
-            <strong>A registered apprenticeship.</strong> Structured, paid,
+            <strong>A registered apprenticeship: </strong> Structured, paid,
             and slower. You earn while you accumulate documented hours that
             count toward a NABCEP credential later. Our{" "}
             <Link href="/resources/how-to-get-a-solar-apprenticeship">
@@ -782,7 +785,7 @@ export default function HowToBecomeASolarInstaller() {
             breaks down how to find one and what to expect.
           </p>
           <p>
-            <strong>Coming from a related trade.</strong> Electricians,
+            <strong>Coming from a related trade: </strong> Electricians,
             roofers, and general construction workers already have most of the
             physical and technical foundation.
           </p>
@@ -798,7 +801,9 @@ export default function HowToBecomeASolarInstaller() {
             documented training hours split across specific categories. The PV
             Associate credential is the more common early milestone: no
             experience prerequisite, and a reasonable target once you&apos;ve
-            got a few months on the tools. See our{" "}
+            got a few months on the tools — often the fastest credential to add once
+            you&apos;ve started down the path to becoming a solar installer.
+            See our{" "}
             <Link href="/certifications">
               certifications by job role
             </Link>{" "}
@@ -817,13 +822,13 @@ export default function HowToBecomeASolarInstaller() {
 </p>
 <div className="sr2-heatspring-cta">
  
-   <a href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
-    target="_blank"
-    rel="noopener noreferrer sponsored"
+   <AffiliateLink
+    href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
+    offerName="nabcep_pv_associate"
     className="sr2-heatspring-btn"
   >
     Get your NABCEP PVA
-  </a>
+  </AffiliateLink>
 </div>
 <p className="sr2-heatspring-disclosure">
   * We may earn a commission if you enroll through this link, at no extra cost to you.
@@ -859,41 +864,39 @@ export default function HowToBecomeASolarInstaller() {
             <Link href="/data/salaries/lead-solar-installer">
               Lead Solar Installer salary data
             </Link>
-            , both pulled from active listings rather than surveys.
+            , both pulled from active listings.
           </p>
-          <h2 id="market"><span className="n">04</span>What Employers Screens For</h2>
+          <h2 id="market"><span className="n">04</span>What Employers Screen For</h2>
           <p>
-         04
-04
-What Employers Screen For
-Certification remains the strongest single signal in the hiring
-process, but it is evaluated alongside a separate
-set of practical criteria before a candidate is placed on a crew.
-
-Physical capacity is assessed first: the role requires climbing,
-kneeling, and carrying panels weighing 40–60 lbs on roofs or
-racking systems for most of a shift. A valid driver's license is
-commonly a hard requirement, as crews typically travel to job
-sites together in a company vehicle. Familiarity with basic hand
-tools — drill, impact driver, wire strippers, multimeter is
-expected, though not mastery.
-
-Attendance reliability is weighted heavily for entry-level
-positions without a certification already in place, since crew-
-based work depends on consistent staffing. Candidates who arrive with NABCEP PV
-Associate or equivalent training typically clear this initial
-screening faster, since certification substitutes for much of what
-these criteria are designed to verify.
-
+            Certification remains the strongest single signal in the hiring
+            process, but it is evaluated alongside a separate set of
+            practical criteria before a candidate is placed on a crew.
+          </p>
+          <p>
+            Physical capacity is assessed first because the role requires climbing,
+            kneeling, and carrying panels weighing 40–60 lbs on roofs or
+            racking systems for most of a shift. A valid driver&apos;s
+            license is commonly a hard requirement, as crews typically
+            travel to job sites together in a company vehicle. Familiarity
+            with basic hand tools — drill, impact driver, wire strippers,
+            multimeter — is expected, though not mastery.
+          </p>
+          <p>
+            Attendance reliability is weighted heavily for entry-level
+            positions without a certification already in place, since
+            crew-based work depends on consistent staffing. Candidates who
+            arrive with NABCEP PV Associate or equivalent training typically
+            clear this initial screening faster, since certification
+            substitutes for much of what these criteria are designed to
+            verify.
           </p>
           <h2 id="brochure"><span className="n">05</span>Safety Considerations</h2>
           <p>
             Falls are the leading cause of death in this trade, and it&apos;s
             not close. Federal workplace safety investigations have documented
             fatal falls from roofs during solar installs where fall protection
-            was either not used or not in place at all. This isn&apos;t a
-            reason to avoid the job. It&apos;s a reason to treat fall
-            protection training as non-negotiable rather than a box to check.
+            was either not used or not in place at all.
+            That’s why proper fall protection training is so important in this industry.
           </p>
           <h2 id="growth"><span className="n">06</span>Career Progression</h2>
           <p>
@@ -929,7 +932,9 @@ these criteria are designed to verify.
             <Link href="/resources/nabcep-training-providers-compared">
               NABCEP training provider comparison
             </Link>{" "}
-            are the two most useful next reads.
+            are the two most useful next reads. Whichever path you take,
+            the fastest way to become a solar installer employers want to
+            hire is still pairing hands-on hours with a NABCEP credential.
           </p>
          
 

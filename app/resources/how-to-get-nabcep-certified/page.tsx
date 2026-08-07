@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AffiliateLink } from '@/components/click_affiliate_link';
+
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-get-nabcep-certified";
 const PAGE_TITLE =
   "How to Get NABCEP Certified (2026): PV Associate vs Installation Professional, Costs, and the Real Timeline";
 const PAGE_DESCRIPTION =
-  "Our step-by-step complete guide";
+  "Learn how to get NABCEP certified in 2026: PV Associate vs PVIP, eligibility, exam format, costs, and a realistic study timeline.";
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
@@ -489,7 +491,7 @@ export default function HowToGetNabcepCertified() {
               Table of Contents
             </div>
             <ol className="sr2-toc-list">
-                <li><a href="#which">Registration</a></li>
+                <li><a href="#registration">Registration</a></li>
               <li><a href="#which">Which Credential Fits You</a></li>
               <li><a href="#eligibility">Eligibility &amp; Hour Requirements</a></li>
               <li><a href="#exam">Exam Format &amp; Scoring</a></li>
@@ -502,7 +504,7 @@ export default function HowToGetNabcepCertified() {
 
         {/* ARTICLE */}
         <article className="sr2-article">
-            <h2 id="eligibility"><span className="n">01</span>Registration</h2>
+            <h2 id="registration"><span className="n">01</span>Registration</h2>
           <p>
             Registration itself works differently depending on the path.
             We'll explain each step throughout this guide.
@@ -525,7 +527,16 @@ export default function HowToGetNabcepCertified() {
             experience and career goals. </p>
 
           <p>
-            <strong>1.</strong> <strong><Link href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq">PV Associate</Link></strong> is the entry credential. No
+            <strong>1.</strong>{" "}
+            <strong>
+              <AffiliateLink
+                href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
+                offerName="nabcep_pv_associate"
+              >
+                PV Associate
+              </AffiliateLink>
+            </strong>{" "}
+            is the entry credential. No
             documented field hours required, which is what makes it the
             standard target for people still in training or early in an OJT
             role. It tells an employer you understand system design basics,
@@ -538,7 +549,16 @@ export default function HowToGetNabcepCertified() {
             course, and your myNABCEP account gets created automatically at
             that point.</p>
           <p>
-           <strong>2.</strong> <strong><Link href= "https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq">PV Installation Professional</Link></strong> is the credential
+            <strong>2.</strong>{" "}
+            <strong>
+              <AffiliateLink
+                href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
+                offerName="nabcep_pvip"
+              >
+                PV Installation Professional
+              </AffiliateLink>
+            </strong>{" "}
+            is the credential
             experienced installers work toward. It requires documented
             installation experience and a separate written exam, and it&apos;s
             the one that shows up as a preferred or required qualification in
@@ -547,8 +567,16 @@ export default function HowToGetNabcepCertified() {
           </p>
            
           <p>
-            <strong>3. <strong/><Link href= "https://www.heatspring.com/courses/nabcep-pv-installer-specialist-pvis-certification-prep?aff_id=9f_wlq">PV Installer Specialist (PVIS)</Link></strong>,
-            is a narrower Board Certification aimed at installers who want to
+            <strong>3.</strong>{" "}
+            <strong>
+              <AffiliateLink
+                href="https://www.heatspring.com/courses/nabcep-pv-installer-specialist-pvis-certification-prep?aff_id=9f_wlq"
+                offerName="nabcep_pvis"
+              >
+                PV Installer Specialist (PVIS)
+              </AffiliateLink>
+            </strong>
+            , is a narrower Board Certification aimed at installers who want to
             demonstrate competence in the hands-on installation process
             itself: DC and AC conductors, raceways, mounting, and monitoring
             and communication hardware, plus safety plan development. It
@@ -565,9 +593,8 @@ export default function HowToGetNabcepCertified() {
           </ul>
           <p>If you're preparing for a NABCEP exam, we recommend HeatSpring.
             It's one of the most trusted online training platforms in the solar industry, and its 
-            NABCEP-approved courses are taught by experienced industry professionals.<p/>
+            NABCEP-approved courses are taught by experienced industry professionals.</p>
 
-          </p>
 <p><strong>Important:</strong> for PVIP, PVIS, and PVA taken through the Experience
             or Conversion pathways, it&apos;s the other way around, you
             create your own myNABCEP account, submit the application

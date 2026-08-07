@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-
 import Link from "next/link";
-
+import { AffiliateLink } from '@/components/click_affiliate_link';
 
 const SITE_URL = "https://www.solarroles.com";
 
@@ -994,22 +993,6 @@ export default function SolarInstallerCertification() {
 
         <article className="sr2-article">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           <h2 id="table" className="sr2-first"><span className="n">01</span>The cheat sheet</h2>
 <p className="sr2-table-note">
   *Pay ranges reflect BLS OEWS May 2024 (SOC 47-2231) plus current
@@ -1027,7 +1010,7 @@ export default function SolarInstallerCertification() {
     <span>Who needs it</span>
     <span>Training hours</span>
     <span>Exam cost</span>
-    <span>Training cost</span>  {/* NOUVEAU */}
+    <span>Training cost</span>
     <span>Recognition</span>
     <span>Get started</span>
   </div>
@@ -1045,9 +1028,13 @@ export default function SolarInstallerCertification() {
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.heatspring.com/courses/osha-10-hour-construction?aff_id=9f_wlq" className="sr2-cta-btn">
+      <AffiliateLink
+        href="https://www.heatspring.com/courses/osha-10-hour-construction?aff_id=9f_wlq"
+        offerName="osha_10"
+        className="sr2-cta-btn"
+      >
         Start Today
-      </a>
+      </AffiliateLink>
     </div>
   </div>
 
@@ -1058,15 +1045,19 @@ export default function SolarInstallerCertification() {
     <div data-label="Status">Recommended</div>
     <div data-label="Who">Crew leads &amp; supervisors</div>
     <div data-label="Training hours">30 hrs, deeper safety scope</div>
-    <div data-label="Exam cost">$159</div>  {/* OSHA 30 */}
+    <div data-label="Exam cost">$159</div>
 <div data-label="Training cost">Often bundled with exam</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.heatspring.com/courses/osha-30-hour-construction?aff_id=9f_wlq" className="sr2-cta-btn">
+      <AffiliateLink
+        href="https://www.heatspring.com/courses/osha-30-hour-construction?aff_id=9f_wlq"
+        offerName="osha_30"
+        className="sr2-cta-btn"
+      >
         Start Today
-      </a>
+      </AffiliateLink>
     </div>
   </div>
 
@@ -1106,9 +1097,13 @@ export default function SolarInstallerCertification() {
       
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq" className="sr2-cta-btn">
+      <AffiliateLink
+        href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
+        offerName="nabcep_pv_associate"
+        className="sr2-cta-btn"
+      >
         Start Today
-      </a>
+      </AffiliateLink>
     </div>
   </div>
 
@@ -1129,9 +1124,13 @@ export default function SolarInstallerCertification() {
       
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq" className="sr2-cta-btn">
+      <AffiliateLink
+        href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
+        offerName="nabcep_pvip"
+        className="sr2-cta-btn"
+      >
         Start Today
-      </a>
+      </AffiliateLink>
     </div>
   </div>
 
@@ -1169,12 +1168,6 @@ export default function SolarInstallerCertification() {
     full breakdown of NABCEP training providers
   </Link>.
 </div>
-
-
-
-
-
-
 
           <h2 id="bottom"><span className="n">02</span>The bottom line</h2>
 
