@@ -295,6 +295,7 @@ export function parseJobWhereParams(searchParams: URLSearchParams): JobWherePara
     excludePhrases: splitPhrasesParam(searchParams.get('exclude_phrases')),
     descriptionContainsAny: splitPhrasesParam(searchParams.get('description_contains_any')),
     titleContainsAny:       splitPhrasesParam(searchParams.get('title_contains_any')),
+    requiredDomainTerms:    splitPhrasesParam(searchParams.get('required_domain_terms')),  
     isFifo:         searchParams.get('is_fifo') === 'true', 
     where:          searchParams.get('where')?.trim() || '',
     salaryMin:      searchParams.get('salary_min')     ? parseInt(searchParams.get('salary_min')!)    : undefined,

@@ -104,6 +104,8 @@ interface JobListProps {
   whatPhrases?: string[] // recherche OU sur des phrases complètes, prioritaire sur `what`
   excludePhrases?: string[]  
   descriptionContainsAny?: string[] // AND indépendant : description doit contenir au moins une de ces phrases
+   requiredDomainTerms?: string[]   // ← ajouter
+  titleContainsAny?: string[] 
   isFifo?: boolean  
   where: string
   salary_min?: string
@@ -174,7 +176,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, isFifo, where, salary_min, searchLabel, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, where, salary_min, searchLabel, initialData }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -196,7 +198,8 @@ export default function JobList({ what, whatPhrases, excludePhrases, description
   const resolvedWhatPhrases = whatPhrases && whatPhrases.length > 0 ? whatPhrases : undefined
    const resolvedExcludePhrases = excludePhrases && excludePhrases.length > 0 ? excludePhrases : undefined 
    const resolvedDescriptionContainsAny = descriptionContainsAny && descriptionContainsAny.length > 0 ? descriptionContainsAny : undefined
-
+  const resolvedRequiredDomainTerms = requiredDomainTerms && requiredDomainTerms.length > 0 ? requiredDomainTerms : undefined   // ← ajouter
+  const resolvedTitleContainsAny = titleContainsAny && titleContainsAny.length > 0 ? titleContainsAny : undefined   
   const filterKeys = [
     'job_type', 'arrangement', 'experience', 'education',
     'company_size', 'benefits', 'easy_apply', 'visa_sponsorship', 'posted_within',
@@ -273,6 +276,13 @@ const canUseSSRInitialData =
     if (resolvedDescriptionContainsAny) {
       params.set('description_contains_any', resolvedDescriptionContainsAny.join('|'))
     }
+      if (resolvedRequiredDomainTerms) {
+    params.set('required_domain_terms', resolvedRequiredDomainTerms.join('|'))   // ← ajouter
+  }
+  if (resolvedTitleContainsAny) {
+    params.set('title_contains_any', resolvedTitleContainsAny.join('|'))          // ← ajouter
+  }
+
     if (isFifo) params.set('is_fifo', 'true')
     if (salary_min) params.set('salary_min', salary_min)
     for (const key of filterKeys) {
@@ -281,7 +291,7 @@ const canUseSSRInitialData =
     }
     return params
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolvedWhere, resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, isFifo, salary_min, searchParams])
+  }, [resolvedWhere, resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedRequiredDomainTerms, resolvedTitleContainsAny, isFifo, salary_min, searchParams])
 
   const jobsQueryKey = (targetPage: number) => [
     'jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedDescriptionContainsAny, isFifo, resolvedWhere, salary_min, targetPage, searchParams.toString(),

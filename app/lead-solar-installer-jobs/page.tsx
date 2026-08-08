@@ -145,6 +145,8 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
                 searchLabel="lead solar installer "
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                descriptionContainsAny= {['lead installer', 'installation foreman', 'crew lead', 'installation supervisor']}
+    titleContainsAny= {['lead', 'Lead']}
                 initialData={initialData}
               />
             </Suspense>

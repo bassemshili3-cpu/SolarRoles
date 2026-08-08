@@ -149,6 +149,7 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
                 searchLabel="solar no experience "
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                  descriptionContainsAny= {['no experience', 'entry level', 'entry-level', 'apprentice', 'helper', 'trainee']}
                 initialData={initialData}
               />
             </Suspense>

@@ -141,6 +141,8 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
                 searchLabel="BESS technician "
                 where={params.where || ''}
                 salary_min={params.salary_min}
+              descriptionContainsAny={['bess', 'battery energy storage', 'battery storage technician', 'energy storage technician', 'battery technician']}
+              titleContainsAny= {['bess', 'BESS', 'techncian', 'Technician', 'tech', 'Tech', 'battery storage', 'Battery Storage', 'energy storage', 'Energy Storage']}
                 initialData={initialData}
               />
             </Suspense>

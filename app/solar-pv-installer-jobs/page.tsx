@@ -153,6 +153,8 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
                 searchLabel="solar pv installer "
                 where={params.where || ''}
                 salary_min={params.salary_min}
+                 descriptionContainsAny= {['installer', 'installation technician', 'pv installer']}
+     requiredDomainTerms= {['solar', 'photovoltaic', ' pv ']}
                 initialData={initialData}
               />
             </Suspense>

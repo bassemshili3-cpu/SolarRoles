@@ -60,18 +60,14 @@ export async function fetchJobsPageUncached(
   return { results, count }
 }
 
-// Comme pour /api/jobs-count avant : on ne fait pas confiance au hashing implicite
-// des arguments par unstable_cache pour différencier les combinaisons de filtres.
-// La clé encode explicitement params + page + resultsPerPage — même combinaison
-// = même entrée de cache, combinaison différente = entrée différente, garanti.
-export async function getCachedJobsPage(
-  params: JobWhereParams,
-  page: number,
-  resultsPerPage: number,
-): Promise<JobsListResult> {
-  return unstable_cache(
-    () => fetchJobsPageUncached(params, page, resultsPerPage),
-    ['jobs-page', JSON.stringify(params), String(page), String(resultsPerPage)],
-    { revalidate: 60 },
-  )()
-}
+// Pattern canonique Next.js : unstable_cache créé UNE SEULE FOIS au niveau module,
+// avec la fonction cachée qui reçoit les vrais arguments à chaque appel. C'est ce
+// qui permet à Next de dériver correctement une clé de cache par combinaison
+// (params, page, resultsPerPage) — recréer un unstable_cache à chaque requête
+// avec une closure sans argument (comme la version précédente) casse cette
+// dérivation et produit des collisions de cache.
+export const getCachedJobsPage = unstable_cache(
+  fetchJobsPageUncached,
+  ['jobs-page'],
+  { revalidate: 60 },
+)

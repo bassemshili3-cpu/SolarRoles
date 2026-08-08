@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Award, HardHat, ShieldCheck, Zap, ArrowRight } from 'lucide-react'
+import { useState } from 'react'
 
 const NAV_CERTIFICATIONS = [
   {
@@ -32,45 +33,48 @@ const NAV_CERTIFICATIONS = [
 ]
 
 export function CertificationsNavCta() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <div className="inline-flex relative group">
+    <div
+      className="relative inline-flex group"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <Link href="/certifications">
-       <Button
-  size="sm"
-  className="relative overflow-hidden rounded-full px-4 h-9 font-semibold text-black
-             bg-[length:200%_100%] animate-cert-cta-shimmer
-             bg-gradient-to-r from-[#F5B819] via-[#FF6A3D] to-[#F5B819]
-             animate-cert-cta-pulse
-             transition-transform hover:scale-[1.03] active:scale-[0.97]"
->
-  <span
-  className="relative z-10"
-  style={{
-    WebkitTextStroke: '0.5px #fff',
-    paintOrder: 'stroke fill',
-  }}
->
-  Certifications
-</span>
-</Button>
+        <Button
+          size="sm"
+          className="relative overflow-hidden rounded-full px-4 h-9 font-semibold text-black
+                     bg-gradient-to-r from-[#F5B819] via-[#FF6A3D] to-[#F5B819]
+                     bg-[length:200%_100%] animate-cert-cta-shimmer
+                     transition-transform hover:scale-[1.03] active:scale-[0.97]
+                     shadow-[0_0_20px_-4px_rgba(245,184,25,0.6)]"
+          aria-haspopup="true"
+          aria-expanded={open}
+        >
+          <span className="relative z-10 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+            Certifications
+          </span>
+        </Button>
       </Link>
 
-      {/* Zone tampon invisible : évite que le survol se coupe entre
-          le bouton et le menu qui apparaît juste en dessous */}
+      {/* Hover buffer */}
       <div className="absolute left-0 top-full h-3 w-full" />
 
-      {/* Méga-menu au survol (desktop uniquement, le CTA est déjà
-          masqué sous sm) */}
+      {/* Mega-menu */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-80
+        className={`absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-80
                    bg-[#0B1A2E] border border-white/10 rounded-2xl shadow-2xl p-3
-                   opacity-0 invisible translate-y-1 pointer-events-none
-                   group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto
-                   transition-all duration-200 ease-out z-50"
+                   transition-all duration-200 ease-out z-50
+                   ${open
+                     ? 'opacity-100 visible translate-y-0 pointer-events-auto'
+                     : 'opacity-0 invisible translate-y-1 pointer-events-none'
+                   }`}
       >
         <p className="px-3 pt-2 pb-3 text-[11px] font-bold uppercase tracking-widest text-[#F5B819]">
           Most-requested certifications
         </p>
+
         <div className="space-y-1">
           {NAV_CERTIFICATIONS.map(({ slug, label, hook, icon: Icon }) => (
             <Link
@@ -92,6 +96,7 @@ export function CertificationsNavCta() {
             </Link>
           ))}
         </div>
+
         <Link
           href="/certifications"
           className="flex items-center justify-center gap-1.5 mt-2 mx-1 py-2.5 rounded-xl text-sm font-semibold text-[#F5B819] hover:bg-white/5 transition-colors border-t border-white/10 pt-3"
