@@ -75,6 +75,7 @@ const resourcePages: string[] = [
 'nabcep-project-credits-explained',
 'nabcep-pvip-pass-rate',
 'nabcep-pvis-vs-pvip',
+'solar-sales-1099-vs-w2-pay',
 ].map(s => `/resources/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────

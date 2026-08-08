@@ -10,11 +10,11 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Solar Sales Jobs | D2D, In-Home & Technical Sales Openings',
-  description: 'Solar sales positions across the United States \u2014 door-to-door, in-home, inside sales, and technical sales roles. Commission structures, what employers screen for, and realistic pay ranges.',
+  description: 'Solar sales positions across the United States, door-to-door, in-home, inside sales, and technical sales roles. Commission structures, what employers screen for, and realistic pay ranges.',
   keywords: 'solar sales jobs, solar sales rep jobs, door to door solar sales, in home solar sales, solar sales consultant, solar technical sales, solar sales engineer jobs',
   openGraph: {
     title: 'Solar Sales Jobs | Now Hiring Nationwide',
-    description: 'Browse open solar sales positions \u2014 D2D, in-home, inside sales, and technical sales roles with commission structures explained.',
+    description: 'Browse open solar sales positions, D2D, in-home, inside sales, and technical sales roles with commission structures explained.',
     type: 'website',
   },
   twitter: {
@@ -46,7 +46,7 @@ const salesRoles = [
   },
   {
     title: 'In-Home Sales Consultant',
-    description: "Runs the sales appointment itself \u2014 presenting system design, financing options, and closing the contract in the customer's home. Leads are usually handed off from a setter or marketing team rather than self-generated.",
+    description: "Runs the sales appointment itself, presenting system design, financing options, and closing the contract in the customer's home. Leads are usually handed off from a setter or marketing team rather than self-generated.",
     icon: Home,
   },
   {
@@ -56,7 +56,7 @@ const salesRoles = [
   },
   {
     title: 'Solar Sales Engineer / Technical Sales',
-    description: "Pairs sales with system design competence \u2014 sizing systems, explaining production estimates, and handling technical objections that a generalist rep would escalate. NABCEP PV Technical Sales certification comes up specifically for this track.",
+    description: "Pairs sales with system design competence, sizing systems, explaining production estimates, and handling technical objections that a generalist rep would escalate. NABCEP PV Technical Sales certification comes up specifically for this track.",
     icon: Award,
   },
   {
@@ -73,7 +73,7 @@ const faqs = [
   },
   {
     question: 'How much can top performers actually earn?',
-    answer: "Top D2D and in-home reps commonly clear $100,000 to $150,000+ in strong markets, since commission is usually paid per watt or per system rather than capped. Mid-performers land well below that \u2014 the spread between top and median earners is wider in solar sales than in most sales jobs.",
+    answer: "Top D2D and in-home reps commonly clear $100,000 to $150,000+ in strong markets, since commission is usually paid per watt or per system rather than capped. Mid-performers land well below that, the spread between top and median earners is wider in solar sales than in most sales jobs.",
   },
   {
     question: 'Do you need a license to sell solar?',
@@ -85,11 +85,11 @@ const faqs = [
   },
   {
     question: 'Do you need technical solar knowledge to get hired?',
-    answer: "Not for most entry-level sales roles \u2014 companies train reps on system basics, financing products, and objection handling. Technical sales and sales engineer roles are the exception, where system design knowledge is part of the job from day one.",
+    answer: "Not for most entry-level sales roles, companies train reps on system basics, financing products, and objection handling. Technical sales and sales engineer roles are the exception, where system design knowledge is part of the job from day one.",
   },
   {
     question: 'Is solar sales a good way to break into the industry with no experience?',
-    answer: "It's one of the more accessible entry points, since most companies hire on sales aptitude rather than solar background and train the technical content on the job. It's a different track than installation, though \u2014 moving from sales into a technical or install role isn't automatic.",
+    answer: "It's one of the more accessible entry points, since most companies hire on sales aptitude rather than solar background and train the technical content on the job. It's a different track than installation, though, moving from sales into a technical or install role isn't automatic.",
   },
 ]
 
@@ -147,7 +147,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Phone className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of Solar Sales Roles</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            "Solar sales" covers roles with genuinely different day-to-day work and pay structures. Where a lead comes from \u2014 self-generated at the door, handed off from a setter, or inbound \u2014 changes almost everything about the job.
+            "Solar sales" covers roles with genuinely different day-to-day work and pay structures. Where a lead comes from: self-generated at the door, handed off from a setter, or inbound - changes almost everything about the job.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {salesRoles.map((role, index) => (
@@ -163,17 +163,17 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><ShieldCheck className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">What These Roles Actually Require</h2></div>
           <p className="text-gray-600 mb-4 max-w-4xl">
-            Most solar sales postings don't require a technical background \u2014 they screen for sales aptitude, resilience for door-to-door or cold outreach, and comfort presenting financing options (loan, lease, or PPA) rather than solar knowledge itself. Companies typically train the technical content during onboarding.
+            Most solar sales postings don't require a technical background, they screen for sales aptitude, resilience for door-to-door or cold outreach, and comfort presenting financing options (loan, lease, or PPA) rather than solar knowledge itself. Companies typically train the technical content during onboarding.
           </p>
           <p className="text-gray-600 max-w-4xl">
-            The exception is technical sales and sales engineer roles, where system design competence is expected from the start and NABCEP's PV Technical Sales credential shows up as a differentiator. State licensing requirements for home improvement or contractor sales also apply in some states specifically for door-to-door and in-home solar \u2014 worth checking before assuming a posting's requirements are generic.
+            The exception is technical sales and sales engineer roles, where system design competence is expected from the start and NABCEP's PV Technical Sales credential shows up as a differentiator. State licensing requirements for home improvement or contractor sales also apply in some states specifically for door-to-door and in-home solar, worth checking before assuming a posting's requirements are generic.
           </p>
         </section>
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Sales Pay & Commission</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Solar sales isn't tracked as its own category by the Bureau of Labor Statistics, so the ranges below reflect typical figures reported in industry postings rather than a government statistic \u2014 treat them as directional, and expect real variance by company, region, and lead source.
+            Solar sales isn't tracked as its own category by the Bureau of Labor Statistics, so the ranges below reflect typical figures reported in industry postings rather than a government statistic, treat them as directional, and expect real variance by company, region, and lead source.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
@@ -197,7 +197,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034 \u2014 sales isn't the same occupation, but every new install crew traces back to a closed sale, so hiring in solar sales tends to track installation growth closely.
+            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034, sales isn't the same occupation, but every new install crew traces back to a closed sale, so hiring in solar sales tends to track installation growth closely.
           </p>
         </section>
 
@@ -220,7 +220,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
 
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Pay ranges reflect typical figures reported across industry job postings, not a Bureau of Labor Statistics occupation \u2014 solar sales isn't tracked as a distinct category. Actual compensation varies significantly by employer, lead source, region, and individual performance. Verify licensing requirements directly with your state.
+            <strong>Disclaimer:</strong> Pay ranges reflect typical figures reported across industry job postings, not a Bureau of Labor Statistics occupation, solar sales isn't tracked as a distinct category. Actual compensation varies significantly by employer, lead source, region, and individual performance. Verify licensing requirements directly with your state.
           </p>
         </section>
       </div>

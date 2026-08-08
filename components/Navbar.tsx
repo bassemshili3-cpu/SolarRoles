@@ -43,7 +43,6 @@ export default function Navbar() {
     { href: '/jobs',       label: 'Find Jobs' },
     { href: '/dashboard/post-a-job-free',  label: 'Employers' },
     { href: '/resources',  label: 'Resources' },
-    { href: '/about',      label: 'About' },
   ]
 
   return (

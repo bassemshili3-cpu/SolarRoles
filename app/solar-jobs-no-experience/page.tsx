@@ -10,11 +10,11 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Solar Jobs No Experience Required | Entry-Level Installer Openings',
-  description: 'Entry-level solar jobs that don\u2019t require prior experience \u2014 helper, apprentice, and trainee roles across the United States. Pay ranges, what employers actually screen for, and what the work involves.',
+  description: 'Entry-level solar jobs that don\u2019t require prior experience, helper, apprentice, and trainee roles across the United States. Pay ranges, what employers actually screen for, and what the work involves.',
   keywords: 'solar jobs no experience, entry level solar installer jobs, solar apprentice jobs, solar helper jobs, no experience solar technician jobs, solar trainee jobs',
   openGraph: {
     title: 'Solar Jobs No Experience Required | Now Hiring Nationwide',
-    description: 'Browse open entry-level solar positions \u2014 helper, apprentice, and trainee roles with no prior experience required.',
+    description: 'Browse open entry-level solar positions, helper, apprentice, and trainee roles with no prior experience required.',
     type: 'website',
   },
   twitter: {
@@ -41,7 +41,7 @@ const jsonLd = {
 const entryRoles = [
   {
     title: 'Solar Installer Helper',
-    description: "Works alongside the crew carrying panels, staging racking components, and handling material on site. The most common no-experience entry point \u2014 you're trained on the tools and the process as you go.",
+    description: "Works alongside the crew carrying panels, staging racking components, and handling material on site. The most common no-experience entry point, you're trained on the tools and the process as you go.",
     icon: HardHat,
   },
   {
@@ -56,7 +56,7 @@ const entryRoles = [
   },
   {
     title: 'Warehouse / Logistics Associate',
-    description: "Pulls and stages equipment for install crews, tracks inventory, and loads trucks. Not on the roof, but a real foot in the door at a solar company \u2014 several postings prioritize warehouse staff for installer openings internally.",
+    description: "Pulls and stages equipment for install crews, tracks inventory, and loads trucks. Not on the roof, but a real foot in the door at a solar company, several postings prioritize warehouse staff for installer openings internally.",
     icon: ClipboardCheck,
   },
   {
@@ -69,7 +69,7 @@ const entryRoles = [
 const faqs = [
   {
     question: 'Can you really get a solar job with zero experience?',
-    answer: "Yes \u2014 helper, apprentice, and warehouse roles are built for it. Most crews expect to train new hires on the actual installation work; what they're screening for going in is reliability, physical ability, and a willingness to learn, not a resume.",
+    answer: "Yes, helper, apprentice, and warehouse roles are built for it. Most crews expect to train new hires on the actual installation work; what they're screening for going in is reliability, physical ability, and a willingness to learn, not a resume.",
   },
   {
     question: 'Do I need any certifications before applying?',
@@ -89,7 +89,7 @@ const faqs = [
   },
   {
     question: 'Is a background in construction or electrical work helpful?',
-    answer: "It helps but isn't required \u2014 plenty of postings list it as preferred, not mandatory. General comfort with hand and power tools, working at heights, and physical labor matters more than the specific trade background.",
+    answer: "It helps but isn't required, plenty of postings list it as preferred, not mandatory. General comfort with hand and power tools, working at heights, and physical labor matters more than the specific trade background.",
   },
 ]
 
@@ -178,14 +178,14 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
             No prior solar experience needed, but postings still screen for a specific set of things: the ability to lift 40 to 50 pounds repeatedly, comfort working at heights and on rooftops, a valid driver's license, and reliable attendance. Most crews handle OSHA 10 training internally once you're hired rather than expecting it going in.
           </p>
           <p className="text-gray-600 max-w-4xl">
-            Requirements vary more by role than by company: warehouse and logistics postings rarely ask for anything beyond a clean driving record and physical stamina, while apprentice and trainee roles increasingly mention a structured pay progression tied to specific milestones \u2014 first solo install, first crew lead-assist, and so on.
+            Requirements vary more by role than by company: warehouse and logistics postings rarely ask for anything beyond a clean driving record and physical stamina, while apprentice and trainee roles increasingly mention a structured pay progression tied to specific milestonesn first solo install, first crew lead-assist, and so on.
           </p>
         </section>
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Entry-Level Solar Pay</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Entry-level pay sits below the national median for solar PV installers overall, which the Bureau of Labor Statistics put at $51,860 as of May 2024 \u2014 that figure reflects licensed, experienced installers, not day-one hires.
+            Entry-level pay sits below the national median for solar PV installers overall, which the Bureau of Labor Statistics put at $51,860 as of May 2024, that figure reflects licensed, experienced installers, not day-one hires.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
@@ -209,7 +209,7 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034, among the fastest-growing occupations it tracks. That growth is a large part of why so many postings skip the experience requirement \u2014 crews are expanding faster than the pool of already-trained installers.
+            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034, among the fastest-growing occupations it tracks. That growth is a large part of why so many postings skip the experience requirement, crews are expanding faster than the pool of already-trained installers.
           </p>
         </section>
 

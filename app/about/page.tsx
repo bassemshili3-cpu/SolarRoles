@@ -1,122 +1,138 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from 'next/font/google'
+
+// If Space Grotesk / Inter / Plex Mono are already loaded in app/layout.tsx,
+// remove this block and swap the className usages below for your existing
+// font variables — no need to load the same fonts twice on one route.
+const display = Space_Grotesk({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-display' })
+const body = Inter({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-body' })
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['500'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
   title: 'About | Solar Roles',
   description:
-    'We are rethinking how hiring works in the US solar industry. Solar Roles puts skills first so the right people find the right solar jobs, regardless of where they went to school.',
+    'Solar Roles started in 2026 to make sense of one of the fastest-growing corners of the U.S. labor market. Here is why it exists, and who builds it.',
   openGraph: {
     title: 'About Solar Roles',
-    description: 'Skills-based hiring for the modern solar workforce.',
+    description: 'Why Solar Roles exists, and who builds it.',
     url: 'https://solarroles.com/about',
     type: 'website',
   },
 }
 
+/** Thin gradient arc — the page's one signature mark. Used once, deliberately. */
+function SunArc({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 1200 140"
+      fill="none"
+      className={className}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M0 120 Q 600 -30 1200 120"
+        stroke="url(#sr-arc-gradient)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <defs>
+        <linearGradient id="sr-arc-gradient" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#0B1A2E" stopOpacity="0.15" />
+          <stop offset="50%" stopColor="#F5B819" />
+          <stop offset="100%" stopColor="#0B1A2E" stopOpacity="0.15" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
+}
+
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className={`${display.variable} ${body.variable} ${mono.variable} min-h-screen bg-[#FAF9F6]`} style={{ fontFamily: 'var(--font-body)' }}>
       {/* Hero */}
-      <section className="bg-[#0B1A2E] text-white">
-        <div className="max-w-3xl mx-auto px-6 py-20">
-          <p className="text-[#F5B819] text-sm font-semibold tracking-wider uppercase mb-5">About Solar Roles</p>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
-            The solar industry judges you<br />by the cert on your wall.
-            <br />
-            <span className="text-[#F5B819]">We think that&rsquo;s backwards.</span>
-          </h1>
-          <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-            We&rsquo;re building a job board that focuses on what solar professionals can actually do on a roof &mdash; not just what certifications they hold or who they&rsquo;ve worked for before.
+      <section className="max-w-3xl mx-auto px-6 pt-24 pb-8">
+        <p
+          className="text-xs font-medium tracking-[0.2em] uppercase text-[#0B1A2E]/50 mb-6"
+          style={{ fontFamily: 'var(--font-mono)' }}
+        >
+          About Solar Roles
+        </p>
+        <h1
+          className="text-[2.25rem] sm:text-5xl font-medium tracking-tight leading-[1.1] text-[#0B1A2E] mb-6"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Solar is growing faster than the systems built to hire for it.
+        </h1>
+        <p className="text-lg text-[#5B6472] leading-relaxed max-w-xl">
+          Solar Roles exists to make sense of one of the fastest-moving corners of the U.S. labor market.
+        </p>
+      </section>
+
+      <div className="max-w-3xl mx-auto px-6">
+        <SunArc className="w-full h-16 sm:h-20" />
+      </div>
+
+      {/* Origin */}
+      <section className="max-w-2xl mx-auto px-6 py-16">
+        <div className="space-y-6 text-[#0B1A2E]/80 text-lg leading-relaxed">
+          <p>
+            Solar Roles started in 2026, out of a simple observation: the U.S. solar industry is expanding quickly, but the tools for understanding it haven&rsquo;t kept up.
+          </p>
+          <p>
+            Energy demand keeps climbing, and regulation shifts by the quarter. The industry offers more career paths and certifications than most people outside it. Our goal is to help Job seekers, who are often times left to piece it together on their own.
           </p>
         </div>
       </section>
 
-      {/* The problem */}
-      <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-bold text-[#0B1A2E] mb-6">The problem we&rsquo;re solving</h2>
-        <div className="space-y-5 text-gray-600 leading-relaxed text-lg">
-          <p>
-            Getting your first solar job still requires having worked in solar. An electrician transitioning into PV is treated like they&rsquo;re starting from zero. And a hands-on installer who&rsquo;s wired hundreds of residential arrays gets screened out before a recruiter ever reads their r&eacute;sum&eacute; &mdash; because they don&rsquo;t have the right acronym after their name.
+      {/* Bio */}
+      <section className="border-t border-[#0B1A2E]/10">
+        <div className="max-w-3xl mx-auto px-6 py-16">
+          <p
+            className="text-xs font-medium tracking-[0.2em] uppercase text-[#0B1A2E]/50 mb-8"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            Who builds it
           </p>
-          <p>
-            Most job boards are running the same playbook they had in 2005: keyword search, date sort, done. Search &ldquo;solar installer&rdquo; and you&rsquo;ll get flooded with residential sales roles and SEO content farms. The actual trade jobs &mdash; the ones that build the energy transition &mdash; get buried.
-          </p>
-          <p>
-            We think there&rsquo;s a better way.
-          </p>
-        </div>
-      </section>
-
-      {/* What we're building */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-[#0B1A2E] mb-8">What we&rsquo;re building</h2>
-          <div className="space-y-8">
-            <div className="flex gap-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#F5B819] text-[#0B1A2E] text-sm font-bold flex items-center justify-center mt-0.5">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-[#0B1A2E] text-lg mb-2">A solar job board that actually works</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Thousands of US solar jobs updated daily, with filters that go beyond the basics. Job type, salary range, NABCEP level, residential vs commercial, apprenticeship programs, OSHA certification. Everything you need to find a solar role worth applying to, without scrolling through pages of SEO noise.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#F5B819] text-[#0B1A2E] text-sm font-bold flex items-center justify-center mt-0.5">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-[#0B1A2E] text-lg mb-2">Skills over pedigree</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  We&rsquo;re working toward a world where what you can do on a roof matters more than the letters after your name. NABCEP-aligned digital credentials, hands-on skills assessments, and portable badges will let solar candidates demonstrate competence, not just claim it. This is where we&rsquo;re going, and we&rsquo;re building toward it deliberately.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-5">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#F5B819] text-[#0B1A2E] text-sm font-bold flex items-center justify-center mt-0.5">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-[#0B1A2E] text-lg mb-2">Built for the people who actually build solar</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Apprentices starting their first week, electricians moving into PV, ex-roofers crossing over, career changers at 40 &mdash; the ones the current hiring system wasn&rsquo;t designed for. Our goal is to give them the same shot as everyone else, based on what they can do on the job today.
-                </p>
-              </div>
+          <div className="grid sm:grid-cols-[160px_1fr] gap-8 sm:gap-12 items-start">
+            <Link href="/about/bassem-shili" className="flex-shrink-0 group">
+            <img
+             src="/profile_pic.png" alt=" Bassem SHILI, founder of Solar Roles" width={160} height={160}
+                      className="w-full h-full object-contain"
+                       style={{ transform: 'scale(0.85)' }} />
+               </Link>     
+            
+   <div className="space-y-5 text-[#5B6472] text-base leading-relaxed">
+              <p>
+               The vision of Bassem SHILI, the founder of Solar Roles:
+            </p>
+              <p>
+                My background spans software development, web design, and recruitment, which puts me somewhere between the technology side and the hiring side of the labor market. I use that mix to build the tools and resources on this site, meant to help candidates understand solar careers, certifications, employers, and the jobs available to them across the U.S.
+              </p>
+              <p>
+                I like to present Solar Roles as an ongoing effort to document and make sense of a workforce that&rsquo;s changing fast. Shaped by technology, employment, and the energy transition, three things I expect to matter more in the years ahead.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* What we believe */}
-      <section className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-bold text-[#0B1A2E] mb-8">What we believe</h2>
-        <div className="grid sm:grid-cols-2 gap-8">
-          <div>
-            <h3 className="font-semibold text-[#0B1A2E] mb-2">Skills are the real signal</h3>
-            <p className="text-gray-600 leading-relaxed">
-              A NABCEP cert is one data point. A track record of installed megawatts is a much better one. We want to help solar professionals build that track record and share it with employers who are paying attention.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-[#0B1A2E] mb-2">Free for job seekers, always</h3>
-            <p className="text-gray-600 leading-relaxed">
-              No premium tiers, no paywalls on search results. If you&rsquo;re looking for solar work, you get the full platform from day one.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-[#0B1A2E] mb-2">Real listings</h3>
-            <p className="text-gray-600 leading-relaxed">
-              We aggregate from verified solar-focused sources and filter aggressively. No ghost jobs, no roles that were filled three months ago, no bait-and-switch from residential sales masquerading as install work.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-[#0B1A2E] mb-2">Transparency</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Pay ranges when we have them. Clear requirements &mdash; NABCEP level, OSHA, journeyman status. Honest about what we know and what we don&rsquo;t. No hidden ranking by paid placement.
-            </p>
-          </div>
+      {/* Closing */}
+      <section className="border-t border-[#0B1A2E]/10">
+        <div className="max-w-3xl mx-auto px-6 py-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <p
+            className="text-xl text-[#0B1A2E] font-medium tracking-tight"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            Looking for solar work?
+          </p>
+          <Link
+            href="/jobs"
+            className="inline-flex items-center gap-2 bg-[#0B1A2E] text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-[#0B1A2E]/90 transition-colors w-fit"
+          >
+            Browse open roles
+          </Link>
         </div>
       </section>
     </main>
