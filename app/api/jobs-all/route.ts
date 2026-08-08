@@ -6,14 +6,20 @@ import { buildJobWhere, parseJobWhereParams, type JobWhereParams } from '@/lib/j
 
 // Clé de cache basée sur les params bruts (stables), pas sur whereClause
 // (qui contient un `new Date()` différent à chaque appel et casserait tout hit).
-const getCachedCount = unstable_cache(
-  async (params: JobWhereParams) => {
-    const whereClause = buildJobWhere(params)
-    return prisma.job.count({ where: whereClause })
-  },
-  ['jobs-count'],
-  { revalidate: 120 }
-)
+// Clé de cache basée sur les params bruts (stables), pas sur whereClause
+// (qui contient un `new Date()` différent à chaque appel et casserait tout hit).
+async function getCachedCount(params: JobWhereParams) {
+  return unstable_cache(
+    async () => {
+      const whereClause = buildJobWhere(params)
+      return prisma.job.count({ where: whereClause })
+    },
+    // La clé DOIT encoder les params : sinon toutes les combinaisons de filtres
+    // partagent la même entrée de cache et se marchent dessus entre requêtes.
+    ['jobs-count', JSON.stringify(params)],
+    { revalidate: 120 }
+  )()
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)

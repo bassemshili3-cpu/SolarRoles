@@ -1,10 +1,15 @@
 /**
- * Seed Adzuna scopé à la niche solaire (PV installer, lead installer) pour
- * SolarRoles. Contrairement aux jobs Ashby/Lever/Greenhouse/Pinpoint, ces
- * jobs sont du backfill de volume — ils restent `source: 'adzuna'`, donc
- * automatiquement `noindex` via isIndexable dans generateMetadata (voir
- * NON_INDEXABLE_SOURCES). Le but est de peupler le site pour les visiteurs,
- * pas de gagner du SEO dessus.
+ * Seed Adzuna scopé à la niche solaire pour SolarRoles. Contrairement
+ * aux jobs Ashby/Lever/Greenhouse/Pinpoint, ces jobs sont du backfill
+ * de volume — ils restent `source: 'adzuna'`, donc automatiquement
+ * `noindex` via isIndexable dans generateMetadata (voir
+ * NON_INDEXABLE_SOURCES). Le but est de peupler le site pour les
+ * visiteurs, pas de gagner du SEO dessus.
+ *
+ * Depuis août 2026, la niche s'élargit au-delà du terrain pur
+ * (installer/technicien) pour couvrir aussi le "corporate solar" :
+ * sales, project management, engineering, estimating. Voir
+ * lib/ats/solar-taxonomy.ts pour le détail du scope et son historique.
  *
  * Usage: npx tsx scripts/seed-adzuna-solar.ts
  */
@@ -18,9 +23,12 @@ const prisma = new PrismaClient();
 const EXPIRY_DAYS = 30;
 const SOURCE_PRIORITY = 10; // en dessous des ATS directs (0), au-dessus si besoin d'ajuster
 
-// Mots-clés strictement scopés à la niche — ne pas élargir au-delà de
-// installer/technicien solaire pour ne pas diluer le positionnement du site.
+// Mots-clés couvrant à la fois le terrain (installer/technicien) et,
+// depuis août 2026, le corporate solar (sales/PM/engineering/estimating).
+// Chaque nouveau mot-clé n'a d'effet que si isSolarInstallerRole()
+// le laisse passer — voir solar-taxonomy.ts pour le filtre réel.
 const KEYWORDS = [
+  // --- terrain ---
   'solar installer',
   'solar panel installer',
   'lead solar installer',
@@ -29,13 +37,25 @@ const KEYWORDS = [
   'solar electrician',
   'residential solar installer',
   'commercial solar installer',
+  'o&m technician',
+
+  // --- corporate solar (ajouté août 2026) ---
+  'solar sales representative',
+  'solar engineer',
+  'solar project manager',
+  'solar estimator',
 ];
 
 const RESULTS_PER_PAGE = 50;
 const PAGES_PER_KEYWORD = 6;
 
 async function upsertJob(rawJob: ReturnType<typeof normalizeAdzuna>): Promise<'created' | 'updated' | 'skipped'> {
-  if (!isSolarInstallerRole(rawJob.title)) {
+  // IMPORTANT: on passe désormais la description, pas seulement le titre.
+  // Sans ça, le fallback Tier 2 (titre générique + corroboration par la
+  // description) de isSolarInstallerRole ne se déclenche jamais — ce qui
+  // faisait passer à tort des offres "O&M Technician" (sans "solar" dans
+  // le titre) en `skipped` même quand leur description était sans ambiguïté.
+  if (!isSolarInstallerRole(rawJob.title, rawJob.description)) {
     return 'skipped';
   }
 

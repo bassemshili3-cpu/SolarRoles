@@ -13,6 +13,13 @@ export const revalidate = 86400
 const SALARY_MIN_THRESHOLD = 20_000
 const SALARY_MAX_THRESHOLD = 600_000
 
+// En dessous de ce seuil, la page est trop mince pour être indexée : trop peu
+// de données pour que les stats (moyennes, top employers...) soient
+// représentatives, ce qui ressemble à du thin content aux yeux de Google.
+// Filtre à la fois generateStaticParams (build) et le rendu runtime (ISR
+// peut faire retomber un état sous le seuil après le build initial).
+const MIN_JOBS_THRESHOLD = 20
+
 // Les 2 rôles core du site, mêmes que /data/salaries — pour donner un aperçu
 // du pay gap installer -> lead directement depuis la page state.
 const CORE_ROLES = [
@@ -33,7 +40,31 @@ function timeAgo(date: Date): string {
 }
 
 export async function generateStaticParams() {
-  return Object.keys(SLUG_TO_STATE).map((slug) => ({ state: slug }))
+  // On ne pré-génère que les états qui passent le seuil au moment du build.
+  // Les autres restent accessibles dynamiquement si dynamicParams n'est pas
+  // désactivé (comportement par défaut de Next) — c'est le check runtime
+  // dans le composant qui décide alors s'il faut les 404.
+  const allSlugs = Object.keys(SLUG_TO_STATE)
+
+  try {
+    const counts = await Promise.all(
+      allSlugs.map(async (slug) => {
+        const stateName = SLUG_TO_STATE[slug]
+        const stateCode = STATES[stateName]
+        const count = await prisma.job.count({
+          where: { active: true, addressRegion: { in: [stateName, stateCode] } },
+        })
+        return { slug, count }
+      })
+    )
+    return counts.filter((c) => c.count >= MIN_JOBS_THRESHOLD).map((c) => ({ state: c.slug }))
+  } catch (err) {
+    console.error('generateStaticParams state count error:', err)
+    // Si la requête échoue au build, on ne bloque pas le build entier —
+    // on retombe sur tous les slugs, et c'est le check runtime dans la page
+    // qui filtrera correctement à la demande.
+    return allSlugs.map((slug) => ({ state: slug }))
+  }
 }
 
 export async function generateMetadata(
@@ -74,6 +105,9 @@ export default async function StateDataPage({
   let topCompanies: { company: string; _count: { id: number } }[] = []
   let topTitles: { title: string; _count: { id: number } }[] = []
   let contractBreakdown: { contractTime: string | null; _count: { id: number } }[] = []
+  // Distingue "0 job réel" de "la requête a échoué" — sans ça, une erreur DB
+  // transitoire ferait 404 une page qui devrait exister.
+  let coreQuerySucceeded = false
 
   try {
     ;[totalJobs, salaryAgg, topCompanies, topTitles, contractBreakdown] = await Promise.all([
@@ -113,9 +147,17 @@ export default async function StateDataPage({
         orderBy: { _count: { id: 'desc' } },
       }),
     ])
+    coreQuerySucceeded = true
   } catch (err) {
     console.error(`StateDataPage core query error (${stateName}):`, err)
     // Fallbacks déjà initialisés — la page se génère avec des valeurs neutres.
+  }
+
+  // Seuil de contenu mince : ne 404 que si on est sûr du chiffre (requête
+  // réussie). Une erreur DB transitoire ne doit jamais se traduire par un
+  // 404 côté SEO.
+  if (coreQuerySucceeded && totalJobs < MIN_JOBS_THRESHOLD) {
+    notFound()
   }
 
   // ── Breakdown par rôle (Installer vs Lead) dans cet état ──

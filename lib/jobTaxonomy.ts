@@ -18,6 +18,15 @@
  * inference, sub-millisecond per call. Trade-off: limited coverage vs
  * external APIs, but predictable, debuggable, and free.
  *
+ * NOTE (Aug 2026): the gating function `isSolarInstallerRole` used to be
+ * defined here, but that duplicated (and drifted from) the gate in
+ * `lib/ats/solar-taxonomy.ts`, which now also covers corporate-solar
+ * roles (sales, PM, engineering, estimating) that this file's old gate
+ * excluded outright. To avoid two boards with two different definitions
+ * of "solar job", the gate now lives ONLY in solar-taxonomy.ts and is
+ * re-exported here for backward compatibility with existing imports.
+ * Do not reintroduce a local copy of the include/exclude patterns.
+ *
  * Usage:
  *   if (isSolarInstallerRole(title, description)) {
  *     const taxonomy = extractSolarJobTaxonomy({ title, description })
@@ -27,6 +36,8 @@
  *   // with lower recall on generic titles ("Installer II") at solar-only
  *   // employers.
  */
+
+export { isSolarInstallerRole } from './ats/solar-taxonomy'
 
 export type ExperienceLevel = 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEVEL'
 
@@ -58,108 +69,10 @@ export interface JobTaxonomyInput {
 const MAX_TEXT_LENGTH = 6000
 
 // ─────────────────────────────────────────────────────────────────────────────
-// GATE: is this even a solar PV installer role?
-// Filtering runs on the job title (cheap, reliable, low false-positive
-// rate). We deliberately do NOT match on description text — too noisy
-// (e.g. a random construction job mentioning "solar-ready roofing" in its
-// description would false-positive on a naive "solar" match).
-//
-// Deliberately narrow: sales/appointment-setter/consultant roles are
-// excluded even though they're "solar industry" — the niche is hands-on
-// installers, not solar sales.
-//
-// Tune this list as you see false positives/negatives in production.
-// ─────────────────────────────────────────────────────────────────────────────
-
-const INCLUDE_PATTERNS: RegExp[] = [
-  /solar\s*(panel)?\s*install(er|ation)/i,
-  /\bpv\s*install(er|ation)/i,
-  /photovoltaic\s*install(er|ation)/i,
-  /solar\s*(field|service)\s*tech(nician)?/i,
-  /solar\s*tech(nician)?\b/i,
-  /solar\s*electrician/i,
-  /lead\s*(solar\s*)?install(er)?/i,
-  /solar\s*(crew|foreman)/i,
-  /residential\s*solar\s*install/i,
-  /commercial\s*solar\s*install/i,
-  /rooftop\s*solar/i,
-  /solar\s*racking/i,
-  /solar\s*apprentice/i,
-  /solar\s*mechanic/i,
-  /battery\s*storage\s*install(er)?/i,
-  /energy\s*storage\s*install(er)?/i,
-  /\bnabcep\b/i,
-  // Added after auditing ATS titles that were slipping past the gate —
-  // common industry phrasings that don't fit the "solar + install(er/
-  // ation)" shape above.
-  /solar\s*install(ation)?\s*specialist/i,
-  /\b(pv|photovoltaic)\s*systems?\s*tech(nician)?/i,
-  // "array" and "module" scoped to solar/PV context to avoid false
-  // positives from unrelated fields (antenna arrays, software modules,
-  // training modules, etc.) — bare "array installer" or "module
-  // installer" are too ambiguous to match on their own.
-  /\b(solar|pv)\s*array\s*(install(er|ation)?|tech(nician)?)/i,
-  /\b(solar|pv|photovoltaic)\s*module\s*install(er|ation)?/i,
-  // "BOS" (balance of system) is a niche-specific acronym but too
-  // ambiguous on its own (bill of sale, basic operating system) —
-  // require the spelled-out form or explicit solar/pv context.
-  /balance\s*of\s*system\s*install(er)?/i,
-  /\b(solar|pv)\s*bos\s*(install(er)?|tech(nician)?)/i,
-]
-
-// Filtered out even if an include pattern also matches — protects against
-// common false positives like non-solar trades, or solar-adjacent
-// sales/office roles outside the installer niche.
-const EXCLUDE_PATTERNS: RegExp[] = [
-  /solar\s*system(s)?\b(?!.*install)/i, // "solar system" astronomy/edu, unless still says "install"
-  /software\s*install(er)?/i,
-  /window\s*install(er)?/i,
-  /flooring\s*install(er)?/i,
-  /carpet\s*install(er)?/i,
-  /security\s*install(er)?/i,
-  /alarm\s*install(er)?/i,
-  /cable\s*install(er)?/i,
-  /solar\s*turbines/i, // Solar Turbines Inc. — gas turbine manufacturer, unrelated to PV
-  /solar\s*(sales|consultant|advisor)/i,
-  /appointment\s*setter/i,
-]
-
-// Runs the include/exclude gate against a single block of text (title,
-// or title + description). Kept separate from isSolarInstallerRole so
-// title-only and title+description checks share identical logic.
-function matchesInstallerPatterns(text: string): boolean {
-  if (EXCLUDE_PATTERNS.some((re) => re.test(text))) return false
-  return INCLUDE_PATTERNS.some((re) => re.test(text))
-}
-
-// title is checked first and alone: it's the cheap, reliable, low-noise
-// signal. Only if the title doesn't resolve it do we fall back to the
-// description — this is noisier (a random construction job can mention
-// "solar-ready roofing" in passing) but titles alone were missing a real
-// slice of postings (generic titles like "Installer II", "Field
-// Technician", "Crew Member" at solar-only employers). The exclude list
-// still runs against the combined text, so a description mentioning
-// "software installer" etc. can still veto a match.
-export function isSolarInstallerRole(title: string, description?: string): boolean {
-  if (!title) return false
-  if (matchesInstallerPatterns(title)) {
-    // still confirm nothing in the description vetoes it (e.g. title is
-    // generic/ambiguous-adjacent and description reveals it's actually
-    // "software installer" or similar)
-    if (description && EXCLUDE_PATTERNS.some((re) => re.test(description))) return false
-    return true
-  }
-  if (!description) return false
-  const truncatedDescription = description.slice(0, MAX_TEXT_LENGTH)
-  if (EXCLUDE_PATTERNS.some((re) => re.test(truncatedDescription))) return false
-  return INCLUDE_PATTERNS.some((re) => re.test(truncatedDescription))
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // SPECIALTY RULES
 // Order matters: first match wins. More specific rules come first.
-// Runs on title + description (unlike the include/exclude gate above,
-// which only trusts the title) since specialty is a lower-stakes,
+// Runs on title + description (unlike the include/exclude gate, which
+// only trusts the title) since specialty is a lower-stakes,
 // enrichment-only classification — a wrong guess here just picks the
 // wrong filter facet, it doesn't let a non-solar job onto the board.
 // ─────────────────────────────────────────────────────────────────────────────

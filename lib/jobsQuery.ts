@@ -15,7 +15,7 @@ const JOB_SELECT = {
   contractType: true, contractTime: true, source: true, postedAt: true,
 } as const
 
-async function fetchJobsPageUncached(
+export async function fetchJobsPageUncached(
   params: JobWhereParams,
   page: number,
   resultsPerPage: number,
@@ -60,17 +60,18 @@ async function fetchJobsPageUncached(
   return { results, count }
 }
 
-// Version cachée : mémorise la réponse par combinaison (params, page, resultsPerPage)
-// pendant 60s. La majorité du trafic SEO tombe sur /jobs (page 1, aucun filtre) —
-// ces visiteurs partagent tous la même réponse en cache, donc plus de round-trip
-// Prisma du tout pour eux pendant la fenêtre de revalidation.
-// NB: chaque combinaison distincte de filtres crée sa propre entrée de cache ;
-// c'est voulu (long-tail de recherches filtrées reste correct), mais si un jour
-// le nombre de combinaisons explose, réduire `revalidate` ou ne cacher que page===1.
-export const getCachedJobsPage = unstable_cache(
-  fetchJobsPageUncached,
-  ['jobs-page'],
-  { revalidate: 60 },
-)
-
-export { fetchJobsPageUncached }
+// Comme pour /api/jobs-count avant : on ne fait pas confiance au hashing implicite
+// des arguments par unstable_cache pour différencier les combinaisons de filtres.
+// La clé encode explicitement params + page + resultsPerPage — même combinaison
+// = même entrée de cache, combinaison différente = entrée différente, garanti.
+export async function getCachedJobsPage(
+  params: JobWhereParams,
+  page: number,
+  resultsPerPage: number,
+): Promise<JobsListResult> {
+  return unstable_cache(
+    () => fetchJobsPageUncached(params, page, resultsPerPage),
+    ['jobs-page', JSON.stringify(params), String(page), String(resultsPerPage)],
+    { revalidate: 60 },
+  )()
+}

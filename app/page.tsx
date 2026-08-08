@@ -48,6 +48,31 @@ import HeroTagline from '@/components/HeroTagline'
 
 // sources is hidden from the homepage sections below.
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Solar Roles',
+  url: 'https://www.solarroles.com',
+  logo: 'https://www.solarroles.com/logo-square.svg', 
+}
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Solar Roles',
+  url: 'https://www.solarroles.com',
+  description:
+    'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://www.solarroles.com/jobs?what={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
+  },
+}
+
 const EXCLUDED_SOURCES = ['careerjet', 'jooble', 'lens', 'adzuna', 'greenhouse']
 
 
@@ -85,15 +110,26 @@ async function getTopStates() {
 
 
 export const metadata: Metadata = {
-
-  title: 'Solar Roles | US Job Board for Solar PV Installers',
-
+  title: 'Solar Roles | Jobs & Career Paths in the US Solar Industry',
   description:
-
-    'Solar PV installer jobs across the US. Pay ranges on every listing. Filter by state, NABCEP, and system type. No account needed to browse.',
-
+    'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing. Independent guides on certifications, career paths, and how to land the right role.',
+  keywords: 'solar jobs, solar installer jobs, solar career, solar electrician jobs, solar sales jobs, NABCEP jobs, solar industry careers',
+  alternates: { canonical: 'https://www.solarroles.com' },
+  openGraph: {
+    title: 'Solar Roles | Jobs & Career Paths in the US Solar Industry',
+    description:
+      'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing.',
+    url: 'https://www.solarroles.com',
+    siteName: 'Solar Roles',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Solar Roles | Jobs & Career Paths in the US Solar Industry',
+    description:
+      'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing.',
+  },
 }
-
 
 export const revalidate = 3600
 
@@ -124,11 +160,11 @@ const credentialFeatures = [
 
 
 const categories = [
-
   { label: 'PV Installer', icon: HardHat, bg: 'bg-[#0B1A2E]', href: '/solar-pv-installer-jobs' },
-
   { label: 'Lead Installer', icon: Award, bg: 'bg-[#1E3A5F]', href: '/lead-solar-installer-jobs' },
-
+  { label: 'No Experience', icon: TrendingUp, bg: 'bg-[#B45309]', href: '/solar-jobs-no-experience' },
+  { label: 'Solar Sales', icon: Briefcase, bg: 'bg-[#0F2440]', href: '/solar-sales-jobs' },
+  { label: 'Bess Technician', icon: Briefcase, bg: 'bg-[#0F2440]', href: '/bess-technician-jobs' },
 ]
 
 
@@ -163,7 +199,7 @@ const FEATURED_ARTICLE = {
 
   author: 'Solar Roles Editorial Team',
 
-  date: 'Coming July 2026',
+  date: 'July 2026',
 
   readTime: '8 min read',
 
@@ -241,7 +277,11 @@ export default async function Home() {
 
     <>
 
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+
      <section className="relative bg-[#0B1A2E] text-white pt-24 pb-40 overflow-hidden">
+      
   {/* Vidéo de fond en boucle, zoomée pour créer de la marge horizontale,
       sujet cadré plus à droite */}
   <div className="absolute inset-0 overflow-hidden">
@@ -250,7 +290,7 @@ export default async function Home() {
       loop
       muted
       playsInline
-      poster="/solar-hero.mp4"
+      poster="/solar-hero-poster.png"
       className="absolute inset-0 w-full h-full object-cover scale-100"
       style={{ objectPosition: '100% center' }}
     >
@@ -270,7 +310,7 @@ export default async function Home() {
   <div className="relative z-10 max-w-6xl mx-auto px-6">
     <div className="max-w-2xl">
       <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
-        Solar PV jobs<br />across the US
+        Solar Jobs<br />across the US
       </h1>
       <HeroTagline />
       <SearchHero />
@@ -458,24 +498,22 @@ export default async function Home() {
               A job board built and maintained for the US solar workforce.
             </h2>
             <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
-              <p>
-                Solar Roles tracks PV installer, lead installer, and electrician
-                openings across all 50 states, and only that: no sales roles,
-                no corporate listings buried under a generic &ldquo;renewable
-                energy&rdquo; tag. Sign in with Google to save searches and
-                apply faster &mdash; we only use your name and email to set
-                up your profile, nothing more.
-              </p>
-              <p>
-                We also publish independent guides on the credentials that
-                actually apply to this trade: which certifications are
-                legally required versus which ones just help you get hired,
-                how NABCEP compares to ETA International and state
-                electrician licenses, and how apprenticeship paths stack up
-                against paying for training up front. The goal is the same
-                one that got us building the job board in the first place:
-                make the confusing parts of a solar career easier to sort
-                through.
+             <p>
+  Solar Roles tracks installer, electrician, service, and sales
+  openings across all 50 states &mdash; every listing is
+  solar-specific, not a generic &ldquo;renewable energy&rdquo; tag
+  pulled from a multi-industry board. Sign in with Google to save
+  searches and apply faster &mdash; we only use your name and email
+  to set up your profile, nothing more.
+</p>
+<p>
+  We also publish independent guides on how these roles connect:
+  which certifications are legally required versus which ones just
+  help you get hired, how NABCEP compares to ETA International and
+  state electrician licenses, and how apprenticeship paths stack up
+  against paying for training up front. The goal is the same one
+  that got us building the job board in the first place: help you
+  find the right entry point into solar, and the next step after it.
               </p>
             </div>
           </div>
@@ -621,7 +659,7 @@ export default async function Home() {
 
               </div>
 
-              <h3 className="text-xl font-bold text-[#0B1A2E] mb-3">For installers</h3>
+              <h3 className="text-xl font-bold text-[#0B1A2E] mb-3">For Solar Job Seekers</h3>
 
               <p className="text-gray-500 leading-relaxed mb-5">
 
@@ -686,7 +724,7 @@ export default async function Home() {
 
           <div className="text-center mb-12">
 
-            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Browse by role</h2>
+            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Browse by category</h2>
 
           </div>
 

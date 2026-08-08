@@ -118,6 +118,7 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
     // independent of the user's own `what` search box below — same pattern
     // used elsewhere for niche landing pages (see job-where.ts comment).
     descriptionContainsAny: ['installer', 'installation technician', 'pv installer'],
+     requiredDomainTerms: ['solar', 'photovoltaic', ' pv '],
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
     resultsPerPage: 30,

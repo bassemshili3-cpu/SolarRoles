@@ -19,7 +19,7 @@ import { rewriteJobDescriptionForSeo, SEO_REWRITE_VERSION } from '../lib/seo/rew
 
 const prisma = new PrismaClient();
 
-const BATCH_SIZE = 20; // per run — keep small enough to fit inside a cron/serverless timeout
+const BATCH_SIZE = 70; // per run — keep small enough to fit inside a cron/serverless timeout
 const DELAY_MS = 300; // spacing between calls, comfortably under rate limits
 
 function sleep(ms: number) {

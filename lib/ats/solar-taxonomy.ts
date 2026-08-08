@@ -2,15 +2,19 @@
  * Solar PV role taxonomy for SolarRoles
  *
  * Decides whether a job pulled from an ATS source belongs on the
- * SolarRoles board. The niche is hands-on field roles across the
- * solar install lifecycle — not just "Installer" as a job title, but
- * the whole crew of trades that build, commission, and maintain PV
- * systems (cf. BLS "Solar Photovoltaic Installers" occupation, plus
- * closely adjacent field trades that share the same labor pool).
+ * SolarRoles board. Originally scoped to hands-on field roles across
+ * the solar install lifecycle only. As of August 2026, the site is
+ * expanding beyond field-only niche to cover "corporate solar" roles
+ * as well — sales, project management, engineering, and estimating —
+ * alongside the original field trades. Field roles remain the primary
+ * focus; corporate roles are now a deliberate secondary category, not
+ * an accident of loose matching.
  *
  * TAXONOMY GOAL: bias toward roles whose descriptions are likely to
- * name specific certifications (NABCEP, OSHA-10, OSHA-30, etc.) —
- * i.e. hands-on, safety-sensitive, credential-gated field work.
+ * name specific certifications (NABCEP, OSHA-10, OSHA-30, etc.) for
+ * field roles, and toward roles that are clearly solar-specific
+ * (not generic "engineer"/"sales"/"project manager" moonlighting as
+ * solar via a single incidental mention) for corporate roles.
  * Roofer/roofing is intentionally NOT covered yet (too high a false-
  * positive rate against the much larger general roofing labor market).
  *
@@ -26,23 +30,30 @@
  *   - Battery / Energy Storage Installer
  *   - QA/QC / Inspector (solar-specific)
  *   - Solar Thermal / Solar Hot Water Installer
+ *   - Solar Sales (representative, technical sales, sales engineer)
+ *   - Solar Project / Construction Management
+ *   - Solar Design / Systems Engineering
+ *   - Solar Estimating
  *
- * Deliberately still excluded: sales, appointment-setting, design/
- * engineering desk roles, permitting/admin, roofing (general) —
- * anything that isn't physically working on a system in the field,
- * or that carries too high a false-positive risk for now.
+ * Deliberately still excluded: appointment-setting/canvassing (high
+ * spam and commission-only-listing rate), permitting/admin, roofing
+ * (general) — anything with too high a false-positive risk for now.
  *
  * Two-tier strategy:
  *   1) TITLE MATCH (cheap, reliable, low false-positive rate) — the
  *      default path. Most solar postings say "solar" or "PV" in the title.
  *   2) GENERIC TITLE + DESCRIPTION CORROBORATION — some solar companies
  *      post under bland internal titles ("Installer II", "Field
- *      Technician", "Foreman", "Inspector") that carry zero solar
- *      signal on their own. For THOSE titles only, we fall back
- *      to the description, and we require a STRONG, specific solar
- *      signal (not just the word "solar" appearing once) to avoid
+ *      Technician", "Foreman", "Inspector", "O&M Technician") that
+ *      carry zero solar signal on their own. For THOSE titles only, we
+ *      fall back to the description, and we require a STRONG, specific
+ *      solar signal (not just the word "solar" appearing once) to avoid
  *      pulling in, e.g., a cable "Field Technician" whose description
  *      happens to mention a client's "solar-ready roofing".
+ *
+ *      IMPORTANT: this fallback only works if the caller passes a
+ *      description. isSolarInstallerRole(title) alone will never
+ *      trigger Tier 2 — always pass the job description when available.
  *
  * Tune this list as you see false positives/negatives in production.
  */
@@ -124,21 +135,21 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /\bess\s*install(er|ation)?/i, // "energy storage system"
 
   // --- BESS / battery storage (expanded) ---
-/\bbess\b/i, // "Battery Energy Storage System" acronym, common standalone in titles
-/battery\s*energy\s*storage\s*(system)?\s*(tech(nician)?|install(er)?|engineer)?/i,
-/battery\s*(systems?)\s*tech(nician)?/i,
-/storage\s*commissioning\s*tech(nician)?/i,
-/storage\s*(field\s*)?tech(nician)?/i,
+  /\bbess\b/i, // "Battery Energy Storage System" acronym, common standalone in titles
+  /battery\s*energy\s*storage\s*(system)?\s*(tech(nician)?|install(er)?|engineer)?/i,
+  /battery\s*(systems?)\s*tech(nician)?/i,
+  /storage\s*commissioning\s*tech(nician)?/i,
+  /storage\s*(field\s*)?tech(nician)?/i,
 
-// --- commercial & industrial (C&I is the standard industry shorthand) ---
-/\bc\s*&\s*i\s*solar/i,
-/commercial\s*(&|and)\s*industrial\s*solar/i,
-/commercial\s*solar\s*(tech(nician)?|electrician|foreman)/i,
+  // --- commercial & industrial (C&I is the standard industry shorthand) ---
+  /\bc\s*&\s*i\s*solar/i,
+  /commercial\s*(&|and)\s*industrial\s*solar/i,
+  /commercial\s*solar\s*(tech(nician)?|electrician|foreman)/i,
 
-// --- utility-scale / ground-mount (expanded) ---
-/ground[\s-]?mount(ed)?\s*(solar|pv)\s*(install(er)?|construction|tech(nician)?)/i,
-/utility\s*solar\s*tech(nician)?/i,
-/utility[\s-]*scale\s*(solar|pv)\s*(tech(nician)?|install(er)?)/i,
+  // --- utility-scale / ground-mount (expanded) ---
+  /ground[\s-]?mount(ed)?\s*(solar|pv)\s*(install(er)?|construction|tech(nician)?)/i,
+  /utility\s*solar\s*tech(nician)?/i,
+  /utility[\s-]*scale\s*(solar|pv)\s*(tech(nician)?|install(er)?)/i,
 
   // --- QA/QC & inspection (solar-specific) ---
   /solar\s*qa\s*[\/-]?\s*qc\s*(tech(nician)?|inspector)?/i,
@@ -151,18 +162,38 @@ const INCLUDE_PATTERNS: RegExp[] = [
 
   // --- certifications as a strong standalone signal ---
   /\bnabcep\b/i,
+
+  // --- corporate solar: sales (added Aug 2026 — scope expansion) ---
+  // Broader than the old technical-sales-only carve-out below: any
+  // title that explicitly says "solar sales" or "PV sales" is now
+  // accepted. Bare "sales representative" with no solar/PV qualifier
+  // is NOT included here — that stays too generic to trust.
+  /solar\s*sales\s*(representative|rep|specialist|consultant|manager|engineer)?/i,
+  /pv\s*sales\s*(representative|rep|specialist|engineer)?/i,
+
+  // --- corporate solar: project / construction management ---
+  /solar\s*(project|construction)\s*(manager|coordinator|engineer)/i,
+  /pv\s*(project|construction)\s*(manager|coordinator)/i,
+
+  // --- corporate solar: design / systems engineering ---
+  /solar\s*(design\s*)?engineer(ing)?/i,
+  /pv\s*(design\s*)?engineer(ing)?/i,
+  /solar\s*electrical\s*engineer/i,
+  /solar\s*systems?\s*engineer/i,
+
+  // --- corporate solar: estimating ---
+  /solar\s*estimat(or|ing)/i,
+  /pv\s*estimat(or|ing)/i,
 ];
 
-// --- Technical sales carve-out ---
-// NABCEP has a dedicated "PV Technical Sales" credential. Unlike pure
-// canvassing/closing/door-to-door roles (blocked below by
-// EXCLUDE_PATTERNS), technical sales titles that explicitly tie back
-// to NABCEP in the description are let through — but ONLY on that
-// narrow, high-precision signal. We deliberately do NOT reuse the
-// broader DESCRIPTION_STRONG_SIGNALS list here: "we sell solar
-// systems" is not enough on its own, we require the NABCEP tie-in
-// specifically to avoid pulling in ordinary door-to-door sales roles
-// that happen to mention "solar" a lot but carry no certification.
+// --- Technical sales carve-out (legacy, kept for the NABCEP-specific
+// signal it captures) ---
+// NABCEP has a dedicated "PV Technical Sales" credential. This narrow
+// carve-out is now largely superseded by the broader "solar sales"
+// INCLUDE patterns above, but is kept as-is since it does no harm and
+// still adds a valid PV-technical-sales-title + NABCEP-description
+// signal for edge cases the broader pattern might miss (e.g. "Technical
+// Sales Engineer" without the word "solar" directly adjacent).
 const TECHNICAL_SALES_TITLE_PATTERNS: RegExp[] = [
   /solar\s*technical\s*sales/i,
   /technical\s*sales.*solar/i,
@@ -180,7 +211,8 @@ const TECHNICAL_SALES_STRONG_SIGNALS: RegExp[] = [
 
 // Filtered out even if an include pattern (title or description) also
 // matches — protects against common false positives like non-solar
-// trades, or solar-adjacent desk roles outside the field-work niche.
+// trades, or roles that carry too high a spam/false-positive risk to
+// let through even under the expanded corporate-solar scope.
 const EXCLUDE_PATTERNS: RegExp[] = [
   /solar\s*system(s)?\b(?!.*install)/i, // "solar system" astronomy/edu, unless still says "install"
   /software\s*install(er)?/i,
@@ -191,10 +223,8 @@ const EXCLUDE_PATTERNS: RegExp[] = [
   /alarm\s*install(er)?/i,
   /cable\s*install(er)?/i,
   /solar\s*turbines/i, // Solar Turbines Inc. — gas turbine manufacturer, unrelated to PV
-  /solar\s*(sales|consultant|advisor|canvasser)/i,
+  /solar\s*(consultant|advisor|canvasser)/i, // "sales" removed Aug 2026 — see corporate-solar sales INCLUDE patterns above
   /appointment\s*setter/i,
-  /project\s*(manager|coordinator)\b(?!.*field)/i, // desk PM roles, unless explicitly field-based
-  /\b(design|engineer(ing)?)\s*(analyst|associate)?\b(?!.*install)/i, // desk design/engineering roles
   /permit(ting)?\s*(specialist|coordinator|technician)/i,
   /home\s*inspector/i, // generic real-estate home inspector, not PV
   /building\s*inspector\b(?!.*solar)/i,
@@ -231,9 +261,16 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\binspector\b/i,
   /\bwireman\b/i,
   /\bepc\s*(field\s*)?tech(nician)?\b/i, // "EPC Field Technician" — common in utility-scale
-/\bbess\s*(tech(nician)?|install(er)?)?\b/i,
-/\bbattery\s*tech(nician)?\b/i,
-/\bstorage\s*tech(nician)?\b/i,
+  /\bbess\s*(tech(nician)?|install(er)?)?\b/i,
+  /\bbattery\s*tech(nician)?\b/i,
+  /\bstorage\s*tech(nician)?\b/i,
+
+  // --- corporate solar generic titles (added Aug 2026) ---
+  /\bsales\s*(representative|rep)\b/i, // bare "Sales Representative" — needs solar in description
+  /\bproject\s*(manager|coordinator)\b/i,
+  /\bconstruction\s*manager\b/i,
+  /\bestimator\b/i,
+  /\bsystems?\s*engineer\b/i,
 ];
 
 // Strong, specific solar signals to look for in a description when the
@@ -269,10 +306,20 @@ const DESCRIPTION_STRONG_SIGNALS: RegExp[] = [
   /solar\s*thermal|solar\s*hot\s*water/i,
   /quality\s*(assurance|control)\s*.*solar\s*(install|array|system)/i,
   /battery\s*energy\s*storage\s*system/i,
-/\bbess\b/i,
-/\bc\s*&\s*i\s*solar/i,
-/commercial\s*(&|and)\s*industrial\s*solar/i,
-/ground[\s-]?mount(ed)?\s*(solar|array|pv)/i,
+  /\bbess\b/i,
+  /\bc\s*&\s*i\s*solar/i,
+  /commercial\s*(&|and)\s*industrial\s*solar/i,
+  /ground[\s-]?mount(ed)?\s*(solar|array|pv)/i,
+
+  // --- corporate solar signals (added Aug 2026) ---
+  /sell(ing)?\s*(residential|commercial)?\s*solar\s*(systems?|energy)/i,
+  /solar\s*(sales|energy)\s*consultation/i,
+  /manage(s|d|ment)?\s*(solar|pv)\s*(installation|construction)\s*project/i,
+  /oversee\s*(solar|pv)\s*(project|construction)/i,
+  /design\s*(solar|pv)\s*(system|array)/i,
+  /engineer(ing)?\s*(solar|pv)\s*(system|array|project)/i,
+  /prepare\s*(solar|pv)?\s*(project\s*)?estimat/i,
+  /estimat(e|ing)\s*(solar|pv)\s*(project|installation|system)/i,
 ];
 
 export function isSolarInstallerRole(title: string, description?: string): boolean {
@@ -313,8 +360,9 @@ export function isSolarInstallerRole(title: string, description?: string): boole
 /**
  * Optional: coarse role family for a matched job, useful later for
  * landing-page segmentation (e.g. /jobs/solar-om-technician,
- * /jobs/solar-site-supervisor) without touching the match logic above.
- * Only meaningful when isSolarInstallerRole(title, description) is true.
+ * /jobs/solar-site-supervisor, /jobs/solar-project-manager) without
+ * touching the match logic above. Only meaningful when
+ * isSolarInstallerRole(title, description) is true.
  */
 export type SolarRoleFamily =
   | 'installer'
@@ -326,11 +374,17 @@ export type SolarRoleFamily =
   | 'qa_qc'
   | 'thermal'
   | 'sales'
+  | 'project_management'
+  | 'engineering'
+  | 'estimating'
   | 'other';
 
 export function getSolarRoleFamily(title: string): SolarRoleFamily {
-  if (/technical\s*sales|sales\s*engineer/i.test(title)) return 'sales';
-  if (/electrician|wireman/i.test(title)) return 'electrician';
+  if (/estimat(or|ing)/i.test(title)) return 'estimating';
+  if (/project\s*(manager|coordinator)|construction\s*manager/i.test(title)) return 'project_management';
+  if (/sales/i.test(title)) return 'sales';
+  if (/\belectrician|wireman/i.test(title)) return 'electrician';
+  if (/\bengineer(ing)?\b/i.test(title)) return 'engineering';
   if (/supervisor|superintendent|crew\s*lead|foreman/i.test(title)) return 'supervisor';
   if (/commissioning/i.test(title)) return 'commissioning';
   if (/(o&m|om\s*tech|service\s*tech|maintenance\s*tech|repair\s*tech|troubleshoot|field\s*service)/i.test(title)) return 'om';

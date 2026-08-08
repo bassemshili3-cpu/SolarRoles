@@ -109,6 +109,7 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
     // AND-filter, independent of the user's own `what` search box below —
     // same pattern used on /solar-pv-installer-jobs.
     descriptionContainsAny: ['lead installer', 'installation foreman', 'crew lead', 'installation supervisor'],
+    titleContainsAny: ['lead', 'Lead'],
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
     resultsPerPage: 30,

@@ -82,6 +82,8 @@ export interface JobWhereParams {
   whatPhrases?: string[]
   excludePhrases?: string[]
   descriptionContainsAny?: string[]
+   requiredDomainTerms?: string[]
+   titleContainsAny?: string[]  
   isFifo?: boolean 
   where?: string
   salaryMin?: number
@@ -115,6 +117,8 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
     whatPhrases   = [],
     excludePhrases = [],
     descriptionContainsAny = [],
+     requiredDomainTerms = [], 
+      titleContainsAny = [], 
     isFifo        = false, 
     where         = '',
     salaryMin,
@@ -140,6 +144,12 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
   }
 }
 
+ if (titleContainsAny.length > 0) {
+    AND.push({
+      OR: keywordOr(titleContainsAny, ['title']),
+    })
+  }
+
   if (excludePhrases.length > 0) {
     AND.push({
       NOT: { OR: keywordOr(excludePhrases, ['title', 'description']) },
@@ -157,6 +167,15 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
       })),
     })
   }
+
+  // buildJobWhere — juste après le bloc descriptionContainsAny existant
+if (requiredDomainTerms.length > 0) {
+  AND.push({
+    OR: requiredDomainTerms.map((phrase) => ({
+      description: { contains: phrase, mode: 'insensitive' as const },
+    })),
+  })
+}
 
    // ── Fifo tag précalculé à l'ingestion ────────────────────────────────────────
   if (isFifo) {
@@ -275,6 +294,7 @@ export function parseJobWhereParams(searchParams: URLSearchParams): JobWherePara
     whatPhrases:    splitPhrasesParam(searchParams.get('what_phrases')),
     excludePhrases: splitPhrasesParam(searchParams.get('exclude_phrases')),
     descriptionContainsAny: splitPhrasesParam(searchParams.get('description_contains_any')),
+    titleContainsAny:       splitPhrasesParam(searchParams.get('title_contains_any')),
     isFifo:         searchParams.get('is_fifo') === 'true', 
     where:          searchParams.get('where')?.trim() || '',
     salaryMin:      searchParams.get('salary_min')     ? parseInt(searchParams.get('salary_min')!)    : undefined,

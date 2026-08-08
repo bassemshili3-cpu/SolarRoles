@@ -5,9 +5,12 @@ import { buildJobSlug } from "@/lib/slugify";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
 import { JobDetail } from "@/lib/jobDetail";
 import { CERTIFICATIONS } from "@/app/certifications/[slug]/certifications-data"
+import { STATES, SLUG_TO_STATE } from "@/lib/usStates";
 
 const BASE_URL = 'https://www.solarroles.com'
-const LAST_MAJOR_UPDATE = new Date('2026-07-26')
+const LAST_MAJOR_UPDATE = new Date('2026-08-8')
+const MIN_JOBS_THRESHOLD = 20 // doit rester synchro avec app/data/states/[state]/page.tsx
+
 
 const ATS_SOURCES = [
   'ashby',
@@ -23,6 +26,9 @@ const ATS_SOURCES = [
 const priorityLandingPages: string[] = [
   '/solar-pv-installer-jobs',
   '/lead-solar-installer-jobs',
+  '/solar-jobs-no-experience',
+  '/solar-sales-jobs',
+  '/bess-technician-jobs',
 ]
 
 // ── Certifications (pages piliers affiliées) ────────────────
@@ -48,19 +54,6 @@ const paycheckPages: string[] = [
 // ── Data Center pages ────────────────────────────────────────
 const dataPages: string[] = ['/data']
 
-const dataStatePages: string[] = [
-  'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado',
-  'connecticut', 'delaware', 'florida', 'georgia', 'hawaii', 'idaho',
-  'illinois', 'indiana', 'iowa', 'kansas', 'kentucky', 'louisiana',
-  'maine', 'maryland', 'massachusetts', 'michigan', 'minnesota',
-  'mississippi', 'missouri', 'montana', 'nebraska', 'nevada',
-  'new-hampshire', 'new-jersey', 'new-mexico', 'new-york',
-  'north-carolina', 'north-dakota', 'ohio', 'oklahoma', 'oregon',
-  'pennsylvania', 'rhode-island', 'south-carolina', 'south-dakota',
-  'tennessee', 'texas', 'utah', 'vermont', 'virginia', 'washington',
-  'west-virginia', 'wisconsin', 'wyoming',
-].map(s => `/data/states/${s}`)
-
 const dataSalaryPages: string[] = [
   'solar-photovoltaic-installer', 'lead-solar-installer',
 'solar-electrician',
@@ -78,6 +71,10 @@ const resourcePages: string[] = [
   'solar-installer-apprenticeship-programs',
   'solar-installer-certification',
   'how-to-get-nabcep-certified',
+  'nabcep-board-eligible-status',
+'nabcep-project-credits-explained',
+'nabcep-pvip-pass-rate',
+'nabcep-pvis-vs-pvip',
 ].map(s => `/resources/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────
@@ -105,7 +102,6 @@ const sections: {
   { routes: certificationPages, changeFrequency: "monthly", priority: 0.8 },
   { routes: paycheckPages, changeFrequency: "monthly", priority: 0.6 },
   { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
-  { routes: dataStatePages, changeFrequency: "weekly", priority: 0.8 },
   { routes: dataSalaryPages, changeFrequency: "weekly", priority: 0.8 },
   { routes: resourcePages, changeFrequency: "monthly", priority: 0.7 },
   { routes: blogPosts, changeFrequency: "monthly", priority: 0.6 },
@@ -131,6 +127,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
     }
   }
+
+  // ── State pages — seulement celles au-dessus du seuil ─────
+  // Doit matcher exactement la condition dans
+  // app/data/states/[state]/page.tsx (notFound() runtime).
+  const stateSlugs = Object.keys(SLUG_TO_STATE)
+  try {
+    const stateCounts = await Promise.all(
+      stateSlugs.map(async (slug) => {
+        const stateName = SLUG_TO_STATE[slug]
+        const stateCode = STATES[stateName]
+        const count = await prisma.job.count({
+          where: { active: true, addressRegion: { in: [stateName, stateCode] } },
+        })
+        return { slug, count }
+      })
+    )
+    for (const { slug, count } of stateCounts) {
+      if (count < MIN_JOBS_THRESHOLD) continue
+      entries.push({
+        url: `${BASE_URL}/data/states/${slug}`,
+        lastModified: LAST_MAJOR_UPDATE,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      })
+    }
+  } catch (err) {
+    console.error("sitemap state count error:", err)
+    // En cas d'échec, on n'ajoute aucune state page plutôt que de risquer
+    // de lister des URLs sous le seuil.
+  }
+
 
   // ── Jobs "own" (indexables) ──────────────────────────────
   const ownJobs = await prisma.job.findMany({
