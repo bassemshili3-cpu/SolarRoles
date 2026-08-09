@@ -76,6 +76,7 @@ const resourcePages: string[] = [
 'nabcep-pvip-pass-rate',
 'nabcep-pvis-vs-pvip',
 'solar-sales-1099-vs-w2-pay',
+'do-you-need-to-be-an-electrician-for-bess',
 ].map(s => `/resources/${s}`)
 
 // ── Articles de blog ─────────────────────────────────────────

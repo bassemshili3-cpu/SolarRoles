@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
+import { Sora } from "next/font/google";
+
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  display: "swap",
+});
 
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-get-nabcep-certified";
@@ -36,7 +43,7 @@ const jsonLd = {
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
       dateModified: "2026-08-03",
-      author: [{ "@type": "Person", name: "Maya Okonkwo" }],
+      author: [{ "@type": "Person", name: "Bassem SHILI" }],
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
     {
@@ -111,14 +118,13 @@ const css = `
   margin: 0 auto;
   max-width: 880px;
   font-size: clamp(30px, 4vw, 46px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--navy-900);
 }
 .sr2-title h1 .accent {
-  background: linear-gradient(135deg, #F5B819 0%, #FF6A3D 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  color: var(--navy-900);
 }
 .sr2-title .sub {
   max-width: 680px;
@@ -563,7 +569,7 @@ export default function HowToGetNabcepCertified() {
             installation experience and a separate written exam, and it&apos;s
             the one that shows up as a preferred or required qualification in
             lead installer and foreman postings. You can&apos;t shortcut to
-            PVIP; the field hours are the gate, not the exam itself.
+            PVIP; the field hours are the gate.
           </p>
            
           <p>
@@ -588,9 +594,9 @@ export default function HowToGetNabcepCertified() {
           <ul>
             <li>New to solar, still in training or OJT → PV Associate first.</li>
             <li>Coming from electrical, roofing, or construction → PV Associate still makes sense as a fast, low-cost signal while you accumulate solar-specific hours toward PVIP or PVIS.</li>
-            <li>Experienced installer, work is installation only, not design or commissioning → PVIS eligibility review.</li>
+            <li>Experienced installer, work is installation only → PVIS eligibility review.</li>
             <li>1+ years documented experience across design, install, and commissioning → go straight for PVIP eligibility review.</li>
-          </ul>
+          
           <p>If you're preparing for a NABCEP exam, we recommend HeatSpring.
             It's one of the most trusted online training platforms in the solar industry, and its 
             NABCEP-approved courses are taught by experienced industry professionals.</p>
@@ -612,7 +618,7 @@ export default function HowToGetNabcepCertified() {
             installation, commissioning, maintenance), signed off by a
             supervisor or employer, before you&apos;re even eligible to take
             the exam. PVIS sits between the two: it requires documented
-            installation-task hours, but not the design and commissioning
+            installation-task hours without the design and commissioning
             hours PVIP demands.
           </p>
           <p>
@@ -643,7 +649,7 @@ export default function HowToGetNabcepCertified() {
             list of what the exam tests — and the strongest prep courses are
             built directly against it rather than a generic solar curriculum.
           </p>
-
+</ul>
           
 
           <h2 id="timeline"><span className="n">05</span>Study Timeline</h2>

@@ -4,6 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { BatteryCharging, Zap, DollarSign, ShieldCheck, Award, Wrench, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import Link from 'next/link'
 
 export const revalidate = 3600
 
@@ -66,16 +67,60 @@ const bessRoles = [
 ]
 
 const certifications = [
-  { name: 'OSHA 10 / OSHA 30', description: "OSHA 10 is the baseline most employers expect before you set foot on site. OSHA 30 comes up more often for BESS work specifically, since employers want documented awareness of the broader hazard set on an active electrical site." },
-  { name: 'NFPA 70E (Arc Flash Safety)', description: "Battery systems operate at high DC voltage and carry real arc flash risk. Most employers either require this training before hire or put new technicians through it in the first weeks on the job." },
-  { name: 'Manufacturer Certification', description: "Tesla, Fluence, LG, and other major BESS manufacturers run their own installer and technician certification programs. Postings frequently name a specific manufacturer cert as required or strongly preferred for their product line." },
-  { name: 'Electrical License', description: "Not required for every technician role, but a licensed electrician on the crew is commonly mandatory for final connections and utility interconnection. Technicians who hold one see faster pay progression." },
-  { name: 'First Responder / Thermal Runaway Awareness', description: "Some employers require training on lithium battery fire behavior and emergency shutdown procedures, particularly for utility scale sites where a thermal event has different protocols than a standard electrical fire." },
+  {
+    name: 'OSHA 10',
+    description: (
+      <>
+        The baseline most employers expect before you set foot on site — a {' '}
+        <Link href="/certifications/osha-10" className="text-blue-600 hover:underline font-medium">
+          10-hour
+        construction safety course, 
+        </Link> covering general jobsite hazards.
+      </>
+    ),
+  },
+  {
+    name: 'OSHA 30',
+    description: (
+      <>
+        {' '}
+        <Link href="/certifications/osha-30" className="text-blue-600 hover:underline font-medium">
+          OSHA 30 certification 
+        </Link> comes up more often for BESS work specifically, since employers want documented
+        awareness of the broader hazard set on an active electrical site.
+      </>
+    ),
+  },
+  {
+    name: 'NFPA 70E (Arc Flash Safety)',
+    description: "Battery systems operate at high DC voltage and carry real arc flash risk. Most employers either require this training before hire or put new technicians through it in the first weeks on the job.",
+  },
+  {
+    name: 'Manufacturer Certification',
+    description: "Tesla, Fluence, LG, and other major BESS manufacturers run their own installer and technician certification programs. Postings frequently name a specific manufacturer cert as required or strongly preferred for their product line.",
+  },
+  {
+    name: 'Electrical License',
+    description: (
+      <>
+        Not required for every technician role, but a licensed electrician on the crew
+        is commonly mandatory for final connections and utility interconnection.
+        Technicians who hold one see faster pay progression. See our guide to learn more about{' '}
+        <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-blue-600 hover:underline font-medium">
+           bess technician entry paths 
+        </Link>
+      </>
+    ),
+  },
+  {
+    name: 'First Responder / Thermal Runaway Awareness',
+    description: "Some employers require training on lithium battery fire behavior and emergency shutdown procedures, particularly for utility scale sites where a thermal event has different protocols than a standard electrical fire.",
+  },
 ]
 
 const faqs = [
   {
-    question: 'What does a BESS technician actually do day to day?',
+    question: 'What does a BESS technician do day to day?',
     answer: "Mechanical installation of battery racks or cabinets, DC and low voltage wiring, and testing communication between the battery management system and the inverter. On active sites, expect fault diagnosis, module swaps, and scheduled maintenance checks rather than new installs.",
   },
   {

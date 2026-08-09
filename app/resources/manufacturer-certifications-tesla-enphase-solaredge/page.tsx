@@ -15,7 +15,7 @@ const PAGE_PATH = "/resources/manufacturer-certifications-tesla-enphase-solaredg
 const PAGE_TITLE =
   "Tesla, Enphase, and SolarEdge Certifications for Installers (2026): Company vs Individual";
 const PAGE_DESCRIPTION =
-  "How manufacturer certifications actually work for solar installers: which ones a company enrolls in, which ones an individual technician can complete directly, and whether they're worth pursuing.";
+  "How manufacturer certifications work for solar installers: which ones a company enrolls in, which ones an individual technician can complete directly, and whether they're worth pursuing.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -193,14 +193,13 @@ export default function ManufacturerCertifications() {
           None of these manufacturer credentials substitute for NABCEP, a
           state license, or OSHA training, and no serious employer treats
           them as if they do. They're narrower by design: proof you know
-          one company's equipment, not proof of broader PV design or code
-          knowledge. Where they land in the fuller certification picture is
+          one company's equipment. Where they land in the fuller certification picture is
           covered in our{" "}
           <Link href="/resources/solar-certifications-by-job-role">
             certifications-by-job-role reference table
           </Link>
           , and if you're earlier in the process of sorting out which
-          credentials actually matter for your target role, the{" "}
+          credentials matter for your target role, the{" "}
           <Link href="/resources/nabcep-training-providers-compared">
             NABCEP training provider comparison
           </Link>{" "}

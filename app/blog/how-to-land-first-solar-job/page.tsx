@@ -5,7 +5,7 @@ import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'The 14-Day Plan to Land Your First Solar Job in 2026 | Solar Roles',
   description:
-    'A day-by-day action plan, not career advice. Exactly what to do, say, and send over the next two weeks to get hired as a solar installer — even with zero experience.',
+    'A day-by-day action plan. Exactly what to do, say, and send over the next two weeks to get hired as a solar installer — even with zero experience.',
   keywords: [
     'how to get a solar job',
     'solar installer apprenticeship',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'The 14-Day Plan to Land Your First Solar Job in 2026',
     description:
-      'A day-by-day action plan, not career advice. Exactly what to do, say, and send over the next two weeks to get hired.',
+      'A day-by-day action plan. Exactly what to do, say, and send over the next two weeks to get hired.',
     url: 'https://www.solarroles.com/blog/14-day-plan-first-solar-job',
     siteName: 'Solar Roles',
     type: 'article',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'The 14-Day Plan to Land Your First Solar Job in 2026',
     description:
-      'A day-by-day action plan, not career advice. Exactly what to do, say, and send over the next two weeks to get hired.',
+      'A day-by-day action plan. Exactly what to do, say, and send over the next two weeks to get hired.',
     images: ['https://www.solarroles.com/solar-featured.jpg'],
   },
 }
@@ -153,7 +153,7 @@ export default function ArticlePage() {
              Follow it in order, each step is built on the one before it.
           </p>
 
-          <h2>Days 1–2: Get the one credential that actually moves the needle</h2>
+          <h2>Days 1–2: Get the one credential that moves the needle</h2>
           <div className="day-block">
             <span className="day-label">Day 1</span>
             <p style={{ marginBottom: '0.75rem' }}>
@@ -216,7 +216,7 @@ export default function ArticlePage() {
 
           <h2>Days 7–9: Show up in person to your top 5</h2>
           <p>
-            This is the step that actually separates you from the other 90% of applicants, who only apply online. 
+            This is the step that separates you from the other 90% of applicants, who only apply online. 
             Pick your 5 closest or most promising companies from the list.
           </p>
           <div className="day-block">

@@ -12,7 +12,7 @@ const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['500'], variable: '--f
 export const metadata: Metadata = {
   title: 'Solar Sales: 1099 vs W2, Which Pays More | Solar Roles',
   description:
-    'A straight comparison of 1099 commission-only and W2 base-plus-commission solar sales jobs: what each structure actually pays, and the risk most postings never explain.',
+    'A straight comparison of 1099 commission-only and W2 base-plus-commission solar sales jobs: what each structure pays, and the risks to be aware of.',
   openGraph: {
     title: 'Solar Sales: 1099 vs W2, Which Pays More',
     description: 'Two pay structures, two different risks. Here is what each one really means.',
@@ -89,7 +89,7 @@ export default function SolarSales1099VsW2Page() {
             At the same number of sales, a rep on pure 1099 commission will almost always out-earn the same rep on a W2 base-plus-commission plan. The company is not paying payroll tax, benefits, or a guaranteed base on the 1099 side, and most of that saved cost gets passed back into a higher commission rate.
           </p>
           <p className="mt-4">
-            That is not the real question, though. The real question is whether you can survive the months it takes to become good enough at solar sales for that higher commission rate to matter.
+          The real question is whether you can survive the months it takes to become good enough at solar sales for that higher commission rate to matter.
           </p>
         </section>
 
@@ -102,7 +102,7 @@ export default function SolarSales1099VsW2Page() {
             Two different structures
           </h2>
           <p>
-            This is why one posting reads &ldquo;$100k&ndash;$200k+&rdquo; and another, for what looks like the same role, reads &ldquo;$35k&ndash;$40k base plus commission.&rdquo; They are not describing the same job with different luck. They are describing two different risk arrangements, and the postings rarely say so directly. Scan a few live listings on our{' '}
+            This is why one posting reads &ldquo;$100k&ndash;$200k+&rdquo; and another, for what looks like the same role, reads &ldquo;$35k&ndash;$40k base plus commission.&rdquo; They are describing two different risk arrangements, and the postings rarely say so directly. Scan a few live listings on our{' '}
             <Link href="/solar-sales-jobs" className="underline decoration-[#0B1A2E]/30 underline-offset-2 hover:decoration-[#0B1A2E] transition-colors">
               solar sales jobs
             </Link>{' '}
@@ -157,7 +157,7 @@ export default function SolarSales1099VsW2Page() {
             Closing solar deals can be difficult the first month. Most reps need real time to learn the pitch, the objections, the permitting quirks in their territory, and their own close rate before commissions become reliable. On a pure 1099 plan, that ramp period pays close to nothing.
           </p>
           <p className="mt-4">
-            The $100k&ndash;$200k+ number is real for reps who make it through the ramp. It says nothing about how many reps run out of savings before they get there, or how long that runway needs to be.
+            The $100k&ndash;$200k+ number is real for reps who make it through the ramp. However, it says nothing about how many reps run out of savings before they get there, or how long that runway needs to be.
           </p>
           <p className="mt-4 text-[#0B1A2E] font-medium">
             Before taking a commission-only role, the real question that matters is &ldquo;how many months can I go without a paycheck while I get good at this.&rdquo;
@@ -173,7 +173,7 @@ export default function SolarSales1099VsW2Page() {
             A simple way to think about it
           </h2>
           <p>
-            Ignore the headline numbers for a moment and run your own math against two things: your monthly expenses, and how many months of them you have saved. If a 1099 offer would take three to four months before your first real commission lands, and you have less than that in savings, the higher ceiling does not help you. You will not be there to reach it.
+            Ignore the headline numbers for a moment and run your own math against two things: your monthly expenses, and how many months of them you have saved. If a 1099 offer would take three to four months before your first real commission lands, and you have less than that in savings, the higher ceiling does not help you.
           </p>
           <p className="mt-4">
             A W2 base does the opposite job. It is there to buy you the time to become good enough at the job that the commission side starts to matter.

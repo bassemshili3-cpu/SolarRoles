@@ -5,9 +5,9 @@ import { AffiliateLink } from '@/components/click_affiliate_link';
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/nabcep-pvis-vs-pvip";
 const PAGE_TITLE =
-  "NABCEP PVIS vs PVIP (2026): The Difference NABCEP Never Actually Explains";
+  "NABCEP PVIS vs PVIP (2026): An overview of the main differences";
 const PAGE_DESCRIPTION =
-  "PV Installer Specialist and PV Installation Professional compared side by side — scope, training hours, eligibility, and which one actually fits your role.";
+  "PV Installer Specialist and PV Installation Professional compared side by side: scope, training hours, eligibility, and which one fits your role.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -425,7 +425,7 @@ export default function NabcepPvisVsPvip() {
           </p>
           <p>
             The short version: <strong>PVIP is the broader credential, and it
-            actually contains PVIS.</strong> The PVIP Job Task Analysis draws
+               contains PVIS.</strong> The PVIP Job Task Analysis draws
             on content from all three PV Specialist certifications — PV
             Design Specialist (PVDS), PVIS, and PV Commissioning &amp;
             Maintenance Specialist (PVCMS) — combined. PVIS isn&apos;t a
@@ -459,7 +459,7 @@ export default function NabcepPvisVsPvip() {
             PVIS doesn&apos;t touch design or commissioning at all. If your
             day-to-day is limited to the physical install — running
             conductors, mounting racking, wiring up monitoring gear — PVIS
-            tests exactly that, and nothing beyond it.
+            tests exactly that.
           </p>
 
           <h2 id="compare"><span className="n">03</span>Side-by-Side Comparison</h2>
@@ -523,8 +523,7 @@ export default function NabcepPvisVsPvip() {
           </p>
           <p>
             That&apos;s also why PVIP is the one most often called the
-            &quot;gold standard&quot; in industry materials — not because
-            PVIS is a lesser credential for what it covers, but because PVIP
+            &quot;gold standard&quot; in industry materials —  because PVIP
             is the only one of the two that certifies the full scope
             employers associate with a lead role.
           </p>
@@ -570,7 +569,7 @@ export default function NabcepPvisVsPvip() {
           <h2 id="mistakes"><span className="n">06</span>Common Mistakes</h2>
           <ul className="sr2-downsides">
             <li>Assuming PVIS is a stepping stone to PVIP — it isn&apos;t a prerequisite, and passing it doesn&apos;t reduce PVIP&apos;s training-hour requirement.</li>
-            <li>Choosing PVIS because it&apos;s cheaper and faster, without checking whether the job postings you&apos;re targeting actually ask for PVIP by name.</li>
+            <li>Choosing PVIS because it&apos;s cheaper and faster, without checking whether the job postings you&apos;re targeting ask for PVIP by name.</li>
             <li>Treating the two as interchangeable on a resume — employers hiring for design or commissioning-adjacent roles will notice the gap.</li>
             <li>Not accounting for the fact that PVIP&apos;s Board Eligible pathway has no PVIS equivalent, if you were planning to sit the exam before finishing field hours.</li>
           </ul>

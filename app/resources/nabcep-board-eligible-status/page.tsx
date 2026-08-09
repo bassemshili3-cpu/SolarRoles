@@ -475,7 +475,7 @@ export default function NabcepBoardEligibleStatus() {
           <p>
             The training and exam side of Board Eligible is identical to the
             standard PVIP requirements — this pathway changes the order
-            things happen in, not what NABCEP asks for overall.
+            things happen in.
           </p>
           <ul className="sr2-checklist">
             <li>10 hours of OSHA Outreach Training for the Construction Industry (OSHA 10 or equivalent)</li>
@@ -485,7 +485,7 @@ export default function NabcepBoardEligibleStatus() {
           </ul>
           <p>
             One detail worth flagging: NABCEP also gives you a window to
-            actually sit the exam once you&apos;ve enrolled — one year, or up
+             sit the exam once you&apos;ve enrolled — one year, or up
             to four attempts after your training course end-date, whichever
             comes first. That clock is separate from the three-year
             experience window that starts once you pass.
@@ -570,7 +570,7 @@ export default function NabcepBoardEligibleStatus() {
           <h2 id="mistakes"><span className="n">06</span>Common Mistakes</h2>
           <ul className="sr2-downsides">
             <li>Treating Board Eligible as equivalent to Board Certified when applying for lead installer roles — employers can tell the difference, and some job postings specifically require full certification.</li>
-            <li>Losing track of the 3-year experience clock, since it starts on your exam pass date, not your training completion date.</li>
+            <li>Losing track of the 3-year experience clock, since it starts on your exam pass date.</li>
             <li>Logging installation hours without documenting a decision-making role specifically — general labor hours on a crew don&apos;t automatically count as Project Credits.</li>
             <li>Assuming the Conversion Application happens automatically once hours are logged — it&apos;s a separate submission you have to file.</li>
           </ul>

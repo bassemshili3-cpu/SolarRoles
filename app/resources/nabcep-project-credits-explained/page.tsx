@@ -7,7 +7,7 @@ const PAGE_PATH = "/resources/nabcep-project-credits-explained";
 const PAGE_TITLE =
   "NABCEP Project Credits Explained: How to Get Decision-Making Experience Without Already Having the Job (2026)";
 const PAGE_DESCRIPTION =
-  "What actually counts as a Project Credit, how many installs you really need, and how to document a decision-making role when you're just starting out.";
+  "What counts as a Project Credit, and how to document a decision-making role when you're starting out.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -402,7 +402,7 @@ export default function NabcepProjectCreditsExplained() {
         <p className="sub">{PAGE_DESCRIPTION}</p>
       </div>
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 8 August, 2026</span>
+        <span><strong>Last reviewed:</strong> 1 August, 2026</span>
         <span className="dot" />
         <span className="changes">This page contains affiliate links. We may earn a commission at no additional cost to you</span>
       </div>
@@ -433,7 +433,7 @@ export default function NabcepProjectCreditsExplained() {
           <h2 id="bottleneck" className="sr2-first"><span className="n">01</span>The Real Bottleneck</h2>
           <p>
             Most NABCEP guides walk you through training hours and exam
-            format without dwelling on the part that actually stops people:
+            format without dwelling on the part that stops people:
             the <strong>6 Project Credits</strong> requirement for PVIP and
             PVIS both ask for documented experience in a{" "}
             <strong>decision-making role</strong>. If you&apos;re new to the
@@ -442,7 +442,7 @@ export default function NabcepProjectCreditsExplained() {
             what gets you into the roles where that experience is earned.
           </p>
           <p>
-            This page breaks down what actually counts, how few installs the
+            This page breaks down what counts, how few installs the
             requirement really takes once you look at the credit math, and
             the routes people use to document a qualifying role before
             they&apos;ve landed a lead position.
@@ -450,8 +450,7 @@ export default function NabcepProjectCreditsExplained() {
 
           <h2 id="what-counts"><span className="n">02</span>What Actually Counts as a Credit</h2>
           <p>
-            Project Credits scale with system size, not with hours worked or
-            number of panels touched. Per NABCEP&apos;s own certification
+            Project Credits scale with system size. Per NABCEP&apos;s own certification
             handbook:
           </p>
           <table className="sr2-credtable">
@@ -480,9 +479,10 @@ export default function NabcepProjectCreditsExplained() {
             1kW and be documented properly.
           </p>
 
+
           <h2 id="decision-making"><span className="n">03</span>What "Decision-Making Role" Means</h2>
           <p>
-            This is where most of the confusion actually lives. NABCEP
+            This is where most of the confusion lives. NABCEP
             doesn&apos;t require you to be the installation contractor listed
             on the permit — that helps, but it&apos;s not the only path.
             If your name isn&apos;t on the permit or final inspection, you
@@ -541,7 +541,7 @@ export default function NabcepProjectCreditsExplained() {
               </div>
             </li>
             <li>
-              <div className="t">Target design or commissioning tasks, not just installation</div>
+              <div className="t">Target design or commissioning tasks</div>
               <div className="d">
                 A decision-making role isn&apos;t limited to running the
                 crew. If you review or contribute to system design, or handle

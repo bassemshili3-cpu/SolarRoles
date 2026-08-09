@@ -113,7 +113,7 @@ export default function PaycheckCalculatorPage() {
 
           <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-12">What This Calculator Does Not Include</h2>
           <p className="text-gray-600 leading-relaxed mb-6">
-            This tool provides an estimate, not an exact payroll calculation. It does not account for local or city income taxes, which apply in places like New York City, Philadelphia, and parts of Ohio. It also skips pre-tax deductions like 401(k) contributions or health insurance premiums, tax credits such as the Earned Income Tax Credit or Child Tax Credit, and itemized deductions that exceed the standard deduction. Field-based solar roles often come with per-diem or travel stipends, and sales roles often run on commission. None of that supplemental income is factored in here. For precise payroll figures, consult a tax professional or your employer's HR department.
+            This tool only provides an estimate. It does not account for local or city income taxes, which apply in places like New York City, Philadelphia, and parts of Ohio. It also skips pre-tax deductions like 401(k) contributions or health insurance premiums, tax credits such as the Earned Income Tax Credit or Child Tax Credit, and itemized deductions that exceed the standard deduction. Field-based solar roles often come with per-diem or travel stipends, and sales roles often run on commission. None of that supplemental income is factored in here. For precise payroll figures, consult a tax professional or your employer's HR department.
           </p>
 
           <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-12">Why Your State Matters More Than You Think</h2>
@@ -175,7 +175,7 @@ export default function PaycheckCalculatorPage() {
         {/* ── DISCLAIMER ── */}
         <footer className="mt-16 border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
-            This calculator provides estimates based on 2025/2026 federal tax brackets and simplified state income tax rates. It does not constitute tax, legal, or financial advice. Actual take-home pay may differ based on local taxes, pre-tax deductions, tax credits, and other factors. Consult a qualified tax professional for precise calculations. Solar Roles is not affiliated with the IRS or any state tax authority.
+            This calculator provides estimates based on 2025/2026 federal tax brackets and simplified state income tax rates. Actual take-home pay may differ based on local taxes, pre-tax deductions, tax credits, and other factors. Consult a qualified tax professional for precise calculations. Solar Roles is not affiliated with the IRS or any state tax authority.
           </p>
         </footer>
       </div>

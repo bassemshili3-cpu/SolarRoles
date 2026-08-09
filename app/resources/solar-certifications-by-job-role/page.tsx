@@ -15,7 +15,7 @@ const PAGE_PATH = "/resources/solar-certifications-by-job-role";
 const PAGE_TITLE =
   "Solar Certifications by Job Role (2026): Which Credential for Which Position";
 const PAGE_DESCRIPTION =
-  "A single reference table mapping US solar job roles to the certifications and licenses that actually apply to them: what's legally required, what's most valued by employers, and what's manufacturer-specific.";
+  "A single reference table mapping US solar job roles to the certifications and licenses that apply to them: what's legally required, what's most valued by employers, and what's manufacturer-specific.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -148,12 +148,12 @@ export default function SolarCertificationsByJobRole() {
 
       <h1>Solar Certifications by Job Role</h1>
       <p className="resource-intro">
-        Certification requirements in solar don't come from one source.
+        Certification requirements in solar comes from multiple sources.
         Some are federal (OSHA), some are state-issued licenses, some are
         voluntary industry credentials (NABCEP, ETA), and some are
         manufacturer-specific. This table lines them up against the roles
-        they actually apply to, so you can see what a given position
-        realistically expects before enrolling in anything.
+        they apply to, so you can see what a given position
+        realistically expects before enrolling.
       </p>
 
       <div className="certs-hub-table-wrap">
@@ -267,13 +267,12 @@ export default function SolarCertificationsByJobRole() {
           itself.
         </p>
         <p>
-          The required column varies more than it looks by state. A
-          electrical license requirement in one state can be a
-          non-requirement two states over, covered in more detail in our{" "}
+          An electrical license requirement in one state can be a
+          non-requirement two states over, we covered this in more detail in our{" "}
           <Link href="/resources/nabcep-vs-eta-vs-state-licenses">
             breakdown of NABCEP, ETA, and state licenses
           </Link>
-          . Treat this table as the general framework, and check your
+          . Please treat this table as the general framework, and check your
           specific state before assuming a row applies to you exactly as
           written.
         </p>
@@ -299,7 +298,7 @@ export default function SolarCertificationsByJobRole() {
         <h2>Two ways to reach the same row</h2>
         <p>
           For roles like Lead Installer or Solar Electrician, there's
-          usually more than one path to the required qualifications. Paying
+          several paths to the required qualifications. Paying
           for a NABCEP-prep course is the faster route if you already have
           savings and a related background, covered in our{" "}
           <Link href="/resources/nabcep-training-providers-compared">
@@ -310,8 +309,7 @@ export default function SolarCertificationsByJobRole() {
             Registered Apprenticeship
           </Link>{" "}
           gets you paid while you accumulate the same documented experience,
-          at the cost of a longer, more structured timeline. Both paths can
-          lead to the same row in this table.
+          at the cost of a longer, more structured timeline.
         </p>
       </section>
 
@@ -320,7 +318,7 @@ export default function SolarCertificationsByJobRole() {
         <p>
           Tesla, Enphase, and SolarEdge certifications show up in the
           "optional" column for a reason: they're not a substitute for
-          NABCEP or a state license. How each program actually works, and
+          NABCEP or a state license. How each program works, and
           which ones you can complete on your own versus which ones depend
           on your employer, is covered in our{" "}
           <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">

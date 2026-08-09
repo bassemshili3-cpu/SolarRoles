@@ -109,7 +109,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
         OSHA training is often the first credential a new installer earns,
         it's frequently a hard requirement to get on a commercial roof at
         all, and the hazards it covers (falls, live DC circuits, struck-by
-        incidents) are the ones that actually injure people in this trade.
+        incidents) are the ones that injure people in this trade.
         Here's what the card means, what the rules require on a real roof,
         and who's on the hook when something goes wrong.
       </p>
@@ -136,7 +136,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
       </div>
 
       <section className="resource-section">
-        <h2>OSHA 10 vs OSHA 30: what's actually different</h2>
+        <h2>OSHA 10 vs OSHA 30: what's different</h2>
         <p>
           Both come from the same Outreach Training Program and cover the
           same four hazard categories construction relies on: falls,
@@ -145,7 +145,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
           gives a new installer enough hazard awareness to work safely under
           someone else's supervision. OSHA 30 adds program-level material,
           like how to run a jobsite safety plan and manage subcontractor
-          compliance, aimed at whoever is actually responsible for the crew.
+          compliance, aimed at whoever is responsible for the crew.
         </p>
         <p>
           Neither is legally mandated by federal OSHA itself. In practice,
@@ -157,11 +157,9 @@ export default function OshaSafetyGuideForSolarInstallers() {
           requirement overrides "voluntary" in every practical sense.
         </p>
         <p>
-          One detail that trips people up: OSHA 10 is not a prerequisite for
-          OSHA 30. A new hire who's about to become a crew lead can go
+          OSHA 10 is not a prerequisite for OSHA 30. A new hire who's about to become a crew lead can go
           straight into the 30-hour course. What decides which one you need
-          is your role and your state's rules, not a hierarchy between the
-          two cards.
+          is your role and your state's rules.
         </p>
       </section>
 
@@ -188,8 +186,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
           at seven and a half feet rather than the federal six, and several
           other state plans layer on their own heat or fall requirements on
           top of the federal floor. The safe assumption on any job is to
-          follow whichever standard is stricter, not whichever one is more
-          convenient.
+          follow whichever standard is stricter..
         </p>
         <p>
           Roof edges aren't the only exposure. Skylights and roof hatches
@@ -199,12 +196,12 @@ export default function OshaSafetyGuideForSolarInstallers() {
           panels. OSHA requires any rooftop hatch opening to have guardrails
           on its exposed sides plus a self-closing gate, and unguarded
           skylights need screening or covers rated to hold a worker's
-          weight, not just a warning sign.
+          weight.
         </p>
       </section>
 
       <section className="resource-section">
-        <h2>Electrical hazards specific to PV, not generic construction</h2>
+        <h2>Electrical hazards specific to PV</h2>
         <p>
           This is where solar diverges from standard roofing work, and it's
           the piece most general OSHA training doesn't cover well. A PV
@@ -229,7 +226,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
         <p>
           None of this is covered in real depth inside a 10-hour or even
           30-hour Outreach course. Both are awareness-level programs across
-          all of construction, not a solar-specific curriculum. Employers
+          all of construction. Employers
           are expected to layer task-specific electrical training on top,
           and that layer is where most of the actual PV-related electrical
           safety knowledge gets taught.
@@ -239,8 +236,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
       <section className="resource-section">
         <h2>Employer obligations vs worker obligations</h2>
         <p>
-          The OSH Act puts the legal weight on the employer, not the
-          individual installer, which is worth knowing if you're ever
+          The OSH Act puts the legal weight on the employer, which is worth knowing if you're ever
           unsure who's supposed to catch a problem. Employers are required
           to provide a workplace free of recognized hazards, supply and pay
           for required PPE and fall protection equipment, provide the
@@ -264,7 +260,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
       </section>
 
       <section className="resource-section">
-        <h2>Which card should a solar installer actually get</h2>
+        <h2>Which card should a solar installer get</h2>
         <p>
           For someone entering the trade with no supervisory role yet, OSHA
           10 Construction is the standard starting point, and it's often
@@ -280,13 +276,13 @@ export default function OshaSafetyGuideForSolarInstallers() {
           foreman role rather than an entry-level one. Getting it earlier
           than your role requires isn't wasted effort, since the deeper
           program-management material tends to matter more once you're
-          responsible for other people's safety, not before.
+          responsible for other people's safety.
         </p>
         <p>
-          Either card should be treated as a floor, not a ceiling. It proves
-          general construction hazard awareness. It does not certify you on
+          Either card should be treated as a floor. It proves
+          general construction hazard awareness. However, it does not certify you on
           DC electrical hazards, rapid shutdown systems, or roof-specific PV
-          mounting risk, and no employer should treat it as if it does.
+          mounting risk.
         </p>
       </section>
 
@@ -294,7 +290,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
         Regulatory thresholds, program requirements, and state variations
         reflect information available as of mid-2026 and change over time,
         particularly at the state-plan level. This is general safety
-        information, not legal or compliance advice. Confirm current
+        information only. Confirm current
         requirements with OSHA, your state plan, and a qualified safety
         professional before setting jobsite policy.
       </p>

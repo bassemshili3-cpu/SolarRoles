@@ -12,7 +12,7 @@ const PAGE_PATH = "/resources/how-to-get-a-solar-apprenticeship";
 const PAGE_TITLE =
   "How to Land a Solar Installer Apprenticeship (2026): Application, Testing, and Selection";
 const PAGE_DESCRIPTION =
-  "A practical guide to actually getting into a solar apprenticeship: how JATC-style electrical apprenticeships rank and select candidates, what the aptitude test covers, and how employer-run and state-registered programs differ.";
+  "A practical guide to getting into a solar apprenticeship: how JATC-style electrical apprenticeships rank and select candidates, what the aptitude test covers, and how employer-run and state-registered programs differ.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -113,7 +113,7 @@ export default function HowToGetASolarApprenticeship() {
       <p className="resource-intro">
        Here is a practical guide to help you find 
       open solar apprenticeship slots, and see what 
-      selection committees are actually screening for
+      selection committees are screening for
       </p>
 
       <div className="resource-table-scroll">
@@ -143,9 +143,7 @@ export default function HowToGetASolarApprenticeship() {
           If your solar apprenticeship route runs through an electrical
           license, like Oregon's Limited Renewable Energy Technician track,
           you're applying through a Joint Apprenticeship Training Committee
-          structure shared with the broader electrical trades. That process
-          is formal, tested, and ranked, and it exists whether or not the
-          specific opening is solar-focused.
+          structure shared with the broader electrical trades. 
         </p>
         <p>
           Employer-run and state-registered solar apprenticeships, like
@@ -159,7 +157,7 @@ export default function HowToGetASolarApprenticeship() {
       </section>
 
       <section className="resource-section">
-        <h2>What the JATC aptitude test actually covers</h2>
+        <h2>What the JATC aptitude test covers</h2>
         <p>
           Programs that use the standard electrical apprenticeship test
           battery (often referred to by its old name, the NJATC test, now
@@ -186,7 +184,7 @@ export default function HowToGetASolarApprenticeship() {
           Passing the test and doing well in the interview doesn't mean
           immediate acceptance. You get scored and placed on an eligibility
           list, sometimes valid for up to two years, and offers go out in
-          rank order as apprenticeship slots actually open up. A strong
+          rank order as apprenticeship slots open up. A strong
           interview score gets you a good position on that list; it doesn't
           guarantee a start date.
         </p>
@@ -202,10 +200,9 @@ export default function HowToGetASolarApprenticeship() {
       </section>
 
       <section className="resource-section">
-        <h2>What actually moves your ranking up</h2>
+        <h2>What moves your ranking up</h2>
         <p>
-          Documented work experience carries real weight, and not just as a
-          tiebreaker. Several JATC locals exempt applicants with roughly
+          Documented work experience carries real weight. Several JATC locals exempt applicants with roughly
           2,000 to 4,000 hours of related electrical construction
           experience from the minimum aptitude test score requirement
           entirely, though they're still required to sit for the test so
@@ -229,7 +226,7 @@ export default function HowToGetASolarApprenticeship() {
       </section>
 
       <section className="resource-section">
-        <h2>Where to actually apply</h2>
+        <h2>Where to apply</h2>
         <p>
           Apprenticeship.gov's Job Finder is the closest thing to a
           national search tool, pulling listings tied to registered

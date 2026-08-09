@@ -132,7 +132,7 @@ export default async function DataCenterPage() {
           </h1>
           <p className="text-gray-500 max-w-2xl mx-auto">
             Live statistics pulled from {totalJobs.toLocaleString('en-US')} active job listings across the United States.
-            Every number on this page is computed from real postings in our database, not estimates or projections.
+            Every number on this page is computed from real postings in our database.
             Updated daily.
           </p>
         </header>
@@ -337,7 +337,7 @@ export default async function DataCenterPage() {
           <p className="text-xs text-gray-400 text-center max-w-2xl mx-auto">
             All data is computed from active job listings in the Solar Roles database sourced from third-party APIs.
             Salary figures reflect listed annual compensation ($20k–$600k range) and may not include bonuses, equity, or benefits.
-            Numbers update daily and represent a snapshot, not a comprehensive census of the US labor market.
+            Numbers update daily and represent a snapshot.
           </p>
         </footer>
 

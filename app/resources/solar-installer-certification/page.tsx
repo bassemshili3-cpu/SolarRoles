@@ -1250,7 +1250,7 @@ level.
 
           <p>
 
-            The next jump, from PVA to PVIP, is what separates lead installer pay from crew installer pay. PVIP holders typically land in the $60-75k range — in line with BLS data showing the top 25% of solar PV installers earning $60k+ annually, with the highest 10% clearing $80k. Real listing data, not a marketing estimate — see the breakdown on our{" "}
+            The next jump, from PVA to PVIP, is what separates lead installer pay from crew installer pay. PVIP holders typically land in the $60-75k range — in line with BLS data showing the top 25% of solar PV installers earning $60k+ annually, with the highest 10% clearing $80k. Real listing data — see the breakdown on our{" "}
 
             <Link href="/data/salaries/lead-solar-installer">
 

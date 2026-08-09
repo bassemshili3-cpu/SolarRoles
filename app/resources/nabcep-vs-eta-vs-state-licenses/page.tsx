@@ -258,14 +258,14 @@ export default function NabcepVsEtaVsStateLicenses() {
           permitting office. But if you plan to specialize in a specific
           brand of equipment, particularly battery storage systems like
           Powerwall or Enphase's IQ Battery, the manufacturer certification
-          is often what actually gets you the install jobs and warranty
+          is often what gets you the install jobs and warranty
           eligibility, regardless of what other credentials sit on your
           resume.
         </p>
       </section>
 
       <section className="resource-section">
-        <h2>How these actually stack for a real career</h2>
+        <h2>How these stack for a real career</h2>
         <p>
           Someone building a serious solar installation career in the US
           typically ends up with a combination, not a single credential.

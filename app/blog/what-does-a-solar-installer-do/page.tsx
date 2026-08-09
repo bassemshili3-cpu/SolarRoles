@@ -314,8 +314,7 @@ export default function Page() {
           <section id="tools-skills">
             <h2>Tools and skills you actually use</h2>
             <p>
-              The skills employers screen for on day one are practical, not
-              academic. Here&rsquo;s what shows up on a real job site.
+              The skills employers screen for on day one are practical. Here&rsquo;s what shows up on a real job site.
             </p>
           </section>
         </div>

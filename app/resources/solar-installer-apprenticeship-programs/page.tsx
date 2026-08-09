@@ -13,7 +13,7 @@ interface ProgramRow {
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/solar-installer-apprenticeship-programs";
 const PAGE_TITLE =
-  "Solar Installer Apprenticeships (2026): How Registered Apprenticeship Programs Actually Work";
+  "Solar Installer Apprenticeships (2026): How Registered Apprenticeship Programs Work";
 const PAGE_DESCRIPTION =
   "A standalone guide to paid, earn-while-you-learn apprenticeship pathways for solar PV installers in the US: how Registered Apprenticeship Programs work, why solar installer isn't officially apprenticeable yet, and how the IRA tax credit changed employer incentives.";
 
@@ -110,7 +110,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <h1>Solar Installer Apprenticeships: How They Actually Work</h1>
+      <h1>How Solar Installer Apprenticeships Work</h1>
       <p className="resource-intro">
        A Registered Apprenticeship pays you while you train, which matters a great deal if a
         NABCEP-approved course running several hundred dollars isn't
@@ -171,19 +171,18 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <section className="resource-section">
         <h2>The IRA apprenticeship requirement</h2>
         <p>
-          Apprenticeships existed in solar before this, just unevenly.
-          What changed the math for a lot of employers is the Inflation
+          Apprenticeships existed in solar before this, but unevenly.
+          What changed the thing for a lot of employers is the Inflation
           Reduction Act's labor provisions. Solar and storage projects over
-          1 megawatt have to source a minimum share of construction labor
+          1 megawatt now have to source a minimum share of construction labor
           hours from registered apprentices to qualify for the full federal
           tax credit, a threshold that started at 12.5 percent and stepped
           up to 15 percent. For an EPC contractor chasing utility-scale
-          work, standing up a real apprenticeship pipeline stopped being
-          a nice-to-have and became a direct lever on how much of the credit
-          they can actually claim.
+          work, standing up a real apprenticeship pipeline became a direct
+          lever on how much of the credit they can claim.
         </p>
         <p>
-          That's useful context for a job seeker, not just industry trivia:
+          That's useful context for a job seeker:
           it explains why apprenticeship openings have been showing up more
           at utility-scale EPCs specifically, rather than spread evenly
           across residential installers who aren't chasing that credit
@@ -192,9 +191,9 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </section>
 
       <section className="resource-section">
-        <h2>What a program actually looks like day to day</h2>
+        <h2>What a program looks like day to day</h2>
         <p>
-          Structure varies by sponsor, but the shape repeats: a mix of paid
+          Structure varies by sponsor: a mix of paid
           on-the-job training under a mentor, plus classroom or online
           instruction covering electrical fundamentals, NEC compliance, and
           safety. ReVision Energy's four-year program, for example, splits
@@ -207,20 +206,18 @@ export default function SolarInstallerApprenticeshipPrograms() {
         </p>
         <p>
           Pay typically starts below a fully qualified installer's wage and
-          steps up on a schedule as hours and competencies accumulate,
-          which is the entire point: you're being paid to become qualified,
-          not paying tuition to prove you already are.
+          steps up on a schedule as hours and competencies accumulate. 
+         
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Apprenticeship vs. paying for NABCEP training up front</h2>
         <p>
-          These aren't really competing paths so much as different starting
-          points that can converge. An apprenticeship gets you paid,
+          These are starting points that can converge. An apprenticeship gets you paid,
           supervised field hours from day one, which is exactly the kind of
-          documented experience NABCEP's Experience Pathway asks for. Many
-          apprentices end up sitting for a NABCEP Associate or Installation
+          documented experience NABCEP's Experience Pathway asks for.
+           Many apprentices end up sitting for a NABCEP Associate or Installation
           Professional exam anyway, using the apprenticeship's hours and
           classroom instruction as the preparation instead of a separate
           paid course.
@@ -228,21 +225,18 @@ export default function SolarInstallerApprenticeshipPrograms() {
         <p>
           The tradeoff is speed and flexibility. Apprenticeships run for
           years on a fixed structure with a defined sponsor and location. A
-          paid NABCEP prep course can be finished in weeks, on your own
-          schedule, if you already have some construction or electrical
-          background and cash to cover it. Someone with savings and a
-          related background may move faster through paid training; someone
-          without either usually comes out ahead going the paid,
+          paid NABCEP prep course can be finished in weeks, if you already 
+          have some construction or electrical background and cash to cover it.
+           Someone with savings and a related background may move faster through 
+           paid training; someone without either usually comes out ahead going the paid &
           supervised route instead.
         </p>
       </section>
 
       <section className="resource-section">
-        <h2>Where these programs actually exist</h2>
+        <h2>Where these programs exist</h2>
         <p>
-          There's no single national job board for solar apprenticeship
-          openings, which is part of why they're underused. In practice
-          they show up through a handful of channels: state apprenticeship
+          In practice they show up through a handful of channels: state apprenticeship
           agencies (Florida and Oregon both run registered programs
           directly), IBEW union locals for the electrical-track route,
           employer-run programs at larger regional installers like ReVision
@@ -257,14 +251,14 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <section className="resource-section">
         <h2>What's next</h2>
         <p>
-          Knowing how to actually get into one of these programs can seem confusing.
+          Knowing how to get into one of these programs can seem confusing.
           This is why we have created a specific resource: a
           practical guide to finding open solar apprenticeship slots and
-          what selection committees are actually screening for.
+          what selection committees are screening for.
         </p>
         <p>
           <Link href="/resources/how-to-get-a-solar-apprenticeship">
-            Read the full guide: How to Land a Solar Installer Apprenticeship →
+            Read the full guide: How to Land a Solar Installer Apprenticeship
           </Link>
         </p>
       </section>

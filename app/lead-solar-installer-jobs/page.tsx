@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Lead Solar Installer Jobs | Foreman & Crew Lead Positions',
-  description: 'Lead solar installer and foreman positions across the United States. Crew leadership roles with pay ranges, certification requirements, and what the job actually involves day to day.',
+  description: 'Lead solar installer and foreman positions across the United States. Crew leadership roles with pay ranges, certification requirements, and what the job involves day to day.',
   keywords: 'lead solar installer jobs, solar foreman jobs, solar crew lead, installation supervisor solar, solar installation foreman, nabcep installation professional jobs',
   openGraph: {
     title: 'Lead Solar Installer Jobs | Now Hiring Nationwide',
@@ -67,16 +67,33 @@ const leadRoles = [
 ]
 
 const certifications = [
-  { name: 'NABCEP PV Installation Professional', description: "The credential most employers expect at this level, not just prefer. It requires documented field experience plus a technical exam, and signals you can be trusted to sign off on a crew's work." },
-  { name: 'OSHA 30', description: "The standard for supervisory roles. Covers a broader range of jobsite hazards than OSHA 10 and is often required specifically for anyone directing other workers on site." },
-  { name: 'Competent Person (Fall Protection)', description: "OSHA requires a designated competent person to inspect fall protection systems and stop unsafe work. Lead installers are frequently the ones holding this designation on a residential or commercial crew." },
-  { name: 'Electrical License', description: "Not universal, but increasingly common at the lead level, especially for crews doing their own final connections. A licensed electrician running the crew removes a dependency on a separate electrician showing up for hookup." },
-  { name: 'First Aid / CPR', description: "Commonly required alongside OSHA 30 for whoever is designated crew lead, since they're the one responsible for handling an on-site injury before anyone else arrives." },
+  {
+    name: 'NABCEP PV Installation Professional',
+    href: 'certifications/nabcep-pv-installation-professional',
+    description: "The credential most employers expect at this level, not just prefer. It requires documented field experience plus a technical exam, and signals you can be trusted to sign off on a crew's work.",
+  },
+  {
+    name: 'OSHA 30',
+    href: 'certifications/osha-30',
+    description: "The standard for supervisory roles. Covers a broader range of jobsite hazards than OSHA 10 and is often required specifically for anyone directing other workers on site.",
+  },
+  {
+    name: 'Competent Person (Fall Protection)',
+    description: "OSHA requires a designated competent person to inspect fall protection systems and stop unsafe work. Lead installers are frequently the ones holding this designation on a residential or commercial crew.",
+  },
+  {
+    name: 'Electrical License',
+    description: "Not universal, but increasingly common at the lead level, especially for crews doing their own final connections. A licensed electrician running the crew removes a dependency on a separate electrician showing up for hookup.",
+  },
+  {
+    name: 'First Aid / CPR',
+    description: "Commonly required alongside OSHA 30 for whoever is designated crew lead, since they're the one responsible for handling an on-site injury before anyone else arrives.",
+  },
 ]
 
 const faqs = [
   {
-    question: 'What does a lead installer actually do that a regular installer doesn\'t?',
+    question: 'What does a lead installer do that a regular installer doesn\'t?',
     answer: "Assigns work to the rest of the crew, checks racking and wiring against code before it's covered up, and is the point of contact for the customer, the inspector, or the project manager. On a residential crew, the lead is also usually still installing panels alongside everyone else.",
   },
   {
@@ -172,15 +189,23 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Award className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Certifications That Matter</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            At the lead level, certifications shift from "nice to have" to something employers actually screen for. These are the ones that come up most often in lead installer and foreman postings.
+            At the lead level, certifications shift from "nice to have" to something employers screen for. These are the ones that come up most often in lead installer and foreman postings.
           </p>
           <div className="space-y-4">
-            {certifications.map((cert, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-xl p-5">
-                <p className="font-semibold text-gray-900 mb-1">{cert.name}</p>
-                <p className="text-gray-600 text-sm">{cert.description}</p>
-              </div>
-            ))}
+          {certifications.map((cert, index) => (
+  <div key={index} className="bg-white border border-gray-200 rounded-xl p-5">
+    <p className="font-semibold text-gray-900 mb-1">
+      {cert.href ? (
+        <a href={cert.href} className="text-blue-700 hover:underline">
+          {cert.name}
+        </a>
+      ) : (
+        cert.name
+      )}
+    </p>
+    <p className="text-gray-600 text-sm">{cert.description}</p>
+  </div>
+))}
           </div>
         </section>
 

@@ -147,16 +147,16 @@ export default function CertificationPage({ params }: PageProps) {
           <p className="text-white/80 mt-6 text-lg max-w-2xl leading-relaxed">
             {cert.acronymExpansion}
           </p>
-          <div className="flex flex-wrap gap-2 mt-5">
-            {cert.forRoles.map(role => (
-              <span
-                key={role}
-                className="text-xs font-bold px-3 py-1 rounded-full bg-[#F5B819] text-[#0B1A2E]"
-              >
-                {role}
-              </span>
-            ))}
-          </div>
+<div className="flex flex-wrap gap-2 mt-5">
+  {cert.forRoles.map(role => (
+    <span
+      key={role.name}
+      className="text-xs font-bold px-3 py-1 rounded-full bg-[#F5B819] text-[#0B1A2E]"
+    >
+      {role.name}
+    </span>
+  ))}
+</div>
         </div>
       </section>
 
@@ -218,21 +218,31 @@ export default function CertificationPage({ params }: PageProps) {
           </Section>
 
           {/* ── CAREER PATHS ────────────────────────────────── */}
-          <Section id="career-paths" title="Careers it unlocks">
-            <p className="text-gray-600 leading-relaxed mb-4">
-              In solar specifically, this credential is most relevant for:
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {cert.careerPaths.map(role => (
-                <span
-                  key={role}
-                  className="text-sm font-semibold px-4 py-2 rounded-full bg-[#0B1A2E] text-white"
-                >
-                  {role}
-                </span>
-              ))}
-            </div>
-          </Section>
+         <Section id="career-paths" title="Careers it unlocks">
+  <p className="text-gray-600 leading-relaxed mb-4">
+    In solar specifically, this credential is most relevant for:
+  </p>
+  <div className="flex flex-wrap gap-2">
+    {cert.careerPaths.map(role => (
+      role.href ? (
+        <Link
+          key={role.name}
+          href={role.href}
+          className="text-sm font-semibold px-4 py-2 rounded-full bg-[#0B1A2E] text-white hover:bg-[#0B1A2E]/80 transition-colors"
+        >
+          {role.name}
+        </Link>
+      ) : (
+        <span
+          key={role.name}
+          className="text-sm font-semibold px-4 py-2 rounded-full bg-[#0B1A2E] text-white"
+        >
+          {role.name}
+        </span>
+      )
+    ))}
+  </div>
+</Section>
 
           {/* ── REQUIREMENTS ────────────────────────────────── */}
           <Section id="requirements" title="Requirements">

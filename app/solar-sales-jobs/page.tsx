@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import { Phone, Home, DollarSign, ShieldCheck, Award, Users, TrendingUp } from 'lucide-react'
+import { Phone, Home, DollarSign, ShieldCheck, Award, Users, TrendingUp, Scale } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 
 
@@ -72,7 +72,7 @@ const faqs = [
     answer: "Most postings combine a modest base with commission that makes up the majority of total pay, though the ratio varies a lot by company and channel. Pure-commission D2D roles exist, but salaried-with-commission structures are more common for in-home and inside sales.",
   },
   {
-    question: 'How much can top performers actually earn?',
+    question: 'How much can top performers earn?',
     answer: "Top D2D and in-home reps commonly clear $100,000 to $150,000+ in strong markets, since commission is usually paid per watt or per system rather than capped. Mid-performers land well below that, the spread between top and median earners is wider in solar sales than in most sales jobs.",
   },
   {
@@ -194,6 +194,19 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
           </div>
         </section>
 
+<section className="mt-20">
+  <div className="flex items-center gap-3 mb-6"><Scale className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">1099 vs. W2: Which Pay Structure Fits You</h2></div>
+  <p className="text-gray-600 mb-4 max-w-4xl">
+    Not every solar sales role pays the same way. Some companies bring reps on as 1099 independent contractors, commission-only, full control over your schedule, no benefits, and you cover your own taxes. Others hire W2, with a base salary plus commission, standard payroll withholding, and access to benefits, but usually less schedule flexibility and a lower commission ceiling.
+  </p>
+  <p className="text-gray-600 max-w-4xl">
+    The right structure depends on how much income volatility you can absorb and whether benefits matter more than a higher earning ceiling. We break down the real differences, tax implications, and how to tell which one a posting is offering, in our{' '}
+    <a href="/resources/solar-sales-1099-vs-w2-pay" className="text-green-700 font-semibold underline hover:text-green-800">
+      1099 vs. W2 solar sales pay guide
+    </a>.
+  </p>
+</section>
+
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
@@ -220,7 +233,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
 
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Pay ranges reflect typical figures reported across industry job postings, not a Bureau of Labor Statistics occupation, solar sales isn't tracked as a distinct category. Actual compensation varies significantly by employer, lead source, region, and individual performance. Verify licensing requirements directly with your state.
+            <strong>Disclaimer:</strong> Pay ranges reflect typical figures reported across industry job postings. Solar sales isn't tracked as a distinct category. Actual compensation varies significantly by employer, lead source, region, and individual performance. Verify licensing requirements directly with your state.
           </p>
         </section>
       </div>

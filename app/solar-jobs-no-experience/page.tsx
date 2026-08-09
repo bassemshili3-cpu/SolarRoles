@@ -10,7 +10,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Solar Jobs No Experience Required | Entry-Level Installer Openings',
-  description: 'Entry-level solar jobs that don\u2019t require prior experience, helper, apprentice, and trainee roles across the United States. Pay ranges, what employers actually screen for, and what the work involves.',
+  description: 'Entry-level solar jobs that don\u2019t require prior experience, helper, apprentice, and trainee roles across the United States. Pay ranges, what employers screen for, and what the work involves.',
   keywords: 'solar jobs no experience, entry level solar installer jobs, solar apprentice jobs, solar helper jobs, no experience solar technician jobs, solar trainee jobs',
   openGraph: {
     title: 'Solar Jobs No Experience Required | Now Hiring Nationwide',
@@ -69,7 +69,7 @@ const entryRoles = [
 const faqs = [
   {
     question: 'Can you really get a solar job with zero experience?',
-    answer: "Yes, helper, apprentice, and warehouse roles are built for it. Most crews expect to train new hires on the actual installation work; what they're screening for going in is reliability, physical ability, and a willingness to learn, not a resume.",
+    answer: "Yes, helper, apprentice, and warehouse roles are built for it. Most crews expect to train new hires on the actual installation work; what they're screening for going in is reliability, physical ability, and a willingness to learn.",
   },
   {
     question: 'Do I need any certifications before applying?',
@@ -80,7 +80,7 @@ const faqs = [
     answer: "Helper and apprentice roles commonly start around $17 to $20 an hour, with pay stepping up as you take on more of the install independently. For comparison, the Bureau of Labor Statistics put the national median for solar PV installers overall at $51,860 as of May 2024.",
   },
   {
-    question: 'What does the job actually involve day to day?',
+    question: 'What does the job involve day to day?',
     answer: "Mostly physical work: carrying and staging panels and racking, running conduit, cleanup, and handing tools to more experienced installers. Expect full days outdoors, on rooftops or ground-mount sites, in varying weather.",
   },
   {
@@ -89,7 +89,7 @@ const faqs = [
   },
   {
     question: 'Is a background in construction or electrical work helpful?',
-    answer: "It helps but isn't required, plenty of postings list it as preferred, not mandatory. General comfort with hand and power tools, working at heights, and physical labor matters more than the specific trade background.",
+    answer: "It helps but isn't required, plenty of postings list it as preferred but not mandatory. General comfort with hand and power tools, working at heights, and physical labor matters more than the specific trade background.",
   },
 ]
 
@@ -185,7 +185,7 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Entry-Level Solar Pay</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Entry-level pay sits below the national median for solar PV installers overall, which the Bureau of Labor Statistics put at $51,860 as of May 2024, that figure reflects licensed, experienced installers, not day-one hires.
+            Entry-level pay sits below the national median for solar PV installers overall, which the Bureau of Labor Statistics put at $51,860 as of May 2024, that figure reflects licensed, experienced installers.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">

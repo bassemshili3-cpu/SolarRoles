@@ -7,7 +7,7 @@ const PAGE_PATH = "/resources/nabcep-pvip-pass-rate";
 const PAGE_TITLE =
   "NABCEP PVIP Pass Rate, Retake Cost & Why It Feels So Hard (2026)";
 const PAGE_DESCRIPTION =
-  "The real PVIP pass rate, what the $275 retake actually costs you, and why the exam feels harder than the material — plus how to prepare so you don't need a second attempt.";
+  "The real PVIP pass rate, what the $275 retake costs you, and why the exam feels harder than the material — plus how to prepare so you don't need a second attempt.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -404,8 +404,7 @@ export default function NabcepPvipPassRate() {
           <div className="sr2-reassure">
             <strong>The short version:</strong> a large share of the field
             fails on the first attempt. That&apos;s a statement about how the
-            exam is built — broad, code-heavy, scenario-based — not about
-            who passes it.
+            exam is built: broad, code-heavy, and scenario-based.
           </div>
 
           <h2 id="passrate"><span className="n">02</span>What the Pass Rate Actually Means</h2>
@@ -440,7 +439,7 @@ export default function NabcepPvipPassRate() {
             </div>
             <div className="sr2-fact">
               <div className="v amber">70/99</div>
-              <div className="l">Scaled passing score — not a raw percentage of questions correct</div>
+              <div className="l">Scaled passing score</div>
             </div>
           </div>
           <p>
@@ -493,7 +492,7 @@ export default function NabcepPvipPassRate() {
             separate first-time passes from retakes:
           </p>
           <ul>
-            <li>Studying directly against NABCEP&apos;s published PVIP Job Task Analysis, not a generic solar curriculum</li>
+            <li>Studying directly against NABCEP&apos;s published PVIP Job Task Analysis</li>
             <li>Practicing with timed, scored practice exams rather than just reading material — the 4-hour time pressure catches people who&apos;ve only studied untimed</li>
             <li>Reviewing 2017 NEC code sections specifically, since that&apos;s the edition the exam is still based on regardless of what&apos;s current in the field</li>
             <li>Treating commissioning and troubleshooting scenarios as their own study category, even if that&apos;s not the part of the job you do day to day</li>
@@ -531,8 +530,7 @@ export default function NabcepPvipPassRate() {
           <p className="sr2-fine">
             NABCEP is an independent certification body and is not affiliated
             with Solar Roles. Pass rates cited here reflect figures commonly
-            reported by training providers and industry publications, not an
-            official statistic published by NABCEP. Exam fees, retake costs,
+            reported by training providers and industry publications. Exam fees, retake costs,
             and format details are set by NABCEP and can change — always
             confirm current requirements at nabcep.org before scheduling an
             exam.

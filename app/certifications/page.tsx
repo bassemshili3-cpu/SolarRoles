@@ -6,14 +6,14 @@ import { CERTIFICATIONS } from './[slug]/certifications-data'
 export const metadata: Metadata = {
   title: 'Solar Certifications | Solar Roles',
   description:
-    'NABCEP, OSHA, and the other certifications that matter for solar installer jobs — what they are, who needs them, and where to get them.',
+    'NABCEP, OSHA, and the other certifications that matter for solar jobs — how to get nabcep certified, what they are, who needs them, and where to get them.',
 }
 
 // The featured certs shown as the "bouquin" diploma visuals.
 // ⚠️  'nabcep-pvip' is a placeholder slug — vérifie qu'il correspond bien
 //     à celui utilisé dans ton fichier certifications-data.ts (ex: 'nabcep-pvip',
 //     'pvip', ou 'nabcep-pv-installation-professional' selon ta convention).
-const FEATURED_SLUGS = ['nabcep-pv-associate', 'nabcep-pv-installation-professional', 'osha-10', 'osha-30']
+const FEATURED_SLUGS = ['nabcep-pv-associate', 'nabcep-pv-installation-professional', 'osha-10', 'osha-30', 'nabcep-pv-installer-specialist']
 
 type Cert = (typeof CERTIFICATIONS)[number]
 
@@ -63,8 +63,8 @@ export default function CertificationsIndex() {
             Solar Certifications
           </span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-5">
-            Get the certifications solar employers{' '}
-            <span className="text-[#F5B819]">actually ask for.</span>
+            Get the top certifications solar employers{' '}
+            <span className="text-[#F5B819]">value</span>
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
             What each one is, which role it's for, and where we'd go to get it.
@@ -77,15 +77,13 @@ export default function CertificationsIndex() {
         <section className="relative bg-gradient-to-b from-white to-gray-50 py-20 px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <p className="text-xs font-bold tracking-widest text-[#F5B819] uppercase mb-2">
-                Top Certifications
+              <p className="text-sl font-bold tracking-widest text-[#F5B819] uppercase mb-2">
+                Getting Started
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1A2E] mb-3">
-                The certifications that open the most doors
+              <h2 className="text-3xl md:text-2xl font-bold text-[#0B1A2E] mb-3">
+                Click on one of the certifications below to learn everything you have to know before getting started.
               </h2>
-              <p className="text-gray-500 max-w-xl mx-auto">
-                Start with these and you'll qualify for the majority of solar installer roles out there.
-              </p>
+             
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

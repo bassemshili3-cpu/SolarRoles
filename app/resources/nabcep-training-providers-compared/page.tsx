@@ -180,7 +180,7 @@ export default function NabcepTrainingComparison() {
       ))}
 
       <section className="resource-provider">
-        <h2>How to actually choose</h2>
+        <h2>How to choose</h2>
         <p>
           If money and speed matter most, and you learn fine on your own,
           HeatSpring's boot camp is hard to beat on price, and the retake

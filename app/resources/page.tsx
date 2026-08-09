@@ -76,12 +76,6 @@ const CATEGORIES = [
     icon: Briefcase,
     href: "/resources/solar-installer-apprenticeship-programs",
   },
-  {
-    label: "Q&A",
-    desc: "Ask the community",
-    icon: HelpCircle,
-    href: "/resources#qa",
-  },
 ];
 
 // Liste unique — une seule source de vérité, plus de duplication
@@ -153,12 +147,108 @@ const ALL_RESOURCES: ResourceItem[] = [
   {
     title: "How to Land a Solar Apprenticeship",
     description:
-      "The application, testing, and ranking process, and what actually moves you up the list.",
+      "The application, testing, and ranking process, and what moves a solar candidate up the list.",
     href: "/resources/how-to-get-a-solar-apprenticeship",
     icon: "Briefcase",
     type: "guide",
     category: "Apprenticeships",
   },
+
+
+
+  {
+    title: "NABCEP PVIS vs PVIP (2026)",
+    description:
+      "PV Installer Specialist and PV Installation Professional compared side by side: scope, training hours, eligibility, and which one actually fits your role.",
+    href: "/resources/nabcep-pvis-vs-pvip",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Side-by-side Review",
+  },
+
+
+
+  {
+    title: "PVIP pass rate",
+    description:
+      "The real PVIP pass rate, what the $275 retake actually costs you, and why the exam feels harder than the material — plus how to prepare so you don't need a second attempt.",
+    href: "/resources/nabcep-pvip-pass-rate",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Certifications & training",
+  },
+
+
+
+
+  {
+    title: "The New path to PVIP",
+    description:
+      "How NABCEP's Board Eligible pathway lets you pass the PVIP exam before you have the field experience, with up to 3 years to convert to full Board Certified status.",
+    href: "/resources/nabcep-board-eligible-status",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Certifications & training",
+  },
+
+
+
+
+  {
+    title: "Nabcep Project Credit Explained",
+    description:
+      "What counts as a Project Credit, and how to document a decision-making role when you're starting out.",
+    href: "/resources/nabcep-project-credits-explained",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Certifications & training",
+  },
+
+
+
+
+
+  {
+    title: "1099 vs w2 pay",
+    description:
+      "A straight comparison of 1099 commission-only and W2 base-plus-commission solar sales jobs: what each structure actually pays, and the risks to be aware of.",
+    href: "/resources/solar-sales-1099-vs-w2-pay",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Side-by-side Review",
+  },
+
+{
+    title: "Solar Installer Certifications",
+    description:
+      "Every solar installer credential and the specifics of each course.",
+    href: "/resources/solar-installer-certification",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Certifications & training",
+  },
+
+  {
+    title: "How to get NABCEP Certified",
+    description:
+      "Learn how to get NABCEP certified in 2026: PV Associate vs PVIP, eligibility, exam format, costs, and a realistic study timeline.",
+    href: "/resources/how-to-get-nabcep-certified",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Certifications & training",
+  },
+
+   {
+    title: "Co",
+    description:
+      "The honest answer on BESS technician requirements: why battery storage isn't a no-experience job like solar, and the two real paths in.",
+    href: "/resources/do-you-need-to-be-an-electrician-for-bess",
+    icon: "Briefcase",
+    type: "guide",
+    category: "Certifications & training",
+  },
+  
+ 
 ];
 
 // Career path nodes - structured like a solar panel wiring diagram.
