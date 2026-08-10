@@ -36,6 +36,12 @@ import { chromium, type Browser, type BrowserContext, type Page } from 'playwrig
 import { isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './types';
+import { STATE_CODE_TO_NAME } from '@/lib/usStates';
+
+const FULL_STATE_NAMES = new Set(
+  Object.values(STATE_CODE_TO_NAME).map((n) => n.toLowerCase())
+);
+
 
 export interface WorkdayCompanySeed {
   tenant: string;   // ex: 'sunrun'
@@ -46,7 +52,8 @@ export interface WorkdayCompanySeed {
 }
 
 const PAGE_SIZE = 20;
-const REQUEST_DELAY_MS = 400; // politesse — Workday a de l'anti-bot (Akamai) sur certains tenants
+const REQUEST_DELAY_MIN_MS = 300;
+const REQUEST_DELAY_MAX_MS = 900; // politesse — Workday a de l'anti-bot (Akamai) sur certains tenants ; plage aléatoire plutôt que fixe pour éviter un pattern de timing trop régulier
 const NAV_TIMEOUT_MS = 30_000;
 const MAX_OFFSET = 5000; // plafond de sécurité (250 pages) au cas où un tenant renvoie des pages en boucle
 
@@ -88,19 +95,76 @@ function normalizeWorkdayLocation(raw: string): string {
   return raw; // ni virgule ni token d'état trouvé — laissé tel quel, sera géré par le fallback détail
 }
 
-function resolveLocation(p: WorkdayJobPosting, detailLocation?: string): string {
-  const raw = p.locationsText ?? p.bulletFields?.[0] ?? '';
+// Certains tenants Workday utilisent bulletFields[0] pour un facet
+// "arrangement de travail" (Field/Remote/Hybrid/Office/...) plutôt que pour
+// la localisation — ex: solvenergy renvoie "Field" à cette position pour
+// les rôles terrain. On refuse ces valeurs connues comme non-localisation
+// plutôt que de les accepter aveuglément.
+const NON_LOCATION_BULLET_VALUES = new Set([
+  'field', 'remote', 'hybrid', 'onsite', 'on-site', 'office',
+  'flexible', 'virtual', 'various', 'various locations',
+]);
 
-  // "N Locations" (ou vide) n'est pas exploitable : on préfère la
-  // localisation renvoyée par l'appel détail (jobPostingInfo.location),
-  // récupérée en même temps que la description.
-  if (/^\d+\s+Location/i.test(raw.trim()) || !raw.trim()) {
-    if (detailLocation) return normalizeWorkdayLocation(detailLocation);
-    return raw;
+function isUsableLocationText(raw: string | undefined): raw is string {
+  if (!raw) return false;
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+  if (/^\d+\s+Location/i.test(trimmed)) return false;
+  if (NON_LOCATION_BULLET_VALUES.has(trimmed.toLowerCase())) return false;
+  return true;
+}
+
+// Dernier recours quand ni locationsText, ni bulletFields, ni l'appel détail
+// ne donnent une localisation exploitable : certains tenants (ex: solvenergy)
+// mettent la vraie localisation entre parenthèses en fin de titre, ex:
+// "Solar Field Service Technician - Level 2 (Tulia, TX)".
+function extractLocationFromTitle(title: string): string | undefined {
+  // "(City, ST)" en fin de titre
+  const paren = title.match(/\(([^()]+,\s*[A-Za-z]{2})\)\s*$/);
+  if (paren) return paren[1].trim();
+
+  // "- City, ST" en fin de titre, sans parenthèses
+  const dashCityState = title.match(/[-–]\s*([^-–,]+,\s*[A-Za-z]{2})\s*$/);
+  if (dashCityState) return dashCityState[1].trim();
+
+  // "- StateFullName" en fin de titre (état seul, pas de ville) — on
+  // valide contre la vraie liste d'états pour ne pas accrocher un suffixe
+  // comme "-EPC" ou "-EPC" dans "High Voltage-EPC".
+  const dashState = title.match(/[-–]\s*([A-Za-z ]+)\s*$/);
+  if (dashState && FULL_STATE_NAMES.has(dashState[1].trim().toLowerCase())) {
+    return dashState[1].trim(); // ex: "Texas" — extractStateFromLocation gère déjà les noms complets
   }
 
-  return normalizeWorkdayLocation(raw);
+  return undefined;
 }
+
+function resolveLocation(p: WorkdayJobPosting, detailLocation?: string): string {
+  if (isUsableLocationText(p.locationsText)) {
+    return normalizeWorkdayLocation(p.locationsText);
+  }
+
+  const bulletRaw = p.bulletFields?.[0];
+  if (isUsableLocationText(bulletRaw)) {
+    return normalizeWorkdayLocation(bulletRaw);
+  }
+
+  if (isUsableLocationText(detailLocation)) {
+    return normalizeWorkdayLocation(detailLocation);
+  }
+
+  const titleLocation = extractLocationFromTitle(p.title);
+  if (titleLocation) {
+    return normalizeWorkdayLocation(titleLocation);
+  }
+
+  if (isRemoteSignal(bulletRaw) || isRemoteSignal(p.locationsText) || isRemoteSignal(detailLocation)) {
+    return 'Remote, US';
+  }
+
+  return p.locationsText || bulletRaw || '';
+}
+
+
 
 interface WorkdayJobPosting {
   title: string;
@@ -221,13 +285,116 @@ async function openWarmedPage(company: WorkdayCompanySeed, context: BrowserConte
     }
   });
 
+  // Filet de diagnostic secondaire : si ce n'est pas une redirection
+  // cross-origin, une CSP stricte bloquant le fetch loggerait une erreur
+  // explicite ici (ex: "Refused to connect to ... because it violates the
+  // following Content Security Policy directive...").
+  page.on('console', (msg) => {
+    if (msg.type() === 'error' && /content security policy|csp|cors/i.test(msg.text())) {
+      console.warn(`[workday] ${company.tenant}/${company.site}: erreur console — ${msg.text()}`);
+    }
+  });
+
+  // Trace toute la chaîne de navigation. Certains tenants renvoient d'abord
+  // vers un interstitiel anti-bot (ex: community.workday.com, observé sur
+  // AES) via une redirection JS déclenchée APRÈS le domcontentloaded initial
+  // — un check d'origine fait juste après le goto() ne le voit donc pas.
+  const navigationLog: string[] = [];
+  page.on('framenavigated', (frame) => {
+    if (frame === page.mainFrame()) navigationLog.push(frame.url());
+  });
+
   await page.goto(careerPageUrl(company), {
     waitUntil: 'domcontentloaded',
     timeout: NAV_TIMEOUT_MS,
   });
-  // laisse le temps aux éventuels scripts anti-bot / hydratation de tourner
-  await page.waitForTimeout(1000);
+
+  // Simule un minimum d'activité humaine avant le premier appel CXS —
+  // délai variable, mouvement de souris, petit scroll — plutôt qu'un
+  // waitForTimeout fixe suivi d'un appel API immédiat, pattern mécanique
+  // facilement repérable par un anti-bot. Ce délai laisse aussi le temps à
+  // un éventuel interstitiel anti-bot de rediriger (ou pas) vers la vraie
+  // page carrière.
+  await humanizePageInteraction(page);
+
+  // Check fait après le warm-up complet — pas juste après le goto() initial
+  // — pour attraper les redirections tardives. Deux signaux distincts d'un
+  // gate anti-bot (pas d'un vrai mur d'authentification — sur un portail
+  // carrière public, parcourir les offres ne devrait jamais exiger de
+  // login ; seul l'apply le ferait) :
+  //  1. Origine différente (ex: interstitiel community.workday.com sur AES)
+  //  2. Même origine mais chemin de login/SSO (ex: /login, /authn, /session)
+  const expectedOrigin = new URL(careerPageUrl(company)).origin;
+  const finalUrl = new URL(page.url());
+  const actualOrigin = finalUrl.origin;
+  const looksLikeAuthRedirect = /\b(login|signin|sign-in|authn|auth|session)\b/i.test(finalUrl.pathname);
+
+  if (actualOrigin !== expectedOrigin || looksLikeAuthRedirect) {
+    const reason = actualOrigin !== expectedOrigin ? 'origine différente' : 'redirection vers login/auth';
+    console.warn(
+      `[workday] ${company.tenant}/${company.site}: page bloquée (${reason}) — ` +
+        `attendu ${expectedOrigin}, obtenu ${page.url()} — chaîne de navigation: ` +
+        `${navigationLog.join(' → ')} — probable gate anti-bot (une vraie page carrière publique ` +
+        `ne devrait jamais exiger de login pour parcourir les offres), entreprise ignorée`
+    );
+    throw new Error(
+      `redirection suspecte vers ${page.url()} (${reason}, probable anti-bot), ` +
+        `impossible de récupérer les postes pour ${company.tenant}/${company.site}`
+    );
+  }
+
   return page;
+}
+
+async function randomDelay(minMs: number, maxMs: number): Promise<void> {
+  const ms = minMs + Math.random() * (maxMs - minMs);
+  await sleep(ms);
+}
+
+/**
+ * Simule un minimum d'activité humaine sur la page après navigation, avant
+ * de commencer les appels fetch in-page. Un contexte fraîchement navigué
+ * qui déclenche immédiatement un appel API avec un délai fixe est lui-même
+ * un signal pour les solutions anti-bot (Akamai, PerimeterX, etc.) — un
+ * vrai visiteur bouge la souris, scroll un peu, et attend une durée variable
+ * avant d'interagir.
+ */
+async function humanizePageInteraction(page: Page): Promise<void> {
+  // Laisse le temps aux scripts anti-bot / hydratation de tourner, avec une
+  // durée variable plutôt qu'un délai fixe et prévisible.
+  await randomDelay(800, 1800);
+
+  try {
+    const viewport = page.viewportSize() ?? { width: 1280, height: 800 };
+
+    // Quelques mouvements de souris en plusieurs étapes plutôt qu'un
+    // téléport direct — Playwright peut simuler des points intermédiaires.
+    const moves = 2 + Math.floor(Math.random() * 2); // 2-3 mouvements
+    for (let i = 0; i < moves; i++) {
+      const x = Math.floor(Math.random() * viewport.width);
+      const y = Math.floor(Math.random() * viewport.height);
+      await page.mouse.move(x, y, { steps: 10 + Math.floor(Math.random() * 15) });
+      await randomDelay(150, 500);
+    }
+
+    // Petit scroll vertical, comme un visiteur qui parcourt la page carrière
+    // avant de chercher un poste.
+    const scrollAmount = 200 + Math.floor(Math.random() * 400);
+    await page.mouse.wheel(0, scrollAmount);
+    await randomDelay(300, 700);
+  } catch {
+    // Ces interactions sont un bonus de discrétion, jamais bloquantes —
+    // si la page a une structure inattendue ou que le scroll échoue, on
+    // continue sans faire échouer tout le run pour ça.
+  }
+
+  await randomDelay(400, 900);
+}
+const REMOTE_BULLET_VALUES = new Set(['remote', 'virtual']);
+
+function isRemoteSignal(raw: string | undefined): boolean {
+  if (!raw) return false;
+  return REMOTE_BULLET_VALUES.has(raw.trim().toLowerCase());
 }
 
 /**
@@ -303,20 +470,30 @@ async function fetchInPageWithRetry<T>(
   throw lastErr;
 }
 
+function assertOnExpectedOrigin(company: WorkdayCompanySeed, page: Page, expectedOrigin: string): void {
+  const actualOrigin = new URL(page.url()).origin;
+  if (actualOrigin !== expectedOrigin) {
+    throw new Error(
+      `[workday] ${company.tenant}/${company.site}: page a dérivé vers ${actualOrigin} ` +
+        `en cours de scraping (probable interstitiel anti-bot déclenché après coup), arrêt`
+    );
+  }
+}
 // ---------------------------------------------------------------------
 // Récupération des postes
 // ---------------------------------------------------------------------
 
-async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promise<WorkdayJobPosting[]> {
-  const seen = new Map<string, WorkdayJobPosting>(); // dédup par externalPath, au cas où une page se répète
+async function fetchAllPostings(
+  company: WorkdayCompanySeed,
+  page: Page,
+  expectedOrigin: string,
+): Promise<WorkdayJobPosting[]> {
+  const seen = new Map<string, WorkdayJobPosting>();
   let offset = 0;
-  // `total` n'est pas fiable page par page (parfois 0 sur une page qui contient
-  // pourtant des postes — probablement un artefact bot-mitigation), mais quand
-  // il se confirme non-nul sur plusieurs pages consécutives c'est le vrai
-  // décompte du tenant. On garde le dernier total non-nul vu comme plafond réel.
   let knownTotal = 0;
 
   while (true) {
+    assertOnExpectedOrigin(company, page, expectedOrigin);
     const result = await fetchInPageWithRetry<WorkdayJobsResponse>(company, page, `${cxsBaseUrl(company)}/jobs`, {
       method: 'POST',
       body: { appliedFacets: {}, limit: PAGE_SIZE, offset, searchText: '' },
@@ -335,30 +512,18 @@ async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promis
       `[workday] ${company.tenant} offset=${offset}: total=${data.total} (known=${knownTotal}), got=${postings.length}`
     );
 
-    // debug ponctuel — dump des clés du premier poste pour identifier
-    // le vrai nom du champ id (jobPostingId semble absent)
     if (offset === 0 && postings[0]) {
       console.log(`[workday] ${company.tenant} keys du 1er posting:`, Object.keys(postings[0]));
     }
 
     let newCount = 0;
     for (const p of postings) {
-      // Clé de dédup robuste : certains tenants renvoient des entrées
-      // sans externalPath (poste retiré, redirection externe, entrée
-      // "malformée" côté Workday). On ne veut pas que plusieurs de ces
-      // entrées invalides s'écrasent entre elles sous la clé `undefined`
-      // (ce qui masquerait silencieusement toutes les autres), donc on
-      // leur donne une clé unique basée sur leur position.
       const key = p.externalPath ?? `__missing-external-path-${offset}-${newCount}`;
       if (!seen.has(key)) {
         seen.set(key, p);
         newCount++;
       }
     }
-
-    // fin réelle : page vide, plus aucun poste nouveau (on boucle sur les
-    // mêmes résultats — arrive quand offset dépasse le total réel), ou
-    // offset qui a rattrapé le total connu et fiable.
     if (postings.length === 0) break;
     if (newCount === 0) {
       console.warn(`[workday] ${company.tenant}: page identique à une page déjà vue à offset=${offset}, arrêt`);
@@ -372,15 +537,12 @@ async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promis
       break;
     }
 
-    await sleep(REQUEST_DELAY_MS);
+    await randomDelay(REQUEST_DELAY_MIN_MS, REQUEST_DELAY_MAX_MS);
   }
 
   const all = Array.from(seen.values());
 
-  // On filtre ici, après dédup, les postings sans externalPath exploitable :
-  // sans lui on ne peut ni récupérer le détail (fetchJobDetail) ni construire
-  // l'URL finale (normalize). Impossible de traiter ces entrées, donc on les
-  // écarte proprement avec un log plutôt que de laisser planter plus loin.
+
   const valid = all.filter((p) => typeof p.externalPath === 'string' && p.externalPath.length > 0);
   const dropped = all.length - valid.length;
   if (dropped > 0) {
@@ -397,19 +559,19 @@ async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promis
 async function fetchJobDetail(
   company: WorkdayCompanySeed,
   page: Page,
-  externalPath: string
+  externalPath: string,
+  expectedOrigin: string,
 ): Promise<{ description: string; location?: string }> {
-  // Filet de sécurité : fetchAllPostings filtre déjà les postings sans
-  // externalPath, mais on garde ce garde-fou ici pour ne jamais planter
-  // sur `.replace` si cette fonction est appelée d'un autre point d'entrée
-  // ou si la logique de filtrage change plus tard.
   if (!externalPath) {
     console.warn(`[workday] ${company.tenant}/${company.site}: externalPath manquant, poste ignoré`);
     return { description: '' };
   }
 
+  assertOnExpectedOrigin(company, page, expectedOrigin);
+
   try {
     const path = externalPath.replace(/^\/job/, '');
+  
     const result = await fetchInPageWithRetry<WorkdayJobDetailResponse>(
       company,
       page,
@@ -428,6 +590,7 @@ async function fetchJobDetail(
 
 export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<NormalizedJob[]> {
   const context = await createCompanyContext();
+  const expectedOrigin = new URL(careerPageUrl(company)).origin;
   let page: Page;
 
   try {
@@ -440,7 +603,7 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   let postings: WorkdayJobPosting[];
   try {
-    postings = await fetchAllPostings(company, page);
+    postings = await fetchAllPostings(company, page, expectedOrigin);
   } catch (err) {
     console.warn(`[workday] ${company.tenant}/${company.site}: fetch échoué — ${(err as Error).message}`);
     await context.close();
@@ -453,8 +616,8 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   try {
     for (const p of postings) {
-      const detail = await fetchJobDetail(company, page, p.externalPath);
-      await sleep(REQUEST_DELAY_MS);
+      const detail = await fetchJobDetail(company, page, p.externalPath, expectedOrigin);
+      await randomDelay(REQUEST_DELAY_MIN_MS, REQUEST_DELAY_MAX_MS);
 
       if (isSolarInstallerRole(p.title, detail.description)) {
         results.push(normalize(company, p, detail.description, detail.location));
@@ -466,6 +629,7 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   return results;
 }
+
 
 function normalize(
   company: WorkdayCompanySeed,

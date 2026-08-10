@@ -83,7 +83,7 @@ export default function SolarInstallerVsElectricianTexas() {
         <article className="sr2-article">
           <h2 id="gap"><span className="n">01</span>The Ad vs the Statute</h2>
           <p>
-Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer jobs</Link> in Texas are saying that crew members can handle DC side work such as racking, installing modules, and string wiring without an electrical license. A licensed electrician then takes care of the AC interconnection. But Texas law does not actually define the work that way.
+Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer jobs</Link> in Texas are saying that crew members can handle DC side work such as racking, installing modules, and string wiring without an electrical license. A licensed electrician then takes care of the AC interconnection. But Texas law does not define the work that way.
 
           </p>
 
