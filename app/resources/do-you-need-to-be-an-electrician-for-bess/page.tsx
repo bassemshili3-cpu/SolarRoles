@@ -72,10 +72,10 @@ export default function DoYouNeedToBeAnElectricianForBess() {
             <div className="sr2-toc-head">Table of Contents</div>
             <ol className="sr2-toc-list">
               <li><a href="#answer">Quick Answer</a></li>
-              <li><a href="#requirements">What BESS Employers Ask For</a></li>
+              <li><a href="#requirements">BESS Employer Requirements</a></li>
               <li><a href="#why">Why BESS Isn&apos;t Solar&apos;s Open Door</a></li>
               <li><a href="#paths">Two Real Paths In</a></li>
-              <li><a href="#nabcep">The NABCEP Certification Confusion</a></li>
+              <li><a href="#nabcep">The Confusion around NABCEP Certification</a></li>
               <li><a href="#pay">Realistic Pay by Stage</a></li>
               <li><a href="#next">Recommended Next Steps</a></li>
             </ol>
@@ -94,9 +94,9 @@ export default function DoYouNeedToBeAnElectricianForBess() {
             installer roles.
           </p>
 
-          <h2 id="requirements"><span className="n">02</span>What BESS Employers Ask For</h2>
+          <h2 id="requirements"><span className="n">02</span>BESS Employer Requirements</h2>
           <p>
-            Pulled straight from active listings: a BESS Technician I posting from a major operator asks for
+            A BESS Technician I posting from a major operator asks for
             a high school diploma <em>or</em> a diploma in an electrical
             program covering AC/DC voltage, one-line and three-line
             schematics, and operation of breakers, disconnects, transformers,
@@ -142,7 +142,7 @@ export default function DoYouNeedToBeAnElectricianForBess() {
             are co-located with solar and staffed by the same contractors.
           </p>
 
-          <h2 id="nabcep"><span className="n">05</span>The NABCEP Certification Confusion</h2>
+          <h2 id="nabcep"><span className="n">05</span>The Confusion around NABCEP Certification</h2>
           <p>
             In solar, <Link href="/certifications/nabcep-pv-associate">NABCEP PV Associate</Link> is a genuine entry credential — no
             experience required. The BESS equivalent, NABCEP Energy Storage

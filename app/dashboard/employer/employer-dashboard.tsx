@@ -299,7 +299,7 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
                     <Link
                       href={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow noopener noreferrer"
                       className="text-[15px] font-medium text-[#1a2340] hover:underline underline-offset-2 decoration-slate-300 truncate"
                     >
                       {job.title}

@@ -148,7 +148,7 @@ export default function BassemShiliPage() {
               key={project.name}
               href={project.href}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="group block border-t border-[#0B1A2E]/10 pt-8 first:border-t-0 first:pt-0"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-2">
@@ -222,7 +222,7 @@ export default function BassemShiliPage() {
             <Link
               href="https://www.linkedin.com/in/YOUR-HANDLE"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="inline-flex items-center gap-2 border border-[#0B1A2E]/20 text-[#0B1A2E] text-sm font-medium px-6 py-3 rounded-full hover:bg-[#0B1A2E]/5 transition-colors w-fit"
             >
               LinkedIn

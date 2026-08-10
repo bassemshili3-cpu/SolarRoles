@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 interface StepRow {
   step: string;
@@ -112,8 +113,8 @@ export default function HowToGetASolarApprenticeship() {
       <h1>How to Land a Solar Installer Apprenticeship</h1>
       <p className="resource-intro">
        Here is a practical guide to help you find 
-      open solar apprenticeship slots, and see what 
-      selection committees are screening for
+      <Link href="/resources/solar-installer-apprenticeship-programs">open solar apprenticeship slots</Link>, and see what
+      selection committees are screening for.
       </p>
 
       <div className="resource-table-scroll">
@@ -157,7 +158,7 @@ export default function HowToGetASolarApprenticeship() {
       </section>
 
       <section className="resource-section">
-        <h2>What the JATC aptitude test covers</h2>
+        <h2>The JATC aptitude test</h2>
         <p>
           Programs that use the standard electrical apprenticeship test
           battery (often referred to by its old name, the NJATC test, now
@@ -217,7 +218,7 @@ export default function HowToGetASolarApprenticeship() {
           with a stronger file already in front of the committee.
         </p>
         <p>
-          An OSHA 10 card or a NABCEP Associate credential earned beforehand
+          An <Link href="/certifications/osha-10">OSHA 10 card</Link> or a <Link href="/certifications/nabcep-pv-associate">NABCEP Associate credential</Link> earned beforehand
           rarely appears as a formal scoring criterion on its own, but it
           signals the same thing a strong interview answer does: you looked
           into this before showing up. Committees interview a lot of people

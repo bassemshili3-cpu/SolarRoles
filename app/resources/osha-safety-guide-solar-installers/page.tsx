@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 interface OutreachRow {
   aspect: string;
@@ -138,7 +139,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
       <section className="resource-section">
         <h2>OSHA 10 vs OSHA 30: what's different</h2>
         <p>
-          Both come from the same Outreach Training Program and cover the
+          Both <Link href="/certifications/osha-10">OSHA 10</Link> and <Link href="/certifications/osha-30">OSHA 30</Link> come from the same Outreach Training Program and cover the
           same four hazard categories construction relies on: falls,
           electrocution, struck-by, and caught-in/between. The difference
           isn't the topic list, it's the depth and the audience. OSHA 10
@@ -272,8 +273,8 @@ export default function OshaSafetyGuideForSolarInstallers() {
         <p>
           OSHA 30 Construction makes sense once you're leading a crew,
           managing a jobsite safety plan, or coordinating subcontractors,
-          which for most installers lines up with a lead installer or
-          foreman role rather than an entry-level one. Getting it earlier
+          which for most installers lines up with a <Link href="/lead-solar-installer-jobs">lead installer or
+          foreman role</Link> rather than an entry-level one. Getting it earlier
           than your role requires isn't wasted effort, since the deeper
           program-management material tends to matter more once you're
           responsible for other people's safety.

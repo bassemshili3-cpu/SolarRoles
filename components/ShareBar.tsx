@@ -63,7 +63,7 @@ export default function ShareBar({ url, title, company }: ShareBarProps) {
           key={label}
           href={href}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="nofollow noopener noreferrer"
           aria-label={`Share on ${label}`}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-medium transition-colors ${bg}`}
         >

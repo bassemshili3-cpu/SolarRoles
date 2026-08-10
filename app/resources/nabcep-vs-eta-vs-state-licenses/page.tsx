@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 interface Category {
   name: string;
@@ -156,7 +157,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           certifications you hold.
         </p>
         <p>
-          Manufacturer certifications (Tesla, Enphase, SolarEdge, IronRidge,
+          <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">Manufacturer certifications</Link> (Tesla, Enphase, SolarEdge, IronRidge,
           and others) are brand-specific training programs. They don't carry
           legal weight and aren't recognized industry-wide the way NABCEP
           is, but they unlock real business benefits: pricing, lead
@@ -281,7 +282,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           building the installation hours needed for higher certifications.
         </p>
         <p>
-          NABCEP PV Installation Professional once you have the documented
+          <Link href="/resources/nabcep-pvis-vs-pvip">NABCEP PV Installation Professional</Link> once you have the documented
           field experience, since it remains the most widely recognized
           credential among employers and incentive programs nationally.
         </p>

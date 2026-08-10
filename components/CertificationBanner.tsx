@@ -6,7 +6,7 @@ export function CertificationBanner({ cert }: { cert: CertificationEntry }) {
     <a
       href={cert.heatspringUrl}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel="nofollow sponsored noopener noreferrer"
       className="group relative block overflow-hidden rounded-2xl my-8 border border-[#F5B819]/30 hover:border-[#F5B819]/60 transition-colors"
     >
       <Image

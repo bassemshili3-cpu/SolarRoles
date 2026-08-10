@@ -34,6 +34,8 @@ import {
 
   Eye,
 
+  Zap,
+
 } from 'lucide-react'
 
 import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
@@ -165,6 +167,7 @@ const categories = [
   { label: 'No Experience', icon: TrendingUp, bg: 'bg-[#B45309]', href: '/solar-jobs-no-experience' },
   { label: 'Solar Sales', icon: Briefcase, bg: 'bg-[#0F2440]', href: '/solar-sales-jobs' },
   { label: 'Bess Technician', icon: Briefcase, bg: 'bg-[#0F2440]', href: '/bess-technician-jobs' },
+  { label: 'Solar Electrician', icon: Zap, bg: 'bg-[#1E3A5F]', href: '/solar-electrician-jobs' },
 ]
 
 

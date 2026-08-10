@@ -13,7 +13,15 @@ export const metadata: Metadata = {
 // ⚠️  'nabcep-pvip' is a placeholder slug — vérifie qu'il correspond bien
 //     à celui utilisé dans ton fichier certifications-data.ts (ex: 'nabcep-pvip',
 //     'pvip', ou 'nabcep-pv-installation-professional' selon ta convention).
-const FEATURED_SLUGS = ['nabcep-pv-associate', 'nabcep-pv-installation-professional', 'osha-10', 'osha-30', 'nabcep-pv-installer-specialist']
+const FEATURED_SLUGS = [
+  'nabcep-pv-associate',
+  'nabcep-pv-installation-professional',
+  'nabcep-pv-installer-specialist',
+  'nabcep-energy-storage-installation-professional',
+  'nabcep-pv-technical-sales',
+  'osha-10',
+  'osha-30',
+]
 
 type Cert = (typeof CERTIFICATIONS)[number]
 

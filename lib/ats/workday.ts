@@ -208,6 +208,19 @@ async function createCompanyContext(): Promise<BrowserContext> {
  */
 async function openWarmedPage(company: WorkdayCompanySeed, context: BrowserContext): Promise<Page> {
   const page = await context.newPage();
+
+  // Diagnostic : le TypeError "Failed to fetch" levé côté page.evaluate ne
+  // dit pas *pourquoi* la requête a échoué (reset Akamai, CSP, DNS...).
+  // `requestfailed` expose le vrai code réseau Chromium (net::ERR_*), donc
+  // on le log pour toute requête vers l'API CXS de ce tenant.
+  page.on('requestfailed', (req) => {
+    if (req.url().includes('/wday/cxs/')) {
+      console.warn(
+        `[workday] ${company.tenant}/${company.site}: requête réseau échouée — ${req.url()} — ${req.failure()?.errorText}`
+      );
+    }
+  });
+
   await page.goto(careerPageUrl(company), {
     waitUntil: 'domcontentloaded',
     timeout: NAV_TIMEOUT_MS,
@@ -222,6 +235,11 @@ async function openWarmedPage(company: WorkdayCompanySeed, context: BrowserConte
  * session, le fingerprint TLS/JS du navigateur, etc.) plutôt que
  * depuis Node. `url`/`init` doivent être sérialisables (pas de
  * closures) puisqu'ils traversent la frontière page.evaluate.
+ *
+ * Ne catch PAS les erreurs réseau (ex: `TypeError: Failed to fetch`
+ * quand Akamai reset la connexion, ou un CSP qui bloque le fetch) —
+ * elles remontent telles quelles pour que `fetchInPageWithRetry`
+ * puisse retenter.
  */
 async function fetchInPage<T>(
   page: Page,
@@ -248,6 +266,43 @@ async function fetchInPage<T>(
   );
 }
 
+const FETCH_MAX_RETRIES = 3;
+const FETCH_RETRY_BASE_DELAY_MS = 1000; // backoff: 1s, 2s, 4s
+
+/**
+ * Variante de `fetchInPage` avec retry/backoff pour absorber les échecs
+ * réseau transitoires côté navigateur (`TypeError: Failed to fetch`).
+ * Ce type d'erreur ne vient PAS d'un statut HTTP (déjà géré par
+ * `fetchInPage` via `ok: false`) mais d'un échec de la requête elle-même
+ * — connexion resetée par un anti-bot (Akamai), CSP qui bloque le
+ * `connect-src`, DNS transitoire, etc. Certains tenants Workday semblent
+ * plus agressifs que d'autres à ce niveau (ex: igsenergy), donc on
+ * retente avant d'abandonner.
+ */
+async function fetchInPageWithRetry<T>(
+  company: WorkdayCompanySeed,
+  page: Page,
+  url: string,
+  init: { method?: string; body?: unknown } = {}
+): Promise<{ ok: true; status: number; data: T } | { ok: false; status: number }> {
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= FETCH_MAX_RETRIES; attempt++) {
+    try {
+      return await fetchInPage<T>(page, url, init);
+    } catch (err) {
+      lastErr = err;
+      const message = (err as Error).message ?? String(err);
+      console.warn(
+        `[workday] ${company.tenant}/${company.site}: échec réseau (tentative ${attempt}/${FETCH_MAX_RETRIES}) sur ${url} — ${message}`
+      );
+      if (attempt < FETCH_MAX_RETRIES) {
+        await sleep(FETCH_RETRY_BASE_DELAY_MS * attempt);
+      }
+    }
+  }
+  throw lastErr;
+}
+
 // ---------------------------------------------------------------------
 // Récupération des postes
 // ---------------------------------------------------------------------
@@ -262,7 +317,7 @@ async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promis
   let knownTotal = 0;
 
   while (true) {
-    const result = await fetchInPage<WorkdayJobsResponse>(page, `${cxsBaseUrl(company)}/jobs`, {
+    const result = await fetchInPageWithRetry<WorkdayJobsResponse>(company, page, `${cxsBaseUrl(company)}/jobs`, {
       method: 'POST',
       body: { appliedFacets: {}, limit: PAGE_SIZE, offset, searchText: '' },
     });
@@ -288,7 +343,13 @@ async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promis
 
     let newCount = 0;
     for (const p of postings) {
-      const key = p.externalPath;
+      // Clé de dédup robuste : certains tenants renvoient des entrées
+      // sans externalPath (poste retiré, redirection externe, entrée
+      // "malformée" côté Workday). On ne veut pas que plusieurs de ces
+      // entrées invalides s'écrasent entre elles sous la clé `undefined`
+      // (ce qui masquerait silencieusement toutes les autres), donc on
+      // leur donne une clé unique basée sur leur position.
+      const key = p.externalPath ?? `__missing-external-path-${offset}-${newCount}`;
       if (!seen.has(key)) {
         seen.set(key, p);
         newCount++;
@@ -314,19 +375,23 @@ async function fetchAllPostings(company: WorkdayCompanySeed, page: Page): Promis
     await sleep(REQUEST_DELAY_MS);
   }
 
-  return Array.from(seen.values());
-}
+  const all = Array.from(seen.values());
 
-async function fetchJobDescription(company: WorkdayCompanySeed, page: Page, externalPath: string): Promise<string> {
-  try {
-    const path = externalPath.replace(/^\/job/, '');
-    const result = await fetchInPage<WorkdayJobDetailResponse>(page, `${cxsBaseUrl(company)}/job${path}`);
-    if (!result.ok) return '';
-    return stripHtml(result.data.jobPostingInfo?.jobDescription ?? '');
-  } catch (err) {
-    console.warn(`[workday] échec récupération description ${externalPath}: ${(err as Error).message}`);
-    return '';
+  // On filtre ici, après dédup, les postings sans externalPath exploitable :
+  // sans lui on ne peut ni récupérer le détail (fetchJobDetail) ni construire
+  // l'URL finale (normalize). Impossible de traiter ces entrées, donc on les
+  // écarte proprement avec un log plutôt que de laisser planter plus loin.
+  const valid = all.filter((p) => typeof p.externalPath === 'string' && p.externalPath.length > 0);
+  const dropped = all.length - valid.length;
+  if (dropped > 0) {
+    const example = all.find((p) => !p.externalPath || typeof p.externalPath !== 'string');
+    console.warn(
+      `[workday] ${company.tenant}/${company.site}: ${dropped} posting(s) sans externalPath ignoré(s) — ` +
+        `exemple: ${JSON.stringify(example)}`
+    );
   }
+
+  return valid;
 }
 
 async function fetchJobDetail(
@@ -334,9 +399,22 @@ async function fetchJobDetail(
   page: Page,
   externalPath: string
 ): Promise<{ description: string; location?: string }> {
+  // Filet de sécurité : fetchAllPostings filtre déjà les postings sans
+  // externalPath, mais on garde ce garde-fou ici pour ne jamais planter
+  // sur `.replace` si cette fonction est appelée d'un autre point d'entrée
+  // ou si la logique de filtrage change plus tard.
+  if (!externalPath) {
+    console.warn(`[workday] ${company.tenant}/${company.site}: externalPath manquant, poste ignoré`);
+    return { description: '' };
+  }
+
   try {
     const path = externalPath.replace(/^\/job/, '');
-    const result = await fetchInPage<WorkdayJobDetailResponse>(page, `${cxsBaseUrl(company)}/job${path}`);
+    const result = await fetchInPageWithRetry<WorkdayJobDetailResponse>(
+      company,
+      page,
+      `${cxsBaseUrl(company)}/job${path}`
+    );
     if (!result.ok) return { description: '' };
     return {
       description: stripHtml(result.data.jobPostingInfo?.jobDescription ?? ''),
@@ -347,7 +425,6 @@ async function fetchJobDetail(
     return { description: '' };
   }
 }
-
 
 export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<NormalizedJob[]> {
   const context = await createCompanyContext();
@@ -376,13 +453,13 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   try {
     for (const p of postings) {
-  const detail = await fetchJobDetail(company, page, p.externalPath);
-  await sleep(REQUEST_DELAY_MS);
+      const detail = await fetchJobDetail(company, page, p.externalPath);
+      await sleep(REQUEST_DELAY_MS);
 
-  if (isSolarInstallerRole(p.title, detail.description)) {
-    results.push(normalize(company, p, detail.description, detail.location));
-  }
-}
+      if (isSolarInstallerRole(p.title, detail.description)) {
+        results.push(normalize(company, p, detail.description, detail.location));
+      }
+    }
   } finally {
     await context.close();
   }

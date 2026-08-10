@@ -687,7 +687,7 @@ function safeJsonLd(data: unknown): string {
 
               {job.source === 'adzuna' && (
 
-                <a href="https://www.adzuna.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.adzuna.com" target="_blank" rel="nofollow noopener noreferrer">
 
                   <img src="/adzuna-logo.png" alt="Powered by Adzuna" width={116} height={23} />
 

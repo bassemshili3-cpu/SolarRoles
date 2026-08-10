@@ -358,7 +358,7 @@ function OverviewTab({
                 <a
                   href={job.applyUrl || job.url}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="flex-shrink-0 text-xs font-medium text-[#2B4ACB] hover:underline"
                 >
                   Apply
@@ -486,7 +486,7 @@ function SavedJobsTab({
                     <a
                       href={job.applyUrl || job.url}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow noopener noreferrer"
                       className="text-xs font-medium bg-[#2B4ACB] text-white px-3 py-1.5 rounded-md hover:bg-[#1f3ba0] transition-colors"
                     >
                       Apply
@@ -713,7 +713,7 @@ function ResumeTab({
               <a
                 href={resume.url}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="flex-shrink-0 text-xs font-medium border border-gray-200 rounded-md px-3 py-1.5 text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Download

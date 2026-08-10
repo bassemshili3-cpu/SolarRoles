@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 interface Provider {
   name: string;
@@ -173,7 +174,7 @@ export default function NabcepTrainingComparison() {
           {p.body.split("\n\n").map((para, i) => (
             <p key={i}>{para}</p>
           ))}
-          <a href={p.link} target="_blank" rel="noopener noreferrer">
+          <a href={p.link} target="_blank" rel="nofollow noopener noreferrer">
             Visit {p.name}
           </a>
         </section>
@@ -203,7 +204,7 @@ export default function NabcepTrainingComparison() {
         </p>
         <p>
           None of these paths guarantee a passing score or a job offer. They
-          guarantee you'll cover the material NABCEP expects you to know. The
+          guarantee you'll cover the material <Link href="/resources/how-to-get-nabcep-certified">NABCEP</Link> expects you to know. The
           rest comes down to how much effort goes into the studying, not
           which logo sits on the certificate of completion.
         </p>

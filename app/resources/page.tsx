@@ -136,6 +136,15 @@ const ALL_RESOURCES: ResourceItem[] = [
     category: "Safety",
   },
   {
+    title: "Why Solar DC Safety Is Different for Electricians",
+    description:
+      "Why PV DC arcs, daylight-generated voltage, and utility-scale systems require solar-specific electrical safety training.",
+    href: "/resources/solar-dc-safety-for-electricians",
+    icon: "Shield",
+    type: "guide",
+    category: "Safety",
+  },
+  {
     title: "Solar Installer Apprenticeship Programs",
     description:
       "How Registered Apprenticeship Programs work, who sponsors them, and why solar isn't officially apprenticeable yet.",
@@ -239,13 +248,13 @@ const ALL_RESOURCES: ResourceItem[] = [
   },
 
    {
-    title: "Co",
+    title: "BESS technician requirements",
     description:
       "The honest answer on BESS technician requirements: why battery storage isn't a no-experience job like solar, and the two real paths in.",
     href: "/resources/do-you-need-to-be-an-electrician-for-bess",
     icon: "Briefcase",
     type: "guide",
-    category: "Certifications & training",
+    category: "Career",
   },
   
  

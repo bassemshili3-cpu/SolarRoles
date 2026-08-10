@@ -410,7 +410,7 @@ export default function Privacy() {
               <p>
                 To exercise these rights, please contact us at{' '}
                 <a href="mailto:privacy@solarroles.com">privacy@solarroles.com</a>. You also have the right to lodge a complaint with a supervisory authority, including the French data protection authority (CNIL), at{' '}
-                <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>.
+                <a href="https://www.cnil.fr" target="_blank" rel="nofollow noopener noreferrer">www.cnil.fr</a>.
               </p>
             </section>
 
@@ -461,7 +461,7 @@ export default function Privacy() {
               </div>
               <p className="mt-6 text-sm text-gray-600">
                 For California residents: if applicable law applies to our Service, you may also contact the California Attorney General at{' '}
-                <a href="https://oag.ca.gov/contact/consumer-complaint-against-business-or-company" target="_blank" rel="noopener noreferrer">
+                <a href="https://oag.ca.gov/contact/consumer-complaint-against-business-or-company" target="_blank" rel="nofollow noopener noreferrer">
                   https://oag.ca.gov/contact/consumer-complaint-against-business-or-company
                 </a>.
               </p>

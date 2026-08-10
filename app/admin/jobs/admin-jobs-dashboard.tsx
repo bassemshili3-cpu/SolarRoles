@@ -156,7 +156,7 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
                 <Link
                   href={jobUrl(job)}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="text-[15px] font-medium text-[#1a2340] hover:underline underline-offset-2 truncate"
                 >
                   {job.title}

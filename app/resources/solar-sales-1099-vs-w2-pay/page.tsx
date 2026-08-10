@@ -119,7 +119,7 @@ export default function SolarSales1099VsW2Page() {
                   1099, commission only
                 </p>
                 <ul className="space-y-2 text-base text-[#5B6472]">
-                  <li>No base pay, no floor</li>
+                  <li>No base pay</li>
                   <li>Higher commission per deal</li>
                   <li>You cover taxes and expenses</li>
                   <li>No benefits, no employer match</li>

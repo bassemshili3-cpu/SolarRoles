@@ -426,7 +426,7 @@ export default function CertificationPage({ params }: PageProps) {
     
      <a href={cert.heatspringUrl}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel="nofollow sponsored noopener noreferrer"
       className="inline-flex items-center gap-2 bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] px-6 py-3 rounded-full font-bold transition-colors shadow-sm"
     >
       Get Started <ExternalLink size={14} />

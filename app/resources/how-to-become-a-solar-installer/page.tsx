@@ -12,9 +12,9 @@ const sora = Sora({
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-become-a-solar-installer";
 const PAGE_TITLE =
-  "How to Become a Solar Installer (2026): Real Timeline, Pay, and What the Job Is Actually Like";
+  "How to Become a Solar Installer (2026): Real Timeline, Pay, and What the Job Is Like";
 const PAGE_DESCRIPTION =
-  "Learn how to become a solar installer in 2026: entry pathways, NABCEP certification, real pay by stage, and what the job is actually like.";
+  "Learn how to become a solar installer in 2026: entry pathways, NABCEP certification, real pay by stage, and what the job is like.";
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
@@ -743,7 +743,7 @@ export default function HowToBecomeASolarInstaller() {
               <li><a href="#paths">Entry Pathways</a></li>
               <li><a href="#nabcep">NABCEP Certification</a></li>
               <li><a href="#pay">Compensation Overview</a></li>
-              <li><a href="#market">What Employers Screen For</a></li>
+              <li><a href="#market">Skills & Qualifications</a></li>
               <li><a href="#brochure">Safety Considerations</a></li>
               <li><a href="#growth">Career Progression</a></li>
               <li><a href="#mistakes">Common Early Mistakes</a></li>
@@ -862,7 +862,7 @@ export default function HowToBecomeASolarInstaller() {
             </div>
           </div>
           <p>
-            For actual numbers by state rather than national averages, see our{" "}
+            For actual numbers by state, see our{" "}
             <Link href="/data/salaries/solar-photovoltaic-installer">
               Solar Photovoltaic Installer salary data
             </Link>{" "}
@@ -872,7 +872,7 @@ export default function HowToBecomeASolarInstaller() {
             </Link>
             , both pulled from active listings.
           </p>
-          <h2 id="market"><span className="n">04</span>What Employers Screen For</h2>
+          <h2 id="market"><span className="n">04</span>Skills & Qualifications</h2>
           <p>
             Certification remains the strongest single signal in the hiring
             process, but it is evaluated alongside a separate set of
@@ -885,7 +885,7 @@ export default function HowToBecomeASolarInstaller() {
             license is commonly a hard requirement, as crews typically
             travel to job sites together in a company vehicle. Familiarity
             with basic hand tools — drill, impact driver, wire strippers,
-            multimeter — is expected, though not mastery.
+            multimeter is expected.
           </p>
           <p>
             Attendance reliability is weighted heavily for entry-level
@@ -898,8 +898,7 @@ export default function HowToBecomeASolarInstaller() {
           </p>
           <h2 id="brochure"><span className="n">05</span>Safety Considerations</h2>
           <p>
-            Falls are the leading cause of death in this trade, and it&apos;s
-            not close. Federal workplace safety investigations have documented
+            Falls are the leading cause of death in this trade. Federal workplace safety investigations have documented
             fatal falls from roofs during solar installs where fall protection
             was either not used or not in place at all.
             That’s why proper fall protection training is so important in this industry.
@@ -924,7 +923,7 @@ export default function HowToBecomeASolarInstaller() {
           </p>
           <h2 id="next"><span className="n">08</span>Recommended Next Steps</h2>
           <p>
-            If you&apos;re ready to see what&apos;s actually being posted right
+            If you&apos;re ready to see what&apos;s being posted right
             now, browse current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
@@ -952,10 +951,7 @@ export default function HowToBecomeASolarInstaller() {
         <aside className="sr2-sidebar">
           <div className="sr2-card">
             <div className="sr2-author-card">
-              <div className="a">MO</div>
-              <div>
-                <div className="by">By Editorial Team</div>
-                <div className="nm">Solar<span className="mark">Roles</span></div>
+      <div>
               
               </div>
             </div>

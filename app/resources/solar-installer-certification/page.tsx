@@ -1074,7 +1074,7 @@ export default function SolarInstallerCertification() {
       <span className="sr2-recognition">Required by state</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.nascla.org" className="sr2-cta-btn">
+      <a href="https://www.nascla.org" target="_blank" rel="nofollow noopener noreferrer" className="sr2-cta-btn">
         Start Today
       </a>
     </div>
@@ -1148,7 +1148,7 @@ export default function SolarInstallerCertification() {
       <span className="sr2-recognition">Manufacturer-specific recognition only</span>
     </div>
     <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.tesla.com/support/energy/tesla-certified-installer" className="sr2-cta-btn">
+      <a href="https://www.tesla.com/support/energy/tesla-certified-installer" target="_blank" rel="nofollow noopener noreferrer" className="sr2-cta-btn">
         Start Today
       </a>
     </div>

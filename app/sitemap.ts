@@ -25,6 +25,7 @@ const ATS_SOURCES = [
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
   '/solar-pv-installer-jobs',
+  '/solar-electrician-jobs',
   '/lead-solar-installer-jobs',
   '/solar-jobs-no-experience',
   '/solar-sales-jobs',
@@ -67,6 +68,7 @@ const resourcePages: string[] = [
   'nabcep-training-providers-compared',
   'nabcep-vs-eta-vs-state-licenses',
   'osha-safety-guide-solar-installers',
+  'solar-dc-safety-for-electricians',
   'solar-certifications-by-job-role',
   'solar-installer-apprenticeship-programs',
   'solar-installer-certification',

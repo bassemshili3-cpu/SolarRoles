@@ -149,7 +149,7 @@ export default function CookiePolicyPage() {
                     <td className="px-4 py-3 font-medium text-gray-900">{provider}</td>
                     <td className="px-4 py-3 text-gray-600">{purpose}</td>
                     <td className="px-4 py-3">
-                      <a href={url} target="_blank" rel="noopener noreferrer"
+                      <a href={url} target="_blank" rel="nofollow noopener noreferrer"
                         className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
                         {label}
                       </a>
@@ -193,7 +193,7 @@ export default function CookiePolicyPage() {
                 ].map(([browser, url]) => (
                   <li key={browser} className="flex items-center gap-1.5">
                     <span className="w-1 h-1 rounded-full bg-gray-400 flex-shrink-0" />
-                    <a href={url} target="_blank" rel="noopener noreferrer"
+                    <a href={url} target="_blank" rel="nofollow noopener noreferrer"
                       className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
                       {browser}
                     </a>
@@ -206,7 +206,7 @@ export default function CookiePolicyPage() {
               <h3 className="font-semibold text-gray-900 mb-1">Google Analytics Opt-Out</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 You can prevent Google Analytics from collecting your data by installing the{' '}
-                <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer"
+                <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="nofollow noopener noreferrer"
                   className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
                   Google Analytics Opt-out Browser Add-on
                 </a>.
@@ -218,7 +218,7 @@ export default function CookiePolicyPage() {
   <p className="text-gray-600 text-sm leading-relaxed">
     Google uses cookies to serve ads based on your prior visits to this and other websites.
     You can opt out of personalized advertising by visiting{' '}
-    <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer"
+    <a href="https://adssettings.google.com" target="_blank" rel="nofollow noopener noreferrer"
       className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
       Google Ad Settings
     </a>.

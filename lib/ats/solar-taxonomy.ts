@@ -74,6 +74,7 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /solar\s*tech(nician)?\b/i,
   /lead\s*solar\s*install(er)?/i, // "solar" obligatoire ici — sinon matche n'importe quel "Lead Installer" (télécom, etc.)
   /solar\s*(crew|foreman)/i,
+  /solar\s*laborer/i, // ★ solar-specific laborer role
   /residential\s*solar\s*install/i,
   /commercial\s*solar\s*install/i,
   /rooftop\s*solar/i,
@@ -180,6 +181,7 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /pv\s*(design\s*)?engineer(ing)?/i,
   /solar\s*electrical\s*engineer/i,
   /solar\s*systems?\s*engineer/i,
+  /solar\s*engineer/i, // ★ explicit solar engineer role
 
   // --- corporate solar: estimating ---
   /solar\s*estimat(or|ing)/i,
@@ -297,8 +299,9 @@ const DESCRIPTION_STRONG_SIGNALS: RegExp[] = [
   /supervise\s*(solar\s*)?install(ation)?\s*(crew|team)/i,
   /solar\s*(tracker|racking)\s*(system|install)/i,
   /single[\s-]?axis\s*tracker/i,
-  /pile\s*driv(er|ing)/i,
-  /(dc|ac)\s*combiner\s*box/i,
+  /pile\s*driv(er|ing)\s*.*(solar|pv|array)/i,
+  /(dc|ac)\s*combiner\s*box.*(solar|pv|array|module)/i,
+  /(solar|pv|array|module).*\b(dc|ac)\s*combiner\s*box/i,
   /inverter\s*(commissioning|troubleshoot|field\s*service)/i,
   /epc\s*(contractor|project).*solar/i,
   /solar\s*(farm|plant)\s*construction/i,
@@ -306,7 +309,6 @@ const DESCRIPTION_STRONG_SIGNALS: RegExp[] = [
   /solar\s*thermal|solar\s*hot\s*water/i,
   /quality\s*(assurance|control)\s*.*solar\s*(install|array|system)/i,
   /battery\s*energy\s*storage\s*system/i,
-  /\bbess\b/i,
   /\bc\s*&\s*i\s*solar/i,
   /commercial\s*(&|and)\s*industrial\s*solar/i,
   /ground[\s-]?mount(ed)?\s*(solar|array|pv)/i,

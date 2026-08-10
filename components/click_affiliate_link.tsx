@@ -16,7 +16,7 @@ export function AffiliateLink({ href, offerName, className, children }: {
   };
 
   return (
-    <a href={href} target="_blank" rel="noopener sponsored" className={className} onClick={handleClick}>
+    <a href={href} target="_blank" rel="nofollow sponsored noopener noreferrer" className={className} onClick={handleClick}>
       {children}
     </a>
   );

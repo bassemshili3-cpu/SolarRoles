@@ -113,7 +113,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <h1>How Solar Installer Apprenticeships Work</h1>
       <p className="resource-intro">
        A Registered Apprenticeship pays you while you train, which matters a great deal if a
-        NABCEP-approved course running several hundred dollars isn't
+        <Link href="/resources/nabcep-training-providers-compared">NABCEP-approved course</Link> running several hundred dollars isn't
         realistic right now. Here's what these programs are, why the paperwork
         behind them is stranger than it looks, and why more employers started
         offering them recently.

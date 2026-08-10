@@ -197,6 +197,13 @@ export default async function SalaryReportPage({
 
   const { title: jobTitle, careerPath, editorial } = role
 
+  const SALARY_TO_LANDING: Record<string, string> = {
+    'solar-photovoltaic-installer': 'solar-pv-installer-jobs',
+    'lead-solar-installer': 'lead-solar-installer-jobs',
+    'solar-electrician': 'solar-electrician-jobs',
+    'bess-technician': 'bess-technician-jobs',
+  }
+
   // Salaire moyen par state — pas de HAVING ici, on filtre en JS pour pouvoir
   // regrouper les states sous-représentés en région plutôt que de les faire disparaître.
   const rawSalaryByState = await prisma.$queryRaw<
@@ -485,7 +492,7 @@ export default async function SalaryReportPage({
           <h2 className="text-xl font-bold text-[#0B1A2E] mb-2">Browse {jobTitle} Jobs</h2>
           <p className="text-sm text-gray-500 mb-4">See all {fmt(totalListings)} active {jobTitle} listings across the US</p>
           <Link
-            href={`/jobs?what=${encodeURIComponent(jobTitle)}`}
+            href={SALARY_TO_LANDING[slug] ? `/${SALARY_TO_LANDING[slug]}` : `/jobs?what=${encodeURIComponent(jobTitle)}`}
             className="inline-block bg-[#0B1A2E] text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#1E3A5F] transition-colors"
           >
             View {jobTitle} Jobs
