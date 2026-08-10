@@ -41,7 +41,7 @@ async function main() {
   // Debug: Show what env vars are loaded
   console.log('🔍 Environment variables check:');
   console.log(`   INDEXNOW_KEY: ${process.env.INDEXNOW_KEY ? '✅ Set (' + process.env.INDEXNOW_KEY.substring(0, 8) + '...)' : '❌ Not set'}`);
-  console.log(`   INDEXNOW_API_KEY: ${process.env.INDEXNOW_API_KEY ? '✅ Set (' + process.env.INDEXNOW_API_KEY.substring(0, 8) + '...)' : '❌ Not set'}`);
+ 
   console.log(`   NEXT_PUBLIC_SITE_URL: ${process.env.NEXT_PUBLIC_SITE_URL || 'Not set (will use default)'}`);
   console.log('');
 

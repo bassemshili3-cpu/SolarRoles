@@ -25,10 +25,20 @@ export function getIndexNowKey(): string {
  * Get site host from environment or default
  */
 export function getSiteHost(): string {
-  const host = process.env.NEXT_PUBLIC_SITE_URL 
-    ? new URL(process.env.NEXT_PUBLIC_SITE_URL).host 
-    : 'solarroles.com';
-  return host;
+  // Priority: INDEXNOW_HOST env var > NEXT_PUBLIC_SITE_URL host > default
+  if (process.env.INDEXNOW_HOST) {
+    return process.env.INDEXNOW_HOST;
+  }
+  
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
+  try {
+    const host = new URL(siteUrl).host;
+    // Remove www. prefix if present, as IndexNow key is often registered for the apex domain
+    return host.replace(/^www\./, '');
+  } catch (error) {
+    console.error('[IndexNow] Invalid NEXT_PUBLIC_SITE_URL:', siteUrl);
+    return 'solarroles.com';
+  }
 }
 
 /**
@@ -95,7 +105,18 @@ export async function submitUrls(urls: string[], apiKey?: string): Promise<boole
       console.log(`[IndexNow] Successfully submitted ${urls.length} URLs`);
       return true;
     } else {
+      const errorText = await response.text();
       console.error(`[IndexNow] Failed to submit batch: ${response.status} ${response.statusText}`);
+      console.error(`[IndexNow] Response body: ${errorText}`);
+      console.error(`[IndexNow] Host used: ${host}`);
+      console.error(`[IndexNow] Key used: ${key.substring(0, 8)}...`);
+      console.error(`[IndexNow] URLs count: ${urls.length}`);
+      console.error('');
+      console.error('Common causes for 403 Forbidden:');
+      console.error('  1. The host does not match the domain where your key file is hosted');
+      console.error('  2. The key file is not accessible at https://yourdomain.com/[key].txt');
+      console.error('  3. The key is invalid or expired');
+      console.error('  4. Set INDEXNOW_HOST env var to override the host (e.g., "solarroles.com")');
       return false;
     }
   } catch (error) {
