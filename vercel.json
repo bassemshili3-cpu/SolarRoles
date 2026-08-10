@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron/indexnow?secret=your-secret-key-here",
+      "path": "/api/cron/indexnow?secret=1a5cfdf1d8784e34be6db477d7e6c6d2",
       "schedule": "0 2 * * *"
     }
   ]
