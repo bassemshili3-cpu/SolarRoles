@@ -691,16 +691,6 @@ function safeJsonLd(data: unknown): string {
 
               {job.source === 'adzuna' && (
 
-                <a href="https://www.adzuna.com" target="_blank" rel="nofollow noopener noreferrer">
-
-                  <img src="/adzuna-logo.png" alt="Powered by Adzuna" width={116} height={23} />
-
-                </a>
-
-              )}
-
-              {job.source === 'jooble' && (
-
                 <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
 
               )}
@@ -865,11 +855,12 @@ function safeJsonLd(data: unknown): string {
         <p className="text-sm text-[#B45309]">{cert.bannerSubtext}</p>
       </div>
       
+      <a
         href={cert.heatspringUrl}
         target="_blank"
         rel="noopener sponsored"
         className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
-    <a>
+      >
         Get certified on HeatSpring →
       </a>
     </div>
