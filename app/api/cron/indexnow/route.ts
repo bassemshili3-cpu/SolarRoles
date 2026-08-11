@@ -1,20 +1,26 @@
 // app/api/cron/indexnow/route.ts
 // Cron endpoint for IndexNow URL submission
-// Triggered by Vercel Cron or external scheduler
+// Triggered by Vercel Cron (auth via header Authorization: Bearer {CRON_SECRET},
+// injecté automatiquement par Vercel — voir vercel.json, plus de secret en query string)
 
 import { NextResponse } from 'next/server';
 import { submitUrls, isIndexNowConfigured } from '@/lib/indexnow';
 import { CERTIFICATIONS } from '@/app/certifications/[slug]/certifications-data';
 
-// Configure your cron secret here or via environment variable
-const CRON_SECRET = process.env.CRON_SECRET || 'your-secret-key-here';
-
 export async function GET(request: Request) {
-  // Verify cron secret
-  const url = new URL(request.url);
-  const secret = url.searchParams.get('secret');
-  
-  if (secret !== CRON_SECRET) {
+  // Vérifie le secret via le header Authorization plutôt qu'un query param.
+  // Vercel Cron envoie automatiquement `Authorization: Bearer {CRON_SECRET}`
+  // sur ses propres appels — CRON_SECRET doit être défini dans les env vars
+  // du projet (dashboard Vercel), jamais en dur dans le code ou vercel.json.
+  const cronSecret = process.env.CRON_SECRET;
+
+  if (!cronSecret) {
+    console.error('[IndexNow Cron] CRON_SECRET is not configured');
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+  }
+
+  const authHeader = request.headers.get('authorization');
+  if (authHeader !== `Bearer ${cronSecret}`) {
     console.error('[IndexNow Cron] Unauthorized access attempt');
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -29,6 +35,9 @@ export async function GET(request: Request) {
   const startTime = Date.now();
 
   try {
+    // Aligné sur le fallback utilisé partout ailleurs (script + lib/indexnow.ts)
+    // pour éviter tout mismatch host/URL — www.solarroles.com est le domaine
+    // canonique réel (solarroles.com fait un 308 vers www).
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
     const urlsToSubmit: string[] = [];
 
@@ -95,7 +104,7 @@ export async function GET(request: Request) {
     const success = await submitUrls(uniqueUrls);
 
     const duration = Date.now() - startTime;
-    
+
     if (success) {
       console.log(`[IndexNow Cron] Completed successfully in ${duration}ms`);
       return NextResponse.json({
@@ -123,7 +132,12 @@ export async function GET(request: Request) {
   }
 }
 
-// Also allow POST for manual triggers
+// Also allow POST for manual triggers.
+// ATTENTION : sans le header Authorization Bearer correct, un POST manuel
+// (ex: via curl ou Postman) sera aussi rejeté en 401 — c'est voulu.
+// Pour tester manuellement, envoie le header toi-même :
+//   curl -X POST https://www.solarroles.com/api/cron/indexnow \
+//     -H "Authorization: Bearer TON_CRON_SECRET"
 export async function POST(request: Request) {
   return GET(request);
 }

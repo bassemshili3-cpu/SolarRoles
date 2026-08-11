@@ -57,6 +57,27 @@ const REQUEST_DELAY_MAX_MS = 900; // politesse — Workday a de l'anti-bot (Akam
 const NAV_TIMEOUT_MS = 30_000;
 const MAX_OFFSET = 5000; // plafond de sécurité (250 pages) au cas où un tenant renvoie des pages en boucle
 
+// ---------------------------------------------------------------------
+// Config proxy
+// ---------------------------------------------------------------------
+
+interface ProxyConfig {
+  server: string;   // ex: 'http://proxy.example.com:8080' ou 'socks5://...'
+  username?: string;
+  password?: string;
+}
+
+function getProxyConfig(): ProxyConfig | undefined {
+  const server = process.env.WORKDAY_PROXY_SERVER;
+  if (!server) return undefined;
+
+  return {
+    server,
+    username: process.env.WORKDAY_PROXY_USERNAME || undefined,
+    password: process.env.WORKDAY_PROXY_PASSWORD || undefined,
+  };
+}
+
 const REALISTIC_USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 
@@ -99,7 +120,11 @@ function normalizeWorkdayLocation(raw: string): string {
 // "arrangement de travail" (Field/Remote/Hybrid/Office/...) plutôt que pour
 // la localisation — ex: solvenergy renvoie "Field" à cette position pour
 // les rôles terrain. On refuse ces valeurs connues comme non-localisation
-// plutôt que de les accepter aveuglément.
+// plutôt que de les accepter aveuglément. On refuse aussi les libellés
+// "multi-sites" (numériques ET textuels, ex: "Multiple Locations",
+// "Various Locations") — ils sont syntaxiquement propres mais ne portent
+// aucune info géographique exploitable, et on ne veut pas gaspiller un
+// appel à extractStateFromLocation dessus avant de tomber sur le fallback.
 const NON_LOCATION_BULLET_VALUES = new Set([
   'field', 'remote', 'hybrid', 'onsite', 'on-site', 'office',
   'flexible', 'virtual', 'various', 'various locations',
@@ -110,6 +135,7 @@ function isUsableLocationText(raw: string | undefined): raw is string {
   const trimmed = raw.trim();
   if (!trimmed) return false;
   if (/^\d+\s+Location/i.test(trimmed)) return false;
+  if (/^(multiple|various|several)\s+locations?$/i.test(trimmed)) return false;
   if (NON_LOCATION_BULLET_VALUES.has(trimmed.toLowerCase())) return false;
   return true;
 }
@@ -138,30 +164,48 @@ function extractLocationFromTitle(title: string): string | undefined {
   return undefined;
 }
 
+// Signal remote explicite porté par le titre lui-même plutôt que par les
+// facets (ex: "SCADA Project Manager II, EPC (Remote)"). isRemoteSignal()
+// ne regarde que bulletFields/locationsText/detailLocation — jamais le
+// titre — donc on le traite séparément dans resolveLocation().
+function titleHasRemoteSignal(title: string): boolean {
+  return /\(\s*remote\s*\)/i.test(title) || /\bfully\s+remote\b/i.test(title);
+}
+
 function resolveLocation(p: WorkdayJobPosting, detailLocation?: string): string {
-  if (isUsableLocationText(p.locationsText)) {
-    return normalizeWorkdayLocation(p.locationsText);
+  const candidates: (string | undefined)[] = [
+    p.locationsText,
+    p.bulletFields?.[0],
+    detailLocation,
+  ];
+
+  // 1. On ne s'arrête sur un candidat que s'il donne un état exploitable —
+  //    un texte "propre" (isUsableLocationText) mais sans état parseable
+  //    (ex: nom de division/branche interne) ne doit PAS court-circuiter
+  //    le fallback titre, qui contient souvent la vraie ville/état.
+  for (const raw of candidates) {
+    if (!isUsableLocationText(raw)) continue;
+    const normalized = normalizeWorkdayLocation(raw);
+    if (extractStateFromLocation(normalized)) {
+      return normalized;
+    }
   }
 
-  const bulletRaw = p.bulletFields?.[0];
-  if (isUsableLocationText(bulletRaw)) {
-    return normalizeWorkdayLocation(bulletRaw);
-  }
-
-  if (isUsableLocationText(detailLocation)) {
-    return normalizeWorkdayLocation(detailLocation);
-  }
-
+  // 2. Titre — souvent plus fiable que les facets Workday sur les rôles terrain
   const titleLocation = extractLocationFromTitle(p.title);
   if (titleLocation) {
     return normalizeWorkdayLocation(titleLocation);
   }
 
-  if (isRemoteSignal(bulletRaw) || isRemoteSignal(p.locationsText) || isRemoteSignal(detailLocation)) {
+  // 3. Signal remote — y compris dans le titre lui-même, pas juste les facets
+  if (candidates.some(isRemoteSignal) || titleHasRemoteSignal(p.title)) {
     return 'Remote, US';
   }
 
-  return p.locationsText || bulletRaw || '';
+  // 4. Rien d'exploitable : on retombe sur le premier candidat "propre"
+  //    même non géolocalisable, pour garder une trace brute en debug.
+  const firstUsable = candidates.find(isUsableLocationText);
+  return firstUsable ? normalizeWorkdayLocation(firstUsable) : (p.locationsText || p.bulletFields?.[0] || '');
 }
 
 
@@ -249,12 +293,16 @@ export async function closeWorkdayBrowser(): Promise<void> {
 
 async function createCompanyContext(): Promise<BrowserContext> {
   const browser = await getBrowser();
+  const proxy = getProxyConfig();
+
   const context = await browser.newContext({
     userAgent: REALISTIC_USER_AGENT,
     viewport: { width: 1280, height: 800 },
     locale: 'en-US',
     timezoneId: 'America/New_York',
+    ...(proxy && { proxy }),
   });
+
 
   // masque webdriver=true, le signal le plus basique de détection headless
   await context.addInitScript(() => {

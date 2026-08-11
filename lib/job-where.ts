@@ -137,10 +137,10 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
 
   if (whatPhrases.length > 0) {
     AND.push({ OR: keywordOr(whatPhrases, ['title', 'description']) })
- } else if (what) {
+} else if (what) {
   const keywords = meaningfulKeywords(what)
   for (const kw of keywords) {
-    AND.push({ OR: keywordOr([kw], ['title', 'company', 'description']) })
+    AND.push({ OR: keywordOr([kw], ['title']) })  // title uniquement
   }
 }
 

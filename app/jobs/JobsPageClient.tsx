@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import JobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
-import AIJobMatcher from '@/components/AIJobMatcher'
+
 
 type AIFilters = {
   title?: string
@@ -45,7 +45,7 @@ export default function JobsPageClient({
         </aside>
 
         <div className="flex-1 min-w-0">
-          <AIJobMatcher onFiltersChange={setAiFilters} />
+        
 
           {/* JobList reads advanced filters (job_type, arrangement, etc.)
               directly from useSearchParams internally — no need to pass them */}

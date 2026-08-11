@@ -25,15 +25,14 @@ export const ASHBY_COMPANIES: AtsCompanySeed[] = [
 
 export const SMARTRECRUITERS_COMPANIES: AtsCompanySeed[] = [
   { slug: 'KingspanEnergy',    name: 'Kingspan Energy',          verified: true }, // ★ Ops Manager Solar/Lighting CT
-  { slug: 'ib-vogt-GmbH',      name: 'ib vogt GmbH',             verified: true }, // ★ Solar & BESS Engineer APAC
+  { slug: 'ib-vogt-gmbh',      name: 'ib vogt GmbH',             verified: true }, // ★ Solar & BESS Engineer APAC
   { slug: 'EcoEnergySolutions',name: 'EcoEnergy Solutions',      verified: true }, // Solar Technician Pakistan
   { slug: 'WunderCapital',     name: 'Wunder Capital',           verified: true },
   { slug: 'SOLV-Energy',       name: 'SOLV Energy',              verified: false },
-  { slug: 'Moss-Construction', name: 'Moss Construction',        verified: false },
-  { slug: 'Heliene',           name: 'Heliene',                  verified: false },
-  { slug: 'SolarMax',          name: 'SolarMax',                 verified: false },
-  { slug: 'CanadianSolar',     name: 'Canadian Solar',           verified: false },
-  { slug: 'knobelsdorffenterprises', name: 'Knobelsdorff Enterprises', verified: false }, // ★ solar EPC/O&M — verify ATS
+  { slug: 'AECOM2',       name: 'AECOM',              verified: false },
+
+
+  { slug: 'knobelsdorffenterprises', name: 'Knobelsdorff', verified: false }, // ★ solar EPC/O&M — verify ATS
 ];
 
 // Lever — jobs.lever.co/<slug>
@@ -145,14 +144,14 @@ export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
   // ★★★ confirmé — page carrière + tenant Workday vérifiés le 29/07/2026
   { tenant: 'sunrun', host: 'wd5', site: 'Sunrun_Careers', name: 'Sunrun', verified: true },
 
-  { tenant: 'aes', host: 'wd1', site: 'AES_External_Careers', name: 'AES', verified: false }, // ★ utility-scale solar/energy storage
-  { tenant: 'nextracker', host: 'wd5', site: 'Nextracker_Careers', name: 'Nextracker', verified: false }, // ★ solar tracker systems
-  { tenant: 'igsenergy', host: 'wd1', site: 'IGS_Energy_Careers', name: 'IGS Energy', verified: false }, // ★ solar installer
-  { tenant: 'faithtechnologies', host: 'wd1', site: 'Faith_Technologies_Careers', name: 'Faith Technologies', verified: false }, // ★ electrical/solar contractor
+  { tenant: 'aes', host: 'wd1', site: 'AES_US', name: 'AES', verified: false }, // ★ utility-scale solar/energy storage
+  { tenant: 'nextracker', host: 'wd5', site: 'nextpower_careers', name: 'Nextracker', verified: false }, // ★ solar tracker systems
+  { tenant: 'igsenergy', host: 'wd1', site: 'IGS', name: 'IGS Energy', verified: false }, // ★ solar installer
+  { tenant: 'faithtechnologies', host: 'wd1', site: 'FTI', name: 'Faith Technologies', verified: false }, // ★ electrical/solar contractor
   { tenant: 'sunrun', host: 'wd5', site: 'Sunrun_Careers', name: 'Sunrun Duplicate Check', verified: false }, // ★ duplicate check
   { tenant: 'solvenergy', host: 'wd1', site: 'SOLV_External_Career', name: 'SOLV Energy', verified: false },
-  { tenant: 'prim', host: 'wd108', site: 'Prim_Careers', name: 'Prim', verified: false }, // ★ solar/energy — verify tenant/host
-  { tenant: 'mosscm', host: 'wd1', site: 'Moss_Construction_Careers', name: 'Moss Construction', verified: false }, // ★ solar EPC
+  { tenant: 'prim', host: 'wd108', site: 'Primoris', name: 'Primoris', verified: false }, // ★ solar/energy — verify tenant/host
+  { tenant: 'mosscm', host: 'wd1', site: 'Moss_Careers', name: 'Moss Construction', verified: false }, // ★ solar EPC
 
   // ⚠️ tenant/host repérés via un lien de login sur rosendin.com/careers,
   // mais l'endpoint /wday/cxs/.../jobs n'a PAS encore été testé en
@@ -191,8 +190,8 @@ export const GREENHOUSE_COMPANIES: AtsCompanySeed[] = [
   { slug: 'brightcoreenergy', name: 'Brightcore Energy',       verified: true }, // installateur géothermie/solaire commercial, IGSHPA certifié requis
   { slug: 'soligent',         name: 'Soligent',                verified: false }, // plus gros distributeur solaire US — jobs surtout ops/warehouse, peu d'"installer" pur
   { slug: 'sunnova',          name: 'Sunnova Energy',          verified: true }, // ★ major residential solar — confirmed Greenhouse
-  { slug: 'sunpower',         name: 'SunPower',                verified: false }, // ★ established solar manufacturer/installer — uses Breezy HR
-  { slug: 'tesla-solar',      name: 'Tesla Solar',             verified: false }, // ★ SolarCity/Tesla — solar installer roles
+  
+
   { slug: 'vivint-solar',     name: 'Vivint Solar',            verified: false }, // ★ residential solar installer
   { slug: 'sunrun-grow',      name: 'Sunrun',                  verified: false }, // ★ residential leader — duplicate check needed
   { slug: '3mgroofing',       name: '3M Roofing',              verified: false }, // ★ solar + roofing — verify Greenhouse

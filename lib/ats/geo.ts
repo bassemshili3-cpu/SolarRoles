@@ -1,11 +1,19 @@
 // lib/ats/geo.ts
 
+import { STATE_CODE_TO_NAME } from '@/lib/usStates';
+
 const US_STATE_CODES = new Set([
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
   'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
   'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
   'VA','WA','WV','WI','WY','DC',
 ]);
+
+// Map "ILLINOIS" -> "IL", "NORTH CAROLINA" -> "NC", etc.
+// Construit à partir de STATE_CODE_TO_NAME pour ne pas dupliquer la source de vérité.
+const STATE_NAME_TO_CODE: Record<string, string> = Object.fromEntries(
+  Object.entries(STATE_CODE_TO_NAME).map(([code, name]) => [name.toUpperCase(), code]),
+);
 
 const NON_US_MARKERS = [
   'canada', 'united kingdom', 'uk', 'england', 'london', 'ireland', 'dublin',
@@ -17,6 +25,19 @@ const NON_US_MARKERS = [
 ];
 
 type MinimalJob = { location?: string | null; addressRegion?: string | null };
+
+/**
+ * Normalise une valeur de region brute (ex: "IL", "Illinois", "illinois ")
+ * vers un code d'état US à 2 lettres, si reconnaissable.
+ * Renvoie undefined si ce n'est ni un code US connu ni un nom d'état US connu
+ * (cas probable: région étrangère, ex: "Ontario", "Bavaria").
+ */
+function normalizeRegion(raw: string): string | undefined {
+  const upper = raw.toUpperCase().trim();
+  if (US_STATE_CODES.has(upper)) return upper;
+  if (STATE_NAME_TO_CODE[upper]) return STATE_NAME_TO_CODE[upper];
+  return undefined;
+}
 
 /**
  * Vérifie qu'un job est basé aux US. Options par métier:
@@ -31,9 +52,14 @@ export function isUSJob(
 ): boolean {
   const { allowBareRemote = true } = opts;
   const location = (job.location || '').toLowerCase();
-  const region = (job.addressRegion || '').toUpperCase();
+  const rawRegion = job.addressRegion || '';
+  const normalizedRegion = rawRegion ? normalizeRegion(rawRegion) : undefined;
 
-  if (region && !US_STATE_CODES.has(region)) {
+  // Workday renvoie addressRegion tantôt en code ("IL"), tantôt en nom complet
+  // ("Illinois"). On ne rejette sur la région QUE si elle est non vide ET
+  // non reconnaissable comme état US (ni code ni nom connu) — sinon on
+  // skippait à tort tous les jobs US dont addressRegion était en toutes lettres.
+  if (rawRegion && !normalizedRegion) {
     return false;
   }
 
@@ -42,7 +68,7 @@ export function isUSJob(
     if (re.test(location)) return false;
   }
 
-  if (region && US_STATE_CODES.has(region)) return true;
+  if (normalizedRegion) return true;
 
   if (/\bunited states\b|\bu\.?s\.?a?\.?\b/i.test(location)) return true;
 

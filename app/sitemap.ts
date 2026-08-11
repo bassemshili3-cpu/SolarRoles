@@ -164,22 +164,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 
   // ── Jobs "own" (indexables) ──────────────────────────────
-  const ownJobs = await prisma.job.findMany({
-    where: {
-      active: true,
-      OR: [
-        { postedByUserId: { not: null } },
-        { source: { in: ATS_SOURCES } },
-      ],
-    },
-    select: {
-      id: true,
-      title: true,
-      location: true,
-      postedAt: true,
-      fetchedAt: true,
-    },
-  })
+const oneMonthAgo = new Date(Date.now() - 30 * 86_400_000)
+
+const ownJobs = await prisma.job.findMany({
+  where: {
+    active: true,
+    AND: [
+      {
+        OR: [
+          { postedByUserId: { not: null } },
+          { source: { in: ATS_SOURCES } },
+        ],
+      },
+      {
+        OR: [
+          { postedAt: { gte: oneMonthAgo } },
+          { postedAt: null, fetchedAt: { gte: oneMonthAgo } },
+        ],
+      },
+    ],
+  },
+  select: {
+    id: true,
+    title: true,
+    location: true,
+    postedAt: true,
+    fetchedAt: true,
+  },
+})
 
   for (const job of ownJobs) {
     entries.push({

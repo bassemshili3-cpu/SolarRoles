@@ -1,7 +1,6 @@
 // app/jobs/[id]/[slug]/page.tsx
 import ApplyToggle from '../apply-toggle'
 
-import { AdUnit } from '@/components/AdUnit'
 
 import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
 
@@ -25,7 +24,7 @@ import { notFound } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 
-import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Minus, Check, AlertTriangle, Briefcase } from 'lucide-react'
 
 import Link from 'next/link'
 
@@ -50,6 +49,8 @@ import { buildJobSlug } from '@/lib/slugify'
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
 import { detectCertifications } from '@/lib/certification-detector'
+
+import { extractRequirementSignals } from '@/lib/requirement-signals'
 
 import Breadcrumb from '@/components/Breadcrumb'
 
@@ -534,8 +535,11 @@ export default async function JobDetailPage({
 
   const job = getJobDetailWithSalary(raw)
 
-const matchedCerts = detectCertifications(`${job.title} ${job.description}`)
+const jobText = job.seoDescription || job.description || ''
+const matchedCerts = detectCertifications(`${job.title} ${jobText}`)
 const cert = matchedCerts[0] // undefined si aucune certif détectée
+
+const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
 
 
   const taxonomy = extractSolarJobTaxonomy({
@@ -846,30 +850,70 @@ function safeJsonLd(data: unknown): string {
 
                   )}
 
-                  {job.contract_type && (
+              {job.contract_time && (
+  <span className="bg-secondary px-3 py-1 rounded-full capitalize">
+    {job.contract_time.replace('_', ' ')}
+  </span>
+)}
+</div>
 
-                    <span className="bg-secondary px-3 py-1 rounded-full capitalize">
+{cert && (
+  <div className="mt-6 rounded-xl border border-[#F5B819]/30 bg-[#FFFBEB] px-5 py-4">
+    <div className="flex items-center justify-between gap-4">
+      <div>
+        <p className="text-sm font-semibold text-[#92400E]">{cert.bannerHeadline}</p>
+        <p className="text-sm text-[#B45309]">{cert.bannerSubtext}</p>
+      </div>
+      
+        href={cert.heatspringUrl}
+        target="_blank"
+        rel="noopener sponsored"
+        className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
+    <a>
+        Get certified on HeatSpring →
+      </a>
+    </div>
+    <p className="mt-2 text-xs text-[#B45309]/70">
+      *We may earn a commission if you enroll through this link, at no extra cost to you.
+    </p>
+  </div>
+)}
 
-                      {job.contract_type}
+{(matchedCerts.length > 0 || requirementSignals.length > 0) && (
+  <div className="mt-6 rounded-xl border border-black/[0.08] bg-secondary/30 px-5 py-4">
+    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
+      At a glance
+    </p>
+    <ul className="space-y-2">
+      {matchedCerts.map((c) => (
+        <li key={c.slug} className="flex items-center gap-2 text-sm">
+          <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span className="text-foreground">{c.shortLabel} — required</span>
+        </li>
+      ))}
+      {requirementSignals.map((signal) => {
+        const icon =
+          signal.status === 'positive' ? (
+            <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+          ) : signal.status === 'warning' ? (
+            <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+          ) : signal.id === 'experience-required' ? (
+            <Briefcase className="w-4 h-4 text-muted-foreground shrink-0" />
+          ) : (
+            <MapPin className="w-4 h-4 text-muted-foreground shrink-0" />
+          )
+        return (
+          <li key={signal.id} className="flex items-center gap-2 text-sm">
+            {icon}
+            <span className="text-foreground">{signal.label}</span>
+          </li>
+        )
+      })}
+    </ul>
+  </div>
+)}
 
-                    </span>
-
-                  )}
-
-                  {job.contract_time && (
-
-                    <span className="bg-secondary px-3 py-1 rounded-full capitalize">
-
-                      {job.contract_time.replace('_', ' ')}
-
-                    </span>
-
-                  )}
-
-                </div>
-
-
-                <hr className="my-8" />
+<hr className="my-8" />
 
 
                 <div>

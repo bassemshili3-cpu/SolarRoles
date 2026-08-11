@@ -13,7 +13,7 @@ export interface UnifiedJob {
   description: string
   url: string
   apply_url: string
-  source: 'lensa' | 'adzuna' | 'jooble' | 'greenhouse' | 'careerjet'
+  source: 'lensa' | 'adzuna' | 'jooble' | 'greenhouse' | 'careerjet' | 'workday' | 'ashby' | 'jobvite' | 'pinpoint' | 'lever' | 'smartrecruiters'
   salary_min?: number
   salary_max?: number
   created?: string
@@ -106,14 +106,20 @@ const stableId = String(rawId).replace(/^-/, '')
 }
 }
 
-const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet', 'adzuna', 'greenhouse']
+const ACTIVE_SOURCES = ['lensa', 'adzuna', 'jooble', 'greenhouse', 'careerjet', 'workday', 'ashby', 'jobvite', 'pinpoint', 'lever', 'smartrecruiters']
 
 const SOURCE_PRIORITY: Record<UnifiedJob['source'], number> = {
-  careerjet: 1,
-  jooble: 2,
-  adzuna: 3,
-  lensa: 4,
-  greenhouse: 5,
+  careerjet: 10,
+  jooble: 9,
+  adzuna: 7,
+  lensa: 8,
+  greenhouse: 1,
+  workday: 2,
+  ashby: 11,
+  jobvite: 6,
+  pinpoint: 3,
+  lever: 4,
+  smartrecruiters: 5,
 }
 
 async function upsertJobsBackground(jobs: UnifiedJob[]) {
@@ -390,9 +396,21 @@ export async function searchAllJobs(params: {
     postedAt: job.created ? new Date(job.created) : null,
   })
 
+  function toWordRegex(keyword: string): RegExp {
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return new RegExp(`\\b${escaped}\\b`, 'i')
+}
+
+const whatFiltered = allResults.filter(job => {
+  if (!params.what) return true
+  const keywords = params.what.toLowerCase().split(/\s+/).filter(Boolean)
+  const haystack = job.title.toLowerCase()
+  return keywords.every(kw => toWordRegex(kw).test(haystack))
+})
+
   const finalResults = advanced
-    ? allResults.filter(job => matchesFilters(toFilterable(job), params)).slice(0, totalLimit)
-    : allResults
+    ? whatFiltered.filter(job => matchesFilters(toFilterable(job), params)).slice(0, totalLimit)
+    : whatFiltered.slice(0, totalLimit)
 
   console.log(`📦 TOTAL RETOURNÉ : ${dedupedCareerjet.length} CareerJet + ${dedupedJooble.length} Jooble + ${dedupedAdzuna.length} Adzuna + ${dedupedLensa.length} Lensa + ${dedupedGreenhouse.length} Greenhouse (${allResults.length} après dédup, ${finalResults.length} après filtres)`)
   console.log("=== DEBUG END ===")

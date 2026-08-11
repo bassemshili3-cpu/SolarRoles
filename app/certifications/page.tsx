@@ -154,12 +154,9 @@ function FeaturedDiploma({ cert }: { cert: Cert }) {
           {cert.name}
         </h3>
 
-        <p className="text-[10px] text-gray-500 mb-5 max-w-[200px] leading-relaxed">
-          For {cert.forRoles.slice(0, 2).join(' · ')}
-        </p>
-
+       
         {/* Official seal */}
-        <div className="relative mb-3">
+        <div className="relative mb-3 mt-5">
           <div className="absolute inset-0 rounded-full bg-[#F5B819]/40 blur-lg group-hover:bg-[#F5B819]/60 transition-colors" />
           <div className="relative h-16 w-16 rounded-full bg-gradient-to-br from-[#F5B819] via-[#F5B819] to-[#E5A810] flex items-center justify-center shadow-xl ring-4 ring-[#F5B819]/20 transition-transform group-hover:scale-110 group-hover:rotate-6">
             <Award className="text-[#0B1A2E]" size={28} strokeWidth={2.5} />
