@@ -647,7 +647,7 @@ export default function HowToGetNabcepCertified() {
             Course quality matters here more than raw study time. NABCEP
             publishes a job task analysis for each credential — the actual
             list of what the exam tests — and the strongest prep courses are
-            built directly against it rather than a generic solar curriculum.
+            built directly against it.
           </p>
 </ul>
           

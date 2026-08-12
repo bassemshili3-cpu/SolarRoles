@@ -691,7 +691,7 @@ function safeJsonLd(data: unknown): string {
 
               {job.source === 'adzuna' && (
 
-                <span className="text-xs text-muted-foreground">Sourced via Jooble</span>
+                <span className="text-xs text-muted-foreground">Sourced via Adzuna</span>
 
               )}
 

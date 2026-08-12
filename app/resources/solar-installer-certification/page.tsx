@@ -1209,8 +1209,7 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
 
           <p>
 
-           Shorter than most people expect, and it varies by state rather than being
-one national rule. No federal law requires any certification to install
+           Shorter than most people expect, and it varies by state. No federal law requires any certification to install
 solar panels. What can be legally required, depending on where you work,
 is a state electrical license for certain wiring tasks, and OSHA safety
 training that most employers treat as mandatory even where it technically

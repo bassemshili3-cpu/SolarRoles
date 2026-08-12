@@ -263,8 +263,7 @@ export default function SolarCertificationsByJobRole() {
           apply. "Most valued" covers voluntary credentials that aren't
           mandated anywhere but that employers and incentive programs
           consistently look for. "Optional / manufacturer" is narrower still,
-          usually tied to a specific product line rather than the role
-          itself.
+          usually tied to a specific product line.
         </p>
         <p>
           An electrical license requirement in one state can be a

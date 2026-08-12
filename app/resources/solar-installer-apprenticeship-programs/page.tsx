@@ -181,13 +181,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
           work, standing up a real apprenticeship pipeline became a direct
           lever on how much of the credit they can claim.
         </p>
-        <p>
-          That's useful context for a job seeker:
-          it explains why apprenticeship openings have been showing up more
-          at utility-scale EPCs specifically, rather than spread evenly
-          across residential installers who aren't chasing that credit
-          threshold in the first place.
-        </p>
+      
       </section>
 
       <section className="resource-section">

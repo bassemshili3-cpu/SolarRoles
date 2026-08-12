@@ -435,8 +435,7 @@ export default function NabcepBoardEligibleStatus() {
             <strong>Board Eligible status is NABCEP&apos;s answer.</strong>{" "}
             It decouples the exam from the experience: you can complete your
             training and pass the PVIP exam first, then spend up to three
-            years accumulating the field experience NABCEP requires, rather
-            than the other way around.
+            years accumulating the field experience NABCEP requires.
           </p>
 
           <h2 id="how"><span className="n">02</span>How Board Eligible Works</h2>

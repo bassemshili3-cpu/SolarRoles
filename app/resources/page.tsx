@@ -82,6 +82,15 @@ const CATEGORIES = [
 // entre l'ancien "Featured" et l'ancien "All resources by group".
 const ALL_RESOURCES: ResourceItem[] = [
   {
+    title: "Types of Solar Engineer Jobs",
+    description:
+      "Every solar engineer job title mapped to what it actually does, what it pays, and what you need — from PV design to BESS.",
+    href: "/resources/solar-engineer-jobs",
+    icon: "BookOpen",
+    type: "guide",
+    category: "Start here",
+  },
+  {
     title: "Solar Certifications by Job Role",
     description:
       "One table mapping each solar job to what's legally required, what's most valued, and what's optional.",

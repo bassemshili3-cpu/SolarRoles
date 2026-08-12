@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 interface Provider {
   name: string;
@@ -77,7 +76,7 @@ The foundational course, PVOL101, runs 60 hours online and costs 995 dollars by 
 
 What sets SEI apart is flexibility for people without much cash up front: a formal payment plan, scholarships, and a work-trade program where students can earn their tuition by working for SEI, an option no other provider here offers. In-person labs pair with the online coursework for hands-on practice, and Colorado residents may qualify for state workforce funding.
 
-Best fit: people planning a longer career rather than just the entry credential, or anyone for whom the up-front cost of other providers is the real obstacle.`,
+Best fit: people planning a longer career just the entry credential, or anyone for whom the up-front cost of other providers is the real obstacle.`,
     link: "https://www.solarenergy.org",
   },
   {
@@ -174,7 +173,7 @@ export default function NabcepTrainingComparison() {
           {p.body.split("\n\n").map((para, i) => (
             <p key={i}>{para}</p>
           ))}
-          <a href={p.link} target="_blank" rel="nofollow noopener noreferrer">
+          <a href={p.link} target="_blank" rel="noopener noreferrer">
             Visit {p.name}
           </a>
         </section>
@@ -192,8 +191,7 @@ export default function NabcepTrainingComparison() {
           the exam fee and paperwork, Everblue's bundles are built for that.
         </p>
         <p>
-          If you're building a long career rather than just a first
-          credential, or the up-front cost elsewhere is a real obstacle,
+          If you're building a long career, or the up-front cost elsewhere is a real obstacle,
           SEI's depth, payment plan, and work-trade program justify the
           higher price and slower pace.
         </p>
@@ -204,9 +202,8 @@ export default function NabcepTrainingComparison() {
         </p>
         <p>
           None of these paths guarantee a passing score or a job offer. They
-          guarantee you'll cover the material <Link href="/resources/how-to-get-nabcep-certified">NABCEP</Link> expects you to know. The
-          rest comes down to how much effort goes into the studying, not
-          which logo sits on the certificate of completion.
+          guarantee you'll cover the material NABCEP expects you to know. The
+          rest comes down to how much effort goes into the studying.
         </p>
       </section>
 

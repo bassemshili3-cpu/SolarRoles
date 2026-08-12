@@ -158,6 +158,9 @@ export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
   // direct — "site" est une déduction (probablement 'Careers'), à
   // confirmer avant de faire confiance à ce verified:true.
   { tenant: 'rosendin', host: 'wd1', site: 'Careers', name: 'Rosendin Electric', verified: false },
+{ tenant: 'enbridge', host: 'wd3', site: 'enbridge_careers', name: 'Enbridge', verified: false },
+{ tenant: 'canadiansolar', host: 'wd5', site: 'CanadianSolar', name: 'CanadianSolar', verified: false },
+{ tenant: 'invenergyllc', host: 'wd3', site: 'invenergycareers', name: 'Invenergy', verified: false },
 ];
 
 // ───────────────────────────────────────────────────────────

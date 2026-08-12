@@ -87,24 +87,24 @@ export default function Page() {
 
         <div className="prose prose-neutral max-w-none prose-p:my-6 prose-h2:font-bold prose-h2:font-serif prose-h2:mt-10 prose-h2:mb-4">
           <p>
-            Most solar contractors hire helpers with zero
+            Yes, some solar contractors hire helpers with zero
             background in the trade and train them on the crew.
           </p>
 
-          <h2>What contractors actually require</h2>
+          <h2>What contractors require</h2>
           <p>
-            A high school diploma (or equivalent) covers the paperwork side.
+            A high school diploma (or equivalent) covers the paperwork side &
             The rest is physical: you need to be comfortable on a roof, able
             to lift and carry racking and panels all day, and willing to
             follow directions from a lead installer. Prior roofing,
-            electrical, or general construction work helps, but plenty of
+            electrical, or general construction work helps, but a lot of
             installers start with none of that.
           </p>
           <p>
             Some crews run a short safety orientation before your first day.
             Others just put you to work carrying materials and staging tools
             while you pick up the terminology. OSHA 10 is the one credential
-            worth getting ahead of time — a lot of postings ask for it, and
+            worth getting ahead of time because a lot of postings ask for it, and
             some employers will cover the cost once you&rsquo;re hired.
           </p>
 
@@ -140,14 +140,14 @@ export default function Page() {
             often shave 6 to 12 months off that timeline.
           </p>
 
-          <h2>Where to actually find these jobs</h2>
+          <h2>Where to find these jobs</h2>
           <p>
             Generic job boards bury solar postings under sales and
             consultant roles that have nothing to do with hands-on
             installation. If you&rsquo;re specifically after tools-in-hand
             installer work, a board built just for that role, like{' '}
-            <a href="https://www.solarroles.com">Solar Roles</a>, cuts out
-            the noise and shows you only PV installer, electrician, and
+            <a href="https://www.solarroles.com">Solar Roles</a>, is specialized
+            in solar careers, and shows you only solar related
             O&amp;M openings.
           </p>
 

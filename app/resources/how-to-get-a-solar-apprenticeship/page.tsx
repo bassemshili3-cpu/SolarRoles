@@ -152,8 +152,7 @@ export default function HowToGetASolarApprenticeship() {
           typically skip the formal testing and ranking system entirely.
           You apply the way you'd apply for a job, because in most respects
           it is one: a paid position with a structured training plan
-          attached, evaluated by resume and interview rather than a scored
-          aptitude test.
+          attached, evaluated by resume and interview.
         </p>
       </section>
 
@@ -173,8 +172,7 @@ export default function HowToGetASolarApprenticeship() {
           touched algebra since high school. Free prep tools exist
           specifically for this test (Electric Prep and SkillsPrep are the
           two most commonly referenced), and several JATC websites
-          point applicants toward them directly rather than leaving people
-          to guess what's tested.
+          point applicants toward them directly.
         </p>
       </section>
 
@@ -232,7 +230,7 @@ export default function HowToGetASolarApprenticeship() {
           Apprenticeship.gov's Job Finder is the closest thing to a
           national search tool, pulling listings tied to registered
           programs and partners. In practice, it works best as a starting
-          point rather than a complete list; state apprenticeship agencies
+          point; state apprenticeship agencies
           (Florida and Oregon both maintain their own), IBEW local union
           halls for the electrical-track route, and direct outreach to
           regional employers running their own registered program often
@@ -240,8 +238,7 @@ export default function HowToGetASolarApprenticeship() {
         </p>
         <p>
           Because eligibility lists are local and options vary so much by
-          state, applying to more than one program at once, rather than
-          waiting on a single application, is the most direct way to
+          state, applying to more than one program at once is the most direct way to
           shorten however long this process ends up taking.
         </p>
       </section>

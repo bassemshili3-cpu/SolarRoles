@@ -415,9 +415,7 @@ export default function NabcepPvipPassRate() {
             try</strong> — meaning somewhere between 3 and 4 in 10 candidates
             need a retake. The candidates who pass on the first attempt are
             almost always the ones who went through a structured prep course
-            built against NABCEP&apos;s published Job Task Analysis, rather
-            than studying general solar material or relying on field
-            experience alone.
+            built against NABCEP&apos;s published Job Task Analysis.
           </p>
           <p>
             That gap — structured prep vs. general experience — is the
@@ -469,7 +467,7 @@ export default function NabcepPvipPassRate() {
             HeatSpring&apos;s PVIP prep, for example, covers the cost of a
             retake if you don&apos;t pass on your first attempt after
             completing their course — worth factoring in if you&apos;re
-            budgeting for the possibility now rather than after the fact.
+            budgeting for the possibility now.
           </p>
           <div className="sr2-heatspring-cta">
             <AffiliateLink
@@ -488,12 +486,12 @@ export default function NabcepPvipPassRate() {
           <p>
             Most sources point to somewhere around 100–150 hours of focused
             study for candidates without a structured course, spread over
-            several weeks rather than crammed. A few things consistently
+            several weeks. A few things consistently
             separate first-time passes from retakes:
           </p>
           <ul>
             <li>Studying directly against NABCEP&apos;s published PVIP Job Task Analysis</li>
-            <li>Practicing with timed, scored practice exams rather than just reading material — the 4-hour time pressure catches people who&apos;ve only studied untimed</li>
+            <li>Practicing with timed, scored practice exams — the 4-hour time pressure catches people who&apos;ve only studied untimed</li>
             <li>Reviewing 2017 NEC code sections specifically, since that&apos;s the edition the exam is still based on regardless of what&apos;s current in the field</li>
             <li>Treating commissioning and troubleshooting scenarios as their own study category, even if that&apos;s not the part of the job you do day to day</li>
           </ul>

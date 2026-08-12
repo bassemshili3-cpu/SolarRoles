@@ -61,7 +61,7 @@ const entryRoles = [
   },
   {
     title: 'Trainee Field Technician',
-    description: "Shadows a licensed technician on O&M and service calls rather than new installs. Slower-paced entry than a install crew, and a common path in for people coming from general electrical or HVAC backgrounds.",
+    description: "Shadows a licensed technician on O&M and service calls. Slower-paced entry than a install crew, and a common path in for people coming from general electrical or HVAC backgrounds.",
     icon: TrendingUp,
   },
 ]
@@ -175,7 +175,7 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><GraduationCap className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">What These Jobs Actually Require</h2></div>
           <p className="text-gray-600 mb-4 max-w-4xl">
-            No prior solar experience needed, but postings still screen for a specific set of things: the ability to lift 40 to 50 pounds repeatedly, comfort working at heights and on rooftops, a valid driver's license, and reliable attendance. Most crews handle OSHA 10 training internally once you're hired rather than expecting it going in.
+            No prior solar experience needed, but postings still screen for a specific set of things: the ability to lift 40 to 50 pounds repeatedly, comfort working at heights and on rooftops, a valid driver's license, and reliable attendance. Most crews handle OSHA 10 training internally once you're hired.
           </p>
           <p className="text-gray-600 max-w-4xl">
             Requirements vary more by role than by company: warehouse and logistics postings rarely ask for anything beyond a clean driving record and physical stamina, while apprentice and trainee roles increasingly mention a structured pay progression tied to specific milestonesn first solo install, first crew lead-assist, and so on.

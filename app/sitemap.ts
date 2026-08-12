@@ -62,6 +62,7 @@ const dataSalaryPages: string[] = [
 
 // ── Resources (guides carrière / certifications) ────────────
 const resourcePages: string[] = [
+  'solar-engineer-jobs',
   'how-to-become-a-solar-installer',
   'how-to-get-a-solar-apprenticeship',
   'manufacturer-certifications-tesla-enphase-solaredge',

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 interface Category {
   name: string;
@@ -151,13 +150,12 @@ export default function NabcepVsEtaVsStateLicenses() {
           hands-on emphasis than NABCEP's largely exam-based approach.
         </p>
         <p>
-          State contractor licenses are legal requirements, not optional
-          credentials. Where they apply, you cannot legally pull permits or
+          State contractor licenses are legal requirements. Where they apply, you cannot legally pull permits or
           run a solar business without one, regardless of how many voluntary
           certifications you hold.
         </p>
         <p>
-          <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">Manufacturer certifications</Link> (Tesla, Enphase, SolarEdge, IronRidge,
+          Manufacturer certifications (Tesla, Enphase, SolarEdge, IronRidge,
           and others) are brand-specific training programs. They don't carry
           legal weight and aren't recognized industry-wide the way NABCEP
           is, but they unlock real business benefits: pricing, lead
@@ -185,8 +183,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           ETA's approach leans further into hands-on assessment. Its
           entry-level certification is built for someone newer to the field,
           with practical training delivered through an ETA-approved school
-          as part of the certification itself, rather than assumed
-          beforehand. ETA also requires a Customer Service Specialist
+          as part of the certification itself. ETA also requires a Customer Service Specialist
           certification alongside its technical credential, something NABCEP
           doesn't build into its core pathway.
         </p>
@@ -230,15 +227,14 @@ export default function NabcepVsEtaVsStateLicenses() {
         <p>
           The practical takeaway is to check your specific state's licensing
           rules before assuming a national certification alone lets you
-          legally run jobs. Certifications travel across state lines;
-          licenses generally do not.
+          legally run jobs. Certifications travel across state lines unlike
+          licenses, generally.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>
-          Manufacturer certifications: not a substitute, but not optional
-          either in practice
+          Manufacturer certifications
         </h2>
         <p>
           Tesla, Enphase, SolarEdge, SMA, and other equipment manufacturers
@@ -269,7 +265,7 @@ export default function NabcepVsEtaVsStateLicenses() {
         <h2>How these stack for a real career</h2>
         <p>
           Someone building a serious solar installation career in the US
-          typically ends up with a combination, not a single credential.
+          typically ends up with a combination.
         </p>
         <p>
           A state contractor license, or supervised hours toward one, if the
@@ -282,7 +278,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           building the installation hours needed for higher certifications.
         </p>
         <p>
-          <Link href="/resources/nabcep-pvis-vs-pvip">NABCEP PV Installation Professional</Link> once you have the documented
+          NABCEP PV Installation Professional once you have the documented
           field experience, since it remains the most widely recognized
           credential among employers and incentive programs nationally.
         </p>
@@ -309,7 +305,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           required state license, or the reverse: assuming a state license
           means employers won't also expect NABCEP. Check what your
           specific state requires first. Everything else layers on top of
-          that foundation, not instead of it.
+          that foundation.
         </p>
       </section>
 

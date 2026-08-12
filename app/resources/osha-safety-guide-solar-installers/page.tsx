@@ -184,7 +184,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
           different rulebooks depending on whether it's a new install or a
           repair. State-plan states can also set their own, stricter
           numbers. California's fall protection threshold for this work sits
-          at seven and a half feet rather than the federal six, and several
+          at seven and a half feet instead of the federal six, and several
           other state plans layer on their own heat or fall requirements on
           top of the federal floor. The safe assumption on any job is to
           follow whichever standard is stricter..
@@ -267,14 +267,13 @@ export default function OshaSafetyGuideForSolarInstallers() {
           10 Construction is the standard starting point, and it's often
           what employers or state law require before you're even allowed on
           a residential roof crew. It's cheap, it's fast, and most
-          installation companies treat it as a baseline hiring requirement
-          rather than a differentiator.
+          installation companies treat it as a baseline hiring requirement.
         </p>
         <p>
           OSHA 30 Construction makes sense once you're leading a crew,
           managing a jobsite safety plan, or coordinating subcontractors,
           which for most installers lines up with a <Link href="/lead-solar-installer-jobs">lead installer or
-          foreman role</Link> rather than an entry-level one. Getting it earlier
+          foreman role</Link>. Getting it earlier
           than your role requires isn't wasted effort, since the deeper
           program-management material tends to matter more once you're
           responsible for other people's safety.

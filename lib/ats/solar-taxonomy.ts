@@ -216,7 +216,6 @@ const TECHNICAL_SALES_STRONG_SIGNALS: RegExp[] = [
 // trades, or roles that carry too high a spam/false-positive risk to
 // let through even under the expanded corporate-solar scope.
 const EXCLUDE_PATTERNS: RegExp[] = [
-  /solar\s*system(s)?\b(?!.*install)/i, // "solar system" astronomy/edu, unless still says "install"
   /software\s*install(er)?/i,
   /window\s*install(er)?/i,
   /flooring\s*install(er)?/i,

@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, DollarSign, TrendingUp, Clock, Zap } from 'lucide-react'
+import { ArrowLeft, DollarSign, TrendingUp, Clock, Zap, Award } from 'lucide-react'
+import { getPrimaryCertificationForCategory } from '@/lib/certification-detector'
 
 export const revalidate = 86400
 
@@ -286,6 +287,81 @@ export default async function SalaryReportPage({
     ? Math.round(((partnerAvg - nationalAvg) / nationalAvg) * 100)
     : 0
 
+  // NABCEP premium differential — moyenne nationale split selon mention NABCEP
+  // dans la description (même seuil de fiabilité >= 3 que salaryByState).
+  const nabcepAgg = await prisma.job.aggregate({
+    where: {
+      active: true,
+      salaryMin: { not: null, gt: 0 },
+      salaryMax: { not: null, gt: 0 },
+      ...titleFilterPrisma(role),
+      description: { contains: 'NABCEP', mode: 'insensitive' },
+    },
+    _avg: { salaryMin: true, salaryMax: true },
+    _count: { id: true },
+  })
+
+  const noNabcepAgg = await prisma.job.aggregate({
+    where: {
+      active: true,
+      salaryMin: { not: null, gt: 0 },
+      salaryMax: { not: null, gt: 0 },
+      ...titleFilterPrisma(role),
+      NOT: { description: { contains: 'NABCEP', mode: 'insensitive' } },
+    },
+    _avg: { salaryMin: true, salaryMax: true },
+    _count: { id: true },
+  })
+
+  const nabcepAvg = Math.round(((nabcepAgg._avg.salaryMin || 0) + (nabcepAgg._avg.salaryMax || 0)) / 2)
+  const noNabcepAvg = Math.round(((noNabcepAgg._avg.salaryMin || 0) + (noNabcepAgg._avg.salaryMax || 0)) / 2)
+  const nabcepCount = nabcepAgg._count.id
+  const noNabcepCount = noNabcepAgg._count.id
+  const showNabcepDiff = nabcepCount >= 3 && noNabcepCount >= 3 && nabcepAvg > 0 && noNabcepAvg > 0
+  const nabcepDiffPct = showNabcepDiff ? Math.round(((nabcepAvg - noNabcepAvg) / noNabcepAvg) * 100) : 0
+
+  // Statut contractuel 1099/W-2 — pas de champ dédié dans le schéma Prisma
+  // (pas de contractStatus/employmentType/workerClassification sur le model
+  // Job), donc extraction via la description avec ILIKE.
+  const formAgg = await prisma.$queryRaw<
+    { with1099: boolean; avgSalary: number; count: number }[]
+  >`
+    SELECT
+      (LOWER(description) LIKE '%1099%' OR LOWER(description) LIKE '%independent contractor%') AS "with1099",
+      ROUND(AVG(("salaryMin" + "salaryMax") / 2))::int AS "avgSalary",
+      COUNT(*)::int AS "count"
+    FROM "Job"
+    WHERE
+      active = true
+      AND "salaryMin" IS NOT NULL
+      AND "salaryMin" > 0
+      AND "salaryMax" IS NOT NULL
+      AND "salaryMax" > 0
+      AND (LOWER(description) LIKE '%1099%' OR LOWER(description) LIKE '%independent contractor%'
+           OR LOWER(description) LIKE '%w-2%' OR LOWER(description) LIKE '%w2%')
+      AND ${titleFilterSql(role)}
+    GROUP BY "with1099"
+  `
+
+  const form1099 = formAgg.find((r) => r.with1099)
+  const formW2 = formAgg.find((r) => !r.with1099)
+  const form1099Count = form1099?.count || 0
+  const formW2Count = formW2?.count || 0
+  const showFormDiff = form1099Count >= 3 && formW2Count >= 3 && (form1099?.avgSalary || 0) > 0 && (formW2?.avgSalary || 0) > 0
+  const formDiffPct = showFormDiff
+    ? Math.round((((form1099?.avgSalary || 0) - (formW2?.avgSalary || 0)) / (formW2?.avgSalary || 1)) * 100)
+    : 0
+
+  // CTA affilié HeatSpring — réutilise le détecteur existant par catégorie
+  // (getPrimaryCertificationForCategory dans certification-detector.ts).
+  const ROLE_TO_CATEGORY_SLUG: Record<string, string> = {
+    'solar-photovoltaic-installer': 'solar-pv-installer',
+    'lead-solar-installer': 'lead-installer',
+  }
+  const cert = ROLE_TO_CATEGORY_SLUG[slug]
+    ? getPrimaryCertificationForCategory(ROLE_TO_CATEGORY_SLUG[slug])
+    : undefined
+
   // Fraîcheur — la donnée la plus récente sur ce rôle.
   const latestJob = await prisma.job.findFirst({
     where: {
@@ -392,6 +468,42 @@ export default async function SalaryReportPage({
           </section>
         )}
 
+        {/* NABCEP PREMIUM — listings mentionnant NABCEP vs ceux qui n'en parlent pas */}
+        {showNabcepDiff && (
+          <section className="mb-12 bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Award className="w-5 h-5 text-[#B45309]" />
+              <h2 className="font-bold text-[#0B1A2E]">NABCEP premium</h2>
+            </div>
+            <p className="text-sm text-gray-600">
+              Listings mentioning NABCEP average <span className="font-semibold text-[#B45309]">${fmt(nabcepAvg)}</span> vs{' '}
+              <span className="font-semibold text-[#0B1A2E]">${fmt(noNabcepAvg)}</span> without — a{' '}
+              <span className="font-semibold text-[#B45309]">{nabcepDiffPct >= 0 ? '+' : ''}{nabcepDiffPct}%</span> difference.
+            </p>
+            <p className="text-xs text-gray-400 mt-2">
+              Based on {fmt(nabcepCount)} listings mentioning NABCEP and {fmt(noNabcepCount)} that don't.
+            </p>
+          </section>
+        )}
+
+        {/* 1099 / W-2 STATUS — salaire moyen selon le statut contractuel */}
+        {showFormDiff && (
+          <section className="mb-12 bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="w-5 h-5 text-[#B45309]" />
+              <h2 className="font-bold text-[#0B1A2E]">1099 vs W-2 pay</h2>
+            </div>
+            <p className="text-sm text-gray-600">
+              1099 / independent contractor listings average <span className="font-semibold text-[#B45309]">${fmt(form1099?.avgSalary || 0)}</span> vs{' '}
+              <span className="font-semibold text-[#0B1A2E]">${fmt(formW2?.avgSalary || 0)}</span> for W-2 — a{' '}
+              <span className="font-semibold text-[#B45309]">{formDiffPct >= 0 ? '+' : ''}{formDiffPct}%</span> difference.
+            </p>
+            <p className="text-xs text-gray-400 mt-2">
+              Based on {fmt(form1099Count)} 1099/contract listings and {fmt(formW2Count)} W-2 listings.
+            </p>
+          </section>
+        )}
+
         {/* EDITORIAL — contenu fixe, comble le vide quand la table de données est maigre */}
         <section className="mb-12 space-y-6">
           <div>
@@ -401,6 +513,27 @@ export default async function SalaryReportPage({
           <div>
             <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">Certification and entry path</h2>
             <p className="text-sm text-gray-600 leading-relaxed">{editorial.certification}</p>
+            {cert && (
+              <div className="mt-4 rounded-xl border border-[#F5B819]/30 bg-[#FFFBEB] px-5 py-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-[#92400E]">{cert.bannerHeadline}</p>
+                    <p className="text-sm text-[#B45309]">{cert.bannerSubtext}</p>
+                  </div>
+                  <a
+                    href={cert.heatspringUrl}
+                    target="_blank"
+                    rel="noopener sponsored"
+                    className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
+                  >
+                    Get certified on HeatSpring →
+                  </a>
+                </div>
+                <p className="mt-2 text-xs text-[#B45309]/70">
+                  *We may earn a commission if you enroll through this link, at no extra cost to you.
+                </p>
+              </div>
+            )}
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">Where this role leads</h2>

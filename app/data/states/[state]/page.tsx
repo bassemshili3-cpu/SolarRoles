@@ -3,8 +3,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
-import { Building2, Briefcase, MapPin, ArrowLeft, Clock, TrendingUp } from 'lucide-react'
+import { Building2, Briefcase, MapPin, ArrowLeft, Clock, TrendingUp, Award } from 'lucide-react'
 import { STATES, SLUG_TO_STATE } from '@/lib/usStates'
+import { getPrimaryCertificationForCategory } from '@/lib/certification-detector'
 
 export const revalidate = 86400
 
@@ -188,6 +189,54 @@ export default async function StateDataPage({
   } catch (err) {
     console.error(`StateDataPage role breakdown error (${stateName}):`, err)
   }
+
+  // ── Prevailing wage — % de listings mentionnant "prevailing wage" ou
+  // "Davis-Bacon" dans la description, + salaire moyen de cette branche vs
+  // le reste. Isolé : si ça échoue, le reste de la page reste intact.
+  let prevailingWage: { pct: number; count: number; avgSalary: number | null; otherAvgSalary: number | null; otherCount: number } | null = null
+  try {
+    const pwAgg = await prisma.$queryRaw<
+      { isPrevailing: boolean; avgSalary: number; count: number }[]
+    >`
+      SELECT
+        (LOWER(description) LIKE '%prevailing wage%' OR LOWER(description) LIKE '%davis-bacon%') AS "isPrevailing",
+        ROUND(AVG(("salaryMin" + "salaryMax") / 2))::int AS "avgSalary",
+        COUNT(*)::int AS "count"
+      FROM "Job"
+      WHERE
+        active = true
+        AND "addressRegion" IN (${stateName}, ${stateCode})
+        AND "salaryMin" IS NOT NULL
+        AND "salaryMin" > 0
+        AND "salaryMax" IS NOT NULL
+        AND "salaryMax" > 0
+        AND (LOWER(description) LIKE '%prevailing wage%' OR LOWER(description) LIKE '%davis-bacon%'
+             OR LOWER(description) NOT LIKE '%prevailing wage%' AND LOWER(description) NOT LIKE '%davis-bacon%')
+      GROUP BY "isPrevailing"
+    `
+
+    const pw = pwAgg.find((r) => r.isPrevailing)
+    const other = pwAgg.find((r) => !r.isPrevailing)
+    const pwCount = pw?.count || 0
+    const otherCount = other?.count || 0
+
+    if (pwCount >= 3 && otherCount >= 3 && (pw?.avgSalary || 0) > 0 && (other?.avgSalary || 0) > 0) {
+      const total = pwCount + otherCount
+      prevailingWage = {
+        pct: Math.round((pwCount / total) * 100),
+        count: pwCount,
+        avgSalary: pw?.avgSalary ?? null,
+        otherAvgSalary: other?.avgSalary ?? null,
+        otherCount,
+      }
+    }
+  } catch (err) {
+    console.error(`StateDataPage prevailing wage error (${stateName}):`, err)
+  }
+
+  // CTA affilié HeatSpring — réutilise le détecteur existant par catégorie
+  // (getPrimaryCertificationForCategory dans certification-detector.ts).
+  const cert = getPrimaryCertificationForCategory('solar-pv-installer')
 
   // ── Moyenne nationale — pour situer l'état dans son contexte ──
   let nationalAvg: number | null = null
@@ -375,6 +424,47 @@ export default async function StateDataPage({
                 </Link>
               ))}
             </div>
+            {/* CTA affilé HeatSpring — réutilise le détecteur existant, inséré
+                juste après la grille des 2 cards installer/lead */}
+            {cert && (
+              <div className="mt-4 rounded-xl border border-[#C9991F]/30 bg-white px-5 py-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-[#3D1654]">{cert.bannerHeadline}</p>
+                    <p className="text-sm text-[#C9991F]">{cert.bannerSubtext}</p>
+                  </div>
+                  <a
+                    href={cert.heatspringUrl}
+                    target="_blank"
+                    rel="noopener sponsored"
+                    className="shrink-0 text-sm font-semibold text-[#C9991F] underline hover:text-[#3D1654]"
+                  >
+                    Get certified on HeatSpring →
+                  </a>
+                </div>
+                <p className="mt-2 text-xs text-[#C9991F]/70">
+                  *We may earn a commission if you enroll through this link, at no extra cost to you.
+                </p>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* PREVAILING WAGE — % de listings mentionnant prevailing wage / Davis-Bacon */}
+        {prevailingWage && (
+          <section className="mb-12 bg-[#F5EEF7] border border-[#E8D5F0] rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Award className="w-5 h-5 text-[#C9991F]" />
+              <h2 className="font-bold text-[#3D1654]">Prevailing wage in {stateName}</h2>
+            </div>
+            <p className="text-sm text-gray-600">
+              {fmt(prevailingWage.pct)}% of active solar listings in {stateName} mention prevailing wage or Davis-Bacon, averaging{' '}
+              <span className="font-semibold text-[#3D1654]">${fmt(prevailingWage.avgSalary || 0)}</span> vs{' '}
+              <span className="font-semibold text-[#3D1654]">${fmt(prevailingWage.otherAvgSalary || 0)}</span> for the rest.
+            </p>
+            <p className="text-xs text-gray-400 mt-2">
+              Based on {fmt(prevailingWage.count)} prevailing-wage listings and {fmt(prevailingWage.otherCount)} others.
+            </p>
           </section>
         )}
 

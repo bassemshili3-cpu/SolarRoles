@@ -182,8 +182,7 @@ export default function ManufacturerCertifications() {
           A Tesla certification works differently: it's not something to
           chase before you have the job. It's a benefit that shows up after
           you're hired by a company that's already a Tesla-certified
-          partner, at which point the training is handled internally rather
-          than something you seek out on your own.
+          partner, at which point the training is handled internally.
         </p>
       </section>
 

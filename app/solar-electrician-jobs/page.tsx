@@ -61,7 +61,7 @@ const electricianRoles = [
   },
   {
     title: 'Solar O&M Electrician',
-    description: 'Maintains operating sites rather than building new ones. Typical work includes fault isolation, inverter and combiner troubleshooting, preventive maintenance, and responding to monitoring alarms.',
+    description: 'Maintains operating sites instead of building new ones. Typical work includes fault isolation, inverter and combiner troubleshooting, preventive maintenance, and responding to monitoring alarms.',
     icon: ShieldCheck,
   },
 ]

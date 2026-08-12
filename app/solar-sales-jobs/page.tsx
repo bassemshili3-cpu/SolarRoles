@@ -46,7 +46,7 @@ const salesRoles = [
   },
   {
     title: 'In-Home Sales Consultant',
-    description: "Runs the sales appointment itself, presenting system design, financing options, and closing the contract in the customer's home. Leads are usually handed off from a setter or marketing team rather than self-generated.",
+    description: "Runs the sales appointment itself, presenting system design, financing options, and closing the contract in the customer's home. Leads are usually handed off from a setter or marketing team.",
     icon: Home,
   },
   {
@@ -61,7 +61,7 @@ const salesRoles = [
   },
   {
     title: 'Channel / Partner Sales Manager',
-    description: "Manages relationships with roofing companies, electricians, or other contractors who refer solar leads, rather than selling to homeowners directly. A common step up after a few years closing deals individually.",
+    description: "Manages relationships with roofing companies, electricians, or other contractors who refer solar leads. A common step up after a few years closing deals individually.",
     icon: Users,
   },
 ]
@@ -73,7 +73,7 @@ const faqs = [
   },
   {
     question: 'How much can top performers earn?',
-    answer: "Top D2D and in-home reps commonly clear $100,000 to $150,000+ in strong markets, since commission is usually paid per watt or per system rather than capped. Mid-performers land well below that, the spread between top and median earners is wider in solar sales than in most sales jobs.",
+    answer: "Top D2D and in-home reps commonly clear $100,000 to $150,000+ in strong markets, since commission is usually paid per watt or per system. Mid-performers land well below that, the spread between top and median earners is wider in solar sales than in most sales jobs.",
   },
   {
     question: 'Do you need a license to sell solar?',
@@ -89,7 +89,7 @@ const faqs = [
   },
   {
     question: 'Is solar sales a good way to break into the industry with no experience?',
-    answer: "It's one of the more accessible entry points, since most companies hire on sales aptitude rather than solar background and train the technical content on the job. It's a different track than installation, though, moving from sales into a technical or install role isn't automatic.",
+    answer: "It's one of the more accessible entry points, since most companies hire on sales aptitude and train the technical content on the job. It's a different track than installation, though, moving from sales into a technical or install role isn't automatic.",
   },
 ]
 
@@ -163,7 +163,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><ShieldCheck className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">What These Roles Actually Require</h2></div>
           <p className="text-gray-600 mb-4 max-w-4xl">
-            Most solar sales postings don't require a technical background, they screen for sales aptitude, resilience for door-to-door or cold outreach, and comfort presenting financing options (loan, lease, or PPA) rather than solar knowledge itself. Companies typically train the technical content during onboarding.
+            Most solar sales postings don't require a technical background, they screen for sales aptitude, resilience for door-to-door or cold outreach, and comfort presenting financing options (loan, lease, or PPA). Companies typically train the technical content during onboarding.
           </p>
           <p className="text-gray-600 max-w-4xl">
             The exception is technical sales and sales engineer roles, where system design competence is expected from the start and NABCEP's PV Technical Sales credential shows up as a differentiator. State licensing requirements for home improvement or contractor sales also apply in some states specifically for door-to-door and in-home solar, worth checking before assuming a posting's requirements are generic.
@@ -173,7 +173,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Sales Pay & Commission</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Solar sales isn't tracked as its own category by the Bureau of Labor Statistics, so the ranges below reflect typical figures reported in industry postings rather than a government statistic, treat them as directional, and expect real variance by company, region, and lead source.
+            Solar sales isn't tracked as its own category by the Bureau of Labor Statistics, so the ranges below reflect typical figures reported in industry postings, treat them as directional, and expect real variance by company, region, and lead source.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">

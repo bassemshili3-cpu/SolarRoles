@@ -15,7 +15,7 @@ import {
 export const metadata: Metadata = {
   title: 'What Does a Solar Installer Do? (Job Description & Daily Tasks)',
   description:
-    'A solar installer mounts racking, sets panels, and wires the system on the roof or ground. Here’s what the job actually looks like day to day in 2026.',
+    'A solar installer mounts racking, sets panels, and wires the system on the roof or ground. Here’s what the job looks like day to day in 2026.',
   keywords: [
     'what does a solar installer do',
     'solar installer job description',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'What Does a Solar Installer Do? (Job Description & Daily Tasks)',
     description:
-      'A solar installer mounts racking, sets panels, and wires the system on the roof or ground. Here’s what the job actually looks like day to day in 2026.',
+      'A solar installer mounts racking, sets panels, and wires the system on the roof or ground. Here’s what the job looks like day to day in 2026.',
     url: 'https://www.solarroles.com/blog/what-does-a-solar-installer-do',
     siteName: 'Solar Roles',
     type: 'article',
@@ -312,7 +312,7 @@ export default function Page() {
         {/* ─── Section 3: Tools and skills ──────────────────────────────── */}
         <div className="prose prose-neutral prose-lg mx-auto max-w-3xl px-4 prose-headings:scroll-mt-20 prose-headings:font-bold prose-h2:mt-16 prose-h2:text-3xl prose-a:text-amber-600 prose-a:no-underline hover:prose-a:underline">
           <section id="tools-skills">
-            <h2>Tools and skills you actually use</h2>
+            <h2>Tools and skills you use</h2>
             <p>
               The skills employers screen for on day one are practical. Here&rsquo;s what shows up on a real job site.
             </p>
@@ -429,7 +429,7 @@ export default function Page() {
         {/* ─── Section 6: Where to find jobs ────────────────────────────── */}
         <div className="prose prose-neutral prose-lg mx-auto max-w-3xl px-4 pb-12 prose-headings:scroll-mt-20 prose-headings:font-bold prose-h2:mt-16 prose-h2:text-3xl prose-a:text-amber-600 prose-a:no-underline hover:prose-a:underline">
           <section id="find-jobs">
-            <h2>Where to actually find these jobs</h2>
+            <h2>Where to find these jobs</h2>
             <p>
               Generic job boards mix installer postings in with sales and
               consultant roles that have nothing to do with hands-on work. If
@@ -443,7 +443,7 @@ export default function Page() {
               <em>
                 It&rsquo;s physical work with a clear routine: stage, mount,
                 wire, test. If that sounds like a fit, the skills above are
-                the ones employers actually screen for.
+                the ones employers screen for.
               </em>
             </p>
           </section>
