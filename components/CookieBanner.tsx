@@ -74,7 +74,7 @@ export default function CookieBanner() {
             </Link>
             {' & '}
             <Link
-              href="/privacy-policy"
+              href="/privacy"
               className="font-medium underline underline-offset-2 text-indigo-600 hover:text-indigo-800 transition-colors"
             >
               Privacy policy

@@ -56,13 +56,13 @@ const CATEGORIES = [
     label: "Career Paths",
     desc: "From tech to lead",
     icon: Route,
-    href: "/resources/career-paths",
+    href: "/resources#career-path",
   },
   {
     label: "Certifications",
     desc: "NABCEP, OSHA, more",
     icon: Award,
-    href: "/resources#certifications",
+    href: "/certifications",
   },
   {
     label: "Safety",
@@ -105,6 +105,15 @@ const ALL_RESOURCES: ResourceItem[] = [
       "The realistic path from zero experience to your first solar job — no degree required.",
     href: "/resources/how-to-become-a-solar-installer",
     icon: "HardHat",
+    type: "guide",
+    category: "Start here",
+  },
+  {
+    title: "Solar Installer vs Electrician (Texas)",
+    description:
+      "Whether DC-side work counts as electrical work under Texas law, and how the licensing rules actually split the crew.",
+    href: "/resources/solar-installer-vs-electrician-texas",
+    icon: "BookOpen",
     type: "guide",
     category: "Start here",
   },
@@ -450,7 +459,7 @@ export default function ResourcesHub() {
       </section>
 
       {/* RESOURCE LIBRARY — remplace Featured + All resources by group */}
-      <section id="all" className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
+      <section id="courses" className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
         <div className="mb-8">
           <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
             Resources
@@ -463,7 +472,7 @@ export default function ResourcesHub() {
       </section>
 
       {/* CAREER PATH FLOW (Resources for your role equivalent) */}
-      <section className="bg-gradient-to-b from-[#FEF7EB] to-[#FAFAFA] py-16 md:py-20 my-8 border-y border-[#F2A93B]/10">
+      <section id="career-path" className="bg-gradient-to-b from-[#FEF7EB] to-[#FAFAFA] py-16 md:py-20 my-8 border-y border-[#F2A93B]/10">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
@@ -490,12 +499,88 @@ export default function ResourcesHub() {
 
           <div className="mt-10 text-center">
             <Link
-              href="/resources/career-paths"
+              href="/resources#career-path"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#F2A93B] text-[#1C2126] rounded-full font-semibold hover:bg-[#E0A030] hover:shadow-[0_8px_24px_-4px_rgba(242,169,59,0.4)] transition-all"
             >
               See the full career path
               <ArrowRight className="h-4 w-4" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* EXPLORE MORE — jobs, salary data, and certifications */}
+      <section className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white rounded-3xl border border-[#F2A93B]/15 p-7">
+            <div className="flex items-center gap-2 mb-4">
+              <Briefcase className="h-5 w-5 text-[#F2A93B]" />
+              <h2 className="text-lg font-bold text-[#1C2126]">Explore jobs by role</h2>
+            </div>
+            <p className="text-sm text-[#1C2126]/65 mb-4 leading-relaxed">
+              Put the guides to work: browse live openings for each role in the
+              solar field, then come back to read the credential you need next.
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+              {[
+                { label: 'Solar PV Installer', href: '/solar-pv-installer-jobs' },
+                { label: 'Solar Technician', href: '/solar-technician-jobs' },
+                { label: 'Lead Installer', href: '/lead-solar-installer-jobs' },
+                { label: 'Solar Electrician', href: '/solar-electrician-jobs' },
+                { label: 'BESS Technician', href: '/bess-technician-jobs' },
+                { label: 'Solar Sales', href: '/solar-sales-jobs' },
+                { label: 'Solar Engineer', href: '/solar-engineer-jobs' },
+                { label: 'No Experience', href: '/solar-jobs-no-experience' },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-[#1C2126]/80 hover:text-[#D88A1E] font-medium inline-flex items-center gap-1.5">
+                    <ArrowRight className="h-3.5 w-3.5 text-[#F2A93B]" />
+                    {l.label} jobs
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl border border-[#F2A93B]/15 p-7">
+              <div className="flex items-center gap-2 mb-4">
+                <Award className="h-5 w-5 text-[#F2A93B]" />
+                <h2 className="text-lg font-bold text-[#1C2126]">Salary data by role</h2>
+              </div>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                {[
+                  { label: 'PV Installer', href: '/data/salaries/solar-photovoltaic-installer' },
+                  { label: 'Lead Installer', href: '/data/salaries/lead-solar-installer' },
+                  { label: 'Solar Technician', href: '/data/salaries/solar-technician' },
+                  { label: 'Solar Electrician', href: '/data/salaries/solar-electrician' },
+                  { label: 'Solar Engineer', href: '/data/salaries/solar-engineer' },
+                  { label: 'Solar Sales', href: '/data/salaries/solar-sales-representative' },
+                ].map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="text-[#1C2126]/80 hover:text-[#D88A1E] font-medium inline-flex items-center gap-1.5">
+                      <ArrowRight className="h-3.5 w-3.5 text-[#F2A93B]" />
+                      {l.label} salary by state
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/data" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#D88A1E] hover:gap-2.5 transition-all">
+                See the full data center <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="bg-white rounded-3xl border border-[#F2A93B]/15 p-7">
+              <div className="flex items-center gap-2 mb-3">
+                <Shield className="h-5 w-5 text-[#F2A93B]" />
+                <h2 className="text-lg font-bold text-[#1C2126]">Certifications</h2>
+              </div>
+              <p className="text-sm text-[#1C2126]/65 leading-relaxed">
+                Deep dives on the credentials that matter most: <Link href="/certifications/nabcep-pv-associate" className="text-[#D88A1E] font-medium hover:underline">NABCEP PV Associate</Link>,{' '}
+                <Link href="/certifications/nabcep-pv-installation-professional" className="text-[#D88A1E] font-medium hover:underline">PVIP</Link>,{' '}
+                <Link href="/certifications/osha-10" className="text-[#D88A1E] font-medium hover:underline">OSHA 10</Link>, and{' '}
+                <Link href="/certifications/osha-30" className="text-[#D88A1E] font-medium hover:underline">OSHA 30</Link>.
+              </p>
+            </div>
           </div>
         </div>
       </section>

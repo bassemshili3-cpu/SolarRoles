@@ -33,8 +33,24 @@ const ARTICLES: Array<{
   image: string | null
   url: string
 }> = [
-  // Un seul article pour le moment — l’article featured ci-dessus fait le taf.
-  // Ajoute tes prochains articles ici quand ils sont prêts, puis on créera la page /blog/[slug]/page.tsx ensemble.
+  {
+    category: 'Solar Careers',
+    title: 'Can You Become a Solar Installer With No Experience? (2026 Guide)',
+    author: 'Solar Roles Editorial Team',
+    date: 'July 2026',
+    readTime: '7 min read',
+    image: null,
+    url: '/blog/become-solar-installer-no-experience',
+  },
+  {
+    category: 'Solar Careers',
+    title: 'What Does a Solar Installer Do? (Job Description & Daily Tasks)',
+    author: 'Solar Roles Editorial Team',
+    date: 'July 2026',
+    readTime: '6 min read',
+    image: null,
+    url: '/blog/what-does-a-solar-installer-do',
+  },
 ]
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {

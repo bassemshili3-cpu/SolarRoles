@@ -194,8 +194,8 @@ export default function Login() {
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <label className="text-sm font-semibold text-slate-700">Password</label>
-                <Link href="/auth/forgot-password" className="text-sm font-medium text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors">
-                  Forgot password?
+                <Link href="/contact" className="text-sm font-medium text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors">
+                  Help signing in? Contact us
                 </Link>
               </div>
               <div className="relative">

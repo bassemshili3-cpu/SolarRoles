@@ -6,7 +6,7 @@ import { STATES } from './usStates'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-export const ACTIVE_SOURCES = ['lever', 'adzuna', 'pinpoint', 'workable', 'employer', 'greenhouse'] as const
+export const ACTIVE_SOURCES = ['lever', 'adzuna', 'pinpoint', 'workable', 'employer', 'greenhouse', 'asby', 'workday'] as const
 
 const STOPWORDS = new Set([
   'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
@@ -84,7 +84,8 @@ export interface JobWhereParams {
   descriptionContainsAny?: string[]
    requiredDomainTerms?: string[]
    titleContainsAny?: string[]  
-  isFifo?: boolean 
+  isFifo?: boolean
+  entryLevel?: boolean
   where?: string
   salaryMin?: number
   postedWithin?: number
@@ -119,7 +120,8 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
     descriptionContainsAny = [],
      requiredDomainTerms = [], 
       titleContainsAny = [], 
-    isFifo        = false, 
+    isFifo        = false,
+    entryLevel    = false, 
     where         = '',
     salaryMin,
     postedWithin,
@@ -135,20 +137,26 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
 
   const AND: Prisma.JobWhereInput[] = []
 
-  if (whatPhrases.length > 0) {
-    AND.push({ OR: keywordOr(whatPhrases, ['title', 'description']) })
+if (whatPhrases.length > 0) {
+  AND.push({ OR: keywordOr(whatPhrases, ['title', 'description']) })
 } else if (what) {
   const keywords = meaningfulKeywords(what)
   for (const kw of keywords) {
-    AND.push({ OR: keywordOr([kw], ['title']) })  // title uniquement
+    AND.push({ OR: keywordOr([kw], ['title']) })  // un AND.push par mot
   }
 }
+const ENTRY_LEVEL_KEYWORDS = [
+  'entry level', 'entry-level', 'junior', 'jr.', 'jr ',
+  'no experience', 'trainee', 'apprentice', 'entry position',
+]
 
- if (titleContainsAny.length > 0) {
-    AND.push({
-      OR: keywordOr(titleContainsAny, ['title']),
-    })
-  }
+const ENTRY_LEVEL_EXCLUDE_KEYWORDS = [
+  'senior', 'sr.', 'sr ', 'lead', 'principal', 'foreman', 'supervisor', 'manager',
+]
+
+if (titleContainsAny.length > 0) {
+  AND.push({ OR: keywordOr(titleContainsAny, ['title']) })
+}
 
   if (excludePhrases.length > 0) {
     AND.push({
@@ -180,6 +188,12 @@ if (requiredDomainTerms.length > 0) {
    // ── Fifo tag précalculé à l'ingestion ────────────────────────────────────────
   if (isFifo) {
     AND.push({ isFifo: true })
+  }
+
+  // ── Entry level (fallback texte tant que experienceLevel n'est pas fiable) ──
+  if (entryLevel) {
+    AND.push({ OR: keywordOr(ENTRY_LEVEL_KEYWORDS, ['title']) })
+    AND.push({ NOT: { OR: keywordOr(ENTRY_LEVEL_EXCLUDE_KEYWORDS, ['title']) } })
   }
 
   // ── Location ────────────────────────────────────────────────────────────────
@@ -297,6 +311,7 @@ export function parseJobWhereParams(searchParams: URLSearchParams): JobWherePara
     titleContainsAny:       splitPhrasesParam(searchParams.get('title_contains_any')),
     requiredDomainTerms:    splitPhrasesParam(searchParams.get('required_domain_terms')),  
     isFifo:         searchParams.get('is_fifo') === 'true', 
+    entryLevel:     searchParams.get('entry_level') === 'true',
     where:          searchParams.get('where')?.trim() || '',
     salaryMin:      searchParams.get('salary_min')     ? parseInt(searchParams.get('salary_min')!)    : undefined,
     postedWithin:   searchParams.get('posted_within')  ? parseInt(searchParams.get('posted_within')!) : undefined,

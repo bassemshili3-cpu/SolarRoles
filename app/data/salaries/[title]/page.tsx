@@ -43,6 +43,76 @@ const NOISE = [
 ]
 
 const ROLES: Record<string, Role> = {
+  'solar-technician': {
+  title: 'Solar Technician',
+  include: [
+    'solar technician',
+    'pv technician',
+    'solar service technician',
+    'solar field service technician',
+    'solar o&m technician',
+    'solar maintenance technician',
+    'pv o&m technician',
+  ],
+  exclude: [
+    'installer',
+    'install technician',
+    'sales',
+    'engineer',
+    'bess',
+    ...NOISE,
+  ],
+  editorial: {
+    dayToDay:
+      'A Solar Technician maintains PV systems already in the ground rather than installing new ones: diagnosing inverter faults, running production diagnostics, replacing failed components, and completing scheduled inspections. Work is spread across a service territory rather than concentrated on one job site, and unplanned callouts for system outages are common alongside the scheduled maintenance route.',
+    certification:
+      'Most postings ask for a year or more of hands-on PV or electrical experience before hire, sometimes phrased as a choice between solar O&M experience or time in an adjacent field like power plant operations. A NABCEP PV Associate or Installation Professional credential is common, and some employers prefer or require a state electrical license for troubleshooting work beyond basic component swaps.',
+    progression:
+      'Technicians with a few years of O&M experience often move into technical lead or regional service roles overseeing a territory, or laterally into commissioning, where the diagnostic experience transfers directly. Some also move into system design once they understand common failure modes well enough to design around them.',
+  },
+},
+  'solar-sales-representative': {
+  title: 'Solar Sales Representative',
+  include: [
+    'solar sales representative',
+    'solar sales consultant',
+    'solar sales rep',
+    'residential solar sales',
+    'solar sales',
+  ],
+  exclude: [...NOISE],
+  editorial: {
+    dayToDay:
+      'A Solar Sales Representative generates and closes residential or commercial solar leads: running site assessments, presenting system designs and financing options, and walking homeowners through incentives like the federal tax credit. Compensation is typically commission-heavy, so the day is split between prospecting, sales calls, and closing paperwork rather than technical design or installation work.',
+    certification:
+      'No electrical license or NABCEP credential is required to sell solar — one of the few roles in the industry open without a technical background. Employers look for sales experience (door-to-door, insurance, real estate, or similar) more than solar-specific knowledge, though understanding system sizing and financing well enough to explain it to a homeowner is expected within the first few weeks.',
+    progression:
+      'Reps typically move up based on closed volume rather than tenure — top performers can reach team lead or sales manager roles within a year or two. Some also cross-train into system design or project management once they understand the technical side well enough.',
+  },
+},
+'solar-engineer': {
+  title: 'Solar Engineer',
+  include: [
+    'solar engineer',
+    'solar design engineer',
+    'pv engineer',
+    'pv systems engineer',
+    'solar systems engineer',
+    'solar project engineer',
+    'bess engineer',
+    'solar electrical engineer',
+    'electrical engineer - solar',
+  ],
+  exclude: [...NOISE],
+  editorial: {
+    dayToDay:
+      'A Solar Engineer designs and specifies photovoltaic systems before anything is built: array layout, string and conductor sizing, shading and production modeling, equipment selection, and the drawing set that goes to permitting. Scope varies widely by title — from residential design desks to utility-scale systems engineering — but the work is software-based and office-centered rather than field installation.',
+    certification:
+      'Requirements range from a technician background plus software proficiency (common for residential design roles) to a full engineering degree and PE license (common for utility-scale and stamping roles). NABCEP PV Design Specialist and PVIP credentials come up across the spectrum, and proficiency in PVsyst, Helioscope, or Aurora Solar is close to universal.',
+    progression:
+      'Engineers typically progress from junior design roles into systems or project engineering, then into senior or PE-licensed positions with stamping responsibility. Moving into battery storage (BESS) engineering is an increasingly common lateral step as more projects add storage.',
+  },
+},
   'solar-photovoltaic-installer': {
     title: 'Solar Photovoltaic Installer',
     include: [
@@ -72,6 +142,8 @@ const ROLES: Record<string, Role> = {
       progression:
         'Installers typically move up after 1 to 3 years on the tools, once they can run a crew, read a permit set unsupervised, and troubleshoot a string fault without escalating. That track usually leads to Lead Installer, then site supervisor or a design role.',
     },
+    
+    
   },
   'lead-solar-installer': {
     title: 'Lead Solar Installer',
@@ -199,11 +271,14 @@ export default async function SalaryReportPage({
   const { title: jobTitle, careerPath, editorial } = role
 
   const SALARY_TO_LANDING: Record<string, string> = {
-    'solar-photovoltaic-installer': 'solar-pv-installer-jobs',
-    'lead-solar-installer': 'lead-solar-installer-jobs',
-    'solar-electrician': 'solar-electrician-jobs',
-    'bess-technician': 'bess-technician-jobs',
-  }
+  'solar-photovoltaic-installer': 'solar-pv-installer-jobs',
+  'lead-solar-installer': 'lead-solar-installer-jobs',
+  'solar-electrician': 'solar-electrician-jobs',
+  'bess-technician': 'bess-technician-jobs',
+  'solar-sales-representative': 'solar-sales-jobs',
+  'solar-engineer': 'solar-engineer-jobs',
+  'solar-technician': 'solar-technician-jobs',
+}
 
   // Salaire moyen par state — pas de HAVING ici, on filtre en JS pour pouvoir
   // regrouper les states sous-représentés en région plutôt que de les faire disparaître.
@@ -507,7 +582,7 @@ export default async function SalaryReportPage({
         {/* EDITORIAL — contenu fixe, comble le vide quand la table de données est maigre */}
         <section className="mb-12 space-y-6">
           <div>
-            <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">What a {jobTitle} actually does</h2>
+            <h2 className="text-lg font-bold text-[#0B1A2E] mb-2">What a {jobTitle} does</h2>
             <p className="text-sm text-gray-600 leading-relaxed">{editorial.dayToDay}</p>
           </div>
           <div>
@@ -630,6 +705,18 @@ export default async function SalaryReportPage({
           >
             View {jobTitle} Jobs
           </Link>
+        </section>
+
+        {/* RELATED */}
+        <section className="mt-12 rounded-2xl border border-gray-200 bg-gray-50 p-6">
+          <h2 className="text-lg font-bold text-[#0B1A2E] mb-3">Go further</h2>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            Explore the full <Link href="/data" className="text-[#B45309] font-medium underline hover:text-[#92400E]">job market data center</Link>,
+            estimate take-home pay with the <Link href="/paycheck-calculator" className="text-[#B45309] font-medium underline hover:text-[#92400E]">paycheck calculator</Link>,
+            and compare the credentials that move pay in our{' '}
+            <Link href="/certifications" className="text-[#B45309] font-medium underline hover:text-[#92400E]">certifications library</Link>{' '}
+            and <Link href="/resources" className="text-[#B45309] font-medium underline hover:text-[#92400E]">career resources</Link>.
+          </p>
         </section>
 
         {/* DISCLAIMER */}

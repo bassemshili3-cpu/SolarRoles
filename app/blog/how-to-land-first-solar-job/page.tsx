@@ -282,6 +282,18 @@ export default function ArticlePage() {
           </div>
         </div>
 
+        <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-6">
+          <p className="font-semibold text-gray-900 mb-2">Keep reading</p>
+          <p className="text-sm text-gray-600">
+            Get the full entry path in{' '}
+            <a href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</a>,
+            map the apprenticeship route with{' '}
+            <a href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">how to land a solar apprenticeship</a>,
+            and check{' '}
+            <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">installer salary by state</a>.
+          </p>
+        </div>
+
         <div className="mt-16 pt-10 border-t border-gray-100">
           <div className="bg-gradient-to-br from-[#0B1A2E] to-[#1E3A5F] rounded-2xl p-8 text-center">
             <h2 className="text-2xl font-bold text-white mb-3">

@@ -27,7 +27,7 @@ export default function CookiePolicyPage() {
               solarroles.com
             </a>{' '}
             (the "<strong>Site</strong>"). It should be read alongside our{' '}
-            <a href="/privacy-policy" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+            <a href="/privacy" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               Privacy Policy
             </a>{' '}
             and, for California residents, our{' '}

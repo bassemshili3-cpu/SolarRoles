@@ -570,7 +570,7 @@ export default function Terms() {
                 © 2026 Solar Roles. All rights reserved. ·{' '}
                 <a href="/privacy" className="text-amber-600 hover:underline font-medium">Privacy Policy</a>
                 {' · '}
-                <a href="/cookies" className="text-amber-600 hover:underline font-medium">Cookie Policy</a>
+                <a href="/cookie-policy" className="text-amber-600 hover:underline font-medium">Cookie Policy</a>
               </p>
             </footer>
 

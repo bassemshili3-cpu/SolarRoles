@@ -11,7 +11,7 @@
  * sales, project management, engineering, estimating. Voir
  * lib/ats/solar-taxonomy.ts pour le détail du scope et son historique.
  *
- * Usage: npx tsx scripts/seed-adzuna-solar.ts
+ * Usage: npx tsx -r dotenv/config scripts/seed-adzuna-solar.ts
  */
 
 import { PrismaClient } from '@prisma/client';

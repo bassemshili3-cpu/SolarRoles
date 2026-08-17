@@ -12,7 +12,7 @@ const PAGE_TITLE =
 
 const PAGE_DESCRIPTION =
 
-  "Every solar installer credential and the specifics of each course.";
+  "Every solar installer credential and the specifics of each course & training program.";
 
 
 export const metadata: Metadata = {
@@ -951,7 +951,7 @@ export default function SolarInstallerCertification() {
 
         <h1>
 
-          Solar Installer <span className="accent">Certifications</span>: What to Get & Which Course Fits Your Path
+          Solar Installer <span className="accent">Certifications</span>: What to Get & Which Course and Training Program Fits Your Path
 
         </h1>
 
@@ -966,7 +966,7 @@ export default function SolarInstallerCertification() {
 
             <div>
 
-              <div className="by">By Editorial Team</div>
+              
 
               <div className="nm">Solar<span className="mark">Roles</span></div>
 

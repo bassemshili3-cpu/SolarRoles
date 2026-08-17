@@ -108,6 +108,7 @@ async function main() {
   const jobLandingPages = [
     'solar-pv-installer-jobs',
     'solar-electrician-jobs',
+    'solar-technician-jobs',
     'lead-solar-installer-jobs',
     'solar-jobs-no-experience',
     'solar-sales-jobs',

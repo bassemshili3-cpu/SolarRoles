@@ -146,7 +146,7 @@ export default function Page() {
             consultant roles that have nothing to do with hands-on
             installation. If you&rsquo;re specifically after tools-in-hand
             installer work, a board built just for that role, like{' '}
-            <a href="https://www.solarroles.com">Solar Roles</a>, is specialized
+            <a href="/solar-jobs-no-experience">Solar Roles</a>, is specialized
             in solar careers, and shows you only solar related
             O&amp;M openings.
           </p>
@@ -155,6 +155,18 @@ export default function Page() {
             Reliability and a willingness to learn on a roof will get you
             hired faster than any prior experience on your resume.
           </p>
+
+          <div className="mt-10 rounded-2xl border border-[#F5B819]/30 bg-[#FFFBEB] p-6">
+            <p className="font-semibold text-[#0B1A2E] mb-2">Keep reading</p>
+            <p className="text-sm text-gray-600">
+              See how installer pay breaks down by state on our{' '}
+              <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar Photovoltaic Installer salary page</a>,
+              follow the full path in{' '}
+              <a href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</a>,
+              or start applying on{' '}
+              <a href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</a>.
+            </p>
+          </div>
         </div>
       </article>
     </>

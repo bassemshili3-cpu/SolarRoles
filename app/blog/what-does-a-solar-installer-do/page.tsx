@@ -466,13 +466,26 @@ export default function Page() {
                 hands-on PV installer, electrician, and O&amp;M openings.
               </p>
               <a
-                href="https://www.solarroles.com"
+                href="/solar-pv-installer-jobs"
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm font-semibold text-gray-900 transition hover:bg-amber-300"
               >
                 Browse open roles
                 <ArrowRight className="h-4 w-4" />
               </a>
             </div>
+          </div>
+        </section>
+        <section className="mx-auto max-w-3xl px-4 pb-8">
+          <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+            <p className="font-semibold text-gray-900 mb-2">Related guides</p>
+            <p className="text-sm text-gray-600">
+              See how the pay works on our{' '}
+              <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">solar installer salary page</a>,
+              compare the credential options in{' '}
+              <a href="/resources/solar-certifications-by-job-role" className="text-blue-700 underline hover:text-blue-900">certifications by job role</a>,
+              or browse live{' '}
+              <a href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</a>.
+            </p>
           </div>
         </section>
       </article>

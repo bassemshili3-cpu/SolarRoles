@@ -4,6 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { Phone, Home, DollarSign, ShieldCheck, Award, Users, TrendingUp, Scale } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import Link from 'next/link'
 
 
 export const revalidate = 3600
@@ -229,6 +230,20 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
               </details>
             ))}
           </div>
+        </section>
+
+        <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            Solar sales pays very differently from field roles — compare structures in our{' '}
+            <Link href="/resources/solar-sales-1099-vs-w2-pay" className="text-blue-700 underline hover:text-blue-900">1099 vs W-2 solar sales pay guide</Link>,{' '}
+            and check the numbers on the{' '}
+            <Link href="/data/salaries/solar-sales-representative" className="text-blue-700 underline hover:text-blue-900">Solar Sales Representative salary page</Link>.
+            If the technical side appeals instead, explore{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>{' '}
+            or{' '}
+            <Link href="/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">solar engineer jobs</Link>.
+          </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">

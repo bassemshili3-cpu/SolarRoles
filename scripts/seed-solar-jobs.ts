@@ -4,7 +4,7 @@
  * and Pinpoint for the companies listed in lib/ats/company-seed.ts, and
  * upserts them into the Job table.
  *
- * Usage: npx tsx scripts/seed-solar-jobs.ts
+ * Usage: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts
  */
 import { PrismaClient } from '@prisma/client';
 import { fetchGreenhouseJobs } from '../lib/ats/greenhouse';

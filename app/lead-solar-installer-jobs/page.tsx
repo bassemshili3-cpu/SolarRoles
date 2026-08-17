@@ -4,6 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { HardHat, ClipboardCheck, DollarSign, ShieldCheck, Award, Users } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import Link from 'next/link'
 
 
 export const revalidate = 3600
@@ -255,6 +256,23 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
               </details>
             ))}
           </div>
+        </section>
+
+        <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            Lead installer pay varies a lot by state and project type — see the numbers on our{' '}
+            <Link href="/data/salaries/lead-solar-installer" className="text-blue-700 underline hover:text-blue-900">Lead Solar Installer Salary by State</Link>{' '}
+            page. If you're exploring adjacent paths, browse{' '}
+            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>,{' '}
+            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>, or{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>.
+            To map which credentials unlock the jump to lead, our{' '}
+            <Link href="/resources/solar-certifications-by-job-role" className="text-blue-700 underline hover:text-blue-900">certifications by job role</Link>{' '}
+            guide and the{' '}
+            <Link href="/resources/nabcep-pvis-vs-pvip" className="text-blue-700 underline hover:text-blue-900">NABCEP PVIS vs PVIP comparison</Link>{' '}
+            are the right first reads.
+          </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">

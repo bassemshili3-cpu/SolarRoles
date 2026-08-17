@@ -4,6 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { HardHat, ClipboardCheck, DollarSign, ShieldCheck, GraduationCap, Users, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import Link from 'next/link'
 
 
 export const revalidate = 3600
@@ -228,6 +229,22 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
               </details>
             ))}
           </div>
+        </section>
+
+        <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Starting Out: More Resources</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            Most no-experience candidates start on the install side, where pay is transparent — see the{' '}
+            <Link href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar PV Installer Salary by State</Link>{' '}
+            to know what to expect. For the full picture, read{' '}
+            <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</Link>,{' '}
+            <Link href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">how to land a solar apprenticeship</Link>,{' '}
+            then browse{' '}
+            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>{' '}
+            or{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>{' '}
+            once you're ready to apply.
+          </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">

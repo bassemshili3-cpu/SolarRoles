@@ -168,6 +168,8 @@ const categories = [
   { label: 'Solar Sales', icon: Briefcase, bg: 'bg-[#0F2440]', href: '/solar-sales-jobs' },
   { label: 'Bess Technician', icon: Briefcase, bg: 'bg-[#0F2440]', href: '/bess-technician-jobs' },
   { label: 'Solar Electrician', icon: Zap, bg: 'bg-[#1E3A5F]', href: '/solar-electrician-jobs' },
+  { label: 'Solar Engineer', icon: Zap, bg: 'bg-[#1E3A5F]', href: '/solar-engineer-jobs' },
+  { label: 'Solar Technician', icon: Zap, bg: 'bg-[#1E3A5F]', href: '/solar-technician-jobs' },
 ]
 
 

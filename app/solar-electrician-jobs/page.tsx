@@ -125,7 +125,7 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
 
   const initialData = await getJobs({
     descriptionContainsAny,
-    requiredDomainTerms: ['solar', 'photovoltaic', ' pv ', 'electrician', 'Electrician',],
+    titleContainsAny: ['solar electrician',],
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
     resultsPerPage: 30,
@@ -246,6 +246,21 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
               </details>
             ))}
           </div>
+        </section>
+        <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            See how electrician pay compares on our{' '}
+            <Link href="/data/salaries/solar-electrician" className="text-blue-700 underline hover:text-blue-900">Solar Electrician Salary by State</Link>{' '}
+            page. Around it, the relevant reads are{' '}
+            <Link href="/resources/solar-dc-safety-for-electricians" className="text-blue-700 underline hover:text-blue-900">why solar DC safety is different for electricians</Link>{' '}
+            and{' '}
+            <Link href="/resources/nabcep-vs-eta-vs-state-licenses" className="text-blue-700 underline hover:text-blue-900">NABCEP vs ETA vs state licenses</Link>.
+            If you're exploring other paths, see{' '}
+            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>,{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>, or{' '}
+            <Link href="/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">solar engineer jobs</Link>.
+          </p>
         </section>
       </div>
     </>

@@ -4,6 +4,7 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { Sun, Wrench, DollarSign, ShieldCheck, Award, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import Link from 'next/link'
 
 import { getPrimaryCertificationForCategory } from '@/lib/certification-detector' // ajustez le chemin
 
@@ -132,8 +133,10 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
     // Scopes this landing page to installer roles via a keyword AND-filter,
     // independent of the user's own `what` search box below — same pattern
     // used elsewhere for niche landing pages (see job-where.ts comment).
-    descriptionContainsAny: ['installer', 'installation technician', 'pv installer'],
-     requiredDomainTerms: ['solar', 'photovoltaic', ' pv '],
+   
+  
+     titleContainsAny: ['solar installer', 'pv installer', 'solar laborer'],
+     excludePhrases: ['lead', 'commercial'],
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
     resultsPerPage: 30,
@@ -233,12 +236,12 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
       <p className="text-xs text-gray-500 text-center">Residential helper, on-the-job training</p>
       <p className="text-xs text-gray-600 mt-3 leading-relaxed">
         Most employers expect a valid{' '}
-        <a href="#" className="text-green-700 underline hover:text-green-800">
+        <a href="/certifications/osha-10" className="text-green-700 underline hover:text-green-800">
           OSHA 10 card
         </a>{' '}
         before you set foot on a jobsite — it's frequently a condition of hire, even for helper-level roles. Pairing it
         with a{' '}
-        <a href="#" className="text-green-700 underline hover:text-green-800">
+        <a href="/certifications/nabcep-pv-associate" className="text-green-700 underline hover:text-green-800">
           NABCEP PV Associate (PVA)
         </a>{' '}
         credential signals baseline PV knowledge and helps you stand out from other entry-level applicants.
@@ -252,7 +255,7 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
       <p className="text-xs text-gray-500 text-center">National median, 2+ years field experience</p>
       <p className="text-xs text-gray-600 mt-3 leading-relaxed">
         At this stage, employers increasingly look for a{' '}
-        <a href="#" className="text-blue-700 underline hover:text-blue-800">
+        <a href="/certifications/nabcep-pv-installer-specialist" className="text-blue-700 underline hover:text-blue-800">
           NABCEP PV Installer Specialist (PVIS)
         </a>{' '}
         certification, which validates hands-on competency with PV conductors, raceways, and system monitoring —
@@ -267,11 +270,11 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
       <p className="text-xs text-gray-500 text-center">Foreman roles, licensed electricians, commercial projects</p>
       <p className="text-xs text-gray-600 mt-3 leading-relaxed">
         Supervisory and utility-scale roles typically require an{' '}
-        <a href="#" className="text-purple-700 underline hover:text-purple-800">
+        <a href="/certifications/osha-30" className="text-purple-700 underline hover:text-purple-800">
           OSHA 30 card
         </a>{' '}
         alongside the{' '}
-        <a href="#" className="text-purple-700 underline hover:text-purple-800">
+        <a href="/certifications/nabcep-pv-installation-professional" className="text-purple-700 underline hover:text-purple-800">
           NABCEP PV Installation Professional (PVIP)
         </a>{' '}
         certification — widely considered the gold standard for design, installation, and commissioning across the
@@ -303,6 +306,25 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
               </details>
             ))}
           </div>
+        </section>
+
+        <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            See how installer pay breaks down state by state on our{' '}
+            <Link href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar PV Installer Salary by State</Link>{' '}
+            page. If you're ready to move up, browse{' '}
+            <Link href="/lead-solar-installer-jobs" className="text-blue-700 underline hover:text-blue-900">lead solar installer jobs</Link>,{' '}
+            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>, or{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>.
+            Starting from zero? Our guide to{' '}
+            <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</Link>{' '}
+            and the{' '}
+            <Link href="/resources/solar-installer-certification" className="text-blue-700 underline hover:text-blue-900">solar installer certification guide</Link>{' '}
+            cover the entry path, and you can start with{' '}
+            <Link href="/solar-jobs-no-experience" className="text-blue-700 underline hover:text-blue-900">no-experience solar jobs</Link>{' '}
+            if you're just getting started.
+          </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">

@@ -24,7 +24,7 @@ export default function CCPAPage() {
         <section>
           <p className="text-gray-700 leading-relaxed">
             This California Privacy Notice supplements the Solar Roles{' '}
-            <a href="/privacy-policy" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+            <a href="/privacy" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               Privacy Policy
             </a>{' '}
             and applies solely to residents of the State of California. It is provided pursuant to the California

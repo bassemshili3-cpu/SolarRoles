@@ -26,20 +26,63 @@ const jsonLd = {
 const SALARY_MIN_THRESHOLD = 20_000
 const SALARY_MAX_THRESHOLD = 600_000
 
-// Titre affiché -> slug réel de la page salaire (/data/salaries/[slug])
-const SALARY_TITLE_TO_SLUG: Record<string, string> = {
-  'Solar Photovoltaic Installer': 'solar-photovoltaic-installer',
-  'Lead Solar Installer': 'lead-solar-installer',
-  'Solar Electrician': 'solar-electrician',
+// Slug réel de la page salaire -> libellé affiché sur la carte
+const SALARY_REPORTS: Record<string, string> = {
+  'solar-photovoltaic-installer': 'Solar Photovoltaic Installer',
+  'lead-solar-installer': 'Lead Solar Installer',
+  'solar-electrician': 'Solar Electrician',
+  'solar-sales-representative': 'Solar Sales Representative',
+  'solar-engineer': 'Solar Engineer',
+  'solar-technician': 'Solar Technician',
 }
 
-const SKILL_BARS = [
-  { skill: 'Certifications required', mentions: 2748, pct: 100, color: 'bg-violet-500' },
-  { skill: 'Communication skills',    mentions: 2510, pct: 91,  color: 'bg-violet-400' },
-  { skill: 'Customer service',        mentions: 2007, pct: 73,  color: 'bg-violet-300' },
-  { skill: 'Bilingual',               mentions: 234,  pct: 9,   color: 'bg-green-500'  },
-  { skill: 'Empathy',                 mentions: 195,  pct: 7,   color: 'bg-green-400'  },
-]
+// ── Skills: mots-clés utilisés pour compter les mentions dans description ──
+// Chaque entrée = liste de variantes/synonymes matchées en OR (insensitive).
+// NB: on évite "license"/"licensed" seuls car ça matche trop souvent
+// "driver's license" dans les annonces d'installeurs terrain -> faux positifs.
+const SKILL_KEYWORDS: Record<string, string[]> = {
+  'Certifications required': [
+    'certification',
+    'certified',
+    'nabcep',
+    'osha 10',
+    'osha 30',
+    'osha-10',
+    'osha-30',
+    'licensed electrician',
+    'state license',
+  ],
+  'Communication skills': [
+    'communication skills',
+    'strong communicator',
+    'verbal and written',
+    'interpersonal skills',
+  ],
+  'Customer service': [
+    'customer service',
+    'customer-facing',
+    'client-facing',
+  ],
+  'Bilingual': [
+    'bilingual',
+    'spanish speaking',
+    'fluent in spanish',
+  ],
+  'Empathy': [
+    'empathy',
+    'empathetic',
+    'compassionate',
+  ],
+}
+
+// Couleurs statiques (ordre = ordre d'affichage), indépendantes des données
+const SKILL_COLORS: Record<string, string> = {
+  'Certifications required': 'bg-violet-500',
+  'Communication skills': 'bg-violet-400',
+  'Customer service': 'bg-violet-300',
+  'Bilingual': 'bg-green-500',
+  'Empathy': 'bg-green-400',
+}
 
 export default async function DataCenterPage() {
   let totalJobs = 0
@@ -48,9 +91,13 @@ export default async function DataCenterPage() {
   }
   let topStatesRaw: { addressRegion: string | null; _count: { id: number } }[] = []
   let entryLevelCount = 0
+  let degreeCount = 0
+  let skillCounts: number[] = new Array(Object.keys(SKILL_KEYWORDS).length).fill(0)
+
+  const skillNames = Object.keys(SKILL_KEYWORDS)
 
   try {
-    ;[totalJobs, avgSalaryResult, topStatesRaw, entryLevelCount] = await Promise.all([
+    const results = await Promise.all([
       prisma.job.count({ where: { active: true } }),
 
       prisma.job.aggregate({
@@ -86,7 +133,39 @@ export default async function DataCenterPage() {
           ],
         },
       }),
+
+      // Nombre d'annonces demandant un diplôme (bachelor/degree), affiché
+      // en comparaison du nombre de certifs demandées.
+      prisma.job.count({
+        where: {
+          active: true,
+          OR: [
+            { description: { contains: "bachelor's degree", mode: 'insensitive' } },
+            { description: { contains: 'bachelor degree',   mode: 'insensitive' } },
+            { description: { contains: 'college degree',    mode: 'insensitive' } },
+          ],
+        },
+      }),
+
+      // Un count par skill, dans le même ordre que skillNames
+      ...skillNames.map((skill) =>
+        prisma.job.count({
+          where: {
+            active: true,
+            OR: SKILL_KEYWORDS[skill].map((kw) => ({
+              description: { contains: kw, mode: 'insensitive' as const },
+            })),
+          },
+        })
+      ),
     ])
+
+    totalJobs = results[0] as number
+    avgSalaryResult = results[1] as typeof avgSalaryResult
+    topStatesRaw = results[2] as typeof topStatesRaw
+    entryLevelCount = results[3] as number
+    degreeCount = results[4] as number
+    skillCounts = results.slice(5) as number[]
   } catch (err) {
     console.error('DataCenterPage query error:', err)
     // Fallbacks déjà initialisés ci-dessus — la page se génère quand même,
@@ -118,6 +197,21 @@ export default async function DataCenterPage() {
     : '0.0'
 
   const topHiringState = topStates.length > 0 ? topStates[0].fullName : '—'
+
+  // Construction du tableau SKILL_BARS à partir des counts DB.
+  // pct = mentions du skill / mentions du skill le plus fréquent, en %
+  // (le skill le plus fréquent affiche donc toujours une barre à 100%).
+  const maxSkillMentions = Math.max(...skillCounts, 1)
+  const skillBars = skillNames
+    .map((skill, i) => ({
+      skill,
+      mentions: skillCounts[i] ?? 0,
+      pct: Math.round(((skillCounts[i] ?? 0) / maxSkillMentions) * 100),
+      color: SKILL_COLORS[skill],
+    }))
+    .sort((a, b) => b.mentions - a.mentions)
+
+  const topSkill = skillBars.length > 0 ? skillBars[0] : null
 
   return (
     <>
@@ -234,7 +328,7 @@ export default async function DataCenterPage() {
             <div>
               <h2 className="text-xl font-bold text-gray-900">Entry-Level Hiring Insights</h2>
               <p className="text-sm text-gray-500">
-                Based on {totalJobs.toLocaleString('en-US')} active US listings — June 2026
+                Based on {totalJobs.toLocaleString('en-US')} active US listings
               </p>
             </div>
           </div>
@@ -250,11 +344,15 @@ export default async function DataCenterPage() {
               </p>
             </div>
             <div className="border border-gray-200 rounded-2xl p-6 bg-white">
-              <p className="text-4xl font-bold text-violet-600">2,748</p>
-              <p className="text-sm font-medium text-gray-800 mt-2">
-                listings require certifications — the #1 demanded qualifier, ahead of communication skills
+              <p className="text-4xl font-bold text-violet-600">
+                {(topSkill?.mentions ?? 0).toLocaleString('en-US')}
               </p>
-              <p className="text-xs text-gray-400 mt-2">vs. only 19 requiring a degree</p>
+              <p className="text-sm font-medium text-gray-800 mt-2">
+                listings require {topSkill?.skill.toLowerCase() ?? 'certifications'} — the #1 demanded qualifier, ahead of communication skills
+              </p>
+              <p className="text-xs text-gray-400 mt-2">
+                vs. only {degreeCount.toLocaleString('en-US')} requiring a degree
+              </p>
             </div>
           </div>
 
@@ -263,7 +361,7 @@ export default async function DataCenterPage() {
               Most demanded skills in active US listings
             </h3>
             <div className="space-y-4">
-              {SKILL_BARS.map(({ skill, mentions, pct, color }) => (
+              {skillBars.map(({ skill, mentions, pct, color }) => (
                 <div key={skill}>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-gray-700 font-medium">{skill}</span>
@@ -303,14 +401,14 @@ export default async function DataCenterPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {Object.entries(SALARY_TITLE_TO_SLUG).map(([title, slug]) => (
+            {Object.entries(SALARY_REPORTS).map(([slug, label]) => (
               <Link
                 key={slug}
                 href={`/data/salaries/${slug}`}
                 className="px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-purple-400 hover:bg-purple-50 hover:text-purple-700 transition-all flex items-center gap-2"
               >
                 <Briefcase className="w-3.5 h-3.5" />
-                {title}
+                {label}
               </Link>
             ))}
           </div>

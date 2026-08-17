@@ -347,7 +347,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
         "That said, some states (Connecticut, Nevada, among others) and individual employers or general contractors require retraining every 3–5 years as a matter of policy or state law, not federal OSHA rule. When that applies, you retake the full 10-hour course — OSHA doesn't offer a shorter refresher version for the Outreach 10-hour card.",
     },
     relatedSalaryPages: [
-      { label: 'Solar PV Installer salary', slug: 'solar-pv-installer' },
+      { label: 'Solar PV Installer salary', slug: 'solar-photovoltaic-installer' },
     ],
     format: 'Online, self-paced',
     duration: '10 hours',
@@ -509,7 +509,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
      },
     relatedSalaryPages: [
       { label: 'Lead Installer / Foreman salary', slug: 'lead-solar-installer' },
-      { label: 'BESS Technician salary', slug: 'bess-technician' },
+      { label: 'Solar Technician salary', slug: 'solar-technician' },
     ],
      format: 'Online prep course, exam requires documented field experience',
      duration: '24 hours of advanced training (plus field experience)',
@@ -595,7 +595,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
          '30 hours of continuing education every 3 years, broken down as: 6 NEC hours, 12 ESIP JTA hours, 2 Building/Fire Code hours, and 10 Renewable Energy elective hours (with at least 2 of those elective hours focused on building or fire codes). You must also submit an employer letter confirming continued involvement in the industry.',
      },
     relatedSalaryPages: [
-      { label: 'BESS Technician salary', slug: 'bess-technician' },
+      { label: 'Solar Technician salary', slug: 'solar-technician' },
       { label: 'Lead Installer / Foreman salary', slug: 'lead-solar-installer' },
     ],
      format: 'Online prep course, exam requires documented field experience with storage systems',

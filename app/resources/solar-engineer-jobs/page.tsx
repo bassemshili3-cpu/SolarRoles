@@ -355,7 +355,7 @@ export default function SolarEngineerJobs() {
           <div className="sr2-callout">
             <span className="kicker">Ready to look at real openings?</span>
             <p>
-              Browse live <Link href="/solar-engineer-jobs" style={{ color: "#F5B819", borderBottomColor: "rgba(245,184,25,0.4)" }}>solar engineer job listings</Link> on Solar Roles — updated daily from real employer postings across the US.
+              Browse live <Link href="/solar-engineer-jobs" style={{ color: "#F5B819", borderBottomColor: "rgba(245,184,25,0.4)" }}>solar engineer job listings</Link> on Solar Roles.
             </p>
           </div>
 

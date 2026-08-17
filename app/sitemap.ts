@@ -26,6 +26,7 @@ const ATS_SOURCES = [
 const priorityLandingPages: string[] = [
   '/solar-pv-installer-jobs',
   '/solar-electrician-jobs',
+  '/solar-technician-jobs',
   '/lead-solar-installer-jobs',
   '/solar-jobs-no-experience',
   '/solar-sales-jobs',
@@ -57,7 +58,7 @@ const dataPages: string[] = ['/data']
 
 const dataSalaryPages: string[] = [
   'solar-photovoltaic-installer', 'lead-solar-installer',
-'solar-electrician',
+'solar-electrician', 'solar-technician', 'solar-engineer', 'solar-sales-representative',
 ].map(s => `/data/salaries/${s}`)
 
 // ── Resources (guides carrière / certifications) ────────────
@@ -84,9 +85,9 @@ const resourcePages: string[] = [
 
 // ── Articles de blog ─────────────────────────────────────────
 const blogPosts: string[] = [
-  '/how-to-land-first-solar-job',
-  '/become-solar-installer-no-experience',
-  '/what-does-a-solar-installer-do',
+  '/blog/how-to-land-first-solar-job',
+  '/blog/become-solar-installer-no-experience',
+  '/blog/what-does-a-solar-installer-do',
 ]
 
 // ── Config par section : priorité, fréquence, date ─────────

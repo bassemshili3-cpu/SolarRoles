@@ -41,8 +41,9 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
-    { href: '/dashboard/post-a-job-free',  label: 'Employers' },
+    { href: '/certifications',  label: 'Certifications' },
     { href: '/resources',  label: 'Resources' },
+    { href: '/dashboard/post-a-job-free',  label: 'Employers' },
   ]
 
   return (

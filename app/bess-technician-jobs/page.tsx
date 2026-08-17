@@ -152,8 +152,8 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
     // Scopes this landing page to battery storage roles via a keyword
     // AND filter, independent of the user's own `what` search box below,
     // same pattern used on /solar-pv-installer-jobs and /lead-solar-installer-jobs.
-    descriptionContainsAny: ['bess', 'battery energy storage', 'battery storage technician', 'energy storage technician', 'battery technician'],
-    titleContainsAny: ['bess', 'BESS', 'techncian', 'Technician', 'tech', 'Tech', 'battery storage', 'Battery Storage', 'energy storage', 'Energy Storage'],
+  
+    titleContainsAny: ['bess technician', 'Sr. Service Technician', 'solar & bess technician'],
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
     resultsPerPage: 30,
@@ -271,6 +271,21 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
               </details>
             ))}
           </div>
+        </section>
+
+        <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            Battery storage technician pay follows the broader solar service market — see the{' '}
+            <Link href="/data/salaries/solar-technician" className="text-blue-700 underline hover:text-blue-900">Solar Technician Salary by State</Link>{' '}
+            and the full{' '}
+            <Link href="/data" className="text-blue-700 underline hover:text-blue-900">job market data center</Link>. For the honest entry requirements, read{' '}
+            <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-blue-700 underline hover:text-blue-900">BESS technician requirements</Link>,{' '}
+            and compare with{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>{' '}
+            or{' '}
+            <Link href="/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">solar engineer jobs</Link>.
+          </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">

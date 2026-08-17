@@ -345,12 +345,12 @@ export default function EmployerPage() {
           Resources for solar employers
         </h2>
         <div className="grid md:grid-cols-3 gap-4">
-          <Link href="/blog/solar-installer-salary-2026" className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#1E3A5F]/25 transition-colors">
+          <Link href="/data/salaries/solar-photovoltaic-installer" className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#1E3A5F]/25 transition-colors">
             <span className="text-[10px] font-bold tracking-widest uppercase text-[#B45309]">Salary Insights</span>
             <h3 className="text-base font-semibold text-[#0B1A2E] mt-2 mb-1.5 leading-snug">What PV installers actually earn in 2026.</h3>
             <p className="text-sm text-muted-foreground">Real salary data by state, certification level, and residential vs commercial — so you can offer competitive pay.</p>
           </Link>
-          <Link href="/blog/solar-apprenticeship-guide" className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#1E3A5F]/25 transition-colors">
+          <Link href="/resources/solar-installer-apprenticeship-programs" className="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-[#1E3A5F]/25 transition-colors">
             <span className="text-[10px] font-bold tracking-widest uppercase text-[#B45309]">Hiring Playbook</span>
             <h3 className="text-base font-semibold text-[#0B1A2E] mt-2 mb-1.5 leading-snug">How to structure a solar apprenticeship that doesn’t lose people in week 3.</h3>
             <p className="text-sm text-muted-foreground">The retention playbook used by the residential installers with the lowest first-90-day turnover.</p>
