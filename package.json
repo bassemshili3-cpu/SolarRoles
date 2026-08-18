@@ -11,7 +11,8 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "seed": "node --env-file=.env.local --import tsx scripts/seed-jobs.ts",
-    "submit-indexnow": "tsx scripts/submit-indexnow.ts"
+    "submit-indexnow": "tsx scripts/submit-indexnow.ts",
+    "submit-google-indexing": "tsx scripts/submit-google-indexing.ts"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.27",

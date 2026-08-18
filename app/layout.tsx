@@ -48,12 +48,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3314706503607251"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+      
 
       </head>
       <body className={inter.className}>

@@ -198,6 +198,51 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
 }
 
+
+// ─── URLs des jobs ATS pour la Google Indexing API ───────────────────────────
+// Seuls les jobs sourcés par un ATS (greenhouse, lever, workday…) sont
+// indexables (voir NON_INDEXABLE_SOURCES dans app/jobs/[id]/[slug]/page.tsx).
+// Cette fonction alimente le cron /api/cron/google-indexing, dans la limite
+// du quota quotidien de 200 URLs de l'API (google-200).
+export const ATS_SOURCES = [
+  'lever',
+  'ashby',
+  'smartrecruiters',
+  'jobvite',
+  'greenhouse',
+  'pinpoint',
+  'workday',
+  'workable',
+]
+
+const JOB_SELECT_ATS = {
+  id: true,
+  title: true,
+  company: true,
+  location: true,
+  addressRegion: true,
+  source: true,
+  description: true,
+} as const
+
+export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]> {
+  const jobs = await prisma.job.findMany({
+    where: { active: true, source: { in: ATS_SOURCES } },
+    select: JOB_SELECT_ATS,
+    orderBy: { fetchedAt: 'desc' },
+    // Overfetch pour compenser le filtre description ci-dessous.
+    take: limit * 2,
+  })
+
+  const hasEnoughContent = (j: { description: string | null }) =>
+    stripHtmlForLengthCheck(j.description || '').length >= MIN_DESCRIPTION_LENGTH
+
+  const filtered = jobs.filter(hasEnoughContent).slice(0, limit)
+
+  // ✅ Construit l'URL COMPLÈTE avec le slug canonique
+  return filtered.map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
+}
+
 // ─── Stats pour le dashboard ─────────────────────────────────────────────────
 export async function getJobStats() {
   const [total, jooble, lensa, careerjet, active] = await Promise.all([

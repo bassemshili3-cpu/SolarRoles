@@ -20,6 +20,7 @@ const ATS_SOURCES = [
   'pinpoint',
   'jobvite',
   'greenhouse',
+  'workday',
 ]
 
 // ── Landing pages SEO prioritaires ──────────────────────────

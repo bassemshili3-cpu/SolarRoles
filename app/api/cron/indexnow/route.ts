@@ -1,11 +1,14 @@
 // app/api/cron/indexnow/route.ts
 // Cron endpoint for IndexNow URL submission
+// Soumet les URLs des jobs ATS les plus récents (contenu principal indexable)
+// + certifications + blog à IndexNow (Bing/Yandex/Cloud).
 // Triggered by Vercel Cron (auth via header Authorization: Bearer {CRON_SECRET},
 // injecté automatiquement par Vercel — voir vercel.json, plus de secret en query string)
 
 import { NextResponse } from 'next/server';
 import { submitUrls, isIndexNowConfigured } from '@/lib/indexnow';
 import { CERTIFICATIONS } from '@/app/certifications/[slug]/certifications-data';
+import { getActiveAtsJobUrls } from '@/lib/job-db';
 
 export async function GET(request: Request) {
   // Vérifie le secret via le header Authorization plutôt qu'un query param.
@@ -41,34 +44,15 @@ export async function GET(request: Request) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
     const urlsToSubmit: string[] = [];
 
-    // 1. Collect certification pages
-    const certUrls = CERTIFICATIONS.map(cert => `${baseUrl}/certifications/${cert.slug}`);
-    urlsToSubmit.push(...certUrls);
-    console.log(`[IndexNow Cron] Added ${certUrls.length} certification URLs`);
-
-    // 2. Collect resource pages (static list from sitemap)
-    const resourcePages = [
-      'how-to-become-a-solar-installer',
-      'how-to-get-a-solar-apprenticeship',
-      'manufacturer-certifications-tesla-enphase-solaredge',
-      'nabcep-training-providers-compared',
-      'nabcep-vs-eta-vs-state-licenses',
-      'osha-safety-guide-solar-installers',
-      'solar-dc-safety-for-electricians',
-      'solar-certifications-by-job-role',
-      'solar-installer-apprenticeship-programs',
-      'solar-installer-certification',
-      'how-to-get-nabcep-certified',
-      'nabcep-board-eligible-status',
-      'nabcep-project-credits-explained',
-      'nabcep-pvip-pass-rate',
-      'nabcep-pvis-vs-pvip',
-      'solar-sales-1099-vs-w2-pay',
-      'do-you-need-to-be-an-electrician-for-bess',
-    ];
-    const resourceUrls = resourcePages.map(slug => `${baseUrl}/resources/${slug}`);
-    urlsToSubmit.push(...resourceUrls);
-    console.log(`[IndexNow Cron] Added ${resourceUrls.length} resource URLs`);
+    // 2. Collect recent ATS job pages (contenu principal)
+    // Les jobs ATS (greenhouse, lever, workday…) sont les seuls jobs indexables
+    // du site. On soumet les plus récents pour basculer la fraîcheur de Bing
+    // vers le contenu dynamique. Les pages statiques (/resources, landing)
+    // sont déjà connues de Bing et n'ont pas besoin d'être re-soumises chaque jour.
+    const MAX_ATS_JOBS = 1000; // IndexNow accepte jusqu'à 10 000 URLs/requête
+    const atsJobUrls = await getActiveAtsJobUrls(MAX_ATS_JOBS);
+    urlsToSubmit.push(...atsJobUrls);
+    console.log(`[IndexNow Cron] Added ${atsJobUrls.length} ATS job URLs`);
 
     // 3. Collect blog pages
     const blogPages = [
@@ -79,23 +63,6 @@ export async function GET(request: Request) {
     const blogUrls = blogPages.map(slug => `${baseUrl}/blog/${slug}`);
     urlsToSubmit.push(...blogUrls);
     console.log(`[IndexNow Cron] Added ${blogUrls.length} blog URLs`);
-
-    // 4. Collect ATS job pages (dynamic - from sitemap logic)
-    // Note: This is a simplified version. In production, you'd want to
-    // fetch the actual job URLs from your database or sitemap.
-    // For now, we'll include the main job landing pages
-    const jobLandingPages = [
-      'solar-pv-installer-jobs',
-      'solar-electrician-jobs',
-      'solar-technician-jobs',
-      'lead-solar-installer-jobs',
-      'solar-jobs-no-experience',
-      'solar-sales-jobs',
-      'bess-technician-jobs',
-    ];
-    const jobUrls = jobLandingPages.map(slug => `${baseUrl}/${slug}`);
-    urlsToSubmit.push(...jobUrls);
-    console.log(`[IndexNow Cron] Added ${jobUrls.length} job landing URLs`);
 
     // Remove duplicates
     const uniqueUrls = Array.from(new Set(urlsToSubmit));

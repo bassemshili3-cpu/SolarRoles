@@ -6,7 +6,14 @@
 
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { ATS_SOURCES } from '@/lib/job-db'
+import { buildJobSlug } from '@/lib/slugify'
+import { isGoogleIndexingConfigured, notifyGoogleIndexing } from '@/lib/googleIndexing'
 
+// Réserve une marge sur le quota quotidien google-200 (200 URLs/jour) :
+// le cron google-indexing en consomme l'essentiel, on n'utilise ici qu'un
+// petit quota pour la désindexation.
+const MAX_DELETE_NOTIFICATIONS = 50
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization')
@@ -22,7 +29,14 @@ export async function GET(request: Request) {
       active: true,
       expiresAt: { lt: new Date() },
     },
-    select: { id: true },
+    select: {
+      id: true,
+      title: true,
+      company: true,
+      location: true,
+      addressRegion: true,
+      source: true,
+    },
   })
 
   if (toDeactivate.length === 0) {
@@ -30,7 +44,7 @@ export async function GET(request: Request) {
   }
 
   const ids = toDeactivate.map((j) => j.id)
-  const urls = ids.map((id) => `https://www.oh-my-job.com/jobs/${id}`)
+  const atsJobs = toDeactivate.filter((j) => ATS_SOURCES.includes(j.source))
 
   // ─── Notifier AVANT ou APRÈS le flag ? Après — pour que le prochain
   // crawl de Google tombe déjà sur un contenu cohérent avec le statut "supprimé" ───
@@ -39,9 +53,31 @@ export async function GET(request: Request) {
     data: { active: false },
   })
 
+  // ─── Google Indexing : URL_DELETED pour les seuls jobs ATS ──────────────
+  // Les autres sources (jooble/lensa/careerjet/adzuna) sont déjà en noindex.
+  let googleSent = 0
+  let googleFailed = 0
+  if (isGoogleIndexingConfigured()) {
+    for (const job of atsJobs.slice(0, MAX_DELETE_NOTIFICATIONS)) {
+      const url = `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job as any)}`
+      const result = await notifyGoogleIndexing(url, 'URL_DELETED')
+      if (result.success) {
+        googleSent++
+        console.log(`[MarkExpired] Google URL_DELETED ✔ ${url}`)
+      } else {
+        googleFailed++
+        console.error(`[MarkExpired] Google URL_DELETED ✘ ${url}:`, result.error)
+        // Quota épuisé → inutile de continuer.
+        if (result.quotaExceeded) break
+      }
+    }
+  } else {
+    console.warn('[MarkExpired] Google Indexing non configuré — skip URL_DELETED')
+  }
 
   return NextResponse.json({
     deactivated: ids.length,
+    googleIndexing: { sent: googleSent, failed: googleFailed, skippedNonAts: ids.length - atsJobs.length },
     timestamp: new Date().toISOString(),
   })
 }

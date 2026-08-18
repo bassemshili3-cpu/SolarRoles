@@ -28,6 +28,7 @@ dotenv.config({ path: env });
 
 import { CERTIFICATIONS } from '../app/certifications/[slug]/certifications-data';
 import { submitUrls, getIndexNowKey, getSiteHost, isIndexNowConfigured } from '../lib/indexnow';
+import { getActiveAtsJobUrls } from '../lib/job-db';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
 
@@ -67,30 +68,12 @@ async function main() {
   allUrls.push(...certUrls);
   console.log(`   ✅ Added ${certUrls.length} certification URLs`);
 
-  // 2. Resource pages
-  console.log('📋 Collecting resource pages...');
-  const resourcePages = [
-    'how-to-become-a-solar-installer',
-    'how-to-get-a-solar-apprenticeship',
-    'manufacturer-certifications-tesla-enphase-solaredge',
-    'nabcep-training-providers-compared',
-    'nabcep-vs-eta-vs-state-licenses',
-    'osha-safety-guide-solar-installers',
-    'solar-dc-safety-for-electricians',
-    'solar-certifications-by-job-role',
-    'solar-installer-apprenticeship-programs',
-    'solar-installer-certification',
-    'how-to-get-nabcep-certified',
-    'nabcep-board-eligible-status',
-    'nabcep-project-credits-explained',
-    'nabcep-pvip-pass-rate',
-    'nabcep-pvis-vs-pvip',
-    'solar-sales-1099-vs-w2-pay',
-    'do-you-need-to-be-an-electrician-for-bess',
-  ];
-  const resourceUrls = resourcePages.map(slug => `${BASE_URL}/resources/${slug}`);
-  allUrls.push(...resourceUrls);
-  console.log(`   ✅ Added ${resourceUrls.length} resource URLs`);
+  // 2. Recent ATS job pages (contenu principal)
+  console.log('📋 Collecting recent ATS job pages...');
+  const MAX_ATS_JOBS = 1000; // IndexNow accepte jusqu'à 10 000 URLs/requête
+  const atsJobUrls = await getActiveAtsJobUrls(MAX_ATS_JOBS);
+  allUrls.push(...atsJobUrls);
+  console.log(`   ✅ Added ${atsJobUrls.length} ATS job URLs`);
 
   // 3. Blog pages
   console.log('📋 Collecting blog pages...');
@@ -102,21 +85,6 @@ async function main() {
   const blogUrls = blogPages.map(slug => `${BASE_URL}/blog/${slug}`);
   allUrls.push(...blogUrls);
   console.log(`   ✅ Added ${blogUrls.length} blog URLs`);
-
-  // 4. Job landing pages
-  console.log('📋 Collecting job landing pages...');
-  const jobLandingPages = [
-    'solar-pv-installer-jobs',
-    'solar-electrician-jobs',
-    'solar-technician-jobs',
-    'lead-solar-installer-jobs',
-    'solar-jobs-no-experience',
-    'solar-sales-jobs',
-    'bess-technician-jobs',
-  ];
-  const jobUrls = jobLandingPages.map(slug => `${BASE_URL}/${slug}`);
-  allUrls.push(...jobUrls);
-  console.log(`   ✅ Added ${jobUrls.length} job landing URLs`);
 
   // Remove duplicates
   const uniqueUrls = Array.from(new Set(allUrls));
