@@ -5,6 +5,7 @@ import JobFilters from '@/components/JobFilters'
 import { Sun, Wrench, DollarSign, ShieldCheck, Award, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 
 import { getPrimaryCertificationForCategory } from '@/lib/certification-detector' // ajustez le chemin
 
@@ -12,21 +13,31 @@ export const revalidate = 3600
 
 
 
-export const metadata: Metadata = {
-  title: 'Solar PV Installer Jobs | Residential, Commercial & Utility-Scale',
-  description: 'Solar photovoltaic installer positions across the United States. Residential, commercial, and utility-scale roles with pay ranges, certification requirements, and career paths.',
-  keywords: 'solar installer jobs, solar pv installer, solar technician jobs, nabcep jobs, residential solar installer, utility scale solar jobs, solar panel installer',
-  openGraph: {
-    title: 'Solar PV Installer Jobs | Now Hiring Nationwide',
-    description: 'Browse open solar photovoltaic installer positions. Entry-level to lead installer roles across residential, commercial, and utility-scale projects.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solar PV Installer Jobs',
-    description: 'Find solar photovoltaic installer openings across the US. Residential, commercial, and utility-scale employers hiring now.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/solar-pv-installer-jobs' },
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRoleSalaryStats('solar-photovoltaic-installer')
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
+      ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
+      : ''
+
+  return {
+    title: salarySuffix
+      ? `Solar PV Installer Jobs${salarySuffix}`
+      : 'Solar PV Installer Jobs | Residential, Commercial & Utility-Scale',
+    description: 'Solar photovoltaic installer positions across the United States. Residential, commercial, and utility-scale roles with pay ranges, certification requirements, and career paths.',
+    keywords: 'solar installer jobs, solar pv installer, solar technician jobs, nabcep jobs, residential solar installer, utility scale solar jobs, solar panel installer',
+    openGraph: {
+      title: 'Solar PV Installer Jobs | Now Hiring Nationwide',
+      description: 'Browse open solar photovoltaic installer positions. Entry-level to lead installer roles across residential, commercial, and utility-scale projects.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Solar PV Installer Jobs',
+      description: 'Find solar photovoltaic installer openings across the US. Residential, commercial, and utility-scale employers hiring now.',
+    },
+    alternates: { canonical: 'https://www.solarroles.com/solar-pv-installer-jobs' },
+  }
 }
 
 const jsonLd = {

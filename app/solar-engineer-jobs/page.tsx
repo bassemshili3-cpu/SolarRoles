@@ -5,24 +5,35 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { Compass, DraftingCompass, Building2, Cable, Calculator, Sun, Zap, BadgeCheck, DollarSign, ShieldCheck } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Solar Engineer Jobs | PV Design, Systems & Electrical Roles',
-  description: 'Solar engineer jobs across the United States. Browse PV design, solar systems, project, electrical engineering, and BESS engineering roles.',
-  keywords: 'solar engineer jobs, solar design engineer jobs, PV systems engineer jobs, solar project engineer, BESS engineer jobs, photovoltaic engineering roles',
-  openGraph: {
-    title: 'Solar Engineer Jobs | Now Hiring Nationwide',
-    description: 'Browse solar engineer, PV design, systems engineering, project engineering, and battery storage roles across the United States.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solar Engineer Jobs',
-    description: 'Find solar engineer and PV design jobs across the US.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/solar-engineer-jobs' },
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRoleSalaryStats('solar-engineer')
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
+      ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
+      : ''
+
+  return {
+    title: salarySuffix
+      ? `Solar Engineer Jobs${salarySuffix}`
+      : 'Solar Engineer Jobs | PV Design, Systems & Electrical Roles',
+    description: 'Solar engineer jobs across the United States. Browse PV design, solar systems, project, electrical engineering, and BESS engineering roles.',
+    keywords: 'solar engineer jobs, solar design engineer jobs, PV systems engineer jobs, solar project engineer, BESS engineer jobs, photovoltaic engineering roles',
+    openGraph: {
+      title: 'Solar Engineer Jobs | Now Hiring Nationwide',
+      description: 'Browse solar engineer, PV design, systems engineering, project engineering, and battery storage roles across the United States.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Solar Engineer Jobs',
+      description: 'Find solar engineer and PV design jobs across the US.',
+    },
+    alternates: { canonical: 'https://www.solarroles.com/solar-engineer-jobs' },
+  }
 }
 
 const jsonLd = {

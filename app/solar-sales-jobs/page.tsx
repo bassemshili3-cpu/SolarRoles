@@ -5,25 +5,36 @@ import JobFilters from '@/components/JobFilters'
 import { Phone, Home, DollarSign, ShieldCheck, Award, Users, TrendingUp, Scale } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Solar Sales Jobs | D2D, In-Home & Technical Sales Openings',
-  description: 'Solar sales positions across the United States, door-to-door, in-home, inside sales, and technical sales roles. Commission structures, what employers screen for, and realistic pay ranges.',
-  keywords: 'solar sales jobs, solar sales rep jobs, door to door solar sales, in home solar sales, solar sales consultant, solar technical sales, solar sales engineer jobs',
-  openGraph: {
-    title: 'Solar Sales Jobs | Now Hiring Nationwide',
-    description: 'Browse open solar sales positions, D2D, in-home, inside sales, and technical sales roles with commission structures explained.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solar Sales Jobs',
-    description: 'Find solar sales openings across the US. D2D, in-home, inside sales, and technical sales employers hiring now.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/solar-sales-jobs' },
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRoleSalaryStats('solar-sales-representative')
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
+      ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
+      : ''
+
+  return {
+    title: salarySuffix
+      ? `Solar Sales Jobs${salarySuffix}`
+      : 'Solar Sales Jobs | D2D, In-Home & Technical Sales Openings',
+    description: 'Solar sales positions across the United States, door-to-door, in-home, inside sales, and technical sales roles. Commission structures, what employers screen for, and realistic pay ranges.',
+    keywords: 'solar sales jobs, solar sales rep jobs, door to door solar sales, in home solar sales, solar sales consultant, solar technical sales, solar sales engineer jobs',
+    openGraph: {
+      title: 'Solar Sales Jobs | Now Hiring Nationwide',
+      description: 'Browse open solar sales positions, D2D, in-home, inside sales, and technical sales roles with commission structures explained.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Solar Sales Jobs',
+      description: 'Find solar sales openings across the US. D2D, in-home, inside sales, and technical sales employers hiring now.',
+    },
+    alternates: { canonical: 'https://www.solarroles.com/solar-sales-jobs' },
+  }
 }
 
 const jsonLd = {

@@ -1,7 +1,14 @@
 ﻿// app/jobs/page.tsx
+import { Metadata } from 'next'
 import { getCachedJobsPage } from '@/lib/jobsQuery'
 import { parseJobWhereParams } from '@/lib/job-where'
 import JobsPageClient from './JobsPageClient'
+
+export const metadata: Metadata = {
+  title: 'Search Solar Roles Jobs in The US | Filter by Salary, Type & Experience | Solar Roles',
+  description:
+    'Browse thousands of solar photovoltaic installer positions in the US across all 50 states, updated daily.',
+}
 
 // Aligné avec le revalidate de getCachedJobsPage — inutile de garder le HTML
 // plus frais que les données qu'il contient.

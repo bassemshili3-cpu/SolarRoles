@@ -5,24 +5,35 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { Wrench, Sun, Zap, ShieldCheck, Award, DollarSign, TrendingUp, GraduationCap, Settings, HardHat, SearchCheck } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Solar Technician Jobs | Service, Field & Repair Technician Roles',
-  description: 'Solar technician jobs across the United States. Browse solar service technician, O&M technician, and solar panel repair technician roles.',
-  keywords: 'solar technician, solar power technician jobs, solar technician salary, solar technician training, solar panel repair technician, solar field technician jobs, solar service technician jobs, solar technician apprenticeship, solar repair technician, pv technician jobs, solar o&m technician',
-  openGraph: {
-    title: 'Solar Technician Jobs | Service, Field & Repair Roles Hiring Now',
-    description: 'Browse open solar technician positions. Service, field, O&M, and repair roles across residential, commercial, and utility-scale fleets.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solar Technician Jobs',
-    description: 'Find solar technician, field service, and solar repair technician openings across the US.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/solar-technician-jobs' },
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRoleSalaryStats('solar-technician')
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
+      ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
+      : ''
+
+  return {
+    title: salarySuffix
+      ? `Solar Technician Jobs${salarySuffix}`
+      : 'Solar Technician Jobs | Service, Field & Repair Technician Roles',
+    description: 'Solar technician jobs across the United States. Browse solar service technician, O&M technician, and solar panel repair technician roles.',
+    keywords: 'solar technician, solar power technician jobs, solar technician salary, solar technician training, solar panel repair technician, solar field technician jobs, solar service technician jobs, solar technician apprenticeship, solar repair technician, pv technician jobs, solar o&m technician',
+    openGraph: {
+      title: 'Solar Technician Jobs | Service, Field & Repair Roles Hiring Now',
+      description: 'Browse open solar technician positions. Service, field, O&M, and repair roles across residential, commercial, and utility-scale fleets.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Solar Technician Jobs',
+      description: 'Find solar technician, field service, and solar repair technician openings across the US.',
+    },
+    alternates: { canonical: 'https://www.solarroles.com/solar-technician-jobs' },
+  }
 }
 
 const jsonLd = {

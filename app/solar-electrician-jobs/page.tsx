@@ -5,24 +5,35 @@ import InfiniteJobList from '@/components/InfiniteJobList'
 import JobFilters from '@/components/JobFilters'
 import { BadgeCheck, Cable, DollarSign, ShieldCheck, Wrench, Zap } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Solar Electrician Jobs | PV, Electrical & Commissioning Roles',
-  description: 'Solar electrician jobs across the United States. Browse residential, commercial, utility-scale, commissioning, and solar O&M electrical roles.',
-  keywords: 'solar electrician jobs, photovoltaic electrician jobs, solar electrical technician jobs, solar journeyman electrician, PV commissioning electrician, solar O&M electrician',
-  openGraph: {
-    title: 'Solar Electrician Jobs | Now Hiring Nationwide',
-    description: 'Browse solar electrician, PV commissioning, electrical service, and O&M roles across the United States.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solar Electrician Jobs',
-    description: 'Find solar electrician and PV electrical jobs across the US.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/solar-electrician-jobs' },
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRoleSalaryStats('solar-electrician')
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
+      ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
+      : ''
+
+  return {
+    title: salarySuffix
+      ? `Solar Electrician Jobs${salarySuffix}`
+      : 'Solar Electrician Jobs | PV, Electrical & Commissioning Roles',
+    description: 'Solar electrician jobs across the United States. Browse residential, commercial, utility-scale, commissioning, and solar O&M electrical roles.',
+    keywords: 'solar electrician jobs, photovoltaic electrician jobs, solar electrical technician jobs, solar journeyman electrician, PV commissioning electrician, solar O&M electrician',
+    openGraph: {
+      title: 'Solar Electrician Jobs | Now Hiring Nationwide',
+      description: 'Browse solar electrician, PV commissioning, electrical service, and O&M roles across the United States.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Solar Electrician Jobs',
+      description: 'Find solar electrician and PV electrical jobs across the US.',
+    },
+    alternates: { canonical: 'https://www.solarroles.com/solar-electrician-jobs' },
+  }
 }
 
 const jsonLd = {

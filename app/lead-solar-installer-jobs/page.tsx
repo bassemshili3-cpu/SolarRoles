@@ -5,25 +5,36 @@ import JobFilters from '@/components/JobFilters'
 import { HardHat, ClipboardCheck, DollarSign, ShieldCheck, Award, Users } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Lead Solar Installer Jobs | Foreman & Crew Lead Positions',
-  description: 'Lead solar installer and foreman positions across the United States. Crew leadership roles with pay ranges, certification requirements, and what the job involves day to day.',
-  keywords: 'lead solar installer jobs, solar foreman jobs, solar crew lead, installation supervisor solar, solar installation foreman, nabcep installation professional jobs',
-  openGraph: {
-    title: 'Lead Solar Installer Jobs | Now Hiring Nationwide',
-    description: 'Browse open lead installer and foreman positions in solar. Crew leadership across residential, commercial, and utility-scale projects.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Lead Solar Installer Jobs',
-    description: 'Find lead installer and foreman openings in solar across the US. Residential, commercial, and utility-scale employers hiring now.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/lead-solar-installer-jobs' },
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRoleSalaryStats('lead-solar-installer')
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
+      ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
+      : ''
+
+  return {
+    title: salarySuffix
+      ? `Lead Solar Installer Jobs${salarySuffix}`
+      : 'Lead Solar Installer Jobs | Foreman & Crew Lead Positions',
+    description: 'Lead solar installer and foreman positions across the United States. Crew leadership roles with pay ranges, certification requirements, and what the job involves day to day.',
+    keywords: 'lead solar installer jobs, solar foreman jobs, solar crew lead, installation supervisor solar, solar installation foreman, nabcep installation professional jobs',
+    openGraph: {
+      title: 'Lead Solar Installer Jobs | Now Hiring Nationwide',
+      description: 'Browse open lead installer and foreman positions in solar. Crew leadership across residential, commercial, and utility-scale projects.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Lead Solar Installer Jobs',
+      description: 'Find lead installer and foreman openings in solar across the US. Residential, commercial, and utility-scale employers hiring now.',
+    },
+    alternates: { canonical: 'https://www.solarroles.com/lead-solar-installer-jobs' },
+  }
 }
 
 const jsonLd = {

@@ -144,6 +144,28 @@ function buildPageTitle(job: JobDetail): string {
   const MAX = 60
 
 
+  // Location present → "Title - City, State | Solar Roles" (unique per posting)
+  if (job.location) {
+    const full = `${job.title} - ${job.location}${brand}`
+
+    if (full.length <= MAX) return full
+
+    const suffix = ` - ${job.location}${brand}`
+    const roomForTitle = MAX - suffix.length
+
+    if (roomForTitle >= 15) {
+      const truncated =
+        job.title.length > roomForTitle - 1
+          ? job.title.slice(0, roomForTitle - 1).trimEnd() + '…'
+          : job.title
+      return `${truncated}${suffix}`
+    }
+
+    // location too long to fit alongside title → truncate whole string
+    return full.slice(0, MAX - 1).trimEnd() + '…'
+  }
+
+
   const full = `${job.title} at ${company}${brand}`
 
   if (full.length <= MAX) return full
@@ -453,7 +475,13 @@ export async function generateMetadata(
 
   const raw = await getJobDetail(id)
 
-  if (!raw) notFound()
+  if (!raw) {
+    return {
+      title: 'Job not found | Solar Roles',
+      description: 'This job posting is no longer available on Solar Roles.',
+      robots: { index: false, follow: true },
+    }
+  }
 
   const job = getJobDetailWithSalary(raw)
 
@@ -551,9 +579,6 @@ const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
   })
 
 
-  const canonicalSlug = buildJobSlug(job)
-
-
   const roleMatch = matchRoleCategory(job.title, job.description)
 
   const stateName = resolveStateName(job.addressRegion)
@@ -643,8 +668,6 @@ const schema = buildJobPostingSchema(job, {
  const apply = applyConfig[job.source] || { label: 'Apply now', className: 'bg-slate-900 text-white' }
 
   const applyUrl = job.externalApplyUrl || job.apply_url
-
-  const canonicalUrl = `https://www.solarroles/jobs/${id}/${canonicalSlug}`
 
 
 function safeJsonLd(data: unknown): string {
