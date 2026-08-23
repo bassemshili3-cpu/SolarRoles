@@ -15,7 +15,7 @@
 // saturer les crawl queues en même temps).
 
 import { NextResponse } from 'next/server';
-import { getActiveAtsJobUrls } from '@/lib/job-db';
+import { getRecentCustomScrapeJobUrls } from '@/lib/job-db';
 import { isGoogleIndexingConfigured, notifyGoogleIndexing } from '@/lib/googleIndexing';
 
 // = quota quotidien google-200. On ne dépasse jamais ça par run.
@@ -45,8 +45,8 @@ export async function GET(request: Request) {
   const startTime = Date.now();
 
   try {
-    const urls = await getActiveAtsJobUrls(MAX_URLS_PER_RUN);
-    console.log(`[Google Indexing Cron] ${urls.length} active ATS job URL(s) to submit`);
+    const urls = await getRecentCustomScrapeJobUrls(MAX_URLS_PER_RUN, 11);
+    console.log(`[Google Indexing Cron] ${urls.length} recent custom-scrape job URL(s) to submit`);
 
     let submitted = 0;
     let failed = 0;

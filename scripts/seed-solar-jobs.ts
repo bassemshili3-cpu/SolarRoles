@@ -16,12 +16,14 @@ import {
   SMARTRECRUITERS_COMPANIES,
   WORKDAY_COMPANIES,
 } from '../lib/ats/company-seed';
+import { CUSTOM_SCRAPE_COMPANIES } from '../lib/ats/custom-scrape/config';
 import { fetchLeverJobs, type NormalizedJob } from '../lib/ats/lever';
 import { fetchPinpointJobs } from '../lib/ats/pinpoint';
 import { fetchAshbyJobs } from '../lib/ats/ashby';
 import { fetchSmartRecruitersJobs } from '../lib/ats/smartrecruiters';
 import { fetchJobviteJobs } from '../lib/ats/jobvite';
 import { fetchWorkdayJobs } from '../lib/ats/workday';
+import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 
@@ -54,7 +56,10 @@ const PROVIDERS: AtsProvider<any>[] = [
   provider('greenhouse',      GREENHOUSE_COMPANIES,      fetchGreenhouseJobs,      (c) => c.slug),
   provider('pinpoint',        PINPOINT_COMPANIES,        fetchPinpointJobs,        (c) => c.slug),
   provider('workday',         WORKDAY_COMPANIES,         fetchWorkdayJobs,         (c) => `${c.tenant}/${c.site}`),
+  provider('custom-scrape',   CUSTOM_SCRAPE_COMPANIES,   fetchCustomScrapeJobs,    (c) => c.domain),
 ];
+
+const requestedProvider = process.argv[2];
 
 
 async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'created' | 'updated'> {
@@ -84,6 +89,9 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
         contractType: job.contractType,
         postedAt: job.postedAt,
         salary: job.salary,
+        salaryMin: job.salaryMin,
+        salaryMax: job.salaryMax,
+        salaryPeriod: job.salaryPeriod,
         active: true,
         expiresAt,
         fetchedAt: new Date(),
@@ -106,6 +114,9 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
       contractType: job.contractType,
       postedAt: job.postedAt,
       salary: job.salary,
+      salaryMin: job.salaryMin,
+      salaryMax: job.salaryMax,
+      salaryPeriod: job.salaryPeriod,
       sourcePriority: SOURCE_PRIORITY,
       expiresAt,
       needsHeaderImage: true,
@@ -121,7 +132,15 @@ async function main() {
   let updated = 0;
   let skippedNonUS = 0;
 
-  for (const provider of PROVIDERS) {
+  const providers = requestedProvider
+    ? PROVIDERS.filter((provider) => provider.name === requestedProvider)
+    : PROVIDERS;
+
+  if (requestedProvider && providers.length === 0) {
+    throw new Error(`Unknown provider "${requestedProvider}". Available providers: ${PROVIDERS.map((provider) => provider.name).join(', ')}`);
+  }
+
+  for (const provider of providers) {
     for (const company of provider.companies) {
       const label = provider.label(company);
       console.log(`[${provider.name}] fetching ${label}...`);
@@ -134,6 +153,7 @@ async function main() {
           continue;
         }
         const taxonomy = extractSolarJobTaxonomy({ title: job.title, description: job.description });
+        if (job.experienceLevel) taxonomy.experienceLevel = job.experienceLevel;
         const result = await upsertJob(job, taxonomy);
         result === 'created' ? created++ : updated++;
       }

@@ -11,7 +11,7 @@
  * so new jobs get picked up automatically. Safe to run frequently — jobs
  * already at the current version are skipped by the WHERE clause.
  *
- * Usage: npx tsx scripts/rewrite-descriptions.ts
+ * Usage: npx tsx -r dotenv/config scripts/rewrite-descriptions.ts
  */
 
 import { PrismaClient } from '@prisma/client';

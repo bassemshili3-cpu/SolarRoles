@@ -209,8 +209,8 @@ const MAX_SKILLS = 10
 // that's folded into the SENIOR_LEVEL pattern alongside the usual terms.
 // ─────────────────────────────────────────────────────────────────────────────
 
-function detectExperienceLevel(title: string): ExperienceLevel | undefined {
-  const t = title.toLowerCase()
+function detectExperienceLevel(title: string, description?: string): ExperienceLevel | undefined {
+  const t = `${title} ${description || ''}`.toLowerCase()
   if (/\b(lead|senior|sr\.?|foreman|crew\s*lead|principal|supervisor|superintendent|manager)\b/.test(t)) {
     return 'SENIOR_LEVEL'
   }
@@ -267,7 +267,7 @@ export function extractSolarJobTaxonomy(input: JobTaxonomyInput): JobTaxonomy {
   }
 
   // Experience level from title only
-  const experienceLevel = detectExperienceLevel(input.title || '')
+  const experienceLevel = detectExperienceLevel(input.title || '', input.description)
 
   return {
     specialty,

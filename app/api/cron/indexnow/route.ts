@@ -7,8 +7,7 @@
 
 import { NextResponse } from 'next/server';
 import { submitUrls, isIndexNowConfigured } from '@/lib/indexnow';
-import { CERTIFICATIONS } from '@/app/certifications/[slug]/certifications-data';
-import { getActiveAtsJobUrls } from '@/lib/job-db';
+import { getRecentCustomScrapeJobUrls } from '@/lib/job-db';
 
 export async function GET(request: Request) {
   // Vérifie le secret via le header Authorization plutôt qu'un query param.
@@ -41,7 +40,6 @@ export async function GET(request: Request) {
     // Aligné sur le fallback utilisé partout ailleurs (script + lib/indexnow.ts)
     // pour éviter tout mismatch host/URL — www.solarroles.com est le domaine
     // canonique réel (solarroles.com fait un 308 vers www).
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
     const urlsToSubmit: string[] = [];
 
     // 2. Collect recent ATS job pages (contenu principal)
@@ -50,19 +48,9 @@ export async function GET(request: Request) {
     // vers le contenu dynamique. Les pages statiques (/resources, landing)
     // sont déjà connues de Bing et n'ont pas besoin d'être re-soumises chaque jour.
     const MAX_ATS_JOBS = 1000; // IndexNow accepte jusqu'à 10 000 URLs/requête
-    const atsJobUrls = await getActiveAtsJobUrls(MAX_ATS_JOBS);
-    urlsToSubmit.push(...atsJobUrls);
-    console.log(`[IndexNow Cron] Added ${atsJobUrls.length} ATS job URLs`);
-
-    // 3. Collect blog pages
-    const blogPages = [
-      'how-to-land-first-solar-job',
-      'become-solar-installer-no-experience',
-      'what-does-a-solar-installer-do',
-    ];
-    const blogUrls = blogPages.map(slug => `${baseUrl}/blog/${slug}`);
-    urlsToSubmit.push(...blogUrls);
-    console.log(`[IndexNow Cron] Added ${blogUrls.length} blog URLs`);
+    const customScrapeJobUrls = await getRecentCustomScrapeJobUrls(MAX_ATS_JOBS, 11);
+    urlsToSubmit.push(...customScrapeJobUrls);
+    console.log(`[IndexNow Cron] Added ${customScrapeJobUrls.length} recent custom-scrape job URLs`);
 
     // Remove duplicates
     const uniqueUrls = Array.from(new Set(urlsToSubmit));

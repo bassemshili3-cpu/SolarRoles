@@ -1,10 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { xai } from '@ai-sdk/xai';
+import { generateText } from 'ai';
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-// Haiku is plenty for this and far cheaper at volume; bump to a Sonnet-tier
-// model via env var if you want more polished output.
-const MODEL = process.env.SEO_REWRITE_MODEL ?? 'claude-haiku-4-5-20251001';
+// The xAI provider reads XAI_API_KEY from the environment.
+// Keep the model configurable for cost/quality tuning without a code change.
+const MODEL = process.env.SEO_REWRITE_MODEL ?? 'grok-4.3';
 
 // Bump this whenever the prompt/logic below changes meaningfully — any job
 // with a stamped version below this constant gets reprocessed on the next
@@ -33,24 +32,22 @@ export interface RewritableJob {
 }
 
 export async function rewriteJobDescriptionForSeo(job: RewritableJob): Promise<string> {
-  const message = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: 2000,
-    system: SYSTEM_PROMPT,
-    messages: [
-      {
-        role: 'user',
-        content: `Job title: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\n\nOriginal description:\n${job.description}`,
-      },
-    ],
-  });
-
- const block = message.content.find((b) => b.type === 'text');
-  if (!block || block.type !== 'text') {
-    throw new Error('Claude returned no text content for this job description');
+  if (!process.env.XAI_API_KEY) {
+    throw new Error('XAI_API_KEY is required to rewrite job descriptions with Grok');
   }
 
-  const cleaned = block.text
+  const { text } = await generateText({
+    model: xai(MODEL),
+    maxOutputTokens: 2000,
+    system: SYSTEM_PROMPT,
+    prompt: `Job title: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\n\nOriginal description:\n${job.description}`,
+  });
+
+  if (!text.trim()) {
+    throw new Error('Grok returned no text content for this job description');
+  }
+
+  const cleaned = text
     .trim()
     .replace(/^```(?:html)?\s*\n?/i, '')
     .replace(/\n?```\s*$/i, '')

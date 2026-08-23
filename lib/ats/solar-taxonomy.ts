@@ -179,6 +179,8 @@ const INCLUDE_PATTERNS: RegExp[] = [
   // --- corporate solar: design / systems engineering ---
   /solar\s*(design\s*)?engineer(ing)?/i,
   /pv\s*(design\s*)?engineer(ing)?/i,
+  /\bpv\s*(designer|design(?:er)?|plan\s*set\s*drafter)\b/i,
+  /solar\s*(designer|design(?:er)?|plan\s*set\s*drafter)\b/i,
   /solar\s*electrical\s*engineer/i,
   /solar\s*systems?\s*engineer/i,
   /solar\s*engineer/i, // ★ explicit solar engineer role
@@ -186,6 +188,19 @@ const INCLUDE_PATTERNS: RegExp[] = [
   // --- corporate solar: estimating ---
   /solar\s*estimat(or|ing)/i,
   /pv\s*estimat(or|ing)/i,
+
+  // --- corporate solar: expanded sales / business development / retail /
+  //     brand (added Aug 2026 — observed in the Venture Solar extraction) ---
+  // Solar-specific corporate roles. Titles carrying an explicit "solar" or
+  // "renewable energy" token pass on the title alone; the rest are added to
+  // GENERIC_TITLE_PATTERNS so they fall back to the description, which for a
+  // curated solar employer always asserts the company is a solar installer.
+  /solar\s*energy\s*consultant/i, // "Solar Energy Consultant", "Sales - Solar Energy Consultant"
+  /solar\s*[\s-]*brand\s*ambassador/i, // "Solar - Brand Ambassador"
+  /solar\s*specialist\s*[\s-]*brand\s*ambassador/i, // "Solar Specialist - Brand Ambassador"
+  /solar\s*[\s-]*retail\s*(associate|representative)/i, // "Solar - Retail Associate"
+  /renewable\s*energy\s*[\s-]*(sales\s*)?(consultant|representative|specialist)/i, // "Renewable Energy Consultant", "Renewable Energy - Sales Consultant", "Retail - Renewable Energy Representative"
+  /retail\s*(associate|sales\s*representative)\s*[\s-]*solar/i, // "Retail Associate - Solar Sales"
 ];
 
 // --- Technical sales carve-out (legacy, kept for the NABCEP-specific
@@ -211,10 +226,10 @@ const TECHNICAL_SALES_STRONG_SIGNALS: RegExp[] = [
   /\bnabcep\b/i, // any explicit NABCEP mention is enough once the title itself already signals technical sales
 ];
 
-// Filtered out even if an include pattern (title or description) also
-// matches — protects against common false positives like non-solar
-// trades, or roles that carry too high a spam/false-positive risk to
-// let through even under the expanded corporate-solar scope.
+// Titles filtered out even if an include pattern also matches — protects
+// against common false positives like non-solar trades, or roles that carry
+// too high a spam/false-positive risk to let through even under the expanded
+// corporate-solar scope.
 const EXCLUDE_PATTERNS: RegExp[] = [
   /software\s*install(er)?/i,
   /window\s*install(er)?/i,
@@ -224,7 +239,9 @@ const EXCLUDE_PATTERNS: RegExp[] = [
   /alarm\s*install(er)?/i,
   /cable\s*install(er)?/i,
   /solar\s*turbines/i, // Solar Turbines Inc. — gas turbine manufacturer, unrelated to PV
-  /solar\s*(consultant|advisor|canvasser)/i, // "sales" removed Aug 2026 — see corporate-solar sales INCLUDE patterns above
+  // Consultants are legitimate sales roles (e.g. "Solar Sales Consultant").
+  // Keep only the lead-generation titles that remain out of scope.
+  /solar\s*(advisor|canvasser)/i, // "sales" removed Aug 2026 — see corporate-solar sales INCLUDE patterns above
   /appointment\s*setter/i,
   /permit(ting)?\s*(specialist|coordinator|technician)/i,
   /home\s*inspector/i, // generic real-estate home inspector, not PV
@@ -255,6 +272,7 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\blead\s*install(er)?\b/i, // e.g. "Lead Installer" or "Telecommunications Lead Installer" without "solar" in the title
   /^helper\s*(i{1,3}|1|2|3)?$/i, // "Solar Helper" vs generic "Helper"
   /^laborer\s*(i{1,3}|1|2|3)?$/i,
+  /^general\s+laborer\s*(i{1,3}|1|2|3)?$/i,
   /\bforeman\b/i, // "Foreman" alone is too generic (construction at large)
   /\bracking\s*(tech(nician)?|crew|installer)\b/i,
   /\bfield\s*service\s*(tech(nician)?|engineer)\b/i,
@@ -272,6 +290,14 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\bconstruction\s*manager\b/i,
   /\bestimator\b/i,
   /\bsystems?\s*engineer\b/i,
+
+  // --- corporate solar generic titles (added Aug 2026 — Venture Solar extraction) ---
+  // No solar token in the title itself: rely on the description fallback,
+  // which for a curated solar employer always asserts the solar context.
+  /\binside\s*sales\b/i, // "Inside Sales Specialist"
+  /\bbusiness\s*development\b/i, // "Business Development Intern", "Business Development Consultant"
+  /\bsales\s*development\b/i, // "Sales Development Consultant"
+  /\bsite\s*surveyor\b/i, // "Site Surveyor"
 ];
 
 // Strong, specific solar signals to look for in a description when the
@@ -339,9 +365,12 @@ export function isSolarInstallerRole(title: string, description?: string): boole
     return true;
   }
 
-  // Excludes always win, whether tripped by title or description.
+  // A title exclusion always wins.
   if (EXCLUDE_PATTERNS.some((re) => re.test(title))) return false;
-  if (description && EXCLUDE_PATTERNS.some((re) => re.test(description))) return false;
+  // Job descriptions commonly list adjacent roles such as "Solar Consultant".
+  // Applying title exclusions to the whole body consequently discarded clearly
+  // relevant retail and sales jobs. Exclusions deliberately govern the role
+  // being advertised (its title); Tier 2 still requires a strong solar signal.
 
   // Tier 1: title alone carries a solar signal for one of the covered roles.
   if (INCLUDE_PATTERNS.some((re) => re.test(title))) return true;
@@ -384,6 +413,7 @@ export function getSolarRoleFamily(title: string): SolarRoleFamily {
   if (/estimat(or|ing)/i.test(title)) return 'estimating';
   if (/project\s*(manager|coordinator)|construction\s*manager/i.test(title)) return 'project_management';
   if (/sales/i.test(title)) return 'sales';
+  if (/(consultant|brand\s*ambassador|business\s*development|sales\s*development|retail|renewable\s*energy)/i.test(title)) return 'sales';
   if (/\belectrician|wireman/i.test(title)) return 'electrician';
   if (/\bengineer(ing)?\b/i.test(title)) return 'engineering';
   if (/supervisor|superintendent|crew\s*lead|foreman/i.test(title)) return 'supervisor';

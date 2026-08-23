@@ -141,7 +141,7 @@ export const JAZZHR_COMPANIES: AtsCompanySeed[] = [
 // débusquer sur company-seed Greenhouse (posigen, fluenthome...).
 // ───────────────────────────────────────────────────────────
 export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
-  // ★★★ confirmé — page carrière + tenant Workday vérifiés le 29/07/2026
+  // ★★★ confirmé — page carrière + tenant Workday vérifiés le 29/07/2026 
   { tenant: 'sunrun', host: 'wd5', site: 'Sunrun_Careers', name: 'Sunrun', verified: true },
 
   { tenant: 'aes', host: 'wd1', site: 'AES_US', name: 'AES', verified: false }, // ★ utility-scale solar/energy storage

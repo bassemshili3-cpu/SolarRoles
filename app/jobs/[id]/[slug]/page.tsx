@@ -28,7 +28,8 @@ import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, Trendin
 
 import Link from 'next/link'
 
-import PaycheckCalculatorCard from '@/components/PaycheckCalculatorCard'
+import CareerjetJobBox from '@/components/CareerjetJobBox'
+import CareerjetSearchBox from '@/components/CareerjetSearchBox'
 
 import { formatJobDescription, sanitizeStructuredHtml } from '@/lib/formatJobDescription'
 
@@ -702,7 +703,7 @@ function safeJsonLd(data: unknown): string {
 
           <div className="w-80 shrink-0 sticky top-6 self-start hidden lg:block">
 
-            <PaycheckCalculatorCard salary={job.salary_min} state={job.location} compact />
+            <CareerjetJobBox search={job.title || ''} location={job.location || ''} />
          
 
           </div>
@@ -927,6 +928,12 @@ function safeJsonLd(data: unknown): string {
   </div>
 )}
 
+                <div className="mb-8 lg:hidden">
+
+                  <CareerjetSearchBox />
+
+                </div>
+
 <hr className="my-8" />
 
 
@@ -949,13 +956,6 @@ function safeJsonLd(data: unknown): string {
                 </div>
 
                 
-
-
-                <div className="mt-8 lg:hidden">
-
-                  <PaycheckCalculatorCard salary={job.salary_min} state={job.location} />
-
-                </div>
 
 
                 {roleStats && stateName && roleMatch && (

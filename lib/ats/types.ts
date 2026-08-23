@@ -11,4 +11,8 @@ export interface NormalizedJob {
   contractType?: string;
   postedAt?: Date;
   salary?: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  salaryPeriod?: string;
+  experienceLevel?: 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEVEL';
 }

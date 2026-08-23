@@ -243,6 +243,35 @@ export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]
   return filtered.map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
 }
 
+/** URLs de jobs custom-scrape publiés au cours des derniers jours. */
+export async function getRecentCustomScrapeJobUrls(
+  limit: number = 200,
+  maxAgeDays: number = 11,
+): Promise<string[]> {
+  const postedAfter = new Date();
+  postedAfter.setDate(postedAfter.getDate() - maxAgeDays);
+
+  const jobs = await prisma.job.findMany({
+    where: {
+      active: true,
+      source: 'custom-scrape',
+      postedAt: { gte: postedAfter },
+    },
+    select: JOB_SELECT_ATS,
+    orderBy: { postedAt: 'desc' },
+    // Overfetch pour compenser le filtre de contenu ci-dessous.
+    take: limit * 2,
+  });
+
+  const hasEnoughContent = (j: { description: string | null }) =>
+    stripHtmlForLengthCheck(j.description || '').length >= MIN_DESCRIPTION_LENGTH;
+
+  return jobs
+    .filter(hasEnoughContent)
+    .slice(0, limit)
+    .map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`);
+}
+
 // ─── Stats pour le dashboard ─────────────────────────────────────────────────
 export async function getJobStats() {
   const [total, jooble, lensa, careerjet, active] = await Promise.all([
