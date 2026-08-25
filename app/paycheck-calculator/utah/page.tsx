@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Utah Paycheck Calculator 2026 | Flat 4.65% Tax, See Your Take-Home Pay',
   description: 'Calculate your take-home pay in Utah. Flat 4.65% state income tax with a unique credit system. Enter your salary and see your net pay instantly.',
   keywords: 'utah paycheck calculator, take home pay utah, salary after taxes UT, utah net pay 2026, salt lake city paycheck calculator',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/utah' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/utah' },
 }
 
 export default function UtahPaycheckCalculatorPage() {

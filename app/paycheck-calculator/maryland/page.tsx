@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Maryland Paycheck Calculator 2026 | State + County Tax Makes a Difference',
   description: 'Calculate your take-home pay in Maryland. State income tax plus mandatory county tax that varies by where you live. Enter your salary and see your real net pay.',
   keywords: 'maryland paycheck calculator, take home pay maryland, salary after taxes MD, maryland net pay 2026, montgomery county tax calculator',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/maryland' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/maryland' },
 }
 
 export default function MarylandPaycheckCalculatorPage() {

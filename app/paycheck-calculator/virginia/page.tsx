@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Virginia Paycheck Calculator 2026 | Take-Home Pay After VA State Tax',
   description: 'Calculate your take-home pay in Virginia. Moderate state tax, no local income tax for most residents, strong federal job market. Enter your salary and see your net pay.',
   keywords: 'virginia paycheck calculator, take home pay virginia, salary after taxes VA, virginia net pay 2026, northern virginia paycheck calculator',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/virginia' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/virginia' },
 }
 
 export default function VirginiaPaycheckCalculatorPage() {

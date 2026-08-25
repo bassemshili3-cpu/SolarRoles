@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Ohio Paycheck Calculator 2026 | Take-Home Pay After OH State & City Taxes',
   description: 'Calculate your take-home pay in Ohio. State tax plus city income tax in most metros. Enter your salary and see your actual net pay. Free and instant.',
   keywords: 'ohio paycheck calculator, take home pay ohio, salary after taxes OH, ohio net pay 2026, columbus paycheck calculator',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/ohio' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/ohio' },
 }
 
 export default function OhioPaycheckCalculatorPage() {

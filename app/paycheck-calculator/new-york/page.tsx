@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'New York Paycheck Calculator 2026 | State + NYC Tax = See What You Keep',
   description: 'Calculate your take-home pay in New York. If you live in NYC, a city tax stacks on top of the state rate. Enter your salary and see the real number.',
   keywords: 'new york paycheck calculator, take home pay new york, salary after taxes NY, NYC paycheck calculator 2026, new york city income tax',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/new-york' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/new-york' },
 }
 
 export default function NewYorkPaycheckCalculatorPage() {

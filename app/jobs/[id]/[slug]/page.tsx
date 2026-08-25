@@ -276,6 +276,13 @@ function buildJobPostingSchema(
 
   const stateCode = job.addressRegion || ''
   const locationRegions = [...new Set([stateCode, ...(job.locationRegions ?? [])].filter(Boolean))]
+  const inferredSalaryPeriod = /(?:\/|per\s+)(?:hour|hr)\b|\bhourly\b/i.test(job.salary || '') ? 'HOUR'
+    : /(?:\/|per\s+)(?:week|wk)\b|\bweekly\b/i.test(job.salary || '') ? 'WEEK'
+    : /(?:\/|per\s+)(?:month|mo)\b|\bmonthly\b/i.test(job.salary || '') ? 'MONTH'
+    : 'YEAR'
+  const salaryUnitText = ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'].includes((job.salaryPeriod || '').toUpperCase())
+    ? (job.salaryPeriod || '').toUpperCase()
+    : inferredSalaryPeriod
   const jobLocations = locationRegions.map((region) => ({
     '@type': 'Place',
     address: (() => {
@@ -410,7 +417,7 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
         maxValue: job.salary_max,
 
-        unitText: 'YEAR',
+        unitText: salaryUnitText,
 
       },
 

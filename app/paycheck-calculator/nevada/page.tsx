@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Nevada Paycheck Calculator 2026 | No State Income Tax, Full Take-Home Pay',
   description: 'Calculate your take-home pay in Nevada. Zero state income tax means your paycheck only loses federal tax and FICA. Enter your salary and see the number.',
   keywords: 'nevada paycheck calculator, take home pay nevada, salary after taxes NV, las vegas paycheck calculator 2026, reno take home pay',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/nevada' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/nevada' },
 }
 
 export default function NevadaPaycheckCalculatorPage() {

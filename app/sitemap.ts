@@ -8,7 +8,6 @@ import { CERTIFICATIONS } from "@/app/certifications/[slug]/certifications-data"
 import { STATES, SLUG_TO_STATE } from "@/lib/usStates";
 
 const BASE_URL = 'https://www.solarroles.com'
-const LAST_MAJOR_UPDATE = new Date('2026-08-8')
 const MIN_JOBS_THRESHOLD = 20 // doit rester synchro avec app/data/states/[state]/page.tsx
 
 
@@ -103,7 +102,6 @@ const sections: {
   routes: string[]
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]
   priority: number
-  lastModified?: Date
 }[] = [
   { routes: priorityLandingPages, changeFrequency: "monthly", priority: 0.8 },
   { routes: certificationPages, changeFrequency: "monthly", priority: 0.8 },
@@ -118,7 +116,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
-      lastModified: LAST_MAJOR_UPDATE,
       changeFrequency: "weekly",
       priority: 1,
     },
@@ -128,7 +125,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const route of section.routes) {
       entries.push({
         url: `${BASE_URL}${route}`,
-        lastModified: section.lastModified ?? LAST_MAJOR_UPDATE,
         changeFrequency: section.changeFrequency,
         priority: section.priority,
       })
@@ -154,7 +150,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (count < MIN_JOBS_THRESHOLD) continue
       entries.push({
         url: `${BASE_URL}/data/states/${slug}`,
-        lastModified: LAST_MAJOR_UPDATE,
         changeFrequency: "weekly",
         priority: 0.8,
       })
@@ -194,13 +189,14 @@ const ownJobs = await prisma.job.findMany({
     location: true,
     postedAt: true,
     fetchedAt: true,
+    updatedAt: true,
   },
 })
 
   for (const job of ownJobs) {
     entries.push({
       url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
-      lastModified: job.postedAt ?? job.fetchedAt,
+      lastModified: job.updatedAt,
       changeFrequency: "daily",
       priority: 0.7,
     })

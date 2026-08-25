@@ -12,6 +12,7 @@ export type JobDetail = {
   locationRegions?: string[]
   postalCode?: string
   salary?: string
+  salaryPeriod?: string
   salary_min?: number
   salary_max?: number
   description?: string
@@ -48,6 +49,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       salary_min: dbJob.salaryMin || undefined,
       salary_max: dbJob.salaryMax || undefined,
       salary: dbJob.salary || undefined,
+      salaryPeriod: dbJob.salaryPeriod || undefined,
       created: dbJob.postedAt?.toISOString(),
       postedAt: (dbJob.postedAt ?? dbJob.fetchedAt).toISOString(),
       fetchedAt: dbJob.fetchedAt.toISOString(),

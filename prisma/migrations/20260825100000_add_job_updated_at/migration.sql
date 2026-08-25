@@ -1,0 +1,9 @@
+ALTER TABLE "Job" ADD COLUMN IF NOT EXISTS "updatedAt" TIMESTAMP(3);
+
+UPDATE "Job"
+SET "updatedAt" = "fetchedAt"
+WHERE "updatedAt" IS NULL;
+
+ALTER TABLE "Job"
+  ALTER COLUMN "updatedAt" SET NOT NULL,
+  ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;

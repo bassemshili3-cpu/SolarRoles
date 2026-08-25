@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Illinois Paycheck Calculator 2026 | Take-Home Pay After IL Flat Tax',
   description: 'Calculate your take-home pay in Illinois. Flat 4.95% state tax on every dollar. Enter your salary and see your net pay instantly. Free, no signup.',
   keywords: 'illinois paycheck calculator, take home pay illinois, salary after taxes IL, illinois net pay 2026',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/illinois' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/illinois' },
 }
 
 export default function IllinoisPaycheckCalculatorPage() {

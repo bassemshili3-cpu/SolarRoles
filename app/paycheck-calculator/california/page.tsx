@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'How much of your California salary do you actually keep? Enter your gross pay and see the net number after federal, CA state tax, SDI, and FICA. Free, instant, no signup.',
   keywords: 'california paycheck calculator, take home pay california, salary after taxes CA, california net pay calculator 2026, how much tax in california',
   alternates: {
-    canonical: 'https://www.oh-my-job.com/paycheck-calculator/california',
+    canonical: 'https://www.solarroles.com/paycheck-calculator/california',
   },
 }
 

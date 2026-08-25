@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Washington State Paycheck Calculator 2026 | No Income Tax, But Read This',
   description: 'Calculate your take-home pay in Washington State. Zero income tax on wages, but a capital gains tax exists. Enter your salary and see what you keep. Free and instant.',
   keywords: 'washington state paycheck calculator, take home pay washington, salary after taxes WA, washington no income tax 2026, seattle paycheck calculator',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/washington' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/washington' },
 }
 
 export default function WashingtonPaycheckCalculatorPage() {

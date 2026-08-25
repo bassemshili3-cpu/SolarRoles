@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Michigan Paycheck Calculator 2026 | Take-Home Pay After MI Flat Tax',
   description: 'Calculate your take-home pay in Michigan. Flat 4.25% state rate plus local taxes in some cities. Enter your salary and see your net pay instantly.',
   keywords: 'michigan paycheck calculator, take home pay michigan, salary after taxes MI, michigan net pay 2026, detroit paycheck calculator',
-  alternates: { canonical: 'https://www.oh-my-job.com/paycheck-calculator/michigan' },
+  alternates: { canonical: 'https://www.solarroles.com/paycheck-calculator/michigan' },
 }
 
 export default function MichiganPaycheckCalculatorPage() {

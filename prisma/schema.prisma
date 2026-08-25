@@ -51,6 +51,7 @@ model Job {
   contractTime             String?
   postedAt                 DateTime?
   fetchedAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
   lastGoogleIndexingSubmittedAt DateTime?
   expiresAt                DateTime
   active                   Boolean  @default(true)

@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Cookie Policy | Solar Roles',
   description: 'Learn how Solar Roles uses cookies and similar tracking technologies on our job search platform.',
   alternates: {
-    canonical: 'https://www.solarroles.col/cookie-policy',
+    canonical: 'https://www.solarroles.com/cookie-policy',
   },
 }
 
