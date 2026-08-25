@@ -160,6 +160,7 @@ const INCLUDE_PATTERNS: RegExp[] = [
   // --- solar thermal (NABCEP also has a distinct Solar Heating cert) ---
   /solar\s*thermal\s*install(er)?/i,
   /solar\s*(hot\s*water|water\s*heat(ing|er))\s*install(er)?/i,
+  /solar\s*pool\s*(heater|heating)\s*install(er|ation)?/i,
 
   // --- certifications as a strong standalone signal ---
   /\bnabcep\b/i,

@@ -9,6 +9,7 @@ export type JobDetail = {
   company?: string
   location?: string
   addressRegion?: string
+  locationRegions?: string[]
   postalCode?: string
   salary?: string
   salary_min?: number
@@ -21,7 +22,8 @@ export type JobDetail = {
   expiresAt: string
   contract_type?: string
   contract_time?: string
-  source: 'lensa' | 'adzuna' | 'jooble' | 'careerjet' | 'employer'
+  source: string
+  sourceUrl?: string
   externalApplyUrl?: string | null
   apply_url?: string
   headerImage?: string | null
@@ -39,6 +41,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       company: dbJob.company,
       location: dbJob.location,
       addressRegion: dbJob.addressRegion,
+      locationRegions: dbJob.locationRegions,
       postalCode: dbJob.postalCode || undefined,
       description: dbJob.description,
       seoDescription: dbJob.seoDescription || null, // ← priorité au rewrite
@@ -49,7 +52,8 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       postedAt: (dbJob.postedAt ?? dbJob.fetchedAt).toISOString(),
       fetchedAt: dbJob.fetchedAt.toISOString(),
       expiresAt: dbJob.expiresAt.toISOString(),
-      source: dbJob.source as 'adzuna' | 'lensa' | 'jooble' | 'careerjet' | 'employer',
+      source: dbJob.source,
+      sourceUrl: dbJob.url,
       externalApplyUrl: dbJob.applyUrl,
       apply_url: dbJob.applyUrl,
       contract_type: dbJob.contractType || undefined,

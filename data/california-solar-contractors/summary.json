@@ -1,0 +1,17 @@
+{
+  "sourceFiles": [
+    "CSLBSearchData_163342171.xlsx",
+    "CSLBSearchData_163412289.xlsx",
+    "CSLBSearchData_163444973.xlsx",
+    "CSLBSearchData_163505900.xlsx",
+    "CSLBSearchData_163528025.xlsx",
+    "CSLBSearchData_163547774.xlsx"
+  ],
+  "inputRows": 1086,
+  "uniqueLicenses": 1086,
+  "activeClearLicenses": 1086,
+  "activeSolarC46Licenses": 1086,
+  "retainedWithWorkersComp": 679,
+  "excludedAsExemptOrNoWorkersComp": 407,
+  "criteria": "Active (CLEAR) California C-46 solar contractor with non-exempt workers compensation coverage."
+}

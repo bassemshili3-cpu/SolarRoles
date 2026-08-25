@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "minResidents": 20,
+    "maxResidents": 125,
+    "minNursingFte": 12,
+    "maxNursingFte": 65,
+    "maxFacilitiesInChain": 3,
+    "minHomeHealthEpisodes": 75,
+    "maxHomeHealthEpisodes": 1500
+  },
+  "nursingHomes": {
+    "input": 14693,
+    "retained": 2905,
+    "excludedForChainOrHospital": 10563,
+    "excludedForSize": 805,
+    "missingStaffing": 420
+  },
+  "homeHealth": {
+    "input": 12460,
+    "retainedForDomainResearch": 5624,
+    "excludedForActivityProxy": 3058,
+    "excludedForKnownLargeOperator": 894,
+    "missingActivityProxy": 2884,
+    "caveat": "The CMS home-health export has no employee count or staffing-hours column. Medicare episodes are only an activity proxy and must not be treated as FTE."
+  }
+}

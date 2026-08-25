@@ -7,7 +7,7 @@
 
 import { NextResponse } from 'next/server';
 import { submitUrls, isIndexNowConfigured } from '@/lib/indexnow';
-import { getRecentCustomScrapeJobUrls } from '@/lib/job-db';
+import { getRecentIndexableJobUrls } from '@/lib/job-db';
 
 export async function GET(request: Request) {
   // Vérifie le secret via le header Authorization plutôt qu'un query param.
@@ -48,9 +48,9 @@ export async function GET(request: Request) {
     // vers le contenu dynamique. Les pages statiques (/resources, landing)
     // sont déjà connues de Bing et n'ont pas besoin d'être re-soumises chaque jour.
     const MAX_ATS_JOBS = 1000; // IndexNow accepte jusqu'à 10 000 URLs/requête
-    const customScrapeJobUrls = await getRecentCustomScrapeJobUrls(MAX_ATS_JOBS, 11);
-    urlsToSubmit.push(...customScrapeJobUrls);
-    console.log(`[IndexNow Cron] Added ${customScrapeJobUrls.length} recent custom-scrape job URLs`);
+    const recentJobUrls = await getRecentIndexableJobUrls(MAX_ATS_JOBS, 15);
+    urlsToSubmit.push(...recentJobUrls);
+    console.log(`[IndexNow Cron] Added ${recentJobUrls.length} recent ATS/custom-scrape job URLs`);
 
     // Remove duplicates
     const uniqueUrls = Array.from(new Set(urlsToSubmit));

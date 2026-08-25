@@ -15,11 +15,12 @@
 // saturer les crawl queues en même temps).
 
 import { NextResponse } from 'next/server';
-import { getRecentCustomScrapeJobUrls } from '@/lib/job-db';
+import { getGoogleIndexingCandidates, markGoogleIndexingSubmitted } from '@/lib/job-db';
 import { isGoogleIndexingConfigured, notifyGoogleIndexing } from '@/lib/googleIndexing';
 
 // = quota quotidien google-200. On ne dépasse jamais ça par run.
-const MAX_URLS_PER_RUN = 200;
+// 8 URLs x 24 executions = 192, under Google's daily quota of 200.
+const MAX_URLS_PER_RUN = 8;
 
 export async function GET(request: Request) {
   const cronSecret = process.env.CRON_SECRET;
@@ -45,28 +46,29 @@ export async function GET(request: Request) {
   const startTime = Date.now();
 
   try {
-    const urls = await getRecentCustomScrapeJobUrls(MAX_URLS_PER_RUN, 11);
-    console.log(`[Google Indexing Cron] ${urls.length} recent custom-scrape job URL(s) to submit`);
+    const candidates = await getGoogleIndexingCandidates(MAX_URLS_PER_RUN, 15);
+    console.log(`[Google Indexing Cron] ${candidates.length} prioritized custom-scrape/ATS job URL(s) to submit`);
 
     let submitted = 0;
     let failed = 0;
     let quotaHit = false;
     const errors: string[] = [];
 
-    for (const url of urls) {
-      const result = await notifyGoogleIndexing(url, 'URL_UPDATED');
+    for (const candidate of candidates) {
+      const result = await notifyGoogleIndexing(candidate.url, 'URL_UPDATED');
 
       if (result.success) {
         submitted++;
+        await markGoogleIndexingSubmitted(candidate.id);
         if (process.env.NODE_ENV !== 'production') {
-          console.log(`[Google Indexing Cron] ✔ ${url}`);
+          console.log(`[Google Indexing Cron] ✔ ${candidate.url}`);
         }
       } else {
         failed++;
         const message =
           typeof result.error === 'string' ? result.error : JSON.stringify(result.error);
         errors.push(message);
-        console.error(`[Google Indexing Cron] ✘ ${url}: ${message}`);
+        console.error(`[Google Indexing Cron] ✘ ${candidate.url}: ${message}`);
 
         // Quota épuisé → arrêt anticipé, on préserve le reste de la journée.
         if (result.quotaExceeded) {
@@ -90,7 +92,7 @@ export async function GET(request: Request) {
       submitted,
       failed,
       quotaHit,
-      totalCandidates: urls.length,
+      totalCandidates: candidates.length,
       errors: errors.slice(0, 5),
       duration: `${duration}ms`,
     });

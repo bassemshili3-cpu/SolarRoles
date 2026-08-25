@@ -12,7 +12,11 @@ function clean(value: string): string {
 
 function getCandidate($: cheerio.CheerioAPI, element: Element, baseUrl: string, selectors?: CustomScrapeSelectors): DiscoveredJobLink | undefined {
   const $element = $(element);
-  const $link = selectors?.link ? $element.find(selectors.link).first() : $element.find('a[href]').first();
+  // A configured list item may itself be the link (for example, repeated
+  // "Apply now" buttons on a WordPress careers page).
+  const $link = selectors?.link
+    ? ($element.is(selectors.link) ? $element : $element.find(selectors.link).first())
+    : ($element.is('a[href]') ? $element : $element.find('a[href]').first());
   const href = $link.attr('href');
   if (!href || href.startsWith('#') || /^(mailto:|tel:|javascript:)/i.test(href)) return undefined;
   try {

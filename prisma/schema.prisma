@@ -38,6 +38,7 @@ model Job {
   company                  String   @default("")
   location                 String   @default("")
   addressRegion            String   @default("")
+  locationRegions          String[] @default([])
   postalCode               String?
   salaryPeriod             String?
   description              String   @db.Text
@@ -50,6 +51,7 @@ model Job {
   contractTime             String?
   postedAt                 DateTime?
   fetchedAt                DateTime @default(now())
+  lastGoogleIndexingSubmittedAt DateTime?
   expiresAt                DateTime
   active                   Boolean  @default(true)
   sourcePriority           Int      @default(99)
@@ -83,6 +85,7 @@ model Job {
   @@index([active, expiresAt, fetchedAt], map: "Job_active_expiresAt_fetchedAt_idx")
   @@index([active, company])
   @@index([active, addressRegion, postedAt(sort: Desc)])
+  @@index([active, lastGoogleIndexingSubmittedAt])
   @@index([needsHeaderImage, headerImage])
 }
 

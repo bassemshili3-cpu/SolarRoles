@@ -209,7 +209,7 @@ function parseLocationForSchema(location: string, _stateCode: string) {
 
   const lower = trimmed.toLowerCase()
 
-  const isRemote = lower === 'remote' || lower.includes('anywhere') || lower.includes('wfh')
+  const isRemote = lower === 'remote' || lower.startsWith('remote ') || lower.startsWith('remote—') || lower.includes('anywhere') || lower.includes('wfh')
 
   const city = trimmed.split(',')[0]?.trim() ?? ''
 
@@ -264,6 +264,8 @@ function buildJobPostingSchema(
 
     companyDomain?: string | null
 
+    companyWebsite?: string | null
+
   } = {},
 
 ) {
@@ -273,6 +275,16 @@ function buildJobPostingSchema(
   const employmentType = resolveEmploymentType(job)
 
   const stateCode = job.addressRegion || ''
+  const locationRegions = [...new Set([stateCode, ...(job.locationRegions ?? [])].filter(Boolean))]
+  const jobLocations = locationRegions.map((region) => ({
+    '@type': 'Place',
+    address: (() => {
+      const addr: Record<string, unknown> = { '@type': 'PostalAddress', addressCountry: 'US', addressRegion: region }
+      if (region === stateCode && city) addr.addressLocality = city
+      if (region === stateCode && job.postalCode) addr.postalCode = job.postalCode
+      return addr
+    })(),
+  }))
 
 
   // ── hiringOrganization: always set logo + sameAs when we can derive a domain ──
@@ -320,7 +332,9 @@ function buildJobPostingSchema(
 
       stateCode,
 
-      description: job.description || '',
+      // The JobPosting description must match the text actually visible on
+      // this page. Rewritten SEO descriptions are rendered below when present.
+      description: job.seoDescription || job.description || '',
 
       salaryMin: job.salary_min,
 
@@ -334,22 +348,7 @@ function buildJobPostingSchema(
 
     hiringOrganization,
 
-    jobLocation: {
-
-      '@type': 'Place',
-
-      address: (() => {
-  const addr: Record<string, unknown> = {
-    '@type': 'PostalAddress',
-    addressCountry: 'US',
-  }
-  if (city) addr.addressLocality = city
-  if (stateCode) addr.addressRegion = stateCode
-  if (job.postalCode) addr.postalCode = job.postalCode
-  return addr
-})(),
-
-    },
+    jobLocation: jobLocations.length === 1 ? jobLocations[0] : jobLocations,
 
     url: `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`,
 
@@ -424,12 +423,22 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
   if (isRemote) {
 
+    // A remote role has no physical worksite. State-specific remote jobs keep
+    // their eligibility restriction from addressRegion instead of being
+    // broadened to the whole country.
+    delete schema.jobLocation
     schema.jobLocationType = 'TELECOMMUTE'
-
-    schema.applicantLocationRequirements = { '@type': 'Country', name: 'US' }
+    const applicantRegions = locationRegions
+      .map((region) => resolveStateName(region))
+      .filter((name): name is string => Boolean(name))
+      .map((name) => ({ '@type': 'State', name: `${name}, USA` }))
+    schema.applicantLocationRequirements = applicantRegions.length > 0
+      ? applicantRegions.length === 1 ? applicantRegions[0] : applicantRegions
+      : { '@type': 'Country', name: 'USA' }
 
   }
 
+  if (context.companyWebsite) hiringOrganization.sameAs = context.companyWebsite
 
   // ── industry + occupationalCategory ──
 
@@ -644,11 +653,17 @@ const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
   const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbSegments)
 
 
+const companyWebsite = (() => {
+  if (job.source !== 'custom-scrape' || !job.sourceUrl) return undefined
+  try { return new URL(job.sourceUrl).origin } catch { return undefined }
+})()
+
 const schema = buildJobPostingSchema(job, {
   industry: taxonomy.specialty,   // ✅ remplace industry par specialty
   occupationalCategory: taxonomy.occupationalCategory,
   skills: taxonomy.skills,
   companyDomain: employerProfile?.domain || undefined,
+  companyWebsite,
 })
 
 

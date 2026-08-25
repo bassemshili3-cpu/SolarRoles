@@ -1,11 +1,22 @@
 // lib/ats/company-seed.ts
 import type { WorkdayCompanySeed } from './workday';
+import type { RipplingCompanySeed } from './rippling';
 
 export type AtsCompanySeed = {
   slug: string;
   name: string;
   verified: boolean;
 };
+
+// Rippling — https://ats.rippling.com/<slug>/jobs
+// `roleFilter` deliberately preserves the manually requested role scope per employer.
+export const RIPPLING_COMPANIES: RipplingCompanySeed[] = [
+  { slug: 'sunnymac-careers', name: 'Sunnymac Solar', verified: true, roleFilter: 'handyman_or_hvac_installer' },
+  { slug: 'asic', name: 'ASIC', verified: true, roleFilter: 'solar_taxonomy' },
+  { slug: 'zeo-energy-corp', name: 'ZEO Energy', verified: true, roleFilter: 'solar_taxonomy' },
+  { slug: 'photon-brothers', name: 'Photon Brothers', verified: true, roleFilter: 'solar_installer' },
+  { slug: 'rnwbl', name: 'RNWBL', verified: true, roleFilter: 'solar_om_or_technician' },
+];
 
 export const ASHBY_COMPANIES: AtsCompanySeed[] = [
   { slug: 'Ambrosia-Energy',  name: 'Ambrosia Energy',         verified: true }, // ★★★ Solar Installer El Paso TX $30-40/hr

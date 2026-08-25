@@ -44,7 +44,7 @@ export async function GET(request: Request) {
   }
 
   const ids = toDeactivate.map((j) => j.id)
-  const atsJobs = toDeactivate.filter((j) => ATS_SOURCES.includes(j.source))
+  const indexableJobs = toDeactivate.filter((j) => ATS_SOURCES.includes(j.source) || j.source === 'custom-scrape')
 
   // ─── Notifier AVANT ou APRÈS le flag ? Après — pour que le prochain
   // crawl de Google tombe déjà sur un contenu cohérent avec le statut "supprimé" ───
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
   let googleSent = 0
   let googleFailed = 0
   if (isGoogleIndexingConfigured()) {
-    for (const job of atsJobs.slice(0, MAX_DELETE_NOTIFICATIONS)) {
+    for (const job of indexableJobs.slice(0, MAX_DELETE_NOTIFICATIONS)) {
       const url = `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job as any)}`
       const result = await notifyGoogleIndexing(url, 'URL_DELETED')
       if (result.success) {
@@ -77,7 +77,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     deactivated: ids.length,
-    googleIndexing: { sent: googleSent, failed: googleFailed, skippedNonAts: ids.length - atsJobs.length },
+    googleIndexing: { sent: googleSent, failed: googleFailed, skippedNonIndexable: ids.length - indexableJobs.length },
     timestamp: new Date().toISOString(),
   })
 }

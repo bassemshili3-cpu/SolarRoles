@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { isSolarInstallerRole } from '../solar-taxonomy';
 import type { NormalizedJob } from '../types';
+import { resolveStateName } from '@/lib/usStates';
 import { discoverJobLinks, discoverNextPageUrl } from './discover';
 import { extractJobDetail } from './detail';
 import type { CustomScrapeOutcome, CustomScrapeOutcomeCounts, CustomScrapeSeed, GoogleJobPosting } from './types';
@@ -111,21 +112,73 @@ async function permitted(seed: CustomScrapeSeed, url: string): Promise<boolean> 
   }
 }
 
-export function buildGoogleJobPosting(job: NormalizedJob, locality: string | undefined): GoogleJobPosting | undefined {
-  if (!job.title || !job.description || !job.postedAt || !job.company || !locality || !job.addressRegion || !job.contractType) return undefined;
+export function buildGoogleJobPosting(
+  job: NormalizedJob,
+  locality: string | undefined,
+  options: { allowMissingEmploymentType?: boolean } = {},
+): GoogleJobPosting | undefined {
+  const remote = job.isRemote === true;
+  if (!job.title || !job.description || !job.postedAt || !job.company || (!options.allowMissingEmploymentType && !job.contractType) || (!remote && !job.addressRegion)) return undefined;
+  const locationRegions = [...new Set([job.addressRegion, ...(job.locationRegions ?? [])].filter(Boolean) as string[])];
   const validThrough = new Date(job.postedAt);
   validThrough.setDate(validThrough.getDate() + 90);
   return {
     title: job.title, description: job.description, datePosted: job.postedAt.toISOString(), validThrough: validThrough.toISOString(),
-    hiringOrganization: { name: job.company }, jobLocation: { address: { addressLocality: locality, addressRegion: job.addressRegion } }, employmentType: job.contractType,
+    hiringOrganization: { name: job.company },
+    ...(job.contractType ? { employmentType: job.contractType } : {}),
+    ...(remote
+      ? {
+        jobLocationType: 'TELECOMMUTE' as const,
+        applicantLocationRequirements: locationRegions.length > 1
+          ? locationRegions.flatMap((region) => {
+            const name = resolveStateName(region);
+            return name ? [{ '@type': 'State' as const, name: `${name}, USA` }] : [];
+          })
+          : job.addressRegion && resolveStateName(job.addressRegion)
+          ? { '@type': 'State' as const, name: `${resolveStateName(job.addressRegion)}, USA` }
+          : { '@type': 'Country' as const, name: 'USA' as const },
+      }
+      : { jobLocation: locationRegions.map((region) => ({ address: { ...(region === job.addressRegion && locality ? { addressLocality: locality } : {}), addressRegion: region, addressCountry: 'US' as const } })) }),
     ...(job.salary ? { baseSalary: job.salary } : {}),
   };
 }
 
-function missingGoogleFields(job: NormalizedJob, locality: string | undefined): string[] {
+function isAllowedJobPageHost(seed: CustomScrapeSeed, url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (seed.jobPageHosts?.length && !seed.jobPageHosts.some((allowed) => parsed.hostname.toLowerCase() === allowed.toLowerCase())) return false;
+    return !seed.jobPagePathPrefixes?.length || seed.jobPagePathPrefixes.some((prefix) => parsed.pathname.startsWith(prefix));
+  } catch {
+    return false;
+  }
+}
+
+function isManuallyIncludedTitle(seed: CustomScrapeSeed, title: string): boolean {
+  const normalizedTitle = title.replace(/\s+/g, ' ').trim().toLocaleLowerCase();
+  return seed.includeJobTitles?.some((allowedTitle) => (
+    allowedTitle.replace(/\s+/g, ' ').trim().toLocaleLowerCase() === normalizedTitle
+  )) ?? false;
+}
+
+/** Applies reviewed state/remote variants before JobPosting validation. */
+function expandLocationVariants(seed: CustomScrapeSeed, baseJob: NormalizedJob): NormalizedJob[] {
+  const variant = seed.locationVariants?.find((candidate) => new URL(baseJob.url).pathname === candidate.urlPath);
+  if (!variant || variant.locations.length === 0) return [baseJob];
+  const regions = [...new Set(variant.locations.map((location) => location.addressRegion))];
+  return [{
+    ...baseJob,
+    location: variant.isRemote ? 'Remote' : variant.locations.map((location) => location.location).join(' / '),
+    addressRegion: regions[0],
+    locationRegions: regions,
+    isRemote: variant.isRemote ?? baseJob.isRemote,
+  }];
+}
+
+function missingGoogleFields(job: NormalizedJob, locality: string | undefined, options: { allowMissingEmploymentType?: boolean } = {}): string[] {
+  const remote = job.isRemote === true;
   return [
     !job.title && 'title', !job.description && 'description', !job.postedAt && 'datePosted', !job.company && 'hiringOrganization.name',
-    !locality && 'jobLocation.address.addressLocality', !job.addressRegion && 'jobLocation.address.addressRegion', !job.contractType && 'employmentType',
+    !remote && !job.addressRegion && 'jobLocation.address.addressRegion', !options.allowMissingEmploymentType && !job.contractType && 'employmentType',
   ].filter(Boolean) as string[];
 }
 
@@ -152,7 +205,11 @@ export async function runCustomScrape(seed: CustomScrapeSeed, options: { allowUn
   try { listingHtml = await fetchListingAfterLoadMore(seed); } catch (error) {
     console.error(`[custom-scrape] ${seed.domain}: listing fetch failed`, error); outcomes.error++; return { jobs, outcomes, googleJobs, diagnostics };
   }
-  const linksByUrl = new Map(discoverJobLinks(listingHtml, seed.careersUrl, seed.selectors).map((link) => [link.url, link]));
+  const linksByUrl = new Map(
+    discoverJobLinks(listingHtml, seed.careersUrl, seed.selectors)
+      .filter((link) => isAllowedJobPageHost(seed, link.url))
+      .map((link) => [link.url, link]),
+  );
   const maxPages = seed.maxListingPages ?? DEFAULT_MAX_LISTING_PAGES;
   let pageUrl = seed.careersUrl;
   for (let pageNumber = 1; pageNumber < maxPages && !seed.selectors?.loadMore; pageNumber++) {
@@ -163,7 +220,9 @@ export async function runCustomScrape(seed: CustomScrapeSeed, options: { allowUn
       await sleep(DOMAIN_DELAY_MS);
       listingHtml = await fetchText(nextPageUrl);
       pageUrl = nextPageUrl;
-      for (const link of discoverJobLinks(listingHtml, pageUrl, seed.selectors)) linksByUrl.set(link.url, link);
+      for (const link of discoverJobLinks(listingHtml, pageUrl, seed.selectors)) {
+        if (isAllowedJobPageHost(seed, link.url)) linksByUrl.set(link.url, link);
+      }
     } catch (error) {
       console.warn(`[custom-scrape] ${seed.domain}: listing page ${pageNumber + 1} failed`, error);
       outcomes.error++;
@@ -183,32 +242,39 @@ export async function runCustomScrape(seed: CustomScrapeSeed, options: { allowUn
       const title = detail.title || link.titleCandidate;
       const job: NormalizedJob = {
         source: 'custom-scrape', externalId: createHash('sha256').update(link.url).digest('hex'), title, company: seed.companyName,
-        location: detail.location, addressRegion: detail.addressRegion, description: detail.description, url: link.url, applyUrl: link.url,
-        contractType: detail.employmentType, postedAt: detail.postedAt ?? new Date(), salary: detail.salary,
+        location: detail.location, addressRegion: detail.addressRegion, isRemote: detail.isRemote, description: detail.description, url: link.url, applyUrl: link.url,
+        contractType: detail.employmentType,
+        // Google requires a datePosted. When the employer does not publish one,
+        // use first-seen time on creation; the seeder preserves it on later runs.
+        postedAt: detail.postedAt ?? new Date(),
+        postedAtEstimated: !detail.postedAt,
+        salary: detail.salary,
         salaryMin: detail.salaryMin, salaryMax: detail.salaryMax, salaryPeriod: detail.salaryPeriod, experienceLevel: detail.experienceLevel,
       };
-      const googleJob = buildGoogleJobPosting(job, detail.addressLocality);
-      if (!googleJob) {
-        outcomes.missing_required_fields++;
-        diagnostics.push({ url: link.url, title: job.title, outcome: 'missing_required_fields', missingFields: missingGoogleFields(job, detail.addressLocality), location: job.location, employmentType: job.contractType, descriptionLength: job.description.length });
-        continue;
+      for (const locatedJob of expandLocationVariants(seed, job)) {
+        const validationOptions = { allowMissingEmploymentType: seed.allowMissingEmploymentType };
+        const googleJob = buildGoogleJobPosting(locatedJob, detail.addressLocality, validationOptions);
+        if (!googleJob) {
+          outcomes.missing_required_fields++;
+          diagnostics.push({ url: locatedJob.url, title: locatedJob.title, outcome: 'missing_required_fields', missingFields: missingGoogleFields(locatedJob, detail.addressLocality, validationOptions), location: locatedJob.location, employmentType: locatedJob.contractType, descriptionLength: locatedJob.description.length });
+          continue;
+        }
+        // A custom seed is manually curated as a solar employer. This bounded
+        // context lets generic field titles use the taxonomy's existing
+        // generic-title + strong-signal path without weakening ATS matching.
+        const taxonomyDescription = `${locatedJob.description}\nCompany context: ${locatedJob.company} is a solar installation company.`;
+        if (!seed.skipRoleFilter && !isManuallyIncludedTitle(seed, locatedJob.title) && !isSolarInstallerRole(locatedJob.title, taxonomyDescription)) {
+          outcomes.filtered_role++;
+          diagnostics.push({ url: locatedJob.url, title: locatedJob.title, outcome: 'filtered_role', location: locatedJob.location, employmentType: locatedJob.contractType, descriptionLength: locatedJob.description.length });
+          continue;
+        }
+        if (locatedJob.description.length < MIN_DESCRIPTION_LENGTH) {
+          outcomes.filtered_length++;
+          diagnostics.push({ url: locatedJob.url, title: locatedJob.title, outcome: 'filtered_length', location: locatedJob.location, employmentType: locatedJob.contractType, descriptionLength: locatedJob.description.length });
+          continue;
+        }
+        jobs.push(locatedJob); googleJobs.push(googleJob); outcomes.extracted++;
       }
-      // A custom seed is manually curated as a solar employer. This bounded
-      // context lets generic field titles (e.g. "Lead Installer") use the
-      // taxonomy's existing generic-title + strong-signal path, without
-      // weakening matching for the ATS providers.
-      const taxonomyDescription = `${job.description}\nCompany context: ${job.company} is a solar installation company.`;
-      if (!isSolarInstallerRole(job.title, taxonomyDescription)) {
-        outcomes.filtered_role++;
-        diagnostics.push({ url: link.url, title: job.title, outcome: 'filtered_role', location: job.location, employmentType: job.contractType, descriptionLength: job.description.length });
-        continue;
-      }
-      if (job.description.length < MIN_DESCRIPTION_LENGTH) {
-        outcomes.filtered_length++;
-        diagnostics.push({ url: link.url, title: job.title, outcome: 'filtered_length', location: job.location, employmentType: job.contractType, descriptionLength: job.description.length });
-        continue;
-      }
-      jobs.push(job); googleJobs.push(googleJob); outcomes.extracted++;
     } catch (error) {
       console.warn(`[custom-scrape] ${seed.domain}: ${link.url} failed`, error); outcomes.error++;
       diagnostics.push({ url: link.url, title: link.titleCandidate, outcome: 'error' });

@@ -1,0 +1,153 @@
+licenseNumber,businessName,cityStateZip,candidateDomain,careerUrl,jobUrls,jobUrlCount,validJobPages,maxDescriptionWords,atsDetected,jobPostingDetected,auditStatus,auditReason
+0057007,"3 GUYS SOLAR, LLC",ORLANDO FL 32811,3guyssolar.com,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+0056771,"A1A SOLAR CONTRACTING, INC.",FERNANDINA BEACH FL 32034-2018,a1asolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1823607,"A1A SOLAR CONTRACTING, INC.",FERNANDINA BEACH FL 32034-2018,a1asolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056849,"ABSOLUTE SOLAR, LLC",DELTONA FL 32738,absolutesolarnj.com,https://absolutesolarnj.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1458514,"ADVANCE SOLAR & SPA, INC",POMPANO BEACH FL 33060,advancesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056664,"ADVANCE SOLAR & SPA, INC.",FORT MYERS FL 33907,advancesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1817663,"ADVANCE SOLAR & SPA, INC.",POMPANO BEACH FL 33060,advancesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1821642,AFFORDABLE SOLAR ROOF & AIR LLC,PEMBROKE PINES FL 33024,solarroofair.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1266423,AFFORDABLE SOLAR ROOF & AIR LLC,,solarroofair.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1336138,AFFORDABLE SOLAR ROOF & AIR LLC,ST. PETERSBURG FL 33705,solarroofair.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057122,AFFORDABLE SOLAR SERVICES INC.,PALM BAY FL 32905,affordablesolarservices.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057096,"ALL ABOUT SOLAR, INC.",FORT LAUDERDALE FL 33334,allaboutsolarinc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0027546,ATLANTIC PLUMBING & SOLAR ENGINEERING INC,PALM BAY FL 32905,atlantic-plumbinginc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0067065,ATLANTIC PLUMBING & SOLAR ENGINEERING INC,PALM BAY FL 32905,atlantic-plumbinginc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057004,BISON ROOFING & SOLAR LLC,FORT LAUDERDALE FL 33334,bisonroofingandsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057273,BISON ROOFING & SOLAR LLC,SANFORD NC 27330,bisonroofingandsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1522748,BLUE RAVEN SOLAR,HOLLADAY COTTONWOOD UT 84117,blueravensolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1816841,"BOB HEINMILLER SOLAR SOLUTIONS, LLC",ORLANDO FL 32804,bobheinmillersolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056874,"BOB HEINMILLER SOLAR SOLUTIONS, LLC",ORLANDO FL 32804,bobheinmillersolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057299,BONE DRY SOLAR,INDIANAPOLIS IN 46268,bonedry.com,https://bonedry.com/careers/,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+1533599,BRIGHTERWAY SOLAR LLC,PLANT CITY FL 33566,brighterwaysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1456996,BROWARD SOLAR INC,N. PALM BEACH FL 33408,browardsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056722,BROWARD SOLAR INC,N. PALM BEACH FL 33408,browardsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056742,"CKR SOLAR, LLC",DADE CITY FL 33526,ckrsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1511520,"CKR SOLAR, LLC",DADE CITY FL 33526,ckrsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057257,"CKR SOLAR, LLC",ABITA SPRINGS LA 70420,ckrsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056780,COAST TO COAST SOLAR INC,LUTZ FL 33549,coasttocoastsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056700,COMPASS SOLAR ENERGY,PENSACOLA FL 32505,compasssolar.com,https://compasssolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056957,CUTLER BAY SOLAR SOLUTIONS,MIAMI FL 33157,cutlerbaysolarsolutions.com,,,0,0,0,false,false,audit_error,fetch failed
+0057301,"DETACH RESET SOLAR, LLC",SUN CITY FL 33573,detachresetsolar.com,https://detachresetsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057176,DIAMOND SOLAR LLC,SANFORD FL 32771,diamondsolarllc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1334532,DIAMOND SOLAR LLC,SANFORD FL 32771,diamondsolarllc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056658,ED'S SPAS SOLAR & POOLS INC,SOUTH DAYTONA FL 32119,poolbuildersormondbeach.com,,,0,0,0,false,false,audit_error,fetch failed
+1513786,EPIC SOLAR SYSTEMS,ZELLWOOD FL 32798,epicsolarsystems.com,,,0,0,0,false,false,audit_error,fetch failed
+0056749,EVERYTHING SOLAR,LONGWOOD FL 32779,poweredbydaylight.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057199,FIX MY SOLAR LLC,WEST PALM BEACH FL 33401,fixmysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1428367,FLORIDA PLUMBING & SOLAR LLC,FORT PIERCE FL 34951,keepingsolarsimple.com,,,0,0,0,false,false,audit_error,fetch failed
+0056956,FLORIDA SOLAR DESIGN GROUP,FORT MYERS FL 33913,floridasolardesigngroup.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056696,FLORIDA SOLAR SERVICES LLC,ST AUGUSTINE FL 32086-3808,floridasolarservices.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1427012,FREEDOM PLUMBING & SOLAR INC,SPRING HILL FL 34608,freedomplumbingsolar.com,,,0,0,0,false,false,audit_error,fetch failed
+1818566,"FREEDOM SOLAR ENERGY, LLC",SANTA ROSA BEACH FL 32459,freedomsolarenergy.us,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056990,"FREEDOM SOLAR ENERGY, LLC",SANTA ROSA BEACH FL 32459,freedomsolarenergy.us,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057061,"FREEDOM SOLAR, INC.",MORRISTON FL 32668,freedomsolar.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056962,GO SOLAR POWER LLC,WEST PALM BEACH FL 33409,gosolarpower.com,https://www.gosolarpower.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1264000,GO SOLAR POWER LLC,MELBOURNE FL 32935,gosolarpower.com,https://www.gosolarpower.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1332637,GO SOLAR POWER LLC,MELBOURNE FL 32935,gosolarpower.com,https://www.gosolarpower.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1334431,GOLD COAST ROOFING AND SOLAR LLC,MIAMI FL 33196,gcroofingsolar.com,https://gcroofingsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056965,"GOLDIN SOLAR, LLC",MIAMI FL 33133,goldinsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057300,"GOLDIN SOLAR, LLC",VERO BEACH FL 32960,goldinsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056958,GREEN CITY SOLAR LLC,FORT MYERS FL 33905,greencitysolar.us,,,0,0,0,false,false,audit_error,fetch failed
+1818888,GREEN SOLUTIONS SOLAR & RENOVATIONS LLC,HOLLYWOOD FL 33021,greensolutionsfl.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1525795,GREEN SOLUTIONS SOLAR & RENOVATIONS LLC,MIAMI FL 33179,greensolutionsfl.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056709,GUARDIAN SOLAR LLC,HOLIDAY FL 34692,guardiansolar.com,,,0,0,0,false,false,audit_error,fetch failed
+1331690,"HD ROOFING & SOLAR, LLC.",LONGWOOD FL 32750,hdroofers.com,https://hdroofers.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0021436,HERE COMES THE SUN-SOLAR ENERGY INC,BOYNTON BEACH FL 33426,herecomesthesunsolarenergyserviceandrepair.com,,,0,0,0,false,false,audit_error,fetch failed
+0056680,HERE COMES THE SUN-SOLAR ENERGY INC,BOYNTON BEACH FL 33426,herecomesthesunsolarenergyserviceandrepair.com,,,0,0,0,false,false,audit_error,fetch failed
+0057116,LIMITLESS SOLAR LLC,HOLLYWOOD FL 33021,limitlesssolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1336613,LIMITLESS SOLAR LLC,WEST PARK FL 33023,limitlesssolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1267786,LIMITLESS SOLAR LLC,HOLLYWOOD FL 33021,limitlesssolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057101,LOTUS ENERGY & SOLAR,MARLTON NJ 08053,lotusenergy.solar,,,0,0,0,false,false,audit_error,fetch failed
+1527497,LPL SOLAR LLC,FORT LAUDERDALE FL 33316,lplsolar.com,https://lplsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1530369,LPL SOLAR LLC,SOUTHWEST RANCHES FL 33330,lplsolar.com,https://lplsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1529971,"LUX SOLAR, INC.",MIAMI FL 33131,inroadlight.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1532488,MATCON SOLAR LLC,TAMPA FL 33603,matconsolar.com,,,0,0,0,false,false,audit_error,fetch failed
+1335620,MCELFRESH ROOFING AND SOLAR LLC,JACKSONVILLE FL 32258,mcelfreshroofing.com,https://mcelfreshroofing.com/job-payments/,https://mcelfreshroofing.com/job-payments/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 internal detailed job URLs found.
+0025586,MIRASOL SOLAR,NOKOMIS FL 34275,mirasolsolar.com,https://mirasolsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056687,MIRASOL SOLAR,NOKOMIS FL 34275,mirasolsolar.com,https://mirasolsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1461089,MIRASOL SOLAR,NOKOMIS FL 34275,mirasolsolar.com,https://mirasolsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057248,MIRASOL SOLAR,SARASOTA FL 34232,mirasolsolar.com,https://mirasolsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1337897,MIRASOL SOLAR,WHITE MARSH MD 21162,mirasolsolar.com,https://mirasolsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1328070,MOMENTUM SOLAR LLC,CLEARWATER FL 33763,momentumsolarinc.com,,,0,0,0,false,false,audit_error,fetch failed
+0057036,MOMENTUM SOLAR LLC,ORLANDO FL 32822,momentumsolarinc.com,,,0,0,0,false,false,audit_error,fetch failed
+1264051,"ONE-UP SOLAR CONTRACTOR, INC.",CUTLER BAY FL 33157,one-upsolar.com,https://one-upsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057117,"ONE-UP SOLAR CONTRACTOR, INC.",CUTLER BAY FL 33157,one-upsolar.com,https://one-upsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1337210,PANASUN SOLAR,PEMBROKE PINES FL 33029,panasunsolar.com,https://panasunsolar.com/job-listing/,https://panasunsolar.com/job-listing/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 internal detailed job URLs found.
+1825200,PANASUN SOLAR,DELTONA FL 32725,panasunsolar.com,https://panasunsolar.com/job-listing/,https://panasunsolar.com/job-listing/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 internal detailed job URLs found.
+0057072,"PARROT SOLAR, INC",JACKSONVILLE BEACH FL 32250,parrotsolar.com,https://parrotsolar.com/404.php,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1326833,PASAT ROOFING AND SOLAR ENERGY,WESTON FL 33326,pasatroofingandsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056636,"PHOTON SOLAR, LLC",LONGWOOD FL 32750,gophotonsolar.com,https://www.gophotonsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1427638,PLATINUM PLUMBING & SOLAR LLC,FELLSMERE FL 32948,platinumplumbingsolar.com,,,0,0,0,false,false,audit_error,Homepage HTTP 500
+0057233,POSITIVE ENERGY SOLAR LLC,FORT MYERS FL 33919,positiveenergysolar.com,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+0057344,PPM SOLAR,GAINESVILLE FL 32607,ppm.solar,https://ppm.solar/career/,https://ppm.solar/careers/marketing-intern-renewable-energy-gainesville/|https://ppm.solar/careers/project-manager-commercial-solar-florida/|https://ppm.solar/careers/commercial-solar-business-developer/|https://ppm.solar/careers/solar-quality-control-specialist/|https://ppm.solar/career/page/2/|https://ppm.solar/career/page/3/|https://ppm.solar/career/page/4/,7,1,1084,false,false,rejected_incomplete_job_pages,"Only 1/3 pages had location, employment type, structure and 300+ words."
+0049744,"PV CONSTRUCTION, LLC",FORT LAUDERDALE FL 33316,constructionpv.ie,,,0,0,0,false,false,audit_error,fetch failed
+0057285,"RACK SOLAR, LLC",BOCA RATON FL 33432,racksolar.com,https://racksolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057130,"REGION SOLAR, LLC",SARASOTA FL 34243,regionsolar.co,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+0056964,"REVOLUTION CONTRACTORS ROOFING AND SOLAR, LLC",NEW SMYRNA BEACH FL 32169,revolutioncontractors.com,https://revolutioncontractors.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1331227,"REVOLUTION CONTRACTORS ROOFING AND SOLAR, LLC",ORLANDO FL 32804,revolutioncontractors.com,https://revolutioncontractors.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057019,"ROARK SOLAR, LLC",SARASOTA FL 34238,roarksolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1458978,"ROARK SOLAR, LLC",SARASOTA FL 34238,roarksolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057340,SAILFISH SOLAR LLC,STUART FL 34996-6621,sailfishsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1331427,SECURED ROOFING AND SOLAR,TAVARES FL 32778,securedroofingandsolar.com,,,0,0,0,false,false,audit_error,Homepage HTTP 500
+0056903,"SIMPLER SOLAR SYSTEMS, INC.",TALLAHASSEE FL 32303,simplersolar.com,https://simplersolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057018,"SIMPLER SOLAR SYSTEMS, INC.",TALLAHASSEE FL 32303,simplersolar.com,https://simplersolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056891,"SIMPLER SOLAR, LLC",TALLAHASSEE FL 32303,simplersolar.com,https://simplersolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057128,SOLAR AUTHORITY,MELBOURNE FL 32904,solarauthority.org,,,0,0,0,false,false,audit_error,fetch failed
+1530971,SOLAR CONSTRUCTION. LLC,MIAMI FL 33155,solarconstruction.us,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057177,SOLAR CONSTRUCTION. LLC,MIAMI FL 33155,solarconstruction.us,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057162,"SOLAR DYNAMICS, INC.",DORAL FL 33126,solardynamics.energy,https://solardynamics.energy/careers/,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+1335573,"SOLAR DYNAMICS, INC.",DORAL FL 33126,solardynamics.energy,https://solardynamics.energy/careers/,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+1824512,"SOLAR DYNAMICS, INC.",DORAL FL 33126,solardynamics.energy,https://solardynamics.energy/careers/,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+0056672,SOLAR ENERGY LABS,JACKSONVILLE FL 32210,sunhomfl.com,,,0,0,0,false,false,audit_error,fetch failed
+0057062,SOLAR ENERGY SOLUTIONS OF AMERICA INC,CAPE CORAL FL 33904,solarenergysolutionsofamerica.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1459638,SOLAR ENERGY SOLUTIONS OF AMERICA INC,CAPE CORAL FL 33904,solarenergysolutionsofamerica.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056761,SOLAR IMPACT INC,GAINESVILLE FL 32606,solarimpact.com,https://solarimpact.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056750,SOLAR LIGHTS & MORE,OCALA FL 34482,solarlightsandmore.com,https://www.solarlightsandmore.com/about-us/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057208,SOLAR LIGHTS & MORE,HERNANDO FL 34442,solarlightsandmore.com,https://www.solarlightsandmore.com/about-us/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1251588,SOLAR MAX INC.,ST. PETERSBURG FL 33714,getsolarmax.com,https://getsolarmax.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057262,"SOLAR OPTIMUM, INC.",GLENDALE CA 91204,solaroptimum.com,https://solaroptimum.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1534603,"SOLAR OPTIMUM, INC.",GLENDALE CA 91204,solaroptimum.com,https://solaroptimum.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1335355,"SOLAR OPTIMUM, INC.",GLENDALE CA 91204,solaroptimum.com,https://solaroptimum.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057058,SOLAR SAGE CORP,KISSIMMEE FL 34741,solarsage.com,https://www.solarsage.com/about/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057129,SOLAR SERVICE PROFESSIONALS LLC,PORT ST LUCIE FL 34952,solarserviceprofessionals.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0026151,SOLAR SPECIALIST INC.,RIVERVIEW FL 33578,solarspecialistinc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056715,SOLAR SPECIALIST INC.,RIVERVIEW FL 33578,solarspecialistinc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1335760,SOLAR SPECIALIST INC.,RIVERVIEW FL 33578,solarspecialistinc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1337871,SOLAR TECH ELEC LLC,SEMINOLE FL 33772,solartechelec.com,https://solartechelec.com/careers/,https://solartechelec.com/careers/solar-electrician-with-project-management-careers/|https://solartechelec.com/careers/solar-sales-consultant/|https://solartechelec.com/careers/virtual-sales-agents/,3,1,363,false,false,rejected_incomplete_job_pages,"Only 1/3 pages had location, employment type, structure and 300+ words."
+1256877,"SOLAR TREK, INC.",SAINT AUGUSTINE FL 32084,gosolartrek.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056899,"SOLAR TREK, INC.",OCALA FL 34480,gosolartrek.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1460945,"SOLAR TREK, INC.",OCALA FL 34480,gosolartrek.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056719,SOLAR WATER HEATERS OF HUDSON INC,SPRING HILL FL 34609,naturecoastsolar.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1458265,SOLAR WATER HEATERS OF HUDSON INC,SPRING HILL FL 34609,naturecoastsolar.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0022632,SOLAR-FIT,HOLLY HILL FL 32117,mysolarfithome.com,https://mysolarfithome.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056690,SOLAR-FIT,HOLLY HILL FL 32117,mysolarfithome.com,https://mysolarfithome.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056926,SOLAR-FIT,HOLLY HILL FL 32117,mysolarfithome.com,https://mysolarfithome.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056880,SOLAR-RAY INC.,WINTER GARDEN FL 34787,solar-ray.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1266050,SPECTRUM SOLAR POWER LLC,HAYDEN ID 83835,spectrumsolarpower.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057225,SPECTRUM SOLAR POWER LLC,PALM HARBOR FL 34683,spectrumsolarpower.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0057074,STRATEGIC SOLAR LLC,CITRA FL 32113,strategicsolarllc.com,,,0,0,0,false,false,audit_error,fetch failed
+1458412,SUN SOLAR POOLS & SPAS INC,LAKE WORTH FL 33460,sunsolarpools.com,https://sunsolarpools.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1330356,"SUN SOLAR POOLS & SPAS, INC",LAKE WORTH FL 33460,sunsolarpools.com,https://sunsolarpools.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057021,"SUNPATH SOLAR, LLC",JACKSONVILLE FL 32204-4256,sunpath.solar,https://sunpath.solar/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056923,TAMPA BAY SOLAR,TAMPA FL 33619,tampabaysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056936,TECA SOLAR INC,COCONUT CREEK FL 33066,tecasolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1460300,TECA SOLAR INC,COCONUT CREEK FL 33066,tecasolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1266437,"TEPHRA SOLAR, LLC",SPANISH FORK UT 84660,tephrasolar.com,https://tephrasolar.com/careers-page-roof-sales/,https://tephrasolar.com/careers-page-roof-sales/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 internal detailed job URLs found.
+1260615,THE SOLAR GUYS,OCALA FL 34480,solarguysusa.com,https://solarguysusa.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1330841,THE SOLAR GUYS,OCALA FL 34480,solarguysusa.com,https://solarguysusa.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057042,THE SOLAR GUYS,OCALA FL 34480,solarguysusa.com,https://solarguysusa.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057164,"TREASURE COAST SOLAR, LLC",STUART FL 34997,treasurecoastsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1263094,UNICITY SOLAR ENERGY LLC,TARPON SPRINGS FL 34689,unicitysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1268432,UNICITY SOLAR ENERGY LLC,ST. PETERSBURG FL 33714,unicitysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1330512,UNIVERSAL CONTRACTING & SOLAR,LEHIGH ACRES FL 33971,ucroof.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1526610,UNIVERSAL CONTRACTING & SOLAR,FT. MYERS  FL 33913,ucroof.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1335489,UNIVERSAL CONTRACTING & SOLAR,TALLAHASSEE FL 32312,ucroof.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+0056980,"UNIVERSAL SOLAR SERVICES, LLC",SUN CITY CENTER FL 33573,universalsolarservices.com,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+0056948,URBAN SOLAR LLC,BOCA RATON FL 33486,urbansolar.com,https://urbansolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+1257755,VELO SOLAR LLC,THOMSON GA 30824,velosolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1334388,VIBRANT ROOF & SOLAR LLC,MYAKKA CITY FL 34251,thevibrantroof.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+1539044,CLEAN ENERGY ENTERPRISES INC.,ST. PETERSBURG FL 33714,cleanenergy.enterprises,https://cleanenergy.enterprises/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0057327,"ENPHASE ENERGY, INC",GRASS VALLEY CA 95945,enphase.com,https://enphase.com/careers,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+1456476,"RENEWABLE ENERGY SPECIALISTS, INC",APOPKA FL 32712,respecialists.com,https://respecialists.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+0056905,"RENEWABLE ENERGY SPECIALISTS, INC",APOPKA FL 32712,respecialists.com,https://respecialists.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.

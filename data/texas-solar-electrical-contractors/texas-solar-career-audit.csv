@@ -1,0 +1,97 @@
+licenseNumber,businessName,cityStateZip,candidateDomain,careerUrl,jobUrls,jobUrlCount,validJobPages,maxDescriptionWords,atsDetected,jobPostingDetected,auditStatus,auditReason
+37740,1 SOLAR SOLUTION LLC,FRISCO TX 75033-8695,1solarsolution.com,https://1solarsolution.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+30667,512 SOLAR LLC,AUSTIN TX 78746-6446,512solar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+27328,ADVANCED SOLAR AND ELECTRIC LLC,CIBOLO TX 78108-3506,advancedsolar.com,https://advancedsolar.com/site-cannot-be-accessed-from-your-current-location.html,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+37216,AFFORDABLE SOLAR ROOF & AIR LLC,TOMBALL TX 77375-8293,solarroofair.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+36998,AMERICAN DREAM SOLAR LLC,CROWLEY TX 76036-4142,adsolarusa.com,https://adsolarusa.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+36379,ASAP SOLAR LLC,TYLER TX 75703-6537,asapsolar.com,https://asapsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+35675,"ASTRAWATT SOLAR, LLC",WEBSTER TX 77598-2336,astrawatt.solar,https://www.astrawatt.solar/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+37831,ATX SOLAR LLC,HUTTO TX 78634-2513,goatxsolar.com,https://goatxsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+33639,AXIS SOLAR LLC,AUSTIN TX 78704,axis-solar.com,https://www.axis-solar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+25739,AXIUM SOLAR INC,MCKINNEY TX 75071,axiumsolar.com,https://axiumsolar.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+30973,"BIG DOG RENEWABLE ENERGY, LLC",CHUBBUCK ID 83202-4908,bigdogenergy.com,,,0,0,0,false,false,audit_error,fetch failed
+38748,CC SOLAR,CORPUS CHRISTI TX 78401-3255,ccsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+34933,CENTRAL TEXAS SOLAR LLC,SAN ANTONIO TX 78213,solar.com,https://www.solar.com/careers/,https://www.solar.com/careers/senior-full-stack-engineer/|https://www.solar.com/careers/product-manager/|https://www.solar.com/careers/solar-pricing-analyst/|https://www.solar.com/careers/energy-advisor/|https://www.solar.com/careers/installer-partnerships-manager/|https://www.solar.com/careers/growth-marketer/,6,0,738,false,false,rejected_incomplete_job_pages,"Only 0/3 pages had location, employment type, structure and 300+ words."
+32697,CIRCLE L SOLAR INC,FORT WORTH TX 76117,circlelsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+35647,COMPLETE SOLAR INC,OREM UT 84097,completesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+39972,CREATUM SOLAR LLC,HOUSTON TX 77066-1003,creatumsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+37519,CUSTOM PRO ROOFING & SOLAR,DALLAS TX 75229,custompro.us,https://custompro.us/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+22994,CUSTOM SOLAR ELECTRIC,AUSTIN TX 78748,customsolarelectric.com,,,0,0,0,false,false,audit_error,Homepage HTTP 500
+37071,"DAWN TO DUSK SOLAR TEXAS, LLC",FARMERS BRANCH TX 75234,solardawntodusk.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+40536,DETACH RESET SOLAR LLC,AUSTIN TX 78731-4298,detachresetsolar.com,https://detachresetsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+29469,DFW SOLAR ELECTRIC LLC,FLOWER MOUND TX 75022,dfwsolarelectric.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38038,EAGLE SOLAR POWER LLC,MANSFIELD TX 76063,eaglesolarpower.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+40318,"EARTH SMART SOLAR, LLC",SAN ANTONIO TX 78258,earthsmartsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+33539,EASTEX SOLAR,PALESTINE TX 75803-0625,eastexsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+37330,ECLIPSE SOLAR & HOME SOLUTIONS INC.,AUSTIN TX 78731-4298,eclipsesolar.net,,,0,0,0,false,false,audit_error,fetch failed
+36539,"ELIAS SOLAR, INC.",HOUSTON TX 77018-5044,elias.solar,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38765,EMPOWER SOLAR INC,HOUSTON TX 77066-1216,empoweryourhome.com,https://www.empoweryourhome.com/careers,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+39263,EMPWR SOLAR LLC,MOUNT PLEASANT SC 29464,empwrsolar.com,https://www.empwrsolar.com/join-us,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+29616,"ENPHASE ENERGY, INC.",FREMONT CA 94538-6517,enphase.com,https://enphase.com/careers,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+40035,EPC SOLAR LLC,ALEDO TX 76008-1844,epcsolarnj.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+35996,FAMILY SOLAR COMPANY,FRISCO TX 75034,familysolarcompany.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+37970,GLOBAL SOLAR GROUP,EL PASO TX 79936,globalsolargrp.com,,,0,0,0,false,false,audit_error,fetch failed
+36814,GLYDE SOLAR LLC,PLEASANT GROVE UT 84062,glydesolar.com,https://glydesolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+35375,GO SOLAR POWER LLC,ADDISON TX 75001,gosolarpower.com,https://www.gosolarpower.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+32051,GREEN LIGHT SOLAR LLC,HOUSTON TX 77032-4087,https://n/a,,,0,0,0,false,false,audit_error,fetch failed
+28367,GREENBELT SOLAR LLC,AUSTIN TX 78745,greenbeltsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38037,HARVEST SOLAR INC.,GARLAND TX 75040,harvestsolarinc.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+36117,"HARVEST SOLAR OF TEXAS, LLC",HOUSTON TX 77035,harvestsolaroftexas.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38471,IMMEDIATE SOLAR LLC,RICHARDSON TX 75081-1865,immediatesolar.org,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+31105,INFINITY SOLAR SOLUTIONS LLC,SAN ANGELO TX 76903,infinitysolarsolutions.net,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+36120,INFINITY SOLAR USA,FARMERS BRANCH TX 75234,infinitysolarusa.com,https://www.infinitysolarusa.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+36453,JEH SOLAR LLC,LAFAYETTE LA 70508,jehsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+40529,KW SOLAR LLC,KATY TX 77493-2411,kw.solar,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+41323,LIFETIME SOLAR LLC,KANSAS CITY MO 64105-2106,lifetimesolarenergy.com,,,0,0,0,false,false,audit_error,fetch failed
+39177,LPL SOLAR LLC,FORT LAUDERDALE FL 33316-4126,lplsolar.com,https://lplsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+38682,MAYER SOLAR LLC,PLANO TX 75074-3770,mayersolar.com,https://mayersolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+37254,MCF SOLAR LLC,LUFKIN TX 75901-5729,mcfsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38847,"MOMENTUM SOLAR, LLC",SOUTH PLAINFIELD NJ 7080 -1201,momentumsolarinc.com,,,0,0,0,false,false,audit_error,fetch failed
+35568,"MONUMENT SOLAR, LLC",SAGINAW TX 76131-1033,monument-solar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+37474,MOUNTAINSTAR SOLAR LLC,EL PASO TX 79835,mountainstarsolar.com,,,0,0,0,false,false,audit_error,fetch failed
+26718,NATIVE SOLAR LLC,DRIPPING SPRINGS TX 78620,nativesolar.com,https://nativesolar.com/careers/,,0,0,0,false,true,rejected_jobposting_detected,JobPosting schema detected on careers landing page.
+36893,NEXT GENERATION SOLAR,FORT WORTH TX 76179,nextgenerationsolar.org,https://www.nextgenerationsolar.org/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+31140,NORTH TEXAS SOLAR LLC,FORT WORTH TX 76137,daybreaksolarpower.com,https://daybreaksolarpower.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+31318,ONE80 SOLAR,SAN ANTONIO TX 78204-1638,one80solar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38246,"PEOPLE'S CHOICE SOLAR, LLC",MCALLEN TX 78501-4902,peopleschoicesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+41752,POSITIVE ENERGY SOLAR INC,SANTA FE NM 87507-4101,positiveenergysolar.com,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+35719,PROCLAIM SOLAR LLC,PLANO TX 75074,proclaimsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+36125,"QUANTUM SOLAR POWER, LLC",EL PASO TX 79905,qtmsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+36729,QUICKEN SOLAR LLC,FRISCO TX 75035,quickensolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38800,RADIANCE SOLAR LLC,MARIETTA GA 30068,radiancesolar.com,https://radiancesolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+36276,RENEWABLE POWER SOLUTIONS,GRANBURY TX 76048-5894,rps-solar.com,,,0,0,0,false,false,audit_error,fetch failed
+36806,RURAL SOLAR RESTORATION LLC,DENVER CO 80211,ruralsolarrestoration.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+33112,S & H SOLAR & ELECTRIC LLC,IOWA PARK TX 76367-1612,shsolarelectric.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+29755,SOLAR CENTEX LLC,HARKER HEIGHTS TX 76548-8680,solarcentex.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+33215,SOLAR EDGE PROS LLC,SAN ANTONIO TX 78216-2621,solaredgepros.com,https://solaredgepros.com/join-our-team-2/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+18011,SOLAR ELECTRIC TEXAS LLC,SAN ANTONIO TX 78229,solarelectrictexas.com,https://solarelectrictexas.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+38546,SOLAR PLUS LLC,MIDLOTHIAN TX 76065-4588,solarplusllc.com,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+34411,SOLAR POWER INTEGRATOR LLC,CORPUS CHRISTI TX 78418-5312,solarpowerintegrator.com,https://solarpowerintegrator.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+27852,"SOLAR SMART LIVING, LLC",SANTA TERESA NM 88008,solarsmartliving.com,https://solarsmartliving.com/about/careers,https://solarsmartliving.com/about/careers/hvac-technician-ii-journeyman-mid-level-1,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 internal detailed job URLs found.
+33434,"SOLAR SME, INC.",DALLAS TX 75212-7612,solarsme.com,https://solarsme.com/join-our-team/careers-opportunities-in-marketing/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+35546,SOLSTICE SOLAR LLC,HOUSTON TX 77040,solstice-solar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+29074,SOUTH COAST SOLAR LLC,METAIRIE LA 70002-6036,southcoastsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+30019,SOUTH TEXAS SOLAR SYSTEMS,SAN ANTONIO TX 78217-4449,txsolarsystems.com,https://txsolarsystems.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+41062,SPECTRUM SOLAR POWER LLC,WINTER PARK FL 32792-2541,spectrumsolarpower.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+36510,STARALT SOLAR,MCALLEN TX 78501,staraltsolar.com,,,0,0,0,false,false,audit_error,Homepage HTTP 403
+35852,STG SOLAR,PISGAH FOREST NC 28768,stgsolarco.com,https://stgsolarco.com/error,,0,0,0,true,false,rejected_ats_detected,Known ATS domain or embed detected.
+39213,SUNAURA SOLAR LLC,ADDISON TX 75001,gosunaura.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+39834,SUNFORCE SOLAR LLC,LAS CRUCES NM 88007,sunforce.solar,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+33531,SUNSHINE RENEWABLE SOLUTIONS LLC,HOUSTON TX 77033,sunshinerenewable.com,https://sunshinerenewable.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+32406,SYNAPTIC SOLAR LLC,RICHARDSON TX 75081-2334,synapticsolar.com,https://www.synapticsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+35309,TEXAS BEST SOLAR,LEWISVILLE TX 75057,texasbestsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+34757,TEXAS DIRECT SOLAR LLC,HOUSTON TX 77023,texasdirectsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+34731,TEXAS ENGINEERED SOLAR LLC,SAN ANTONIO TX 78219,txensolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+30629,TEXAS SOLAR ENERGY,HUMBLE TX 77396-6046,texsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+33580,TEXAS SOLAR GUYS LLC,BUDA TX 78610,texassolarguys.com,https://texassolarguys.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+26492,TEXAS SOLAR POWER COMPANY,AUSTIN TX 78723-1074,txspc.com,https://www.txspc.com/about-us/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+35727,TEXAS SOLAR PROFESSIONAL LLC,CEDAR HILL TX 75104-2656,texassolar.pro,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38354,TEXON SOLAR ENERGY LLC,ALVIN TX 77511-7807,texonsolar.com,,,0,0,0,false,false,audit_error,fetch failed
+40091,TIER 1 SOLAR LLC,CORPUS CHRISTI TX 78401-1934,tier1.solar,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+38437,"TOP TIER SOLAR SOLUTIONS, LLC",CHARLOTTE NC 28217-2911,toptiersolarsolutions.com,https://www.toptiersolarsolutions.com/work-with-us,https://www.toptiersolarsolutions.com/work-with-us,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 internal detailed job URLs found.
+32259,TRISMART SOLAR LLC,HOUSTON TX 77073-6445,trismartsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+37089,TRUE TEXAS SOLAR LLC,WILLIS TX 77318,truetexassolar.com,https://truetexassolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 internal detailed job URLs found.
+38340,VANTAGE POINT SOLAR LLC,IRVING TX 75039,vantagepointsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+35152,"WEST TEXAS SOLAR, LLC",ABILENE TX 79601-6400,west-texas-solar.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+31269,WRIGHT SOLAR ENERGY L.L.C.,SAN ANTONIO TX 78257,wrightsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.
+26497,"WRIGHT WAY SOLAR TECHNOLOGIES, LLC",TYLER TX 75703,wright-way.com,,,0,0,0,false,false,rejected_no_careers_page,No provider-hosted careers/jobs landing page found from homepage or standard paths.

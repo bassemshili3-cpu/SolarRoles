@@ -1,0 +1,625 @@
+licenseNumber,businessName,city,state,candidateDomain,careerUrl,jobUrls,jobUrlCount,validJobPages,maxDescriptionWords,atsDetected,jobPostingDetected,auditStatus,auditReason
+995321,180 ROOFING PROS,ESCONDIDO,CA,180solarpower.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1131393,1ST LIGHT SALES CORP,MANTECA,CA,dnb.com,https://www.dnb.com/en-us/about/careers.html,https://www.dnb.com/en-us/about/careers/benefits.html|https://www.dnb.com/en-us/about/careers/internships.html,2,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+471898,A C & R SERVICE HEATING & COOLING INC,UKIAH,CA,ca.biznet-us.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+950369,A F C PLUMBING AND SOLAR,CAMARILLO,CA,afcplumbingandsolar.com,https://afcplumbingandsolar.com/employment-opportunities/,https://afcplumbingandsolar.com/employment-opportunities/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+974115,A P ELECTRICAL,SUN VALLEY,CA,arcadiaca.gov,https://arcadiaca.gov/government/human_resources/job_description.php,https://arcadiaca.gov/government/human_resources/job_description.php|https://arcadiaca.gov/government/human_resources/government/human_resources/job_description.php,2,0,0,false,false,rejected_insufficient_job_urls,Only 2/3 static job URLs found.
+1104438,A P P SOLAR,CARLSBAD,CA,repvise.app,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+891743,A1 SUN INC,BERKELEY,CA,a1suninc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+887507,AAA STEINERS SOLAR SERVICE,SACRAMENTO,CA,steinersolar.com,https://steinersolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+708922,AABCO WATER HEATERS & SOLAR SERVICES,LOS ALAMITOS,CA,homeyou.com,https://www.homeyou.com/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+914346,ABC SOLAR INCORPORATED,TORRANCE,CA,nextdoor.com,https://about.nextdoor.com/careers/,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+933062,ABOVE ALL CONSTRUCTION INC,RIVERSIDE,CA,downtobid.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1021325,ABOVE ALL ROOFING & SEAMLESS GUTTERS INC,VACAVILLE,CA,aboveallroofingnorcal.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+846462,ACE PLUMBING,FRESNO,CA,plumbingweb.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+972276,ADDY SOLAR,REDDING,CA,addysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+929060,ADRIATIC BUILDERS LLC,HERCULES,CA,alamedaca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+620243,ADVANCE SOLAR HYDRO WIND POWER INC,REDWOOD VALLEY,CA,advancepower.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+508902,ADVANCED CONSERVATION SYSTEMS INC,LANCASTER,CA,advancedconservationsystems.com,https://www.advancedconservationsystems.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1009773,AETERNA ENERGY LLC,SIMI VALLEY,CA,energy.ca.gov,https://www.energy.ca.gov/careers,https://www.energy.ca.gov/careers/examsassessments|https://www.energy.ca.gov/careers/law-clerkships-internships-and-fellowships|https://www.energy.ca.gov/careers/volunteer-opportunities,3,0,897,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+957287,AHRENS MECHANICAL,SAN DIEGO,CA,web.agcsd.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1006946,AHSOLAR PRO SOLUTIONS,UNION CITY,CA,milpitas.gov,https://www.milpitas.gov/240/Job-Opportunities,https://www.milpitas.gov/240/Job-Opportunities|https://www.milpitas.gov/713/Employment-Job-Sites,2,0,0,false,false,rejected_insufficient_job_urls,Only 2/3 static job URLs found.
+1022669,AIC HEATING AND AIR,BAKERSFIELD,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+986427,AIKYUM SOLAR,WESTMINSTER,CA,aikyum.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+916654,AIR HEAT SOLAR,SACRAMENTO,CA,homequotr.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+842877,AIR RITE HEATING AND AIR CONDITIONING,ORLAND,CA,airrite.us,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+885073,AIR SUN INC,VISALIA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+889684,AIR TEMP COMPANY,SAN MATEO,CA,bestopedia.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+878027,ALBION POWER COMPANY INC,SAN FRANCISCO,CA,albionpower.com,https://www.albionpower.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+559721,ALCOR ENTERPRISES,CONCORD,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+959972,ALL AIR HEATING & AIR CONDITIONING,LODI,CA,allairsolar.com,https://allairsolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+840958,ALL AMERICAN PLUMBING HEATING & AIR INC,LOS BANOS,CA,allamericanpha.com,https://www.allamericanpha.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+962034,ALL BAY SOLAR CONSTRUCTION INC,SAN FRANCISCO,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+870111,ALL CLIMATE AIR INC,BAKERSFIELD,CA,allclimateair.com,https://allclimateair.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+944973,ALL ON ELECTRIC INC,LIVERMORE,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+964957,ALL SOLAR,LONG BEACH,CA,solarsourceinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+499720,ALL VALLEY SOLAR INC,N HOLLYWOOD,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+775322,ALL-PRO ENTERPRISES INC,SAN DIMAS,CA,all-proent.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+382383,ALLBRITTEN BAREFOOT PLUMBERS ELECTRICIANS & HVAC TECHNICIANS,FRESNO,CA,networx.com,https://www.networx.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1100044,ALLIANZ HEATING & AIR INC,REDDING,CA,shastacounty.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+868542,ALLIED ENERGY INC,CARLSBAD,CA,alliedenergy-us.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+713479,ALLTECH SOLAR INC,SAN DIEGO,CA,alltechsolarusa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+847973,ALLTERRA SOLAR,SANTA CRUZ,CA,allterrasolar.com,https://www.allterrasolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+806465,ALLY ELECTRIC,RICHMOND,CA,allyelectricandsolar.com,https://www.allyelectricandsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1080653,ALOE SOLAR INC,CASTAIC,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+979146,ALTADENA ENERGY & SOLAR INC,PASADENA,CA,pwp.cityofpasadena.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+632507,ALTERNATIVE ENERGY,SONORA,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+853351,ALTERNATIVE ENERGY SYSTEMS INC,CHICO,CA,savingenergyforlife.com,https://savingenergyforlife.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+947007,ALTERNATIVE HEATING & AIR,CHICO,CA,alternativeheatingandair.com,https://alternativeheatingandair.com/employment,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+944549,ALTSYS SOLAR INC,TULARE,CA,altsyssolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+863510,AMAZING AIRCONDITIONING INC,LOS ANGELES,CA,scribd.com,https://www.scribd.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+987843,AMEKO A P S INC,POMONA,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1081438,AMERICAN ENERGY SOLAR,VENTURA,CA,sntm-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1065297,AMN SOLAR CORP,CORONA,CA,amnsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1077258,ANTHEM CONSTRUCTION INC,CLOVIS,CA,anthemroofingandsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1001659,ANTHEM MECHANICAL,COACHELLA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+859901,APG SOLAR,ATWATER,CA,apgsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+795570,AREMTECH INC,SAN FRANCISCO,CA,californiawells.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1071153,ARRAY ENERGIES,NOVATO,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1040832,ARROW ENERGY SOLAR SYSTEMS,SANTA CRUZ,CA,calssa-backend.squarespace.com,https://calssa-backend.squarespace.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+798323,ART OF CONSTRUCTION INC,SOUTH SAN FRANCISCO,CA,houzz.com,https://www.houzz.com/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1137107,ASCENDANT ROOFING AND SOLAR LLC,THOUSAND OAKS,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+920386,ASPIRE BUILDERS,DANVILLE,CA,houzz.com,https://www.houzz.com/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+954036,AUBURN SOLAR,NEWCASTLE,CA,auburnsolar.biz,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1078551,AXIOM 360 LLC,GROVER BEACH,CA,axiom360.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+550110,AZTEC SOLAR INC,RANCHO CORDOVA,CA,aztecsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+310715,B & B ELECTRIC,VISTA,CA,b-b-electric.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+519561,B & B SOLAR INC,REDDING,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+670906,B B J ELECTRIC INC,SAN BRUNO,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+280981,B J'S HEATING & AIR CONDITIONING INC,WOODLAND,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1033754,B V I SOLAR,SAN DIEGO,CA,bvisolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+161756,BAKER ELECTRIC,ESCONDIDO,CA,baker-electric.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+858088,BAKER HOME ENERGY,ESCONDIDO,CA,bakerhomeenergy.com,https://bakerhomeenergy.com/job-opportunities/,https://bakerhomeenergy.com/job-opportunities/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1142760,BAP POWER LLC,ALISO VIEJO,CA,cenergypower.ghost.io,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+599724,BARNUM & CELILLO ELECTRIC INC,SACRAMENTO,CA,barnumcelillo.com,https://www.barnumcelillo.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+976962,BEACH CITIES SOLAR INC,SAN PEDRO,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1028222,BEAR SOLAR INC,ORANGEVALE,CA,bearsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1098465,BELLA SOL SYSTEMS LLC,SANTA ROSA,CA,bellasol.biz,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+963824,BELMONT ENERGY INC,LAGUNA HILLS,CA,belmont-energy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+833169,BERKLEY CONSTRUCTION INC,SAN DIEGO,CA,berkleyconstruction.wordpress.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+691947,BERRY ROOFING INC,RIVERSIDE,CA,roofingcontractors.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+880102,BEST TEC,PALM DESERT,CA,pub-palmdesert.escribemeetings.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1113957,BESTCLASS ENERGY INC,SAN JACINTO,CA,homesonspec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+621790,BISHOP HEATING & AIR CONDITIONING INCORPORATED,BISHOP,CA,searchlocalpro.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1134768,BLAKE ELECTRIC LLC,REDDING,CA,blakeelectricusa.com,https://blakeelectricusa.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+972683,BLAKE ROOFING INC,NORCO,CA,network.procore.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+632049,BLUE SKY ENERGY,SANTA MONICA,CA,blueskyenergy.solar,https://blueskyenergy.solar/job-openings/,https://blueskyenergy.solar/job-openings/|https://blueskyenergy.solar/jobs/operations-manager-general-manager-solar-battery-custom-construction/|https://blueskyenergy.solar/jobs/solar-project-manager/|https://blueskyenergy.solar/jobs/solar-installer/|https://blueskyenergy.solar/jobs/renewable-energy-electrician/,5,1,1319,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+905923,BLUELINE SOLAR POWER,HOLLISTER,CA,energy.ca.gov,https://www.energy.ca.gov/careers,https://www.energy.ca.gov/careers/examsassessments|https://www.energy.ca.gov/careers/law-clerkships-internships-and-fellowships|https://www.energy.ca.gov/careers/volunteer-opportunities,3,0,897,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+1017260,BRETT DOWIS,HEMET,CA,me.sh,https://me.sh/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1029267,BRIGHT LIFE REMODELING,COSTA MESA,CA,ecms.newportbeachca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1007552,BRIGHT SPOT SOLAR,TEMPLE CITY,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1055369,BRIGHTON SOLAR INC,SACRAMENTO,CA,brightonenergy.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1081055,BROWER MECHANICAL CA LLC,ROCKLIN,CA,rocklin.ca.us,,,0,0,0,false,false,audit_error,fetch failed
+1066979,BRYTEMOVE ENERGY,TUSTIN,CA,brytemove.com,https://www.brytemove.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+558980,"BUCKLEY HEAT & AIR, SOLAR",CITRUS HEIGHTS,CA,rocklin.ca.us,,,0,0,0,false,false,audit_error,fetch failed
+1019515,BURTEK ENERGY LLC,SAN DIEGO,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+709658,C & C ROOFING,SAN DIMAS,CA,covinaca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+780158,CACY ELECTRIC,EL CAJON,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+920596,CAL - PAC ROOFING,CAMPBELL,CA,calpac.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+735061,CAL - PAC ROOFING OF SAN MATEO,SAN MATEO,CA,mathisroofing.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1092658,CAL CONTRACTOR SERVICES INC,BAKERSFIELD,CA,calcontractorservices.com,https://calcontractorservices.com/careers/?,"https://calcontractorservices.com/careers/3980%20Saco%20Road%20Suite%20K%20Bakersfield,%20CA%2093308",1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+872310,CALCRAFT CORPORATION,RIALTO,CA,calcraft.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+748668,CALIFORNIA ARBORIST COMPLETE TREE CARE INC,WHITTIER,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1067305,CALIFORNIA BUILDERS,CHICO,CA,solar530.com,https://solar530.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1015546,CALIFORNIA ENERGY SAVERS INC,RANCHO CUCAMONGA,CA,gendealers.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+980699,CALIFORNIA SOLAR INNOVATORS INC,RIPON,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1004246,CALIFORNIA SOLAR INTEGRATORS INC,SAN DIEGO,CA,glassdoor.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1002971,CALIFORNIA SOLAR PARTNERS INC,ANTELOPE,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1103250,CALIFORNIA SOLAR PROS INC,NORTH HIGHLANDS,CA,ru.scribd.com,https://ru.scribd.com/docs/Career-Growth,https://ru.scribd.com/docs/Career-Growth,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1106843,CALLAHAN SOLAR SERVICES,CALLAHAN,CA,callahansolargov.com,https://callahansolargov.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+549715,CALPRO SOLAR,BRENTWOOD,CA,calprosolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+989905,CANADAY ELECTRIC,MORRO BAY,CA,energy.ca.gov,https://www.energy.ca.gov/careers,https://www.energy.ca.gov/careers/examsassessments|https://www.energy.ca.gov/careers/law-clerkships-internships-and-fellowships|https://www.energy.ca.gov/careers/volunteer-opportunities,3,0,897,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+824635,CAPITAL AIRE SYSTEMS,SHINGLE SPRINGS,CA,capitalairesystems.com,https://capitalairesystems.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+423462,CARNAHAN ELECTRIC LTD,DIAMOND SPRINGS,CA,thebluebook.com,https://www.thebluebook.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+873578,CASTLE ROCK DESIGN AND DEVELOPMENT INC,MENLO PARK,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+968426,CASTLEBERRY HOME IMPROVEMENTS INC,LONG BEACH,CA,findacontractorfast.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1043973,CASTONE ROOFING AND CONSTRUCTION INC,CLOVIS,CA,m.castoneinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+928270,CENTRAL VALLEY RETAIL & SECURITY SOLUTIONS,FRESNO,CA,cv-rss.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1086347,CERTIFIED SOLAR PRO,LADERA RANCH,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1062535,CHICO SOLAR WORKS,CHICO,CA,chicosolarworks.com,,,0,0,0,false,false,audit_error,fetch failed
+512482,CIENAGA SERVICES INC,PISMO BEACH,CA,energy.ca.gov,https://www.energy.ca.gov/careers,https://www.energy.ca.gov/careers/examsassessments|https://www.energy.ca.gov/careers/law-clerkships-internships-and-fellowships|https://www.energy.ca.gov/careers/volunteer-opportunities,3,0,897,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+976065,CINNAMON ENERGY SYSTEMS INC,LOS GATOS,CA,bebee.com,https://bebee.com/es/jobs,https://bebee.com/es/job-market|https://bebee.com/es/jobs/role|https://bebee.com/es/jobs/remote|https://bebee.com/es/for/job-seekers|https://bebee.com/es/jobs/rental-sales-agent-europcar-santa-cruz-de-tenerife--fj-2326797280|https://bebee.com/es/jobs/instalador-de-gas-y-apmr-sei-madrid--un-mejor-5133367|https://bebee.com/es/jobs/profesor-apoyo-escolar-educa-vitoria-gasteiz--un-mejor-5873394|https://bebee.com/es/jobs/ing-climatizacion-y-frio-industrial-acoval-instalaciones-tecnicas-slu-aldaia--un-mejor-5843038|https://bebee.com/es/jobs/ayudante-soldador-mataro-fabricante-componentes-motocicletas-mataro--un-mejor-5859845|https://bebee.com/es/jobs/business-analyst-actuario-salud-axxis-systems-europe-sl-remoto--un-mejor-5880869|https://bebee.com/es/jobs/conductor-atlas-logistica-pobra-do-caraminal--un-mejor-5880778|https://bebee.com/es/jobs/auxiliar-de-taller-y-maquina-de-produccion-industrial-papelera-andinasl-basika-san-agustin-de-guadal--un-mejor-5879232|https://bebee.com/es/jobs/pasante-de-reclutamiento-para-sector-inteligencia-artificial-mensis-100-remoto--un-mejor-5878218|https://bebee.com/es/jobs/profesor-de-euskera-educa-vitoria-gasteiz--un-mejor-5873417|https://bebee.com/es/jobs/azafata-y-azafato-madrid-grandes-rasgos-sl-madrid--un-mejor-5835918|https://bebee.com/es/jobs/fisioterapeuta-toledo-clinica-kalma-fisioterapia-toledo--un-mejor-5879514|https://bebee.com/es/jobs/buscamos-cocineros-as-y-ayudantes-de-cocina-en-barcelona-y-cataluna-boris-45-barcelona--un-mejor-5876760|https://bebee.com/es/jobs/2-soldadores-profesionales-de-tig-y-autogenas-en-mataro-fabricante-componentes-motocicletas-mataro--un-mejor-5859843|https://bebee.com/es/jobs/business-analyst-yaba-ventures-sa-barcelona--gohire-b8c415c97e6e6a35|https://bebee.com/es/jobs/fpa-supply-chain-affinity-petcare-barcelona--fj-2304018782,44,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+701434,CIS ROOFING,MISSION VIEJO,CA,projects.constructconnect.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+647149,CITADEL ROOFING AND SOLAR,VACAVILLE,CA,citadelrs.com,https://citadelrs.com/careers/,https://citadelrs.com/careers/solar-accounting-specialist/|https://citadelrs.com/careers/warehouse-associate/,2,0,0,false,false,rejected_insufficient_job_urls,Only 2/3 static job URLs found.
+924297,CLEAN POWER GROUP INC,NORTHRIDGE,CA,solarpowerworldonline.com,https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/,https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.authorLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.uploadedToLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.originalImageURL%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.link%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.editLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.url%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.editLink%20%7D%7D&amp;image-editor,7,0,445,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+1054822,CLEAN POWER SOLAR,PERRIS,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+910460,CLEANTECH ENERGY SOLUTIONS INC,OCEANSIDE,CA,cleantechenergysolutionsca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1038414,COACHELLA VALLEY SOLAR INC,COACHELLA,CA,solarnearme.us.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+820697,COBALT POWER SYSTEMS INC,MOUNTAIN VIEW,CA,cobaltpower.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1108780,CODE 4 ROOFING SPECIALIST LLC,UPLAND,CA,owenscorning.com,https://careers.owenscorning.com/,https://careers.owenscorning.com/content/Jobs-by-Function/?locale=en_US,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+768923,COMFORT DYNAMICS INC,SAN LEANDRO,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+858776,COMFORT ENERGY INC,MILPITAS,CA,comfortenergy.com,https://www.comfortenergy.com/about-us/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+552144,COMFORT SYSTEMS CONSTRUCTION INC,SACRAMENTO,CA,homequotr.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1108378,COMPETITIVE CHOICE SOLAR,BAKERSFIELD,CA,bakersfieldschoice.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1114705,CONNOR ENERGY SERVICES,SAN DIEGO,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1010440,CONTROLLED ENVIRONMENT HVAC INC,GLENDALE,CA,data.lacity.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+996520,COOL EARTH SOLAR DEVELOPMENT LLC,STOCKTON,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1019424,CORDA SOLAR LLC,DANVILLE,CA,cordasolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1042269,CORE ENERGY GROUP INC,SAN JOSE,CA,network.procore.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+749743,CORNERSTONE TECHNOLOGIES INC,LONG BEACH,CA,california.bizhwy.com,https://www.bizhwy.com/404.php,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1062520,CORONEL SOLAR,CHICO,CA,coronelsolarchico.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+831831,COSMIC SOLAR INC,VISTA,CA,cosmicsolar.com,https://www.cosmicsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1046094,COURVILLE COLTON,MENIFEE,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+174637,CUPERTINO ELECTRIC INC,SAN JOSE,CA,cei.com,https://www.cei.com/careers,https://www.cei.com/careers/current-openings,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1045016,CURRENT HOME SOLAR,HEMET,CA,currenthome.com,https://www.currenthome.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1010027,CURTISS SOLAR ENERGY GROUP,SAN DIEGO,CA,ellahienergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1112748,D A C ENTERPRISES LLC,CARLSBAD,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+928315,D G HEATING AND AIR CONDITIONING,SAN JOSE,CA,dgheatingandair.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1035345,D G HEATING AND AIR CONDITIONING INC,SAN JOSE,CA,network.procore.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+728118,D K ENVIRONMENTAL,LAFAYETTE,CA,chwmeg.org,https://chwmeg.org/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+861505,D S C M INC,EL CAJON,CA,orangebook.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1145139,D3 ENERGY LLC,SACRAMENTO,CA,homequotr.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+987896,DAY ONE SOLAR INC,SANTA CRUZ,CA,day1solar.com,https://day1solar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+903293,DAYLIGHT SOLAR ENERGY CORP,ONTARIO,CA,homeguide.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1069859,DAYSTAR SOLAR,RANCHO CORDOVA,CA,gsa.acgov.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+683104,DEHARO CONSTRUCTION INC,LIVERMORE,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1131922,DEL SUR ENERGY,SAN DIEGO,CA,delsurenergy.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1064475,DESERT CLEAN ENERGY,PERRIS,CA,tbdsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+454228,DIABLO SOLAR SERVICES INC,CONCORD,CA,skilledtrades.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1076337,DIAMOND SOLAR SOLUTIONS INC,DIAMOND SPRINGS,CA,diamondsolar4u.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+867376,DOLLENS ELECTRIC INC,SAN JOSE,CA,reviews.birdeye.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+504407,DUCHARME CONSTRUCTION,SAN ANSELMO,CA,sanan-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1006299,DYNAMIC SOLAR,DIAMOND BAR,CA,docs.cpuc.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+794674,E L B A C,CORONA,CA,elbacroofing.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+865616,E P I CONSTRUCTION INC,STUDIO CITY,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+668002,EAGLE AIR,LIVERMORE,CA,eagleairconditioning.com,https://www.eagleairconditioning.com/about-us/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+822408,EAGLE MOUNTAIN PLUMBING & MECHANICAL LLC,ESCONDIDO,CA,eaglemountainplumbing.com,,,0,0,0,false,false,audit_error,fetch failed
+1003783,EARTH ELECTRIC INCORPORATED,CAMPBELL,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+810369,EARTH STAR ELECTRIC,SONOMA,CA,gsfahome.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1064003,EARTHQUAKE PROTECTION SYSTEMS,VALLEJO,CA,indexbox.io,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1014830,ECLECTRIC SOLAR,WILLITS,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+445220,ECONO AIR,PLACENTIA,CA,myeconoair.com,https://www.myeconoair.com/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1029435,ECOPOWER SOLAR,MURRIETA,CA,ecopowersolar.com,,,0,0,0,false,false,audit_error,The operation was aborted due to timeout
+1045300,ECOSOLAR USA ELECTRICAL LLC,GARDEN GROVE,CA,ggcity.org,https://ggcity.org/hr,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1113934,EL-FI HOMES LLC,IRVINE,CA,elfihomes.com,https://www.elfihomes.com/careers,,0,0,0,false,false,audit_error,fetch failed
+1072844,ELBAC SOLAR,CORONA,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+871218,ELEMENT ELECTRIC INC,DIXON,CA,thebluebook.com,https://thebluebook.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+946630,ELEMENT POWER SYSTEMS INC,CLAYTON,CA,tuolumnecounty.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1048261,ELH INC,HEMET,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1133927,ELITE SOLAR,MONTEBELLO,CA,elitesolarelectro.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1051137,ELWAY CONSTRUCTION,RIO DELL,CA,mccmeetingspublic.blob.core.usgovcloudapi.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+990593,ENABLE ENERGY,SACRAMENTO,CA,prnewswire.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1103108,ENCHARGE ENERGY,BAKERSFIELD,CA,enchargeenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+736839,ENERGY +,PALMDALE,CA,palmdaleepicenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+472363,ENERGY HOUSE,FRESNO,CA,energyhousefresno.com,https://energyhousefresno.com/about/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1101197,ENERGY SOLUTIONS HEATING AIR & SOLAR INC,LAKE ALMANOR,CA,esihas.com,https://www.esihas.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1139308,ENERVATION HEATING & AIR CONDITIONING INC,OAKLEY,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+967408,ENETECH INCORPORATED,BREA,CA,energy.ca.gov,https://www.energy.ca.gov/careers,https://www.energy.ca.gov/careers/examsassessments|https://www.energy.ca.gov/careers/law-clerkships-internships-and-fellowships|https://www.energy.ca.gov/careers/volunteer-opportunities,3,0,897,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+1146208,ENPHASE ENERGY INC,FREMONT,CA,enphaseenergy.gcs-web.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1151729,ESCALONA RENEWABLES,OCEANSIDE,CA,thecoastnews.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1045040,ESSEX SOLAR HEATING AND AIR INC,REDDING,CA,permits.shastacounty.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1104064,EVEREST ELECTRICAL USA INC,SANTA CLARITA,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1102899,EVERGREEN SOLAR,LOS ALAMITOS,CA,evergreen-solar.net,https://www.evergreen-solar.net/about/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1103998,EVERGREEN SOLAR,ANDERSON,CA,evgsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1115612,EXPERT HVAC SERVICE INC,WALNUT,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1017331,EXTREME SOLAR SOLUTIONS,ATWATER,CA,reviews.birdeye.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+347708,FARIS CONSTRUCTION COMPANY,OCEANSIDE,CA,b2bhint.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+807511,FEATHER RIVER AIRE AND SOLAR,CHICO,CA,d16k74nzx9emoe.cloudfront.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+156017,FIDELITY ROOF COMPANY,OAKLAND,CA,fidelityroof.com,https://fidelityroof.com/career-opportunities/,https://fidelityroof.com/career-opportunities/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+831636,FIELD OF DREAMS LANDSCAPING AND CONCRETE,SANTA CLARA,CA,field-dreams-concrete.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+886679,FIRE PROTECTION AND LIFE SAFETY INC,LOS ANGELES,CA,data.lacity.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1139737,FIRST CLASS ROOFING,LEMON GROVE,CA,local.yahoo.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1013243,FIRST EDISON,PLEASANTON,CA,firstedison.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1039876,FIRST RESPONSE SOLAR INC,SEBASTOPOL,CA,firstresponsesolar.com,https://www.firstresponsesolar.com/job-galary,https://www.firstresponsesolar.com/job-galary,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+631964,FISHER ELECTRIC INC,SCOTTS VALLEY,CA,fisherelectricinc.com,https://fisherelectricinc.com/category/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+873535,FIVE STAR SOLAR,ELK GROVE,CA,fivestarssolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+990072,FLEX SOLAR,EL CAJON,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+501585,FORSTER HEATING AIR CONDITIONING & SHEET METAL,AUBURN,CA,placer.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+784864,FREEDOM HEATING INC,FREEDOM,CA,veteranownedbusiness.com,https://news.veteranownedbusiness.com/events/category/career-fair/,https://www.veteranownedbusiness.com/152/employment-services,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1020722,FREEDOM SOLAR,ESCONDIDO,CA,orangebook.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1077999,FRESCHI AIR SYSTEMS LLC,CONCORD,CA,serviceexperts.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+859046,FRESH COAT,VOLCANO,CA,34c031f8-c9fd-4018-8c5a-4159cdff6b0d-cdn-endpoint.azureedge.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1054022,FUSED ELECTRIC,MARINA DEL REY,CA,rpvca.gov,https://rpvca.gov/Jobs.aspx,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+463720,FUTURE ENERGY SAVERS,WILTON,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+984739,G O P ELECTRIC INC,GRANADA HILLS,CA,napc.pro,https://www.napc.pro/contact/?t=e404,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+496735,G W RICHARDSON HEATING & AIR CONDITIONING INC,VALENCIA,CA,gwrichardsonac.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+661450,GALAXY PLUMBING & SOLAR SYSTEMS INC,AGOURA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+692839,GARVEY ROOFING COMPANY INCORPORATED,MONROVIA,CA,bnica.com,https://bnica.com/en-US/index,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1071057,GCI ROOFING,ESCONDIDO,CA,solab-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1157686,GLE SOLAR,VISALIA,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1120463,GOAT SOLAR INC,RANCHO MIRAGE,CA,goatsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1064369,GOGREEN BUILDERS LLC,SHERMAN OAKS,CA,gogreenbuilders.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+612405,GOLD RIVER MECHANICAL INC,LOOMIS,CA,goldriverheatairsolar.com,,,0,0,0,false,false,audit_error,fetch failed
+1032117,GOMAXXX INC,BENICIA,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1010200,GRAHAM SOLAR SYSTEMS INC,ORANGEVALE,CA,dfpi.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+543093,GRASS VALLEY AIR CONDITIONING INC,GRASS VALLEY,CA,geothermalfinder.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1127392,GREEN ADDITIONS INC,LOS ANGELES,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+916517,GREEN AIR HEATING AND AIR CONDITIONING INC,CONCORD,CA,gogreenair.net,,,0,0,0,false,false,audit_error,fetch failed
+938682,GREEN HILL SOLAR INC,WEST HILLS,CA,greenhillsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1075546,GREEN LINE SOLAR & ENERGY STORAGE,PETALUMA,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1128206,GREEN POWER DIRECT SOLAR,COVINA,CA,secure.cityofirvine.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+961800,GREEN STOCK SOLAR,NAPA,CA,greenstocksolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1026278,GREEN UNIVERSE INC,VAN NUYS,CA,thegreenuniverseinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1047548,GREENCAT INC,HEMET,CA,cleanenergyconnection.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+908145,GREENVOX CORPORATION,BURBANK,CA,local.yahoo.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+954140,GREENWIRED INC,REDWAY,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+858319,GREER'S BANNER AIR OF BAKERSFIELD INC,BAKERSFIELD,CA,bannerair.com,https://www.bannerair.com/employment-bakersfield-ca/,https://www.bannerair.com/employment-bakersfield-ca/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+365955,GREINER HEATING AIR AND ELECTRIC INC,DIXON,CA,contracosta.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+867533,GRID ALTERNATIVES,OAKLAND,CA,gridalternatives.org,https://gridalternatives.org/get-training/job-training-partnerships,https://gridalternatives.org/get-training/job-training-partnerships,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1024264,GSE SOLAR SYSTEMS INC,ADELANTO,CA,agentsolar.ai,https://agentsolar.ai/careers/cto,https://agentsolar.ai/careers/cto,1,0,0,false,true,rejected_jobposting_detected,JobPosting schema detected on the career page.
+1117117,GU DEVELOPMENT INC,FREMONT,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+997054,GUYOU CONSTRUCTION INC,RIVERSIDE,CA,guyouconstruction.com,https://guyouconstruction.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1024165,H C I SOLAR,WALNUT CREEK,CA,hcisolarusa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+822005,H M W DEVELOPMENT INC,SAN MATEO,CA,data.sfgov.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+918651,H R C ROOFING AND SOLAR INC,HAYWARD,CA,hrcroofingandsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+810016,HAMMER MECHANICAL INC,VISTA,CA,hammermechanical.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+434631,HANLEY CONSTRUCTION,STOCKTON,CA,rocketreach.co,https://rocketreach.co/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+734617,HARAN CONTRACTING,RED BLUFF,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+814866,HAVEN-ELECTRIC INC,BLUE LAKE,CA,haven-electric.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+606836,HAWES HEATING & AIR CONDITIONING,DAVIS,CA,vall-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+855174,HENRY MECHANICAL,WINDSOR,CA,henrymechanical.com,https://henrymechanical.com/about/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1130591,HHS SOLAR CA LLC,SACRAMENTO,CA,homequotr.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+949189,HIGH DEFINITION SOLAR CONSTRUCTION,CONCORD,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+907086,HIGH POINT SOLAR,MAMMOTH LAKES,CA,highpoint-solar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+960376,HIGHLIGHT SOLAR INC A CALIFORNIA CORPORATION,SAN JOSE,CA,agentsolar.ai,https://agentsolar.ai/careers/cto,https://agentsolar.ai/careers/cto,1,0,0,false,true,rejected_jobposting_detected,JobPosting schema detected on the career page.
+846105,HODNE ROOFING & SOLAR,HUNTINGTON BEACH,CA,local.yahoo.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1008036,HOME BUILT ENERGY INC,HANFORD,CA,homebuiltenergyinc.com,https://homebuiltenergyinc.com/employment-opportunities,https://homebuiltenergyinc.com/employment-opportunities,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1050229,HOME PRO ROOFING AND SOLAR,SUNNYVALE,CA,homeproca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1053003,HOMEXPERTS INC,CONCORD,CA,homexpertsinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+942829,HONEYS AIR & SOLAR,MODESTO,CA,honeysair.com,https://www.honeysair.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+949707,HOOKED ON SOLAR INC,ROCKLIN,CA,hookedonsolar.com,https://hookedonsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+987927,HORIZON ENERGY SYSTEMS LLC,CARMICHAEL,CA,fortresspower.com,https://www.fortresspower.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+940550,HOT PURPLE ENERGY,PALM SPRINGS,CA,hotpurpleenergy.com,https://hotpurpleenergy.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+898737,HOWE ELECTRIC CONSTRUCTION INC,FRESNO,CA,rocketreach.co,https://rocketreach.co/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1142194,HP ELECTRICAL LLC,AUBURN,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1048126,HPM SOLAR INC,UPLAND,CA,app.bcigem.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+793014,HPS PLUMBING SERVICES,BAKERSFIELD,CA,hps-plumbing-services.wheree.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+975784,HRC HOME IMPROVEMENT INC,HAYWARD,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+352336,HUDSPETH CONSTRUCTION INC,VISALIA,CA,homesonspec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1028965,I LOVE MY SOLAR INC,IONE,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+937645,ILLUMINATE SOLAR COMPANY,WALNUT CREEK,CA,nextdoor.com,https://about.nextdoor.com/careers/,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1125951,IMPACT SOLAR ENERGY LLC,IRVINE,CA,homesonspec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1086834,INDIGO SOLAR,CORONA,CA,indigosolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1008917,INFINITE SOLAR INC,OXNARD,CA,homequotr.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+992065,INFINITY ELECTRIC & GENERATORS,DOWNEY,CA,data.lacity.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+698270,INSTALLATION OF DATA & TELECOMMUNICATIONS,SAN RAFAEL,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+750325,"INTEGRITY HEATING, AIR & SOLAR",ANDERSON,CA,integrity-heating-air-solar.wheree.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+522166,INTERSTATE ROOFING AND SOLAR,OAKLAND,CA,berkeleyparentsnetwork.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+868592,ITECH SOLUTION,SAN JOSE,CA,scribd.com,https://www.scribd.com/docs/Career-Growth,https://www.scribd.com/docs/Career-Growth,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1107914,J AIRCON INC,WALNUT,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+911492,J K B ENERGY,TURLOCK,CA,jkbenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+991112,J K B ENERGY CORPORATION,TURLOCK,CA,dnb.com,https://www.dnb.com/en-us/about/careers.html,https://www.dnb.com/en-us/about/careers/benefits.html|https://www.dnb.com/en-us/about/careers/internships.html,2,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+401802,J R PUTMAN INC,RANCHO CORDOVA,CA,rocklin.ca.us,,,0,0,0,false,false,audit_error,fetch failed
+815888,J T ELECTRIC INC,GILROY,CA,pro.porch.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1064241,JC SOLAR ENTERPRISES INC,SIMI VALLEY,CA,bj8.dcd.myftpupload.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+909002,JEBL ENGINEERING & CONSTRUCTION INC,SAN LUIS OBISPO,CA,jeblec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+939675,JEFF PERIERA HOME ENERGY INC,BAKERSFIELD,CA,mediall.rapmls.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+708935,JONAS ENERGY SOLUTIONS,LOWER LAKE,CA,jonas-energy-solutions.wheree.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+874560,JOVIC CONSTRUCTION INC,POMONA,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1082343,JP SOLAR SERVICES INC,ATWATER,CA,jpsolarservices.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+787317,KERN MECHANICAL INC,BAKERSFIELD,CA,kerncountybuilderscaassoc.wliinc32.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1119258,KING ELECTRIC AND SOLAR INC,AUBURN,CA,placer.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1028324,KINGDOM SOLAR INC,SANTA MARIA,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1042456,KLEIN CONSTRUCTION INC,VALLEY VILLAGE,CA,scribd.com,https://www.scribd.com/docs/Career-Growth,https://www.scribd.com/docs/Career-Growth,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+775849,KS ELECTRIC,MADERA,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1158273,KX CONSTRUCTION LLC,SAN FRANCISCO,CA,scribd.com,https://www.scribd.com/docs/Career-Growth,https://www.scribd.com/docs/Career-Growth,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1115117,L J HEATING AND AIR CONDITIONING INC,MARYSVILLE,CA,ljheatandair.com,https://ljheatandair.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+983334,L T S SOLAR ENERGY,RAMONA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1112295,LA CRESTA HOLDINGS INC,MURRIETA,CA,opengovus.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+627629,LAKESHORE ELECTRIC & ENGINEERING COMPANY INC,SAN JOSE,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1006199,LANDSCAPE & TREE COMPANY,ROSEVILLE,CA,business.rosevillechamber.com,https://business.rosevillechamber.com/job-postings,https://business.rosevillechamber.com/job-postings|https://business.rosevillechamber.com/job-postings/Details/director-of-child-support-services-350580|https://business.rosevillechamber.com/job-postings/Details/senior-human-resources-analyst-339071|https://business.rosevillechamber.com/job-postings/Details/library-services-manager-338707|https://business.rosevillechamber.com/job-postings/Details/resident-services-coordinator-ii-pleasant-grove-and-the-lohse-301782,5,3,838,true,false,rejected_ats_detected,ATS detected on a job page.
+669156,LANDSCAPE ARTISTRY INCORPORATED,DEL MAR,CA,sandiego.gov,https://www.sandiego.gov/empopp/city-jobs,https://www.sandiego.gov/empopp/city-jobs/job-seeker-resources,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1007527,LENZI INCORPORATED,VICTOR,CA,thebluebook.com,https://www.thebluebook.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+773026,LGM CONSTRUCTION,JACKSON,CA,lgmconstruction.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+978938,LIM SOLUTIONS INC,HUNTINGTON BEACH,CA,sanclemente.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1033488,LOS ANGELES SOLAR PROS,LOS ANGELES,CA,lasolarpros.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+983600,LOTUS ENERGY,COLOMA,CA,eldoradocounty.ca.gov,https://www.eldoradocounty.ca.gov/Unused-Site-Elements/Jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1114147,LUMENEXX,WALNUT,CA,lumenexx.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+845219,LUMINALT ENERGY CORPORATION,SAN FRANCISCO,CA,luminalt.com,https://luminalt.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+939364,LUNDY SOLAR AND ROOFING COMPANY,DUBLIN,CA,agentsolar.ai,https://agentsolar.ai/careers/cto,https://agentsolar.ai/careers/cto,1,0,0,false,true,rejected_jobposting_detected,JobPosting schema detected on the career page.
+815891,M D ELECTRIC & SOLAR INC,GUALALA,CA,mdelectricsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+440297,M S SHUFELBERGER CONSTRUCTION,REDDING,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1000366,MAC GREINE ENERGY CORP,EL SEGUNDO,CA,macgreineenergycorp.com,https://macgreineenergycorp.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+477233,MAC'S SOLAR,SANTA BARBARA,CA,macsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1025477,MAGIC SOLAR SAN DIEGO LLC,OCEANSIDE,CA,magicsolarsandiego.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+815323,MAGNOLIA HEATING & COOLING INC,RIVERSIDE,CA,jurupavalley.org,https://www.governmentjobs.com/careers/jurupavalley,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+749299,MARIN MECHANICAL II INC,SAN RAFAEL,CA,marinmechanical.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+701317,MARKS SOLAR INC,DURHAM,CA,vceonline.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+299990,MASELLIS ELECTRIC & SOLAR INC,ESCALON,CA,solarforyourhouse.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+768926,MASTERS ELECTRIC,RIVERSIDE,CA,ibew440.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+895469,MAXUM ENERGY INC,WESTLAKE VILLAGE,CA,solarmagazine.com,https://solarmagazine.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+941211,MCCALMONT CORPORATION,CAMPBELL,CA,govchime.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+965286,MCKEEVER ENERGY & ELECTRIC INC,ARCATA,CA,leadiq.com,https://leadiq.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+663552,MECHANICAL GROUP,LA HABRA,CA,socalhvacr.info,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+996940,MECHPROS HEATING AND AIR CONDITIONING,PACHECO,CA,mechproshvac.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+584591,MEDINA'S HEATING AND AIR - CONDITIONING INC,ALHAMBRA,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+777269,MEGA ELECTRIC & P V INC,ALAMEDA,CA,norcalneca.org,https://norcalneca.org/calendar/employment-training-panel/,webcal://norcalneca.org/calendar/employment-training-panel/?ical=1,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1029183,MEI RENEWABLES INC,SANTA ROSA,CA,meirenewables.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+611215,MESA ENERGY SYSTEMS INC,IRVINE,CA,mesaenergy.com,https://mesaenergy.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+510978,MGP CONSTRUCTION,UPLAND,CA,lwb-registry-867.s3.ca-central-1.amazonaws.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+967354,MICHAEL & SUN SOLAR INC,GRATON,CA,michaelandsunsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+835608,MICHAEL ROBERTS CONSTRUCTION INC,CAMPBELL,CA,mrcbuilt.com,https://mrcbuilt.com/employment/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+370265,MID - STATE SOLAR,MODESTO,CA,midstatesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1086362,MID VALLEY POWER,MODESTO,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+413730,MIDNIGHT CRANE SERVICES,FRESNO,CA,midnightcrane.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+731809,MIKE THE POOLMAN INC,FOLSOM,CA,romeri.co,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1007601,MODERNIZE CONSTRUCTION INC,FOLSOM,CA,modernizepower.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1075045,MORALES ELECTRIC,HAWTHORNE,CA,isitlicensed.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+481394,MOUNTAIN AIRE HEATING & AIR CONDITIONING INC,COARSEGOLD,CA,mtn-aire.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+719709,MULTI POWER,FRESNO,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1155461,MYCROGRID INCORPORATED,PALM DESERT,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1009790,MYNT SYSTEMS INC,SANTA CRUZ,CA,myntsystems.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+761659,N V HEATHORN CO,CONCORD,CA,rocketreach.co,https://rocketreach.co/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+517533,NATIONAL CONSTRUCTION COMPANY INC,EL CERRITO,CA,alamedaca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1029842,NC SOLAR CONSTRUCTION INC,MANTECA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+779970,ND CONSTRUCTION COMPANY INC,LONG BEACH,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1076614,NEIGHBORHOOD SOLAR LLC,TEMECULA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1053851,NEOSUN,BURBANK,CA,neosun.us,https://neosun.us/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+812958,NEW DAY SOLAR,MURRIETA,CA,newdaysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+775687,NEXT LEVEL HOME PERFORMANCE,DIAMOND SPRINGS,CA,stylemg.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1089797,NEXT WAVE ENERGY MONITORING INC,CARLSBAD,CA,energy-xprt.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+975779,NIPPON ENERGY INC,MISSION VIEJO,CA,hesperiaca.gov,https://hesperiaca.gov/266/Employment-Opportunities,https://hesperiaca.gov/266/Employment-Opportunities,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+649300,NORTH COAST SOLAR,SANTA ROSA,CA,ncsr.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+498434,NORTH COAST WATERWORKS INC,WINDSOR,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1006316,NORTHSTAR SOLAR INC,DANVILLE,CA,rocketreach.co,https://rocketreach.co/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+963509,NPI CONCRETE,SYLMAR,CA,drugfreeconstruction.org,https://drugfreeconstruction.org/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1038061,OASIS AIR AND SOLAR,BAKERSFIELD,CA,oasisairandsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+981865,OCAL,SANTA ROSA,CA,sonomacountyenergy.my.site.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+591549,OCCIDENTAL POWER SOLAR & COGEN,SAN FRANCISCO,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1123087,OFF GRID SOLAR SOLUTIONS INC,VALLEY CENTER,CA,borregospringsgzcms.preview.gochambermaster.com,,,0,0,0,false,false,audit_error,The operation was aborted due to timeout
+1069206,OHM SOLAR SOLUTIONS,CHICO,CA,ohmsolarsolutions.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1128661,ON POINT COMMERCIAL SOLAR INC,VALENCIA,CA,isitlicensed.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1096220,ONESUN LLC,STUDIO CITY,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1142716,OPTERRA ENERGY SERVICES LLC,PASADENA,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1024381,OPTIMUM SOLAR POWER INC,RIVERSIDE,CA,optimumsolarpower.com,https://optimumsolarpower.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+985340,OPTION ONE SOLAR,APPLE VALLEY,CA,optiononesolar.com,https://optiononecorporationchaparosaroofinginc.discovered.ai/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+861315,OR - 5 GENERAL CONTRACTOR CORP,WOODLAND HILLS,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+522475,P S I,THOUSAND OAKS,CA,cleanwater1.com,https://cleanwater1.com/careers?hsLang=en,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+853463,PAB SOLAR AND AIR INC,SAN JOSE,CA,cleanenergyconnection.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+544777,PACE SETTER PLUMBING CORPORATION,LANCASTER,CA,plumbing-expert.com,,,0,0,0,false,false,audit_error,fetch failed
+917409,PACIFIC BLUE SOLAR INC,CANYON COUNTRY,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+812149,PACIFIC SOLAR,CLOVIS,CA,pacificsolarcompany.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1004379,PACIFICSKY SOLAR LLC,CHATSWORTH,CA,crunchbase.com,https://about.crunchbase.com/about-us/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1035963,PANEL THE PLANET,YORBA LINDA,CA,b2bhint.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1025115,PARAGONSUN,IRVINE,CA,paragonsun.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1014673,PARTICIPANT ENERGY CALIFORNIA INC,BERKELEY,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1131853,PELICAN CONSTRUCTION & ENERGY INC,OCEANSIDE,CA,gis.vista.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+798375,PENNIES A/C - SOLAR & CONSTRUCTION,LANCASTER,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+789106,PERFORMANCE SOLAR INC,ESCONDIDO,CA,performancesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+988549,PERRYBUILT CONSTRUCTION INC,SOQUEL,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+981354,PHOENIX ENERGY SOLUTIONS INC,SHINGLE SPRINGS,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+997464,PHOTOVOLTAICS CALIFORNIA,HAYWARD,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1135215,PLACER SOLAR SOLUTIONS INC,ROCKLIN,CA,placersolarsolutions.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+938313,PLANET SOLAR INCORPORATED,CLOVIS,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+879366,POCO SOLAR ENERGY INC,SANTA CLARA,CA,pocosolar.com,https://www.pocosolar.com/careers/,https://www.pocosolar.com/careers/index.php|https://www.pocosolar.com/careers/SITEMAP,2,0,0,false,false,rejected_insufficient_job_urls,Only 2/3 static job URLs found.
+978758,POWERAID,SANTA ANA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1113642,POWERTREE SERVICES INC,SAN FRANCISCO,CA,powertreeservices.com,https://www.powertreeservices.com/admin/login/?next=/about/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+924885,"PR PLUMBING,HEATING AND AIR CONDITIONING INC",CLOVIS,CA,prplumbingfresno.com,https://www.prplumbingfresno.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+428900,PRECISE AIR SYSTEMS INC,LOS ANGELES,CA,preciseairsystems.com,https://www.preciseairsystems.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+534116,PRECISION ELECTRIC CO,LAKESIDE,CA,precisionelectricco.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+950065,PRECISION ELECTRIC SOLAR,LAKESIDE,CA,ibew569.org,https://ibew569.org/career-changers/,https://ibew569.org/career-changers/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+967732,PRIDE INDUSTRIES ONE INC,ROCKLIN,CA,nrgcemetery.com,https://www.nrgcemetery.com/position-s-available,https://www.nrgcemetery.com/position-s-available|https://www.nrgcemetery.com/job-announcement,2,0,0,false,false,rejected_insufficient_job_urls,Only 2/3 static job URLs found.
+992887,PRIME ENC INC,ANAHEIM,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1126479,PRISTINE SOLAR & ELECTRIC INC,HANFORD,CA,isitlicensed.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+498775,PRO - AIR INC,CITRUS HEIGHTS,CA,reviews.birdeye.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+808734,PURE POWER SOLUTIONS,HEALDSBURG,CA,purepowersolutions.com,https://purepowersolutions.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+963602,PURE PWR POOL SERVICE,ESCONDIDO,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+939143,PURE SOLAR POWER,ENCINITAS,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1149696,PV PLUS LLC,ACAMPO,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+939078,PYCEM INC,SAN DIEGO,CA,calssa-backend.squarespace.com,https://calssa-backend.squarespace.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+959548,QUALITY HOME RENOVATORS INC,WOODLAND HILLS,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+954020,QUATTRO SOLAR INC,NOVATO,CA,thebluebook.com,https://thebluebook.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+951053,R B H CONSTRUCTION INC,FOLSOM,CA,network.procore.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1055446,R C SOLAR,RIVERSIDE,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+503251,R T MAHER CONSTRUCTION,MERCED,CA,rtmaher.com,https://rtmaher.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+958638,R&R HORN CONTRACTORS INC,CHICO,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1007610,RADIANT SOLAR TECHNOLOGY INC,UKIAH,CA,radiantsolar.tech,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1107898,RANGER ROOFING AND SOLAR,MALIBU,CA,idcrawl.com,https://idcrawl.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+967900,RBT ELECTRIC INC,SACRAMENTO,CA,rbt-electric.com,https://www.rbt-electric.com/employment-opportunities/,https://www.rbt-electric.com/employment-opportunities/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1050161,RE-GEN ELECTRIC INC,FRESNO,CA,re-genelectric.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1144151,REDDING ROOFING & SOLAR,CHICO,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+697406,REFRESHED HEATING & COOLING,CONCORD,CA,elcr-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+616351,REINEKE BUILDING,GRANITE BAY,CA,reinekebuildinginc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+944636,RENEWABLE SOLAR,HANFORD,CA,renewablesolarhanford.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1083377,RENVO,ORANGEVALE,CA,renvoco.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1069078,REVAMP SOLAR CO,MONROVIA,CA,rpvca.gov,https://rpvca.gov/Jobs.aspx,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+387219,REVCO SOLAR ENGINEERING INC,LAGUNA HILLS,CA,revcosolar.com,https://www.revcosolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1106092,REVEL SOLAR ENERGY,IRVINE,CA,c-13digest.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1135603,REVOLVING POWER SOLAR,SACRAMENTO,CA,rpsol.co,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+987150,RF SOLAR & GREEN ENERGY INC,WEST COVINA,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+538702,RICK'S REFRIGERATION,GRANITE BAY,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+260176,RIDOUT ROOFING COMPANY INC,SAN LEANDRO,CA,datanyze.com,https://www.datanyze.com/market-share/job-boards--377,https://www.datanyze.com/market-share/job-boards--377,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+791025,RIGHT NOW AIR,VACAVILLE,CA,rightnowairandsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1008581,RIOS SOLAR,MADERA,CA,dnb.com,https://www.dnb.com/en-us/about/careers.html,https://www.dnb.com/en-us/about/careers/benefits.html|https://www.dnb.com/en-us/about/careers/internships.html,2,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1096492,RISE UP ROOFING AND CONSTRUCTION INC,OCEANSIDE,CA,owenscorning.com,https://careers.owenscorning.com/,https://careers.owenscorning.com/content/Jobs-by-Function/?locale=en_US,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1077450,RME INNOVATIONS INC,SACRAMENTO,CA,energyranked.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1132476,ROAM SOLAR ENERGY INC,SAN JOSE,CA,romeri.co,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+991938,ROCKIN ROOFERS,PETALUMA,CA,renovationsup.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1050566,ROCKLIN SOLAR REPAIR,ROCKLIN,CA,rocklinsolarrepair.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+592190,RODDICK R POOL CONSTRUCTION INC,SANTA CRUZ,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1082435,ROI SOLAR INC,LODI,CA,roisolarpower.com,https://roisolarpower.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1062195,ROOFXPERTS,STANDARD,CA,tuolumnecounty.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1041899,ROOZBEH INC,BEVERLY HILLS,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1123304,ROWAN BUILT LLC,VICTORVILLE,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+510286,ROYAL AIRE INC,CHICO,CA,edocs.buttecounty.ca.gov,https://edocs.buttecounty.ca.gov/WebLink/Welcome.aspx?cr=1,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+638729,ROYALTECH SERVICES,LA PUENTE,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+982533,SADLER SOLAR DEVELOPMENT,LAGUNA BEACH,CA,agentsolar.ai,https://agentsolar.ai/careers/cto,https://agentsolar.ai/careers/cto,1,0,0,false,true,rejected_jobposting_detected,JobPosting schema detected on the career page.
+1081457,SAFEHOME SOLAR,SOUTH PASADENA,CA,gsfahome.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+387886,SAFEWAY ELECTRIC,RIVERSIDE,CA,safewayelectric.com,https://www.safewayelectric.com/employment,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+959155,SAN DIEGO COUNTY SOLAR,ENCINITAS,CA,sandiegocountysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1046417,SANTA CRUZ RENEWABLES,SOQUEL,CA,screnewable.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1059767,SARITA SOLAR INC,VALLEY CENTER,CA,saritasolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+380125,SCHOTT ROOFING INC,VISTA,CA,owenscorning.com,https://careers.owenscorning.com/,https://careers.owenscorning.com/content/Jobs-by-Function/?locale=en_US,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+869203,SCOTTY'S ENTERPRISES INC,PLACERVILLE,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1036962,SCURFIELD ELECTRIC HEATING & SOLAR,ARCATA,CA,scurfield-electric-heating-solar.wheree.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+900399,SEA BRIGHT SOLAR INC,SAN BERNARDINO,CA,hesperiaca.gov,https://hesperiaca.gov/266/Employment-Opportunities,https://hesperiaca.gov/266/Employment-Opportunities,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1038751,SEABRIGHT SOLAR,APTOS,CA,seabrightsolarca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1083681,SEMPER AIR,EL CAJON,CA,hvac.sempersolaris.com,https://hvac.sempersolaris.com/careers/,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+978152,SEMPER SOLARIS,EL CAJON,CA,sempersolaris.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1018979,SENGOKU SOLAR LLC,TEMECULA,CA,sengokusolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1051281,SHADE POWER LLC,SUNNYVALE,CA,getshadepower.com,https://getshadepower.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+968940,SHINE ON SOLAR & MAINTENANCE,ROHNERT PARK,CA,shineonsolar.us,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+709389,SHUFELBERGER CONSTRUCTION INC,REDDING,CA,buildwithsci.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+453302,SIERRA PACIFIC HOME & COMFORT INC,RANCHO CORDOVA,CA,sierrapacifichome.com,https://www.sierrapacifichome.com/contact/careers,https://www.sierrapacifichome.com/contact/career-fair|https://www.sierrapacifichome.com/contact/careers/dispatcher|https://www.sierrapacifichome.com/contact/careers/install-helper-general-laborer|https://www.sierrapacifichome.com/contact/careers/solar-pool-heater-installers|https://www.sierrapacifichome.com/contact/careers/hvac-maintenance-technicians1|https://www.sierrapacifichome.com/contact/careers/hvac-servicerepair-technicians|https://www.sierrapacifichome.com/contact/careers/electrical-operations-manager|https://www.sierrapacifichome.com/contact/careers/lead-generators|https://www.sierrapacifichome.com/contact/careers/sales|https://www.sierrapacifichome.com/contact/careers/electrician|https://www.sierrapacifichome.com/contact/careers/plumber|https://www.sierrapacifichome.com/contact/careers/water-softener-sales-design-supervisors,12,3,1672,false,false,validated_custom_scrape_candidate,Static employer job pages meet all criteria.
+360454,SIERRA SOLAR INC,MAMMOTH LAKES,CA,solarnearme.us.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+826606,SIERRA VALLEY MECHANICAL,RANCHO CORDOVA,CA,sierravalleymechanical.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+997639,"SIG SOLAR, S.I.G.",OAKDALE,CA,sig.solar,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1001143,SILVERLINE SOLAR,CANOGA PARK,CA,silverlinesolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+765156,SIMMITRI INC,MORGAN HILL,CA,simmitri.com,https://simmitri.com/contact-us/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+990055,SIMPLY SOLAR LLC,RANCHO CUCAMONGA,CA,simplysolarsocal.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1091624,SIX RIVERS SOLAR LLC,EUREKA,CA,rocketreach.co,https://rocketreach.co/jobs,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+998255,SMART SOLAR CONSTRUCTION,CHATSWORTH,CA,isitlicensed.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1141919,SMARTBUILT INC,NAPA,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+871200,SMITH ELECTRICAL CONTRACTORS INC,EL CAJON,CA,residentsolarpower.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+724082,SOCAL HYDRONICS & PHOENIX BUILD CONSORTIUM,AGOURA HILLS,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1077212,SOL R US INCORPORATED,ROCKLIN,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1072735,SOL-TEK SOLAR,CLOVIS,CA,solteksolar.com,https://solteksolar.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+953443,SOLA-LITE,PALM DESERT,CA,puresunlight.com,https://puresunlight.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+752181,SOLAR - TEC SYSTEMS INC,DANA POINT,CA,solar-tec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+872323,SOLAR CENTER,TUSTIN,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+488066,SOLAR CENTER INC,MENLO PARK,CA,document.epiq11.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1051362,SOLAR CENTRAL INC,THOUSAND PALMS,CA,solarcentralinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1007296,SOLAR CENTURY,FAIR OAKS,CA,agentsolar.ai,https://agentsolar.ai/careers/cto,https://agentsolar.ai/careers/cto,1,0,0,false,true,rejected_jobposting_detected,JobPosting schema detected on the career page.
+683128,SOLAR CONTRACTOR THE,OAK VIEW,CA,thesolarcontractor.net,https://thesolarcontractor.net/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1040134,SOLAR HARMONICS INC,BRENTWOOD,CA,ecohome.net,https://www.ecohome.net/en/employment/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1050433,SOLAR MOTION,APTOS,CA,solarmotion.com,https://solarmotion.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1021919,SOLAR NEGOTIATORS,FRESNO,CA,solarnegotiators.com,https://www.solarnegotiators.com/about/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1084699,SOLAR NOW,YUCCA VALLEY,CA,solarnowyv.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1054153,SOLAR PANEL SOLUTIONS INC,SAN JOSE,CA,pegbo.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+924564,SOLAR POOL SERVICES INC,RIVERSIDE,CA,solarpoolservicesinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+947141,SOLAR POWER CONSTRUCTION & PLUMBING CO,BURBANK,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1097059,SOLAR POWER FUND,SAN JOSE,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+1088859,SOLAR POWERGEN INC,LOS ANGELES,CA,re-plus.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+913359,SOLAR PROJECTS UNLIMITED,ARCATA,CA,solarprojectsunlimited.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+990943,SOLAR RENEWABLE ENERGY,VISTA,CA,ziprecruiter.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1051284,SOLAR SERVICE PROFESSIONALS INC,SHERMAN OAKS,CA,sanclemente.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+580995,SOLAR SERVICES OF SAN DIEGO INC,SANTEE,CA,data.sandiegocounty.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+925231,SOLAR SOURCE INC,LONG BEACH,CA,solarsourceinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1040428,SOLAR SPECTROM INC,MOORPARK,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+988146,SOLAR SYMPHONY CONSTRUCTION INC,ESCONDIDO,CA,solar-symphony-construction-inc.wheree.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1106777,SOLAR TECH ENERGY SYSTEMS INC,EL CAJON,CA,solartechonline.com,https://solartechonline.com/blog/careers-in-energy-complete-guide/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+932914,SOLAR TECHNOLOGIES,SAN RAMON,CA,solartechnologies.com,https://solartechnologies.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+393565,SOLAR UNLIMITED INC,ARCADIA,CA,solarunlimited.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+991559,SOLAR XPRESS INC,CALABASAS,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+1001001,SOLARCO ENERGY,LAGUNA HILLS,CA,solarcoenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+497797,SOLARCRAFT SERVICES INC,NOVATO,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+971194,SOLARGRAHAM,MURRIETA,CA,solargraham.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+970970,SOLARHUT LLC,DIAMOND SPRINGS,CA,solarhut.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+972048,SOLARMAX RENEWABLE ENERGY PROVIDER INC,RIVERSIDE,CA,solarmaxtech.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+561720,SOLARON,SACRAMENTO,CA,solaron.net,https://solaron.net/about/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+930425,SOLARPARK USA INC,SAN RAMON,CA,solarparkusa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+391670,SOLARPONICS INC,ATASCADERO,CA,solarponics.com,https://solarponics.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+656905,SOLARPORTS DEVELOPMENT,MILL VALLEY,CA,solarports.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+932764,SOLARTRONICS USA,COLTON,CA,solartronicsusa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+678517,SOLEX,CARMEL VALLEY,CA,appliedsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+973676,SOLGREEN DEVELOPMENT,POMONA,CA,findacontractorfast.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+982727,SOLINSURE,BERKELEY,CA,solinsure.com,https://www.solinsure.com/about/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1050892,SOLIRVINE LLC,LADERA RANCH,CA,sanclemente.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1033780,SOLTECH ENERGY INC,SAN JACINTO,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1083907,SOLV ENERGY LLC,SAN DIEGO,CA,solvenergy.com,https://www.solvenergy.com/careers,https://www.solvenergy.com/careers/contact-careers-at-solv-energy,1,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+901436,SON LIGHT INC,BAKERSFIELD,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1035189,SONOMARIN SOLAR INC,SAN RAFAEL,CA,cityofsanrafael.org,https://www.cityofsanrafael.org/jobs,https://www.cityofsanrafael.org/job-classification-descriptions/|https://www.cityofsanrafael.org/job-descriptions/,2,0,0,false,false,rejected_insufficient_job_urls,Only 2/3 static job URLs found.
+805496,SOURCE SOLAR INC,CLAREMONT,CA,sourcesolarinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1055498,SOUTH SHORE ELECTRIC,LAKE ELSINORE,CA,local.yahoo.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1022373,SOUTHBAY NRG,SUNLAND,CA,craigslist.org,https://www.craigslist.org/about/help/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1062963,SRS ROOFING & SOLAR INC,SAN LEANDRO,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+984910,STATEN SOLAR CORPORATION,SAN JOSE,CA,govtribe.com,https://govtribe.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+975678,STJ ENERGY,GOLD RIVER,CA,romeri.co,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1131980,STRAIGHT LINE ROOFING & CONSTRUCTION LLC,SHINGLE SPRINGS,CA,eldoradocounty.ca.gov,https://www.eldoradocounty.ca.gov/Unused-Site-Elements/Jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+939095,SULPIZIO STUART,LOS ANGELES,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+597784,SUN AMERICA SOLAR & CONSTRUCTION CO,PETALUMA,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1074301,SUN DOLLAR SOLAR,BEAUMONT,CA,sundollarsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+669250,SUN FIRST! INC,SAN RAFAEL,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+326203,SUN LIGHT & POWER,BERKELEY,CA,sunlightandpower.com,https://www.sunlightandpower.com/consider-career-sun-light-power,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+952018,SUN MARSHALL SOLAR SERVICES,VALLEJO,CA,contracosta.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+990449,SUN METRICS,DAVIS,CA,sunmetrics.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+759837,SUN POWER CONSTRUCTION INC,TRUCKEE,CA,sunpowerconstruction.com,https://sunpowerconstruction.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+655330,SUN POWERED SOLUTIONS INC,PALMDALE,CA,palmdaleca.edefeed.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1055560,SUN SOLAR ENERGY SOLUTIONS,BAKERSFIELD,CA,solarpowerworldonline.com,https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/,https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.authorLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.uploadedToLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.originalImageURL%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.link%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.editLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.url%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.editLink%20%7D%7D&amp;image-editor,7,0,445,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+1065395,SUN SOLAR ENERGY SOLUTIONS,BAKERSFIELD,CA,solarpowerworldonline.com,https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/,https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.authorLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.uploadedToLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.originalImageURL%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.link%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.editLink%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.url%20%7D%7D|https://www.solarpowerworldonline.com/2025/12/jobs-report-finds-renewable-energy-employees-are-optimistic-about-industry-but-hesitant-on-future/%7B%7B%20data.editLink%20%7D%7D&amp;image-editor,7,0,445,false,false,rejected_incomplete_job_pages,"Only 0/3 pages met description, location and employment-type criteria."
+989112,SUN-TRICITY SOLAR POWER,EL CAJON,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1078460,SUNBOLT SOLAR,ARCATA,CA,sunboltsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+749795,SUNCHASER INC,LAKESIDE,CA,newswire.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1015070,SUNDANCE SOLAR,PLEASANT HILL,CA,findenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1061794,SUNERGY INC,LAKE FOREST,CA,reddit.com,https://www.reddit.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1021907,SUNKO SOLAR,LOS ANGELES,CA,sunkosolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+997589,SUNLIGHT SOLAR INC,EL CAJON,CA,sunlightsolarinc.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1063414,"SUNLOGIX AC, HEATING , & SOLAR",PALM DESERT,CA,americanstandardair.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1039722,SUNMADE SMART ROOFING SOLAR & ELECTRIC,FRESNO,CA,gosunmade.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1076156,SUNNY CREEK SOLAR AND MAINTENANCE INC,ESPARTO,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1042628,SUNNY SOLAR POWER INC,EL CAJON,CA,sunnysolarpower.com,https://www.sunnysolarpower.com/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+990589,SUNNYCAL SOLAR INCORPORATED,VALLEY SPRINGS,CA,dnb.com,https://www.dnb.com/en-us/about/careers.html,https://www.dnb.com/en-us/about/careers/benefits.html|https://www.dnb.com/en-us/about/careers/internships.html,2,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+977486,SUNRISE ENERGY SOLUTIONS INC,GRANITE BAY,CA,placer.ca.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+913485,SUNRISE SOLAR,RANCHO CORDOVA,CA,reviews.birdeye.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1031082,SUNRISE SOLAR,FORESTVILLE,CA,consumeraffairs.com,https://www.consumeraffairs.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+970886,SUNRIVER SOLAR INC,AUBURN,CA,sunriversolar.com,https://www.sunriversolar.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1044501,SUNSHINE PACIFIC GROUP AMERICA INC,CHINO HILLS,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+961108,SUNSTALL INC,NOVATO,CA,sunstall.com,https://sunstall.com/career-apply/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+338647,SUNTEGRITY SOLAR,SANTA ROSA,CA,suntegritysolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+859460,SUNTREK INDUSTRIES INC,IRVINE,CA,suntreksolar.com,https://www.suntreksolar.com/about-us/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+369267,SUNTRICITY INC,LA QUINTA,CA,data.lacity.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1058411,SUNVAULT,FREMONT,CA,sunvaultsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1116133,SUNWISE SOLAR SOLUTIONS,LOS GATOS,CA,solarnearme.us.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+920732,SUNWORK RENEWABLE ENERGY PROJECTS,MOUNTAIN VIEW,CA,sunwork.org,https://sunwork.org/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1076925,SUPREME SOLAR & ELECTRIC,FRESNO,CA,supreme.solar,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1069368,SUTTON ROOFING,TEMECULA,CA,suttonroofingandsolar-ca.com,https://suttonroofingandsolar-ca.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1005845,SWG ENERGY INC,CARLSBAD,CA,commercialenergystoragesolutions.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+717212,SWIFT CERTIFIED MECHANICAL,CONCORD,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+933858,SWSG INC,HERMOSA BEACH,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1107653,SYMMETRIC SOLAR ENERGY,SAUSALITO,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1109123,SYNERGY 768 ELECTRIC LLC,BRENTWOOD,CA,cityby.net,https://www.cityby.net/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+994847,SYNERGY 768 INC,BRENTWOOD,CA,synergy768.com,https://synergy768.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+835016,SYNERGY COMPANIES,OCEANSIDE,CA,sanclemente.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+945168,SYNERGY EE INC,CARLSBAD,CA,homesonspec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+913951,SYNERGY SOLAR & ELECTRICAL SYSTEMS INC,SEBASTOPOL,CA,synsolar.com,https://synsolar.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+793124,T & K CONSTRUCTION,FOUNTAIN VALLEY,CA,tkconstructionco.com,https://tkconstructionco.com/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+664428,T MARSHALL ELECTRIC,DUBLIN,CA,homesonspec.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1081160,T-REX SOLAR INC,GRASS VALLEY,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1105231,TAHOE SOLAR INC,SOUTH LAKE TAHOE,CA,eldoradocounty.ca.gov,https://www.eldoradocounty.ca.gov/Unused-Site-Elements/Jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+975545,TAYLOR ENERGY SYSTEMS INC,SEBASTOPOL,CA,taylor-energy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+836664,TECHNION CONTRACTORS T C I INC,NORTHRIDGE,CA,search.certifications.sba.gov,https://search.certifications.sba.gov/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1051985,TEICHERT SOLAR,SACRAMENTO,CA,teichert.com,https://teichert.com/grow/career-paths/,https://teichert.com/grow/career-paths/,1,0,0,false,false,rejected_insufficient_job_urls,Only 1/3 static job URLs found.
+1092568,TENCO SOLAR INC,ANAHEIM,CA,tencosolar.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+909722,TERRAMAR POOL CONSTRUCTION,VISTA,CA,etrakit9.san-marcos.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+888104,TESLA ENERGY OPERATIONS INC,FREMONT,CA,en.wikipedia.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+790691,"THE CREST CONSTRUCTION COMPANY, INC",ENCINITAS,CA,solab-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1131926,THE SOLAR TECH CORP,FULLERTON,CA,secure.cityofirvine.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+469936,THE STANLEY LOUIS COMPANY,TORRANCE,CA,stanleylouis.com,https://www.stanleylouis.com/about/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+513115,"THE WHITE GLOVE GUYS, PLUMBING DRAINS HEATING AIR CONDITIONING",SAN DIEGO,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+922761,THORNTON'S GAS SERVICE,NICOLAUS,CA,fuelwonk.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+688058,THORSEN'S-NORQUIST INC,TURLOCK,CA,thornorinc.com,https://thornorinc.com/employment-application/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1085628,THRIVING SOLAR SOLUTIONS INC,SAN RAMON,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+781374,TIMELESS DEVELOPMENT,SAN DIEGO,CA,contractorlicenseproof.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1152671,TOUGH SOLAR,CATHEDRAL CITY,CA,trulytough.com,https://www.trulytough.com/careers,https://www.trulytough.com/jobs/responsible-managing-employee|https://www.trulytough.com/jobs/office-admin|https://www.trulytough.com/jobs/marketing-strategist|https://www.trulytough.com/jobs/computer-tech-support|https://www.trulytough.com/jobs/roof-installer|https://www.trulytough.com/jobs/solar-installer|https://www.trulytough.com/jobs/electrical-tech|https://www.trulytough.com/jobs/hvac-installer|https://www.trulytough.com/jobs/journeyman-plumber|https://www.trulytough.com/jobs/pool-construction-tech|https://www.trulytough.com/jobs/residential-painter|https://www.trulytough.com/jobs/drywall-installer|https://www.trulytough.com/jobs/fence-installer|https://www.trulytough.com/jobs/flooring-installer|https://www.trulytough.com/jobs/concrete-finisher,15,1,1483,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+1109302,TOWNSEND SOLAR AND POOLS INC,RIPON,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1066318,TRANE U S INC,BREA,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+996593,TREEPUBLIC SOLAR,HAWTHORNE,CA,treepublicsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+947751,TRIANGLE MANUFACTURING INC,MONTROSE,CA,studylib.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+853740,TRINITY POWER,FRESNO,CA,trinitypowerca.com,,,0,0,0,false,false,audit_error,fetch failed
+1068141,TRUE SOLAR & ELECTRIC INC,KERMAN,CA,true-solar.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1078990,TRULYSUN ENERGY CORPORATION,SAN FRANCISCO,CA,elcr-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+978493,UNIQUE SOLAR,SAN DIEGO,CA,uniquesolar.net,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+893826,URBAN DESIGN,PARADISE,CA,urbandesignsolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+944115,URBAN ENERGY SOLAR INC,HUNTINGTON BEACH,CA,selfgenca.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1143984,V & A SOLAR TECHNOLOGY INC,LATHROP,CA,zerofi.ai,https://www.zerofi.ai/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+858197,VALLEY SOLAR INC,SACRAMENTO,CA,valley-solar.com,,,0,0,0,false,false,audit_error,fetch failed
+1081676,VALLEY SOLAR SERVICE CORPORATION,FRESNO,CA,serviceagent.ai,https://serviceagent.ai/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+874184,VALLEY WATER,FRESNO,CA,clean-valley-water-water-purification-company.wheree.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1000480,VAN LUND ROOFING AND SOLAR,RANCHO CUCAMONGA,CA,gaf.com,https://www.gaf.com/en-us/about-us/careers?utm_source=billboard&utm_medium=vanity+url,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+608260,VASCO SOLAR,FOUNTAIN VALLEY,CA,vascosolar.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+977386,VEGAS PACIFIC EXPRESS,FONTANA,CA,li-public.fmcsa.dot.gov,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1005557,VELOCITY SOLAR POWER INC,OAKDALE,CA,edocs.buttecounty.ca.gov,https://edocs.buttecounty.ca.gov/WebLink/Welcome.aspx?cr=1,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+973895,VICTORY HEATING & AIR INC,APPLE VALLEY,CA,homversa.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+481352,VINTAGE E & S INC,INDIO,CA,laqu-trk.aspgov.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1110302,VIVA ENERGY,MORRO BAY,CA,viva-energy.us,https://www.viva-energy.us/jobs,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1135786,VOLT HOME,SANTA ANA,CA,volthome.com,https://volthome.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1042043,VOLT MODERN ROOFING AND SOLAR,ROCKLIN,CA,voltmodern.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+726486,VOLZ ELECTRIC,UPLAND,CA,buildzoom.com,https://www.buildzoom.com/careers,,0,0,0,true,false,rejected_ats_detected,ATS detected on the career page.
+1110946,WEST COAST CUSTOM SOLAR,ORLAND,CA,bidroom.io,https://bidroom.io/jobs,https://bidroom.io/jobs/192e3d9b-ee45-4c2a-8b47-0a1d321839c0|https://bidroom.io/jobs/096ed779-7da6-4a7a-8441-056000d42a84|https://bidroom.io/jobs/5bffa1ad-bfc3-4ee2-9b78-e29fb34f2ef5,3,1,1104,false,true,rejected_jobposting_detected,JobPosting schema detected on a job page.
+908549,WEST COAST SOLAR INC,CONCORD,CA,isitlicensed.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+945067,WEST COAST TECH ELECTRIC,ARROYO GRANDE,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+918393,WEST PACIFIC ELECTRIC COMPANY CORPORATION,PISMO BEACH,CA,search.certifications.sba.gov,https://search.certifications.sba.gov/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+963158,WESTCOAST SOLAR ENERGY,SANTA ROSA,CA,westcoastsolarenergy.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1047833,WESTCOAST SOLAR PROFESSIONAL,RIVERSIDE,CA,westcoastsolarprofessional.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+739791,WESTECH SYSTEMS INC,CLOVIS,CA,downtobid.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+962892,WESTERN SUN SYSTEMS INC,CARMEL,CA,pegbo.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+965111,WESTHAVEN POWER,YUBA CITY,CA,westhavenpower.com,https://www.westhavenpower.com/career,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1127078,WICKS,NIPOMO,CA,wicksroofing.com,https://wicksroofing.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+1101461,WIN-DOR LLC,BREA,CA,craigslist.org,https://www.craigslist.org/about/help/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+688062,WINKLE R D COMPANY,THOUSAND PALMS,CA,residentialbrokers.org,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+973766,WRIGHT BUILDING,PALM DESERT,CA,patch.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+992157,XERO SOLAR,EL SEGUNDO,CA,xerosolar.com,https://xerosolar.com/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+789630,YAMA CONSTRUCTION,SAN FRANCISCO,CA,statecreds.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1137277,ZENITH SOLAR INC,SAN DIEGO,CA,provenpros.co,https://provenpros.co/careers,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.
+820063,ZERO ENERGY ASSOCIATES,SEBASTOPOL,CA,zeroea.com,,,0,0,0,false,false,rejected_no_careers_page,No internal careers/jobs page found.
+1063175,ZINC ROOFING INC,FRESNO,CA,zincroofingco.com,https://zincroofingco.com/careers/,,0,0,0,false,false,rejected_insufficient_job_urls,Only 0/3 static job URLs found.

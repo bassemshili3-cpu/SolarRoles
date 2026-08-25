@@ -14,6 +14,7 @@ import {
   ASHBY_COMPANIES,
   PINPOINT_COMPANIES,
   SMARTRECRUITERS_COMPANIES,
+  RIPPLING_COMPANIES,
   WORKDAY_COMPANIES,
 } from '../lib/ats/company-seed';
 import { CUSTOM_SCRAPE_COMPANIES } from '../lib/ats/custom-scrape/config';
@@ -24,12 +25,14 @@ import { fetchSmartRecruitersJobs } from '../lib/ats/smartrecruiters';
 import { fetchJobviteJobs } from '../lib/ats/jobvite';
 import { fetchWorkdayJobs } from '../lib/ats/workday';
 import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
+import { fetchRipplingJobs } from '../lib/ats/rippling';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 
 const prisma = new PrismaClient();
 
 const EXPIRES_IN_DAYS = 45;
+const CUSTOM_SCRAPE_EXPIRES_IN_DAYS = 7;
 const SOURCE_PRIORITY = 1;
 
 type AtsProvider<T> = {
@@ -56,6 +59,7 @@ const PROVIDERS: AtsProvider<any>[] = [
   provider('greenhouse',      GREENHOUSE_COMPANIES,      fetchGreenhouseJobs,      (c) => c.slug),
   provider('pinpoint',        PINPOINT_COMPANIES,        fetchPinpointJobs,        (c) => c.slug),
   provider('workday',         WORKDAY_COMPANIES,         fetchWorkdayJobs,         (c) => `${c.tenant}/${c.site}`),
+  provider('rippling',        RIPPLING_COMPANIES,        fetchRipplingJobs,        (c) => c.slug),
   provider('custom-scrape',   CUSTOM_SCRAPE_COMPANIES,   fetchCustomScrapeJobs,    (c) => c.domain),
 ];
 
@@ -67,7 +71,8 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
     where: { url: job.url, source: job.source },
   });
 
-  const expiresAt = new Date(Date.now() + EXPIRES_IN_DAYS * 24 * 60 * 60 * 1000);
+  const expiresInDays = job.source === 'custom-scrape' ? CUSTOM_SCRAPE_EXPIRES_IN_DAYS : EXPIRES_IN_DAYS;
+  const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000);
 
   const taxonomyFields = {
     specialty: taxonomy.specialty,
@@ -77,6 +82,16 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
   };
 
   if (existing) {
+    const contentChanged =
+      existing.title !== job.title ||
+      existing.company !== job.company ||
+      existing.location !== job.location ||
+      existing.addressRegion !== (job.addressRegion ?? '') ||
+      existing.description !== job.description ||
+      existing.applyUrl !== job.applyUrl ||
+      existing.contractType !== job.contractType ||
+      existing.salaryMin !== (job.salaryMin ?? null) ||
+      existing.salaryMax !== (job.salaryMax ?? null);
     await prisma.job.update({
       where: { id: existing.id },
       data: {
@@ -84,10 +99,14 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
         company: job.company,
         location: job.location,
         addressRegion: job.addressRegion,
+        locationRegions: job.locationRegions ?? [],
         description: job.description,
         applyUrl: job.applyUrl,
         contractType: job.contractType,
-        postedAt: job.postedAt,
+        // Do not renew the apparent publication date at every custom scrape
+        // when it was inferred from first discovery. A genuine source date can
+        // still replace that fallback if it becomes available later.
+        postedAt: job.postedAtEstimated ? (existing.postedAt ?? job.postedAt) : job.postedAt,
         salary: job.salary,
         salaryMin: job.salaryMin,
         salaryMax: job.salaryMax,
@@ -95,6 +114,9 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
         active: true,
         expiresAt,
         fetchedAt: new Date(),
+        // Make genuinely changed offers eligible for the next hourly Google
+        // batch; a routine scrape with identical content does not reset them.
+        ...(contentChanged ? { lastGoogleIndexingSubmittedAt: null } : {}),
         ...taxonomyFields,
       },
     });
@@ -108,6 +130,7 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
       company: job.company,
       location: job.location,
       addressRegion: job.addressRegion,
+      locationRegions: job.locationRegions ?? [],
       description: job.description,
       url: job.url,
       applyUrl: job.applyUrl,
@@ -147,7 +170,11 @@ async function main() {
       const jobs = await provider.fetch(company);
       console.log(`[${provider.name}] ${label}: ${jobs.length} solar installer role(s) matched`);
       for (const job of jobs) {
-        if (!isUSJob(job, { allowBareRemote: false })) {
+        // A custom-scrape job is marked isRemote only after its detail page
+        // contains both a remote signal and US eligibility. For that bounded
+        // case, a bare "Remote" location is safe to retain; ATS jobs keep the
+        // stricter physical-US-location requirement.
+        if (!isUSJob(job, { allowBareRemote: job.source === 'custom-scrape' && job.isRemote === true })) {
           skippedNonUS++;
           console.log(`  ↳ skipped (non-US): ${job.title} — "${job.location}"`);
           continue;

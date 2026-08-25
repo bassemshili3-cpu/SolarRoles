@@ -10,6 +10,7 @@ export type ExtractedJobDetail = {
   location: string;
   addressLocality?: string;
   addressRegion?: string;
+  isRemote?: boolean;
   employmentType?: string;
   salary?: string;
   salaryMin?: number;
@@ -21,10 +22,15 @@ export type ExtractedJobDetail = {
 };
 
 const EMPLOYMENT_TYPES: Array<[RegExp, string]> = [
-  [/\bfull[ -]?time\b/i, 'FULL_TIME'], [/\bpart[ -]?time\b/i, 'PART_TIME'],
+  [/\bfull[_ -]?time\b/i, 'FULL_TIME'], [/\bpart[_ -]?time\b/i, 'PART_TIME'],
   [/\bcontract(?:or)?\b/i, 'CONTRACTOR'], [/\btemporary\b/i, 'TEMPORARY'], [/\bintern(?:ship)?\b/i, 'INTERN'],
 ];
 const clean = (value: string) => value.replace(/\s+/g, ' ').trim();
+
+function findEmploymentType(...values: Array<string | undefined>): string | undefined {
+  const text = values.filter(Boolean).join('\n');
+  return EMPLOYMENT_TYPES.find(([pattern]) => pattern.test(text))?.[1];
+}
 
 function titleFromDocument($: cheerio.CheerioAPI, url: string, selector?: string): string {
   const raw = clean((selector ? $(selector).first().text() : '') || $('h1').first().text() || $('title').text());
@@ -35,13 +41,53 @@ function titleFromDocument($: cheerio.CheerioAPI, url: string, selector?: string
 function findLocation(text: string): { location: string; locality?: string; region?: string } {
   const cityState = text.match(/\b([A-Z][a-zA-Z.' -]{1,60}),\s*([A-Z]{2})\b/);
   if (cityState && extractStateFromLocation(cityState[0])) return { location: cityState[0], locality: cityState[1].trim(), region: cityState[2] };
-  const labelled = text.match(/(?:location|based in|office)\s*[:\-]?\s*([^\n|]{2,100})/i)?.[1]?.trim();
-  const region = labelled ? extractStateFromLocation(labelled) : undefined;
+  // Page text is normalized before extraction, so a generic "Location:" match
+  // must stop at the next job-facts label rather than consume the description.
+  const labelled = text.match(/\blocation\s*:\s*([a-z][a-z /-]{1,80}?)(?=\s+(?:salary(?:\s+range)?|experience|position|requirements|responsibilities|apply)\b|$)/i)?.[1]?.trim()
+    ?? text.match(/(?:based in|office)\s*[:\-]?\s*([^\n|]{2,100})/i)?.[1]?.trim();
+  const firstRegion = labelled?.split(/[\/|]/)[0].trim();
+  const region = firstRegion
+    ? extractStateFromLocation(firstRegion) ?? extractStateFromLocation(firstRegion.replace(/^(central|north|south|east|west)\s+/i, ''))
+    : undefined;
   return { location: labelled ?? '', region };
 }
 
-function findSalary(text: string): string | undefined {
-  return text.match(/(?:\$\s?\d[\d,]*(?:\.\d{2})?\s*(?:-|\u2013|to)\s*\$?\s?\d[\d,]*(?:\.\d{2})?\s*(?:\/?\s*(?:hour|hr|year|yr))?)/i)?.[0];
+function isUsFullyRemote(text: string, schemaLocationType?: string): boolean {
+  const remote = /\b(remote|work[ -]?from[ -]?home|wfh|telecommut(?:e|ing))\b/i.test(text) || /^telecommute$/i.test(schemaLocationType ?? '');
+  const unitedStates = /\b(united states|u\.?s\.?a?\.?|us[- ]based)\b/i.test(text);
+  return remote && unitedStates;
+}
+
+function salaryNumberFromText(value: string): number | undefined {
+  const normalized = value.replace(/[$,\s]/g, '');
+  const match = normalized.match(/^(\d+(?:\.\d+)?)([km])?$/i);
+  if (!match) return undefined;
+  const multiplier = match[2]?.toLowerCase() === 'k' ? 1_000 : match[2]?.toLowerCase() === 'm' ? 1_000_000 : 1;
+  const number = Number(match[1]) * multiplier;
+  return Number.isFinite(number) ? number : undefined;
+}
+
+function textSalary(text: string): ExtractedSalary | undefined {
+  // Intentionally requires a dollar sign on the lower bound so that unrelated
+  // numeric ranges in a job description are not mistaken for compensation.
+  const amount = '\\d[\\d,]*(?:\\.\\d+)?\\s*[kKmM]?';
+  const range = new RegExp(
+    `(\\$\\s*${amount})\\s*(?:-|\\u2013|\\u2014|to)\\s*(\\$?\\s*${amount})` +
+    `(?:\\s*(?:/|per)\\s*(hour|hr|year|yr|month|mo|week|wk)\\b|\\s*\\b(annual(?:ly)?|hourly|monthly|weekly)\\b)?`,
+    'i',
+  ).exec(text);
+  if (!range) return undefined;
+  const min = salaryNumberFromText(range[1]);
+  const max = salaryNumberFromText(range[2]);
+  if (min === undefined || max === undefined) return undefined;
+  const periodText = (range[3] ?? range[4] ?? '').toLowerCase();
+  const period = periodText
+    ? /^(year|yr|annual)/.test(periodText) ? 'YEAR'
+      : /^(hour|hr|hourly)/.test(periodText) ? 'HOUR'
+        : /^(month|mo|monthly)/.test(periodText) ? 'MONTH'
+          : 'WEEK'
+    : undefined;
+  return { display: clean(range[0]), min, max, period };
 }
 
 type JsonLdJobPosting = {
@@ -53,6 +99,7 @@ type JsonLdJobPosting = {
   baseSalary?: unknown;
   experienceRequirements?: unknown;
   jobLocation?: { address?: { addressLocality?: string; addressRegion?: string } } | Array<{ address?: { addressLocality?: string; addressRegion?: string } }>;
+  jobLocationType?: string;
   '@graph'?: JsonLdJobPosting[];
 };
 
@@ -123,18 +170,23 @@ export function extractJobDetail(html: string, url: string, selectors?: CustomSc
   const locationData = rawLocation ? { ...findLocation(rawLocation), location: rawLocation } : schemaLocation
     ? { location: schemaLocation, locality: schemaAddress?.addressLocality, region: schemaAddress?.addressRegion }
     : findLocation(description);
+  const remote = isUsFullyRemote(`${rawLocation}\n${schemaLocation}\n${description}`, jobPosting?.jobLocationType);
   const rawEmploymentType = clean(selectors?.employmentType ? $(selectors.employmentType).first().text() : '');
   const schemaEmploymentType = Array.isArray(jobPosting?.employmentType) ? jobPosting.employmentType[0] : jobPosting?.employmentType;
-  const employmentType = EMPLOYMENT_TYPES.find(([pattern]) => pattern.test(rawEmploymentType || schemaEmploymentType || description))?.[1] ?? schemaEmploymentType;
-  const salary = schemaSalary(jobPosting?.baseSalary);
+  // Many small employer sites place "Type: Full-time" in a job facts panel
+  // which Readability omits from the main description. The page text is a
+  // legitimate fallback, while the pattern map keeps the stored value within
+  // Google's allowed employmentType values.
+  const employmentType = findEmploymentType(rawEmploymentType, schemaEmploymentType, description, $('body').text()) ?? schemaEmploymentType;
+  const salary = schemaSalary(jobPosting?.baseSalary) ?? textSalary(description) ?? textSalary($('body').text());
   const schemaDate = jobPosting?.datePosted ? new Date(jobPosting.datePosted) : undefined;
   const canonicalHref = $('link[rel="canonical"]').attr('href');
   let canonicalUrl: string | undefined;
   try { canonicalUrl = canonicalHref ? new URL(canonicalHref, url).href : undefined; } catch { /* ignore malformed canonical */ }
   return {
     title: clean((selectors?.title ? $(selectors.title).first().text() : '') || jobPosting?.title || titleFromDocument($, url, selectors?.title)),
-    description, location: locationData.location, addressLocality: locationData.locality, addressRegion: locationData.region, employmentType,
-    salary: salary?.display ?? findSalary(description), salaryMin: salary?.min, salaryMax: salary?.max, salaryPeriod: salary?.period,
+    description, location: remote ? 'Remote' : locationData.location, addressLocality: locationData.locality, addressRegion: locationData.region, isRemote: remote, employmentType,
+    salary: salary?.display, salaryMin: salary?.min, salaryMax: salary?.max, salaryPeriod: salary?.period,
     experienceLevel: experienceLevel(jobPosting?.experienceRequirements, description), postedAt: schemaDate && !Number.isNaN(schemaDate.valueOf()) ? schemaDate : undefined, canonicalUrl,
   };
 }

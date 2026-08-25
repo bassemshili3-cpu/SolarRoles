@@ -21,6 +21,23 @@ export type CustomScrapeSeed = {
   verified: boolean;
   status: 'active' | 'paused' | 'needs_review';
   selectors?: CustomScrapeSelectors;
+  /** Allow every role for a manually reviewed, sector-specific employer. */
+  skipRoleFilter?: boolean;
+  /** Exact role titles manually approved beyond the shared solar taxonomy. */
+  includeJobTitles?: string[];
+  /** Source was manually reviewed but does not display an employment type. */
+  allowMissingEmploymentType?: boolean;
+  /** Enrich one detailed offer with its explicitly listed eligible/work regions. */
+  locationVariants?: Array<{
+    urlPath: string;
+    locations: Array<{ location: string; addressRegion: string }>;
+    /** Manually verified fully-remote role; each variant retains its stated eligible region. */
+    isRemote?: boolean;
+  }>;
+  /** Restrict detailed offer pages to these hostnames when a careers page links to noisy ATS duplicates. */
+  jobPageHosts?: string[];
+  /** Restrict detailed offer pages to URL path prefixes after hostname filtering. */
+  jobPagePathPrefixes?: string[];
   /** Safety cap for listing pagination / load-more clicks. Defaults to 10. */
   maxListingPages?: number;
 };
@@ -43,7 +60,9 @@ export type GoogleJobPosting = {
   datePosted: string;
   validThrough: string;
   hiringOrganization: { name: string };
-  jobLocation: { address: { addressLocality: string; addressRegion: string } };
-  employmentType: string;
+  jobLocation?: { address: { addressLocality?: string; addressRegion: string; addressCountry: 'US' } } | Array<{ address: { addressLocality?: string; addressRegion: string; addressCountry: 'US' } }>;
+  jobLocationType?: 'TELECOMMUTE';
+  applicantLocationRequirements?: { '@type': 'Country'; name: 'USA' } | { '@type': 'State'; name: string } | Array<{ '@type': 'State'; name: string }>;
+  employmentType?: string;
   baseSalary?: string;
 };

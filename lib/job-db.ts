@@ -223,7 +223,11 @@ const JOB_SELECT_ATS = {
   addressRegion: true,
   source: true,
   description: true,
+  postedAt: true,
+  lastGoogleIndexingSubmittedAt: true,
 } as const
+
+export type GoogleIndexingCandidate = { id: string; url: string }
 
 export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]> {
   const jobs = await prisma.job.findMany({
@@ -243,25 +247,31 @@ export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]
   return filtered.map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
 }
 
-/** URLs de jobs custom-scrape publiés au cours des derniers jours. */
-export async function getRecentCustomScrapeJobUrls(
+/** URLs indexables (ATS + custom-scrape) publiées au cours des derniers jours. */
+export async function getRecentIndexableJobUrls(
   limit: number = 200,
-  maxAgeDays: number = 11,
+  maxAgeDays: number = 10,
+  options: { prioritizeCustomScrape?: boolean } = {},
 ): Promise<string[]> {
   const postedAfter = new Date();
   postedAfter.setDate(postedAfter.getDate() - maxAgeDays);
 
-  const jobs = await prisma.job.findMany({
-    where: {
-      active: true,
-      source: 'custom-scrape',
-      postedAt: { gte: postedAfter },
-    },
+  const baseWhere = { active: true, postedAt: { gte: postedAfter } };
+  const queryOptions = {
     select: JOB_SELECT_ATS,
-    orderBy: { postedAt: 'desc' },
+    orderBy: { postedAt: 'desc' as const },
     // Overfetch pour compenser le filtre de contenu ci-dessous.
     take: limit * 2,
-  });
+  };
+  const jobs = options.prioritizeCustomScrape
+    ? (await Promise.all([
+      prisma.job.findMany({ where: { ...baseWhere, source: 'custom-scrape' }, ...queryOptions }),
+      prisma.job.findMany({ where: { ...baseWhere, source: { in: ATS_SOURCES } }, ...queryOptions }),
+    ])).flat()
+    : await prisma.job.findMany({
+      where: { ...baseWhere, source: { in: [...ATS_SOURCES, 'custom-scrape'] } },
+      ...queryOptions,
+    });
 
   const hasEnoughContent = (j: { description: string | null }) =>
     stripHtmlForLengthCheck(j.description || '').length >= MIN_DESCRIPTION_LENGTH;
@@ -270,6 +280,47 @@ export async function getRecentCustomScrapeJobUrls(
     .filter(hasEnoughContent)
     .slice(0, limit)
     .map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`);
+}
+
+/**
+ * Selects a small hourly Google Indexing batch without repeatedly consuming
+ * the quota on the same pages. Fresh custom-scrape jobs lead, then fresh ATS
+ * jobs; only after that do previously submitted jobs rotate back in.
+ */
+export async function getGoogleIndexingCandidates(
+  limit: number,
+  maxAgeDays: number,
+): Promise<GoogleIndexingCandidate[]> {
+  const postedAfter = new Date();
+  postedAfter.setDate(postedAfter.getDate() - maxAgeDays);
+  const queryOptions = {
+    select: JOB_SELECT_ATS,
+    orderBy: { postedAt: 'desc' as const },
+    take: limit * 24,
+  };
+  const baseWhere = { active: true, postedAt: { gte: postedAfter } };
+  const [customJobs, atsJobs] = await Promise.all([
+    prisma.job.findMany({ where: { ...baseWhere, source: 'custom-scrape' }, ...queryOptions }),
+    prisma.job.findMany({ where: { ...baseWhere, source: { in: ATS_SOURCES } }, ...queryOptions }),
+  ]);
+  const hasEnoughContent = (job: { description: string | null }) =>
+    stripHtmlForLengthCheck(job.description || '').length >= MIN_DESCRIPTION_LENGTH;
+  const byOldestSubmission = (a: { lastGoogleIndexingSubmittedAt: Date | null }, b: { lastGoogleIndexingSubmittedAt: Date | null }) =>
+    (a.lastGoogleIndexingSubmittedAt?.getTime() ?? 0) - (b.lastGoogleIndexingSubmittedAt?.getTime() ?? 0);
+  const partition = <T extends { lastGoogleIndexingSubmittedAt: Date | null }>(jobs: T[]) => ({
+    fresh: jobs.filter((job) => !job.lastGoogleIndexingSubmittedAt),
+    previouslySubmitted: jobs.filter((job) => job.lastGoogleIndexingSubmittedAt).sort(byOldestSubmission),
+  });
+  const custom = partition(customJobs.filter(hasEnoughContent));
+  const ats = partition(atsJobs.filter(hasEnoughContent));
+
+  return [...custom.fresh, ...ats.fresh, ...custom.previouslySubmitted, ...ats.previouslySubmitted]
+    .slice(0, limit)
+    .map((job) => ({ id: job.id, url: `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job as any)}` }));
+}
+
+export async function markGoogleIndexingSubmitted(jobId: string): Promise<void> {
+  await prisma.job.update({ where: { id: jobId }, data: { lastGoogleIndexingSubmittedAt: new Date() } });
 }
 
 // ─── Stats pour le dashboard ─────────────────────────────────────────────────

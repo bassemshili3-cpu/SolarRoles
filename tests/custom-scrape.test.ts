@@ -22,6 +22,27 @@ assert.equal(detail.location, 'Riverside, CA');
 assert.equal(detail.addressLocality, 'Riverside');
 assert.equal(detail.addressRegion, 'CA');
 assert.equal(detail.employmentType, 'FULL_TIME');
+
+const detailWithFactsPanel = extractJobDetail(`
+  <main><h1>Solar Installer</h1><p>Install residential solar systems throughout California.</p></main>
+  <aside><span>Type</span><span>Full-time</span></aside>
+`, 'https://example.com/jobs/installer');
+assert.equal(detailWithFactsPanel.employmentType, 'FULL_TIME');
+
+const detailWithTextSalary = extractJobDetail(`
+  <main><h1>Solar Sales Representative</h1>
+  <p>$50k – $100k / year - Rancho Cordova, CA, USA- Full Time</p></main>
+`, 'https://example.com/jobs/sales');
+assert.equal(detailWithTextSalary.salary, '$50k – $100k / year');
+assert.equal(detailWithTextSalary.salaryMin, 50_000);
+assert.equal(detailWithTextSalary.salaryMax, 100_000);
+assert.equal(detailWithTextSalary.salaryPeriod, 'YEAR');
+
+const detailWithStateOnlyLocation = extractJobDetail(`
+  <main><h1>Solar Sales Consultant</h1><p>LOCATION: Florida SALARY RANGE: Commission only</p></main>
+`, 'https://example.com/jobs/sales');
+assert.equal(detailWithStateOnlyLocation.location, 'Florida');
+assert.equal(detailWithStateOnlyLocation.addressRegion, 'FL');
 assert.match(detail.description, /photovoltaic systems/i);
 assert.equal(detail.salary, '$24 - $32 per hour');
 
@@ -40,11 +61,24 @@ assert.equal(structuredDetail.salaryMax, 200000);
 const job: NormalizedJob = { source: 'custom-scrape', externalId: 'fixture', title: detail.title, company: 'Solar CCS', location: detail.location, addressRegion: detail.addressRegion, description: detail.description, url: links[0].url, applyUrl: links[0].url, contractType: detail.employmentType, postedAt: new Date('2026-08-20T00:00:00.000Z'), salary: detail.salary };
 const google = buildGoogleJobPosting(job, detail.addressLocality);
 assert.ok(google, 'complete job must satisfy Google JobPosting required fields');
-assert.equal(google?.jobLocation.address.addressRegion, 'CA');
+assert.ok(google?.jobLocation && !Array.isArray(google.jobLocation));
+assert.equal(Array.isArray(google?.jobLocation) ? undefined : google?.jobLocation?.address.addressRegion, 'CA');
 assert.equal(buildGoogleJobPosting({ ...job, contractType: undefined }, detail.addressLocality), undefined, 'missing required employment type must be rejected');
+const stateOnlyGoogle = buildGoogleJobPosting({ ...job, location: 'Florida', addressRegion: 'FL' }, undefined);
+assert.ok(stateOnlyGoogle?.jobLocation && !Array.isArray(stateOnlyGoogle.jobLocation));
+assert.equal(Array.isArray(stateOnlyGoogle?.jobLocation) ? undefined : stateOnlyGoogle?.jobLocation?.address.addressLocality, undefined);
+assert.equal(Array.isArray(stateOnlyGoogle?.jobLocation) ? undefined : stateOnlyGoogle?.jobLocation?.address.addressRegion, 'FL');
+const remoteDetail = extractJobDetail('<main><h1>Remote Solar Consultant</h1><p>This is a fully remote position available anywhere in the United States.</p></main>', 'https://example.com/jobs/remote-solar-consultant');
+assert.equal(remoteDetail.isRemote, true);
+assert.equal(remoteDetail.location, 'Remote');
+const remoteGoogle = buildGoogleJobPosting({ ...job, title: remoteDetail.title, location: remoteDetail.location, addressRegion: undefined, isRemote: remoteDetail.isRemote }, undefined);
+assert.equal(remoteGoogle?.jobLocationType, 'TELECOMMUTE');
+assert.equal(Array.isArray(remoteGoogle?.applicantLocationRequirements) ? undefined : remoteGoogle?.applicantLocationRequirements?.name, 'USA');
+assert.equal(remoteGoogle?.jobLocation, undefined);
 assert.equal(isAllowedByRobots('User-agent: *\nDisallow: /careers/private\nAllow: /', 'https://example.com/careers/solar'), true);
 assert.equal(isAllowedByRobots('User-agent: *\nDisallow: /careers', 'https://example.com/careers/solar'), false);
 assert.equal(isSolarInstallerRole('Lead Installer / Crew Lead', 'Company context: Solar CCS is a solar installation company.'), true);
+assert.equal(isSolarInstallerRole('Solar Pool Heater Installers'), true);
 assert.equal(isSolarInstallerRole('General Laborer', 'Company context: Solar CCS is a solar installation company.'), true);
 assert.equal(isSolarInstallerRole('PV Designer / Plan Set Drafter'), true);
 assert.equal(isSolarInstallerRole('Permit & Interconnection Coordinator', 'Company context: Solar CCS is a solar installation company.'), false);

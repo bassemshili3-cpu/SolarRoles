@@ -177,6 +177,7 @@ const ownJobs = await prisma.job.findMany({
         OR: [
           { postedByUserId: { not: null } },
           { source: { in: ATS_SOURCES } },
+          { source: 'custom-scrape' },
         ],
       },
       {

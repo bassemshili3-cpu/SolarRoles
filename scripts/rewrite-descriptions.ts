@@ -56,6 +56,9 @@ async function main() {
         data: {
           seoDescription: rewritten,
           seoDescriptionVersion: SEO_REWRITE_VERSION,
+          // Queue this materially changed page for the next hourly Google
+          // Indexing batch, rather than waiting for its normal rotation.
+          lastGoogleIndexingSubmittedAt: null,
         },
       });
 

@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-08-24T12:43:47.948Z",
+  "source": "C:\\Users\\basse\\Downloads\\Lteecele.csv",
+  "totalLicenses": 14032,
+  "activeLicenses": 12313,
+  "retained": 239,
+  "explicitSolarOrPv": 228,
+  "renewableOrSolarBrand": 11,
+  "excluded": {
+    "expiredOrUnparseable": 1719,
+    "noExplicitSolarSignal": 12074
+  }
+}
