@@ -21,7 +21,7 @@ import { isSolarInstallerRole } from '../lib/ats/solar-taxonomy';
 const prisma = new PrismaClient();
 
 const EXPIRY_DAYS = 30;
-const SOURCE_PRIORITY = 10; // en dessous des ATS directs (0), au-dessus si besoin d'ajuster
+const SOURCE_PRIORITY = 30; // Adzuna is deliberately the final listing source.
 
 // Mots-clés couvrant à la fois le terrain (installer/technicien) et,
 // depuis août 2026, le corporate solar (sales/PM/engineering/estimating).

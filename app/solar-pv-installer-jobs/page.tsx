@@ -11,6 +11,9 @@ import { getPrimaryCertificationForCategory } from '@/lib/certification-detector
 
 export const revalidate = 3600
 
+const INSTALLER_TITLE_PHRASES = ['solar installer', 'pv installer', 'solar laborer']
+const INSTALLER_EXCLUDE_PHRASES = ['lead', 'commercial', 'telecommunications']
+
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -146,8 +149,8 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
     // used elsewhere for niche landing pages (see job-where.ts comment).
    
   
-     titleContainsAny: ['solar installer', 'pv installer', 'solar laborer'],
-     excludePhrases: ['lead', 'commercial'],
+     titleContainsAny: INSTALLER_TITLE_PHRASES,
+     excludePhrases: INSTALLER_EXCLUDE_PHRASES,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
     resultsPerPage: 30,
@@ -182,8 +185,12 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
                 searchLabel="solar pv installer "
                 where={params.where || ''}
                 salary_min={params.salary_min}
-                 descriptionContainsAny= {['installer', 'installation technician', 'pv installer']}
-     requiredDomainTerms= {['solar', 'photovoltaic', 'installer', 'Installer', ' pv ']}
+                descriptionContainsAny={['installer', 'installation technician', 'pv installer']}
+                requiredDomainTerms={['solar', 'photovoltaic', 'installer', ' pv ']}
+                titleContainsAny={INSTALLER_TITLE_PHRASES}
+                excludePhrases={INSTALLER_EXCLUDE_PHRASES}
+                whatJobsTitleIncludesAll={['solar', 'installer']}
+                whatJobsTitleExcludes={INSTALLER_EXCLUDE_PHRASES}
                 initialData={initialData}
               />
             </Suspense>

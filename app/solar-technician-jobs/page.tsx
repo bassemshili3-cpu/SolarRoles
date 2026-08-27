@@ -180,8 +180,10 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
                   'solar repair technician', 'solar panel repair', 'pv technician',
                   'solar o&m technician', 'solar maintenance technician',
                 ]}
-                titleContainsAny={['technician', 'Tech', 'service', 'field', 'repair', 'o&m', 'maintenance', 'service tech', 'field service']}
-                excludePhrases={['bess', 'engineer', 'sales']}
+                titleContainsAny={['technician', 'tech', 'service', 'field', 'o&m', 'maintenance', 'repair']}
+                excludePhrases={['bess', 'engineer', 'sales', 'supervisor', 'manager']}
+                whatJobsTitleIncludesAll={['solar', 'technician']}
+                whatJobsTitleExcludes={['bess', 'engineer', 'sales', 'supervisor', 'manager']}
                 initialData={initialData}
               />
             </Suspense>

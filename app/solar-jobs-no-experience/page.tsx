@@ -104,8 +104,10 @@ const NO_EXPERIENCE_EXCLUDE_PHRASES = [
   'minimum of 2 years', 'minimum of 3 years', 'minimum of 5 years',
   'prior experience required', 'prior installation experience required',
   'must have experience', 'must have prior experience', 'must have solar experience',
+  'solar experience required', 'solar experience is required', 'previous solar experience',
+  'prior solar experience', 'solar installation experience',
   'senior installer', 'senior technician', 'lead installer', 'crew lead',
-  'not an entry level', 'not an entry-level',
+  'not an entry level', 'not an entry-level', 'all experience levels',
 ]
 
 export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
@@ -167,6 +169,7 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
                 salary_min={params.salary_min}
                 entryLevel
                 excludePhrases={NO_EXPERIENCE_EXCLUDE_PHRASES}
+                includeWhatJobs={false}
                 initialData={initialData}
               />
             </Suspense>

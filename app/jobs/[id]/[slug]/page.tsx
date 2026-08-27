@@ -28,6 +28,9 @@ import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, Trendin
 
 import Link from 'next/link'
 
+import WhatJobsJobBox from '@/components/WhatJobsJobBox'
+import WhatJobsMobileSearch from '@/components/WhatJobsMobileSearch'
+
 
 import { formatJobDescription, sanitizeStructuredHtml } from '@/lib/formatJobDescription'
 
@@ -512,7 +515,7 @@ export async function generateMetadata(
 
       : ''
 
-      const NON_INDEXABLE_SOURCES = ['adzuna', 'jooble', 'careerjet', 'lensa']
+      const NON_INDEXABLE_SOURCES = ['adzuna', 'jooble', 'careerjet', 'lensa', 'whatjobs']
 const isIndexable = !NON_INDEXABLE_SOURCES.includes(job.source)
 
   return {
@@ -722,9 +725,13 @@ function safeJsonLd(data: unknown): string {
       />
 
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12">
 
         <div className="flex gap-6 items-start">
+
+          <aside className="sticky top-6 hidden w-80 shrink-0 self-start lg:block">
+            <WhatJobsJobBox search={job.title || 'solar'} location={job.location || job.addressRegion || ''} />
+          </aside>
 
           <div className="flex-1 min-w-0">
 
@@ -752,7 +759,12 @@ function safeJsonLd(data: unknown): string {
 
 <Breadcrumb segments={breadcrumbSegments} />
 
-            <div className="bg-card border rounded-2xl shadow-sm overflow-hidden">
+            <WhatJobsMobileSearch
+              keyword={job.title || 'solar'}
+              location={job.location || job.addressRegion || ''}
+            />
+
+            <div className="overflow-hidden rounded-xl border bg-card shadow-sm sm:rounded-2xl">
 
               {job.headerImage && (
   <div className="relative h-48 sm:h-56">
@@ -766,7 +778,7 @@ function safeJsonLd(data: unknown): string {
 )}
 
 
-              <div className="p-8">
+              <div className="p-4 sm:p-8">
 
                 <h1 className="text-3xl font-bold tracking-tight">{job.title}</h1>
 
@@ -889,13 +901,13 @@ function safeJsonLd(data: unknown): string {
 </div>
 
 {cert && (
-  <div className="mt-6 rounded-xl border border-[#F5B819]/30 bg-[#FFFBEB] px-5 py-4">
-    <div className="flex items-center justify-between gap-4">
-      <div className="flex items-start gap-3">
+  <div className="mt-6 rounded-xl border border-[#F5B819]/30 bg-[#FFFBEB] px-4 py-4 sm:px-5">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <div className="flex min-w-0 items-start gap-3">
         {certRequirement?.required && (
           <AlertTriangle aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
         )}
-        <div>
+        <div className="min-w-0">
           <p className="text-sm font-semibold text-[#92400E]">
             {certRequirement?.required ? `This job requires ${cert.shortLabel}` : cert.bannerHeadline}
           </p>
@@ -911,19 +923,19 @@ function safeJsonLd(data: unknown): string {
         href={cert.heatspringUrl}
         target="_blank"
         rel="noopener sponsored"
-        className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
+        className="self-start text-sm font-semibold text-[#B45309] underline hover:text-[#92400E] sm:shrink-0 sm:self-auto"
       >
         Get certified on HeatSpring →
       </a>
     </div>
     <p className="mt-2 text-xs text-[#B45309]/70">
-      *We may earn a commission if you enroll through this link, at no extra cost to you.
+      Solar Roles is affiliated with HeatSpring and may earn a commission if you enroll through this link, at no extra cost to you.
     </p>
   </div>
 )}
 
 {(requiredCerts.length > 0 || requirementSignals.length > 0) && (
-  <div className="mt-6 rounded-xl border border-black/[0.08] bg-secondary/30 px-5 py-4">
+  <div className="mt-6 rounded-xl border border-black/[0.08] bg-secondary/30 px-4 py-4 sm:px-5">
     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
       At a glance
     </p>

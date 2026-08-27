@@ -168,8 +168,11 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
                 searchLabel="solar engineer "
                 where={params.where ?? ''}
                 salary_min={params.salary_min}
-                
+                titleContainsAny={['engineer']}
+                excludePhrases={['bess']}
                 requiredDomainTerms={['solar','engineer']}
+                whatJobsTitleIncludesAll={['solar', 'engineer']}
+                whatJobsTitleExcludes={['bess']}
                 initialData={initialData}
               />
             </Suspense>

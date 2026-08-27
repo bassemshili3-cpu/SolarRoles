@@ -33,7 +33,8 @@ const prisma = new PrismaClient();
 
 const EXPIRES_IN_DAYS = 45;
 const CUSTOM_SCRAPE_EXPIRES_IN_DAYS = 7;
-const SOURCE_PRIORITY = 1;
+// ATS and custom-scrape offers come first in every listing.
+const SOURCE_PRIORITY = 0;
 
 type AtsProvider<T> = {
   name: string;
@@ -111,6 +112,7 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
         salaryMin: job.salaryMin,
         salaryMax: job.salaryMax,
         salaryPeriod: job.salaryPeriod,
+        sourcePriority: SOURCE_PRIORITY,
         active: true,
         expiresAt,
         fetchedAt: new Date(),

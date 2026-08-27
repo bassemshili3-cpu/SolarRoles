@@ -76,47 +76,35 @@ export default function ArticlePage() {
           margin-top: 2rem;
           margin-bottom: 0.75rem;
         }
-        .article-body .day-block {
-          background: #F9FAFB;
-          border: 1px solid #F3F4F6;
-          border-radius: 0.75rem;
-          padding: 1.5rem 1.75rem;
-          margin-bottom: 1.5rem;
-        }
-        .article-body .day-label {
-          display: inline-block;
-          font-size: 0.7rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: #B45309;
-          background: #FEF3C7;
-          padding: 0.25rem 0.6rem;
-          border-radius: 0.4rem;
-          margin-bottom: 0.75rem;
-        }
-        .article-body .script {
-          background: #0B1A2E;
-          color: #E5E7EB;
-          border-radius: 0.5rem;
-          padding: 1.1rem 1.35rem;
-          font-size: 1rem;
+        .article-body ul { margin: 0 0 1.5rem; padding: 0; list-style: none; }
+        .article-body li {
+          position: relative;
+          color: #374151;
           line-height: 1.7;
-          margin: 1rem 0 1.5rem;
-          font-style: italic;
+          margin-bottom: 0.5rem;
+          padding-left: 1.7rem;
+          font-size: 1.05rem;
         }
-        .article-body ul { margin: 0 0 1.5rem; padding-left: 1.25rem; }
-        .article-body li { color: #374151; line-height: 1.7; margin-bottom: 0.4rem; font-size: 1.05rem; }
-        .article-body .role-card {
-          border-left: 4px solid #F5B819;
-          background: #FFFBEB;
-          border-radius: 0 0.75rem 0.75rem 0;
-          padding: 1.25rem 1.4rem;
-          margin: 1.25rem 0;
+        .article-body li::before {
+          content: '☀';
+          position: absolute;
+          left: 0;
+          top: 0.1rem;
+          color: #F5B819;
+          font-size: 0.95rem;
+          line-height: 1.7;
         }
-        .article-body .role-card h3 { margin-top: 0; }
-        .article-body .role-card p { font-size: 1rem; margin-bottom: 0.8rem; }
-        .article-body .role-card p:last-child { margin-bottom: 0; }
+        .article-body .role-section {
+          margin: 2.75rem 0;
+          padding: 0;
+        }
+        .article-body .role-section + .role-section {
+          border-top: 1px solid #E5E7EB;
+          padding-top: 2.75rem;
+        }
+        .article-body .role-section h3 { margin-top: 0; }
+        .article-body .role-section p { font-size: 1rem; margin-bottom: 0.9rem; }
+        .article-body .role-section p:last-child { margin-bottom: 0; }
         .article-body .role-order {
           display: inline-block;
           color: #92400E;
@@ -134,10 +122,11 @@ export default function ArticlePage() {
           padding-top: 1rem;
         }
         .article-body .inline-cta {
-          display: inline-flex;
+          display: flex;
+          width: fit-content;
           align-items: center;
           justify-content: center;
-          margin: 0.25rem 0 1.75rem;
+          margin: 1.5rem auto 2.75rem;
           padding: 0.75rem 1rem;
           border: 1px solid #0B1A2E;
           border-radius: 0;
@@ -208,7 +197,7 @@ export default function ArticlePage() {
 
           <EditorialInfographic kind="first-solar-role" />
 
-          <div className="role-card">
+          <section className="role-section">
             <span className="role-order">1. Most accessible</span>
             <h3>General laborer, rooftop helper, or warehouse / install support</h3>
             <p>
@@ -225,13 +214,13 @@ export default function ArticlePage() {
               <em> warehouse assistant</em>. Call local contractors and ask whether they hire helpers for
               install crews. You can also visit the office when appropriate.
             </p>
-          </div>
+          </section>
 
           <Link href="/solar-pv-installer-jobs" className="inline-cta">
             Browse solar installer jobs
           </Link>
 
-          <div className="role-card">
+          <section className="role-section">
             <span className="role-order">2. Entry trade path</span>
             <h3>Solar PV installer</h3>
             <p>
@@ -250,13 +239,13 @@ export default function ArticlePage() {
               <li>Give one real example of safe physical work.</li>
             </ul>
             <p>Do not buy a full tool kit before you are hired. Ask what the employer supplies and what you will need on day one.</p>
-          </div>
+          </section>
 
           <Link href="/solar-pv-installer-jobs" className="inline-cta">
             Browse solar PV installer jobs
           </Link>
 
-          <div className="role-card">
+          <section className="role-section">
             <span className="role-order">3. Accessible, but a different job</span>
             <h3>Solar sales consultant or appointment setter</h3>
             <p>
@@ -273,13 +262,13 @@ export default function ArticlePage() {
               <li>What happens if a customer cancels, including any commission clawback.</li>
             </ul>
             <p>If you need predictable income, favour a base-plus-commission role over a commission-only promise.</p>
-          </div>
+          </section>
 
           <Link href="/solar-sales-jobs" className="inline-cta">
             Browse solar sales jobs
           </Link>
 
-          <div className="role-card">
+          <section className="role-section">
             <span className="role-order">4. Trade progression</span>
             <h3>Solar electrician, service technician, or O&amp;M technician</h3>
             <p>
@@ -293,9 +282,9 @@ export default function ArticlePage() {
               the job, volunteer for troubleshooting and commissioning checklists. Learn photo documentation and inverter or battery
               basics. Those skills bridge installation work and service work.
             </p>
-          </div>
+          </section>
 
-          <div className="role-card">
+          <section className="role-section">
             <span className="role-order">5. Not usually a first job</span>
             <h3>Lead installer or crew lead</h3>
             <p>
@@ -308,9 +297,9 @@ export default function ArticlePage() {
               <strong>Best move:</strong> during an installer interview, ask what a promotion-ready installer can demonstrate in the first
               90 days. Then keep a simple record of the systems, tools, layouts, safety tasks, and junior teammates you have supported.
             </p>
-          </div>
+          </section>
 
-          <div className="role-card">
+          <section className="role-section">
             <span className="role-order">6. Least accessible without related experience</span>
             <h3>Project coordinator, assistant project manager, or project manager</h3>
             <p>
@@ -324,7 +313,7 @@ export default function ArticlePage() {
               budgets, permits, and customer communication. If you are coming from the field, learn plan reading, RFIs, material
               takeoffs, and closeout documentation. Those are concrete signals that you are ready to support a PM.
             </p>
-          </div>
+          </section>
 
           <p className="source-note">
             <strong>What informed this section:</strong> official PV-installer training guidance from the{' '}
@@ -337,20 +326,8 @@ export default function ArticlePage() {
             These are practitioner perspectives, not guarantees about any employer or pay plan.
           </p>
 
-          <h2>DGet a credible safety baseline</h2>
-          <div className="day-block">
-            <span className="day-label">Day 1</span>
-            <p style={{ marginBottom: '0.75rem' }}>
-              If you are targeting field work, enroll in an OSHA 10-Hour Construction Outreach course from an authorized provider.
-              OSHA describes the 10-hour program as entry-level safety training; it is not a trade license and does not replace an
-              employer's site-specific training. It takes at least two calendar days under Outreach rules, so start now rather than
-              waiting for an interview.
-            </p>
-            <p style={{ marginBottom: 0 }}>
-              If cost is a barrier, check your state workforce office, community college, union, or workforce board before paying.
-              Some states and local programs offer free classes.
-            </p>
-          </div>
+          {/* The generic day-by-day plan has been removed: this article now stays focused on role-specific advice. */}
+          {/*
           <div className="day-block">
             <span className="day-label">Day 2</span>
             <p style={{ marginBottom: 0 }}>
@@ -467,6 +444,7 @@ export default function ArticlePage() {
               this way land something between week 2 and week 4.
             </p>
           </div>
+          */}
         </div>
 
         <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-6">

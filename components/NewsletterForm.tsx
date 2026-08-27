@@ -53,7 +53,7 @@ export default function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="flex w-full max-w-md flex-col gap-3 sm:mx-auto sm:flex-row sm:flex-wrap">
       <input
         type="email"
         required
@@ -70,7 +70,7 @@ export default function NewsletterForm() {
         {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
       </button>
       {status === 'error' && (
-        <p className="absolute -bottom-6 left-0 text-red-300 text-xs">{errorMsg}</p>
+        <p className="basis-full text-xs text-red-300">{errorMsg}</p>
       )}
     </form>
   )

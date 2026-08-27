@@ -172,6 +172,8 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
                 salary_min={params.salary_min}
                 descriptionContainsAny={descriptionContainsAny}
                 requiredDomainTerms={['solar', 'photovoltaic', ' pv ']}
+                titleContainsAny={['solar electrician']}
+                whatJobsTitleIncludesAll={['solar', 'electrician']}
                 initialData={initialData}
               />
             </Suspense>

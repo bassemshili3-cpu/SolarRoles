@@ -149,8 +149,7 @@ if (whatPhrases.length > 0) {
 // This keeps broad installer postings out of the no-experience landing page.
 const ENTRY_LEVEL_TITLE_KEYWORDS = [
   'entry level', 'entry-level', 'junior', 'jr.', 'jr ', 'trainee',
-  'apprentice', 'helper', 'general laborer', 'solar laborer',
-  'racking crew', 'warehouse associate', 'install support',
+  'apprentice', 'helper',
 ]
 
 const ENTRY_LEVEL_DESCRIPTION_KEYWORDS = [
@@ -163,6 +162,18 @@ const ENTRY_LEVEL_DESCRIPTION_KEYWORDS = [
 const ENTRY_LEVEL_EXCLUDE_KEYWORDS = [
   'senior', 'sr.', 'sr ', 'lead', 'principal', 'foreman', 'supervisor',
   'manager', 'director', 'journeyman', 'master electrician',
+  'all experience levels',
+]
+
+// A no-experience page must not rely on a broad role name such as "laborer":
+// plenty of those postings still demand previous solar or construction work.
+// These phrases are applied to both title and description as hard exclusions.
+const ENTRY_LEVEL_REQUIRED_EXPERIENCE_PHRASES = [
+  'must have experience', 'must have prior experience', 'must have solar experience',
+  'solar experience required', 'solar experience is required', 'previous solar experience',
+  'prior solar experience', 'solar installation experience',
+  'prior experience required', 'prior installation experience required',
+  'years of experience required', 'years experience required',
 ]
 
 if (titleContainsAny.length > 0) {
@@ -212,6 +223,7 @@ if (requiredDomainTerms.length > 0) {
     // These rank words are reliable in a title, but too broad in a description
     // (an apprentice can legitimately report to a "lead installer").
     AND.push({ NOT: { OR: keywordOr(ENTRY_LEVEL_EXCLUDE_KEYWORDS, ['title']) } })
+    AND.push({ NOT: { OR: keywordOr(ENTRY_LEVEL_REQUIRED_EXPERIENCE_PHRASES, ['title', 'description']) } })
   }
 
   // ── Location ────────────────────────────────────────────────────────────────

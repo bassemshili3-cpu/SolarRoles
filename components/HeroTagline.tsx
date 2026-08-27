@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 const PREFIX = 'Your time to '
-const GOLD = 'Shine.'
+const GOLD = 'Shine'
 const STORAGE_KEY = 'hero-tagline-seen'
 const TYPE_SPEED_MS = 55
 

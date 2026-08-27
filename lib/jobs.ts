@@ -109,17 +109,17 @@ const stableId = String(rawId).replace(/^-/, '')
 const ACTIVE_SOURCES = ['lensa', 'adzuna', 'jooble', 'greenhouse', 'careerjet', 'workday', 'ashby', 'jobvite', 'pinpoint', 'lever', 'smartrecruiters']
 
 const SOURCE_PRIORITY: Record<UnifiedJob['source'], number> = {
-  careerjet: 10,
-  jooble: 9,
-  adzuna: 7,
-  lensa: 8,
-  greenhouse: 1,
-  workday: 2,
-  ashby: 11,
-  jobvite: 6,
-  pinpoint: 3,
-  lever: 4,
-  smartrecruiters: 5,
+  greenhouse: 0,
+  workday: 0,
+  ashby: 0,
+  jobvite: 0,
+  pinpoint: 0,
+  lever: 0,
+  smartrecruiters: 0,
+  careerjet: 20,
+  lensa: 21,
+  jooble: 22,
+  adzuna: 30,
 }
 
 async function upsertJobsBackground(jobs: UnifiedJob[]) {
@@ -138,6 +138,7 @@ async function upsertJobsBackground(jobs: UnifiedJob[]) {
         salaryMin: job.salary_min || null,
         salaryMax: job.salary_max || null,
         addressRegion: job.addressRegion || '',
+        sourcePriority: SOURCE_PRIORITY[job.source] ?? 99,
         fetchedAt: new Date(),
         expiresAt,
         active: true,

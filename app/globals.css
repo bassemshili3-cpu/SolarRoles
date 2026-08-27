@@ -97,6 +97,7 @@
     color: hsl(var(--muted-foreground));
     line-height: 1.65;
     margin: 1rem 0;
+    text-align: left !important;
   }
 
   .job-description ul {
@@ -108,10 +109,17 @@
     color: hsl(var(--muted-foreground));
     margin: 0.5rem 0;
     line-height: 1.65;
+    text-align: left !important;
   }
 
   .job-description li::marker {
     color: #f5b819;
+  }
+
+  @media (max-width: 640px) {
+    .job-description ul {
+      margin-left: 1.125rem;
+    }
   }
 
   /* ============================================================

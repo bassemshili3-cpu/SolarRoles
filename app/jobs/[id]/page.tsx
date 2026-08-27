@@ -6,7 +6,7 @@ import { buildJobSlug } from '@/lib/slugify'
 import { getCanonicalSlugFromCache } from '@/lib/jobSlugCache'
 
 const SITE_URL = 'https://www.solarroles.com'
-const NON_INDEXABLE_SOURCES = new Set(['adzuna', 'jooble', 'careerjet', 'lensa'])
+const NON_INDEXABLE_SOURCES = new Set(['adzuna', 'jooble', 'careerjet', 'lensa', 'whatjobs'])
 
 function buildPageTitle(job: JobDetail): string {
   const brand = ' | Solar Roles'

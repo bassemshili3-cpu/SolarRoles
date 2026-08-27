@@ -18,9 +18,10 @@ const EXPIRY_DAYS = 30
 const MIN_DESCRIPTION_LENGTH = 60
 
 const SOURCE_PRIORITY: Record<string, number> = {
-  careerjet: 1,
-  lensa: 2,
-  jooble: 3,
+  // Direct ATS/employer jobs use 0. Partner feeds must never displace them.
+  careerjet: 20,
+  lensa: 21,
+  jooble: 22,
 }
 
 export interface SyncResult {

@@ -142,7 +142,7 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
             </span>
           ) : (
             <span className="inline-flex items-center px-2 py-0.5 md:px-2.5 md:py-1 rounded-md bg-slate-100 text-slate-600 text-xs md:text-sm font-medium">
-              Competitive
+              Salary not listed
             </span>
           )}
         </div>

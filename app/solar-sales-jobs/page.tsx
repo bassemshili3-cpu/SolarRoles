@@ -151,6 +151,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
                     descriptionContainsAny= {['solar sales', 'sales representative', 'sales consultant', 'sales engineer', 'account executive', 'door to door', 'd2d']}
     requiredDomainTerms= {['sales', 'Sales']}
                 initialData={initialData}
+                whatJobsTitleIncludesAll={['solar', 'sales']}
               />
             </Suspense>
           </div>

@@ -2,6 +2,7 @@
 import { useRouter, usePathname } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import JobCard from './JobCard'
+import WhatJobsFeed from './WhatJobsFeed'
 import { Button } from '@/components/ui/button'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { Bell, Check, ChevronDown } from 'lucide-react'
@@ -108,6 +109,10 @@ interface JobListProps {
   titleContainsAny?: string[] 
   isFifo?: boolean  
   entryLevel?: boolean
+  includeWhatJobs?: boolean
+  whatJobsTitleIncludesAny?: string[]
+  whatJobsTitleIncludesAll?: string[]
+  whatJobsTitleExcludes?: string[]
   where: string
   salary_min?: string
   searchLabel?: string   // libellé affiché (ex: "fly in fly out "), sinon dérivé de `what`
@@ -177,7 +182,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, entryLevel, where, salary_min, searchLabel, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, entryLevel, includeWhatJobs = true, whatJobsTitleIncludesAny, whatJobsTitleIncludesAll, whatJobsTitleExcludes, where, salary_min, searchLabel, initialData }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -201,11 +206,43 @@ export default function JobList({ what, whatPhrases, excludePhrases, description
    const resolvedDescriptionContainsAny = descriptionContainsAny && descriptionContainsAny.length > 0 ? descriptionContainsAny : undefined
   const resolvedRequiredDomainTerms = requiredDomainTerms && requiredDomainTerms.length > 0 ? requiredDomainTerms : undefined   // ← ajouter
   const resolvedTitleContainsAny = titleContainsAny && titleContainsAny.length > 0 ? titleContainsAny : undefined   
+  const resolvedWhatJobsTitleIncludesAny = useMemo(
+    () => whatJobsTitleIncludesAny?.filter(Boolean) || [],
+    [whatJobsTitleIncludesAny],
+  )
+  const resolvedWhatJobsTitleIncludesAll = useMemo(
+    () => whatJobsTitleIncludesAll?.filter(Boolean) || [],
+    [whatJobsTitleIncludesAll],
+  )
+  const resolvedWhatJobsTitleExcludes = useMemo(
+    () => whatJobsTitleExcludes?.filter(Boolean) || [],
+    [whatJobsTitleExcludes],
+  )
   const filterKeys = [
-    'job_type', 'arrangement', 'experience', 'education',
-    'company_size', 'benefits', 'easy_apply', 'visa_sponsorship', 'posted_within',
+    'salary_min', 'posted_within', 'job_type', 'arrangement', 'experience',
+    'certification', 'education', 'company_size', 'benefits', 'easy_apply',
+    'visa_sponsorship',
   ]
   const hasFilters = filterKeys.some(key => searchParams.has(key))
+
+  // WhatJobs only accepts keyword and location. Do not show a partner card if
+  // it cannot honor every active constraint; a missing salary or unverified
+  // certification must never bypass the user's filters.
+  const hasWhatJobsUnsupportedFilter = filterKeys.some((key) => searchParams.has(key))
+  const hasStrictWhatJobsTitleRule = resolvedWhatJobsTitleIncludesAny.length > 0 || resolvedWhatJobsTitleIncludesAll.length > 0
+  const hasListingOnlyConstraint = Boolean(entryLevel || isFifo || resolvedWhatPhrases?.length)
+  // Some curated landing pages use a title-only partner rule. This is safe
+  // only when the page supplies explicit allowed title phrases; otherwise
+  // description/domain/exclusion constraints cannot be verified from WhatJobs.
+  const hasUnverifiablePartnerConstraint = Boolean(
+    !hasStrictWhatJobsTitleRule && (
+      resolvedExcludePhrases?.length ||
+      resolvedDescriptionContainsAny?.length ||
+      resolvedRequiredDomainTerms?.length ||
+      resolvedTitleContainsAny?.length
+    ),
+  )
+  const shouldShowWhatJobs = includeWhatJobs && !hasWhatJobsUnsupportedFilter && !hasListingOnlyConstraint && !hasUnverifiablePartnerConstraint
 
   // initialData ne doit servir QU'AU tout premier rendu (what/where par défaut,
   // page 1, aucun filtre avancé actif). On le fige dans une ref pour qu'il ne soit
@@ -318,6 +355,18 @@ const canUseSSRInitialData =
 
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
   const jobType = searchLabel ?? (resolvedWhat ? `${resolvedWhat} ` : '')
+  const whatJobsKeyword = resolvedWhat || searchLabel?.trim() || 'solar'
+  const results = data?.results || []
+
+  // Keep offers that come directly from an ATS or an employer ahead of every
+  // partner feed. WhatJobs occupies the first partner slot; Adzuna remains the
+  // final source in the listing.
+  const partnerSources = new Set(['adzuna', 'jooble', 'lensa', 'careerjet', 'whatjobs'])
+  const firstPartyJobs = results.filter((job: any) => !partnerSources.has(job.source))
+  const otherPartnerJobs = results.filter((job: any) => (
+    partnerSources.has(job.source) && job.source !== 'adzuna'
+  ))
+  const adzunaJobs = results.filter((job: any) => job.source === 'adzuna')
 
   // ── Prefetch de la page suivante en arrière-plan ────────────────────────
   // 1. router.prefetch() précharge le shell/RSC de la route /jobs?page=N+1
@@ -355,7 +404,7 @@ const canUseSSRInitialData =
   // Loading state — ne s'affiche pas sur page 1 grâce à initialData
   if (isLoading) {
     return (
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
         {[...Array(6)].map((_, i) => (
           <div key={i} className="h-80 bg-muted rounded-2xl animate-pulse" />
         ))}
@@ -384,15 +433,34 @@ const canUseSSRInitialData =
         </p>
       )}
 
-      {/* Jobs */}
-      <div
-  className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6"
-  onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
->
-  {(data?.results || []).map((job: any) => (
-    <JobCard key={job.id} job={job} backUrl={backUrl} />
-  ))}
-</div>
+      {/* All sources share one grid. Source order still controls priority, but
+          CSS can fill each row instead of stretching a lone direct-job card
+          or leaving holes between source groups. */}
+      {(firstPartyJobs.length > 0 || otherPartnerJobs.length > 0 || adzunaJobs.length > 0 || (page === 1 && shouldShowWhatJobs)) && (
+        <div
+          className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6"
+          onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
+        >
+          {firstPartyJobs.map((job: any) => (
+            <JobCard key={job.id} job={job} backUrl={backUrl} />
+          ))}
+          {page === 1 && shouldShowWhatJobs && (
+            <WhatJobsFeed
+              keyword={whatJobsKeyword}
+              location={resolvedWhere}
+        titleIncludesAny={resolvedWhatJobsTitleIncludesAny}
+        titleIncludesAll={resolvedWhatJobsTitleIncludesAll}
+              titleExcludes={resolvedWhatJobsTitleExcludes}
+            />
+          )}
+          {otherPartnerJobs.map((job: any) => (
+            <JobCard key={job.id} job={job} backUrl={backUrl} />
+          ))}
+          {adzunaJobs.map((job: any) => (
+            <JobCard key={job.id} job={job} backUrl={backUrl} />
+          ))}
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-4 mt-10">
@@ -406,7 +474,8 @@ const canUseSSRInitialData =
 
       </div>
 
-      {/* Newsletter */}
+      {/* Job-alert signup intentionally removed from listing pages. */}
+      {false && (
       <div className="mt-16 bg-white border border-gray-200 shadow-sm text-gray-900 rounded-3xl p-10">
         <div className="flex items-center gap-5 mb-8">
           <Bell className="w-12 h-10 flex-shrink-0 text-gray-900" />
@@ -522,6 +591,7 @@ const canUseSSRInitialData =
           </p>
         )}
       </div>
+      )}
     </div>
   )
 }

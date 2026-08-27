@@ -176,6 +176,7 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
                 salary_min={params.salary_min}
                 descriptionContainsAny= {['lead installer', 'installation foreman', 'crew lead', 'installation supervisor']}
     titleContainsAny= {['lead', 'Lead']}
+                whatJobsTitleIncludesAll={['lead', 'installer']}
                 initialData={initialData}
               />
             </Suspense>

@@ -295,7 +295,7 @@ export default function SearchHero() {
             className={`pl-12 h-14 text-base border-0 focus-visible:ring-0 bg-white text-[#0B1A2E] placeholder:text-[#0B1A2E]/40 ${showWhatError ? 'ring-2 ring-red-400 rounded-xl' : ''}`}
           />
           {showWhatError && (
-            <p className="absolute -bottom-5 left-1 text-xs text-red-400 font-medium">Please enter a job title or keyword</p>
+            <p className="mt-1 px-1 text-xs font-medium leading-4 text-red-500">Please enter a job title or keyword</p>
           )}
           {showTitleSuggestions && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
@@ -331,7 +331,7 @@ export default function SearchHero() {
             className={`pl-12 h-14 text-base border-0 focus-visible:ring-0 bg-white text-[#0B1A2E] placeholder:text-[#0B1A2E]/40 ${showWhereError ? 'ring-2 ring-red-400 rounded-xl' : ''}`}
           />
           {showWhereError && (
-            <p className="absolute -bottom-5 left-1 text-xs text-red-400 font-medium">Please enter a city, state or ZIP</p>
+            <p className="mt-1 px-1 text-xs font-medium leading-4 text-red-500">Please enter a city, state or ZIP</p>
           )}
           {showLocationSuggestions && (locationSuggestions.length > 0 || locationLoading) && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
