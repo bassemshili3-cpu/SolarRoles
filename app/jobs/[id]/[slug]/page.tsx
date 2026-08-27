@@ -24,7 +24,7 @@ import { notFound } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 
-import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Minus, Check, AlertTriangle, Briefcase } from 'lucide-react'
+import { MapPin, Clock, DollarSign, ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Minus, Check, AlertTriangle, Briefcase, GraduationCap } from 'lucide-react'
 
 import Link from 'next/link'
 
@@ -49,7 +49,7 @@ import { buildJobSlug } from '@/lib/slugify'
 
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
-import { detectCertifications } from '@/lib/certification-detector'
+import { detectCertificationRequirements } from '@/lib/certification-detector'
 
 import { extractRequirementSignals } from '@/lib/requirement-signals'
 
@@ -580,8 +580,13 @@ export default async function JobDetailPage({
 
   const job = getJobDetailWithSalary(raw)
 
-const jobText = job.seoDescription || job.description || ''
-const matchedCerts = detectCertifications(`${job.title} ${jobText}`)
+// Requirement details are often present in the source posting but omitted by a
+// shorter SEO rewrite, so scan both versions rather than choosing one.
+const jobText = [job.description, job.seoDescription].filter(Boolean).join('\n')
+const certificationRequirements = detectCertificationRequirements(`${job.title} ${jobText}`)
+const matchedCerts = certificationRequirements.map(({ cert }) => cert)
+const requiredCerts = certificationRequirements.filter(({ required }) => required).map(({ cert }) => cert)
+const certRequirement = certificationRequirements[0]
 const cert = matchedCerts[0] // undefined si aucune certif détectée
 
 const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
@@ -896,9 +901,20 @@ function safeJsonLd(data: unknown): string {
 {cert && (
   <div className="mt-6 rounded-xl border border-[#F5B819]/30 bg-[#FFFBEB] px-5 py-4">
     <div className="flex items-center justify-between gap-4">
-      <div>
-        <p className="text-sm font-semibold text-[#92400E]">{cert.bannerHeadline}</p>
-        <p className="text-sm text-[#B45309]">{cert.bannerSubtext}</p>
+      <div className="flex items-start gap-3">
+        {certRequirement?.required && (
+          <AlertTriangle aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+        )}
+        <div>
+          <p className="text-sm font-semibold text-[#92400E]">
+            {certRequirement?.required ? `This job requires ${cert.shortLabel}` : cert.bannerHeadline}
+          </p>
+          <p className="text-sm text-[#B45309]">
+            {certRequirement?.required
+              ? `Review the training path for ${cert.shortLabel} before you apply.`
+              : cert.bannerSubtext}
+          </p>
+        </div>
       </div>
       
       <a
@@ -916,13 +932,13 @@ function safeJsonLd(data: unknown): string {
   </div>
 )}
 
-{(matchedCerts.length > 0 || requirementSignals.length > 0) && (
+{(requiredCerts.length > 0 || requirementSignals.length > 0) && (
   <div className="mt-6 rounded-xl border border-black/[0.08] bg-secondary/30 px-5 py-4">
     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
       At a glance
     </p>
     <ul className="space-y-2">
-      {matchedCerts.map((c) => (
+      {requiredCerts.map((c) => (
         <li key={c.slug} className="flex items-center gap-2 text-sm">
           <Check className="w-4 h-4 text-emerald-600 shrink-0" />
           <span className="text-foreground">{c.shortLabel} — required</span>
@@ -936,6 +952,8 @@ function safeJsonLd(data: unknown): string {
             <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
           ) : signal.id === 'experience-required' ? (
             <Briefcase className="w-4 h-4 text-muted-foreground shrink-0" />
+          ) : signal.id === 'education-required' ? (
+            <GraduationCap className="w-4 h-4 text-muted-foreground shrink-0" />
           ) : (
             <MapPin className="w-4 h-4 text-muted-foreground shrink-0" />
           )

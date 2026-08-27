@@ -255,14 +255,15 @@ export default function Page() {
           <section id="core-tasks">
             <h2>The core tasks</h2>
             <p>
-              Most of the work falls into three stages. First, mounting the
-              racking that holds the panels in place, whether that&rsquo;s
-              rails bolted to a roof or a ground-mounted frame. Second,
-              setting and securing the panels themselves. Third, running the
-              wiring between panels, combiner boxes, and the inverter, then
-              testing connections before the system goes live. On some crews
-              you&rsquo;ll also handle conduit runs, grounding, and labeling
-              for the inspector.
+              Most of the work falls into three stages:
+            </p>
+            <ol>
+              <li>Mount the racking that holds the panels in place, whether that&rsquo;s rails on a roof or a ground-mounted frame.</li>
+              <li>Set and secure the panels.</li>
+              <li>Run wiring to the inverter, then test connections before the system goes live.</li>
+            </ol>
+            <p>
+              Some crews also handle conduit runs, grounding, and labeling for the inspector.
             </p>
           </section>
         </div>
@@ -272,12 +273,11 @@ export default function Page() {
           <section id="typical-day">
             <h2>A typical day</h2>
             <p>
-              The day usually starts early, loading the truck with panels,
-              racking, and tools before driving to the job site. Once there,
-              the crew stages materials, sets up fall protection if it&rsquo;s
-              a roof job, and works through the install in a set order:
-              layout, racking, panels, wiring. A lead installer or foreman
-              assigns tasks and checks the work as it goes. On residential
+              The day usually starts early: load the truck, drive to the site,
+              and stage the materials. On a roof job, the crew sets up fall
+              protection before beginning the work. The install then follows a
+              clear order: layout, racking, panels, and wiring. A lead installer
+              or foreman assigns tasks and checks the work as it goes. On residential
               jobs a crew of two or three can often finish a system in a day;
               commercial and utility-scale projects run over weeks or months
               with larger, rotating crews.

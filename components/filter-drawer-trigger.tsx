@@ -1,7 +1,7 @@
 // components/filter-drawer-trigger.tsx
 'use client'
 
-import { Settings } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import { useFilterDrawer } from '@/contexts/filter-drawer-context'
 
 export function FilterDrawerTrigger() {
@@ -11,9 +11,9 @@ export function FilterDrawerTrigger() {
       type="button"
       onClick={toggle}
       aria-label="Ouvrir les filtres"
-      className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-accent transition-colors text-foreground"
+      className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg hover:bg-accent transition-colors text-foreground"
     >
-      <Settings className="h-5 w-5" />
+      <SlidersHorizontal className="h-6 w-6" strokeWidth={2.25} />
     </button>
   )
 }

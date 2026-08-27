@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { EditorialInfographic } from '@/components/EditorialInfographic'
 
 // If Space Grotesk / Inter / IBM Plex Mono are already loaded in
 // app/layout.tsx or app/resources/layout.tsx, remove this block and reuse
@@ -145,6 +146,8 @@ export default function SolarSales1099VsW2Page() {
           </div>
         </section>
 
+        <EditorialInfographic kind="sales-pay" />
+
         {/* The real risk */}
         <section>
           <h2
@@ -154,7 +157,7 @@ export default function SolarSales1099VsW2Page() {
             The real risk: the ramp
           </h2>
           <p>
-            Closing solar deals can be difficult the first month. Most reps need real time to learn the pitch, the objections, the permitting quirks in their territory, and their own close rate before commissions become reliable. On a pure 1099 plan, that ramp period pays close to nothing.
+            Closing solar deals can be difficult in the first month. Most reps need time to learn the pitch and handle objections. They also need to understand permitting quirks in their territory and establish their own close rate. On a pure 1099 plan, that ramp period pays close to nothing.
           </p>
           <p className="mt-4">
             The $100k&ndash;$200k+ number is real for reps who make it through the ramp. However, it says nothing about how many reps run out of savings before they get there, or how long that runway needs to be.
@@ -173,7 +176,7 @@ export default function SolarSales1099VsW2Page() {
             A simple way to think about it
           </h2>
           <p>
-            Ignore the headline numbers for a moment and run your own math against two things: your monthly expenses, and how many months of them you have saved. If a 1099 offer would take three to four months before your first real commission lands, and you have less than that in savings, the higher ceiling does not help you.
+            Ignore the headline numbers for a moment. Start with your monthly expenses, then calculate how many months of expenses you have saved. If a 1099 offer would take three to four months before your first real commission lands, the higher ceiling does not help if your savings run out first.
           </p>
           <p className="mt-4">
             A W2 base does the opposite job. It is there to buy you the time to become good enough at the job that the commission side starts to matter.
@@ -198,7 +201,7 @@ export default function SolarSales1099VsW2Page() {
             <div>
               <h3 className="font-medium text-[#0B1A2E] mb-1">W2 tends to make sense if</h3>
               <p className="text-base text-[#5B6472]">
-                You are new to sales or new to solar and your savings buffer is thin, or you need predictable income while you learn. The lower ceiling is the cost of a floor that keeps you in the job long enough to get good at it.
+                This route is usually a better fit if you are new to sales, new to solar, or short on savings. It also suits people who need predictable income while they learn. The lower ceiling is the cost of a floor that keeps you in the job long enough to get good at it.
               </p>
             </div>
           </div>

@@ -94,6 +94,20 @@ const faqs = [
   },
 ]
 
+// Kept in sync with the server-side filter so the client pagination cannot
+// reintroduce senior or experience-required postings after page one.
+const NO_EXPERIENCE_EXCLUDE_PHRASES = [
+  'years of experience required', 'years experience required',
+  '1+ years', '2+ years', '3+ years', '4+ years', '5+ years', '6+ years', '7+ years', '8+ years', '10+ years',
+  '1 year of experience', '2 years of experience', '3 years of experience', '4 years of experience', '5 years of experience',
+  '2-3 years', '3-5 years', '5-7 years', '2 to 3 years', '3 to 5 years', '5 to 7 years',
+  'minimum of 2 years', 'minimum of 3 years', 'minimum of 5 years',
+  'prior experience required', 'prior installation experience required',
+  'must have experience', 'must have prior experience', 'must have solar experience',
+  'senior installer', 'senior technician', 'lead installer', 'crew lead',
+  'not an entry level', 'not an entry-level',
+]
+
 export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
   const params = await searchParams
 
@@ -101,10 +115,11 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
   // Scopes this landing page to entry-level roles via a keyword
   // AND-filter, independent of the user's own `what` search box below —
   // same pattern used on /lead-solar-installer-jobs.
-  descriptionContainsAny: ['no experience', 'entry level', 'entry-level', 'apprentice', 'helper', 'trainee'],
+  entryLevel: true,
   // Écarte les offres qui matchent un des mots-clés ci-dessus (ex: "apprentice")
   // mais sont en réalité des postes senior/confirmés exigeant de l'expérience.
-  excludePhrases: [
+   excludePhrases: NO_EXPERIENCE_EXCLUDE_PHRASES,
+   /* Legacy list kept here temporarily for reference:
    'experienced',                         // couvre "Experienced X" en titre, très fréquent
   'years of experience required',
   'years experience required',
@@ -116,7 +131,7 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
   'senior installer', 'senior technician', 'lead installer', 'crew lead',
   'not an entry level', 'not an entry-level',
   'nabcep certified required', 'nabcep certification required',
-  ],
+   */
   ...(params.what ? { what: params.what } : {}),
   where: params.where || '',
     resultsPerPage: 30,
@@ -150,7 +165,8 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
                 searchLabel="solar no experience "
                 where={params.where || ''}
                 salary_min={params.salary_min}
-                  descriptionContainsAny= {['no experience', 'entry level', 'entry-level', 'apprentice', 'helper', 'trainee']}
+                entryLevel
+                excludePhrases={NO_EXPERIENCE_EXCLUDE_PHRASES}
                 initialData={initialData}
               />
             </Suspense>

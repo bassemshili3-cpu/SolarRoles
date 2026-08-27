@@ -158,7 +158,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           Manufacturer certifications (Tesla, Enphase, SolarEdge, IronRidge,
           and others) are brand-specific training programs. They don't carry
           legal weight and aren't recognized industry-wide the way NABCEP
-          is, but they unlock real business benefits: pricing, lead
+          is, but they can provide business benefits: pricing, lead
           referrals, and eligibility to install certain products under
           warranty.
         </p>
@@ -242,7 +242,7 @@ export default function NabcepVsEtaVsStateLicenses() {
           their non-legal status might suggest. These programs train
           installers on a specific product line (Tesla Powerwall and Solar
           Roof, Enphase microinverters, SolarEdge power optimizers) and
-          typically unlock tangible business benefits: product pricing,
+          can provide tangible business benefits: product pricing,
           priority technical support, marketing support, and in Enphase's
           case, a tiered partner system (platinum, gold, silver) that
           determines priority access to new product allocation.

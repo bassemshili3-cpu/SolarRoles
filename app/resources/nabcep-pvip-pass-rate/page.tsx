@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
+import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/nabcep-pvip-pass-rate";
@@ -418,8 +419,8 @@ export default function NabcepPvipPassRate() {
             built against NABCEP&apos;s published Job Task Analysis.
           </p>
           <p>
-            That gap — structured prep vs. general experience — is the
-            single biggest factor training providers point to. Field
+            Training providers consistently point to the gap between
+            structured prep and general experience. Field
             experience teaches you to install correctly. It doesn&apos;t
             teach you to explain, in a multiple-choice format, why you
             installed it that way under a specific code section.
@@ -449,6 +450,8 @@ export default function NabcepPvipPassRate() {
             score from how the exam felt — it&apos;s not a reliable signal
             either way.
           </p>
+
+          <EditorialInfographic kind="pvip-exam" />
 
           <h2 id="retake"><span className="n">04</span>If You Fail: Retake Process &amp; Cost</h2>
           <p>

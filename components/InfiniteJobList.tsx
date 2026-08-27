@@ -107,6 +107,7 @@ interface JobListProps {
    requiredDomainTerms?: string[]   // ← ajouter
   titleContainsAny?: string[] 
   isFifo?: boolean  
+  entryLevel?: boolean
   where: string
   salary_min?: string
   searchLabel?: string   // libellé affiché (ex: "fly in fly out "), sinon dérivé de `what`
@@ -176,7 +177,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, where, salary_min, searchLabel, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, entryLevel, where, salary_min, searchLabel, initialData }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -284,6 +285,7 @@ const canUseSSRInitialData =
   }
 
     if (isFifo) params.set('is_fifo', 'true')
+    if (entryLevel) params.set('entry_level', 'true')
     if (salary_min) params.set('salary_min', salary_min)
     for (const key of filterKeys) {
       const val = searchParams.get(key)
@@ -291,10 +293,10 @@ const canUseSSRInitialData =
     }
     return params
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolvedWhere, resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedRequiredDomainTerms, resolvedTitleContainsAny, isFifo, salary_min, searchParams])
+  }, [resolvedWhere, resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedDescriptionContainsAny, resolvedRequiredDomainTerms, resolvedTitleContainsAny, isFifo, entryLevel, salary_min, searchParams])
 
   const jobsQueryKey = (targetPage: number) => [
-    'jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedDescriptionContainsAny, isFifo, resolvedWhere, salary_min, targetPage, searchParams.toString(),
+    'jobs', resolvedWhat, resolvedWhatPhrases, resolvedExcludePhrases, resolvedDescriptionContainsAny, resolvedRequiredDomainTerms, resolvedTitleContainsAny, isFifo, entryLevel, resolvedWhere, salary_min, targetPage, searchParams.toString(),
   ]
 
   const fetchJobsPage = async (targetPage: number) => {

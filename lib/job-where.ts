@@ -145,13 +145,24 @@ if (whatPhrases.length > 0) {
     AND.push({ OR: keywordOr([kw], ['title']) })  // un AND.push par mot
   }
 }
-const ENTRY_LEVEL_KEYWORDS = [
-  'entry level', 'entry-level', 'junior', 'jr.', 'jr ',
-  'no experience', 'trainee', 'apprentice', 'entry position',
+// Require an explicit entry-level signal in the job title or description.
+// This keeps broad installer postings out of the no-experience landing page.
+const ENTRY_LEVEL_TITLE_KEYWORDS = [
+  'entry level', 'entry-level', 'junior', 'jr.', 'jr ', 'trainee',
+  'apprentice', 'helper', 'general laborer', 'solar laborer',
+  'racking crew', 'warehouse associate', 'install support',
+]
+
+const ENTRY_LEVEL_DESCRIPTION_KEYWORDS = [
+  'no experience required', 'no experience necessary', 'no prior experience',
+  'no solar experience required', 'entry level', 'entry-level', 'will train',
+  'we will train', 'training provided', 'on-the-job training',
+  'on the job training',
 ]
 
 const ENTRY_LEVEL_EXCLUDE_KEYWORDS = [
-  'senior', 'sr.', 'sr ', 'lead', 'principal', 'foreman', 'supervisor', 'manager',
+  'senior', 'sr.', 'sr ', 'lead', 'principal', 'foreman', 'supervisor',
+  'manager', 'director', 'journeyman', 'master electrician',
 ]
 
 if (titleContainsAny.length > 0) {
@@ -192,7 +203,14 @@ if (requiredDomainTerms.length > 0) {
 
   // ── Entry level (fallback texte tant que experienceLevel n'est pas fiable) ──
   if (entryLevel) {
-    AND.push({ OR: keywordOr(ENTRY_LEVEL_KEYWORDS, ['title']) })
+    AND.push({
+      OR: [
+        ...keywordOr(ENTRY_LEVEL_TITLE_KEYWORDS, ['title']),
+        ...keywordOr(ENTRY_LEVEL_DESCRIPTION_KEYWORDS, ['description']),
+      ],
+    })
+    // These rank words are reliable in a title, but too broad in a description
+    // (an apprentice can legitimately report to a "lead installer").
     AND.push({ NOT: { OR: keywordOr(ENTRY_LEVEL_EXCLUDE_KEYWORDS, ['title']) } })
   }
 

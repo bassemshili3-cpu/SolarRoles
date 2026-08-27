@@ -18,9 +18,34 @@ const DETECTION_KEYWORDS: Record<string, string[]> = {
     'nabcep pv associate',
     'nabcep associate',
     'pv associate',
+    'nabcep certification',
+    'nabcep certified',
   ],
-  'osha-30': ['osha 30', 'osha-30', 'osha 30-hour', 'osha thirty'],
-  'osha-10': ['osha 10', 'osha-10', 'osha 10-hour', 'osha ten'],
+  'osha-30': ['osha 30', 'osha-30', 'osha 30-hour', 'osha 30 hour', 'osha thirty', 'osha thirty-hour'],
+  'osha-10': ['osha 10', 'osha-10', 'osha 10-hour', 'osha 10 hour', 'osha ten', 'osha ten-hour', 'osha certification', 'osha card'],
+}
+
+export interface CertificationRequirement {
+  cert: CertificationEntry
+  required: boolean
+}
+
+const REQUIRED_LANGUAGE = /\b(required|mandatory|must\s+(?:have|hold|possess|maintain)|condition\s+of\s+employment|certified)\b/i
+const OPTIONAL_LANGUAGE = /\b(preferred|not\s+required|nice\s+to\s+have|a\s+plus|bonus|will\s+(?:provide|train)|training\s+provided)\b/i
+
+function isCertificationRequired(text: string, keywords: string[]): boolean {
+  const lower = text.toLowerCase()
+
+  for (const keyword of keywords) {
+    let start = lower.indexOf(keyword)
+    while (start !== -1) {
+      const context = text.slice(Math.max(0, start - 90), Math.min(text.length, start + keyword.length + 130))
+      if (!OPTIONAL_LANGUAGE.test(context) && REQUIRED_LANGUAGE.test(context)) return true
+      start = lower.indexOf(keyword, start + keyword.length)
+    }
+  }
+
+  return false
 }
 
 /**
@@ -92,4 +117,15 @@ export function getCertificationsForCategory(categorySlug: string): Certificatio
  */
 export function getPrimaryCertificationForCategory(categorySlug: string): CertificationEntry | undefined {
   return getCertificationsForCategory(categorySlug)[0]
+}
+
+/** Distinguishes a stated requirement from a simple mention in the posting. */
+export function detectCertificationRequirements(text: string): CertificationRequirement[] {
+  const haystack = text.toLowerCase()
+
+  return CERTIFICATIONS.flatMap((cert) => {
+    const keywords = DETECTION_KEYWORDS[cert.slug] || []
+    if (!keywords.some((keyword) => haystack.includes(keyword))) return []
+    return [{ cert, required: isCertificationRequired(text, keywords) }]
+  })
 }

@@ -41,10 +41,14 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
-   
     { href: '/resources',  label: 'Resources' },
-    { href: '/dashboard/post-a-job-free',  label: 'Employers' },
+    { href: '/dashboard/post-a-job-free',  label: 'Post a Job' },
   ]
+  // The drawer only exists alongside JobFilters. Keep its trigger off job
+  // detail pages and all editorial/content pages where it would do nothing.
+  const showMobileFilters = pathname === '/jobs'
+    || pathname === '/solar-jobs-no-experience'
+    || /^\/[^/]+-jobs\/?$/.test(pathname ?? '')
 
   return (
     <nav className="border-b border-gray-100 bg-white sticky top-0 z-50 md:static">
@@ -74,7 +78,7 @@ export default function Navbar() {
                 <line x1="23.1" y1="8.9"  x2="25.9" y2="6.1"  />
               </g>
             </svg>
-            <span className="hidden sm:inline text-base sm:text-lg font-bold text-[#0B1A2E] tracking-tight whitespace-nowrap">
+            <span className="inline text-base sm:text-lg font-bold text-[#0B1A2E] tracking-tight whitespace-nowrap">
               Solar<span className="text-[#F5B819]">Roles</span>
             </span>
           </Link>
@@ -136,7 +140,7 @@ export default function Navbar() {
           )}
 
 
-          <FilterDrawerTrigger />
+          {showMobileFilters && <FilterDrawerTrigger />}
 
           <Button
             variant="ghost"
@@ -170,12 +174,6 @@ export default function Navbar() {
               )
             })}
             <div className="pt-2 mt-2 border-t border-gray-100 space-y-1">
-              <Link
-                href="/dashboard/post-a-job-free"
-                className="block px-3 py-2.5 rounded-full text-sm font-semibold bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] text-center transition-colors"
-              >
-                Post a Job
-              </Link>
               {user ? (
                 <>
                   <Link

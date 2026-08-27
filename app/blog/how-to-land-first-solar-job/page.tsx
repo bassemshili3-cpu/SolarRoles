@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
+import { Calendar, Clock, User } from 'lucide-react'
+import { EditorialInfographic } from '@/components/EditorialInfographic'
 
 export const metadata: Metadata = {
   title: 'The 14-Day Plan to Land Your First Solar Job in 2026 | Solar Roles',
   description:
-    'A day-by-day action plan. Exactly what to do, say, and send over the next two weeks to get hired as a solar installer — even with zero experience.',
+    'All you need to know to land your first solar job in 2026, with a practical 14-day plan and tailored advice for helpers, installers, sales reps, technicians, crew leads, and project managers.',
   keywords: [
     'how to get a solar job',
     'solar installer apprenticeship',
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'The 14-Day Plan to Land Your First Solar Job in 2026',
     description:
-      'A day-by-day action plan. Exactly what to do, say, and send over the next two weeks to get hired.',
+      'All you need to know to land your first solar job in 2026, with a practical 14-day plan and tailored advice for helpers, installers, sales reps, technicians, crew leads, and project managers.',
     url: 'https://www.solarroles.com/blog/14-day-plan-first-solar-job',
     siteName: 'Solar Roles',
     type: 'article',
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'The 14-Day Plan to Land Your First Solar Job in 2026',
     description:
-      'A day-by-day action plan. Exactly what to do, say, and send over the next two weeks to get hired.',
+      'A practical 14-day plan for landing a first solar job, with a route for installers, sales, technicians, crew leads, and project management.',
     images: ['https://www.solarroles.com/solar-featured.jpg'],
   },
 }
@@ -106,6 +107,48 @@ export default function ArticlePage() {
         }
         .article-body ul { margin: 0 0 1.5rem; padding-left: 1.25rem; }
         .article-body li { color: #374151; line-height: 1.7; margin-bottom: 0.4rem; font-size: 1.05rem; }
+        .article-body .role-card {
+          border-left: 4px solid #F5B819;
+          background: #FFFBEB;
+          border-radius: 0 0.75rem 0.75rem 0;
+          padding: 1.25rem 1.4rem;
+          margin: 1.25rem 0;
+        }
+        .article-body .role-card h3 { margin-top: 0; }
+        .article-body .role-card p { font-size: 1rem; margin-bottom: 0.8rem; }
+        .article-body .role-card p:last-child { margin-bottom: 0; }
+        .article-body .role-order {
+          display: inline-block;
+          color: #92400E;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          margin-bottom: .35rem;
+        }
+        .article-body .source-note {
+          font-size: .92rem;
+          color: #6B7280;
+          border-top: 1px solid #E5E7EB;
+          margin-top: 2rem;
+          padding-top: 1rem;
+        }
+        .article-body .inline-cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0.25rem 0 1.75rem;
+          padding: 0.75rem 1rem;
+          border: 1px solid #0B1A2E;
+          border-radius: 0;
+          background: #0B1A2E;
+          color: #FFFFFF;
+          font-size: 0.9rem;
+          font-weight: 700;
+          line-height: 1.2;
+          transition: background .15s ease, color .15s ease;
+        }
+        .article-body .inline-cta:hover { background: #F5B819; color: #0B1A2E; }
       `}</style>
 
       <div className="max-w-3xl mx-auto px-6 pt-8">
@@ -118,10 +161,10 @@ export default function ArticlePage() {
             Solar Careers
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-[#0B1A2E] tracking-tight leading-[1.1] mb-5">
-            The 14-Day Plan to Land Your First Solar Job in 2026
+            Land Your First Solar Job in two weeks: 2026 Edition
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
-            Here's exactly what to do each day for the next two weeks, including the emails to send and the words to say in person.
+            The solar job market is competitive, but with the right strategy, you can land your first position in 2026. This plan outlines the specific actions to take over the next two weeks, including the emails to send and the words to say in person.
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 pb-8 border-b border-gray-100">
             <div className="flex items-center gap-1.5">
@@ -134,7 +177,7 @@ export default function ArticlePage() {
             </div>
             <div className="flex items-center gap-1.5">
               <Clock size={14} />
-              <span>9 min read</span>
+              <span>14 min read</span>
             </div>
           </div>
         </header>
@@ -149,27 +192,171 @@ export default function ArticlePage() {
 
         <div className="article-body">
           <p>
-            Below is a two-week schedule with a specific action for each day.
-             Follow it in order, each step is built on the one before it.
+            The best way to land your first solar job depends on the work you actually want to do. Start by picking a lane. Rooftop
+            helper and installer roles are the most accessible. Sales follows a different hiring path, while crew lead and project
+            management roles usually require more proof of experience.
           </p>
 
-          <h2>Days 1–2: Get the one credential that moves the needle</h2>
+          <h2>Pick the right first role before you apply</h2>
+          <p>
+            Do not apply to every title containing “solar.” Pick the lane that matches the experience you can honestly show today,
+            then tailor your two-week plan to it. The sequence below is roughly from the most accessible entry point to the roles that
+            normally require prior field, trade, or construction-management experience. It is not a pay ranking:
+            a good roofer may move faster than a complete beginner, while an experienced construction coordinator may enter through
+            an assistant project manager role.
+          </p>
+
+          <EditorialInfographic kind="first-solar-role" />
+
+          <div className="role-card">
+            <span className="role-order">1. Most accessible</span>
+            <h3>General laborer, rooftop helper, or warehouse / install support</h3>
+            <p>
+              This is the cleanest entry point if you have no solar or construction background. Small installers need dependable people
+              who can work outdoors and get to jobsites reliably. Make the evidence easy to find on your resume:
+            </p>
+            <ul>
+              <li>reliable transportation and comfort with early starts;</li>
+              <li>safe physical work, including carrying material; and</li>
+              <li>relevant experience from roofing, landscaping, warehouse, delivery, moving, or military work.</li>
+            </ul>
+            <p>
+              <strong>Best move:</strong> search for <em>solar laborer</em>, <em>installer helper</em>, <em>roof crew helper</em>, and
+              <em> warehouse assistant</em>. Call local contractors and ask whether they hire helpers for
+              install crews. You can also visit the office when appropriate.
+            </p>
+          </div>
+
+          <Link href="/solar-pv-installer-jobs" className="inline-cta">
+            Browse solar installer jobs
+          </Link>
+
+          <div className="role-card">
+            <span className="role-order">2. Entry trade path</span>
+            <h3>Solar PV installer</h3>
+            <p>
+              This is the main “learn while working” route. The Bureau of Labor Statistics says most PV installers learn alongside
+              experienced installers, with related construction experience shortening the ramp-up. That matches repeated advice from
+              working installers: start with safety, listen closely, and learn tools and layout quickly. Show that you understand the
+              realities of the work: heat, roofs, travel, and physical repetition.
+            </p>
+            <p>
+              <strong>Best move:</strong> apply to installer and apprentice openings. Then make your application specific:
+            </p>
+            <ul>
+              <li>State whether OSHA 10 is complete or in progress.</li>
+              <li>Say that you are comfortable on roofs and available for early starts.</li>
+              <li>Include your valid driver&rsquo;s license if you have one.</li>
+              <li>Give one real example of safe physical work.</li>
+            </ul>
+            <p>Do not buy a full tool kit before you are hired. Ask what the employer supplies and what you will need on day one.</p>
+          </div>
+
+          <Link href="/solar-pv-installer-jobs" className="inline-cta">
+            Browse solar PV installer jobs
+          </Link>
+
+          <div className="role-card">
+            <span className="role-order">3. Accessible, but a different job</span>
+            <h3>Solar sales consultant or appointment setter</h3>
+            <p>
+              Sales can be easier to enter than an electrical role, but it is not an “easy” solar job. It rewards prospecting,
+              follow-up, clear communication, and comfort with rejection — often through phone, virtual, canvassing, or door-to-door
+              work. Community discussions consistently warn new reps not to confuse a large advertised income range with guaranteed pay.
+            </p>
+            <p>
+              <strong>Best move:</strong> before accepting, get these answers in writing:
+            </p>
+            <ul>
+              <li>Whether the role is W-2 or 1099, and whether there is a guaranteed base.</li>
+              <li>Where leads come from and when commission is paid.</li>
+              <li>What happens if a customer cancels, including any commission clawback.</li>
+            </ul>
+            <p>If you need predictable income, favour a base-plus-commission role over a commission-only promise.</p>
+          </div>
+
+          <Link href="/solar-sales-jobs" className="inline-cta">
+            Browse solar sales jobs
+          </Link>
+
+          <div className="role-card">
+            <span className="role-order">4. Trade progression</span>
+            <h3>Solar electrician, service technician, or O&amp;M technician</h3>
+            <p>
+              These roles are excellent long-term paths, but usually not the first offer for someone with no electrical foundation.
+              Employers look for electrical troubleshooting, conduit, plans, code awareness, commissioning, service documentation, or
+              an electrician apprenticeship. If you already have electrical, HVAC, industrial maintenance, or automotive diagnostics
+              experience, say so directly; it is more valuable than a generic “passion for solar” paragraph.
+            </p>
+            <p>
+              <strong>Best move:</strong> start with an apprenticeship, electrical helper, installer, or junior service role. Once you are on
+              the job, volunteer for troubleshooting and commissioning checklists. Learn photo documentation and inverter or battery
+              basics. Those skills bridge installation work and service work.
+            </p>
+          </div>
+
+          <div className="role-card">
+            <span className="role-order">5. Not usually a first job</span>
+            <h3>Lead installer or crew lead</h3>
+            <p>
+              A lead is hired to keep people safe and lay out the work. They solve small problems, teach newer installers, and deliver a
+              handoff — not merely to install panels quickly. Experienced workers describe advancement as tied to crew responsibility,
+              conduit and electrical competence, paperwork, and the ability to train others. Treat this as a target after proving you
+              can install consistently, not a title to stretch for on your first application.
+            </p>
+            <p>
+              <strong>Best move:</strong> during an installer interview, ask what a promotion-ready installer can demonstrate in the first
+              90 days. Then keep a simple record of the systems, tools, layouts, safety tasks, and junior teammates you have supported.
+            </p>
+          </div>
+
+          <div className="role-card">
+            <span className="role-order">6. Least accessible without related experience</span>
+            <h3>Project coordinator, assistant project manager, or project manager</h3>
+            <p>
+              Solar project management is construction coordination. It covers permits, schedules, material status, change orders,
+              inspections, and closeout. Some roles also manage subcontractors or customer communication. A direct PM jump is realistic
+              only if you already bring relevant construction, logistics, permitting, design, procurement, or client-project experience.
+              Practitioners are more likely to recommend project coordinator or assistant PM roles to newcomers than a full PM title.
+            </p>
+            <p>
+              <strong>Best move:</strong> translate your current experience into solar language. Highlight schedules, vendors, documentation,
+              budgets, permits, and customer communication. If you are coming from the field, learn plan reading, RFIs, material
+              takeoffs, and closeout documentation. Those are concrete signals that you are ready to support a PM.
+            </p>
+          </div>
+
+          <p className="source-note">
+            <strong>What informed this section:</strong> official PV-installer training guidance from the{' '}
+            <a href="https://www.bls.gov/ooh/construction-and-extraction/solar-photovoltaic-installers.htm" target="_blank" rel="noopener noreferrer">U.S. Bureau of Labor Statistics</a>,
+            plus recurring firsthand themes from discussions among{' '}
+            <a href="https://www.reddit.com/r/solar/comments/q0kwoi/chances_of_becoming_a_solar_installer/" target="_blank" rel="noopener noreferrer">installers entering without prior trade experience</a>,{' '}
+            <a href="https://www.reddit.com/r/solar/comments/eds88z/pv_installersleads_how_much_do_any_make_what_state/" target="_blank" rel="noopener noreferrer">crew leads</a>,{' '}
+            <a href="https://www.reddit.com/r/solar/comments/12oethj/i_am_applying_for_a_sales_representative_job_and/" target="_blank" rel="noopener noreferrer">solar sales reps</a>, and{' '}
+            <a href="https://www.reddit.com/r/solar/comments/1vfrnvo/working_in_the_industry/" target="_blank" rel="noopener noreferrer">solar project managers</a>.
+            These are practitioner perspectives, not guarantees about any employer or pay plan.
+          </p>
+
+          <h2>DGet a credible safety baseline</h2>
           <div className="day-block">
             <span className="day-label">Day 1</span>
             <p style={{ marginBottom: '0.75rem' }}>
-              Take an OSHA 10 course online tonight. It's 10 hours, self-paced, roughly $70–$100, and you can spread it over two evenings.
-              Search "OSHA 10 construction outreach online" and pick a provider authorized by the OSHA Training Institute — the certificate
-              should say "OSHA 10-Hour Construction," not "OSHA 10-Hour General Industry" (installers need the construction version).
+              If you are targeting field work, enroll in an OSHA 10-Hour Construction Outreach course from an authorized provider.
+              OSHA describes the 10-hour program as entry-level safety training; it is not a trade license and does not replace an
+              employer's site-specific training. It takes at least two calendar days under Outreach rules, so start now rather than
+              waiting for an interview.
             </p>
             <p style={{ marginBottom: 0 }}>
-              Do not wait until you have an interview lined up. Employers filter applications by who already has it.
+              If cost is a barrier, check your state workforce office, community college, union, or workforce board before paying.
+              Some states and local programs offer free classes.
             </p>
           </div>
           <div className="day-block">
             <span className="day-label">Day 2</span>
             <p style={{ marginBottom: 0 }}>
-              Finish the course, download the PDF certificate, and save it as <strong>LastName_OSHA10_2026.pdf</strong>. You'll attach this
-              to every application.
+              Finish the course, download the PDF certificate, and save it as <strong>LastName_OSHA10_2026.pdf</strong>. Attach it to
+              field-role applications. If you have only enrolled, say “OSHA 10 Construction — in progress, completion date [date]”
+              rather than claiming the card early.
             </p>
           </div>
 
@@ -201,7 +388,7 @@ export default function ArticlePage() {
           <div className="day-block">
             <span className="day-label">Day 5</span>
             <ul>
-              <li>Browse open installer and apprentice role and note every company hiring near you (see our <Link href="https://www.solarroles.com/jobs">job listing)</Link></li>
+              <li>Browse open installer and apprentice roles and note every company hiring near you (see our <Link href="/jobs">job listings</Link>)</li>
               <li>Search Maps for "solar installer" in your metro area and note companies with active crews (check their reviews for recent installs)</li>
               <li>Search LinkedIn for "solar installer" + your city, filtered to the last week, and note who's posting</li>
             </ul>
@@ -304,7 +491,7 @@ export default function ArticlePage() {
             </p>
             <Link
               href="/jobs"
-              className="inline-flex items-center gap-2 bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] font-semibold px-6 py-3 rounded-full transition-colors"
+              className="inline-flex items-center gap-2 bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] font-semibold px-6 py-3 rounded-none transition-colors"
             >
               Browse open solar jobs
             </Link>

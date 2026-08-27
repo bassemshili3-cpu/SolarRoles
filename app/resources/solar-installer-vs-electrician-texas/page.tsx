@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Sora } from "next/font/google";
 import { articleCss } from "../_shared/article-styles";
+import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const sora = Sora({ subsets: ["latin"], weight: ["700", "800"], display: "swap" });
 
@@ -127,6 +128,8 @@ Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer
               Electrical Apprentice license and on-site supervision.
             </p>
           </div>
+
+          <EditorialInfographic kind="texas-licensing" />
 
           <h2 id="apprentice"><span className="n">04</span>The Legal Entry Point</h2>
           <p>

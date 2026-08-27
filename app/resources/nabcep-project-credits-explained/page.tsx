@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
+import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/nabcep-project-credits-explained";
@@ -527,6 +528,8 @@ export default function NabcepProjectCreditsExplained() {
               <div className="l">Window before submission in which completed installs still count</div>
             </div>
           </div>
+
+          <EditorialInfographic kind="nabcep-credits" />
 
           <h2 id="routes"><span className="n">05</span>Ways to Get Credits Without Already Having the Role</h2>
           <ul className="sr2-routes">

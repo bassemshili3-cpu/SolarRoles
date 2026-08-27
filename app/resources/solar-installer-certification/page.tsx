@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
+import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const SITE_URL = "https://www.solarroles.com";
 
@@ -1170,6 +1171,7 @@ export default function SolarInstallerCertification() {
 </div>
 
           <h2 id="bottom"><span className="n">02</span>The bottom line</h2>
+          <EditorialInfographic kind="installer-certifications" />
 
 
           <div className="sr2-facts">
@@ -1209,12 +1211,14 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
 
           <p>
 
-           Shorter than most people expect, and it varies by state. No federal law requires any certification to install
-solar panels. What can be legally required, depending on where you work,
-is a state electrical license for certain wiring tasks, and OSHA safety
-training that most employers treat as mandatory even where it technically
-isn't.
+           The answer is shorter than most people expect, and it varies by state.
+           No federal law requires a certification to install solar panels. What
+           can be legally required depends on where you work:
           </p>
+          <ul>
+            <li>a state electrical license for certain wiring tasks; and</li>
+            <li>OSHA safety training, which most employers treat as mandatory even where it is not technically required.</li>
+          </ul>
 
           <p>
 
@@ -1249,7 +1253,7 @@ level.
 
           <p>
 
-            The next jump, from PVA to PVIP, is what separates lead installer pay from crew installer pay. PVIP holders typically land in the $60-75k range — in line with BLS data showing the top 25% of solar PV installers earning $60k+ annually, with the highest 10% clearing $80k. Real listing data — see the breakdown on our{" "}
+            The next jump, from PVA to PVIP, is what separates lead installer pay from crew installer pay. PVIP holders typically land in the $60-75k range. That is consistent with BLS data showing the top 25% of solar PV installers earning $60k+ annually, with the highest 10% clearing $80k. See the breakdown in our{" "}
 
             <Link href="/data/salaries/lead-solar-installer">
 

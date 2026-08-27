@@ -114,8 +114,8 @@ export default function DoYouNeedToBeAnElectricianForBess() {
           <h2 id="why"><span className="n">03</span>Why BESS Isn&apos;t Solar&apos;s Open Door</h2>
           <p>
             Solar installer crews can absorb someone with zero background
-            because the physical install work — racking, mounting, panel
-            handling — doesn&apos;t require touching live high-voltage
+            because the physical install work, including racking, mounting,
+            and panel handling, doesn&apos;t require touching live high-voltage
             equipment on day one. Technicians work around DC strings that can run past 1,000V, lithium-ion packs with
             thermal runaway risk, and arc flash hazards baked into daily
             maintenance and commissioning tasks. Employers can&apos;t train

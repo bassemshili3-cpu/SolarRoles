@@ -428,7 +428,7 @@ export default function NabcepPvisVsPvip() {
                contains PVIS.</strong> The PVIP Job Task Analysis draws
             on content from all three PV Specialist certifications — PV
             Design Specialist (PVDS), PVIS, and PV Commissioning &amp;
-            Maintenance Specialist (PVCMS) — combined. PVIS isn&apos;t a
+            Maintenance Specialist (PVCMS), combined. PVIS isn&apos;t a
             different track from PVIP; it&apos;s a narrower slice of it.
           </p>
 
@@ -457,8 +457,8 @@ export default function NabcepPvisVsPvip() {
           </div>
           <p>
             PVIS doesn&apos;t touch design or commissioning at all. If your
-            day-to-day is limited to the physical install — running
-            conductors, mounting racking, wiring up monitoring gear — PVIS
+            day-to-day is limited to physical installation work, such as
+            running conductors, mounting racking, and wiring monitoring gear, PVIS
             tests exactly that.
           </p>
 
@@ -530,7 +530,7 @@ export default function NabcepPvisVsPvip() {
 
           <h2 id="choose"><span className="n">05</span>Which One to Choose</h2>
           <ul>
-            <li>Your job is purely installation — running conductors, racking, mounting — and you don&apos;t design systems or sign off on commissioning → <strong>PVIS</strong>.</li>
+            <li>Your job is purely installation: running conductors, racking, and mounting. You do not design systems or sign off on commissioning. Choose <strong>PVIS</strong>.</li>
             <li>You want to move toward lead installer, foreman, or eventually run your own crew or business → <strong>PVIP</strong>.</li>
             <li>You&apos;re not sure yet which direction your role is heading → PVIP is the safer target, since it already includes what PVIS tests for.</li>
             <li>You want the faster, cheaper credential to add now and can pursue PVIP later → PVIS at 24 training hours is quicker to complete than PVIP&apos;s 58.</li>

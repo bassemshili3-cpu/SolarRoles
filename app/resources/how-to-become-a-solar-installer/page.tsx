@@ -777,9 +777,9 @@ export default function HowToBecomeASolarInstaller() {
            <p>
             <strong>A short paid training program:</strong> Community colleges
             and workforce boards run programs that compress the basics into a
-            few weeks: electrical fundamentals, racking and mounting, OSHA
-            safety, and hands-on install practice, often with job placement
-            built in.
+            few weeks. They usually cover electrical fundamentals, racking and
+            mounting, OSHA safety, and hands-on installation practice. Some
+            programs also include job placement.
           </p>
           <p>
             <strong>A registered apprenticeship: </strong> Structured, paid,
@@ -906,12 +906,15 @@ export default function HowToBecomeASolarInstaller() {
           <h2 id="growth"><span className="n">06</span>Career Progression</h2>
           <p>
             Most installers who stay in the trade move up after one to three
-            years, once they can run a small crew, read a permit set without
-            help, and troubleshoot a wiring fault without escalating it. From
-            there, the common next steps are lead installer or foreman,
-            electrician licensure, site supervision, or a move into system
-            design and commissioning.
+            years. Before that step, they need to run a small crew, read a permit
+            set without help, and troubleshoot a wiring fault without escalating it.
+            Common next moves include:
           </p>
+          <ul>
+            <li>lead installer or foreman;</li>
+            <li>electrician licensure or site supervision; and</li>
+            <li>system design or commissioning.</li>
+          </ul>
           <h2 id="mistakes"><span className="n">07</span>Common Early Mistakes</h2>
           <p>
             <strong>Skipping OSHA 10</strong> because an employer

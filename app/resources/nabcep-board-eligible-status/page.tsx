@@ -465,7 +465,7 @@ export default function NabcepBoardEligibleStatus() {
                 <li>Complete 58 hrs advanced training + OSHA 10</li>
                 <li>Sit and pass the PVIP exam</li>
                 <li>Become <strong>Board Eligible</strong> (temporary status)</li>
-                <li>Accumulate experience — up to 3 years — then convert</li>
+                <li>Accumulate experience for up to three years, then convert</li>
               </ol>
             </div>
           </div>
@@ -523,9 +523,9 @@ export default function NabcepBoardEligibleStatus() {
             </tbody>
           </table>
           <p>
-            Project Credits scale with system size — larger commercial and
-            utility-scale systems count for more than a single residential
-            install — so the 6-credit threshold doesn&apos;t always mean six
+            Project Credits scale with system size. A larger commercial or
+            utility-scale system counts for more than a single residential
+            install, so the six-credit threshold does not always mean six
             separate jobs.
           </p>
 

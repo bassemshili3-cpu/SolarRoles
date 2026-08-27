@@ -306,6 +306,27 @@ export const articleCss = `
   padding: 4px 0 4px 16px;
   margin: 12px 0 22px;
 }
+/* FAQ */
+.sr2-faq {
+  margin: 10px 0 34px;
+  border-top: 1px solid var(--line);
+}
+.sr2-faq h3 {
+  margin: 0;
+  padding: 17px 0 7px;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.35;
+  color: var(--navy-900);
+}
+.sr2-faq p {
+  margin: 0;
+  padding: 0 0 17px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-600);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
 /* ── DOWNSIDES LIST ───────────────────────────────────────────────── */
 .sr2-downsides {
   list-style: none;

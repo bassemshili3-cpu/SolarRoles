@@ -259,7 +259,7 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
 
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Pay ranges reflect typical figures reported across industry job postings. Solar sales isn't tracked as a distinct category. Actual compensation varies significantly by employer, lead source, region, and individual performance. Verify licensing requirements directly with your state.
+            <strong>Disclaimer:</strong> Pay ranges reflect typical figures reported across industry job postings. Solar sales is not tracked as a distinct category. Compensation depends on the employer, lead source, region, and individual performance. Verify licensing requirements directly with your state.
           </p>
         </section>
       </div>

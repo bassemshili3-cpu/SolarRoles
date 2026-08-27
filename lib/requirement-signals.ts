@@ -94,6 +94,27 @@ function detectExperienceRequirement(text: string): RequirementSignal | null {
   return null
 }
 
+function detectEducationRequirement(text: string): RequirementSignal | null {
+  const cleanText = stripHtml(text)
+  const patterns: Array<{ pattern: RegExp; label: string }> = [
+    { pattern: /(?:high\s+school\s+diploma|ged)(?:\s+or\s+equivalent)?[^.]{0,80}\b(required|must\s+(?:have|hold)|minimum)\b/i, label: 'High school diploma or GED required' },
+    { pattern: /\b(?:required qualifications?|minimum requirements?)\b[^.]{0,100}(?:high\s+school\s+diploma|ged)/i, label: 'High school diploma or GED required' },
+    { pattern: /associate(?:'s)?\s+degree[^.]{0,80}\b(required|must\s+(?:have|hold)|minimum)\b/i, label: 'Associate degree required' },
+    { pattern: /\b(?:required qualifications?|minimum requirements?)\b[^.]{0,100}associate(?:'s)?\s+degree/i, label: 'Associate degree required' },
+    { pattern: /(?:bachelor(?:'s)?\s+degree|b\.s\.|b\.a\.)[^.]{0,80}\b(required|must\s+(?:have|hold)|minimum)\b/i, label: "Bachelor's degree required" },
+    { pattern: /\b(?:required qualifications?|minimum requirements?)\b[^.]{0,100}(?:bachelor(?:'s)?\s+degree|b\.s\.|b\.a\.)/i, label: "Bachelor's degree required" },
+    { pattern: /(?:master(?:'s)?\s+degree|m\.s\.|m\.b\.a\.|mba)[^.]{0,80}\b(required|must\s+(?:have|hold)|minimum)\b/i, label: "Master's degree required" },
+    { pattern: /\b(?:required qualifications?|minimum requirements?)\b[^.]{0,100}(?:master(?:'s)?\s+degree|m\.s\.|m\.b\.a\.|mba)/i, label: "Master's degree required" },
+  ]
+
+  for (const { pattern, label } of patterns) {
+    const match = cleanText.match(pattern)
+    if (match) return { id: 'education-required', label, status: 'neutral', matchedText: match[0] }
+  }
+
+  return null
+}
+
 export function extractRequirementSignals(text: string): RequirementSignal[] {
   const cleanText = stripHtml(text)
   const lower = cleanText.toLowerCase()
@@ -103,6 +124,11 @@ export function extractRequirementSignals(text: string): RequirementSignal[] {
   const expSignal = detectExperienceRequirement(cleanText)
   if (expSignal) {
     signals.push(expSignal)
+  }
+
+  const educationSignal = detectEducationRequirement(cleanText)
+  if (educationSignal) {
+    signals.push(educationSignal)
   }
 
   // Employment status

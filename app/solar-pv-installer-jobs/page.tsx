@@ -193,7 +193,7 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Sun className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of Solar Installer Roles</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            "Solar installer" covers a wide range of work. A residential crew and a utility-scale crew do fundamentally different jobs, with different pay, schedules, and physical demands.
+            "Solar installer" can mean residential rooftop work, commercial construction, or utility-scale field work. Those crews differ in pay, schedule, equipment, and physical demands.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {installerRoles.map((role, index) => (
