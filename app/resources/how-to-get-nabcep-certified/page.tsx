@@ -545,8 +545,8 @@ export default function HowToGetNabcepCertified() {
             is the entry credential. No
             documented field hours required, which is what makes it the
             standard target for people still in training or early in an OJT
-            role. It tells an employer you understand system design basics,
-            electrical fundamentals, and code requirements before you&apos;ve
+            role. It tells an employer you understand electrical basics and
+            code requirements before you&apos;ve
             necessarily touched a roof.
           </p>
           <p>For PVA taken through the Associate Education Pathway, you
@@ -584,8 +584,7 @@ export default function HowToGetNabcepCertified() {
             </strong>
             , is a narrower Board Certification aimed at installers who want to
             demonstrate competence in the hands-on installation process
-            itself: DC and AC conductors, raceways, mounting, and monitoring
-            and communication hardware, plus safety plan development. It
+            itself: conductors and mounting work, plus safety planning. It
             doesn&apos;t cover the design and commissioning scope that PVIP
             does, which makes it a faster path for someone whose job is
             purely installation and who doesn&apos;t design systems or sign
@@ -602,9 +601,8 @@ export default function HowToGetNabcepCertified() {
             NABCEP-approved courses are taught by experienced industry professionals.</p>
 
 <p><strong>Important:</strong> for PVIP, PVIS, and PVA taken through the Experience
-            or Conversion pathways, it&apos;s the other way around, you
-            create your own myNABCEP account, submit the application
-            yourself with your documented hours and training, and wait for
+            or Conversion pathways, it&apos;s the other way around. You create
+            your own myNABCEP account, submit your documented hours, and wait for
             NABCEP to approve it before you can schedule an exam date. Your
             employer&apos;s only role is signing off on your logged hours,
             they don&apos;t register you or apply on your behalf.</p>
@@ -625,8 +623,8 @@ export default function HowToGetNabcepCertified() {
             <strong>hours don&apos;t
             count retroactively unless they&apos;re documented at the time.</strong>{" "}
             If you&apos;re on a crew now and think PVIP or PVIS is a year or
-            two away, start a simple log today: date, task category, hours,
-            supervisor initials. Rebuilding that record later from memory is
+            two away, start a simple log today with the date and hours.
+            Rebuilding that record later from memory is
             the single most common reason applications get delayed.
           </p>
          

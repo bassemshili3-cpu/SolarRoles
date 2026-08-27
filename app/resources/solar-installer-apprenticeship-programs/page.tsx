@@ -113,10 +113,9 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <h1>How Solar Installer Apprenticeships Work</h1>
       <p className="resource-intro">
        A Registered Apprenticeship pays you while you train, which matters a great deal if a
-        <Link href="/resources/nabcep-training-providers-compared">NABCEP-approved course</Link> running several hundred dollars isn't
-        realistic right now. Here's what these programs are, why the paperwork
-        behind them is stranger than it looks, and why more employers started
-        offering them recently.
+        <Link href="/resources/nabcep-training-providers-compared"> NABCEP-approved course</Link> running several hundred dollars isn't
+        realistic right now. Here's what these programs are & why the paperwork
+        behind them is stranger than it looks.
       </p>
 
       <div className="resource-table-scroll">
@@ -157,8 +156,7 @@ export default function SolarInstallerApprenticeshipPrograms() {
         </p>
         <p>
           IREC and SEIA got national guidelines approved for exactly this
-          setup, giving employers, community colleges, and unions a
-          DOL-compliant template to build a solar apprenticeship without
+          setup. The template helps employers build a solar apprenticeship without
           waiting for a dedicated occupation code to exist. Some states,
           like Oregon, route the same idea through an existing electrical
           apprenticeship (the Limited Renewable Energy Technician license)
@@ -185,12 +183,11 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </section>
 
       <section className="resource-section">
-        <h2>What a program looks like day to day</h2>
+        <h2>What a program looks like</h2>
         <p>
           Structure varies by sponsor: a mix of paid
           on-the-job training under a mentor, plus classroom or online
-          instruction covering electrical fundamentals, NEC compliance, and
-          safety. ReVision Energy's four-year program, for example, splits
+          instruction in electrical fundamentals and safety. ReVision Energy's four-year program splits
           into installation or maintenance technician tracks and combines
           8,000 hours of supervised fieldwork with 600 hours of related
           classroom instruction. Oregon's electrical-track apprenticeship
@@ -230,12 +227,9 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <section className="resource-section">
         <h2>Where these programs exist</h2>
         <p>
-          In practice they show up through a handful of channels: state apprenticeship
-          agencies (Florida and Oregon both run registered programs
-          directly), IBEW union locals for the electrical-track route,
-          employer-run programs at larger regional installers like ReVision
-          Energy, and the DOL's Solar Ready Vets Network for veterans
-          transitioning into the trade. SEIA and IREC also maintain
+          In practice, start with a state apprenticeship agency or an IBEW
+          local for the electrical track. Employer-run programs are another
+          route. SEIA and IREC also maintain
           employer-facing resources that, in practice, double as a way to
           find which companies in a given region are currently running a
           registered program.

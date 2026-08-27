@@ -9,7 +9,7 @@ const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/solar-engineer-jobs";
 const PAGE_TITLE = "Types of Solar Engineer Jobs (2026 Guide)";
 const PAGE_DESCRIPTION =
-  "Every solar engineer job title mapped to what it does, what it pays, and what you need — from PV design to BESS.";
+  "Every solar engineer job title mapped to what to know which one is a fit for you.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -130,7 +130,7 @@ export default function SolarEngineerJobs() {
           <div className="sr2-toc-card">
             <div className="sr2-toc-head">Table of Contents</div>
             <ol className="sr2-toc-list">
-              <li><a href="#confusion">Why are They so many Titles</a></li>
+              <li><a href="#confusion">Why are There so many Titles</a></li>
               <li><a href="#mapping">Job Title Mapping Table</a></li>
               <li><a href="#pv-design">PV Design Engineer</a></li>
               <li><a href="#systems">Solar Systems Engineer</a></li>
@@ -147,21 +147,19 @@ export default function SolarEngineerJobs() {
         </aside>
 
         <article className="sr2-article">
-          <h2 id="confusion"><span className="n">01</span>Why are they so many titles ?</h2>
+          <h2 id="confusion"><span className="n">01</span>Why are there so many titles ?</h2>
           <p>
-            The term 'Solar Engineer' is used broadly across the industry, leading to a variety of job titles. One posting calls the role "Solar Design Engineer," and the next "PV Systems Engineer," and a third "Electrical Engineer — Solar."
+            The term 'Solar Engineer' is used broadly across the industry, leading to a variety of job titles.
           </p>
           <p>
-            The root cause is structural. Solar is a young industry with no single standardized BLS/SOC occupational code covering these roles. The Bureau of Labor Statistics tracks "Electrical Engineers" (17-2071) and "Mechanical Engineers" (17-2141), but there's no "Solar Engineer" code. So every EPC, installer, and utility names the role however their internal structure dictates.
+            The root cause is structural. Solar is a young industry with no single standardized BLS/SOC occupational code covering these roles. The Bureau of Labor Statistics do not track solar engineering positions, so every company names the role however their internal structure dictates.
           </p>
           <p>
-            This guide maps the real titles you'll see in postings to what the job involves.
+            This guide maps the real titles you'll see in postings.
           </p>
 
           <h2 id="mapping"><span className="n">02</span>Job Title Mapping Table</h2>
-          <p>
-            Find the title you're looking at, and this table tells you which functional bucket it belongs to.
-          </p>
+         
           <table style={{ width: "100%", borderCollapse: "collapse", margin: "20px 0 28px", fontSize: "14px" }}>
             <thead>
               <tr style={{ background: "#0B1A2E", color: "#fff" }}>
@@ -204,32 +202,13 @@ export default function SolarEngineerJobs() {
             </tbody>
           </table>
 
-          <div style={{ margin: "22px 0 30px", textAlign: "center" }}>
-            <Link
-              href="/solar-engineer-jobs"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                background: "#0B1A2E",
-                color: "#FFFFFF",
-                border: "1px solid #0B1A2E",
-                borderRadius: 0,
-                fontWeight: 800,
-                textDecoration: "none",
-              }}
-            >
-              Browse live solar engineer jobs →
-            </Link>
-          </div>
-
           <h2 id="pv-design"><span className="n">03</span>Photovoltaic (PV) Design Engineer</h2>
           <p>
-            This is the most common "solar engineer" posting you'll find, and the most accessible entry point. A PV Design Engineer turns a site into a buildable system, whether it is a roof, parking canopy, or ground-mounted array.
+            This is the most common "solar engineer" posting you'll find, and the most accessible entry point. A PV Design Engineer takes a site — a roof, a parking lot, a ground mount, and turns it into a buildable system.
           </p>
-          <p><strong>Day-to-day:</strong> You start with the site layout, then size strings, conductors, conduit, and racking. You model shading and production before producing the permit drawing set. At residential companies, this role often overlaps with sales engineering because the design has to be cost-competitive.</p>
-          <p><strong>Software commonly required:</strong> Start with PVsyst for production modeling. Learn Helioscope or Aurora Solar for layout and shading. AutoCAD is commonly used for plan sets, while some postings add SketchUp for 3D modeling.</p>
-          <p><strong>Certifications commonly requested:</strong> NABCEP PV Installation Professional (PVIP) shows up on a meaningful share of postings. NABCEP PV Design Specialist is less common but appears on more senior roles. EIT is a plus but rarely required at this level. See the <Link href="/certifications/nabcep-pv-installation-professional">NABCEP PVIP certification guide</Link> for the eligibility path.</p>
+          <p><strong>Day-to-day:</strong> Build the system layout, then produce a permit-ready drawing set. Residential teams often combine this work with sales engineering.</p>
+          <p><strong>Software commonly required:</strong> PVsyst is common for production modeling. Aurora or Helioscope usually covers layout work.</p>
+          <p><strong>Certifications commonly requested:</strong> NABCEP PV Installation Professional (PVIP) appears on some postings. EIT is usually a plus rather than a requirement at this level.</p>
           <p><strong>Degree requirement:</strong> Many residential and small-commercial design roles do <em>not</em> strictly require a 4-year engineering degree. Postings frequently accept an associate degree plus software proficiency and field experience. Utility-scale design roles are more likely to require a BS in electrical or mechanical engineering.</p>
           <p><strong>Salary range:</strong> Aggregated from job postings: roughly $60,000–$85,000 for residential design, $80,000–$110,000 for commercial/utility design. Senior or PE-licensed roles push $110,000–$140,000. Exact figures vary by employer and region.</p>
           <p><strong>Scope skew:</strong> Residential and small-commercial, with utility-scale roles at larger EPCs.</p>
@@ -238,8 +217,8 @@ export default function SolarEngineerJobs() {
           <p>
             "Solar Systems Engineer" and "PV Systems Engineer" are the titles employers use when they want someone who owns the whole system. These roles appear more often at EPCs, integrators, and companies building larger projects.
           </p>
-          <p><strong>Day-to-day:</strong> Systems engineers set the system architecture, then coordinate the electrical and structural design. They model performance, select equipment, and review designs produced by others. They are the people answering, "Will this work and meet code?" across the project.</p>
-          <p><strong>Software commonly required:</strong> PVsyst, PVCase or PlantPredict for utility-scale optimization, AutoCAD, and often specialized tools like CYMCAP for cable ampacity or ETAP for protection studies.</p>
+          <p><strong>Day-to-day:</strong> Own the system architecture and review designs produced by others. The central question is whether the project will work and meet code.</p>
+          <p><strong>Software commonly required:</strong> PVsyst and AutoCAD are common. Utility-scale roles may also use PVCase or PlantPredict.</p>
           <p><strong>Certifications commonly requested:</strong> NABCEP PVIP is frequently listed. EIT/PE track is more common here than in residential design. Some postings explicitly say "PE preferred" or "EIT required."</p>
           <p><strong>Degree requirement:</strong> A BS in electrical engineering is the most common requirement on these postings. Mechanical engineering degrees appear for structural-heavy roles. Some employers accept equivalent experience, but the bar is higher than residential design.</p>
           <p><strong>Salary range:</strong> Aggregated from job postings: $80,000–$120,000 for mid-level, $110,000–$150,000+ for senior or PE-licensed. Utility-scale systems engineers at large EPCs sit at the top of that range.</p>
@@ -249,8 +228,8 @@ export default function SolarEngineerJobs() {
           <p>
             Project Engineer is a construction-industry title that solar has adopted. It's the role that sits between the design office and the field crew. It is a common lateral move for design engineers who want more site exposure.
           </p>
-          <p><strong>Day-to-day:</strong> Project engineers manage RFIs (requests for information) and review submittals. They coordinate with the general contractor and subcontractors, track as-built changes, and solve problems that only show up once construction starts. On smaller companies, they may also do the design. At larger EPCs, this is a dedicated coordination role.</p>
-          <p><strong>Software commonly required:</strong> AutoCAD (reading and marking up drawings), Procore or similar construction management software, and Microsoft Project or Primavera for scheduling. Design software is less central here than in design roles.</p>
+          <p><strong>Day-to-day:</strong> Resolve site questions and coordinate changes once construction starts. Smaller companies may combine this role with design work.</p>
+          <p><strong>Software commonly required:</strong> AutoCAD and a construction-management platform such as Procore are common. Design software matters less here.</p>
           <p><strong>Certifications commonly requested:</strong> NABCEP PVIP is a plus. OSHA 30 is frequently required for site work. EIT/PE is less common unless the role includes stamping responsibility.</p>
           <p><strong>Degree requirement:</strong> A BS in engineering (civil, mechanical, or electrical) is the most common requirement, but construction management degrees and equivalent field experience also appear on postings.</p>
           <p><strong>Salary range:</strong> Aggregated from job postings: $70,000–$100,000 for mid-level, $95,000–$130,000 for senior project engineers at utility-scale EPCs.</p>
@@ -260,8 +239,8 @@ export default function SolarEngineerJobs() {
           <p>
             These postings are usually written by companies that need a licensed-track electrical engineer who understands PV. The emphasis is on the electrical side of the system.
           </p>
-          <p><strong>Day-to-day:</strong> The core work is one-line and three-line diagrams. Electrical engineers run protection and coordination studies, design grounding, and manage utility interconnection applications. They also ensure code compliance under NEC Article 690 for PV and Article 705 for interconnected systems. At utility scale, they coordinate substation and medium-voltage design.</p>
-          <p><strong>Software commonly required:</strong> AutoCAD Electrical, ETAP or SKM for protection studies, and sometimes CYMCAP. PVsyst appears less often here, this is an electrical engineering role.</p>
+          <p><strong>Day-to-day:</strong> Design the electrical side of the project and prepare utility interconnection work. Utility-scale roles can include substation coordination.</p>
+          <p><strong>Software commonly required:</strong> AutoCAD Electrical and ETAP are common. PVsyst appears less often in this electrical-engineering track.</p>
           <p><strong>Certifications commonly requested:</strong> EIT is frequently required, PE is often preferred or required for stamping roles. NABCEP PVIP is a plus but secondary to the electrical credentials.</p>
           <p><strong>Degree requirement:</strong> A BS in electrical engineering from an ABET-accredited program is the standard requirement. This is the one solar engineering category where the degree is genuinely hard to bypass — PE-track roles require it by definition.</p>
           <p><strong>Salary range:</strong> Aggregated from job postings: $80,000–$115,000 for EIT-level, $110,000–$150,000+ for PE-licensed. Utility-scale electrical engineers at large EPCs and utilities sit at the top.</p>
@@ -275,26 +254,26 @@ export default function SolarEngineerJobs() {
             When solar thermal roles do appear, they're usually within mechanical engineering departments at companies doing industrial process heat, or at specialized firms serving the commercial hot-water market. The skills are closer to HVAC and plumbing design than to PV electrical work.
           </p>
           <p>
-            If you're interested in thermal, the honest advice is to pursue a mechanical engineering background and look for companies with a thermal product line — don't expect a dedicated "solar thermal engineer" job board to be useful.
+            If you're interested in thermal, the best advice is to pursue a mechanical engineering background and look for companies with a thermal product line.
           </p>
 
           <h2 id="bess"><span className="n">08</span>BESS Engineer</h2>
           <p>
-            Battery Energy Storage Systems (BESS) engineering is the fastest-growing corner of solar engineering right now. Storage is being added to residential, commercial, and utility-scale projects across the country, and the labor shortage is real.
+            Battery Energy Storage Systems (BESS) engineering is the fastest-growing corner of solar engineering right now. Storage is being added to residential, commercial, & utility-scale projects across the country.
           </p>
           <p>
-            A BESS Engineer designs the storage side. They size the battery, select the inverter and PCS, then coordinate thermal management and fire safety under NFPA 855. They also configure the controls that make the system dispatchable. At utility scale, the work extends to containerized systems, medium-voltage integration, and grid-services modeling.
+            A BESS Engineer designs the storage side of a project: battery sizing and the controls that dispatch it. Utility-scale roles can also include medium-voltage integration.
           </p>
           <p>
             We have a dedicated guide on <Link href="/resources/do-you-need-to-be-an-electrician-for-bess">BESS technician requirements</Link> and a <Link href="/bess-technician-jobs">BESS technician jobs board</Link> — the engineering side is a step up from technician work, but the same market dynamics apply: demand is growing faster than the supply of qualified people.
           </p>
 
-          <h2 id="scope"><span className="n">09</span>Residential vs. Commercial vs. Utility-Scale: How Scope Changes the Job</h2>
+          <h2 id="scope"><span className="n">09</span>Residential vs. Commercial vs. Utility-Scale</h2>
           <p>
             The same title means different work depending on the market segment. This matters more in solar than in most industries.
           </p>
           <p>
-            <strong>Residential:</strong> Design engineers deal with permitting variance state by state and jurisdiction by jurisdiction. Every AHJ (Authority Having Jurisdiction) has its own requirements, and a design that passes in one county can fail in the next. The work is high-volume, often dozens of small designs per week, and cost pressure is intense. Residential solar is in a harder market right now, with slower installs and tighter margins. That makes design roles here more exposed to market swings.
+            <strong>Residential:</strong> Design engineers deal with permitting variance state-by-state and jurisdiction-by-jurisdiction. Every AHJ (Authority Having Jurisdiction) has its own requirements, and a design that passes in one county can fail in the next. The work is high-volume — dozens of small designs per week — and cost pressure is intense. Residential solar is in a harder market right now, with slower installs and tighter margins, which means design roles here are more exposed to market swings.
           </p>
           <p>
             <strong>Commercial:</strong> Design engineers work on larger rooftops and parking structures with more complex electrical systems — three-phase, higher voltages, more interconnection coordination. The design cycle is longer and the stakes per project are higher. This is where the "systems engineer" title starts to appear.
@@ -317,7 +296,7 @@ export default function SolarEngineerJobs() {
             <li><strong>Electrical Engineer → Solar Electrical Engineer → Utility Interconnection / Grid Engineer:</strong> Electrical engineers can specialize into interconnection and grid integration, which is one of the most in-demand niches as solar penetration grows.</li>
           </ul>
           <p>
-            The key insight: your first solar engineering job does not lock you in. A design engineer can move into project work. A project engineer can develop deeper systems expertise. BESS employers hire from each of those backgrounds.
+            The key insight: your first solar engineering job doesn't lock you in. The industry is young enough that lateral moves between design, project, and systems roles are common — and the fastest-growing segment (BESS) is pulling people from all of them.
           </p>
 
           <h2 id="degree"><span className="n">11</span>Do You Need an Engineering Degree?</h2>
@@ -336,11 +315,9 @@ export default function SolarEngineerJobs() {
 
           <h2 id="faq"><span className="n">12</span>FAQ</h2>
 
-          <div className="sr2-faq">
-
           <h3>What software do solar design engineers use?</h3>
           <p>
-            Start with PVsyst for production modeling. Helioscope and Aurora Solar are widely used for layout and shading analysis. AutoCAD or AutoCAD Civil 3D is common for plan sets. Utility-scale roles often add PVCase or PlantPredict for large-array optimization and interconnection studies.
+            The most common tools are PVsyst for production modeling, Helioscope and Aurora Solar for layout and shading analysis, and AutoCAD or AutoCAD Civil 3D for plan sets. Utility-scale roles add PVCase or PlantPredict for large-array optimization and interconnection studies.
           </p>
 
           <h3>Do solar engineers need a PE license?</h3>
@@ -372,8 +349,6 @@ export default function SolarEngineerJobs() {
           <p>
             It exists but is rare. The US solar market is overwhelmingly photovoltaic (PV) — solar thermal (hot water, process heat) makes up a very small share of installations and job postings. Most "solar engineer" roles you'll find are PV-focused. If you're interested in thermal, it's usually a niche within mechanical engineering.
           </p>
-
-          </div>
 
           <div className="sr2-callout">
             <span className="kicker">Ready to look at real openings?</span>

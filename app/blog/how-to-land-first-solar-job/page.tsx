@@ -227,7 +227,7 @@ export default function ArticlePage() {
               This is the main “learn while working” route. The Bureau of Labor Statistics says most PV installers learn alongside
               experienced installers, with related construction experience shortening the ramp-up. That matches repeated advice from
               working installers: start with safety, listen closely, and learn tools and layout quickly. Show that you understand the
-              realities of the work: heat, roofs, travel, and physical repetition.
+              realities of the work: roofs and physical repetition.
             </p>
             <p>
               <strong>Best move:</strong> apply to installer and apprentice openings. Then make your application specific:
@@ -249,9 +249,7 @@ export default function ArticlePage() {
             <span className="role-order">3. Accessible, but a different job</span>
             <h3>Solar sales consultant or appointment setter</h3>
             <p>
-              Sales can be easier to enter than an electrical role, but it is not an “easy” solar job. It rewards prospecting,
-              follow-up, clear communication, and comfort with rejection — often through phone, virtual, canvassing, or door-to-door
-              work. Community discussions consistently warn new reps not to confuse a large advertised income range with guaranteed pay.
+              Sales can be easier to enter than an electrical role, but it is not an “easy” solar job. It rewards consistent follow-up and comfort with rejection. Community discussions consistently warn new reps not to confuse a large advertised income range with guaranteed pay.
             </p>
             <p>
               <strong>Best move:</strong> before accepting, get these answers in writing:
@@ -273,9 +271,7 @@ export default function ArticlePage() {
             <h3>Solar electrician, service technician, or O&amp;M technician</h3>
             <p>
               These roles are excellent long-term paths, but usually not the first offer for someone with no electrical foundation.
-              Employers look for electrical troubleshooting, conduit, plans, code awareness, commissioning, service documentation, or
-              an electrician apprenticeship. If you already have electrical, HVAC, industrial maintenance, or automotive diagnostics
-              experience, say so directly; it is more valuable than a generic “passion for solar” paragraph.
+              Employers look for electrical troubleshooting and an electrician apprenticeship. If you already have electrical or industrial-maintenance experience, say so directly; it is more valuable than a generic “passion for solar” paragraph.
             </p>
             <p>
               <strong>Best move:</strong> start with an apprenticeship, electrical helper, installer, or junior service role. Once you are on
@@ -289,8 +285,7 @@ export default function ArticlePage() {
             <h3>Lead installer or crew lead</h3>
             <p>
               A lead is hired to keep people safe and lay out the work. They solve small problems, teach newer installers, and deliver a
-              handoff — not merely to install panels quickly. Experienced workers describe advancement as tied to crew responsibility,
-              conduit and electrical competence, paperwork, and the ability to train others. Treat this as a target after proving you
+              handoff — not merely to install panels quickly. Experienced workers describe advancement as tied to crew responsibility and the ability to train others. Treat this as a target after proving you
               can install consistently, not a title to stretch for on your first application.
             </p>
             <p>
@@ -303,9 +298,7 @@ export default function ArticlePage() {
             <span className="role-order">6. Least accessible without related experience</span>
             <h3>Project coordinator, assistant project manager, or project manager</h3>
             <p>
-              Solar project management is construction coordination. It covers permits, schedules, material status, change orders,
-              inspections, and closeout. Some roles also manage subcontractors or customer communication. A direct PM jump is realistic
-              only if you already bring relevant construction, logistics, permitting, design, procurement, or client-project experience.
+              Solar project management is construction coordination. It covers permits and project closeout. Some roles also manage subcontractors. A direct PM jump is realistic only if you already bring construction or project-coordination experience.
               Practitioners are more likely to recommend project coordinator or assistant PM roles to newcomers than a full PM title.
             </p>
             <p>
@@ -349,7 +342,7 @@ export default function ArticlePage() {
               <li><strong>Availability</strong> — one line: "Available immediately, full-time, own transportation" (this alone gets you past some filters)</li>
             </ul>
             <p style={{ marginBottom: 0 }}>
-              If you've never worked construction: use roofing, landscaping, warehouse, moving, delivery, or military experience. Rewrite each
+              If you've never worked construction: use roofing or warehouse experience. Rewrite each
               bullet around a physical or safety skill. "Stocked shelves" becomes "Lifted and moved 40–60 lb loads repeatedly in a fast-paced
               environment while following safety protocols."
             </p>
@@ -465,7 +458,7 @@ export default function ArticlePage() {
               Start your solar job search right now
             </h2>
             <p className="text-white/80 mb-6 max-w-md mx-auto">
-              Browse open PV installer, apprentice, and lead installer jobs from solar-focused employers across the US.
+              Browse open PV installer and apprentice jobs from solar-focused employers across the US.
             </p>
             <Link
               href="/jobs"

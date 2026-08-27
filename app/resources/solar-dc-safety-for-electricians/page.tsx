@@ -61,7 +61,7 @@ export default function SolarDcSafetyForElectricians() {
       </div>
 
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 10 August, 2026</span>
+        <span><strong>Last reviewed:</strong> 27 August, 2026</span>
       </div>
 
       <div className="sr2-shell">
@@ -94,10 +94,10 @@ export default function SolarDcSafetyForElectricians() {
 
           <h2 id="daylight"><span className="n">02</span>Why “Off” Is Not Always De-Energized</h2>
           <p>
-            A PV module generates DC electricity whenever light reaches it. Opening an inverter, disconnect, or breaker may isolate part of the system, but it does not make every conductor on the array side dead. The exact energized sections depend on the system design and the isolation points available.
+            A PV module generates DC electricity whenever light reaches it. Opening an inverter may isolate part of the system, but it does not make every conductor on the array side dead. The exact energized sections depend on the system design and the isolation points available.
           </p>
           <p>
-            This is where an AC-only mental model can become dangerous. “The system is off” is not a complete electrical status. A qualified worker needs to identify the source, the circuit boundaries, the devices that can interrupt the circuit, and what remains energized in daylight before work begins.
+            This is where an AC-only mental model can become dangerous. “The system is off” is not a complete electrical status. A qualified worker needs to identify the source that can interrupt the circuit, and what remains energized in daylight before work begins.
           </p>
           <p>
             OSHA specifically notes that solar workers face shock and arc-flash hazards, and that PV circuits are energized whenever modules are exposed to sunlight. That is why solar-specific safety training matters alongside a general electrical background.

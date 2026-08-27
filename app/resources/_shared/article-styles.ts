@@ -287,6 +287,27 @@ export const articleCss = `
   box-shadow: 0 4px 10px -4px rgba(245,184,25,0.4);
   font-variant-numeric: tabular-nums;
 }
+@media (max-width: 640px) {
+  /* Keep the section marker compact so headings use the line width naturally
+     instead of breaking into two overly balanced-looking lines. */
+  .sr2-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .sr2-article h2 {
+    font-size: 23px;
+    gap: 8px;
+    line-height: 1.22;
+  }
+  .sr2-article h2 .n {
+    min-width: 28px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+}
 .sr2-article p { margin: 0 0 16px; }
 .sr2-article strong { color: var(--navy-900); font-weight: 700; }
 .sr2-article a {

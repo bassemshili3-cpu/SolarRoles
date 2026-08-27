@@ -71,12 +71,9 @@ export default function CertificationsIndex() {
             Solar Certifications
           </span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-5">
-            Get the top certifications solar employers{' '}
-            <span className="text-[#F5B819]">value</span>
+            Get the most valued solar certifications
           </h1>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto">
-            What each one is, which role it's for, and where we'd go to get it.
-          </p>
+        
         </div>
       </section>
 
@@ -89,7 +86,7 @@ export default function CertificationsIndex() {
                 Getting Started
               </p>
               <h2 className="text-3xl md:text-2xl font-bold text-[#0B1A2E] mb-3">
-                Click on one of the certifications below to learn everything you have to know before getting started.
+                Click on one of the certifications below to learn everything you have to know before starting your solar career.
               </h2>
              
             </div>

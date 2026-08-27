@@ -97,10 +97,8 @@ export default function DoYouNeedToBeAnElectricianForBess() {
           <h2 id="requirements"><span className="n">02</span>BESS Employer Requirements</h2>
           <p>
             A BESS Technician I posting from a major operator asks for
-            a high school diploma <em>or</em> a diploma in an electrical
-            program covering AC/DC voltage, one-line and three-line
-            schematics, and operation of breakers, disconnects, transformers,
-            and relays, plus one to three years of field experience at a
+            a high school diploma <em>or</em> an electrical-program diploma,
+            plus one to three years of field experience at a
             BESS, solar, wind, or thermal site. Postings at utility-scale
             plants go even further, preferring a journeyman or licensed industrial
             electrician outright.
@@ -114,10 +112,9 @@ export default function DoYouNeedToBeAnElectricianForBess() {
           <h2 id="why"><span className="n">03</span>Why BESS Isn&apos;t Solar&apos;s Open Door</h2>
           <p>
             Solar installer crews can absorb someone with zero background
-            because the physical install work, including racking, mounting,
-            and panel handling, doesn&apos;t require touching live high-voltage
-            equipment on day one. Technicians work around DC strings that can run past 1,000V, lithium-ion packs with
-            thermal runaway risk, and arc flash hazards baked into daily
+            because basic installation work does not require touching live high-voltage
+            equipment on day one. Technicians work around high-voltage DC and battery systems with
+            thermal-runaway risk during daily
             maintenance and commissioning tasks. Employers can&apos;t train
             that judgment in a few weeks the way they can train panel
             installation.
@@ -147,7 +144,7 @@ export default function DoYouNeedToBeAnElectricianForBess() {
             In solar, <Link href="/certifications/nabcep-pv-associate">NABCEP PV Associate</Link> is a genuine entry credential — no
             experience required. The BESS equivalent, NABCEP Energy Storage
             Installation Professional (ESIP), isn&apos;t. It requires 58 hours
-            of advanced training, OSHA 30, and two years of experience in a
+            of advanced training and two years of experience in a
             decision-making role on storage projects, with at least six
             project credits completed in that window. You can&apos;t
             certify your way into your first BESS job because the certification

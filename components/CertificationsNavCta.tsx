@@ -38,13 +38,17 @@ export function CertificationsNavCta() {
   return (
     <div
       className="relative inline-flex group"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onPointerEnter={(event) => {
+        if (event.pointerType === 'mouse') setOpen(true)
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === 'mouse') setOpen(false)
+      }}
     >
       <Link href="/certifications">
         <Button
           size="sm"
-          className="relative overflow-hidden rounded-full px-3 h-7 text-xs sm:px-4 sm:h-9 sm:text-sm font-semibold text-black
+          className="relative overflow-hidden rounded-full px-3 h-7 text-xs max-[360px]:px-2 max-[360px]:text-[11px] sm:px-4 sm:h-9 sm:text-sm font-semibold text-black
                      bg-gradient-to-r from-[#F5B819] via-[#FF6A3D] to-[#F5B819]
                      bg-[length:200%_100%] animate-cert-cta-shimmer
                      transition-transform hover:scale-[1.03] active:scale-[0.97]

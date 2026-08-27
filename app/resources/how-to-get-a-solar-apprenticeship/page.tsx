@@ -228,13 +228,10 @@ export default function HowToGetASolarApprenticeship() {
         <h2>Where to apply</h2>
         <p>
           Apprenticeship.gov's Job Finder is the closest thing to a
-          national search tool, pulling listings tied to registered
-          programs and partners. In practice, it works best as a starting
-          point; state apprenticeship agencies
-          (Florida and Oregon both maintain their own), IBEW local union
-          halls for the electrical-track route, and direct outreach to
-          regional employers running their own registered program often
-          surface openings that never show up in a national search.
+          national search tool. Use it as a starting point, then check your
+          state apprenticeship agency and local IBEW halls. Direct outreach
+          to regional employers can uncover openings that never reach a
+          national search.
         </p>
         <p>
           Because eligibility lists are local and options vary so much by

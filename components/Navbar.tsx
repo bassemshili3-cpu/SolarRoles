@@ -46,8 +46,8 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white md:static">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2 sm:gap-8">
+        <div className="flex h-16 items-center gap-2 max-[360px]:gap-1">
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-8">
           <Link
             href="/"
             className="flex items-center shrink-0 gap-2"
@@ -95,10 +95,29 @@ export default function Navbar() {
               )
             })}
           </div>
+
+          <div className="ml-1 flex min-w-0 items-center gap-3.5 max-[360px]:ml-0 max-[360px]:gap-2 lg:hidden">
+            {navLinks.slice(0, 2).map(({ href, label }) => {
+              const isActive = pathname === href || pathname?.startsWith(href + '/')
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`whitespace-nowrap text-[12px] max-[360px]:text-[11px] font-medium transition-colors ${
+                    isActive ? 'text-[#0B1A2E]' : 'text-gray-600 hover:text-[#0B1A2E]'
+                  }`}
+                >
+                  {label}
+                </Link>
+              )
+            })}
+          </div>
         </div>
 
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
-            <CertificationsNavCta />
+          <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-3">
+            <span className={showMobileFilters ? 'hidden lg:inline-flex' : 'inline-flex'}>
+              <CertificationsNavCta />
+            </span>
 
           {user ? (
             <>
@@ -133,27 +152,10 @@ export default function Navbar() {
             </Link>
           )}
             {showMobileFilters && (
-              <span className="max-[360px]:hidden">
+              <span>
                 <FilterDrawerTrigger />
               </span>
             )}
-          </div>
-
-          <div className="flex min-w-0 items-center gap-2 lg:hidden">
-            {navLinks.slice(0, 2).map(({ href, label }) => {
-              const isActive = pathname === href || pathname?.startsWith(href + '/')
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`whitespace-nowrap text-[11px] font-medium transition-colors ${
-                    isActive ? 'text-[#0B1A2E]' : 'text-gray-600 hover:text-[#0B1A2E]'
-                  }`}
-                >
-                  {label}
-                </Link>
-              )
-            })}
           </div>
         </div>
         </div>

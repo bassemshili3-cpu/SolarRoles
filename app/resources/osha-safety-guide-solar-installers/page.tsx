@@ -107,12 +107,10 @@ export default function OshaSafetyGuideForSolarInstallers() {
 
       <h1>OSHA Safety Guide for Solar Installers</h1>
       <p className="resource-intro">
-        OSHA training is often the first credential a new installer earns,
-        it's frequently a hard requirement to get on a commercial roof at
-        all, and the hazards it covers (falls, live DC circuits, struck-by
-        incidents) are the ones that injure people in this trade.
-        Here's what the card means, what the rules require on a real roof,
-        and who's on the hook when something goes wrong.
+        OSHA training is often the first credential a new installer earns.
+        It is frequently required before someone can work on a commercial
+        roof. The course covers the hazards that most often injure solar
+        workers, including falls and live DC circuits.
       </p>
 
       <div className="resource-table-scroll">
@@ -140,8 +138,8 @@ export default function OshaSafetyGuideForSolarInstallers() {
         <h2>OSHA 10 vs OSHA 30: what's different</h2>
         <p>
           Both <Link href="/certifications/osha-10">OSHA 10</Link> and <Link href="/certifications/osha-30">OSHA 30</Link> come from the same Outreach Training Program and cover the
-          same four hazard categories construction relies on: falls,
-          electrocution, struck-by, and caught-in/between. The difference
+          same core construction hazards, including falls and electrocution.
+          The difference
           isn't the topic list, it's the depth and the audience. OSHA 10
           gives a new installer enough hazard awareness to work safely under
           someone else's supervision. OSHA 30 adds program-level material,
@@ -150,8 +148,8 @@ export default function OshaSafetyGuideForSolarInstallers() {
         </p>
         <p>
           Neither is legally mandated by federal OSHA itself. In practice,
-          almost every general contractor, EPC, and installation company
-          requires OSHA 10 before a worker sets foot on a jobsite, and a
+          most solar employers require OSHA 10 before a worker sets foot on
+          a jobsite. A
           growing number of states and municipalities have made it a legal
           condition for construction permits regardless of what OSHA
           requires nationally. If your state is one of them, that
@@ -171,8 +169,8 @@ export default function OshaSafetyGuideForSolarInstallers() {
           installation, and the rule is more specific than "wear a harness."
           Under construction standards, workers installing panels are
           exposed to a fall hazard at six feet or more and must be protected
-          by a guardrail system, a safety net, or a personal fall arrest
-          system. Maintenance work on an already-installed system falls
+          by a guardrail or a personal fall-arrest system. Maintenance work
+          on an already-installed system falls
           under general industry rules instead, where the threshold drops to
           four feet, and a standard railing is the default expectation
           before fall arrest gear becomes an option.
@@ -238,20 +236,16 @@ export default function OshaSafetyGuideForSolarInstallers() {
         <h2>Employer obligations vs worker obligations</h2>
         <p>
           The OSH Act puts the legal weight on the employer, which is worth knowing if you're ever
-          unsure who's supposed to catch a problem. Employers are required
-          to provide a workplace free of recognized hazards, supply and pay
-          for required PPE and fall protection equipment, provide the
-          training a task requires, and keep the records that prove it
-          happened. That obligation doesn't shrink based on company size,
-          and on multi-contractor sites, liability commonly extends to the
-          general contractor and property owner as well as the direct
+          unsure who's supposed to catch a problem. Employers must provide
+          a workplace free of recognized hazards and the training a task
+          requires. They must also supply required protection. On a
+          multi-contractor site, responsibility can extend beyond the direct
           employer.
         </p>
         <p>
           Workers have real obligations too, just narrower ones: use the
-          equipment and procedures you were trained on, report hazards and
-          near-misses instead of working around them, and follow the fall
-          protection and lockout/tagout rules that apply to the specific
+          procedures you were trained on and report hazards rather than
+          working around them. Follow the protection rules that apply to the
           task in front of you. A worker can be disciplined for ignoring
           provided protection, but a worker cannot be held responsible for
           protection the employer never supplied in the first place. When
@@ -266,7 +260,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
           For someone entering the trade with no supervisory role yet, OSHA
           10 Construction is the standard starting point, and it's often
           what employers or state law require before you're even allowed on
-          a residential roof crew. It's cheap, it's fast, and most
+          a residential roof crew. It is quick to complete and most
           installation companies treat it as a baseline hiring requirement.
         </p>
         <p>
@@ -280,9 +274,8 @@ export default function OshaSafetyGuideForSolarInstallers() {
         </p>
         <p>
           Either card should be treated as a floor. It proves
-          general construction hazard awareness. However, it does not certify you on
-          DC electrical hazards, rapid shutdown systems, or roof-specific PV
-          mounting risk.
+          general construction hazard awareness. However, it does not certify
+          you for DC electrical work or roof-specific PV mounting.
         </p>
       </section>
 

@@ -757,8 +757,8 @@ export default function HowToBecomeASolarInstaller() {
           <p>
             If you&apos;re figuring out how to become a solar installer,
             there are four common routes into the job. Which one makes
-            sense depends on your background, how much you can afford to
-            earn while training, and how fast you want to move.
+            sense depends on your background and how quickly you need to
+            start earning.
           </p>
         
          <p>
@@ -777,8 +777,8 @@ export default function HowToBecomeASolarInstaller() {
            <p>
             <strong>A short paid training program:</strong> Community colleges
             and workforce boards run programs that compress the basics into a
-            few weeks. They usually cover electrical fundamentals, racking and
-            mounting, OSHA safety, and hands-on installation practice. Some
+            few weeks. They usually cover electrical fundamentals and
+            hands-on installation practice. Some
             programs also include job placement.
           </p>
           <p>
@@ -791,8 +791,8 @@ export default function HowToBecomeASolarInstaller() {
             breaks down how to find one and what to expect.
           </p>
           <p>
-            <strong>Coming from a related trade: </strong> Electricians,
-            roofers, and general construction workers already have most of the
+            <strong>Coming from a related trade: </strong> Electricians and
+            construction workers already have most of the
             physical and technical foundation.
           </p>
           <h2 id="nabcep"><span className="n">02</span>NABCEP Certification</h2>
@@ -879,8 +879,8 @@ export default function HowToBecomeASolarInstaller() {
             practical criteria before a candidate is placed on a crew.
           </p>
           <p>
-            Physical capacity is assessed first because the role requires climbing,
-            kneeling, and carrying panels weighing 40–60 lbs on roofs or
+            Physical capacity is assessed first because the role requires climbing
+            and carrying panels weighing 40–60 lbs on roofs or
             racking systems for most of a shift. A valid driver&apos;s
             license is commonly a hard requirement, as crews typically
             travel to job sites together in a company vehicle. Familiarity
@@ -906,8 +906,8 @@ export default function HowToBecomeASolarInstaller() {
           <h2 id="growth"><span className="n">06</span>Career Progression</h2>
           <p>
             Most installers who stay in the trade move up after one to three
-            years. Before that step, they need to run a small crew, read a permit
-            set without help, and troubleshoot a wiring fault without escalating it.
+            years. Before that step, they need to run a small crew and troubleshoot
+            a wiring fault without escalating it.
             Common next moves include:
           </p>
           <ul>

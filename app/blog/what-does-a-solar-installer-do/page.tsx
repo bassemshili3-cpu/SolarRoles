@@ -188,8 +188,8 @@ export default function Page() {
               Do?
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-gray-600 sm:text-xl">
-              The hands-on trade that puts panels on America&rsquo;s roofs,
-              warehouses, and solar farms. Here&rsquo;s what a real day looks
+              The hands-on trade that puts panels on roofs and solar farms.
+              Here&rsquo;s what a real day looks
               like in 2026.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500">
@@ -214,9 +214,9 @@ export default function Page() {
                   The short version
                 </h2>
                 <p className="mt-2 text-base text-gray-800 sm:text-lg">
-                  A solar installer mounts racking, sets panels, and wires the
-                  system on roofs or ground mounts. It&rsquo;s a hands-on trade
-                  with a clear daily routine: stage, mount, wire, test.
+                  A solar installer builds and wires PV systems on roofs or
+                  ground mounts. It&rsquo;s a hands-on trade with a clear daily
+                  routine: prepare the site, then complete the install.
                 </p>
               </div>
             </div>
@@ -263,7 +263,7 @@ export default function Page() {
               <li>Run wiring to the inverter, then test connections before the system goes live.</li>
             </ol>
             <p>
-              Some crews also handle conduit runs, grounding, and labeling for the inspector.
+              Some crews also handle conduit runs and grounding work for the inspector.
             </p>
           </section>
         </div>
@@ -273,10 +273,10 @@ export default function Page() {
           <section id="typical-day">
             <h2>A typical day</h2>
             <p>
-              The day usually starts early: load the truck, drive to the site,
-              and stage the materials. On a roof job, the crew sets up fall
+              The day usually starts early: load the truck and travel to the
+              site. On a roof job, the crew sets up fall
               protection before beginning the work. The install then follows a
-              clear order: layout, racking, panels, and wiring. A lead installer
+              clear order: layout followed by installation. A lead installer
               or foreman assigns tasks and checks the work as it goes. On residential
               jobs a crew of two or three can often finish a system in a day;
               commercial and utility-scale projects run over weeks or months
@@ -348,8 +348,8 @@ export default function Page() {
           <section id="work-types">
             <h2>Residential, commercial, and utility-scale</h2>
             <p>
-              The core skills carry over between all three, but the pace,
-              crew size, and travel expectations differ quite a bit. Here&rsquo;s
+              The core skills carry over between all three, but the pace and
+              travel expectations differ. Here&rsquo;s
               a side-by-side.
             </p>
           </section>
@@ -418,8 +418,8 @@ export default function Page() {
               Installers rarely work alone. A crew lead or foreman manages
               sequencing and quality on site. A licensed electrician usually
               handles the final connection to the grid and any work that
-              requires a license. A project manager coordinates permits,
-              scheduling, and inspections behind the scenes. As an installer
+              requires a license. A project manager coordinates permits and
+              inspections behind the scenes. As an installer
               gains experience, moving into the crew lead role is the most
               common next step.
             </p>
@@ -463,7 +463,7 @@ export default function Page() {
               </h2>
               <p className="mt-2 max-w-xl text-gray-300">
                 Skip the sales and consultant noise. Solar Roles only shows
-                hands-on PV installer, electrician, and O&amp;M openings.
+              hands-on PV installer and electrician openings.
               </p>
               <a
                 href="/solar-pv-installer-jobs"
