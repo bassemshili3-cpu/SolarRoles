@@ -2,8 +2,7 @@
 import type { Metadata } from 'next'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { getJobDetail, getJobDetailWithSalary, type JobDetail } from '@/lib/jobDetail'
-import { buildJobSlug } from '@/lib/slugify'
-import { getCanonicalSlugFromCache } from '@/lib/jobSlugCache'
+import { getCanonicalJobSlug } from '@/lib/slugify'
 
 const SITE_URL = 'https://www.solarroles.com'
 const NON_INDEXABLE_SOURCES = new Set(['adzuna', 'jooble', 'careerjet', 'lensa', 'whatjobs'])
@@ -42,7 +41,7 @@ export async function generateMetadata({
   }
 
   const job = getJobDetailWithSalary(rawJob)
-  const canonicalUrl = `${SITE_URL}/jobs/${job.id}/${buildJobSlug(job)}`
+  const canonicalUrl = `${SITE_URL}/jobs/${job.id}/${getCanonicalJobSlug(job)}`
   const salary = job.salary_min && job.salary_max
     ? ` — $${job.salary_min.toLocaleString('en-US')} to $${job.salary_max.toLocaleString('en-US')}`
     : ''
@@ -70,14 +69,7 @@ export default async function LegacyJobRedirect({
 }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
-  // 1. On tente d'abord le cache Redis (rapide, évite la DB)
-  const cachedSlug = await getCanonicalSlugFromCache(id)
-  if (cachedSlug) {
-    permanentRedirect(`/jobs/${id}/${cachedSlug}`)
-  }
-
-  // 2. Sinon, fallback sur la DB comme avant
   const job = await getJobDetail(id)
   if (!job) notFound()
-  permanentRedirect(`/jobs/${id}/${buildJobSlug(job)}`)
+  permanentRedirect(`/jobs/${id}/${getCanonicalJobSlug(job)}`)
 }

@@ -42,6 +42,7 @@ async function* iterateAllJobIds(batchSize = 1000): AsyncGenerator<string[]> {
   while (true) {
     const jobs = await prisma.job.findMany({
       select: { id: true },
+      where: { canonicalSlug: null },
       take: batchSize,
       ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
       orderBy: { id: 'asc' },
@@ -57,10 +58,13 @@ async function cacheJobSlug(jobId: string): Promise<boolean> {
   return await withRetry(async () => {
     const job = await prisma.job.findUnique({
       where: { id: jobId },
-      select: { id: true, title: true, company: true, location: true, addressRegion: true, source: true },
+      select: { id: true, title: true, company: true, location: true, addressRegion: true, source: true, canonicalSlug: true },
     })
     if (!job) return null
-    const slug = buildJobSlug(job as any)
+    const slug = job.canonicalSlug || buildJobSlug(job)
+    if (!job.canonicalSlug) {
+      await prisma.job.update({ where: { id: job.id }, data: { canonicalSlug: slug } })
+    }
     await kv.set(`${KEY_PREFIX}${job.id}`, slug, { ex: TTL_SECONDS })
     return slug
   }, jobId) !== null
@@ -76,8 +80,8 @@ async function main() {
   console.log('🚀 Backfill des slugs dans Upstash...')
   const startTime = Date.now()
 
-  const total = await prisma.job.count()
-  console.log(`📦 ${total} jobs en base`)
+  const total = await prisma.job.count({ where: { canonicalSlug: null } })
+  console.log(`📦 ${total} jobs à stabiliser`)
 
   let processed = 0
   let totalOk = 0

@@ -25,3 +25,12 @@ export function buildJobSlug(job: { title: string; location?: string | null }): 
 
   return `${titleSlug}-${locationSlug}`.slice(0, 80)
 }
+
+/** Uses the immutable persisted slug when one exists. */
+export function getCanonicalJobSlug(job: {
+  canonicalSlug?: string | null
+  title: string
+  location?: string | null
+}): string {
+  return job.canonicalSlug?.trim() || buildJobSlug(job)
+}

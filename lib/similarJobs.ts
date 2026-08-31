@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 export type SimilarJob = {
   id: string
   title: string
+  canonicalSlug: string | null
   company: string | null
   location: string | null
   salaryMin: number | null
@@ -14,6 +15,7 @@ export type SimilarJob = {
 const SELECT = {
   id: true,
   title: true,
+  canonicalSlug: true,
   company: true,
   location: true,
   salaryMin: true,

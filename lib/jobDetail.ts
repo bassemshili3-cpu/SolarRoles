@@ -6,6 +6,7 @@ import { cache } from 'react'
 export type JobDetail = {
   id: string
   title: string
+  canonicalSlug?: string | null
   company?: string
   location?: string
   addressRegion?: string
@@ -39,6 +40,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
     return {
       id: dbJob.id,
       title: dbJob.title,
+      canonicalSlug: dbJob.canonicalSlug,
       company: dbJob.company,
       location: dbJob.location,
       addressRegion: dbJob.addressRegion,

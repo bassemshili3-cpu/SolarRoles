@@ -75,6 +75,18 @@ const remoteGoogle = buildGoogleJobPosting({ ...job, title: remoteDetail.title, 
 assert.equal(remoteGoogle?.jobLocationType, 'TELECOMMUTE');
 assert.equal(Array.isArray(remoteGoogle?.applicantLocationRequirements) ? undefined : remoteGoogle?.applicantLocationRequirements?.name, 'USA');
 assert.equal(remoteGoogle?.jobLocation, undefined);
+const regionRestrictedRemoteGoogle = buildGoogleJobPosting({
+  ...job,
+  title: remoteDetail.title,
+  location: remoteDetail.location,
+  addressRegion: 'FL',
+  locationRegions: ['FL', 'TX'],
+  isRemote: true,
+}, undefined);
+assert.deepEqual(regionRestrictedRemoteGoogle?.applicantLocationRequirements, [
+  { '@type': 'AdministrativeArea', name: 'Florida, USA' },
+  { '@type': 'AdministrativeArea', name: 'Texas, USA' },
+]);
 assert.equal(isAllowedByRobots('User-agent: *\nDisallow: /careers/private\nAllow: /', 'https://example.com/careers/solar'), true);
 assert.equal(isAllowedByRobots('User-agent: *\nDisallow: /careers', 'https://example.com/careers/solar'), false);
 assert.equal(isSolarInstallerRole('Lead Installer / Crew Lead', 'Company context: Solar CCS is a solar installation company.'), true);

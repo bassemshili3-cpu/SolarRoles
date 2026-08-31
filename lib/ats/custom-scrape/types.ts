@@ -62,7 +62,7 @@ export type GoogleJobPosting = {
   hiringOrganization: { name: string };
   jobLocation?: { address: { addressLocality?: string; addressRegion: string; addressCountry: 'US' } } | Array<{ address: { addressLocality?: string; addressRegion: string; addressCountry: 'US' } }>;
   jobLocationType?: 'TELECOMMUTE';
-  applicantLocationRequirements?: { '@type': 'Country'; name: 'USA' } | { '@type': 'State'; name: string } | Array<{ '@type': 'State'; name: string }>;
+  applicantLocationRequirements?: { '@type': 'Country'; name: 'USA' } | { '@type': 'AdministrativeArea'; name: string } | Array<{ '@type': 'AdministrativeArea'; name: string }>;
   employmentType?: string;
   baseSalary?: string;
 };

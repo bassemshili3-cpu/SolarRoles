@@ -1,7 +1,7 @@
 // app/sitemap.ts
 
 import type { MetadataRoute } from "next";
-import { buildJobSlug } from "@/lib/slugify";
+import { getCanonicalJobSlug } from "@/lib/slugify";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
 import { JobDetail } from "@/lib/jobDetail";
 import { CERTIFICATIONS } from "@/app/certifications/[slug]/certifications-data"
@@ -186,6 +186,7 @@ const ownJobs = await prisma.job.findMany({
   select: {
     id: true,
     title: true,
+    canonicalSlug: true,
     location: true,
     postedAt: true,
     fetchedAt: true,
@@ -195,7 +196,7 @@ const ownJobs = await prisma.job.findMany({
 
   for (const job of ownJobs) {
     entries.push({
-      url: `${BASE_URL}/jobs/${job.id}/${buildJobSlug(job)}`,
+      url: `${BASE_URL}/jobs/${job.id}/${getCanonicalJobSlug(job)}`,
       lastModified: job.updatedAt,
       changeFrequency: "daily",
       priority: 0.7,

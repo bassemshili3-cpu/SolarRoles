@@ -20,7 +20,7 @@ import { getRoleLocationStats } from '@/lib/roleLocationStats'
 
 import { Metadata } from 'next'
 
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 
@@ -46,7 +46,7 @@ import { compareSalaryToMarket } from '@/lib/salaryComparison'
 
 import { getJobDetail, getJobDetailWithSalary, type JobDetail } from '@/lib/jobDetail'
 
-import { buildJobSlug } from '@/lib/slugify'
+import { getCanonicalJobSlug } from '@/lib/slugify'
 
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
@@ -358,7 +358,7 @@ function buildJobPostingSchema(
 
     jobLocation: jobLocations.length === 1 ? jobLocations[0] : jobLocations,
 
-    url: `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`,
+    url: `https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}`,
 
   datePosted: new Date(job.postedAt).toISOString().split('T')[0],
 validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
@@ -431,15 +431,14 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
   if (isRemote) {
 
-    // A remote role has no physical worksite. State-specific remote jobs keep
-    // their eligibility restriction from addressRegion instead of being
-    // broadened to the whole country.
+    // A remote role has no physical worksite. Google validates eligible
+    // applicant regions as AdministrativeArea, not schema.org State.
     delete schema.jobLocation
     schema.jobLocationType = 'TELECOMMUTE'
     const applicantRegions = locationRegions
       .map((region) => resolveStateName(region))
       .filter((name): name is string => Boolean(name))
-      .map((name) => ({ '@type': 'State', name: `${name}, USA` }))
+      .map((name) => ({ '@type': 'AdministrativeArea', name: `${name}, USA` }))
     schema.applicantLocationRequirements = applicantRegions.length > 0
       ? applicantRegions.length === 1 ? applicantRegions[0] : applicantRegions
       : { '@type': 'Country', name: 'USA' }
@@ -504,7 +503,7 @@ export async function generateMetadata(
   const job = getJobDetailWithSalary(raw)
 
 
-  const canonicalUrl = `https://www.solarroles.com/jobs/${id}/${buildJobSlug(job)}`
+  const canonicalUrl = `https://www.solarroles.com/jobs/${id}/${getCanonicalJobSlug(job)}`
 
 
   const salaryStr =
@@ -580,6 +579,11 @@ export default async function JobDetailPage({
 
 
   const job = getJobDetailWithSalary(raw)
+
+  const canonicalSlug = getCanonicalJobSlug(job)
+  if (slug !== canonicalSlug) {
+    permanentRedirect(`/jobs/${id}/${canonicalSlug}`)
+  }
 
 // Requirement details are often present in the source posting but omitted by a
 // shorter SEO rewrite, so scan both versions rather than choosing one.
@@ -1130,7 +1134,7 @@ function safeJsonLd(data: unknown): string {
    {job.source === 'employer'}
 
   <ShareBar
-    url={`https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`}
+    url={`https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}`}
     title={job.title}
     company={job.company || ''}
   />
@@ -1158,7 +1162,7 @@ function safeJsonLd(data: unknown): string {
 
                           <Link
 
-                            href={`/jobs/${sj.id}/${buildJobSlug(sj)}`}
+                            href={`/jobs/${sj.id}/${getCanonicalJobSlug(sj)}`}
 
                             className="group flex items-center gap-3 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
 

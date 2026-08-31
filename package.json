@@ -40,7 +40,8 @@
     "audit:editorial-content": "node --experimental-strip-types scripts/audit-editorial-content.ts",
     "normalize:listing-priorities": "node --env-file=.env.local --experimental-strip-types scripts/normalize-listing-priorities.ts",
     "submit-indexnow": "tsx scripts/submit-indexnow.ts",
-    "submit-google-indexing": "tsx scripts/submit-google-indexing.ts"
+    "submit-google-indexing": "tsx scripts/submit-google-indexing.ts",
+    "backfill:job-canonical-slugs": "node --env-file=.env.local --experimental-strip-types scripts/backfill-job-canonical-slugs.ts"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.27",

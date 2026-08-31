@@ -1,6 +1,6 @@
 // lib/jobSlugCache.ts
 import { Redis } from '@upstash/redis/cloudflare'  // au lieu de '@upstash/redis'
-import { buildJobSlug } from '@/lib/slugify'
+import { getCanonicalJobSlug } from '@/lib/slugify'
 import type { JobDetail } from '@/lib/jobDetail'
 
 const KEY_PREFIX = 'job:slug:'
@@ -22,7 +22,7 @@ export async function getCanonicalSlugFromCache(id: string): Promise<string | nu
 }
 
 export async function setCanonicalSlugFromJob(job: JobDetail): Promise<string> {
-  const slug = buildJobSlug(job)
+  const slug = getCanonicalJobSlug(job)
   try {
     await kv.set(`${KEY_PREFIX}${job.id}`, slug, { ex: TTL_SECONDS })
   } catch (err) {

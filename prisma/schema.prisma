@@ -35,6 +35,7 @@ model Job {
   id                       String   @id @default(cuid())
   source                   String
   title                    String
+  canonicalSlug            String?
   company                  String   @default("")
   location                 String   @default("")
   addressRegion            String   @default("")

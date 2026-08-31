@@ -6,7 +6,7 @@
 //
 // Adzuna paused: only Jooble, Lensa, and Careerjet are active.
 import { prisma } from './prisma'
-import { buildJobSlug } from './slugify'   // ← ajout
+import { getCanonicalJobSlug } from './slugify'
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
 const MIN_DESCRIPTION_LENGTH = 80
@@ -123,6 +123,8 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
     title: true,
 
+    canonicalSlug: true,
+
     company: true,
 
     location: true,
@@ -194,7 +196,7 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
   // ✅ Construit l'URL COMPLÈTE avec le slug canonique
 
-  return all.map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
+  return all.map((j) => `https://www.solarroles.com/jobs/${j.id}/${getCanonicalJobSlug(j)}`)
 
 }
 
@@ -218,6 +220,7 @@ export const ATS_SOURCES = [
 const JOB_SELECT_ATS = {
   id: true,
   title: true,
+  canonicalSlug: true,
   company: true,
   location: true,
   addressRegion: true,
@@ -244,7 +247,7 @@ export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]
   const filtered = jobs.filter(hasEnoughContent).slice(0, limit)
 
   // ✅ Construit l'URL COMPLÈTE avec le slug canonique
-  return filtered.map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`)
+  return filtered.map((j) => `https://www.solarroles.com/jobs/${j.id}/${getCanonicalJobSlug(j)}`)
 }
 
 /** URLs indexables (ATS + custom-scrape) publiées au cours des derniers jours. */
@@ -279,7 +282,7 @@ export async function getRecentIndexableJobUrls(
   return jobs
     .filter(hasEnoughContent)
     .slice(0, limit)
-    .map((j) => `https://www.solarroles.com/jobs/${j.id}/${buildJobSlug(j as any)}`);
+    .map((j) => `https://www.solarroles.com/jobs/${j.id}/${getCanonicalJobSlug(j)}`);
 }
 
 /**
@@ -316,7 +319,7 @@ export async function getGoogleIndexingCandidates(
 
   return [...custom.fresh, ...ats.fresh, ...custom.previouslySubmitted, ...ats.previouslySubmitted]
     .slice(0, limit)
-    .map((job) => ({ id: job.id, url: `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job as any)}` }));
+    .map((job) => ({ id: job.id, url: `https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}` }));
 }
 
 export async function markGoogleIndexingSubmitted(jobId: string): Promise<void> {

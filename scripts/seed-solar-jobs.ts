@@ -28,6 +28,7 @@ import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
 import { fetchRipplingJobs } from '../lib/ats/rippling';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
+import { buildJobSlug } from '../lib/slugify';
 
 const prisma = new PrismaClient();
 
@@ -125,7 +126,7 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
     return 'updated';
   }
 
-  await prisma.job.create({
+  const createdJob = await prisma.job.create({
     data: {
       source: job.source,
       title: job.title,
@@ -148,6 +149,13 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
       seoDescriptionVersion: 0,
       ...taxonomyFields,
     },
+  });
+
+  // Title/location can be corrected by later scrapes. Persist the first slug
+  // so the public job URL and its SEO signals never move with those updates.
+  await prisma.job.update({
+    where: { id: createdJob.id },
+    data: { canonicalSlug: buildJobSlug(createdJob) },
   });
   return 'created';
 }

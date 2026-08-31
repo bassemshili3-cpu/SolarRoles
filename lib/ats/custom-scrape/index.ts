@@ -132,10 +132,10 @@ export function buildGoogleJobPosting(
         applicantLocationRequirements: locationRegions.length > 1
           ? locationRegions.flatMap((region) => {
             const name = resolveStateName(region);
-            return name ? [{ '@type': 'State' as const, name: `${name}, USA` }] : [];
+            return name ? [{ '@type': 'AdministrativeArea' as const, name: `${name}, USA` }] : [];
           })
           : job.addressRegion && resolveStateName(job.addressRegion)
-          ? { '@type': 'State' as const, name: `${resolveStateName(job.addressRegion)}, USA` }
+          ? { '@type': 'AdministrativeArea' as const, name: `${resolveStateName(job.addressRegion)}, USA` }
           : { '@type': 'Country' as const, name: 'USA' as const },
       }
       : { jobLocation: locationRegions.map((region) => ({ address: { ...(region === job.addressRegion && locality ? { addressLocality: locality } : {}), addressRegion: region, addressCountry: 'US' as const } })) }),

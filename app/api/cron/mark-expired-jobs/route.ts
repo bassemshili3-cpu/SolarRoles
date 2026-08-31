@@ -7,7 +7,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ATS_SOURCES } from '@/lib/job-db'
-import { buildJobSlug } from '@/lib/slugify'
+import { getCanonicalJobSlug } from '@/lib/slugify'
 import { isGoogleIndexingConfigured, notifyGoogleIndexing } from '@/lib/googleIndexing'
 
 // Réserve une marge sur le quota quotidien google-200 (200 URLs/jour) :
@@ -32,6 +32,7 @@ export async function GET(request: Request) {
     select: {
       id: true,
       title: true,
+      canonicalSlug: true,
       company: true,
       location: true,
       addressRegion: true,
@@ -59,7 +60,7 @@ export async function GET(request: Request) {
   let googleFailed = 0
   if (isGoogleIndexingConfigured()) {
     for (const job of indexableJobs.slice(0, MAX_DELETE_NOTIFICATIONS)) {
-      const url = `https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job as any)}`
+      const url = `https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}`
       const result = await notifyGoogleIndexing(url, 'URL_DELETED')
       if (result.success) {
         googleSent++

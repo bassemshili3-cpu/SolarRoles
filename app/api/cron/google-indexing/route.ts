@@ -60,9 +60,8 @@ export async function GET(request: Request) {
       if (result.success) {
         submitted++;
         await markGoogleIndexingSubmitted(candidate.id);
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(`[Google Indexing Cron] ✔ ${candidate.url}`);
-        }
+        // Keep the exact submitted URLs in Vercel logs for production audits.
+        console.log(`[Google Indexing Cron] ✔ ${candidate.url}`);
       } else {
         failed++;
         const message =
