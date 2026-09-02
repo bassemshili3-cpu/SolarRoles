@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
       jobTypes: splitParam(searchParams.get('job_type')),
       arrangements: splitParam(searchParams.get('arrangement')),
       experience: searchParams.get('experience') || '',
+      certification: searchParams.get('certification') || '',
       education: searchParams.get('education') || '',
       companySizes: splitParam(searchParams.get('company_size')),
       benefits: splitParam(searchParams.get('benefits')),

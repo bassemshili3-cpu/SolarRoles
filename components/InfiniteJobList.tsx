@@ -4,6 +4,13 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import WhatJobsFeed from './WhatJobsFeed'
 import { Button } from '@/components/ui/button'
+import { FilterDrawerTrigger } from '@/components/filter-drawer-trigger'
+import {
+  getPopularJobFilterTags,
+  isPopularJobFilterActive,
+  togglePopularJobFilter,
+  type PopularJobFilterTag,
+} from '@/lib/popular-job-filters'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { Bell, Check, ChevronDown } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
@@ -98,7 +105,6 @@ const WORK_ARRANGEMENTS = [
   'Hybrid',
   'On-site',
 ]
-
 
 interface JobListProps {
   what: string
@@ -219,9 +225,8 @@ export default function JobList({ what, whatPhrases, excludePhrases, description
     [whatJobsTitleExcludes],
   )
   const filterKeys = [
-    'salary_min', 'posted_within', 'job_type', 'arrangement', 'experience',
-    'certification', 'education', 'company_size', 'benefits', 'easy_apply',
-    'visa_sponsorship',
+    'sort', 'salary_min', 'posted_within', 'job_type', 'arrangement', 'experience',
+    'certification', 'benefits',
   ]
   const hasFilters = filterKeys.some(key => searchParams.has(key))
 
@@ -278,6 +283,18 @@ const canUseSSRInitialData =
   const router = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
+  const popularFilterTags = useMemo(() => getPopularJobFilterTags(pathname), [pathname])
+
+  const isPopularTagActive = useCallback((tag: PopularJobFilterTag) => {
+    return isPopularJobFilterActive(searchParams, tag)
+  }, [searchParams])
+
+  const togglePopularTag = useCallback((tag: PopularJobFilterTag) => {
+    const params = togglePopularJobFilter(searchParams, tag)
+    setPage(1)
+    const qs = params.toString()
+    router.push(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
+  }, [pathname, router, searchParams])
 
   function goToPage(newPage: number) {
     const params = new URLSearchParams(searchParams.toString())
@@ -347,6 +364,7 @@ const canUseSSRInitialData =
     queryKey: jobsQueryKey(page),
     queryFn: () => fetchJobsPage(page),
     initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
+    placeholderData: (previousData) => previousData,
     // Évite un refetch immédiat en arrière-plan juste après l'hydratation quand on a
     // déjà les données SSR (initialData) : sans ça, React Query les considère stale
     // dès 0ms et relance /api/jobs-all inutilement au moment le plus critique du chargement.
@@ -357,16 +375,19 @@ const canUseSSRInitialData =
   const jobType = searchLabel ?? (resolvedWhat ? `${resolvedWhat} ` : '')
   const whatJobsKeyword = resolvedWhat || searchLabel?.trim() || 'solar'
   const results = data?.results || []
+  const isNewestSort = searchParams.get('sort') === 'newest'
 
   // Keep offers that come directly from an ATS or an employer ahead of every
   // partner feed. WhatJobs occupies the first partner slot; Adzuna remains the
   // final source in the listing.
   const partnerSources = new Set(['adzuna', 'jooble', 'lensa', 'careerjet', 'whatjobs'])
-  const firstPartyJobs = results.filter((job: any) => !partnerSources.has(job.source))
-  const otherPartnerJobs = results.filter((job: any) => (
+  const firstPartyJobs = isNewestSort
+    ? results
+    : results.filter((job: any) => !partnerSources.has(job.source))
+  const otherPartnerJobs = isNewestSort ? [] : results.filter((job: any) => (
     partnerSources.has(job.source) && job.source !== 'adzuna'
   ))
-  const adzunaJobs = results.filter((job: any) => job.source === 'adzuna')
+  const adzunaJobs = isNewestSort ? [] : results.filter((job: any) => job.source === 'adzuna')
 
   // ── Prefetch de la page suivante en arrière-plan ────────────────────────
   // 1. router.prefetch() précharge le shell/RSC de la route /jobs?page=N+1
@@ -426,12 +447,40 @@ const canUseSSRInitialData =
 
   return (
     <div>
-      {/* Count dynamique — reflète toujours les filtres actuellement actifs */}
-      {typeof data?.count === 'number' && data.count > 0 && (
-        <p className="text-sm text-gray-500 mb-4">
-          <span className="font-semibold text-gray-800">{data.count.toLocaleString('en-US')}</span> positions available
-        </p>
-      )}
+      <div className="mb-4 flex min-h-10 items-center justify-between gap-3 md:min-h-0">
+        {/* Count dynamique — reflète toujours les filtres actuellement actifs */}
+        {typeof data?.count === 'number' && data.count > 0 ? (
+          <p className="text-sm text-gray-500">
+            <span className="font-semibold text-gray-800">{data.count.toLocaleString('en-US')}</span> positions available
+          </p>
+        ) : (
+          <span />
+        )}
+        <FilterDrawerTrigger />
+      </div>
+
+      <div className="-mx-1 mb-4 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex w-max gap-2 md:w-full md:flex-nowrap">
+          {popularFilterTags.map((tag) => {
+            const isActive = isPopularTagActive(tag)
+            return (
+              <button
+                key={tag.id}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => togglePopularTag(tag)}
+                className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-white transition-[background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B1A2E] focus-visible:ring-offset-2 ${
+                  isActive
+                    ? 'bg-[#F2A93B] shadow-[0_5px_14px_-6px_rgba(180,110,0,0.85)]'
+                    : 'bg-[#F2A93B]/60 hover:bg-[#F2A93B]/80'
+                }`}
+              >
+                {tag.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
 
       {/* All sources share one grid. Source order still controls priority, but
           CSS can fill each row instead of stretching a lone direct-job card

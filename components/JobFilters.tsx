@@ -7,13 +7,14 @@ import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 
 import { useFilterDrawer } from '@/contexts/filter-drawer-context'
+import { isPromotedDrawerValue } from '@/lib/popular-job-filters'
 
 import { useState, useEffect, useRef } from 'react'
 
 import {
   Search, MapPin, X, ChevronDown, ChevronUp,
   Clock, Briefcase, Sun, DollarSign, HardHat,
-  Award, Building2, Gift, Zap,
+  Award, Gift, Zap,
 } from 'lucide-react'
 
 // Identite visuelle Solar Roles : panneau en graphite doux (degrade legerement
@@ -55,45 +56,32 @@ const DATE_OPTIONS = [
 ]
 
 const JOB_TYPES = [
-  'Full-time', 'Part-time', 'Contract', 'Apprenticeship',
-  'Temporary', 'Union', 'Per diem',
+  'Full-time', 'Part-time', 'Contract', 'Apprenticeship', 'Temporary',
 ]
 
-const ARRANGEMENTS = ['Field / On-site', 'Shop & field', 'Office / Remote']
+const ARRANGEMENTS = ['Field / On-site', 'Remote']
 
 const EXPERIENCE_LEVELS = [
-  { label: 'Any level',            value: '' },
   { label: 'Apprentice / Trainee',  value: 'apprentice' },
   { label: 'Helper / Entry-level',  value: 'entry' },
-  { label: 'Installer',             value: 'installer' },
+  { label: 'Experienced installer / technician', value: 'experienced' },
   { label: 'Lead / Crew foreman',   value: 'lead' },
   { label: 'Superintendent',        value: 'superintendent' },
-  { label: 'Project manager',       value: 'manager' },
+  { label: 'Project / Construction manager', value: 'manager' },
   { label: 'Director / Executive',  value: 'executive' },
 ]
 
 const CERTIFICATIONS = [
-  { label: 'No certification required', value: '' },
   { label: 'OSHA 10',                    value: 'osha10' },
   { label: 'OSHA 30',                    value: 'osha30' },
   { label: 'NABCEP PV Associate',        value: 'nabcep_associate' },
-  { label: 'NABCEP PV Installer',        value: 'nabcep_installer' },
+  { label: 'NABCEP PV Installation Professional', value: 'nabcep_installer' },
   { label: "Journeyman electrician's license", value: 'journeyman' },
-]
-
-const COMPANY_SIZES = [
-  'Local crew (1-50)',
-  'Regional installer (51-200)',
-  'Mid-size (201-1k)',
-  'National EPC (1k-5k)',
-  'Utility-scale (5k+)',
 ]
 
 const BENEFITS = [
   'Health insurance',
-  'Dental & Vision',
   '401(k) match',
-  'Paid time off',
   'Per diem / travel pay',
   'Tool allowance',
   'Company vehicle',
@@ -249,10 +237,7 @@ export default function JobFilters({ defaultWhat = '' }: JobFiltersProps) {
   const [salary, setSalary] = useState(0)
   const [experience, setExperience] = useState('')
   const [certification, setCertification] = useState('')
-  const [companySizes, setCompanySizes] = useState<string[]>([])
   const [benefits, setBenefits] = useState<string[]>([])
-  const [easyApply, setEasyApply] = useState(false)
-  const [visaSponsorship, setVisaSponsorship] = useState(false)
 const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
   // Sync from URL
@@ -265,10 +250,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
     setArrangements(splitParam(searchParams.get('arrangement')))
     setExperience(searchParams.get('experience') || '')
     setCertification(searchParams.get('certification') || '')
-    setCompanySizes(splitParam(searchParams.get('company_size')))
     setBenefits(splitParam(searchParams.get('benefits')))
-    setEasyApply(searchParams.get('easy_apply') === 'true')
-    setVisaSponsorship(searchParams.get('visa_sponsorship') === 'true')
   }, [searchParams, defaultWhat])
 
   // Location autocomplete
@@ -321,10 +303,13 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
     setOrDelete(params, 'arrangement', arrangements.join(','))
     setOrDelete(params, 'experience', experience)
     setOrDelete(params, 'certification', certification)
-    setOrDelete(params, 'company_size', companySizes.join(','))
     setOrDelete(params, 'benefits', benefits.join(','))
-    setOrDelete(params, 'easy_apply', easyApply ? 'true' : '')
-    setOrDelete(params, 'visa_sponsorship', visaSponsorship ? 'true' : '')
+    // Remove deprecated filters from old bookmarked URLs when applying the
+    // streamlined solar-specific filter set.
+    params.delete('education')
+    params.delete('company_size')
+    params.delete('easy_apply')
+    params.delete('visa_sponsorship')
     const qs = params.toString()
     router.push(`${pathname}${qs ? `?${qs}` : ''}`)
     router.refresh()
@@ -340,10 +325,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
     setArrangements([])
     setExperience('')
     setCertification('')
-    setCompanySizes([])
     setBenefits([])
-    setEasyApply(false)
-    setVisaSponsorship(false)
     router.push(defaultWhat ? `${pathname}?what=${encodeURIComponent(defaultWhat)}` : pathname)
     router.refresh()
     close()
@@ -351,8 +333,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
   const activeCount = [
     postedWithin, ...jobTypes, ...arrangements, experience, certification,
-    ...companySizes, ...benefits,
-    easyApply ? 'ea' : '', visaSponsorship ? 'vs' : '', salary > 0 ? 's' : '',
+    ...benefits, salary > 0 ? 's' : '',
   ].filter(Boolean).length
 
   return (
@@ -506,7 +487,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
           {/* Job Type */}
           <Section icon={<Briefcase className="h-3.5 w-3.5" />} title="Job Type">
-            {JOB_TYPES.map(type => (
+            {JOB_TYPES.filter((type) => !isPromotedDrawerValue(pathname, 'job_type', type)).map(type => (
               <CheckOption
                 key={type}
                 label={type}
@@ -518,7 +499,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
           {/* Work Arrangement */}
           <Section icon={<HardHat className="h-3.5 w-3.5" />} title="Work Setting">
-            {ARRANGEMENTS.map(arr => (
+            {ARRANGEMENTS.filter((arr) => !isPromotedDrawerValue(pathname, 'arrangement', arr)).map(arr => (
               <CheckOption
                 key={arr}
                 label={arr}
@@ -572,7 +553,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
           {/* Experience Level */}
           <Section icon={<Zap className="h-3.5 w-3.5" />} title="Experience Level">
-            {EXPERIENCE_LEVELS.map(opt => (
+            {EXPERIENCE_LEVELS.filter((opt) => !isPromotedDrawerValue(pathname, 'experience', opt.value)).map(opt => (
               <RadioOption
                 key={opt.value}
                 label={opt.label}
@@ -584,7 +565,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
 
           {/* Certification */}
           <Section icon={<Award className="h-3.5 w-3.5" />} title="Certification" defaultOpen={false}>
-            {CERTIFICATIONS.map(opt => (
+            {CERTIFICATIONS.filter((opt) => !isPromotedDrawerValue(pathname, 'certification', opt.value)).map(opt => (
               <RadioOption
                 key={opt.value}
                 label={opt.label}
@@ -594,21 +575,9 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
             ))}
           </Section>
 
-          {/* Company Size */}
-          <Section icon={<Building2 className="h-3.5 w-3.5" />} title="Company Size" defaultOpen={false}>
-            {COMPANY_SIZES.map(size => (
-              <CheckOption
-                key={size}
-                label={size}
-                checked={companySizes.includes(size)}
-                onChange={() => toggleArr(companySizes, size, setCompanySizes)}
-              />
-            ))}
-          </Section>
-
-          {/* Benefits */}
-          <Section icon={<Gift className="h-3.5 w-3.5" />} title="Benefits & Perks" defaultOpen={false}>
-            {BENEFITS.map(b => (
+          {/* Solar-specific pay and field perks */}
+          <Section icon={<Gift className="h-3.5 w-3.5" />} title="Pay & Field Perks" defaultOpen={false}>
+            {BENEFITS.filter((benefit) => !isPromotedDrawerValue(pathname, 'benefits', benefit)).map(b => (
               <CheckOption
                 key={b}
                 label={b}
@@ -616,20 +585,6 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
                 onChange={() => toggleArr(benefits, b, setBenefits)}
               />
             ))}
-          </Section>
-
-          {/* Quick Filters */}
-          <Section icon={<Sun className="h-3.5 w-3.5" />} title="Quick Filters">
-            <CheckOption
-              label="Easy Apply"
-              checked={easyApply}
-              onChange={() => setEasyApply(v => !v)}
-            />
-            <CheckOption
-              label="Visa Sponsorship"
-              checked={visaSponsorship}
-              onChange={() => setVisaSponsorship(v => !v)}
-            />
           </Section>
 </div>
         )}

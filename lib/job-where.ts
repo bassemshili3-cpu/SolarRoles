@@ -3,6 +3,11 @@
 
 import { Prisma } from '@prisma/client'
 import { STATES } from './usStates'
+import {
+  ENTRY_LEVEL_DESCRIPTION_EXCLUDES,
+  ENTRY_LEVEL_INCLUDE_KEYWORDS,
+  ENTRY_LEVEL_TITLE_EXCLUDES,
+} from './entry-level-filter'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -24,19 +29,32 @@ function meaningfulKeywords(input: string): string[] {
 const JOB_TYPE_KEYWORDS: Record<string, string[]> = {
   'Full-time':  ['full-time', 'full time'],
   'Part-time':  ['part-time', 'part time'],
-  'Contract':   ['contract', 'contractor'],
+  'Contract':   ['contract position', 'contract role', 'contract employment', 'contract-to-hire', 'independent contractor', '1099'],
+  'Apprenticeship': ['apprentice', 'apprenticeship'],
   'Internship': ['intern', 'internship'],
-  'Temporary':  ['temporary', 'temp'],
+  'Temporary':  ['temporary position', 'temporary role', 'seasonal', 'fixed-term', 'fixed term'],
   'Freelance':  ['freelance'],
   'Per diem':   ['per diem'],
 }
 
+const JOB_TYPE_STRUCTURED_VALUES: Record<string, string[]> = {
+  'Full-time': ['full-time', 'full time', 'permanent'],
+  'Part-time': ['part-time', 'part time'],
+  'Contract': ['contract'],
+  'Apprenticeship': ['apprentice', 'apprenticeship'],
+  'Temporary': ['temporary', 'seasonal', 'fixed-term'],
+}
+
 const EXPERIENCE_KEYWORDS: Record<string, string[]> = {
+  apprentice: ['apprentice', 'apprenticeship', 'trainee'],
   internship: ['intern', 'internship'],
-  entry:      ['entry level', 'entry-level', 'junior', 'associate', 'new grad', '0-1 year', '0-2 year', 'no experience'],
+  entry:      [...ENTRY_LEVEL_INCLUDE_KEYWORDS],
+  experienced: ['experienced installer', 'experienced technician', '2+ years', '3+ years', 'journeyman'],
+  lead:       ['lead installer', 'lead technician', 'crew lead', 'crew foreman', 'foreman'],
+  superintendent: ['superintendent'],
   mid:        ['mid level', 'mid-level', '2-4 year', '3-5 year', '2+ year', '3+ year'],
   senior:     ['senior', 'sr.', 'lead', '5+ year', '5-8 year', '7+ year'],
-  manager:    ['manager', 'management', 'team lead', 'supervisor', 'head of'],
+  manager:    ['project manager', 'construction manager', 'program manager'],
   director:   ['director', 'vp of', 'vice president'],
   executive:  ['chief', 'cto', 'cfo', 'coo', 'ceo', 'executive', 'president', 'c-suite'],
 }
@@ -50,6 +68,8 @@ const EDUCATION_KEYWORDS: Record<string, string[]> = {
 }
 
 const ARRANGEMENT_KEYWORDS: Record<string, string[]> = {
+  'Field / On-site': ['field-based', 'field based', 'on-site', 'onsite', 'on site', 'jobsite', 'job site', 'solar farm', 'rooftop'],
+  'Office / Remote': ['remote', 'work from home', 'wfh', 'hybrid', 'office-based', 'office based', 'in-office', 'in office'],
   Remote:    ['remote', 'work from home', 'wfh', 'telecommute', 'distributed'],
   Hybrid:    ['hybrid', 'flexible work', 'partial remote'],
   'On-site': ['on-site', 'onsite', 'in-office', 'in office', 'on site'],
@@ -65,7 +85,24 @@ const BENEFIT_KEYWORDS: Record<string, string[]> = {
   'Tuition reimbursement':  ['tuition reimbursement', 'education assistance', 'tuition assistance'],
   'Parental leave':         ['parental leave', 'maternity leave', 'paternity leave', 'family leave'],
   'Wellness perks':         ['gym membership', 'wellness', 'mental health', 'employee assistance'],
+  'Per diem / travel pay':  ['per diem', 'travel pay', 'travel allowance', 'travel reimbursement'],
+  'Tool allowance':         ['tool allowance', 'tool reimbursement', 'tools provided', 'company-provided tools'],
+  'Company vehicle':        ['company vehicle', 'company truck', 'take-home vehicle', 'vehicle allowance'],
+  'Certification reimbursement': ['certification reimbursement', 'certification assistance', 'paid certification', 'training reimbursement'],
+  'Overtime / prevailing wage': ['overtime pay', 'paid overtime', 'prevailing wage', 'davis-bacon'],
 }
+
+const CERTIFICATION_KEYWORDS: Record<string, string[]> = {
+  osha10: ['OSHA 10', 'OSHA-10', 'OSHA 10-hour'],
+  osha30: ['OSHA 30', 'OSHA-30', 'OSHA 30-hour'],
+  nabcep_associate: ['NABCEP PV Associate', 'NABCEP Associate'],
+  nabcep_installer: ['NABCEP PV Installation Professional', 'NABCEP PVIP', 'NABCEP certified'],
+  journeyman: ['journeyman electrician', 'journeyman license', 'journeyman electrical license'],
+}
+
+const TITLE_ONLY_EXPERIENCE_LEVELS = new Set([
+  'lead', 'superintendent', 'manager', 'executive',
+])
 
 const COMPANY_SIZE_KEYWORDS: Record<string, string[]> = {
   'Startup (1–50)':     ['startup', 'start-up', 'early stage', 'seed stage', 'series a'],
@@ -78,6 +115,7 @@ const COMPANY_SIZE_KEYWORDS: Record<string, string[]> = {
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface JobWhereParams {
+  sort?: 'newest'
   what?: string
   whatPhrases?: string[]
   excludePhrases?: string[]
@@ -92,6 +130,7 @@ export interface JobWhereParams {
   jobTypes?: string[]
   arrangements?: string[]
   experience?: string
+  certification?: string
   education?: string
   companySizes?: string[]
   benefits?: string[]
@@ -128,6 +167,7 @@ export function buildJobWhere(params: JobWhereParams): Prisma.JobWhereInput {
     jobTypes      = [],
     arrangements  = [],
     experience    = '',
+    certification = '',
     education     = '',
     companySizes  = [],
     benefits      = [],
@@ -256,8 +296,17 @@ if (where) {
   // ── Job type ────────────────────────────────────────────────────────────────
   if (jobTypes.length > 0) {
     const kws = jobTypes.flatMap((t) => JOB_TYPE_KEYWORDS[t] ?? [])
-    if (kws.length > 0) {
-      AND.push({ OR: keywordOr(kws, ['title', 'description']) })
+    const structuredValues = jobTypes.flatMap((t) => JOB_TYPE_STRUCTURED_VALUES[t] ?? [])
+    if (kws.length > 0 || structuredValues.length > 0) {
+      AND.push({
+        OR: [
+          ...keywordOr(kws, ['title', 'description']),
+          ...structuredValues.flatMap((value) => [
+            { contractType: { contains: value, mode: 'insensitive' as const } },
+            { contractTime: { contains: value, mode: 'insensitive' as const } },
+          ]),
+        ],
+      })
     }
   }
 
@@ -271,7 +320,21 @@ if (where) {
 
   // ── Experience level ────────────────────────────────────────────────────────
   if (experience && EXPERIENCE_KEYWORDS[experience]) {
-    AND.push({ OR: keywordOr(EXPERIENCE_KEYWORDS[experience], ['title', 'description']) })
+    if (experience === 'entry') {
+      AND.push({ OR: keywordOr([...ENTRY_LEVEL_INCLUDE_KEYWORDS], ['title', 'description']) })
+      AND.push({ NOT: { OR: keywordOr([...ENTRY_LEVEL_TITLE_EXCLUDES], ['title']) } })
+      AND.push({ NOT: { OR: keywordOr([...ENTRY_LEVEL_DESCRIPTION_EXCLUDES], ['description']) } })
+    } else {
+      const fields: Array<'title' | 'description'> = TITLE_ONLY_EXPERIENCE_LEVELS.has(experience)
+        ? ['title']
+        : ['title', 'description']
+      AND.push({ OR: keywordOr(EXPERIENCE_KEYWORDS[experience], fields) })
+    }
+  }
+
+  // Solar credentials are frequently present only in the job description.
+  if (certification && CERTIFICATION_KEYWORDS[certification]) {
+    AND.push({ OR: keywordOr(CERTIFICATION_KEYWORDS[certification], ['title', 'description']) })
   }
 
   // ── Education ───────────────────────────────────────────────────────────────
@@ -334,6 +397,7 @@ export function splitPhrasesParam(v: string | null): string[] {
 
 export function parseJobWhereParams(searchParams: URLSearchParams): JobWhereParams {
   return {
+    sort:           searchParams.get('sort') === 'newest' ? 'newest' : undefined,
     what:           searchParams.get('what')?.trim() || '',
     whatPhrases:    splitPhrasesParam(searchParams.get('what_phrases')),
     excludePhrases: splitPhrasesParam(searchParams.get('exclude_phrases')),
@@ -348,6 +412,7 @@ export function parseJobWhereParams(searchParams: URLSearchParams): JobWherePara
     jobTypes:       splitParam(searchParams.get('job_type')),
     arrangements:   splitParam(searchParams.get('arrangement')),
     experience:     searchParams.get('experience')  || '',
+    certification:  searchParams.get('certification') || '',
     education:      searchParams.get('education')   || '',
     companySizes:   splitParam(searchParams.get('company_size')),
     benefits:       splitParam(searchParams.get('benefits')),

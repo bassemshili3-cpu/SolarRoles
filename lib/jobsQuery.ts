@@ -1,5 +1,6 @@
 // lib/jobsQuery.ts
 import { unstable_cache } from 'next/cache'
+import type { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { buildJobWhere, type JobWhereParams } from '@/lib/job-where'
 
@@ -21,15 +22,22 @@ export async function fetchJobsPageUncached(
   resultsPerPage: number,
 ): Promise<JobsListResult> {
   const whereClause = buildJobWhere(params)
+  const orderBy: Prisma.JobOrderByWithRelationInput[] = params.sort === 'newest'
+    ? [
+        { postedAt: { sort: 'desc', nulls: 'last' } },
+        { sourcePriority: 'asc' },
+        { fetchedAt: 'desc' },
+      ]
+    : [
+        { sourcePriority: 'asc' },
+        { fetchedAt: 'desc' },
+      ]
 
   const [dbJobs, count] = await Promise.all([
     prisma.job.findMany({
       where: whereClause,
       select: JOB_SELECT,
-      orderBy: [
-        { sourcePriority: 'asc' },
-        { fetchedAt: 'desc' },
-      ],
+      orderBy,
       skip: (page - 1) * resultsPerPage,
       take: resultsPerPage,
     }),

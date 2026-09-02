@@ -5,6 +5,9 @@ import { CERTIFICATIONS } from './[slug]/certifications-data'
 
 export const metadata: Metadata = {
   title: 'Solar Certifications | Solar Roles',
+  alternates: {
+    canonical: 'https://www.solarroles.com/certifications',
+  },
   description:
     'NABCEP, OSHA, and the other certifications that matter for solar jobs — how to get nabcep certified, what they are, who needs them, and where to get them.',
 }

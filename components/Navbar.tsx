@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { User } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
-import { FilterDrawerTrigger } from '@/components/filter-drawer-trigger'
 import { CertificationsNavCta } from '@/components/CertificationsNavCta'
 
 export default function Navbar() {
@@ -37,12 +36,6 @@ export default function Navbar() {
     { href: '/resources',  label: 'Resources' },
     { href: '/dashboard/post-a-job-free',  label: 'Post a Job' },
   ]
-  // The drawer only exists alongside JobFilters. Keep its trigger off job
-  // detail pages and all editorial/content pages where it would do nothing.
-  const showMobileFilters = pathname === '/jobs'
-    || pathname === '/solar-jobs-no-experience'
-    || /^\/[^/]+-jobs\/?$/.test(pathname ?? '')
-
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white md:static">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -115,7 +108,7 @@ export default function Navbar() {
         </div>
 
           <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-3">
-            <span className={showMobileFilters ? 'hidden lg:inline-flex' : 'inline-flex'}>
+            <span className="inline-flex">
               <CertificationsNavCta />
             </span>
 
@@ -151,11 +144,6 @@ export default function Navbar() {
               </Button>
             </Link>
           )}
-            {showMobileFilters && (
-              <span>
-                <FilterDrawerTrigger />
-              </span>
-            )}
           </div>
         </div>
         </div>

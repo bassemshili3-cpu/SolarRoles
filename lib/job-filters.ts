@@ -1,21 +1,28 @@
 // lib/job-filters.ts
 
+import { ENTRY_LEVEL_INCLUDE_KEYWORDS, matchesEntryLevelJob } from './entry-level-filter'
+
 export const JOB_TYPE_KEYWORDS: Record<string, string[]> = {
   'Full-time':  ['full-time', 'full time'],
   'Part-time':  ['part-time', 'part time'],
-  'Contract':   ['contract', 'contractor'],
+  'Contract':   ['contract position', 'contract role', 'contract employment', 'contract-to-hire', 'independent contractor', '1099'],
+  'Apprenticeship': ['apprentice', 'apprenticeship'],
   'Internship': ['intern', 'internship'],
-  'Temporary':  ['temporary', 'temp'],
+  'Temporary':  ['temporary position', 'temporary role', 'seasonal', 'fixed-term', 'fixed term'],
   'Freelance':  ['freelance'],
   'Per diem':   ['per diem'],
 }
 
 export const EXPERIENCE_KEYWORDS: Record<string, string[]> = {
+  apprentice: ['apprentice', 'apprenticeship', 'trainee'],
   internship: ['intern', 'internship'],
-  entry:      ['entry level', 'entry-level', 'junior', 'associate', 'new grad', '0-1 year', '0-2 year', 'no experience'],
+  entry:      [...ENTRY_LEVEL_INCLUDE_KEYWORDS],
+  experienced: ['experienced installer', 'experienced technician', '2+ years', '3+ years', 'journeyman'],
+  lead:       ['lead installer', 'lead technician', 'crew lead', 'crew foreman', 'foreman'],
+  superintendent: ['superintendent'],
   mid:        ['mid level', 'mid-level', '2-4 year', '3-5 year', '2+ year', '3+ year'],
   senior:     ['senior', 'sr.', 'lead', '5+ year', '5-8 year', '7+ year'],
-  manager:    ['manager', 'management', 'team lead', 'supervisor', 'head of'],
+  manager:    ['project manager', 'construction manager', 'program manager'],
   director:   ['director', 'vp of', 'vice president'],
   executive:  ['chief', 'cto', 'cfo', 'coo', 'ceo', 'executive', 'president', 'c-suite'],
 }
@@ -29,6 +36,8 @@ export const EDUCATION_KEYWORDS: Record<string, string[]> = {
 }
 
 export const ARRANGEMENT_KEYWORDS: Record<string, string[]> = {
+  'Field / On-site': ['field-based', 'field based', 'on-site', 'onsite', 'on site', 'jobsite', 'job site', 'solar farm', 'rooftop'],
+  'Office / Remote': ['remote', 'work from home', 'wfh', 'hybrid', 'office-based', 'office based', 'in-office', 'in office'],
   Remote:    ['remote', 'work from home', 'wfh', 'telecommute', 'distributed'],
   Hybrid:    ['hybrid', 'flexible work', 'partial remote'],
   'On-site': ['on-site', 'onsite', 'in-office', 'in office', 'on site'],
@@ -44,7 +53,24 @@ export const BENEFIT_KEYWORDS: Record<string, string[]> = {
   'Tuition reimbursement': ['tuition reimbursement', 'education assistance', 'tuition assistance'],
   'Parental leave':        ['parental leave', 'maternity leave', 'paternity leave', 'family leave'],
   'Wellness perks':        ['gym membership', 'wellness', 'mental health', 'employee assistance'],
+  'Per diem / travel pay': ['per diem', 'travel pay', 'travel allowance', 'travel reimbursement'],
+  'Tool allowance':        ['tool allowance', 'tool reimbursement', 'tools provided', 'company-provided tools'],
+  'Company vehicle':       ['company vehicle', 'company truck', 'take-home vehicle', 'vehicle allowance'],
+  'Certification reimbursement': ['certification reimbursement', 'certification assistance', 'paid certification', 'training reimbursement'],
+  'Overtime / prevailing wage': ['overtime pay', 'paid overtime', 'prevailing wage', 'davis-bacon'],
 }
+
+export const CERTIFICATION_KEYWORDS: Record<string, string[]> = {
+  osha10: ['OSHA 10', 'OSHA-10', 'OSHA 10-hour'],
+  osha30: ['OSHA 30', 'OSHA-30', 'OSHA 30-hour'],
+  nabcep_associate: ['NABCEP PV Associate', 'NABCEP Associate'],
+  nabcep_installer: ['NABCEP PV Installation Professional', 'NABCEP PVIP', 'NABCEP certified'],
+  journeyman: ['journeyman electrician', 'journeyman license', 'journeyman electrical license'],
+}
+
+const TITLE_ONLY_EXPERIENCE_LEVELS = new Set([
+  'lead', 'superintendent', 'manager', 'executive',
+])
 
 export const COMPANY_SIZE_KEYWORDS: Record<string, string[]> = {
   'Startup (1–50)':    ['startup', 'start-up', 'early stage', 'seed stage', 'series a'],
@@ -59,6 +85,7 @@ export interface JobFilterParams {
   jobTypes?: string[]
   arrangements?: string[]
   experience?: string
+  certification?: string
   education?: string
   companySizes?: string[]
   benefits?: string[]
@@ -81,6 +108,7 @@ export function hasAdvancedFilters(f: JobFilterParams): boolean {
     f.jobTypes?.length ||
     f.arrangements?.length ||
     f.experience ||
+    f.certification ||
     f.education ||
     f.companySizes?.length ||
     f.benefits?.length ||
@@ -112,7 +140,18 @@ export function matchesFilters(job: FilterableJob, f: JobFilterParams): boolean 
   }
 
   if (f.experience && EXPERIENCE_KEYWORDS[f.experience]) {
-    if (!textMatches(job, EXPERIENCE_KEYWORDS[f.experience])) return false
+    const matches = f.experience === 'entry'
+      ? matchesEntryLevelJob(job.title, job.description)
+      : TITLE_ONLY_EXPERIENCE_LEVELS.has(f.experience)
+        ? EXPERIENCE_KEYWORDS[f.experience].some((keyword) =>
+            job.title.toLowerCase().includes(keyword.toLowerCase()),
+          )
+        : textMatches(job, EXPERIENCE_KEYWORDS[f.experience])
+    if (!matches) return false
+  }
+
+  if (f.certification && CERTIFICATION_KEYWORDS[f.certification]) {
+    if (!textMatches(job, CERTIFICATION_KEYWORDS[f.certification])) return false
   }
 
   if (f.education && EDUCATION_KEYWORDS[f.education]) {

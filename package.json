@@ -37,6 +37,7 @@
     "prepare:florida-solar-domains": "node --experimental-strip-types scripts/prepare-florida-solar-domain-candidates.ts",
     "audit:california-solar-careers": "node --env-file=.env --experimental-strip-types scripts/audit-california-solar-careers-serper.ts",
     "test:custom-scrape": "tsx tests/custom-scrape.test.ts",
+    "test:job-filter-tags": "node --experimental-strip-types tests/job-filter-tags.test.ts",
     "audit:editorial-content": "node --experimental-strip-types scripts/audit-editorial-content.ts",
     "normalize:listing-priorities": "node --env-file=.env.local --experimental-strip-types scripts/normalize-listing-priorities.ts",
     "submit-indexnow": "tsx scripts/submit-indexnow.ts",

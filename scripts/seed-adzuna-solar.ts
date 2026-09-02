@@ -39,6 +39,11 @@ const KEYWORDS = [
   'commercial solar installer',
   'o&m technician',
 
+  // --- BESS / battery storage technicians ---
+  'bess technician',
+  'battery storage technician',
+  'energy storage technician',
+
   // --- corporate solar (ajouté août 2026) ---
   'solar sales representative',
   'solar engineer',
