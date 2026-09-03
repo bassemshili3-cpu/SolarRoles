@@ -112,9 +112,9 @@ export default function HowToGetASolarApprenticeship() {
 
       <h1>How to Land a Solar Installer Apprenticeship</h1>
       <p className="resource-intro">
-       Here is a practical guide to help you find 
-      <Link href="/resources/solar-installer-apprenticeship-programs">open solar apprenticeship slots</Link>, and see what
-      selection committees are screening for.
+        Use this guide to find{" "}
+        <Link href="/resources/solar-installer-apprenticeship-programs">open solar apprenticeship programs</Link>.
+        It also explains what selection committees look for.
       </p>
 
       <div className="resource-table-scroll">
@@ -147,12 +147,11 @@ export default function HowToGetASolarApprenticeship() {
           structure shared with the broader electrical trades. 
         </p>
         <p>
-          Employer-run and state-registered solar apprenticeships, like
-          ReVision Energy's program or Florida's state-registered pathway,
-          typically skip the formal testing and ranking system entirely.
-          You apply the way you'd apply for a job, because in most respects
-          it is one: a paid position with a structured training plan
-          attached, evaluated by resume and interview.
+          Employer-run and state-registered programs usually skip formal tests
+          and ranked eligibility lists. ReVision Energy and Florida's state
+          pathway follow this model. Candidates apply much as they would for a
+          job. The employer reviews a resume and interview for a paid position
+          with structured training.
         </p>
       </section>
 
@@ -160,19 +159,16 @@ export default function HowToGetASolarApprenticeship() {
         <h2>The JATC aptitude test</h2>
         <p>
           Programs that use the standard electrical apprenticeship test
-          battery (often referred to by its old name, the NJATC test, now
-          administered through the Electrical Training Alliance) split into
-          two sections: algebra and reading comprehension, run back to back
-          with a short break, taking roughly two and a half hours total.
-          Most locals set a minimum passing score, commonly around 4 out of
-          9, before you're advanced to the interview stage.
+          battery is often called by its former name: the NJATC test. The
+          Electrical Training Alliance now administers it. Candidates complete
+          algebra and reading-comprehension sections in about two and a half
+          hours. Most locals require a minimum score before the interview.
+          Four out of nine is a common threshold.
         </p>
         <p>
-          The material is more accessible than it sounds if you haven't
-          touched algebra since high school. Free prep tools exist
-          specifically for this test (Electric Prep and SkillsPrep are the
-          two most commonly referenced), and several JATC websites
-          point applicants toward them directly.
+          The material is manageable even if you have not studied algebra
+          since high school. Electric Prep and SkillsPrep offer free tools for
+          this test. Several JATC websites refer applicants to them directly.
         </p>
       </section>
 
@@ -180,47 +176,44 @@ export default function HowToGetASolarApprenticeship() {
         <h2>The ranking system nobody explains upfront</h2>
         <p>
           This is the part that trips up first-time applicants the most.
-          Passing the test and doing well in the interview doesn't mean
-          immediate acceptance. You get scored and placed on an eligibility
-          list, sometimes valid for up to two years, and offers go out in
-          rank order as apprenticeship slots open up. A strong
-          interview score gets you a good position on that list; it doesn't
-          guarantee a start date.
+          Passing the test and interview does not guarantee immediate entry.
+          The committee scores candidates and places them on an eligibility
+          list. Some lists remain valid for up to two years.
         </p>
         <p>
-          That explains why two equally qualified applicants can have
-          wildly different timelines. Someone ranked near the top of a
-          list with high turnover might start within weeks. Someone ranked
-          in the middle of a list with few annual openings could wait the
-          better part of a year. Applying to only one local's list, when
-          several may serve your area, is the single most common
-          unforced error.
+          Offers go out in rank order as positions open. A strong score
+          improves your place. It does not provide a start date.
+        </p>
+        <p>
+          Timelines vary even for similarly qualified applicants. A candidate
+          near the top of a busy list may start within weeks. Someone in the
+          middle of a slower list may wait most of a year. Apply to every local
+          that serves your area rather than relying on one list.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>What moves your ranking up</h2>
         <p>
-          Documented work experience carries real weight. Several JATC locals exempt applicants with roughly
-          2,000 to 4,000 hours of related electrical construction
-          experience from the minimum aptitude test score requirement
-          entirely, though they're still required to sit for the test so
-          the committee has an aptitude reading on file.
+          Documented work experience carries real weight. Several JATC locals
+          waive the minimum test score for applicants with roughly 2,000 to
+          4,000 hours of related electrical construction experience. Those
+          candidates still sit for the test so the committee has a score on
+          file.
         </p>
         <p>
-          Completing a recognized pre-apprenticeship program is another
-          lever several JATCs explicitly credit toward eligibility, and
-          documented veteran status, submitted with a DD-214, is commonly
-          factored into scoring as well. None of these are shortcuts around
-          the process; they're ways of arriving at the test and interview
-          with a stronger file already in front of the committee.
+          A recognized pre-apprenticeship can also strengthen an application.
+          Several JATCs explicitly credit that training. Documented veteran
+          status submitted with a DD-214 may also affect scoring. These factors
+          do not bypass the process. They give the committee more evidence
+          before the test and interview.
         </p>
         <p>
-          An <Link href="/certifications/osha-10">OSHA 10 card</Link> or a <Link href="/certifications/nabcep-pv-associate">NABCEP Associate credential</Link> earned beforehand
-          rarely appears as a formal scoring criterion on its own, but it
-          signals the same thing a strong interview answer does: you looked
-          into this before showing up. Committees interview a lot of people
-          who clearly haven't.
+          An <Link href="/certifications/osha-10">OSHA 10 card</Link> or{" "}
+          <Link href="/certifications/nabcep-pv-associate">NABCEP Associate credential</Link>{" "}
+          rarely appears as a formal scoring item. It still shows that you
+          prepared before applying. A strong interview answer sends the same
+          signal.
         </p>
       </section>
 
@@ -234,18 +227,17 @@ export default function HowToGetASolarApprenticeship() {
           national search.
         </p>
         <p>
-          Because eligibility lists are local and options vary so much by
-          state, applying to more than one program at once is the most direct way to
-          shorten however long this process ends up taking.
+          Eligibility lists are local and program availability varies by state.
+          Applying to several programs at once is the most direct way to
+          shorten the wait.
         </p>
       </section>
 
       <p className="resource-fine-print">
-        Application steps, test formats, and ranking criteria vary by local
-        program and change over time. Details reflect information available
-        as of mid-2026. Confirm current requirements directly with the
-        specific JATC, employer, or state apprenticeship agency before
-        applying.
+        Application steps, test formats and ranking criteria vary by program.
+        These details reflect information available in mid-2026. Confirm the
+        current requirements with the JATC, employer or state apprenticeship
+        agency before applying.
       </p>
     </article>
   );

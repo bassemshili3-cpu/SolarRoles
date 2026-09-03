@@ -112,10 +112,10 @@ export default function SolarInstallerApprenticeshipPrograms() {
 
       <h1>How Solar Installer Apprenticeships Work</h1>
       <p className="resource-intro">
-       A Registered Apprenticeship pays you while you train, which matters a great deal if a
-        <Link href="/resources/nabcep-training-providers-compared"> NABCEP-approved course</Link> running several hundred dollars isn't
-        realistic right now. Here's what these programs are & why the paperwork
-        behind them is stranger than it looks.
+        A Registered Apprenticeship pays you while you train. That matters when
+        a <Link href="/resources/nabcep-training-providers-compared">NABCEP-approved course</Link>{" "}
+        costing several hundred dollars is out of reach. Here is how the
+        programs work and why their paperwork can be confusing.
       </p>
 
       <div className="resource-table-scroll">
@@ -149,35 +149,33 @@ export default function SolarInstallerApprenticeshipPrograms() {
           To register an apprenticeship with the Department of Labor, the
           occupation has to be formally recognized as apprenticeable. As of
           this writing, "solar installer" still isn't one of those
-          recognized occupations on its own. Programs work around that by
-          registering apprentices under an occupation the DOL already
-          recognizes, most often Construction Craft Laborer, and building
-          solar-specific tasks into that framework instead.
+          occupations. Programs instead register apprentices under an existing
+          DOL category. Construction Craft Laborer is the most common. The
+          sponsor then adds solar-specific tasks to that framework.
         </p>
         <p>
-          IREC and SEIA got national guidelines approved for exactly this
-          setup. The template helps employers build a solar apprenticeship without
-          waiting for a dedicated occupation code to exist. Some states,
-          like Oregon, route the same idea through an existing electrical
-          apprenticeship (the Limited Renewable Energy Technician license)
-          instead of the general laborer route, so the exact legal wrapper
-          varies by state even when the on-the-ground training looks
-          similar.
+          IREC and SEIA secured national guidelines for this model. The
+          template lets employers build a solar apprenticeship without a
+          dedicated occupation code. Oregon takes a different route through
+          its Limited Renewable Energy Technician electrical apprenticeship.
+          The legal structure varies by state even when the field training
+          looks similar.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>The IRA apprenticeship requirement</h2>
         <p>
-          Apprenticeships existed in solar before this, but unevenly.
-          What changed the thing for a lot of employers is the Inflation
-          Reduction Act's labor provisions. Solar and storage projects over
-          1 megawatt now have to source a minimum share of construction labor
-          hours from registered apprentices to qualify for the full federal
-          tax credit, a threshold that started at 12.5 percent and stepped
-          up to 15 percent. For an EPC contractor chasing utility-scale
-          work, standing up a real apprenticeship pipeline became a direct
-          lever on how much of the credit they can claim.
+          Solar apprenticeships existed before the Inflation Reduction Act,
+          but availability was uneven. The law's labor provisions changed the
+          calculation for employers. Solar and storage projects above 1
+          megawatt must assign a minimum share of construction hours to
+          registered apprentices to receive the full federal tax credit. The
+          threshold began at 12.5 percent and rose to 15 percent.
+        </p>
+        <p>
+          For utility-scale EPC contractors, an apprenticeship pipeline now
+          affects the value of the credit they can claim.
         </p>
       
       </section>
@@ -185,15 +183,16 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <section className="resource-section">
         <h2>What a program looks like</h2>
         <p>
-          Structure varies by sponsor: a mix of paid
-          on-the-job training under a mentor, plus classroom or online
-          instruction in electrical fundamentals and safety. ReVision Energy's four-year program splits
-          into installation or maintenance technician tracks and combines
-          8,000 hours of supervised fieldwork with 600 hours of related
-          classroom instruction. Oregon's electrical-track apprenticeship
-          runs leaner at 4,000 OJT hours and 288 classroom hours, reflecting
-          the difference between a general craft-laborer wrapper and a
-          licensure-track electrical apprenticeship.
+          Every sponsor sets its own structure. Most combine paid work under a
+          mentor with classroom or online instruction in safety and electrical
+          fundamentals.
+        </p>
+        <p>
+          ReVision Energy's four-year program offers installation and
+          maintenance tracks. It includes 8,000 supervised field hours and 600
+          classroom hours. Oregon's electrical track requires 4,000 on-the-job
+          hours and 288 classroom hours. Its shorter schedule reflects a
+          different licensing framework.
         </p>
         <p>
           Pay typically starts below a fully qualified installer's wage and
@@ -205,34 +204,29 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <section className="resource-section">
         <h2>Apprenticeship vs. paying for NABCEP training up front</h2>
         <p>
-          These are starting points that can converge. An apprenticeship gets you paid,
-          supervised field hours from day one, which is exactly the kind of
-          documented experience NABCEP's Experience Pathway asks for.
-           Many apprentices end up sitting for a NABCEP Associate or Installation
-          Professional exam anyway, using the apprenticeship's hours and
-          classroom instruction as the preparation instead of a separate
-          paid course.
+          These routes can lead to the same place. An apprenticeship provides
+          paid and supervised field hours from the first day. That experience
+          can support NABCEP's Experience Pathway. Many apprentices later sit
+          for a NABCEP Associate or Installation Professional exam. Their work
+          hours and classroom instruction replace a separate prep course.
         </p>
         <p>
-          The tradeoff is speed and flexibility. Apprenticeships run for
-          years on a fixed structure with a defined sponsor and location. A
-          paid NABCEP prep course can be finished in weeks, if you already 
-          have some construction or electrical background and cash to cover it.
-           Someone with savings and a related background may move faster through 
-           paid training; someone without either usually comes out ahead going the paid &
-          supervised route instead.
+          The tradeoff is speed and flexibility. Apprenticeships follow a fixed
+          structure and can last for years. They also tie you to a sponsor and
+          location. A worker with relevant experience and enough savings may
+          complete a paid NABCEP prep course in weeks. Without those
+          advantages, paid and supervised training is often the stronger route.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Where these programs exist</h2>
         <p>
-          In practice, start with a state apprenticeship agency or an IBEW
-          local for the electrical track. Employer-run programs are another
-          route. SEIA and IREC also maintain
-          employer-facing resources that, in practice, double as a way to
-          find which companies in a given region are currently running a
-          registered program.
+          Start with your state apprenticeship agency or an IBEW local if you
+          want the electrical track. Employer-run programs offer another route.
+          SEIA and IREC also publish resources for sponsors. Those directories
+          can reveal which regional employers currently run registered
+          programs.
         </p>
       </section>
 
@@ -252,11 +246,11 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </section>
 
       <p className="resource-fine-print">
-        Program structures, hour requirements, and federal tax credit
-        thresholds reflect information available as of mid-2026 and change
-        over time as new programs register and legislation evolves. Confirm
-        current details directly with the listed program sponsors or your
-        state apprenticeship agency before applying.
+        Program structures, required hours and federal tax-credit thresholds
+        reflect information available in mid-2026. New registrations and
+        legislation can change those details. Confirm the current terms with
+        the program sponsor or your state apprenticeship agency before
+        applying.
       </p>
     </article>
   );

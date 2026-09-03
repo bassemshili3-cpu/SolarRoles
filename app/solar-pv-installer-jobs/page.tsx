@@ -59,32 +59,32 @@ const jsonLd = {
 const installerRoles = [
   {
     title: 'Residential Installer',
-    description: "Rooftop systems on single-family homes, usually 4 to 12kW. Crews of 2 to 4 move between multiple sites in a day. This is where most installers start, and where the bulk of entry-level hiring happens.",
+    description: "Residential installers build 4 to 12kW rooftop systems. Crews of two to four may visit several homes in a day. Most entry-level hiring happens in this market.",
     icon: Sun,
   },
   {
     title: 'Commercial & Industrial Installer',
-    description: "Larger rooftop or carport arrays on warehouses, schools, and office buildings. Systems range from 50kW into the megawatts. Work is more structured than residential, often unionized on prevailing-wage projects.",
+    description: "Commercial installers work on warehouses, schools and office buildings. Systems range from 50kW into the megawatts. Prevailing-wage projects may use union crews and more formal workflows.",
     icon: Wrench,
   },
   {
     title: 'Utility-Scale Installer',
-    description: "Ground-mount arrays on solar farms spanning hundreds of acres. Longer project timelines, higher pay, and often per diem for travel. Crews here work with tracker systems and higher-voltage combiner setups.",
+    description: "Utility crews build ground-mount arrays across large solar farms. Projects run longer and often pay more. Traveling workers may receive per diem. The work includes trackers and higher-voltage combiner systems.",
     icon: TrendingUp,
   },
   {
     title: 'Lead Installer / Foreman',
-    description: "Runs the crew, manages the daily install schedule, and signs off on quality before inspection. Usually requires 2 to 4 years of field experience plus a track record of clean, code-compliant installs.",
+    description: "The lead assigns daily work and checks quality before inspection. Employers usually want two to four years of field experience. Candidates also need a record of clean, code-compliant installations.",
     icon: ShieldCheck,
   },
   {
     title: 'O&M Technician',
-    description: "Maintains systems already in the ground: panel cleaning, inverter troubleshooting, monitoring system diagnostics, and warranty repairs. Less physically demanding than new installs, steadier year-round schedule.",
+    description: "O&M technicians maintain operating systems. They clean panels, troubleshoot inverters and diagnose monitoring faults. Warranty repairs and a steadier year-round schedule are common.",
     icon: Award,
   },
   {
     title: 'Battery Storage Installer',
-    description: "Installs and commissions residential and commercial battery systems, often paired with a PV install. Demand here is growing fast as storage attaches to a growing share of new solar contracts.",
+    description: "Battery installers build and commission residential or commercial storage systems. Much of the work is paired with PV. Demand is rising as more contracts include storage.",
     icon: DollarSign,
   },
 ]
@@ -115,11 +115,11 @@ const certifications = [
 const faqs = [
   {
     question: 'What does a solar PV installer do day to day?',
-    answer: "Mounting racking systems, running conduit, placing and wiring panels, and connecting the array to an inverter and the electrical panel. Most of the work happens on a roof or a ground-mount frame, often in direct sun. A residential crew typically completes one system per day.",
+    answer: "Installers mount racking and place panels. They also run conduit, complete wiring and connect the array to an inverter. Most work happens outdoors on roofs or ground-mount frames. A residential crew often completes one system per day.",
   },
   {
     question: 'How much do solar installers earn?',
-    answer: "The median annual wage for solar photovoltaic installers was $51,860 as of May 2024, according to the Bureau of Labor Statistics. Entry-level helpers on residential crews tend to start closer to $35,000 to $40,000. Lead installers and workers on utility-scale projects with several years of experience commonly clear $65,000 to $75,000, and licensed electricians working solar installs earn more on top of that.",
+    answer: "The Bureau of Labor Statistics reported a $51,860 median annual wage in May 2024. Residential helpers often start around $35,000 to $40,000. Experienced leads and utility-scale installers commonly earn $65,000 to $75,000. Licensed electricians can earn more.",
   },
   {
     question: 'Do I need a certification to get hired?',
@@ -127,11 +127,11 @@ const faqs = [
   },
   {
     question: 'Is solar installer work physically demanding?',
-    answer: "Yes. Expect to carry panels up ladders, work on sloped roofs, and spend full days outdoors in heat or cold depending on region and season. It's a trade job, closer in physical demand to roofing or general construction than to an electrician's bench work.",
+    answer: "Yes. Installers carry panels up ladders and work on sloped roofs. Full days outdoors may involve heat or cold. The physical demands resemble roofing or general construction more than bench electrical work.",
   },
   {
     question: 'Is the job growing or shrinking?',
-    answer: "Growing quickly. BLS projects 42% employment growth for solar photovoltaic installers between 2024 and 2034, among the fastest of any occupation tracked, with about 4,100 openings projected each year nationally.",
+    answer: "BLS projects 42% employment growth from 2024 to 2034. That is among the fastest rates for any tracked occupation. The agency expects about 4,100 openings each year nationwide.",
   },
   {
     question: 'Can I move from installer into a different solar career?',
@@ -200,7 +200,9 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Sun className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of Solar Installer Roles</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            "Solar installer" can mean residential rooftop work, commercial construction, or utility-scale field work. Those crews differ in pay, schedule, equipment, and physical demands.
+            "Solar installer" covers residential rooftops, commercial sites and
+            utility-scale fields. Each market has its own pay, schedule and
+            equipment. Physical demands differ too.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {installerRoles.map((role, index) => (
@@ -216,7 +218,9 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Award className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Certifications</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Most employers will hire and train a motivated entry-level candidate. These credentials are what move you from helper to lead installer, and what employers screen for on higher-paying postings.
+            Most employers train motivated entry-level hires. Credentials
+            become more important when moving from helper to lead installer.
+            Higher-paying postings often screen for them directly.
           </p>
           <div className="space-y-4">
            {certifications.map((cert) => (
@@ -242,8 +246,9 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
     <h2 className="text-2xl font-bold text-gray-900">Solar Installer Salary Ranges</h2>
   </div>
   <p className="text-gray-600 mb-6 max-w-4xl">
-    The median annual wage for solar photovoltaic installers was $51,860 as of May 2024, per the Bureau of Labor
-    Statistics. Actual pay depends heavily on region, project type, and the certifications you bring to the job.
+    The Bureau of Labor Statistics reported a $51,860 median annual wage in
+    May 2024. Region and project type change the offer. Certifications can
+    change it as well.
   </p>
 
   <div className="grid md:grid-cols-3 gap-6">
@@ -305,7 +310,9 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034, among the fastest growth rates of any tracked occupation, with roughly 4,100 openings projected annually nationwide.
+            The Bureau of Labor Statistics projects 42% employment growth from
+            2024 to 2034. That is among the fastest rates for any tracked
+            occupation. Roughly 4,100 openings are expected each year.
           </p>
         </section>
 
@@ -329,17 +336,21 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
-            See how installer pay breaks down state by state on our{' '}
+            Compare state pay on our{' '}
             <Link href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar PV Installer Salary by State</Link>{' '}
-            page. If you're ready to move up, browse{' '}
-            <Link href="/lead-solar-installer-jobs" className="text-blue-700 underline hover:text-blue-900">lead solar installer jobs</Link>,{' '}
-            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>, or{' '}
+            page. Ready to move up? Browse{' '}
+            <Link href="/lead-solar-installer-jobs" className="text-blue-700 underline hover:text-blue-900">lead solar installer jobs</Link>.
+            You can also explore{' '}
+            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>{' '}
+            or{' '}
             <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>.
-            Starting from zero? Our guide to{' '}
+          </p>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            Starting from zero? Read{' '}
             <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</Link>{' '}
-            and the{' '}
+            and our{' '}
             <Link href="/resources/solar-installer-certification" className="text-blue-700 underline hover:text-blue-900">solar installer certification guide</Link>{' '}
-            cover the entry path, and you can start with{' '}
+            first. Then search{' '}
             <Link href="/solar-jobs-no-experience" className="text-blue-700 underline hover:text-blue-900">no-experience solar jobs</Link>{' '}
             if you're just getting started.
           </p>
@@ -347,7 +358,10 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
 
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Salary and outlook figures are drawn from Bureau of Labor Statistics data and represent national averages. Actual pay varies by employer, region, and experience. Verify certification requirements and safety standards directly with employers and OSHA.
+            <strong>Disclaimer:</strong> Salary and outlook figures use Bureau
+            of Labor Statistics national data. Actual pay varies by employer,
+            region and experience. Verify certification and safety requirements
+            with employers and OSHA.
           </p>
         </section>
       </div>

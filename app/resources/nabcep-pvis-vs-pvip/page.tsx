@@ -413,23 +413,19 @@ export default function NabcepPvisVsPvip() {
         <article className="sr2-article">
           <h2 id="confusion" className="sr2-first"><span className="n">01</span>Why the Confusion Exists</h2>
           <p>
-            Ask around and you&apos;ll find installers, and even some training
-            providers, who genuinely aren&apos;t sure how the PV Installer
-            Specialist (PVIS) differs from the PV Installation Professional
-            (PVIP). It&apos;s a fair question — NABCEP doesn&apos;t publish a
-            side-by-side comparison anywhere on nabcep.org. What exists
-            instead is two separate certification pages, each listing its own
-            requirements and Job Task Analysis, with no direct explanation of
-            why you&apos;d pick one over the other. Training providers have
-            had to fill that gap themselves.
+            Installers and training providers often struggle to explain the
+            difference between PV Installer Specialist and PV Installation
+            Professional. NABCEP does not publish a direct comparison on its
+            website. Instead, each credential has a separate page with its own
+            requirements and Job Task Analysis. Neither page explains which
+            credential fits a particular career goal.
           </p>
           <p>
-            The short version: <strong>PVIP is the broader credential, and it
-               contains PVIS.</strong> The PVIP Job Task Analysis draws
-            on content from all three PV Specialist certifications — PV
-            Design Specialist (PVDS), PVIS, and PV Commissioning &amp;
-            Maintenance Specialist (PVCMS), combined. PVIS isn&apos;t a
-            different track from PVIP; it&apos;s a narrower slice of it.
+            <strong>PVIP is the broader credential and includes the PVIS
+            scope.</strong> Its Job Task Analysis draws from three specialist
+            certifications: PV Design Specialist, PV Installer Specialist and
+            PV Commissioning &amp; Maintenance Specialist. PVIS is a narrower
+            part of that broader body of knowledge.
           </p>
 
           <h2 id="scope"><span className="n">02</span>Scope: What Each One Covers</h2>
@@ -456,10 +452,9 @@ export default function NabcepPvisVsPvip() {
             </div>
           </div>
           <p>
-            PVIS doesn&apos;t touch design or commissioning at all. If your
-            day-to-day is limited to physical installation work, such as
-            running conductors, mounting racking, and wiring monitoring gear, PVIS
-            tests exactly that.
+            PVIS does not cover design or commissioning. It focuses on
+            physical installation work such as conductor runs, racking and
+            monitoring hardware.
           </p>
 
           <h2 id="compare"><span className="n">03</span>Side-by-Side Comparison</h2>
@@ -511,20 +506,16 @@ export default function NabcepPvisVsPvip() {
 
           <h2 id="pathway"><span className="n">04</span>Career Pathway Differences</h2>
           <p>
-            NABCEP&apos;s own career pathway materials list the same six solar
-            installation job titles under both PVIS and PVIP — on paper,
-            either one gets you recognized for installer roles. Where they
-            diverge is everything adjacent to installation. PVIP is the
-            credential that shows up as a preferred or required qualification
-            for system design, project management, and business ownership,
-            because the certification itself covers that ground. PVIS
-            doesn&apos;t open those doors, since it was never built to test
-            for them.
+            NABCEP career materials list the same six installation titles under
+            PVIS and PVIP. Either credential can support an installer role.
+            Their value separates when the job expands into design, project
+            management or business ownership. PVIP covers that wider scope and
+            appears more often in qualifications for those positions. PVIS was
+            built for installation work.
           </p>
           <p>
-            That&apos;s also why PVIP is the one most often called the
-            &quot;gold standard&quot; in industry materials —  because PVIP
-            is the only one of the two that certifies the full scope
+            Industry materials often call PVIP the &quot;gold standard.&quot; Of
+            these two credentials, it is the one that covers the full scope
             employers associate with a lead role.
           </p>
 
@@ -576,18 +567,17 @@ export default function NabcepPvisVsPvip() {
 
           <h2 id="next"><span className="n">07</span>Next Steps</h2>
           <p>
-            For the full breakdown of every NABCEP credential, including PV
-            Associate, see our{" "}
+            Our{" "}
             <Link href="/resources/how-to-get-nabcep-certified">
               guide to getting NABCEP certified
             </Link>
-            . If you&apos;ve settled on PVIP and want to know how the newer
-            Board Eligible pathway changes the order of requirements, read
-            our{" "}
+            {" "}compares every major credential, including PV Associate. If
+            you have chosen PVIP, the{" "}
             <Link href="/resources/nabcep-board-eligible-status">
               Board Eligible status guide
             </Link>
-            . Once certified, browse current{" "}
+            {" "}explains how to take the exam before completing your field
+            hours. Once certified, browse current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
             </Link>{" "}
@@ -595,10 +585,9 @@ export default function NabcepPvisVsPvip() {
           </p>
 
           <p className="sr2-fine">
-            NABCEP is an independent certification body and is not affiliated
-            with Solar Roles. Certification scope, training-hour
-            requirements, and eligibility criteria are set by NABCEP and can
-            change — always confirm current requirements at nabcep.org before
+            NABCEP is an independent certification body with no affiliation to
+            Solar Roles. NABCEP sets the scope, training hours and eligibility
+            criteria. Confirm the current requirements at nabcep.org before
             enrolling in a prep course.
           </p>
         </article>

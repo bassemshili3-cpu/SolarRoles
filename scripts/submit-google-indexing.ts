@@ -41,6 +41,8 @@ const ATS_SOURCES = [
   'pinpoint',
   'workday',
   'workable',
+  'rippling',
+  'successfactors',
 ];
 
 async function main() {

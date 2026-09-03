@@ -82,57 +82,100 @@ export default function SolarDcSafetyForElectricians() {
         <article className="sr2-article">
           <h2 id="difference"><span className="n">01</span>The DC Difference</h2>
           <p>
-            An electrician who is experienced on conventional AC systems already brings valuable fundamentals: safe work practices, troubleshooting discipline, and respect for energized equipment. Solar PV adds a different electrical environment, not just a different kind of rooftop installation.
+            AC electricians bring valuable fundamentals to solar. They already
+            understand safe work, disciplined troubleshooting and the danger
+            of energized equipment. PV adds a different electrical environment
+            that requires its own methods.
           </p>
           <p>
-            The key difference is how an arc behaves. In AC, current reverses direction and crosses zero many times per second. That zero crossing can help an arc extinguish when a circuit opens. DC has no equivalent repeated zero crossing. Once a DC arc is established, it can be sustained until the circuit is interrupted by equipment designed and rated to do so.
+            The key difference is arc behavior. AC reverses direction and
+            crosses zero many times per second. That crossing can help an arc
+            extinguish when a circuit opens. DC has no repeated zero crossing.
+            Once established, an arc may continue until properly rated
+            equipment interrupts the circuit.
           </p>
           <div className="sr2-callout">
             <span className="kicker">The practical takeaway</span>
-            <p>Solar work is not a lower-voltage version of conventional electrical work. The hazard assessment, isolation plan, switching equipment, and training must fit the DC circuit in front of you.</p>
+            <p>Solar work is not a lower-voltage version of conventional electrical work. The hazard assessment and isolation plan must fit the DC circuit. So must the switching equipment and training.</p>
           </div>
 
           <h2 id="daylight"><span className="n">02</span>Why “Off” Is Not Always De-Energized</h2>
           <p>
-            A PV module generates DC electricity whenever light reaches it. Opening an inverter may isolate part of the system, but it does not make every conductor on the array side dead. The exact energized sections depend on the system design and the isolation points available.
+            A PV module generates DC electricity whenever light reaches it.
+            Opening an inverter may isolate part of the system. It does not
+            de-energize every array-side conductor. The design and available
+            isolation points determine what remains live.
           </p>
           <p>
-            This is where an AC-only mental model can become dangerous. “The system is off” is not a complete electrical status. A qualified worker needs to identify the source that can interrupt the circuit, and what remains energized in daylight before work begins.
+            An AC-only mental model can be dangerous here. “The system is off”
+            is not a complete electrical status. Before work begins, a
+            qualified worker must identify the interruption point and every
+            section that remains energized in daylight.
           </p>
           <p>
-            OSHA specifically notes that solar workers face shock and arc-flash hazards, and that PV circuits are energized whenever modules are exposed to sunlight. That is why solar-specific safety training matters alongside a general electrical background.
+            OSHA identifies shock and arc-flash hazards for solar workers. It
+            also notes that sunlight energizes PV circuits. General electrical
+            experience therefore needs a layer of solar-specific training.
           </p>
 
           <h2 id="scale"><span className="n">03</span>Voltage and Available Energy Change the Job</h2>
           <p>
-            Large solar sites commonly use DC collection architectures in the 600 to 1,500 V range. Higher voltage alone does not describe the full arc-flash risk: available fault current, clearing time, working distance, enclosure design, and the task all matter. But it does mean the work cannot be approached like a small residential branch circuit.
+            Large solar sites commonly use DC collection systems from 600 to
+            1,500 V. Voltage alone does not define arc-flash risk. Fault
+            current, clearing time and working distance also matter. The
+            enclosure and task change the exposure as well. This work cannot
+            be approached like a small residential branch circuit.
           </p>
           <p>
-            The risk can concentrate at combiner boxes, recombiners, inverters, disconnects, and other points where strings are brought together. Those locations combine exposed electrical work with equipment-specific switching and isolation rules. A job that looks routine on a one-line diagram can carry very different consequences when DC sources remain available.
+            Risk can concentrate where strings come together. Combiner boxes,
+            recombiners, inverters and disconnects are common examples. Each
+            location has equipment-specific switching and isolation rules. A
+            routine-looking task can carry serious consequences while DC
+            sources remain available.
           </p>
 
           <h2 id="retraining"><span className="n">04</span>What an AC Electrician Must Relearn</h2>
           <p>
-            The goal is not to erase AC experience. It is to add PV-specific competence before taking responsibility for DC-side work. That includes understanding string and combiner architecture, DC-rated disconnecting means, rapid-shutdown design where applicable, lockout/tagout limits, and the site&apos;s arc-flash risk assessment.
+            AC experience remains useful. Before taking responsibility for
+            DC-side work, add competence in string and combiner architecture.
+            Learn DC-rated disconnects and rapid-shutdown design. Understand
+            the limits of lockout/tagout and the site's arc-flash assessment.
           </p>
           <p>
-            It also means learning to treat labels, one-line diagrams, equipment instructions, and the employer&apos;s electrical safety program as working tools rather than paperwork. PPE is part of the control strategy, not a substitute for eliminating exposure, establishing a safe work condition, or following the designed switching sequence.
+            Labels, one-line diagrams and equipment instructions are working
+            tools. The employer's electrical safety program is one too. PPE
+            supports the control strategy. It cannot replace exposure removal,
+            a safe work condition or the correct switching sequence.
           </p>
           <p>
-            Our <Link href="/resources/osha-safety-guide-solar-installers">OSHA safety guide for solar installers</Link> covers the broader roof, fall-protection, and electrical hazards that sit alongside this DC-specific risk. In Texas, licensing and supervision rules also shape who may perform this work; see the guide to <Link href="/resources/solar-installer-vs-electrician-texas">solar installer versus electrician requirements</Link>.
+            Our <Link href="/resources/osha-safety-guide-solar-installers">OSHA safety guide for solar installers</Link>{" "}
+            covers roof and fall hazards alongside electrical risk. Texas also
+            restricts who may perform this work. See our guide to{" "}
+            <Link href="/resources/solar-installer-vs-electrician-texas">solar installer versus electrician requirements</Link>.
           </p>
 
           <h2 id="employers"><span className="n">05</span>What Employers Should Look For</h2>
           <p>
-            Hiring an electrician for solar should not stop at checking a license or years of AC experience. The useful question is whether the candidate has been trained and supervised on the PV equipment, voltage class, operating procedures, and energized-work rules used on that site.
+            A license and years of AC experience do not complete a solar
+            safety assessment. Employers should confirm training on the site's
+            equipment and voltage class. They should also check experience
+            with its operating procedures and energized-work rules.
           </p>
           <p>
-            For electricians moving into solar, the strongest signal is not simply saying “I have worked around DC.” It is being able to explain how a PV array remains a source in daylight, where isolation begins and ends, and why the planned task can be completed under the site&apos;s safety controls.
+            Electricians should be able to explain how an array remains a
+            source in daylight. They should identify where isolation begins
+            and ends. They should also show why a planned task fits the site's
+            safety controls. That evidence says more than a general claim of DC
+            experience.
           </p>
 
           <h2 id="next"><span className="n">06</span>Next Step</h2>
           <p>
-            If you already have an electrical background and want to apply it in solar, explore <Link href="/solar-electrician-jobs">Solar Electrician job openings</Link>. Before accepting DC-side responsibility, make sure the employer provides role- and site-specific PV safety training, equipment procedures, and qualified supervision.
+            Electricians can explore current{" "}
+            <Link href="/solar-electrician-jobs">Solar Electrician job openings</Link>.
+            Before accepting DC-side responsibility, confirm that the employer
+            provides site-specific PV training. Equipment procedures and
+            qualified supervision should also be in place.
           </p>
 
           <div className="sr2-fine">

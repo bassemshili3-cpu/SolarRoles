@@ -52,22 +52,22 @@ const jsonLd = {
 const electricianRoles = [
   {
     title: 'Residential Solar Electrician',
-    description: 'Handles the electrical side of rooftop PV: service-panel work, conduit, inverter connections, interconnection, troubleshooting, and inspection corrections. The job often sits between the installation crew, homeowner, utility, and AHJ.',
+    description: 'Residential solar electricians own the electrical scope of rooftop PV. That includes service panels, conduit and inverter connections. They also coordinate troubleshooting and inspection corrections with the crew, homeowner and utility.',
     icon: Zap,
   },
   {
     title: 'Commercial PV Electrician',
-    description: 'Works on larger rooftops, carports, and behind-the-meter systems. Expect more conduit runs, equipment rooms, switchgear coordination, and plan-set work than on a typical residential crew.',
+    description: 'Commercial electricians work on large rooftops, carports and behind-the-meter systems. The job adds longer conduit runs and equipment rooms. Switchgear coordination and plan-set work are also common.',
     icon: Cable,
   },
   {
     title: 'Utility-Scale Electrical Technician',
-    description: 'Builds, tests, and maintains the electrical systems that turn an array into a generating plant: DC collection, inverters, transformers, controls, and field verification. Travel and per diem are common on construction projects.',
+    description: 'Utility technicians build and test the electrical systems behind a generating plant. They work with DC collection, inverters and transformers. Controls and field verification are part of the scope. Construction projects often involve travel and per diem.',
     icon: Wrench,
   },
   {
     title: 'PV Commissioning Electrician',
-    description: 'Steps in near the end of a project to verify wiring, polarity, communications, protection settings, and equipment operation before turnover. This is a detail-heavy role where documentation matters as much as installation speed.',
+    description: 'Commissioning electricians verify the finished system before turnover. They check wiring, polarity and communications. Protection settings and equipment operation also require signoff. Documentation matters as much as speed.',
     icon: BadgeCheck,
   },
   {
@@ -99,7 +99,7 @@ const qualifications = [
 const faqs = [
   {
     question: 'What does a solar electrician do that a solar installer does not?',
-    answer: 'The overlap depends on the project and local rules. Solar electricians are generally responsible for the electrical scope: conductors, conduit, grounding and bonding, inverters, service equipment, testing, and interconnection. Install crews may handle racking and modules, while the electrician owns the work that requires electrical licensing or supervision.',
+    answer: 'The boundary depends on the project and local law. Solar electricians generally own conductors, conduit and grounding. They also handle inverters, service equipment, testing and interconnection. Installation crews may focus on racking and modules.',
   },
   {
     question: 'Do I need to be a licensed electrician to work in solar?',
@@ -107,7 +107,7 @@ const faqs = [
   },
   {
     question: 'Can a residential electrician move into solar?',
-    answer: 'Yes. Residential service-panel, branch-circuit, conduit, and inspection experience transfers well. The important addition is PV-specific training: DC circuit behavior, inverter and rapid-shutdown systems, array-side isolation, and the site safety procedures used by the employer.',
+    answer: 'Yes. Service-panel, branch-circuit and conduit experience transfers well. So does inspection work. The electrician still needs PV training in DC behavior and array-side isolation. Inverter, rapid-shutdown and site-safety procedures are also important.',
   },
   {
     question: 'Are solar electrician jobs only construction jobs?',
@@ -115,11 +115,11 @@ const faqs = [
   },
   {
     question: 'How much do solar electricians earn?',
-    answer: 'Solar electrician pay is not reported as a separate national occupation, so listings vary by license level, region, union status, travel, overtime, and project type. The BLS reported a $62,350 median annual wage for electricians across all industries in May 2024; solar-specific offers can sit above or below that benchmark depending on those factors.',
+    answer: 'BLS reported a $62,350 median wage for electricians across all industries in May 2024. Solar offers can fall above or below that benchmark. License level, region and union status all affect pay. Travel and overtime can change total earnings further.',
   },
   {
     question: 'What should I look for in a solar electrician job posting?',
-    answer: 'Look beyond the title. Check whether the work is new installation, commissioning, service, or O&M; the voltage and equipment involved; whether travel or per diem is included; the required license level; and whether the employer provides PV-specific safety and equipment training.',
+    answer: 'Look beyond the title. Identify whether the work is installation, commissioning, service or O&M. Check the voltage, equipment and required license level. Confirm travel or per diem and ask what PV-specific training the employer provides.',
   },
 ]
 
@@ -182,7 +182,7 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Zap className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of Solar Electrician Roles</h2></div>
-          <p className="text-gray-600 mb-6 max-w-4xl">“Solar electrician” is not one job. The work changes substantially between a residential interconnection, a commercial electrical room, a utility-scale commissioning package, and an operating site.</p>
+          <p className="text-gray-600 mb-6 max-w-4xl">“Solar electrician” is not one job. Residential interconnection differs from commercial electrical-room work. Utility commissioning and operating-site maintenance add other responsibilities.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {electricianRoles.map((role) => (
               <div key={role.title} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all">
@@ -197,7 +197,7 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Cable className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">The Part of Solar Work Most Electricians Underestimate</h2></div>
           <div className="max-w-4xl space-y-4 text-gray-600">
-            <p>Solar work is not simply AC electrical work installed outdoors. The DC side of a PV system stays a source while modules are in daylight, and DC arcs do not behave like AC arcs. That changes how electricians read the system, isolate equipment, and plan work around energized conductors.</p>
+            <p>PV adds a DC source that remains energized in daylight. DC arcs also behave differently from AC arcs. Electricians must account for both facts when reading the system and planning isolation.</p>
             <p><Link href="/resources/solar-dc-safety-for-electricians" className="text-blue-700 underline hover:text-blue-900">Why Solar DC Safety Is Different for Electricians</Link> explains the shift from conventional AC work to photovoltaic DC hazards, including why “off” does not always mean every circuit is de-energized.</p>
           </div>
         </section>
@@ -224,7 +224,7 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Electrician Pay: What Changes the Offer</h2></div>
-          <p className="text-gray-600 mb-6 max-w-4xl">Solar electrician pay is shaped less by the word “solar” in the title than by your license level, the project type, travel requirements, overtime, and whether the role is construction or operating-site work.</p>
+          <p className="text-gray-600 mb-6 max-w-4xl">License level and project type shape solar-electrician pay. Travel and overtime can add to the package. Construction and operating-site roles also pay differently.</p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
               <p className="text-3xl font-bold text-green-600 mb-2">Apprentice</p>
@@ -263,15 +263,17 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
-            See how electrician pay compares on our{' '}
+            Compare electrician pay on our{' '}
             <Link href="/data/salaries/solar-electrician" className="text-blue-700 underline hover:text-blue-900">Solar Electrician Salary by State</Link>{' '}
-            page. Around it, the relevant reads are{' '}
+            page. For career context, read{' '}
             <Link href="/resources/solar-dc-safety-for-electricians" className="text-blue-700 underline hover:text-blue-900">why solar DC safety is different for electricians</Link>{' '}
             and{' '}
             <Link href="/resources/nabcep-vs-eta-vs-state-licenses" className="text-blue-700 underline hover:text-blue-900">NABCEP vs ETA vs state licenses</Link>.
-            If you're exploring other paths, see{' '}
-            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>,{' '}
-            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>, or{' '}
+            Explore other paths through{' '}
+            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>.
+            You can also see{' '}
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>{' '}
+            or{' '}
             <Link href="/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">solar engineer jobs</Link>.
           </p>
         </section>

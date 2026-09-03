@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import { Sun } from "lucide-react";
 
 interface Category {
   name: string;
@@ -96,6 +98,18 @@ const jsonLd = {
   ],
 };
 
+function SunBullet({ children }: { children: ReactNode }) {
+  return (
+    <li className="flex items-start gap-3">
+      <Sun
+        aria-hidden="true"
+        className="mt-1.5 h-4 w-4 shrink-0 text-[#F2A93B]"
+      />
+      <span>{children}</span>
+    </li>
+  );
+}
+
 export default function NabcepVsEtaVsStateLicenses() {
   return (
     <article className="resource-article">
@@ -106,12 +120,11 @@ export default function NabcepVsEtaVsStateLicenses() {
 
       <h1>NABCEP vs ETA vs State Licenses vs Manufacturer Certifications</h1>
       <p className="resource-intro">
-        Solar credentials come in four different flavors. Some
-        are voluntary industry certifications, some are legal requirements
-        enforced by a state, and some are marketing programs run by
-        equipment manufacturers that happen to require real training.
-        Confusing them leads to wasted money on the wrong credential at the
-        wrong time.
+        Solar credentials fall into four categories. Industry certifications
+        demonstrate knowledge. State licenses grant legal authority to do the
+        work. Manufacturer programs prove that an installer has completed
+        product-specific training. Choosing the wrong category can mean paying
+        for a credential that does not yet help your career.
       </p>
 
       <div className="resource-table-scroll">
@@ -138,183 +151,193 @@ export default function NabcepVsEtaVsStateLicenses() {
       </div>
 
       <section className="resource-section">
-        <h2>The four categories, in plain terms</h2>
-        <p>
-          NABCEP is a national, voluntary certification body. It doesn't
-          grant you legal permission to work anywhere; it signals to
-          employers and customers that you've met a recognized standard.
-        </p>
-        <p>
-          ETA International is a separate certification body, older and less
-          known outside the electronics and solar trades, with a more
-          hands-on emphasis than NABCEP's largely exam-based approach.
-        </p>
-        <p>
-          State contractor licenses are legal requirements. Where they apply, you cannot legally pull permits or
-          run a solar business without one, regardless of how many voluntary
-          certifications you hold.
-        </p>
-        <p>
-          Manufacturer certifications (Tesla, Enphase, SolarEdge, IronRidge,
-          and others) are brand-specific training programs. They don't carry
-          legal weight and aren't recognized industry-wide the way NABCEP
-          is, but they can provide business benefits: pricing, lead
-          referrals, and eligibility to install certain products under
-          warranty.
-        </p>
+        <h2>The four categories</h2>
+        <ul className="!mb-6 !ml-0 list-none space-y-4 !pl-0">
+          <SunBullet>
+            <strong>NABCEP</strong> is a voluntary national certification. It
+            does not grant legal permission to work. It tells employers and
+            customers that you have met a recognized industry standard.
+          </SunBullet>
+          <SunBullet>
+            <strong>ETA International</strong> is another voluntary
+            certification body. It is older than NABCEP and is better known
+            within the electronics and solar trades. Its pathway places more
+            emphasis on hands-on assessment.
+          </SunBullet>
+          <SunBullet>
+            <strong>State contractor licenses</strong> are legal requirements.
+            In states that require one, you cannot pull permits or operate a
+            solar business without the appropriate license. Voluntary
+            certifications do not override that rule.
+          </SunBullet>
+          <SunBullet>
+            <strong>Manufacturer certifications</strong> cover equipment from
+            brands such as Tesla, Enphase, SolarEdge and IronRidge. They carry
+            no legal authority. They can still unlock better pricing, lead
+            referrals and eligibility to install products under warranty.
+          </SunBullet>
+        </ul>
       </section>
 
       <section className="resource-section">
         <h2>NABCEP vs ETA International</h2>
         <p>
-          Both are legitimate, nonprofit-run certification bodies, and the
-          two are often positioned as competitors, but they're built for
-          slightly different moments in a career.
+          Both credentials come from legitimate nonprofit certification
+          bodies. They are often presented as competitors. In practice, they
+          suit different stages and styles of training.
         </p>
         <p>
           NABCEP's certification track generally assumes you already have
           field experience. To sit for the PV Installation Professional
-          exam, candidates need documented involvement in a minimum number
-          of installations, on top of training hours. It's exam-heavy and
-          widely recognized: employers and government incentive programs
-          across the country reference it by name.
+          exam, candidates need training hours and documented involvement in
+          a minimum number of installations. The pathway relies heavily on
+          exams. It is also widely recognized by employers and government
+          incentive programs across the country.
         </p>
         <p>
-          ETA's approach leans further into hands-on assessment. Its
-          entry-level certification is built for someone newer to the field,
-          with practical training delivered through an ETA-approved school
-          as part of the certification itself. ETA also requires a Customer Service Specialist
-          certification alongside its technical credential, something NABCEP
-          doesn't build into its core pathway.
+          ETA leans further into hands-on assessment. Its entry-level
+          certification is designed for people who are newer to the field.
+          Practical instruction from an ETA-approved school is part of the
+          process. ETA also pairs its technical credential with a Customer
+          Service Specialist certification. NABCEP does not include that
+          requirement in its core pathway.
         </p>
         <p>
-          Cost is one of the clearest differences. Between initial
-          certification and renewal, NABCEP tends to run several times more
-          expensive than ETA's comparable level, largely because of NABCEP's
-          higher exam and application fees. That doesn't make ETA the better
-          deal by default. NABCEP's wider name recognition among employers
-          and utility incentive programs is worth real money over a career,
-          even if it costs more up front.
+          Cost is one of the clearest differences. Initial certification and
+          renewal through NABCEP tend to cost several times more than the
+          comparable ETA level. Higher exam and application fees account for
+          much of that gap.
         </p>
         <p>
-          In practice, plenty of installers hold both. Neither one replaces
-          field experience, and neither is a substitute for a state license
-          where one is legally required.
+          Price does not settle the choice. NABCEP has stronger recognition
+          among employers and utility incentive programs. That can carry real
+          value over a career.
+        </p>
+        <p>
+          Many installers hold both credentials. Neither replaces field
+          experience. Neither substitutes for a state license where the law
+          requires one.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>State contractor licenses: the one that isn't optional</h2>
         <p>
-          This is the category people mix up most often with NABCEP, and
-          it's the one with real legal consequences if ignored. As of the
-          most recent tally, twelve states plus Puerto Rico require a
-          solar-specific contractor license, separate from a general
-          electrical or plumbing license. Most other states still require a
-          general electrical contractor license (or supervision by someone
-          who holds one) to legally connect a PV system to the grid.
+          Twelve states and Puerto Rico require a solar-specific contractor
+          license according to the most recent tally. That credential is
+          separate from a general electrical or plumbing license. Most other
+          states still require an electrical contractor license to connect a
+          PV system to the grid.
         </p>
         <p>
-          NABCEP certification is not a state license, and holding it
-          doesn't exempt you from licensing requirements where they exist.
-          The two systems do intersect in a few places: Utah requires NABCEP
-          certification as a prerequisite to qualify for its state solar
-          contractor license, and a handful of states, including
-          California, Delaware, and Massachusetts, give preference to
-          NABCEP-certified professionals in rebate and incentive programs
-          without making it a legal requirement.
+          In some states, an unlicensed worker can perform the work under the
+          supervision of a license holder. Local rules determine the scope.
         </p>
         <p>
-          The practical takeaway is to check your specific state's licensing
-          rules before assuming a national certification alone lets you
-          legally run jobs. Certifications travel across state lines unlike
-          licenses, generally.
+          NABCEP certification is not a state license. Holding it does not
+          exempt you from local licensing rules. The two systems do intersect
+          in a few places.
+        </p>
+        <p>
+          Utah requires NABCEP certification before a professional can qualify
+          for its state solar contractor license.
+          California, Delaware and Massachusetts also favor NABCEP-certified
+          professionals in some rebate and incentive programs. They do not
+          make the credential a statewide legal requirement.
+        </p>
+        <p>
+          Check your state's licensing rules before taking responsibility for
+          a job. A national certification is portable across state lines. A
+          contractor license generally is not.
         </p>
       </section>
 
       <section className="resource-section">
-        <h2>
-          Manufacturer certifications
-        </h2>
+        <h2>Manufacturer certifications</h2>
         <p>
-          Tesla, Enphase, SolarEdge, SMA, and other equipment manufacturers
-          run their own certification programs, and they matter more than
-          their non-legal status might suggest. These programs train
-          installers on a specific product line (Tesla Powerwall and Solar
-          Roof, Enphase microinverters, SolarEdge power optimizers) and
-          can provide tangible business benefits: product pricing,
-          priority technical support, marketing support, and in Enphase's
-          case, a tiered partner system (platinum, gold, silver) that
-          determines priority access to new product allocation.
+          Tesla, Enphase, SolarEdge and SMA run their own installer programs.
+          Each one teaches the correct way to work with a specific product
+          line. Examples include Tesla Powerwall and Solar Roof, Enphase
+          microinverters and SolarEdge power optimizers.
         </p>
         <p>
-          None of this replaces NABCEP, ETA, or a state license. A
-          manufacturer certification proves you know how to install one
-          company's equipment correctly; it says nothing about your broader
-          PV design or code knowledge, and it carries no weight with a
-          permitting office. But if you plan to specialize in a specific
-          brand of equipment, particularly battery storage systems like
-          Powerwall or Enphase's IQ Battery, the manufacturer certification
-          is often what gets you the install jobs and warranty
-          eligibility, regardless of what other credentials sit on your
-          resume.
+          The value goes beyond training. A program may offer better product
+          pricing, priority technical support or marketing assistance.
+          Enphase also uses partner tiers that affect access to new product
+          allocations.
+        </p>
+        <p>
+          These programs do not replace NABCEP, ETA or a state license. A
+          manufacturer credential proves that you can install one company's
+          equipment correctly. It does not validate broader knowledge of PV
+          design or electrical codes. Permitting offices give it no legal
+          weight.
+        </p>
+        <p>
+          Product-specific training can still decide who gets specialized
+          installation work. That is especially true for battery systems such
+          as Powerwall and Enphase IQ Battery. The right manufacturer
+          credential can also determine warranty eligibility.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>How these stack for a real career</h2>
         <p>
-          Someone building a serious solar installation career in the US
-          typically ends up with a combination.
+          A long-term solar installation career usually requires a combination
+          of credentials. The useful order depends on your state and the work
+          you want to perform.
         </p>
-        <p>
-          A state contractor license, or supervised hours toward one, if the
-          state requires it, since this is the only category with legal
-          teeth.
-        </p>
-        <p>
-          NABCEP PV Associate early on, since it requires no field
-          experience and signals foundational knowledge while you're
-          building the installation hours needed for higher certifications.
-        </p>
-        <p>
-          NABCEP PV Installation Professional once you have the documented
-          field experience, since it remains the most widely recognized
-          credential among employers and incentive programs nationally.
-        </p>
-        <p>
-          One or two manufacturer certifications tied to whatever equipment
-          your employer or region uses most, since these open doors to
-          specific, well-paying installation work that generic credentials
-          don't guarantee.
-        </p>
-        <p>
-          ETA certification is worth adding if your training path leans more
-          hands-on than exam-based, or if a specific employer or region
-          values it, though it won't replace NABCEP's broader name
-          recognition.
-        </p>
+        <ul className="!mb-6 !ml-0 list-none space-y-4 !pl-0">
+          <SunBullet>
+            <strong>Start with the legal requirement.</strong> Work toward a
+            state contractor license when your state requires one. Until you
+            qualify, accumulate supervised hours under a licensed contractor.
+          </SunBullet>
+          <SunBullet>
+            <strong>Add NABCEP PV Associate early.</strong> It requires no
+            field experience and demonstrates foundational knowledge while
+            you build installation hours.
+          </SunBullet>
+          <SunBullet>
+            <strong>Pursue NABCEP PV Installation Professional next.</strong>{" "}
+            Apply once you have the documented field experience. The
+            credential remains widely recognized by employers and incentive
+            programs nationwide.
+          </SunBullet>
+          <SunBullet>
+            <strong>Choose manufacturer programs selectively.</strong> Focus
+            on one or two brands used by your employer or in your region.
+            Those credentials can open access to specialized installation
+            work.
+          </SunBullet>
+          <SunBullet>
+            <strong>Consider ETA for a hands-on pathway.</strong> It can be
+            valuable when practical assessment fits your training style or a
+            local employer requests it. It does not match NABCEP's broader
+            name recognition.
+          </SunBullet>
+        </ul>
       </section>
 
       <section className="resource-section">
-        <h2>The mistake to avoid</h2>
+        <h2>The main thing to remember</h2>
         <p>
-          The most expensive mistake in this space isn't picking the
-          "wrong" certification. It's assuming a national certification
-          (NABCEP, ETA, or a manufacturer program) substitutes for a legally
-          required state license, or the reverse: assuming a state license
-          means employers won't also expect NABCEP. Check what your
-          specific state requires first. Everything else layers on top of
-          that foundation.
+          A national certification does not substitute for a legally required
+          state license. That rule applies to NABCEP, ETA and manufacturer
+          programs. A state license also does not remove an employer's
+          certification requirements. Check your state's rules first. Build
+          the rest of your credential stack from there.
         </p>
       </section>
 
       <p className="resource-fine-print">
-        Licensing requirements, certification costs, and manufacturer
-        program details reflect information available as of mid-2026 and
-        change over time, especially at the state level. Confirm current
-        requirements with your state licensing board and the relevant
-        certifying body before making enrollment or licensing decisions.
+        The licensing rules, certification costs and manufacturer program
+        details on this page reflect information available in mid-2026. These
+        details change over time. State requirements are especially likely to
+        change. Confirm the current rules with your state licensing board and
+        the relevant certifying body before enrolling or applying for a
+        license.
       </p>
     </article>
   );

@@ -52,32 +52,32 @@ const jsonLd = {
 const technicianRoles = [
   {
     title: 'Solar Service Technician',
-    description: 'Responds to service calls on systems already in operation: diagnosing inverter faults, reading monitoring data, swapping failed components, and clearing error codes. The front line for keeping residential and commercial arrays producing.',
+    description: 'Service technicians respond to faults on operating systems. They read monitoring data and diagnose inverters. They also replace failed components and clear error codes to restore production.',
     icon: Wrench,
   },
   {
     title: 'Solar Field Technician',
-    description: 'Travels a service territory across multiple sites handling scheduled inspections, panel testing, and repairs. Field work is more varied than new construction and rewards troubleshooting over raw installation speed.',
+    description: 'Field technicians travel between sites for inspections, testing and repairs. The work varies more than new construction. Troubleshooting matters more than installation speed.',
     icon: HardHat,
   },
   {
     title: 'Solar Panel Repair Technician',
-    description: 'Focuses on fixing damaged or underperforming panels: replacing cracked modules, reseating connectors, repairing racking and mounting hardware, and verifying output after the repair. A hands-on specialty within the broader solar repair technician role.',
+    description: 'Repair technicians fix damaged or underperforming panels. They replace modules and reseat connectors. Racking repairs and output verification complete the job.',
     icon: Settings,
   },
   {
     title: 'PV O&M Technician',
-    description: 'Runs the operations and maintenance program for a fleet of systems — production diagnostics, module string testing, thermal scans, and scheduled maintenance routes that keep uptime and revenue high.',
+    description: 'O&M technicians support a fleet of operating systems. They diagnose production and test module strings. Thermal scans and scheduled maintenance protect uptime and revenue.',
     icon: Sun,
   },
   {
     title: 'Solar Maintenance Technician',
-    description: 'Performs preventive maintenance across inverter and panel installations: torque checks, cleaning, firmware updates, and documentation of maintenance history. Steadier schedule than emergency callout work.',
+    description: 'Maintenance technicians perform torque checks and cleaning. They also update firmware and document service history. The schedule is steadier than emergency-callout work.',
     icon: Zap,
   },
   {
     title: 'Commissioning / Startup Technician',
-    description: 'Brings newly built systems online for the first time: functional testing, communication checks between inverters, batteries, and monitoring, and punch list items before handoff to the customer or utility.',
+    description: 'Startup technicians bring new systems online. They run functional tests and verify communication between inverters, batteries and monitoring. Punch-list work comes before customer or utility handoff.',
     icon: SearchCheck,
   },
 ]
@@ -89,7 +89,7 @@ const qualifications = [
   },
   {
     name: 'Solar technician training & certifications',
-    description: 'NABCEP credentials — the PV Associate for entry-level and the PVIP for experienced techs — are the most requested solar-specific certifications. OSHA 10 or 30 is common, and manufacturer certifications (Tesla, Enphase, SolarEdge) are frequent pluses.',
+    description: 'NABCEP PV Associate is the common entry credential. Experienced technicians may pursue PVIP. OSHA 10 or 30 appears frequently, along with manufacturer training from Tesla, Enphase or SolarEdge.',
   },
   {
     name: 'Troubleshooting & diagnostic skills',
@@ -104,31 +104,31 @@ const qualifications = [
 const faqs = [
   {
     question: 'What does a solar technician do?',
-    answer: 'A solar technician maintains and repairs solar systems already in the field. Daily work centers on diagnosing inverter faults, running production diagnostics, replacing failed components, and completing scheduled inspections across a service territory.',
+    answer: 'A solar technician maintains systems already in operation. Daily work includes inverter diagnosis and production checks. Technicians also replace failed components and perform scheduled inspections.',
   },
   {
     question: 'What is the difference between a solar installer and a solar technician?',
-    answer: 'A solar installer builds new systems on rooftops or ground mounts. A solar technician services systems that are already producing — troubleshooting, repairing, and maintaining them over their 25+ year lifespan.',
+    answer: 'Installers build new systems on roofs or ground mounts. Technicians service systems that already produce power. Their work continues through the operating life of the equipment.',
   },
   {
     question: 'What is a solar technician salary?',
-    answer: 'Based on aggregated job postings, entry-level solar technicians typically range from about $20 to $26 an hour, experienced field and service technicians from $28 to $38 an hour, and senior or licensed O&M techs can exceed $40 an hour plus per diem. See our state-by-state solar technician salary breakdown for live figures.',
+    answer: 'Aggregated postings place entry-level technicians around $20 to $26 an hour. Experienced field and service roles run from $28 to $38. Senior or licensed O&M technicians can exceed $40 an hour and may receive per diem.',
   },
   {
     question: 'How do I become a solar technician without experience?',
-    answer: 'The most common entry path is starting as a solar installer or taking an entry-level service support role, then completing solar technician training. Earning a NABCEP PV Associate credential and OSHA certification signals readiness, and a solar technician apprenticeship is a structured way to earn while you learn.',
+    answer: 'Start as an installer or service helper, then build troubleshooting experience. NABCEP PV Associate and OSHA training can strengthen an application. An apprenticeship provides a structured paid route.',
   },
   {
     question: 'What certifications do solar technicians need?',
-    answer: 'NABCEP PV Associate (entry) and PVIP (experienced) are the most recognized, alongside OSHA 10/30 and manufacturer certifications from Tesla, Enphase, or SolarEdge. Some employers prefer or require a state electrical license for troubleshooting work beyond basic component swaps.',
+    answer: 'NABCEP PV Associate is the recognized entry credential. Experienced technicians may need PVIP. OSHA and manufacturer training also appear frequently. Some employers require an electrical license for work beyond basic component replacement.',
   },
   {
     question: 'Are solar repair technicians in demand?',
-    answer: 'Yes. As the installed base of solar grows, the fleet of systems needing maintenance and repair grows with it. The Bureau of Labor Statistics projects strong growth for the occupation, and service roles are often steadier than construction work because they follow a recurring maintenance and repair schedule.',
+    answer: 'Yes. Every new installation adds equipment that will need maintenance and repair. Service work can be steadier than construction because inspections and fault response recur throughout the system life.',
   },
   {
     question: 'Which states hire the most solar technicians?',
-    answer: 'States with large installed solar fleets drive the most service demand — California, Texas, and Florida lead, with strong technician hiring in Arizona, Nevada, the Carolinas, and the Northeast. Utility-scale states also hire heavily for field and O&M technicians covering large arrays.',
+    answer: 'California, Texas and Florida have large installed fleets and strong service demand. Arizona, Nevada, the Carolinas and the Northeast also hire technicians. Utility-scale markets need field and O&M teams for large arrays.',
   },
 ]
 export default async function SolarTechnicianJobsPage({ searchParams }: any) {
@@ -193,9 +193,9 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Wrench className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of Solar Technician Roles</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            &ldquo;Solar technician&rdquo; covers a range of service work that keeps systems producing after they are
-            installed. The day-to-day differs a lot between a residential service route and a utility-scale O&M
-            crew, so it helps to know which flavor matches your experience.
+            Solar technicians keep installed systems producing. A residential
+            service route differs from utility-scale O&M. Choose the setting
+            that matches your experience and preferred schedule.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {technicianRoles.map((role, index) => (
@@ -211,9 +211,9 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><GraduationCap className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Technician Training &amp; Skills</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Solar technician training is more about field troubleshooting than classroom theory. These are the
-            qualifications that show up most often on solar technician postings and that set a solar repair
-            technician apart from a general maintenance hire.
+            Solar-technician training centers on field troubleshooting. These
+            qualifications appear most often in postings. They separate a PV
+            repair specialist from a general maintenance hire.
           </p>
           <div className="space-y-4">
             {qualifications.map((qual, index) => (
@@ -227,8 +227,8 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
             ))}
           </div>
           <p className="text-gray-600 max-w-4xl mt-6">
-            If you are starting from zero, a solar technician apprenticeship is one of the most practical
-            ways in — you get paid field experience while working toward certification. See our guide to{' '}
+            An apprenticeship combines paid field experience with a path to
+            certification. See our guide to{' '}
             <Link href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">
               how to get a solar apprenticeship
             </Link>{' '}
@@ -236,11 +236,14 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
             <Link href="/resources/solar-installer-apprenticeship-programs" className="text-blue-700 underline hover:text-blue-900">
               solar apprenticeship programs
             </Link>{' '}
-            to map a route. For the full credential picture, our{' '}
+            to map a route.
+          </p>
+          <p className="text-gray-600 max-w-4xl mt-3">
+            Our{' '}
             <Link href="/resources/solar-certifications-by-job-role" className="text-blue-700 underline hover:text-blue-900">
               solar certifications by job role
             </Link>{' '}
-            guide lays out what is expected at each level.
+            guide explains what employers expect at each level.
           </p>
         </section>
 
@@ -269,13 +272,13 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Technician Salary &amp; Pay Ranges</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Solar technician salary varies by region, project scale, and certifications. Service and repair roles
-            generally pay above entry-level installation because they require troubleshooting skill. Track live
-            pay by state on our{' '}
+            Region, project scale and credentials shape technician pay. Service
+            and repair usually pay more than entry-level installation because
+            troubleshooting is required. Track state pay on our{' '}
             <Link href="/data/salaries/solar-technician" className="text-green-700 underline hover:text-green-900">
               Solar Technician Salary by State
             </Link>{' '}
-            page, built from real job listing data.
+            page, built from job-listing data.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
@@ -299,11 +302,10 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            The Bureau of Labor Statistics projects strong growth for solar photovoltaic installers and
-            technicians over the coming decade, with tens of thousands of openings annually. As the installed
-            base of solar grows, the fleet of systems needing solar maintenance, service, and repair grows with
-            it — driving steady demand for solar field technician jobs and solar service technician jobs
-            nationwide, well beyond the initial construction boom.
+            The Bureau of Labor Statistics projects strong growth for PV work
+            over the next decade. Every new system adds years of maintenance
+            and repair demand. Service hiring can therefore continue long after
+            the initial construction boom.
           </p>
         </section>
 
@@ -327,16 +329,16 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
-            Solar technician work sits between construction and operations. If you are exploring the build side,
-            see{' '}
+            Solar-technician work sits between construction and operations. For
+            the build side, see{' '}
             <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>
             {' '}or{' '}
             <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>.
-            Storage is one of the fastest-growing technician fields — browse{' '}
+            Storage is another growing technician field. Browse{' '}
             <Link href="/bess-technician-jobs" className="text-blue-700 underline hover:text-blue-900">BESS technician jobs</Link>{' '}
-            if battery systems appeal to you. And if you are just getting started, our guide on{' '}
+            if battery systems appeal to you. New to the industry? Our guide on{' '}
             <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</Link>{' '}
-            is a solid first read.
+            explains the entry path.
           </p>
         </section>
 

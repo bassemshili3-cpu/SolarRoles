@@ -41,27 +41,27 @@ const jsonLd = {
 const bessRoles = [
   {
     title: 'Residential Battery Installer',
-    description: "Installs and wires home battery systems such as a Powerwall or Enphase unit, usually paired with a solar install already on site or added after the fact. One to two days per system, working alongside an electrician for the final interconnection.",
+    description: "Residential installers wire home batteries such as Powerwall or Enphase systems. The storage may arrive with solar or be added later. A system usually takes one to two days, with an electrician handling final interconnection.",
     icon: BatteryCharging,
   },
   {
     title: 'Commercial BESS Technician',
-    description: "Installs and commissions larger battery cabinets or containers behind a business or facility, often sized to shave peak demand charges. Work spans mechanical mounting, DC wiring, and coordination with the inverter and switchgear teams on site.",
+    description: "Commercial technicians install larger cabinets or containers behind a facility. Many systems reduce peak-demand charges. The work covers mounting and DC wiring. It also requires coordination with inverter and switchgear teams.",
     icon: Wrench,
   },
   {
     title: 'Utility Scale BESS Field Technician',
-    description: "Works on containerized battery arrays at a storage plant, frequently colocated with a solar or wind farm. Handles module installation, thermal management checks, and rack level electrical connections under a lead technician or commissioning engineer.",
+    description: "Utility technicians work on containerized arrays beside solar or wind plants. They install modules and check thermal management. Rack-level connections are completed under a lead technician or commissioning engineer.",
     icon: TrendingUp,
   },
   {
     title: 'Commissioning Technician',
-    description: "Brings a completed battery system online: functional testing, communication checks between the battery management system and the inverter, and punch list items before the site is handed off to the customer or utility.",
+    description: "Commissioning technicians bring completed systems online. They run functional tests and verify communication between the battery controls and inverter. They also close punch-list items before handoff.",
     icon: Zap,
   },
   {
     title: 'BESS O&M / Service Technician',
-    description: "Maintains systems already in operation. Diagnoses fault codes, replaces failed modules or contactors, and performs scheduled inspections. Steadier year round schedule than new installs, with occasional emergency callouts.",
+    description: "Service technicians maintain operating systems. They diagnose faults and replace failed modules or contactors. Scheduled inspections provide steadier year-round work, with occasional emergency callouts.",
     icon: ShieldCheck,
   },
 ]
@@ -97,14 +97,14 @@ const certifications = [
   },
   {
     name: 'Manufacturer Certification',
-    description: "Tesla, Fluence, LG, and other major BESS manufacturers run their own installer and technician certification programs. Postings frequently name a specific manufacturer cert as required or strongly preferred for their product line.",
+    description: "Major BESS manufacturers run their own training programs. Tesla, Fluence and LG credentials appear in postings tied to their equipment. Employers may require the relevant certification for warranty work.",
   },
   {
     name: 'Electrical License',
     description: (
       <>
-        Not required for every technician role, but a licensed electrician on the crew
-        is commonly mandatory for final connections and utility interconnection.
+        Many technician roles do not require a license. Final connections and
+        utility interconnection still commonly require a licensed electrician.
         Technicians who hold one see faster pay progression. See our guide to learn more about{' '}
         <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-blue-600 hover:underline font-medium">
            bess technician entry paths 
@@ -121,27 +121,27 @@ const certifications = [
 const faqs = [
   {
     question: 'What does a BESS technician do day to day?',
-    answer: "Mechanical installation of battery racks or cabinets, DC and low voltage wiring, and testing communication between the battery management system and the inverter. On active sites, expect fault diagnosis, module swaps, and scheduled maintenance checks rather than new installs.",
+    answer: "BESS technicians install racks or cabinets and complete DC or low-voltage wiring. They also test communication between battery controls and the inverter. On active sites, the work shifts to diagnostics, module replacement and scheduled maintenance.",
   },
   {
     question: 'Do I need solar experience to get hired as a BESS technician?',
-    answer: "It helps but isn't the only path in. Electricians, HVAC technicians, and former military electronics techs regularly move into BESS roles, since a lot of the skill set (wiring, reading schematics, troubleshooting) transfers directly. Employers typically train on the battery specific parts of the job.",
+    answer: "Yes. Electricians, HVAC technicians and military electronics specialists bring transferable skills. Wiring and troubleshooting matter more than a solar background. Employers usually teach the product-specific work.",
   },
   {
     question: 'How much do BESS technicians earn?',
-    answer: "Entry level installation roles commonly start in the $22 to $28 per hour range. Commissioning and O&M technicians with a year or more of experience often move into the $30 to $42 per hour range, and utility scale roles with a manufacturer certification or electrical license can clear $75,000 to $95,000 annually with per diem for travel.",
+    answer: "Entry-level installation roles commonly pay $22 to $28 per hour. Commissioning and O&M technicians with experience often reach $30 to $42 per hour. Certified or licensed utility-scale technicians can earn $75,000 to $95,000 a year. Traveling roles may add per diem.",
   },
   {
     question: 'Is BESS technician work physically demanding?',
-    answer: "Yes, particularly on the installation side. Battery modules are heavy, and crews spend full days moving and mounting equipment, often outdoors. O&M and service roles are lighter physically but still involve lifting and working in confined equipment enclosures.",
+    answer: "Installation work is physically demanding. Battery modules are heavy, and crews spend full days mounting equipment outdoors. Service roles involve less material handling. Technicians still lift components and work inside tight enclosures.",
   },
   {
     question: 'Is this a growing field?',
-    answer: "Battery storage capacity in the US has expanded rapidly over the past several years as more solar and wind projects pair with storage to firm up their output. That buildout is driving steady hiring for installation, commissioning, and service technicians, closely tracking the broader growth in solar and renewable energy jobs.",
+    answer: "US battery capacity has expanded as renewable projects add storage. Each new site needs installation and commissioning crews. Operating systems then create recurring service work.",
   },
   {
     question: 'Can BESS technician work lead to other roles?',
-    answer: "Commissioning and O&M experience is a common path into project engineering, EPC field supervision, or a manufacturer's technical support and training team. The site level troubleshooting experience is exactly what those roles screen for.",
+    answer: "Commissioning and O&M can lead to project engineering or EPC field supervision. Manufacturers also hire experienced technicians for support and training. Site-level troubleshooting is the key evidence for those moves.",
   },
 ]
 
@@ -197,7 +197,8 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><BatteryCharging className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of BESS Technician Roles</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Battery Energy Storage System work spans residential backup batteries and grid scale storage plants. The scope of the job changes a lot depending on which end of that range you're working on.
+            BESS work ranges from home backup batteries to grid-scale plants.
+            The role changes with the size and purpose of the system.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {bessRoles.map((role, index) => (
@@ -213,7 +214,9 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Award className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Certifications That Matter</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Most employers will train a motivated hire on the specifics of a given battery product. These are the credentials that come up most often in postings and open doors to higher paying roles.
+            Most employers teach the details of their battery product. These
+            credentials appear most often in postings and support progression
+            into higher-paying work.
           </p>
           <div className="space-y-4">
             {certifications.map((cert, index) => (
@@ -228,7 +231,9 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">BESS Technician Pay Ranges</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Pay varies significantly by project scale and region. Utility scale and manufacturer certified roles pay well above entry level installation work.
+            Project scale and region shape pay. Utility-scale work and
+            manufacturer credentials usually command more than entry-level
+            installation.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
@@ -252,7 +257,10 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            Battery storage capacity in the United States has grown rapidly as more solar and wind projects pair with storage to firm up output and shift power to when it's needed most. That buildout is driving steady demand for installation, commissioning, and service technicians, tracking closely with the broader growth in solar and renewable energy hiring nationwide.
+            US battery capacity has grown rapidly as solar and wind projects add
+            storage. Those systems shift output to periods of higher demand.
+            The buildout creates steady work in installation, commissioning and
+            service.
           </p>
         </section>
 
@@ -276,12 +284,13 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
-            Battery storage technician pay follows the broader solar service market — see the{' '}
+            Battery technician pay follows the broader service market. See the{' '}
             <Link href="/data/salaries/solar-technician" className="text-blue-700 underline hover:text-blue-900">Solar Technician Salary by State</Link>{' '}
-            and the full{' '}
-            <Link href="/data" className="text-blue-700 underline hover:text-blue-900">job market data center</Link>. For the honest entry requirements, read{' '}
-            <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-blue-700 underline hover:text-blue-900">BESS technician requirements</Link>,{' '}
-            and compare with{' '}
+            and the{' '}
+            <Link href="/data" className="text-blue-700 underline hover:text-blue-900">job market data center</Link>.
+            For entry requirements, read{' '}
+            <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-blue-700 underline hover:text-blue-900">BESS technician requirements</Link>.
+            Compare that path with{' '}
             <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>{' '}
             or{' '}
             <Link href="/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">solar engineer jobs</Link>.

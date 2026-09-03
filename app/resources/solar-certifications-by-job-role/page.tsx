@@ -148,12 +148,11 @@ export default function SolarCertificationsByJobRole() {
 
       <h1>Solar Certifications by Job Role</h1>
       <p className="resource-intro">
-        Certification requirements in solar comes from multiple sources.
-        Some are federal (OSHA), some are state-issued licenses, some are
-        voluntary industry credentials (NABCEP, ETA), and some are
-        manufacturer-specific. This table lines them up against the roles
-        they apply to, so you can see what a given position
-        realistically expects before enrolling.
+        Solar credentials come from several sources. OSHA provides federal
+        safety training. States issue trade licenses. NABCEP and ETA offer
+        voluntary industry credentials. Manufacturers run product-specific
+        programs. The table shows which ones apply to each job before you pay
+        for training.
       </p>
 
       <div className="certs-hub-table-wrap">
@@ -258,68 +257,61 @@ export default function SolarCertificationsByJobRole() {
       <section className="resource-section">
         <h2>How to read this table</h2>
         <p>
-          "Legally required" means an OSHA program, a state license, or a
-          rule tied to permitting, none of which are optional where they
-          apply. "Most valued" covers voluntary credentials that aren't
-          mandated anywhere but that employers and incentive programs
-          consistently look for. "Optional / manufacturer" is narrower still,
-          usually tied to a specific product line.
+          "Legally required" covers safety training, state licenses and
+          permitting rules that apply in a jurisdiction. "Most valued" covers
+          voluntary credentials sought by employers or incentive programs.
+          "Optional / manufacturer" refers to narrower qualifications tied to
+          a product line.
         </p>
         <p>
-          An electrical license requirement in one state can be a
-          non-requirement two states over, we covered this in more detail in our{" "}
+          Electrical licensing rules can change at a state border. Our{" "}
           <Link href="/resources/nabcep-vs-eta-vs-state-licenses">
             breakdown of NABCEP, ETA, and state licenses
           </Link>
-          . Please treat this table as the general framework, and check your
-          specific state before assuming a row applies to you exactly as
-          written.
+          {" "}explains those differences in more detail. Treat this table as a
+          general framework. Check your state's rules before relying on a row.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>The baseline that applies almost everywhere</h2>
         <p>
-          Across nearly every row in this table, OSHA training sits
-          underneath everything else. It's rarely the credential that gets
-          someone hired, but it's frequently the one that gets them onto a
-          jobsite in the first place. Our{" "}
+          OSHA training underpins almost every row in the table. The card
+          rarely secures a job by itself. It often determines whether a worker
+          can enter the site. Our{" "}
           <Link href="/resources/osha-safety-guide-solar-installers">
             OSHA safety guide for solar installers
           </Link>{" "}
-          covers the OSHA 10 vs 30 distinction and the fall protection and
-          electrical rules specific to PV work in more depth than this table
-          can.
+          explains the difference between OSHA 10 and OSHA 30. It also covers
+          fall protection and PV electrical hazards.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Two ways to reach the same row</h2>
         <p>
-          For roles like Lead Installer or Solar Electrician, there's
-          several paths to the required qualifications. Paying
-          for a NABCEP-prep course is the faster route if you already have
-          savings and a related background, covered in our{" "}
+          Lead installers and solar electricians can reach the required
+          qualifications by different routes. A paid NABCEP prep course may be
+          fastest for someone with savings and relevant experience. Our{" "}
           <Link href="/resources/nabcep-training-providers-compared">
             comparison of NABCEP training providers
           </Link>
-          . A{" "}
+          {" "}compares the main options. A{" "}
           <Link href="/resources/solar-installer-apprenticeship-programs">
             Registered Apprenticeship
           </Link>{" "}
-          gets you paid while you accumulate the same documented experience,
-          at the cost of a longer, more structured timeline.
+          pays you while you build documented experience. The tradeoff is a
+          longer and more structured timeline.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Where manufacturer certifications fit</h2>
         <p>
-          Tesla, Enphase, and SolarEdge certifications show up in the
-          "optional" column for a reason: they're not a substitute for
-          NABCEP or a state license. How each program works, and
-          which ones you can complete on your own versus which ones depend
-          on your employer, is covered in our{" "}
+          Tesla, Enphase and SolarEdge credentials appear in the optional
+          column because they do not replace NABCEP or a state license. Some
+          can be completed independently. Others require an approved employer.
+          Our{" "}
           <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">
             guide to Tesla, Enphase, and SolarEdge certifications
           </Link>
@@ -328,12 +320,10 @@ export default function SolarCertificationsByJobRole() {
       </section>
 
       <p className="resource-fine-print">
-        Requirements shown here are a general framework, not a
-        state-by-state legal reference. Licensing rules, credential names,
-        and employer expectations vary and change over time. Confirm
-        current requirements with your state licensing board and the
-        certifying bodies referenced before making training or licensing
-        decisions.
+        This table is a general framework rather than a state-by-state legal
+        reference. Licensing rules, credential names and employer expectations
+        change over time. Confirm current requirements with your state board
+        and the relevant certifying body before making a decision.
       </p>
     </article>
   );

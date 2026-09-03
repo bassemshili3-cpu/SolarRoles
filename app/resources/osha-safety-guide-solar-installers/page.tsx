@@ -137,140 +137,124 @@ export default function OshaSafetyGuideForSolarInstallers() {
       <section className="resource-section">
         <h2>OSHA 10 vs OSHA 30: what's different</h2>
         <p>
-          Both <Link href="/certifications/osha-10">OSHA 10</Link> and <Link href="/certifications/osha-30">OSHA 30</Link> come from the same Outreach Training Program and cover the
-          same core construction hazards, including falls and electrocution.
-          The difference
-          isn't the topic list, it's the depth and the audience. OSHA 10
-          gives a new installer enough hazard awareness to work safely under
-          someone else's supervision. OSHA 30 adds program-level material,
-          like how to run a jobsite safety plan and manage subcontractor
-          compliance, aimed at whoever is responsible for the crew.
+          <Link href="/certifications/osha-10">OSHA 10</Link> and{" "}
+          <Link href="/certifications/osha-30">OSHA 30</Link> belong to the
+          same Outreach Training Program. Both cover core construction hazards
+          such as falls and electrocution. The difference is depth and
+          audience. OSHA 10 gives new installers the awareness needed to work
+          under supervision. OSHA 30 adds material for people who manage a
+          crew, a safety plan or subcontractor compliance.
         </p>
         <p>
-          Neither is legally mandated by federal OSHA itself. In practice,
-          most solar employers require OSHA 10 before a worker sets foot on
-          a jobsite. A
-          growing number of states and municipalities have made it a legal
-          condition for construction permits regardless of what OSHA
-          requires nationally. If your state is one of them, that
-          requirement overrides "voluntary" in every practical sense.
+          Federal OSHA does not require either card. Most solar employers still
+          expect OSHA 10 before a worker enters a jobsite. Some states and
+          municipalities also make Outreach training a condition of
+          construction work. In those jurisdictions, the local rule controls.
         </p>
         <p>
-          OSHA 10 is not a prerequisite for OSHA 30. A new hire who's about to become a crew lead can go
-          straight into the 30-hour course. What decides which one you need
-          is your role and your state's rules.
+          OSHA 10 is not a prerequisite for OSHA 30. A new hire preparing to
+          lead a crew can take the 30-hour course directly. Your role and local
+          rules determine which card you need.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Fall protection: the rule that governs every roof job</h2>
         <p>
-          Falls are the leading cause of serious injury in solar
-          installation, and the rule is more specific than "wear a harness."
-          Under construction standards, workers installing panels are
-          exposed to a fall hazard at six feet or more and must be protected
-          by a guardrail or a personal fall-arrest system. Maintenance work
-          on an already-installed system falls
-          under general industry rules instead, where the threshold drops to
-          four feet, and a standard railing is the default expectation
-          before fall arrest gear becomes an option.
+          Falls are the leading cause of serious injury in solar installation.
+          The rule is more specific than "wear a harness." Construction
+          standards require protection when panel installers face a fall of
+          six feet or more. That protection may be a guardrail or personal
+          fall-arrest system.
         </p>
         <p>
-          That construction-vs-maintenance split matters more than most
-          installers realize. Two workers can be standing on the same roof,
-          doing what looks like similar work, and be governed by two
-          different rulebooks depending on whether it's a new install or a
-          repair. State-plan states can also set their own, stricter
-          numbers. California's fall protection threshold for this work sits
-          at seven and a half feet instead of the federal six, and several
-          other state plans layer on their own heat or fall requirements on
-          top of the federal floor. The safe assumption on any job is to
-          follow whichever standard is stricter..
+          Maintenance on an existing system falls under general-industry
+          rules. There, the threshold is four feet and a standard railing is
+          the default protection.
         </p>
         <p>
-          Roof edges aren't the only exposure. Skylights and roof hatches
-          cause a disproportionate share of incidents because they don't
-          register as a hazard the way an open edge does, especially on
-          metal roofs where a skylight can blend into the surrounding
-          panels. OSHA requires any rooftop hatch opening to have guardrails
-          on its exposed sides plus a self-closing gate, and unguarded
-          skylights need screening or covers rated to hold a worker's
-          weight.
+          The construction-versus-maintenance distinction changes the rulebook.
+          Two workers on the same roof may face different requirements if one
+          is installing and the other is repairing.
+        </p>
+        <p>
+          States with their own OSHA plans can set different thresholds.
+          California uses seven and a half feet for this work. Other state
+          plans add heat or fall protections. Follow the stricter rule when
+          standards overlap.
+        </p>
+        <p>
+          Roof edges are not the only fall exposure. Skylights and hatches can
+          blend into a metal roof and are easy to overlook. OSHA requires
+          guardrails on the exposed sides of a rooftop hatch and a self-closing
+          gate. Unguarded skylights need screens or covers rated to support a
+          worker's weight.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Electrical hazards specific to PV</h2>
         <p>
-          This is where solar diverges from standard roofing work, and it's
-          the piece most general OSHA training doesn't cover well. A PV
-          module produces current the moment light hits it, regardless of
-          whether a breaker downstream is open or a disconnect is switched
-          off. Lockout/tagout procedures under 29 CFR 1910.147 still apply
-          to isolate energy sources during install or maintenance, but LOTO
-          alone doesn't make a module safe to touch during daylight the way
-          it makes a de-energized circuit safe elsewhere. Covering panels or
-          working before sunrise are common field workarounds precisely
-          because switching off downstream equipment doesn't stop
-          generation at the source.
+          A PV module produces current as soon as light reaches it. Opening a
+          downstream breaker or disconnect does not stop generation at the
+          module. Lockout/tagout procedures under 29 CFR 1910.147 still apply
+          during installation and maintenance.
         </p>
         <p>
-          Arc flash risk on the DC side is also treated differently than
-          installers coming from AC-only electrical backgrounds expect. DC
-          arcs don't self-extinguish at the zero-crossing the way AC arcs
-          do, which is part of why DC combiner boxes and rapid shutdown
-          devices get specific attention in solar-focused safety training
-          that generic construction courses skip entirely.
+          LOTO cannot remove daylight from the source. Crews may cover panels
+          or work before sunrise because downstream switching does not
+          de-energize the array itself.
         </p>
         <p>
-          None of this is covered in real depth inside a 10-hour or even
-          30-hour Outreach course. Both are awareness-level programs across
-          all of construction. Employers
-          are expected to layer task-specific electrical training on top,
-          and that layer is where most of the actual PV-related electrical
-          safety knowledge gets taught.
+          DC arc behavior also differs from AC. A DC arc does not
+          self-extinguish at a zero-crossing. Solar-focused safety training
+          therefore gives special attention to combiner boxes and rapid
+          shutdown devices. Generic construction courses may not cover those
+          hazards in detail.
+        </p>
+        <p>
+          Neither Outreach course teaches these issues in depth. OSHA 10 and
+          OSHA 30 provide awareness across the construction industry.
+          Employers must add electrical training for the work employees will
+          perform. That task-specific layer carries most of the practical PV
+          safety knowledge.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Employer obligations vs worker obligations</h2>
         <p>
-          The OSH Act puts the legal weight on the employer, which is worth knowing if you're ever
-          unsure who's supposed to catch a problem. Employers must provide
-          a workplace free of recognized hazards and the training a task
-          requires. They must also supply required protection. On a
-          multi-contractor site, responsibility can extend beyond the direct
-          employer.
+          The OSH Act places the main legal duty on the employer. Employers
+          must address recognized hazards and provide the training each task
+          requires. They must also supply required protection. On a site with
+          several contractors, responsibility can extend beyond a worker's
+          direct employer.
         </p>
         <p>
-          Workers have real obligations too, just narrower ones: use the
-          procedures you were trained on and report hazards rather than
-          working around them. Follow the protection rules that apply to the
-          task in front of you. A worker can be disciplined for ignoring
-          provided protection, but a worker cannot be held responsible for
-          protection the employer never supplied in the first place. When
-          something goes wrong on a roof, that distinction is usually where
-          an OSHA investigation starts.
+          Workers have narrower obligations. They must follow their training,
+          use the protection provided and report hazards. An employer may
+          discipline a worker who ignores available protection. It cannot
+          shift responsibility for equipment or training it never supplied.
+          OSHA investigations often begin with that distinction.
         </p>
       </section>
 
       <section className="resource-section">
         <h2>Which card should a solar installer get</h2>
         <p>
-          For someone entering the trade with no supervisory role yet, OSHA
-          10 Construction is the standard starting point, and it's often
-          what employers or state law require before you're even allowed on
-          a residential roof crew. It is quick to complete and most
-          installation companies treat it as a baseline hiring requirement.
+          OSHA 10 Construction is the standard starting point for a new
+          installer without supervisory duties. Employers or state law may
+          require it before a worker joins a residential roof crew. The course
+          is short, and many installation companies treat it as a hiring
+          baseline.
         </p>
         <p>
-          OSHA 30 Construction makes sense once you're leading a crew,
-          managing a jobsite safety plan, or coordinating subcontractors,
-          which for most installers lines up with a <Link href="/lead-solar-installer-jobs">lead installer or
-          foreman role</Link>. Getting it earlier
-          than your role requires isn't wasted effort, since the deeper
-          program-management material tends to matter more once you're
-          responsible for other people's safety.
+          OSHA 30 Construction fits people who lead crews, manage jobsite
+          safety plans or coordinate subcontractors. For installers, that
+          usually means a <Link href="/lead-solar-installer-jobs">lead installer or
+          foreman role</Link>. Taking it earlier is still useful. Its
+          program-management material becomes most relevant once you are
+          responsible for other workers.
         </p>
         <p>
           Either card should be treated as a floor. It proves
@@ -280,11 +264,10 @@ export default function OshaSafetyGuideForSolarInstallers() {
       </section>
 
       <p className="resource-fine-print">
-        Regulatory thresholds, program requirements, and state variations
-        reflect information available as of mid-2026 and change over time,
-        particularly at the state-plan level. This is general safety
-        information only. Confirm current
-        requirements with OSHA, your state plan, and a qualified safety
+        Regulatory thresholds, program requirements and state variations
+        reflect information available in mid-2026. State-plan rules can change.
+        This page provides general safety information only. Confirm current
+        requirements with OSHA, your state plan and a qualified safety
         professional before setting jobsite policy.
       </p>
     </article>

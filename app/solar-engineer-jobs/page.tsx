@@ -52,27 +52,27 @@ const jsonLd = {
 const engineerRoles = [
   {
     title: 'Solar Design Engineer',
-    description: 'Turns a roof, parking lot, or ground mount into a buildable system: array layout, string sizing, shading analysis, production modeling, and the drawing set that goes to permitting. The most common engineering entry point in solar.',
+    description: 'Design engineers turn a site into a buildable system. They handle array layout, string sizing and shading analysis. Production models and permit drawings complete the package. This is a common engineering entry point.',
     icon: DraftingCompass,
   },
   {
     title: 'PV Systems Engineer',
-    description: 'Owns the whole system architecture. DC and AC electrical design, structural coordination, equipment selection (inverters, transformers, trackers), and technical reviews across multiple projects.',
+    description: 'Systems engineers own the overall architecture. Their work covers DC and AC design, structural coordination and equipment selection. They also review technical decisions across several projects.',
     icon: Sun,
   },
   {
     title: 'Solar Project Engineer',
-    description: 'Sits between the design office and the field crew: RFIs, submittals, as-builts, and solving the problems that only show up once construction starts. A common lateral move for design engineers who want site exposure.',
+    description: 'Project engineers connect the design office with the field crew. They manage RFIs, submittals and as-built drawings. They also solve problems uncovered during construction. Design engineers often move into this role for more site exposure.',
     icon: Building2,
   },
   {
     title: 'Electrical Engineer (Solar)',
-    description: 'Focuses on the licensed-track electrical side: one-line diagrams, protection and coordination studies, grounding design, interconnection applications, and code compliance under NEC Articles 690 and 705.',
+    description: 'Electrical engineers handle one-line diagrams and grounding design. Protection studies and interconnection applications also fall within the role. The work follows NEC Articles 690 and 705.',
     icon: Cable,
   },
   {
     title: 'BESS / Energy Storage Engineer',
-    description: 'Designs the battery storage side of solar: battery sizing, inverter and PCS selection, thermal management, fire safety per NFPA 855, and the controls that make a system dispatchable.',
+    description: 'BESS engineers design the storage system. They size batteries and select inverters or power-conversion systems. Thermal management, NFPA 855 fire safety and dispatch controls shape the rest of the work.',
     icon: Zap,
   },
 ]
@@ -99,31 +99,31 @@ const qualifications = [
 const faqs = [
   {
     question: 'What does a solar design engineer do?',
-    answer: 'A solar design engineer takes a site and turns it into a buildable PV system: array layout in software, string and conductor sizing, racking selection, shading analysis, production estimates, and a permit-ready drawing set. The role is software-heavy and office-based compared to field installation work.',
+    answer: 'A design engineer turns a site into a buildable PV system. The work includes layout, electrical sizing and racking selection. Shading analysis, production estimates and permit drawings follow. Most of the job is office-based and software-heavy.',
   },
   {
     question: 'Do I need an engineering degree for solar engineer jobs?',
-    answer: 'Not for every role. Many residential and small-commercial design postings accept a technician background plus software proficiency and NABCEP certification in lieu of a 4-year engineering degree. PE-track and utility-scale roles more consistently require an ABET-accredited engineering degree.',
+    answer: 'Not for every role. Some residential and small-commercial employers accept field experience, software skills and NABCEP certification. Utility-scale and PE-track positions are more likely to require an ABET-accredited engineering degree.',
   },
   {
     question: 'What software do solar engineers use?',
-    answer: 'The core tools are PVsyst for production modeling, Helioscope or Aurora Solar for layout and shading, and AutoCAD for plan sets. Utility-scale roles add PVCase or PlantPredict, and electrical-focused roles may use ETAP or SKM for protection studies.',
+    answer: 'PVsyst handles production modeling. Helioscope and Aurora Solar cover layout and shading, while AutoCAD supports plan sets. Utility-scale teams may add PVCase or PlantPredict. Electrical roles often use ETAP or SKM.',
   },
   {
     question: 'What is the difference between a solar engineer and a solar installer?',
-    answer: 'A solar installer physically builds the system on the roof or ground mount. A solar engineer designs it in software before anything is built — system layout, electrical calculations, production modeling, and equipment. Installers can move into engineering roles after learning the software and code requirements.',
+    answer: 'Installers build the system on a roof or ground mount. Engineers design it before construction begins. Their work covers layout, electrical calculations, production and equipment. An installer can move into design after learning the software and code requirements.',
   },
   {
     question: 'What is the salary range for solar engineer jobs?',
-    answer: 'Based on aggregated job postings, residential solar design engineers typically range from $60,000 to $85,000, commercial and utility-scale design engineers from $80,000 to $120,000, and senior or PE-licensed engineers from $110,000 to $150,000+. Exact figures vary by employer, region, and scope.',
+    answer: 'Aggregated postings place residential design roles around $60,000 to $85,000. Commercial and utility-scale roles run from $80,000 to $120,000. Senior or PE-licensed engineers can reach $110,000 to $150,000+. Employer, region and scope affect the offer.',
   },
   {
     question: 'Which states hire the most solar engineers?',
-    answer: 'The states with the largest solar buildouts tend to have the most engineering postings — California, Texas, and Florida lead on residential and commercial volume, while utility-scale states like Texas, Arizona, Nevada, and the Southeast (Georgia, Florida, the Carolinas) drive demand for systems and project engineers.',
+    answer: 'Large solar markets produce the most engineering postings. California, Texas and Florida lead in residential and commercial volume. Texas, Arizona, Nevada and the Southeast also create utility-scale demand.',
   },
   {
     question: 'How do I get my first solar engineer job?',
-    answer: 'The most accessible on-ramp is residential design: learn PVsyst and Aurora-based solar (Aurora Solar), get NABCEP certified, and apply for junior design roles that accept technician backgrounds. Field experience as a solar installer or electrician is a strong differentiator.',
+    answer: 'Residential design is often the most accessible entry point. Learn PVsyst or Aurora Solar, then target junior roles that accept technician backgrounds. NABCEP certification can help. Installer or electrician experience is a strong advantage.',
   },
 ]
 
@@ -181,7 +181,11 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DraftingCompass className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of Solar Engineer Roles</h2></div>
-          <p className="text-gray-600 mb-6 max-w-4xl">&ldquo;Solar engineer&rdquo;'s job changes substantially between a residential design desk, a utility-scale systems role, a construction-facing project position, and the licensed-track electrical side. The same title can mean different things at a 200-person installer versus a national EPC.</p>
+          <p className="text-gray-600 mb-6 max-w-4xl">
+            A solar-engineering title can describe very different work. A
+            residential design desk does not operate like a utility-scale EPC.
+            The cards below map the main titles to their actual scope.
+          </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {engineerRoles.map((role) => (
               <div key={role.title} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all">
@@ -196,17 +200,17 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Compass className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Engineer Job Titles Are Confusing — Here's Why</h2></div>
           <div className="max-w-4xl space-y-4 text-gray-600">
-            <p>If you've searched &ldquo;solar engineer&rdquo; on any job board, you already know the problem: one posting calls the role &ldquo;Solar Design Engineer,&rdquo; the next &ldquo;PV Systems Engineer,&rdquo; and a third &ldquo;Electrical Engineer — Solar.&rdquo; They're not always the same job, and the differences aren't obvious from the titles alone.</p>
-            <p>Part of it is structural. The Bureau of Labor Statistics tracks electrical engineers and mechanical engineers, but there is no &ldquo;solar engineer&rdquo; occupational code — so every EPC, installer, and utility names the role however their internal structure dictates.</p>
-            <p>We built a practical guide that maps every major title to what the job involves, what's required, and what it pays: <Link href="/resources/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">Types of Solar Engineer Jobs — the full title mapping guide</Link>. It covers PV design, systems engineering, project engineering, electrical, and BESS roles in depth, with salary ranges and honest degree requirements.</p>
+            <p>Job boards use &ldquo;Solar Design Engineer,&rdquo; &ldquo;PV Systems Engineer&rdquo; and &ldquo;Electrical Engineer — Solar&rdquo; for distinct jobs. The title alone rarely reveals the scope.</p>
+            <p>BLS tracks electrical and mechanical engineers, but it has no separate solar-engineer occupation. Each EPC, installer and utility therefore applies its own naming system.</p>
+            <p>Our <Link href="/resources/solar-engineer-jobs" className="text-blue-700 underline hover:text-blue-900">solar-engineering title guide</Link> maps the work, requirements and pay behind each title. It covers design, systems, project, electrical and BESS roles.</p>
           </div>
         </section>
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Calculator className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Software and Skills Employers Actually Ask For</h2></div>
           <div className="max-w-4xl space-y-4 text-gray-600">
-            <p>Unlike general engineering roles, solar engineering postings are unusually specific about software. PVsyst, Helioscope, and Aurora Solar are the industry-standard design tools, and proficiency in at least one is usually the first screening criterion. AutoCAD follows for plan sets and one-line diagrams. On the electrical side, ETAP and SKM show up on protection-study roles.</p>
-            <p>The electrical side of solar has its own safety considerations. If you're coming from conventional AC engineering, our guide to <Link href="/resources/solar-dc-safety-for-electricians" className="text-green-700 underline hover:text-green-900">why solar DC safety is different for electricians</Link> explains the DC-specific hazards that don't exist in standard AC design work — sustained arcs, daylight-generated voltage, and array-side isolation.</p>
+            <p>Solar postings name software early. PVsyst, Helioscope or Aurora Solar is often the first screening criterion. AutoCAD follows for plan sets and one-line diagrams. Protection-study roles may require ETAP or SKM.</p>
+            <p>Engineers moving from conventional AC work also face different hazards. Our <Link href="/resources/solar-dc-safety-for-electricians" className="text-green-700 underline hover:text-green-900">solar DC safety guide</Link> covers sustained arcs, daylight-generated voltage and array-side isolation.</p>
           </div>
         </section>
 
@@ -224,7 +228,7 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Solar Engineer Pay: What Changes the Offer</h2></div>
-          <p className="text-gray-600 mb-6 max-w-4xl">Solar engineering pay is shaped by scope, software depth, license status, and market segment. Aggregated from real job postings, residential design roles tend to sit at the lower end while PE-licensed utility-scale roles sit at the top.</p>
+          <p className="text-gray-600 mb-6 max-w-4xl">Scope, software depth and license status shape the offer. Residential design roles usually sit at the lower end. PE-licensed utility-scale work commands the highest pay.</p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
               <p className="text-3xl font-bold text-orange-600 mb-2">$60–85K</p>
@@ -247,8 +251,8 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Zap className="w-7 h-7 text-purple-600" /><h2 className="text-2xl font-bold text-gray-900">The BESS Angle: Where Solar Engineering Is Heading</h2></div>
           <div className="max-w-4xl space-y-4 text-gray-600">
-            <p>Battery storage is being added to residential, commercial, and utility-scale projects across the country, and it's pulling engineers from every part of the solar stack. BESS engineers design the storage side: battery sizing, inverter and PCS selection, thermal management, fire safety per NFPA 855, and the controls that make a system dispatchable.</p>
-            <p>The labor shortage is even more acute on the technician side. Our guide to <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-purple-700 underline hover:text-purple-900">BESS technician requirements</Link> covers the honest answer about entering storage without a solar background, and you can browse <Link href="/bess-technician-jobs" className="text-purple-700 underline hover:text-purple-900">BESS technician jobs</Link> separately if the field side appeals to you more than the desk.</p>
+            <p>Battery storage now appears across residential, commercial and utility-scale projects. BESS engineers size batteries and select power-conversion equipment. They also address thermal controls, NFPA 855 and dispatch strategy.</p>
+            <p>Field roles follow a different path. Our <Link href="/resources/do-you-need-to-be-an-electrician-for-bess" className="text-purple-700 underline hover:text-purple-900">BESS technician guide</Link> explains the entry requirements. You can also browse <Link href="/bess-technician-jobs" className="text-purple-700 underline hover:text-purple-900">open BESS technician jobs</Link>.</p>
           </div>
         </section>
 
@@ -271,7 +275,12 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
 
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">From Design Desk to Field: Explore Related Roles</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-6">Solar engineering is part of a broader career ecosystem. If you're exploring the physical side of the industry, see <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>, <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>, or <Link href="/lead-solar-installer-jobs" className="text-blue-700 underline hover:text-blue-900">lead solar installer roles</Link>. And if you're starting from zero, our guide on <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</Link> is a solid first read.</p>
+          <p className="text-gray-600 max-w-2xl mx-auto mb-6">
+            Prefer field work? Explore <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>,{' '}
+            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link> or{' '}
+            <Link href="/lead-solar-installer-jobs" className="text-blue-700 underline hover:text-blue-900">lead installer roles</Link>. New to solar? Start with our guide to{' '}
+            <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">becoming an installer</Link>.
+          </p>
         </section>
       </div>
     </>

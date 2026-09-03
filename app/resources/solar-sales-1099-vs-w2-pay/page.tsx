@@ -69,7 +69,8 @@ export default function SolarSales1099VsW2Page() {
           Solar sales: 1099 vs W2, which pays more ?
         </h1>
         <p className="text-lg text-[#5B6472] leading-relaxed max-w-xl">
-          Two listings can advertise the same job title and land in completely different places. This resource will help you choose.
+          Two listings can advertise the same title and offer completely
+          different deals. This guide explains how to choose between them.
         </p>
       </section>
 
@@ -87,10 +88,15 @@ export default function SolarSales1099VsW2Page() {
             The short answer
           </h2>
           <p>
-            At the same number of sales, a rep on pure 1099 commission will almost always out-earn the same rep on a W2 base-plus-commission plan. The company is not paying payroll tax, benefits, or a guaranteed base on the 1099 side, and most of that saved cost gets passed back into a higher commission rate.
+            At the same sales volume, a rep on pure 1099 commission will
+            almost always earn more than a rep on a W2 base-plus-commission
+            plan. The company saves money on payroll tax, benefits and
+            guaranteed pay. Much of that saving returns to the rep through a
+            higher commission rate.
           </p>
           <p className="mt-4">
-          The real question is whether you can survive the months it takes to become good enough at solar sales for that higher commission rate to matter.
+            The harder question is whether you can support yourself during the
+            months it takes to make that higher rate matter.
           </p>
         </section>
 
@@ -103,7 +109,11 @@ export default function SolarSales1099VsW2Page() {
             Two different structures
           </h2>
           <p>
-            This is why one posting reads &ldquo;$100k&ndash;$200k+&rdquo; and another, for what looks like the same role, reads &ldquo;$35k&ndash;$40k base plus commission.&rdquo; They are describing two different risk arrangements, and the postings rarely say so directly. Scan a few live listings on our{' '}
+            One posting may advertise &ldquo;$100k&ndash;$200k+.&rdquo; Another
+            may offer &ldquo;$35k&ndash;$40k base plus commission&rdquo; for what
+            appears to be the same role. The difference is who carries the
+            financial risk, though job ads rarely say that directly. Scan a
+            few live listings on our{' '}
             <Link href="/solar-sales-jobs" className="underline decoration-[#0B1A2E]/30 underline-offset-2 hover:decoration-[#0B1A2E] transition-colors">
               solar sales jobs
             </Link>{' '}
@@ -160,10 +170,14 @@ export default function SolarSales1099VsW2Page() {
             Closing solar deals can be difficult in the first month. Most reps need time to learn the pitch and handle objections. They also need to understand permitting quirks in their territory and establish their own close rate. On a pure 1099 plan, that ramp period pays close to nothing.
           </p>
           <p className="mt-4">
-            The $100k&ndash;$200k+ number is real for reps who make it through the ramp. However, it says nothing about how many reps run out of savings before they get there, or how long that runway needs to be.
+            The $100k&ndash;$200k+ figure is attainable for reps who complete
+            the ramp. It does not reveal how many new hires run out of savings
+            first. Nor does it show how much financial runway they needed.
           </p>
           <p className="mt-4 text-[#0B1A2E] font-medium">
-            Before taking a commission-only role, the real question that matters is &ldquo;how many months can I go without a paycheck while I get good at this.&rdquo;
+            Before accepting a commission-only role, ask: &ldquo;How many months
+            can I manage without a reliable paycheck while I learn this
+            job?&rdquo;
           </p>
         </section>
 
@@ -176,7 +190,10 @@ export default function SolarSales1099VsW2Page() {
             A simple way to think about it
           </h2>
           <p>
-            Ignore the headline numbers for a moment. Start with your monthly expenses, then calculate how many months of expenses you have saved. If a 1099 offer would take three to four months before your first real commission lands, the higher ceiling does not help if your savings run out first.
+            Set the headline numbers aside. Calculate your monthly expenses
+            and the number of months your savings can cover. A higher ceiling
+            will not help if the first meaningful 1099 commission arrives
+            after your savings are gone.
           </p>
           <p className="mt-4">
             A W2 base does the opposite job. It is there to buy you the time to become good enough at the job that the commission side starts to matter.
@@ -195,7 +212,10 @@ export default function SolarSales1099VsW2Page() {
             <div>
               <h3 className="font-medium text-[#0B1A2E] mb-1">1099 tends to make sense if</h3>
               <p className="text-base text-[#5B6472]">
-                You already have several months of expenses saved & you have sold before (solar or otherwise) and have a sense of your own close rate. You would rather carry the full risk in exchange for the full upside.
+                You have several months of expenses saved and previous sales
+                experience. You also have a realistic sense of your close
+                rate. In return for carrying the financial risk, you keep more
+                of the upside.
               </p>
             </div>
             <div>
@@ -223,7 +243,9 @@ export default function SolarSales1099VsW2Page() {
             <li>On W2 offers, how often does the base pay get reviewed or reduced as commissions grow</li>
           </ul>
           <p className="mt-6 text-sm text-[#5B6472]">
-            Disclaimer: none of this is tax advice. Self-employment tax and quarterly estimated payments work differently on 1099 income, and it is worth a short conversation with a tax professional before you commit to a commission-only role.
+            This is not tax advice. Self-employment tax and quarterly payments
+            work differently for 1099 income. Speak with a tax professional
+            before committing to a commission-only role.
           </p>
         </section>
       </article>

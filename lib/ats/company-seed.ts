@@ -1,6 +1,7 @@
 // lib/ats/company-seed.ts
 import type { WorkdayCompanySeed } from './workday';
 import type { RipplingCompanySeed } from './rippling';
+import type { SuccessFactorsCompanySeed } from './successfactors';
 
 export type AtsCompanySeed = {
   slug: string;
@@ -11,11 +12,24 @@ export type AtsCompanySeed = {
 // Rippling — https://ats.rippling.com/<slug>/jobs
 // `roleFilter` deliberately preserves the manually requested role scope per employer.
 export const RIPPLING_COMPANIES: RipplingCompanySeed[] = [
+  { slug: 'clean-energy-services-careers', name: 'Clean Energy Services', verified: true, roleFilter: 'solar_taxonomy' },
   { slug: 'sunnymac-careers', name: 'Sunnymac Solar', verified: true, roleFilter: 'handyman_or_hvac_installer' },
   { slug: 'asic', name: 'ASIC', verified: true, roleFilter: 'solar_taxonomy' },
   { slug: 'zeo-energy-corp', name: 'ZEO Energy', verified: true, roleFilter: 'solar_taxonomy' },
   { slug: 'photon-brothers', name: 'Photon Brothers', verified: true, roleFilter: 'solar_installer' },
   { slug: 'rnwbl', name: 'RNWBL', verified: true, roleFilter: 'solar_om_or_technician' },
+];
+
+// SAP SuccessFactors Recruiting Marketing — public RSS feeds expose the
+// complete description and source publication date without browser automation.
+export const SUCCESSFACTORS_COMPANIES: SuccessFactorsCompanySeed[] = [
+  {
+    baseUrl: 'https://jobs.engie.com',
+    name: 'ENGIE',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['bess'],
+  },
 ];
 
 export const ASHBY_COMPANIES: AtsCompanySeed[] = [

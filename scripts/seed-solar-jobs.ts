@@ -16,6 +16,7 @@ import {
   SMARTRECRUITERS_COMPANIES,
   RIPPLING_COMPANIES,
   WORKDAY_COMPANIES,
+  SUCCESSFACTORS_COMPANIES,
 } from '../lib/ats/company-seed';
 import { CUSTOM_SCRAPE_COMPANIES } from '../lib/ats/custom-scrape/config';
 import { fetchLeverJobs, type NormalizedJob } from '../lib/ats/lever';
@@ -26,6 +27,7 @@ import { fetchJobviteJobs } from '../lib/ats/jobvite';
 import { fetchWorkdayJobs } from '../lib/ats/workday';
 import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
 import { fetchRipplingJobs } from '../lib/ats/rippling';
+import { fetchSuccessFactorsJobs } from '../lib/ats/successfactors';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 import { buildJobSlug } from '../lib/slugify';
@@ -62,6 +64,7 @@ const PROVIDERS: AtsProvider<any>[] = [
   provider('pinpoint',        PINPOINT_COMPANIES,        fetchPinpointJobs,        (c) => c.slug),
   provider('workday',         WORKDAY_COMPANIES,         fetchWorkdayJobs,         (c) => `${c.tenant}/${c.site}`),
   provider('rippling',        RIPPLING_COMPANIES,        fetchRipplingJobs,        (c) => c.slug),
+  provider('successfactors',  SUCCESSFACTORS_COMPANIES,  fetchSuccessFactorsJobs,  (c) => c.baseUrl),
   provider('custom-scrape',   CUSTOM_SCRAPE_COMPANIES,   fetchCustomScrapeJobs,    (c) => c.domain),
 ];
 

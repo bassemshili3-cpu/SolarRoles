@@ -85,70 +85,69 @@ export default function DoYouNeedToBeAnElectricianForBess() {
         <article className="sr2-article">
           <h2 id="answer"><span className="n">01</span>The Quick Answer</h2>
           <p>
-            In practice, almost every BESS technician job posting wants someone who already understands AC/DC
-            theory, and how to work safely around live
-            electrical equipment. That knowledge usually comes from an
-            electrical background or hands-on solar
-            experience. There&apos;s no real &quot;zero experience&quot; door
-            into battery storage the way there is for entry-level solar
-            installer roles.
+            Almost every BESS technician posting asks for an understanding of
+            AC/DC theory and safe work around energized equipment. That
+            knowledge usually comes from electrical training or hands-on solar
+            experience. Battery storage does not offer the same
+            &quot;zero-experience&quot; entry point as a solar installation crew.
           </p>
 
           <h2 id="requirements"><span className="n">02</span>BESS Employer Requirements</h2>
           <p>
             A BESS Technician I posting from a major operator asks for
-            a high school diploma <em>or</em> an electrical-program diploma,
-            plus one to three years of field experience at a
-            BESS, solar, wind, or thermal site. Postings at utility-scale
-            plants go even further, preferring a journeyman or licensed industrial
-            electrician outright.
+            a high school diploma <em>or</em> an electrical-program diploma.
+            It also asks for one to three years of field experience at a BESS,
+            solar, wind or thermal site. Utility-scale plants often go
+            further and prefer a journeyman or licensed industrial electrician.
           </p>
           <p>
-            The pattern holds across most listings: either documented
-            electrical training, or hands-on time at a comparable energy site.
-            
+            Most listings follow the same pattern. Candidates need documented
+            electrical training or hands-on time at a comparable energy site.
           </p>
 
           <h2 id="why"><span className="n">03</span>Why BESS Isn&apos;t Solar&apos;s Open Door</h2>
           <p>
             Solar installer crews can absorb someone with zero background
-            because basic installation work does not require touching live high-voltage
-            equipment on day one. Technicians work around high-voltage DC and battery systems with
-            thermal-runaway risk during daily
-            maintenance and commissioning tasks. Employers can&apos;t train
-            that judgment in a few weeks the way they can train panel
-            installation.
+            because new hires need not touch energized high-voltage equipment
+            on day one. BESS technicians face high-voltage DC and
+            thermal-runaway hazards during maintenance and commissioning.
+            Developing sound judgment around those risks takes longer than
+            learning basic panel installation.
           </p>
 
           <h2 id="paths"><span className="n">04</span>Two Real Paths In</h2>
           <p>
             <strong>Electrician apprentice → BESS: </strong>
             A standard electrical apprenticeship runs about four years and
-            roughly 8,000 hours of supervised field work, plus 144 classroom
-            hours a year. You don&apos;t need to finish the full journeyman
-            track before pivoting. Many BESS employers accept apprentices
-            with two-plus years in, especially if some of that time touched
-            industrial or utility-scale electrical work.
+            roughly 8,000 hours of supervised field work. It also includes 144
+            classroom hours each year.
+          </p>
+          <p>
+            You don&apos;t need to finish the full journeyman track before
+            pivoting. Many BESS employers accept apprentices with at least two
+            years in the trade. Industrial or utility-scale experience makes
+            that move easier.
           </p>
           <p>
             <strong>Solar installer → BESS: </strong>
-            The faster route for most people already in renewables. A year or
-            two on a solar crew, ideally with exposure to string inverters and
-            DC combiner boxes, plus NABCEP PV Associate or better, positions
-            you for battery-storage-adjacent roles — since many BESS projects
-            are co-located with solar and staffed by the same contractors.
+            This is often the faster route for people already in renewables.
+            Spend a year or two on a solar crew and seek exposure to string
+            inverters and DC combiner boxes. NABCEP PV Associate can strengthen
+            that experience. Many BESS projects sit beside solar assets and use
+            the same contractors.
           </p>
 
           <h2 id="nabcep"><span className="n">05</span>The Confusion around NABCEP Certification</h2>
           <p>
-            In solar, <Link href="/certifications/nabcep-pv-associate">NABCEP PV Associate</Link> is a genuine entry credential — no
-            experience required. The BESS equivalent, NABCEP Energy Storage
-            Installation Professional (ESIP), isn&apos;t. It requires 58 hours
-            of advanced training and two years of experience in a
-            decision-making role on storage projects, with at least six
-            project credits completed in that window. You can&apos;t
-            certify your way into your first BESS job because the certification
-            comes after you&apos;re already doing the work.
+            <Link href="/certifications/nabcep-pv-associate">NABCEP PV Associate</Link>{" "}
+            is an entry credential with no experience requirement. NABCEP
+            Energy Storage Installation Professional is not. ESIP requires 58
+            hours of advanced training. Candidates also need two years in a
+            decision-making storage role and at least six project credits
+            during that period.
+          </p>
+          <p>
+            The certification follows field experience. It cannot replace it.
           </p>
 
           <h2 id="pay"><span className="n">06</span>Realistic Pay by Stage</h2>
@@ -172,15 +171,15 @@ export default function DoYouNeedToBeAnElectricianForBess() {
 
           <h2 id="next"><span className="n">07</span>Recommended Next Steps</h2>
           <p>
-            If you&apos;re already an electrician or apprentice, look at{" "}
+            Electricians and apprentices can move directly to{" "}
             <Link href="/jobs?what=BESS%20Technician">BESS Technician openings</Link>{" "}
-            directly — your background already clears the main bar. If
-            you&apos;re coming from solar, our{" "}
+            because their background clears the main entry barrier. For solar
+            workers, our{" "}
             <Link href="/resources/how-to-become-a-solar-installer">
               solar installer guide
             </Link>{" "}
-            covers the fastest way to build the field hours that make a BESS
-            move realistic in a year or two.
+            explains how to build the field hours needed for a BESS move in a
+            year or two.
           </p>
         </article>
 

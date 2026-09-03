@@ -391,16 +391,12 @@ export default function NabcepPvipPassRate() {
         <article className="sr2-article">
           <h2 id="why-hard" className="sr2-first"><span className="n">01</span>Why It Feels Harder Than It Should</h2>
           <p>
-            If you&apos;re researching this after a failed attempt, or before
-            a first one you&apos;re dreading: the difficulty isn&apos;t in
-            your head, and it isn&apos;t a sign you don&apos;t know your
-            trade. The PVIP exam tests design, code compliance, commissioning,
-            and troubleshooting together in one sitting — categories that, on
-            the job, you&apos;d rarely be tested on all at once. Someone with
-            years of hands-on install experience can still get caught out by
-            a code-reference question or a commissioning scenario they
-            haven&apos;t personally run, simply because that&apos;s not the
-            part of the job they do daily.
+            The PVIP exam can challenge experienced installers. It tests
+            design, code compliance, commissioning and troubleshooting in one
+            sitting. Few jobs demand all four skills at once. A veteran
+            installer can still miss a code-reference question or an
+            unfamiliar commissioning scenario. That result does not erase
+            years of trade knowledge.
           </p>
           <div className="sr2-reassure">
             <strong>The short version:</strong> a large share of the field
@@ -410,20 +406,17 @@ export default function NabcepPvipPassRate() {
 
           <h2 id="passrate"><span className="n">02</span>What the Pass Rate Actually Means</h2>
           <p>
-            NABCEP doesn&apos;t publish an official first-attempt pass rate,
-            but the figure most consistently cited across training providers
-            and industry guides puts it around <strong>60–70% on the first
-            try</strong> — meaning somewhere between 3 and 4 in 10 candidates
-            need a retake. The candidates who pass on the first attempt are
-            almost always the ones who went through a structured prep course
-            built against NABCEP&apos;s published Job Task Analysis.
+            NABCEP does not publish an official first-attempt pass rate.
+            Training providers and industry guides most often cite a range of
+            <strong> 60–70% on the first try</strong>. That would leave three
+            or four candidates in ten needing a retake. Structured preparation
+            against NABCEP&apos;s Job Task Analysis is a common feature among
+            first-time passes.
           </p>
           <p>
-            Training providers consistently point to the gap between
-            structured prep and general experience. Field
-            experience teaches you to install correctly. It doesn&apos;t
-            teach you to explain, in a multiple-choice format, why you
-            installed it that way under a specific code section.
+            Field experience teaches correct installation. The exam asks
+            candidates to connect that decision to a specific code section in
+            multiple-choice format. Structured preparation targets that gap.
           </p>
 
           <h2 id="format"><span className="n">03</span>Exam Format &amp; Scoring</h2>
@@ -442,13 +435,11 @@ export default function NabcepPvipPassRate() {
             </div>
           </div>
           <p>
-            One detail that trips people up: the scaled score isn&apos;t the
-            same as "70% of questions right." NABCEP weights and scales
-            results across the pool of scored questions, so two candidates
-            who feel equally unsure walking out can land on different sides
-            of the passing line. Don&apos;t try to reverse-engineer your
-            score from how the exam felt — it&apos;s not a reliable signal
-            either way.
+            A scaled score of 70 does not mean 70 percent of answers were
+            correct. NABCEP weights and scales the scored questions. Two
+            candidates with similar impressions can therefore finish on
+            opposite sides of the passing line. The way the exam felt is not a
+            reliable estimate of the final score.
           </p>
 
           <EditorialInfographic kind="pvip-exam" />
@@ -466,11 +457,10 @@ export default function NabcepPvipPassRate() {
             <li>If you don&apos;t pass within the year, your application eligibility lapses and you&apos;ll need to reapply</li>
           </ul>
           <p>
-            Some prep providers build the retake fee into their guarantee.
-            HeatSpring&apos;s PVIP prep, for example, covers the cost of a
-            retake if you don&apos;t pass on your first attempt after
-            completing their course — worth factoring in if you&apos;re
-            budgeting for the possibility now.
+            Some prep providers include the retake fee in their guarantee.
+            HeatSpring covers one retake after a student completes its PVIP
+            course and fails the first attempt. Include that protection when
+            comparing the total cost of each option.
           </p>
           <div className="sr2-heatspring-cta">
             <AffiliateLink
@@ -487,10 +477,10 @@ export default function NabcepPvipPassRate() {
 
           <h2 id="prepare"><span className="n">05</span>How to Avoid Needing a Retake</h2>
           <p>
-            Most sources point to somewhere around 100–150 hours of focused
-            study for candidates without a structured course, spread over
-            several weeks. A few things consistently
-            separate first-time passes from retakes:
+            Sources commonly suggest 100–150 hours of focused study for
+            candidates without a structured course. Spread that work across
+            several weeks. Four practices appear consistently in advice for
+            first-time candidates:
           </p>
           <ul>
             <li>Studying directly against NABCEP&apos;s published PVIP Job Task Analysis</li>
@@ -509,18 +499,16 @@ export default function NabcepPvipPassRate() {
 
           <h2 id="next"><span className="n">07</span>Next Steps</h2>
           <p>
-            If you&apos;re earlier in the process and still deciding which
-            NABCEP credential to target first, our{" "}
+            If you are still choosing a credential, our{" "}
             <Link href="/resources/how-to-get-nabcep-certified">
               guide to getting NABCEP certified
             </Link>{" "}
-            compares PV Associate, PVIP, and PVIS side by side. If
-            you&apos;ve got the training done but not yet the field hours,
-            the{" "}
+            {" "}compares PV Associate, PVIP and PVIS. If your training is
+            complete but your field hours are not, the{" "}
             <Link href="/resources/nabcep-board-eligible-status">
               Board Eligible pathway
             </Link>{" "}
-            lets you sit the exam first. Once you&apos;re certified, browse
+            lets you sit the exam first. Once certified, browse
             current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
@@ -529,12 +517,11 @@ export default function NabcepPvipPassRate() {
           </p>
 
           <p className="sr2-fine">
-            NABCEP is an independent certification body and is not affiliated
-            with Solar Roles. Pass rates cited here reflect figures commonly
-            reported by training providers and industry publications. Exam fees, retake costs,
-            and format details are set by NABCEP and can change — always
-            confirm current requirements at nabcep.org before scheduling an
-            exam.
+            NABCEP is an independent certification body with no affiliation to
+            Solar Roles. The pass-rate range reflects figures reported by
+            training providers and industry publications. NABCEP sets exam
+            fees, retake costs and format details. Confirm current information
+            at nabcep.org before scheduling an exam.
           </p>
         </article>
 

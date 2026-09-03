@@ -433,20 +433,16 @@ export default function NabcepProjectCreditsExplained() {
         <article className="sr2-article">
           <h2 id="bottleneck" className="sr2-first"><span className="n">01</span>The Real Bottleneck</h2>
           <p>
-            Most NABCEP guides walk you through training hours and exam
-            format without dwelling on the part that stops people:
-            the <strong>6 Project Credits</strong> requirement for PVIP and
-            PVIS both ask for documented experience in a{" "}
-            <strong>decision-making role</strong>. If you&apos;re new to the
-            trade, that&apos;s the classic catch — you need the experience to
-            get certified, and in a lot of hiring pipelines, certification is
-            what gets you into the roles where that experience is earned.
+            The <strong>6 Project Credits</strong> requirement stops many PVIP
+            and PVIS candidates. Both credentials require documented
+            experience in a <strong>decision-making role</strong>. New workers
+            face a circular problem. They need responsibility to qualify, yet
+            some employers reserve that responsibility for certified workers.
           </p>
           <p>
-            This page breaks down what counts, how few installs the
-            requirement really takes once you look at the credit math, and
-            the routes people use to document a qualifying role before
-            they&apos;ve landed a lead position.
+            This guide explains what counts and how the credit math works. It
+            also covers ways to document qualifying responsibility before
+            landing a formal lead position.
           </p>
 
           <h2 id="what-counts"><span className="n">02</span>What Actually Counts as a Credit</h2>
@@ -473,21 +469,19 @@ export default function NabcepProjectCreditsExplained() {
             </tbody>
           </table>
           <p>
-            That first bracket covers essentially every residential system
-            and most commercial rooftop jobs — a standard 8kW home install
-            earns the same 2 credits as a 900kW commercial array. Size
-            doesn&apos;t need to be large to count; it just needs to clear
-            1kW and be documented properly.
+            The first bracket covers almost every residential system and most
+            commercial rooftops. A standard 8kW home installation earns the
+            same two credits as a 900kW array. A project only needs to exceed
+            1kW and carry the required documentation.
           </p>
 
 
           <h2 id="decision-making"><span className="n">03</span>What "Decision-Making Role" Means</h2>
           <p>
-            This is where most of the confusion lives. NABCEP
-            doesn&apos;t require you to be the installation contractor listed
-            on the permit — that helps, but it&apos;s not the only path.
-            If your name isn&apos;t on the permit or final inspection, you
-            can still qualify by submitting one of the following:
+            NABCEP does not require every candidate to be the contractor named
+            on the permit. That record helps, but other evidence can establish
+            responsibility. If your name is absent from the permit or final
+            inspection, submit one of the following:
           </p>
           <ul className="sr2-checklist">
             <li>A signed letter on company letterhead from the person (or senior management) named on the permit/inspection, describing your decision-making role on that project</li>
@@ -495,24 +489,20 @@ export default function NabcepProjectCreditsExplained() {
             <li>A commissioning or quality assurance report identifying you as responsible for that commissioning or QA process</li>
           </ul>
           <p>
-            One detail that surprises a lot of candidates: <strong>more than
-            one person can qualify for the same system.</strong> NABCEP
-            explicitly allows for multiple decision-making roles on a single
-            install — a lead installer, a designer, and whoever ran
-            commissioning can each document their own role and each count
-            that project toward their own credits. Being on a crew
-            doesn&apos;t automatically disqualify you just because someone
-            else is the named contractor.
+            <strong>Several people can qualify through the same system.</strong>{" "}
+            NABCEP recognizes distinct decision-making roles on one project.
+            The lead installer, designer and commissioning owner may each
+            document separate responsibility. Another person being named as
+            contractor does not automatically disqualify a crew member.
           </p>
 
           <h2 id="how-many"><span className="n">04</span>How Many Installs You Actually Need</h2>
           <div className="sr2-reassure">
             <strong>The math is more forgiving than it sounds.</strong>{" "}
-            At 2 credits per residential or standard commercial system, three
-            completed installs with a documented decision-making role clears
-            the 6-credit threshold. This isn&apos;t a multi-year, dozens-of-jobs
-            requirement — it&apos;s a documentation problem more than a
-            volume problem.
+            A residential or standard commercial system earns two credits.
+            Three completed installations can therefore clear the six-credit
+            threshold. The difficult part is documenting responsibility on
+            each project.
           </div>
           <div className="sr2-facts">
             <div className="sr2-fact">
@@ -616,10 +606,9 @@ export default function NabcepProjectCreditsExplained() {
             <li>Each installation needs a permit and a final approved inspection submitted as part of your documentation — plans or unpermitted work don&apos;t qualify</li>
           </ul>
           <p>
-            This is why documenting your role at the time a job wraps matters
-            more than most people expect — going back two years later to ask
-            for a letter about a project no one remembers clearly is much
-            harder than requesting it while it&apos;s fresh.
+            Document your role as each job closes. Asking for a letter two
+            years later is harder when the project team no longer remembers
+            the details.
           </p>
 
           <h2 id="mistakes"><span className="n">07</span>Common Mistakes</h2>
@@ -633,16 +622,15 @@ export default function NabcepProjectCreditsExplained() {
 
           <h2 id="next"><span className="n">08</span>Next Steps</h2>
           <p>
-            For the full picture of PVIP requirements alongside training and
-            exam details, see our{" "}
+            For the full PVIP requirements, see our{" "}
             <Link href="/resources/how-to-get-nabcep-certified">
               guide to getting NABCEP certified
             </Link>
-            . If the exam itself is what&apos;s weighing on you, our{" "}
+            . Our{" "}
             <Link href="/resources/nabcep-pvip-pass-rate">
               PVIP pass rate and retake guide
             </Link>{" "}
-            covers what to expect. Once you&apos;re working toward
+            explains the exam and retake process. Once you are working toward
             certification, browse current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
@@ -651,12 +639,10 @@ export default function NabcepProjectCreditsExplained() {
           </p>
 
           <p className="sr2-fine">
-            NABCEP is an independent certification body and is not affiliated
-            with Solar Roles. Project Credit values, documentation
-            requirements, and timing windows are set by NABCEP and can
-            change — always confirm current requirements at nabcep.org or in
-            the NABCEP Certification Handbook before submitting an
-            application.
+            NABCEP is an independent certification body with no affiliation to
+            Solar Roles. NABCEP sets credit values, documentation rules and
+            timing windows. Confirm current requirements at nabcep.org or in
+            the NABCEP Certification Handbook before applying.
           </p>
         </article>
 

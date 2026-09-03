@@ -42,27 +42,27 @@ const jsonLd = {
 const entryRoles = [
   {
     title: 'Solar Installer Helper',
-    description: "Works alongside the crew carrying panels, staging racking components, and handling material on site. The most common no-experience entry point, you're trained on the tools and the process as you go.",
+    description: "Helpers carry panels, stage racking and move material around the site. It is the most common entry point without experience. The crew teaches the tools and process on the job.",
     icon: HardHat,
   },
   {
     title: 'Solar Apprentice',
-    description: "A structured path toward becoming a full installer, often paired with an OSHA 10 or 30 course paid for by the employer. Pay usually steps up at set milestones as you take on more of the install yourself.",
+    description: "An apprenticeship provides a structured path to full installer work. Employers may pay for OSHA 10 or 30. Wages usually rise at set milestones as the apprentice takes on more of the installation.",
     icon: GraduationCap,
   },
   {
     title: 'Racking Crew Member',
-    description: "Focused specifically on assembling and mounting the racking system before panels go on. Physical, repetitive, and one of the fastest ways to learn the mechanical side of an install.",
+    description: "Racking crews assemble the mounting system before panels arrive. The work is physical and repetitive. It is also a fast way to learn the mechanical side of an installation.",
     icon: Users,
   },
   {
     title: 'Warehouse / Logistics Associate',
-    description: "Pulls and stages equipment for install crews, tracks inventory, and loads trucks. Not on the roof, but a real foot in the door at a solar company, several postings prioritize warehouse staff for installer openings internally.",
+    description: "Warehouse associates pull equipment, track inventory and load crew trucks. They stay off the roof while learning the materials. Some companies promote reliable warehouse staff into installer openings.",
     icon: ClipboardCheck,
   },
   {
     title: 'Trainee Field Technician',
-    description: "Shadows a licensed technician on O&M and service calls. Slower-paced entry than a install crew, and a common path in for people coming from general electrical or HVAC backgrounds.",
+    description: "Trainees shadow licensed technicians on service calls and O&M work. The pace is often steadier than new construction. Electrical or HVAC experience can make this route easier to enter.",
     icon: TrendingUp,
   },
 ]
@@ -70,27 +70,27 @@ const entryRoles = [
 const faqs = [
   {
     question: 'Can you really get a solar job with zero experience?',
-    answer: "Yes, helper, apprentice, and warehouse roles are built for it. Most crews expect to train new hires on the actual installation work; what they're screening for going in is reliability, physical ability, and a willingness to learn.",
+    answer: "Yes. Helper, apprentice and warehouse roles are built for beginners. Crews teach the installation process. Employers screen first for reliability, physical ability and willingness to learn.",
   },
   {
     question: 'Do I need any certifications before applying?',
-    answer: "Usually not on day one. Employers commonly cover OSHA 10 during onboarding, and NABCEP certification typically comes after a year or more in the field, once you've got install hours to qualify for the exam.",
+    answer: "Usually not on day one. Employers often cover OSHA 10 during onboarding. NABCEP certification comes later, after you have enough field experience for the chosen credential.",
   },
   {
     question: 'How much do entry-level solar jobs pay?',
-    answer: "Helper and apprentice roles commonly start around $17 to $20 an hour, with pay stepping up as you take on more of the install independently. For comparison, the Bureau of Labor Statistics put the national median for solar PV installers overall at $51,860 as of May 2024.",
+    answer: "Helper and apprentice roles commonly start around $17 to $20 an hour. Pay rises as workers complete more of the installation independently. BLS reported a $51,860 national median for all PV installers in May 2024.",
   },
   {
     question: 'What does the job involve day to day?',
-    answer: "Mostly physical work: carrying and staging panels and racking, running conduit, cleanup, and handing tools to more experienced installers. Expect full days outdoors, on rooftops or ground-mount sites, in varying weather.",
+    answer: "The work is mostly physical. Beginners carry panels, stage racking and clean the site. They may also run conduit or assist experienced installers. Expect full days outdoors in changing weather.",
   },
   {
     question: 'How fast can you move up from helper to installer?',
-    answer: "Many postings mention 6 months to a year for helpers to move into a full installer role, faster on crews that are actively expanding. Progression usually tracks directly with how much of the install you can be trusted to do unsupervised.",
+    answer: "Many postings suggest six months to a year. Expanding crews may promote faster. Progress depends on how much of an installation you can complete safely without close supervision.",
   },
   {
     question: 'Is a background in construction or electrical work helpful?',
-    answer: "It helps but isn't required, plenty of postings list it as preferred but not mandatory. General comfort with hand and power tools, working at heights, and physical labor matters more than the specific trade background.",
+    answer: "It helps, but many postings treat trade experience as preferred rather than required. Comfort with tools, heights and physical work matters more than a specific background.",
   },
 ]
 
@@ -179,7 +179,9 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><HardHat className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Types of No-Experience Solar Jobs</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Solar companies hire for entry points below "installer" more often than the job titles suggest. These are the roles that show up most often in postings that don't require prior solar experience.
+            Solar companies hire below the full installer level. These five roles
+            appear most often in postings that accept candidates without solar
+            experience.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {entryRoles.map((role, index) => (
@@ -195,17 +197,24 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><GraduationCap className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">What These Jobs Actually Require</h2></div>
           <p className="text-gray-600 mb-4 max-w-4xl">
-            No prior solar experience needed, but postings still screen for a specific set of things: the ability to lift 40 to 50 pounds repeatedly, comfort working at heights and on rooftops, a valid driver's license, and reliable attendance. Most crews handle OSHA 10 training internally once you're hired.
+            Experience may be optional, but physical requirements are not. Many
+            postings ask candidates to lift 40 to 50 pounds and work at height.
+            A valid driver&apos;s license and reliable attendance also matter.
+            Crews often provide OSHA 10 training after hire.
           </p>
           <p className="text-gray-600 max-w-4xl">
-            Requirements vary more by role than by company: warehouse and logistics postings rarely ask for anything beyond a clean driving record and physical stamina, while apprentice and trainee roles increasingly mention a structured pay progression tied to specific milestonesn first solo install, first crew lead-assist, and so on.
+            Warehouse roles usually emphasize driving history and stamina.
+            Apprenticeships add formal pay milestones. Those steps may include a
+            first independent installation or a first crew-lead assist.
           </p>
         </section>
 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Entry-Level Solar Pay</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Entry-level pay sits below the national median for solar PV installers overall, which the Bureau of Labor Statistics put at $51,860 as of May 2024, that figure reflects licensed, experienced installers.
+            BLS reported a $51,860 median for PV installers in May 2024. That
+            figure covers all experience levels. Beginner wages usually start
+            below it.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
@@ -229,7 +238,9 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><TrendingUp className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034, among the fastest-growing occupations it tracks. That growth is a large part of why so many postings skip the experience requirement, crews are expanding faster than the pool of already-trained installers.
+            BLS projects 42% growth for PV installers from 2024 to 2034. That is
+            among the fastest rates it tracks. Expanding crews cannot rely only
+            on experienced candidates, so many employers train new hires.
           </p>
         </section>
 
@@ -253,22 +264,25 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Starting Out: More Resources</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
-            Most no-experience candidates start on the install side, where pay is transparent — see the{' '}
+            Most beginners start on an installation crew. Check the{' '}
             <Link href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar PV Installer Salary by State</Link>{' '}
-            to know what to expect. For the full picture, read{' '}
-            <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</Link>,{' '}
-            <Link href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">how to land a solar apprenticeship</Link>,{' '}
-            then browse{' '}
+            before comparing offers. Our guides explain{' '}
+            <Link href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become an installer</Link>{' '}
+            and{' '}
+            <Link href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">how to find an apprenticeship</Link>.
+            Ready to apply? Browse{' '}
             <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>{' '}
             or{' '}
-            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>{' '}
-            once you're ready to apply.
+            <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>.
           </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Salary and outlook figures are drawn from Bureau of Labor Statistics data and represent national averages. Actual pay varies by employer, region, and role. Verify training and certification expectations directly with employers.
+            <strong>Disclaimer:</strong> Salary and outlook figures use Bureau
+            of Labor Statistics data and national averages. Pay varies by
+            employer, region and role. Confirm training requirements with each
+            employer.
           </p>
         </section>
       </div>

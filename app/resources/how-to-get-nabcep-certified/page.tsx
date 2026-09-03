@@ -522,15 +522,15 @@ export default function HowToGetNabcepCertified() {
             
             
            
+          <p>NABCEP offers three credentials for different career stages:</p>
+          <ul>
+            <li><strong>PV Associate (PVA)</strong></li>
+            <li><strong>PV Installation Professional (PVIP)</strong></li>
+            <li><strong>PV Installer Specialist (PVIS)</strong></li>
+          </ul>
           <p>
-            NABCEP runs several credentials:<ul>
-                <li>- <strong>PV Associate (PVA)</strong>{" "}</li>
-            <li>- <strong>PV Installation Professional (PVIP)</strong></li>
-               <li>- <strong>NABCEP PV Installer Specialist (PVIS)</strong></li> 
-                </ul>
-           Each certification serves a different purpose and is designed for professionals
-            at different stages of their careers. Choosing the right one depends on your 
-            experience and career goals. </p>
+            Your field experience and career goal determine which one fits.
+          </p>
 
           <p>
             <strong>1.</strong>{" "}
@@ -542,18 +542,17 @@ export default function HowToGetNabcepCertified() {
                 PV Associate
               </AffiliateLink>
             </strong>{" "}
-            is the entry credential. No
-            documented field hours required, which is what makes it the
-            standard target for people still in training or early in an OJT
-            role. It tells an employer you understand electrical basics and
-            code requirements before you&apos;ve
-            necessarily touched a roof.
+            is the entry credential. It requires no documented field hours.
+            That makes it a common target during training or early on-the-job
+            learning. The credential shows an employer that you understand
+            electrical fundamentals and basic code requirements.
           </p>
-          <p>For PVA taken through the Associate Education Pathway, you
-            don&apos;t apply to NABCEP yourself: your training provider
-            registers you for the exam once you&apos;ve completed their
-            course, and your myNABCEP account gets created automatically at
-            that point.</p>
+          <p>
+            Under the Associate Education Pathway, the training provider
+            registers you for the PVA exam after the course. NABCEP creates
+            your account during that process. You do not file the initial
+            application yourself.
+          </p>
           <p>
             <strong>2.</strong>{" "}
             <strong>
@@ -564,12 +563,10 @@ export default function HowToGetNabcepCertified() {
                 PV Installation Professional
               </AffiliateLink>
             </strong>{" "}
-            is the credential
-            experienced installers work toward. It requires documented
-            installation experience and a separate written exam, and it&apos;s
-            the one that shows up as a preferred or required qualification in
-            lead installer and foreman postings. You can&apos;t shortcut to
-            PVIP; the field hours are the gate.
+            is designed for experienced installers. It requires documented
+            installation experience and a separate written exam. Lead
+            installer and foreman postings often prefer or require it. The
+            field requirement cannot be skipped.
           </p>
            
           <p>
@@ -582,72 +579,62 @@ export default function HowToGetNabcepCertified() {
                 PV Installer Specialist (PVIS)
               </AffiliateLink>
             </strong>
-            , is a narrower Board Certification aimed at installers who want to
-            demonstrate competence in the hands-on installation process
-            itself: conductors and mounting work, plus safety planning. It
-            doesn&apos;t cover the design and commissioning scope that PVIP
-            does, which makes it a faster path for someone whose job is
-            purely installation and who doesn&apos;t design systems or sign
-            off on commissioning.
+            {" "}is a narrower Board Certification. It covers conductors,
+            mounting work and safety planning. It excludes the design and
+            commissioning scope tested by PVIP. That focus can make PVIS a
+            faster path for workers who only perform installation.
           </p>
           <ul>
             <li>New to solar, still in training or OJT → PV Associate first.</li>
             <li>Coming from electrical, roofing, or construction → PV Associate still makes sense as a fast, low-cost signal while you accumulate solar-specific hours toward PVIP or PVIS.</li>
             <li>Experienced installer, work is installation only → PVIS eligibility review.</li>
             <li>1+ years documented experience across design, install, and commissioning → go straight for PVIP eligibility review.</li>
-          
-          <p>If you're preparing for a NABCEP exam, we recommend HeatSpring.
-            It's one of the most trusted online training platforms in the solar industry, and its 
-            NABCEP-approved courses are taught by experienced industry professionals.</p>
+          </ul>
 
-<p><strong>Important:</strong> for PVIP, PVIS, and PVA taken through the Experience
-            or Conversion pathways, it&apos;s the other way around. You create
-            your own myNABCEP account, submit your documented hours, and wait for
-            NABCEP to approve it before you can schedule an exam date. Your
-            employer&apos;s only role is signing off on your logged hours,
-            they don&apos;t register you or apply on your behalf.</p>
+          <p>
+            HeatSpring offers NABCEP-approved preparation taught by experienced
+            industry professionals. It is one of the established online
+            options for candidates preparing for these exams.
+          </p>
+
+          <p>
+            <strong>Important:</strong> PVIP, PVIS and the PVA Experience or
+            Conversion pathways work differently. Create your own myNABCEP
+            account and submit documented hours. NABCEP must approve the file
+            before you schedule an exam. Your employer signs the hour log but
+            does not apply on your behalf.
+          </p>
 
           <h2 id="eligibility"><span className="n">03</span>Eligibility &amp; Hour Requirements</h2>
           <p>
-            PV Associate has no prerequisite hours, only a training-hour
-            minimum that most short courses or bootcamps satisfy in a single
-            program. PVIP is stricter: NABCEP requires documented experience
-            hours across specific task categories (site assessment,
-            installation, commissioning, maintenance), signed off by a
-            supervisor or employer, before you&apos;re even eligible to take
-            the exam. PVIS sits between the two: it requires documented
-            installation-task hours without the design and commissioning
-            hours PVIP demands.
+            PV Associate has no field-hour prerequisite. A short course or boot
+            camp can meet its training minimum. PVIP requires documented hours
+            across site assessment, installation, commissioning and
+            maintenance. A supervisor or employer must verify the record before
+            exam eligibility. PVIS sits between them. It requires installation
+            hours but excludes PVIP's design and commissioning scope.
           </p>
           <p>
-            <strong>hours don&apos;t
-            count retroactively unless they&apos;re documented at the time.</strong>{" "}
-            If you&apos;re on a crew now and think PVIP or PVIS is a year or
-            two away, start a simple log today with the date and hours.
-            Rebuilding that record later from memory is
-            the single most common reason applications get delayed.
+            <strong>Record hours as you earn them.</strong> If PVIP or PVIS is
+            still a year away, start a dated log now. Reconstructing the record
+            from memory is a common source of application delays.
           </p>
          
 
           <h2 id="exam"><span className="n">04</span>Exam Format &amp; Scoring</h2>
           <p>
-            All three exams are computer-based, multiple choice, proctored,
-            and timed. PV Associate is the shorter, more foundational test —
-            electrical fundamentals, basic system design, mechanical
-            mounting, and safety. PVIS focuses tightly on installation
-            execution: conductors, raceways, mounting hardware, monitoring
-            and communication systems, and safety plans. PVIP goes further
-            still, into code compliance (NEC), commissioning, and
-            troubleshooting, and it draws directly on the field-hour
-            categories you had to document to qualify.
+            All three exams are timed, proctored and computer-based. PV
+            Associate covers electrical fundamentals, basic design, mounting
+            and safety. PVIS focuses on conductors, raceways, hardware,
+            monitoring and safety plans. PVIP adds NEC compliance,
+            commissioning and troubleshooting. Its scope mirrors the field
+            categories used for eligibility.
           </p>
           <p>
-            Course quality matters here more than raw study time. NABCEP
-            publishes a job task analysis for each credential, the actual
-            list of what the exam tests. The strongest prep courses are
-            built directly against it.
+            Course quality matters as much as study time. NABCEP publishes a
+            Job Task Analysis for every credential. Strong prep courses follow
+            that test blueprint directly.
           </p>
-</ul>
           
 
           <h2 id="timeline"><span className="n">05</span>Study Timeline</h2>
@@ -692,30 +679,25 @@ export default function HowToGetNabcepCertified() {
           
 
           <h2 id="mistakes"><span className="n">06</span>Common Mistakes</h2>
-          <p>
-            Not logging hours until the PVIP or PVIS application is due.{" "}
-            Studying for PVIP off general solar content instead
-            of the published job task analysis. Treating PVA as
-            optional when
-            it&apos;s the fastest, cheapest way to clear an early hiring
-            screen while you build toward PVIP or PVIS. Assuming PVIS and
-            PVIP are interchangeable when employers are asking for design or
-            commissioning experience specifically.
-          </p>
+          <ul className="sr2-downsides">
+            <li>Waiting until the PVIP or PVIS application is due to log field hours.</li>
+            <li>Studying general solar content instead of the published Job Task Analysis.</li>
+            <li>Overlooking PVA while building experience for PVIP or PVIS.</li>
+            <li>Treating PVIS and PVIP as interchangeable for design or commissioning roles.</li>
+          </ul>
 
           
           <p>
-            If you&apos;re still deciding between training routes before you
-            even get to certification, our{" "}
+            If you are still choosing a training route, our{" "}
             <Link href="/resources/how-to-become-a-solar-installer">
               guide to becoming a solar installer
             </Link>{" "}
-            covers entry pathways in full. Once you&apos;re certified, browse
+            {" "}covers the main entry pathways. Once certified, browse
             current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
             </Link>{" "}
-            on Solar Roles, or compare providers in our{" "}
+            on Solar Roles. You can also compare providers in our{" "}
             <Link href="/resources/nabcep-training-providers-compared">
               NABCEP training provider comparison
             </Link>
@@ -723,10 +705,10 @@ export default function HowToGetNabcepCertified() {
           </p>
 
           <p className="sr2-fine">
-            NABCEP is an independent certification body and is not affiliated
-            with Solar Roles. Exam fees, hour requirements, and credential
-            names are set by NABCEP and can change — always confirm current
-            requirements at nabcep.org before enrolling in a prep course.
+            NABCEP is an independent certification body with no affiliation to
+            Solar Roles. NABCEP sets exam fees, hour requirements and
+            credential names. Confirm current information at nabcep.org before
+            enrolling in a prep course.
           </p>
         </article>
 

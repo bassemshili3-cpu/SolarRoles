@@ -93,30 +93,28 @@ export default function Page() {
 
           <h2>What contractors require</h2>
           <p>
-            A high school diploma (or equivalent) covers the paperwork side &
-            The rest is physical: you need to be comfortable on a roof, able
-            to lift and carry racking and panels all day, and willing to
-            follow directions from a lead installer. Prior roofing,
-            electrical, or general construction work helps, but a lot of
-            installers start with none of that.
+            A high school diploma or equivalent usually covers the education
+            requirement. The rest is practical. You need to work comfortably
+            at height and carry racking or panels throughout a shift. You also
+            need to follow a lead installer's directions. Roofing, electrical
+            or construction experience helps, but many installers start
+            without it.
           </p>
           <p>
             Some crews run a short safety orientation before your first day.
-            Others just put you to work carrying materials and staging tools
-            while you pick up the terminology. OSHA 10 is the one credential
-            worth getting ahead of time because a lot of postings ask for it, and
-            some employers will cover the cost once you&rsquo;re hired.
+            Others start new hires on material handling and tool staging while
+            they learn the terminology. OSHA 10 is the most useful credential
+            to earn in advance because many postings request it. Some employers
+            will pay for the course after hiring.
           </p>
 
           <h2>What you&rsquo;ll get paid</h2>
           <p>
-            Entry-level &ldquo;no experience&rdquo; solar installer roles are
-            averaging around $22&ndash;26/hour nationally in 2026, according
-            to ZipRecruiter data, with real variation by state.
-            California and the Northeast tend to run higher; Texas and other
-            lower-cost markets sit a bit under the national average.
-            Utility-scale projects often add a per diem on top of the
-            hourly rate if you&rsquo;re traveling to job sites.
+            ZipRecruiter data places entry-level solar installer pay around
+            $22&ndash;26 per hour nationally in 2026. State markets vary.
+            California and the Northeast tend to pay more. Texas and other
+            lower-cost areas sit below the national range. Traveling
+            utility-scale crews may also receive per diem.
           </p>
 
           <h2>How fast you move up</h2>
@@ -142,13 +140,10 @@ export default function Page() {
 
           <h2>Where to find these jobs</h2>
           <p>
-            Generic job boards bury solar postings under sales and
-            consultant roles that have nothing to do with hands-on
-            installation. If you&rsquo;re specifically after tools-in-hand
-            installer work, a board built just for that role, like{' '}
-            <a href="/solar-jobs-no-experience">Solar Roles</a>, is specialized
-            in solar careers, and shows you only solar related
-            O&amp;M openings.
+            Generic job boards mix installation with sales and consulting.
+            For hands-on work, use a specialized board such as{' '}
+            <a href="/solar-jobs-no-experience">Solar Roles</a>. It separates
+            installer and O&amp;M openings from unrelated titles.
           </p>
 
           <p>
@@ -159,11 +154,11 @@ export default function Page() {
           <div className="mt-10 rounded-2xl border border-[#F5B819]/30 bg-[#FFFBEB] p-6">
             <p className="font-semibold text-[#0B1A2E] mb-2">Keep reading</p>
             <p className="text-sm text-gray-600">
-              See how installer pay breaks down by state on our{' '}
-              <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar Photovoltaic Installer salary page</a>,
-              follow the full path in{' '}
-              <a href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</a>,
-              or start applying on{' '}
+              Compare state pay on our{' '}
+              <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">Solar Photovoltaic Installer salary page</a>.
+              Read the full path in{' '}
+              <a href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</a>.
+              When you are ready, start applying through{' '}
               <a href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</a>.
             </p>
           </div>

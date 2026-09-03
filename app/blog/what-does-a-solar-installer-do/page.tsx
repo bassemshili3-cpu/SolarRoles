@@ -273,14 +273,12 @@ export default function Page() {
           <section id="typical-day">
             <h2>A typical day</h2>
             <p>
-              The day usually starts early: load the truck and travel to the
-              site. On a roof job, the crew sets up fall
-              protection before beginning the work. The install then follows a
-              clear order: layout followed by installation. A lead installer
-              or foreman assigns tasks and checks the work as it goes. On residential
-              jobs a crew of two or three can often finish a system in a day;
-              commercial and utility-scale projects run over weeks or months
-              with larger, rotating crews.
+              The day starts early with loading and travel. On a roof job, fall
+              protection goes up before installation begins. The crew then
+              follows the layout while a lead assigns and checks each task.
+              Two or three residential installers can often finish a system in
+              one day. Larger commercial and utility projects run for weeks or
+              months with rotating crews.
             </p>
           </section>
         </div>
@@ -348,9 +346,8 @@ export default function Page() {
           <section id="work-types">
             <h2>Residential, commercial, and utility-scale</h2>
             <p>
-              The core skills carry over between all three, but the pace and
-              travel expectations differ. Here&rsquo;s
-              a side-by-side.
+              The same core skills apply in all three markets. Pace, crew size
+              and travel expectations change. Here is the comparison.
             </p>
           </section>
         </div>
@@ -415,13 +412,11 @@ export default function Page() {
           <section id="who-they-work-with">
             <h2>Who they work alongside</h2>
             <p>
-              Installers rarely work alone. A crew lead or foreman manages
-              sequencing and quality on site. A licensed electrician usually
-              handles the final connection to the grid and any work that
-              requires a license. A project manager coordinates permits and
-              inspections behind the scenes. As an installer
-              gains experience, moving into the crew lead role is the most
-              common next step.
+              Installers work as part of a wider team. A lead or foreman manages
+              the sequence and checks quality. A licensed electrician handles
+              grid connection and work reserved by law. The project manager
+              coordinates permits and inspections. With experience, installers
+              often move into the crew-lead role.
             </p>
           </section>
         </div>
@@ -431,13 +426,10 @@ export default function Page() {
           <section id="find-jobs">
             <h2>Where to find these jobs</h2>
             <p>
-              Generic job boards mix installer postings in with sales and
-              consultant roles that have nothing to do with hands-on work. If
-              you want tools-in-hand installer jobs specifically, a board
-              built just for that role, like{' '}
-              <a href="https://www.solarroles.com">Solar Roles</a>, cuts out
-              the noise and shows you only PV installer, electrician, and
-              O&amp;M openings.
+              Generic boards mix installation with sales and consulting. A
+              specialist board such as{' '}
+              <a href="https://www.solarroles.com">Solar Roles</a> keeps the
+              search focused on PV installer, electrician and O&amp;M openings.
             </p>
             <p className="!mt-12 !text-base !text-gray-600">
               <em>
@@ -479,11 +471,11 @@ export default function Page() {
           <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
             <p className="font-semibold text-gray-900 mb-2">Related guides</p>
             <p className="text-sm text-gray-600">
-              See how the pay works on our{' '}
-              <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">solar installer salary page</a>,
-              compare the credential options in{' '}
-              <a href="/resources/solar-certifications-by-job-role" className="text-blue-700 underline hover:text-blue-900">certifications by job role</a>,
-              or browse live{' '}
+              See current pay on our{' '}
+              <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">solar installer salary page</a>.
+              Compare credentials in{' '}
+              <a href="/resources/solar-certifications-by-job-role" className="text-blue-700 underline hover:text-blue-900">certifications by job role</a>.
+              You can also browse live{' '}
               <a href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</a>.
             </p>
           </div>

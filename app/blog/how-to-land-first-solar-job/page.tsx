@@ -153,7 +153,9 @@ export default function ArticlePage() {
             Land Your First Solar Job in two weeks: 2026 Edition
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
-            The solar job market is competitive, but with the right strategy, you can land your first position in 2026. This plan outlines the specific actions to take over the next two weeks, including the emails to send and the words to say in person.
+            A focused search can produce a first solar offer in two weeks.
+            This plan identifies the roles to target and the evidence to show.
+            It also gives you the questions to ask employers.
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 pb-8 border-b border-gray-100">
             <div className="flex items-center gap-1.5">
@@ -188,11 +190,15 @@ export default function ArticlePage() {
 
           <h2>Pick the right first role before you apply</h2>
           <p>
-            Do not apply to every title containing “solar.” Pick the lane that matches the experience you can honestly show today,
-            then tailor your two-week plan to it. The sequence below is roughly from the most accessible entry point to the roles that
-            normally require prior field, trade, or construction-management experience. It is not a pay ranking:
-            a good roofer may move faster than a complete beginner, while an experienced construction coordinator may enter through
-            an assistant project manager role.
+            Do not apply to every title containing “solar.” Choose the lane
+            that matches the experience you can prove today. The sequence
+            below moves from accessible entry roles to jobs that require trade
+            or construction-management experience.
+          </p>
+          <p>
+            This is not a pay ranking. A roofer may advance faster than a
+            beginner. An experienced construction coordinator may start as an
+            assistant project manager.
           </p>
 
           <EditorialInfographic kind="first-solar-role" />
@@ -224,10 +230,12 @@ export default function ArticlePage() {
             <span className="role-order">2. Entry trade path</span>
             <h3>Solar PV installer</h3>
             <p>
-              This is the main “learn while working” route. The Bureau of Labor Statistics says most PV installers learn alongside
-              experienced installers, with related construction experience shortening the ramp-up. That matches repeated advice from
-              working installers: start with safety, listen closely, and learn tools and layout quickly. Show that you understand the
-              realities of the work: roofs and physical repetition.
+              This is the main learn-while-working route. The Bureau of Labor
+              Statistics says most PV installers train beside experienced
+              workers. Related construction experience shortens the ramp.
+              Working installers give similar advice: prioritize safety,
+              listen closely and learn the tools. Employers also want evidence
+              that you understand heights and repetitive physical work.
             </p>
             <p>
               <strong>Best move:</strong> apply to installer and apprentice openings. Then make your application specific:
@@ -249,7 +257,10 @@ export default function ArticlePage() {
             <span className="role-order">3. Accessible, but a different job</span>
             <h3>Solar sales consultant or appointment setter</h3>
             <p>
-              Sales can be easier to enter than an electrical role, but it is not an “easy” solar job. It rewards consistent follow-up and comfort with rejection. Community discussions consistently warn new reps not to confuse a large advertised income range with guaranteed pay.
+              Sales is easier to enter than many electrical roles. The work
+              still demands consistent follow-up and comfort with rejection.
+              Experienced reps warn newcomers that a large advertised range is
+              not guaranteed income.
             </p>
             <p>
               <strong>Best move:</strong> before accepting, get these answers in writing:
@@ -270,8 +281,12 @@ export default function ArticlePage() {
             <span className="role-order">4. Trade progression</span>
             <h3>Solar electrician, service technician, or O&amp;M technician</h3>
             <p>
-              These roles are excellent long-term paths, but usually not the first offer for someone with no electrical foundation.
-              Employers look for electrical troubleshooting and an electrician apprenticeship. If you already have electrical or industrial-maintenance experience, say so directly; it is more valuable than a generic “passion for solar” paragraph.
+              These roles offer strong long-term paths, but rarely serve as a
+              first job without an electrical foundation. Employers look for
+              troubleshooting ability and apprenticeship experience. State
+              electrical or industrial-maintenance experience directly on the
+              application. It carries more weight than a generic statement
+              about passion for solar.
             </p>
             <p>
               <strong>Best move:</strong> start with an apprenticeship, electrical helper, installer, or junior service role. Once you are on
@@ -284,13 +299,17 @@ export default function ArticlePage() {
             <span className="role-order">5. Not usually a first job</span>
             <h3>Lead installer or crew lead</h3>
             <p>
-              A lead is hired to keep people safe and lay out the work. They solve small problems, teach newer installers, and deliver a
-              handoff — not merely to install panels quickly. Experienced workers describe advancement as tied to crew responsibility and the ability to train others. Treat this as a target after proving you
-              can install consistently, not a title to stretch for on your first application.
+              A lead lays out the work and keeps the crew safe. The role also
+              involves solving problems, teaching new installers and delivering
+              a clean handoff. Advancement follows proven responsibility and
+              the ability to train others. Target this title after demonstrating
+              consistent installation work.
             </p>
             <p>
-              <strong>Best move:</strong> during an installer interview, ask what a promotion-ready installer can demonstrate in the first
-              90 days. Then keep a simple record of the systems, tools, layouts, safety tasks, and junior teammates you have supported.
+              <strong>Best move:</strong> ask what a promotion-ready installer
+              should demonstrate in the first 90 days. Then record the systems
+              and layouts you worked on. Track the tools, safety duties and
+              junior teammates you supported as well.
             </p>
           </section>
 
@@ -298,13 +317,18 @@ export default function ArticlePage() {
             <span className="role-order">6. Least accessible without related experience</span>
             <h3>Project coordinator, assistant project manager, or project manager</h3>
             <p>
-              Solar project management is construction coordination. It covers permits and project closeout. Some roles also manage subcontractors. A direct PM jump is realistic only if you already bring construction or project-coordination experience.
-              Practitioners are more likely to recommend project coordinator or assistant PM roles to newcomers than a full PM title.
+              Solar project management is construction coordination. The work
+              covers permits and closeout. Some positions also manage
+              subcontractors. A direct move into project management usually
+              requires related experience. Newcomers have a better chance with
+              project coordinator or assistant PM roles.
             </p>
             <p>
-              <strong>Best move:</strong> translate your current experience into solar language. Highlight schedules, vendors, documentation,
-              budgets, permits, and customer communication. If you are coming from the field, learn plan reading, RFIs, material
-              takeoffs, and closeout documentation. Those are concrete signals that you are ready to support a PM.
+              <strong>Best move:</strong> translate your experience into
+              construction terms. Highlight schedules, vendors and budgets.
+              Include permits, documentation and customer communication. Field
+              workers should learn plan reading and RFIs. Material takeoffs and
+              closeout records are further evidence that you can support a PM.
             </p>
           </section>
 
@@ -443,11 +467,11 @@ export default function ArticlePage() {
         <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-6">
           <p className="font-semibold text-gray-900 mb-2">Keep reading</p>
           <p className="text-sm text-gray-600">
-            Get the full entry path in{' '}
-            <a href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</a>,
-            map the apprenticeship route with{' '}
-            <a href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">how to land a solar apprenticeship</a>,
-            and check{' '}
+            Read the full entry path in{' '}
+            <a href="/resources/how-to-become-a-solar-installer" className="text-blue-700 underline hover:text-blue-900">how to become a solar installer</a>.
+            Map the apprenticeship route with{' '}
+            <a href="/resources/how-to-get-a-solar-apprenticeship" className="text-blue-700 underline hover:text-blue-900">how to land a solar apprenticeship</a>.
+            Then check{' '}
             <a href="/data/salaries/solar-photovoltaic-installer" className="text-blue-700 underline hover:text-blue-900">installer salary by state</a>.
           </p>
         </div>

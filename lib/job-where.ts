@@ -11,7 +11,7 @@ import {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-export const ACTIVE_SOURCES = ['lever', 'adzuna', 'pinpoint', 'workable', 'employer', 'greenhouse', 'asby', 'workday'] as const
+export const ACTIVE_SOURCES = ['lever', 'adzuna', 'pinpoint', 'workable', 'employer', 'greenhouse', 'asby', 'workday', 'rippling', 'successfactors'] as const
 
 const STOPWORDS = new Set([
   'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',

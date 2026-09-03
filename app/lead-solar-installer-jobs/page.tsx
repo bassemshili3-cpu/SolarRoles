@@ -53,27 +53,27 @@ const jsonLd = {
 const leadRoles = [
   {
     title: 'Residential Crew Lead',
-    description: "Runs a 2 to 4 person crew through a full day's install, usually one system per day. Handles the walkthrough with the homeowner, assigns tasks on site, and signs off before the inspector shows up.",
+    description: "A residential lead runs a two- to four-person crew through one system per day. The lead assigns work and handles the homeowner walkthrough. Quality is checked before inspection.",
     icon: HardHat,
   },
   {
     title: 'Commercial Crew Lead',
-    description: "Oversees larger rooftop or carport jobs on a longer timeline, often over several days or weeks. Coordinates with the project manager, tracks progress against the schedule, and manages material deliveries on site.",
+    description: "Commercial leads oversee larger rooftops and carports for days or weeks. They coordinate with the project manager and track the schedule. Material deliveries also fall within the role.",
     icon: ClipboardCheck,
   },
   {
     title: 'Utility-Scale Foreman',
-    description: "Manages a crew on a ground-mount solar farm, often one of several foremen reporting to a superintendent. Responsible for daily production targets, safety compliance across the crew, and tracker or combiner install quality.",
+    description: "Utility foremen manage crews on ground-mount projects and report to a superintendent. They own daily production and safety. They also check tracker or combiner installation quality.",
     icon: Users,
   },
   {
     title: 'Working Foreman',
-    description: "Still on the tools most of the day, but responsible for the crew's output and quality. The most common entry point into leadership, usually the next step after 2 to 4 years as an installer.",
+    description: "A working foreman stays on the tools while owning crew output and quality. This is the most common first leadership role. Promotion usually follows two to four years as an installer.",
     icon: Award,
   },
   {
     title: 'Installation Supervisor',
-    description: "Oversees multiple crews rather than running one directly. Spends more time on scheduling, quality audits across sites, and training newer installers than on physical install work.",
+    description: "An installation supervisor oversees several crews instead of running one. The job centers on scheduling and quality audits. Training new installers replaces much of the physical work.",
     icon: ShieldCheck,
   },
 ]
@@ -82,7 +82,7 @@ const certifications = [
   {
     name: 'NABCEP PV Installation Professional',
     href: 'certifications/nabcep-pv-installation-professional',
-    description: "The credential most employers expect at this level, not just prefer. It requires documented field experience plus a technical exam, and signals you can be trusted to sign off on a crew's work.",
+    description: "Most employers expect this credential at the lead level. It requires documented field experience and a technical exam. The result supports responsibility for checking a crew's work.",
   },
   {
     name: 'OSHA 30',
@@ -95,7 +95,7 @@ const certifications = [
   },
   {
     name: 'Electrical License',
-    description: "Not universal, but increasingly common at the lead level, especially for crews doing their own final connections. A licensed electrician running the crew removes a dependency on a separate electrician showing up for hookup.",
+    description: "An electrical license appears more often at lead level, especially when crews handle final connections. A licensed crew lead can complete the hookup without waiting for a separate electrician.",
   },
   {
     name: 'First Aid / CPR',
@@ -106,15 +106,15 @@ const certifications = [
 const faqs = [
   {
     question: 'What does a lead installer do that a regular installer doesn\'t?',
-    answer: "Assigns work to the rest of the crew, checks racking and wiring against code before it's covered up, and is the point of contact for the customer, the inspector, or the project manager. On a residential crew, the lead is also usually still installing panels alongside everyone else.",
+    answer: "A lead assigns crew work and checks racking or wiring before it is covered. The lead also speaks with the customer, inspector and project manager. On residential crews, leads usually continue installing panels.",
   },
   {
     question: 'How much do lead installers and foremen earn?',
-    answer: "Lead installer pay typically starts around $58,000 to $65,000, ahead of the $51,860 median for general PV installers reported by the Bureau of Labor Statistics for May 2024. Experienced foremen on commercial or utility-scale crews commonly earn $75,000 to $90,000, and multi-crew supervisors can clear $95,000, particularly with an electrical license or prevailing-wage projects in the mix.",
+    answer: "Lead installer pay often starts around $58,000 to $65,000. BLS reported a $51,860 median for all PV installers in May 2024. Experienced commercial or utility foremen commonly earn $75,000 to $90,000. Multi-crew supervisors can clear $95,000, especially with an electrical license or prevailing-wage work.",
   },
   {
     question: 'Do you need NABCEP to become a lead installer?',
-    answer: "Most employers either require NABCEP PV Installation Professional or expect you to get it within the first year in the role. It's less about the certification itself and more about what it verifies: that you understand code requirements well enough to catch a mistake before it fails inspection.",
+    answer: "Most employers require NABCEP PV Installation Professional or expect it during the first year. The credential verifies enough code knowledge to catch mistakes before inspection.",
   },
   {
     question: 'How many years of experience does it usually take to get promoted to lead?',
@@ -202,7 +202,8 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><Award className="w-7 h-7 text-blue-600" /><h2 className="text-2xl font-bold text-gray-900">Certifications That Matter</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            At the lead level, certifications shift from "nice to have" to something employers screen for. These are the ones that come up most often in lead installer and foreman postings.
+            Lead-level postings screen for certifications directly. These are
+            the credentials that appear most often for installers and foremen.
           </p>
           <div className="space-y-4">
           {certifications.map((cert, index) => (
@@ -225,7 +226,9 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><DollarSign className="w-7 h-7 text-green-600" /><h2 className="text-2xl font-bold text-gray-900">Lead Installer Salary Ranges</h2></div>
           <p className="text-gray-600 mb-6 max-w-4xl">
-            Lead roles pay a clear step above general installer wages, which had a national median of $51,860 as of May 2024 per the Bureau of Labor Statistics. Actual pay depends on crew size, project type, and region.
+            Lead roles pay above the $51,860 national installer median reported
+            by BLS in May 2024. Crew size and project type change the offer.
+            Region matters too.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-5 text-center border border-gray-200">
@@ -249,7 +252,9 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
         <section className="mt-20">
           <div className="flex items-center gap-3 mb-6"><ClipboardCheck className="w-7 h-7 text-orange-500" /><h2 className="text-2xl font-bold text-gray-900">Job Outlook</h2></div>
           <p className="text-gray-600 max-w-4xl">
-            The Bureau of Labor Statistics projects 42% employment growth for solar photovoltaic installers between 2024 and 2034. As companies add crews to keep up, the number of lead installer and foreman openings grows roughly in step, since every new crew needs someone running it.
+            BLS projects 42% growth for solar PV installers from 2024 to 2034.
+            More crews create more lead and foreman openings. Every crew needs
+            someone responsible for the work.
           </p>
         </section>
 
@@ -273,23 +278,31 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
         <section className="mt-20 bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Related Roles &amp; Resources</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
-            Lead installer pay varies a lot by state and project type — see the numbers on our{' '}
+            Lead-installer pay changes by state and project type. See the
+            numbers on our{' '}
             <Link href="/data/salaries/lead-solar-installer" className="text-blue-700 underline hover:text-blue-900">Lead Solar Installer Salary by State</Link>{' '}
-            page. If you're exploring adjacent paths, browse{' '}
-            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>,{' '}
-            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>, or{' '}
+            page. Explore adjacent paths through{' '}
+            <Link href="/solar-pv-installer-jobs" className="text-blue-700 underline hover:text-blue-900">solar PV installer jobs</Link>.
+            You can also browse{' '}
+            <Link href="/solar-electrician-jobs" className="text-blue-700 underline hover:text-blue-900">solar electrician jobs</Link>{' '}
+            or{' '}
             <Link href="/solar-technician-jobs" className="text-blue-700 underline hover:text-blue-900">solar technician jobs</Link>.
-            To map which credentials unlock the jump to lead, our{' '}
+          </p>
+          <p className="text-gray-600 max-w-3xl mx-auto mb-6">
+            To map the credentials for a lead role, read{' '}
             <Link href="/resources/solar-certifications-by-job-role" className="text-blue-700 underline hover:text-blue-900">certifications by job role</Link>{' '}
-            guide and the{' '}
+            and the{' '}
             <Link href="/resources/nabcep-pvis-vs-pvip" className="text-blue-700 underline hover:text-blue-900">NABCEP PVIS vs PVIP comparison</Link>{' '}
-            are the right first reads.
+            .
           </p>
         </section>
 
         <section className="mt-20 border-t border-gray-200 pt-10">
           <p className="text-sm text-gray-500 max-w-4xl">
-            <strong>Disclaimer:</strong> Salary and outlook figures are drawn from Bureau of Labor Statistics data and represent national averages. Actual pay varies by employer, region, and experience. Verify certification and OSHA requirements directly with employers.
+            <strong>Disclaimer:</strong> Salary and outlook figures use Bureau
+            of Labor Statistics national data. Actual pay varies by employer,
+            region and experience. Verify certification and OSHA requirements
+            directly with employers.
           </p>
         </section>
       </div>

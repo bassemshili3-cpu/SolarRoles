@@ -1158,13 +1158,11 @@ export default function SolarInstallerCertification() {
 
 <div className="sr2-why-callout">
   <span className="heading"></span>
-  HeatSpring is recomended for solar training courses because their NABCEP PV Associate prep course reports an 88% first-time pass
-  rate — well above the exam's scaled passing score of 65 (out of 99),
-  which trips up a lot of self-taught candidates. HeatSpring also
-  guarantees a pass: if you don't clear the exam on your first attempt,
-  they cover your retake fee. That's the main reason we point to them
-  first. You also could check out our
-  our{" "}
+  HeatSpring reports an 88 percent first-attempt pass rate for its NABCEP PV
+  Associate course. The exam uses a scaled passing score of 65 out of 99.
+  Students who complete the course and fail their first attempt receive a free
+  retake. That guarantee is the main reason we recommend the program. You can
+  compare it with other options in our{" "}
   <Link href="/resources/nabcep-training-providers-compared">
     full breakdown of NABCEP training providers
   </Link>.
@@ -1211,9 +1209,9 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
 
           <p>
 
-           The answer is shorter than most people expect, and it varies by state.
-           No federal law requires a certification to install solar panels. What
-           can be legally required depends on where you work:
+           No federal law requires a professional certification to install
+           solar panels. State and local rules determine the legal
+           requirements. Depending on the work, those may include:
           </p>
           <ul>
             <li>a state electrical license for certain wiring tasks; and</li>
@@ -1222,13 +1220,12 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
 
           <p>
 
-           NABCEP works differently: it's a professional
-credential. Employers use it as a hiring filter, and insurers and
-utilities increasingly reference it on commercial projects. it's
-often what separates a $45k installer from a $60k lead. Your state
-license is what lets you legally sign off on wiring whereas your NABCEP
-credential is what tells an employer you're worth promoting past entry
-level.
+           NABCEP is a professional credential rather than a license.
+           Employers use it as a hiring filter. Insurers and utilities also
+           reference it on commercial projects. It often separates a $45k
+           installer from a $60k lead. A state license grants legal authority
+           for covered wiring work. NABCEP gives an employer evidence for
+           promotion beyond entry level.
 
           </p>
 
@@ -1237,23 +1234,20 @@ level.
 
           <p>
 
-            The clearest financial jump sits between OSHA 10 alone and
-
-            NABCEP PV Associate. Entry-level installers without the PVA
-
-            generally top out around $42k. Adding the PVA, which has no
-
-            field-experience prerequisite to sit the exam — moves the same
-
-            installer into the $45-55k band, often within the first year on
-
-            the crew.
+            The clearest early pay jump sits between OSHA 10 alone and NABCEP
+            PV Associate. Entry-level installers without PVA generally top out
+            around $42k. The PVA has no field-experience prerequisite. Adding
+            it can move the same installer into the $45–55k band during the
+            first year.
 
           </p>
 
           <p>
 
-            The next jump, from PVA to PVIP, is what separates lead installer pay from crew installer pay. PVIP holders typically land in the $60-75k range. That is consistent with BLS data showing the top 25% of solar PV installers earning $60k+ annually, with the highest 10% clearing $80k. See the breakdown in our{" "}
+            The move from PVA to PVIP separates many crew and lead-installer
+            pay bands. PVIP holders typically earn $60–75k. BLS data places
+            the top quarter of solar PV installers above $60k a year. The top
+            ten percent clear $80k. See the breakdown in our{" "}
 
             <Link href="/data/salaries/lead-solar-installer">
 
@@ -1283,7 +1277,12 @@ level.
 
           <p className="sr2-fine">
 
-            <strong>*Sources:</strong> Sources: BLS Occupational Employment and Wage Statistics, May 2024 (SOC 47-2231, Solar Photovoltaic Installers); BLS Occupational Outlook Handbook, 2024 edition; NABCEP 2024 Industry Survey Report; NABCEP accreditation status per ANSI National Accreditation Board (ANAB), ISO/IEC 17024 personnel certification directory. Pay levels reflect national wage distribution bands and vary by state, employer, and overtime. Certification and licensing requirements vary by state and change over time — this page is not legal advice.
+            <strong>*Sources:</strong> BLS Occupational Employment and Wage
+            Statistics for May 2024, SOC 47-2231; the 2024 BLS Occupational
+            Outlook Handbook; the NABCEP 2024 Industry Survey; and the ANAB
+            ISO/IEC 17024 personnel-certification directory. Pay varies by
+            state, employer and overtime. Licensing and certification rules
+            also change. This page is not legal advice.
 
           </p>
 

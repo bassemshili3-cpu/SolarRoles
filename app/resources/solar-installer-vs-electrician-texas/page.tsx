@@ -84,21 +84,24 @@ export default function SolarInstallerVsElectricianTexas() {
         <article className="sr2-article">
           <h2 id="gap"><span className="n">01</span>The Ad vs the Statute</h2>
           <p>
-Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer jobs</Link> in Texas are saying that crew members can handle DC side work such as racking, installing modules, and string wiring without an electrical license. A licensed electrician then takes care of the AC interconnection. But Texas law does not define the work that way.
-
+            Many Texas postings for <Link href="/solar-pv-installer-jobs">solar installer jobs</Link>{" "}
+            assign racking, module installation and string wiring to
+            unlicensed crew members. A licensed electrician handles the AC
+            interconnection. Texas law does not divide the work that way.
           </p>
 
           <h2 id="law"><span className="n">02</span>Texas Law Requirements</h2>
           <p>
             The Texas Electrical Safety and Licensing Act (Occupations Code
             Chapter 1305) defines &quot;electrical work&quot; broadly enough
-            to cover a full PV installation, and it does not carve out DC
-            circuits as a separate, lower-barrier category. TDLR&apos;s own
-            published guidance breaks a typical install into tasks. System
-            design, racking installation, module mounting, DC connections and
-            grounding, AC connections and grounding. It assigns the same
-            answer to every single one: licensed electrician, working through
-            a licensed Electrical Contractor.
+            to cover a full PV installation. It does not create a separate
+            lower-barrier category for DC circuits. TDLR guidance addresses
+            system design, racking, module mounting and electrical
+            connections.
+          </p>
+          <p>
+            Every task receives the same answer. A licensed electrician must
+            perform the work through a licensed Electrical Contractor.
           </p>
           <p>
             Transporting panels to the jobsite is the one task on that list
@@ -110,14 +113,15 @@ Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer
           <h2 id="myth"><span className="n">03</span>The DC-Side</h2>
           <p>
             A licensing guidance document prepared for the Texas Renewable
-            Energy Industries Association addresses this directly: some
-            installers assume DC-side work falls outside licensing
-            requirements, and TDLR guidance states plainly that this
-            assumption has no basis in the statute. General contractors who
-            bring in a licensed electrician only to pull the permit and
-            handle the AC interconnection, while unlicensed workers build out
-            the rest of the system, are described as out of compliance —
-            regardless of who touches the AC side.
+            Energy Industries Association addresses this point directly.
+            Some installers assume that DC-side work falls outside licensing
+            rules. TDLR states that the statute provides no basis for that
+            assumption.
+          </p>
+          <p>
+            A general contractor cannot use unlicensed workers for most of the
+            build and bring in an electrician only for the permit and AC
+            interconnection. The project remains out of compliance.
           </p>
           <div className="sr2-callout">
             <span className="kicker">Why this matters for job seekers</span>
@@ -134,12 +138,12 @@ Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer
           <h2 id="apprentice"><span className="n">04</span>The Legal Entry Point</h2>
           <p>
             Texas does have a route in without a full journeyman or master
-            license: the <Link href="/resources/how-to-get-a-solar-apprenticeship">Electrical Apprentice license</Link>. An apprentice can
-            perform electrical work, DC or AC, under the on-site supervision
-            of a Master Electrician, Journeyman Electrician, or Residential
-            Wireman. The supervisor is on the hook
-            for reviewing and inspecting the apprentice&apos;s work, and the
-            apprentice still needs the license itself before starting.
+            license: the <Link href="/resources/how-to-get-a-solar-apprenticeship">Electrical Apprentice license</Link>.
+            An apprentice may perform DC and AC electrical work under on-site
+            supervision. The supervisor must be a Master Electrician,
+            Journeyman Electrician or Residential Wireman. That person reviews
+            and inspects the apprentice&apos;s work. The apprentice must still
+            obtain the license before starting.
           </p>
 
           <h2 id="hunting"><span className="n">05</span>What This Means If You&apos;re Job Hunting</h2>
@@ -155,12 +159,11 @@ Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer
 
           <h2 id="next"><span className="n">06</span>What is next</h2>
           <p>
-            If you already hold an electrician&apos;s license or are working
-            toward one, browse current{" "}
+            If you hold an electrician&apos;s license or are working toward one,
+            browse current{" "}
             <Link href="/solar-electrician-jobs">Solar Electrician job openings</Link>{" "}
-            — these are the roles built around what Texas law
-            requires. If you&apos;re earlier in the process, the
-            TDLR apprentice application is the concrete first step; our{" "}
+            built around the work Texas law permits. Earlier in the process,
+            the TDLR apprentice application is the first concrete step. Our{" "}
             <Link href="/resources/how-to-become-a-solar-installer">
               solar installer guide
             </Link>{" "}
@@ -168,10 +171,10 @@ Plenty of job postings for <Link href="/solar-pv-installer-jobs">solar installer
           </p>
 
           <div className="sr2-fine">
-            This page summarizes TDLR guidance and the Texas Electrical
-            Safety and Licensing Act (Occupations Code Ch. 1305) as of August
-            2026. Municipal rules can add requirements on top of state law.
-            Verify current requirements directly with TDLR before making
+            This page reflects TDLR guidance and the Texas Electrical Safety
+            and Licensing Act as of August 2026. The relevant statute is
+            Occupations Code Chapter 1305. Municipal rules may add requirements
+            to state law. Verify the current position with TDLR before making
             employment or licensing decisions.
           </div>
         </article>

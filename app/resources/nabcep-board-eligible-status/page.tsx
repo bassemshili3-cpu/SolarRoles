@@ -422,32 +422,27 @@ export default function NabcepBoardEligibleStatus() {
         <article className="sr2-article">
           <h2 id="problem" className="sr2-first"><span className="n">01</span>The Problem It Solves</h2>
           <p>
-            The PV Installation Professional (PVIP) credential has always had a
-            circular requirement: employers want to see PVIP before they hand
-            someone a decision-making role on an install, but NABCEP has
-            historically required documented decision-making field experience
-            before you could even sit for the PVIP exam. That left a real gap
-            for career changers, recent grads, and installers who could pass
-            the exam today but hadn&apos;t yet been signed off as the person
-            making the calls on a job site.
+            The traditional PVIP route created a circular requirement.
+            Employers often wanted the credential before assigning
+            decision-making responsibility. NABCEP required documented
+            decision-making experience before a candidate could sit the exam.
+            Career changers, recent graduates and capable crew members could
+            get stuck between those two conditions.
           </p>
           <p>
             <strong>Board Eligible status is NABCEP&apos;s answer.</strong>{" "}
-            It decouples the exam from the experience: you can complete your
-            training and pass the PVIP exam first, then spend up to three
-            years accumulating the field experience NABCEP requires.
+            It separates the exam from the experience requirement. Candidates
+            can complete their training and pass the PVIP exam first. They then
+            have up to three years to build the required field experience.
           </p>
 
           <h2 id="how"><span className="n">02</span>How Board Eligible Works</h2>
           <p>
-            The sequence flips compared to the traditional PVIP pathway.
-            Instead of gathering experience first and sitting the exam last,
-            you complete your training hours and OSHA 10, pass the PVIP exam,
-            and become <strong>Board Eligible</strong> — a temporary status.
-            You are not yet Board Certified: you won&apos;t get the digital
-            badge or appear in NABCEP&apos;s Professional Directory until the
-            experience requirement is also met and your conversion
-            application is approved.
+            Board Eligible reverses the traditional sequence. Complete the
+            training hours and OSHA 10 first. Pass the PVIP exam next. NABCEP
+            then grants the temporary <strong>Board Eligible</strong> status.
+            The digital badge and Professional Directory listing come later,
+            after NABCEP approves the experience and conversion application.
           </p>
           <div className="sr2-compare">
             <div className="sr2-compare-card old">
@@ -472,9 +467,8 @@ export default function NabcepBoardEligibleStatus() {
 
           <h2 id="requirements"><span className="n">03</span>Requirements to Apply</h2>
           <p>
-            The training and exam side of Board Eligible is identical to the
-            standard PVIP requirements — this pathway changes the order
-            things happen in.
+            Board Eligible uses the same training and exam requirements as the
+            standard PVIP route. Only the order changes.
           </p>
           <ul className="sr2-checklist">
             <li>10 hours of OSHA Outreach Training for the Construction Industry (OSHA 10 or equivalent)</li>
@@ -483,11 +477,9 @@ export default function NabcepBoardEligibleStatus() {
             <li>Within 3 years of passing: 6 Project Credits documenting a decision-making role on completed, permitted, and inspected PV installations</li>
           </ul>
           <p>
-            One detail worth flagging: NABCEP also gives you a window to
-             sit the exam once you&apos;ve enrolled — one year, or up
-            to four attempts after your training course end-date, whichever
-            comes first. That clock is separate from the three-year
-            experience window that starts once you pass.
+            Enrollment starts a separate exam clock. Candidates have one year
+            or four attempts after the course end date, whichever comes first.
+            The three-year experience window begins only after a passing score.
           </p>
 
           <h2 id="timeline"><span className="n">04</span>Timeline &amp; Deadlines</h2>
@@ -523,17 +515,15 @@ export default function NabcepBoardEligibleStatus() {
             </tbody>
           </table>
           <p>
-            Project Credits scale with system size. A larger commercial or
-            utility-scale system counts for more than a single residential
-            install, so the six-credit threshold does not always mean six
-            separate jobs.
+            Project Credits scale with system size. A commercial or
+            utility-scale project may earn several credits. Reaching six
+            credits therefore does not always require six separate jobs.
           </p>
 
           <p>
-            If you&apos;re starting the training side of this now, HeatSpring&apos;s
-            PVIP prep bundle is built directly against NABCEP&apos;s current
-            job task analysis and covers the 58-hour advanced training
-            requirement in one package.
+            HeatSpring builds its PVIP prep bundle against NABCEP&apos;s current
+            Job Task Analysis. One package covers the 58-hour advanced training
+            requirement.
           </p>
           <div className="sr2-heatspring-cta">
             <AffiliateLink
@@ -550,9 +540,8 @@ export default function NabcepBoardEligibleStatus() {
 
           <h2 id="who"><span className="n">05</span>Who This Is For</h2>
           <p>
-            Board Eligible status is most useful for people who can prove
-            they know the material but haven&apos;t yet been the
-            decision-maker on a documented install:
+            Board Eligible is designed for candidates who know the material
+            but have not yet held a documented decision-making role:
           </p>
           <ul>
             <li>Career changers moving into solar from electrical, roofing, or general construction, who can pass a knowledge-based exam faster than they can accumulate decision-making field hours</li>
@@ -560,10 +549,9 @@ export default function NabcepBoardEligibleStatus() {
             <li>Recent graduates of solar training programs who want a credential to show employers while they build the experience side</li>
           </ul>
           <p>
-            It&apos;s less useful if you already have years of decision-making
-            field experience — in that case the traditional pathway gets you
-            to fully Board Certified in one pass, with no temporary status in
-            between.
+            Experienced decision-makers gain less from this route. The
+            traditional pathway can take them directly to Board Certified
+            status without a temporary stage.
           </p>
 
           <h2 id="mistakes"><span className="n">06</span>Common Mistakes</h2>
@@ -576,13 +564,12 @@ export default function NabcepBoardEligibleStatus() {
 
           <h2 id="next"><span className="n">07</span>Next Steps</h2>
           <p>
-            If you&apos;re still deciding whether PVIP or another credential
-            fits your stage, our{" "}
+            If you are still choosing a credential, our{" "}
             <Link href="/resources/how-to-get-nabcep-certified">
               guide to getting NABCEP certified
             </Link>{" "}
-            compares PV Associate, PVIP, and PVIS side by side. Once
-            you&apos;re Board Eligible or fully certified, browse current{" "}
+            {" "}compares PV Associate, PVIP and PVIS. Once you become Board
+            Eligible or fully certified, browse current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
             </Link>{" "}
@@ -590,11 +577,10 @@ export default function NabcepBoardEligibleStatus() {
           </p>
 
           <p className="sr2-fine">
-            NABCEP is an independent certification body and is not affiliated
-            with Solar Roles. Board Eligible requirements, deadlines, and
-            Project Credit thresholds are set by NABCEP and can change —
-            always confirm current requirements at nabcep.org before applying
-            or enrolling in a prep course.
+            NABCEP is an independent certification body with no affiliation to
+            Solar Roles. NABCEP sets Board Eligible requirements, deadlines
+            and Project Credit thresholds. Confirm current information at
+            nabcep.org before applying or enrolling in a prep course.
           </p>
         </article>
 

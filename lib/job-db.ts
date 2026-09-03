@@ -215,6 +215,8 @@ export const ATS_SOURCES = [
   'pinpoint',
   'workday',
   'workable',
+  'rippling',
+  'successfactors',
 ]
 
 const JOB_SELECT_ATS = {

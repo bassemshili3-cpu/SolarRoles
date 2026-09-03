@@ -755,19 +755,15 @@ export default function HowToBecomeASolarInstaller() {
         <article className="sr2-article">
           <h2 id="paths"><span className="n">01</span>Entry Pathways</h2>
           <p>
-            If you&apos;re figuring out how to become a solar installer,
-            there are four common routes into the job. Which one makes
-            sense depends on your background and how quickly you need to
-            start earning.
+            Four routes lead into solar installation. Your background and the
+            time you can spend before earning determine which one fits.
           </p>
         
          <p>
   <strong>Direct hire plus on-the-job training: </strong> 
-  A company hires you with no solar experience, pairs
-  you with an experienced crew, and you learn by doing. OJT typically
-  runs from one month to a year before you&apos;re working
-  independently. You get paid from day one, which is the main
-  advantage, but it comes with downsides that should be known:
+  A company hires you without solar experience and pairs you with a seasoned
+  crew. You learn while earning from the first day. Reaching independent work
+  can take one month to a year. This route also has tradeoffs:
 </p>
 <ul className="sr2-downsides">
   <li>Some states require or prefer NABCEP certification for installs to qualify for public incentives.</li>
@@ -782,9 +778,9 @@ export default function HowToBecomeASolarInstaller() {
             programs also include job placement.
           </p>
           <p>
-            <strong>A registered apprenticeship: </strong> Structured, paid,
-            and slower. You earn while you accumulate documented hours that
-            count toward a NABCEP credential later. Our{" "}
+            <strong>A registered apprenticeship: </strong> This route is paid
+            and highly structured. It also takes longer. Your documented hours
+            can support a later NABCEP credential. Our{" "}
             <Link href="/resources/how-to-get-a-solar-apprenticeship">
               guide to apprenticeship programs
             </Link>{" "}
@@ -797,18 +793,20 @@ export default function HowToBecomeASolarInstaller() {
           </p>
           <h2 id="nabcep"><span className="n">02</span>NABCEP Certification</h2>
           <p>
-           The NABCEP 2024 survey revealed that 36% of solar employers were ranking certifications
-           as the number one hiring criterion. What NABCEP does is signal to an employer that you
-            know the material without them having to take your word for it, and it becomes more relevant
-            as you aim for lead installer or electrician-adjacent roles.
+            In NABCEP's 2024 survey, 36 percent of solar employers ranked
+            certifications as their top hiring criterion. A credential gives
+            employers independent evidence of your knowledge. Its value rises
+            as you pursue lead installer or electrician-adjacent work.
           </p>
           <p>
             The PV Installation Professional certification requires 58
             documented training hours split across specific categories. The PV
-            Associate credential is the more common early milestone: no
-            experience prerequisite, and a reasonable target once you&apos;ve
-            got a few months on the tools — often the fastest credential to add once
-            you&apos;ve started down the path to becoming a solar installer.
+            Associate credential is the more common early milestone. It has no
+            experience prerequisite and becomes a realistic target after a few
+            months on the tools. It is often the fastest credential to add
+            after entering the trade.
+          </p>
+          <p>
             See our{" "}
             <Link href="/certifications">
               certifications by job role
@@ -816,15 +814,16 @@ export default function HowToBecomeASolarInstaller() {
             reference, and the{" "}
             <Link href="/resources/osha-safety-guide-solar-installers">
               OSHA safety guide
-            </Link>
+            </Link>.
           </p>
          
        <p>
-  <strong>HeatSpring</strong> is a NABCEP Registered Provider and the official PV Associate 
-  training partner for the 2026 NABCEP CE Conference. Courses are taught by instructors who
-  helped write the NABCEP exam content itself. Sean White, for example, contributed to the 
-  PV Installation Professional job task analysis. Their PV Associate program comes with a 
-  pass guarantee: if you don't clear the exam on the first attempt, the retake is free.
+  <strong>HeatSpring</strong> is a NABCEP Registered Provider and the PV
+  Associate training partner for the 2026 NABCEP CE Conference. Its instructors
+  include contributors to NABCEP exam content. Sean White worked on the PV
+  Installation Professional Job Task Analysis. HeatSpring also provides a free
+  retake when a student completes its PV Associate program and fails the first
+  attempt.
 </p>
 <div className="sr2-heatspring-cta">
  
@@ -841,8 +840,8 @@ export default function HowToBecomeASolarInstaller() {
 </p>
       <h2 id="pay"><span className="n">03</span>Compensation Overview</h2>
           <p className="sr2-h2-intro">
-            Three stages, three pay bands. The jump between them is almost
-            always tied to documented field hours + certification.
+            Three stages correspond to three broad pay bands. Documented field
+            hours and certification usually drive the move between them.
           </p>
           <div className="sr2-paygrid">
             <div className="sr2-paycard">
@@ -874,41 +873,34 @@ export default function HowToBecomeASolarInstaller() {
           </p>
           <h2 id="market"><span className="n">04</span>Skills & Qualifications</h2>
           <p>
-            Certification remains the strongest single signal in the hiring
-            process, but it is evaluated alongside a separate set of
-            practical criteria before a candidate is placed on a crew.
+            Certification is a strong hiring signal. Employers still evaluate
+            practical requirements before placing someone on a crew.
           </p>
           <p>
-            Physical capacity is assessed first because the role requires climbing
-            and carrying panels weighing 40–60 lbs on roofs or
-            racking systems for most of a shift. A valid driver&apos;s
-            license is commonly a hard requirement, as crews typically
-            travel to job sites together in a company vehicle. Familiarity
-            with basic hand tools — drill, impact driver, wire strippers,
-            multimeter is expected.
+            The work requires climbing and carrying 40–60 pound panels for much
+            of a shift. Employers therefore assess physical capacity early. A
+            valid driver's license is also common because crews travel between
+            sites together. Candidates should know how to use a drill, impact
+            driver, wire strippers and multimeter.
           </p>
           <p>
-            Attendance reliability is weighted heavily for entry-level
-            positions without a certification already in place, since
-            crew-based work depends on consistent staffing. Candidates who
-            arrive with NABCEP PV Associate or equivalent training typically
-            clear this initial screening faster, since certification
-            substitutes for much of what these criteria are designed to
-            verify.
+            Reliable attendance matters because every absence affects a crew.
+            Employers weigh it heavily in entry-level hiring. NABCEP PV
+            Associate or equivalent training can speed up the initial screen
+            by providing evidence of preparation.
           </p>
           <h2 id="brochure"><span className="n">05</span>Safety Considerations</h2>
           <p>
-            Falls are the leading cause of death in this trade. Federal workplace safety investigations have documented
-            fatal falls from roofs during solar installs where fall protection
-            was either not used or not in place at all.
-            That’s why proper fall protection training is so important in this industry.
+            Falls are the leading cause of death in this trade. Federal safety
+            investigations have documented fatal roof falls on solar projects
+            without effective protection. Proper fall-protection training is a
+            baseline requirement for the work.
           </p>
           <h2 id="growth"><span className="n">06</span>Career Progression</h2>
           <p>
-            Most installers who stay in the trade move up after one to three
-            years. Before that step, they need to run a small crew and troubleshoot
-            a wiring fault without escalating it.
-            Common next moves include:
+            Installers often move up after one to three years. Advancement
+            usually requires leading a small crew and troubleshooting wiring
+            faults without escalation. Common next moves include:
           </p>
           <ul>
             <li>lead installer or foreman;</li>
@@ -916,23 +908,19 @@ export default function HowToBecomeASolarInstaller() {
             <li>system design or commissioning.</li>
           </ul>
           <h2 id="mistakes"><span className="n">07</span>Common Early Mistakes</h2>
-          <p>
-            <strong>Skipping OSHA 10</strong> because an employer
-            doesn&apos;t require it yet. <strong>Not tracking training hours
-            from day one.</strong> <strong>Chasing a manufacturer
-            certification</strong> (Tesla, Enphase, SolarEdge) before having
-            NABCEP or a state license in place. See the full breakdown in the
-            next section.
-          </p>
+          <ul className="sr2-downsides">
+            <li>Skipping OSHA 10 because the current employer has not requested it.</li>
+            <li>Waiting to track training and field hours.</li>
+            <li>Pursuing a manufacturer credential before the broader qualification the role needs.</li>
+          </ul>
           <h2 id="next"><span className="n">08</span>Recommended Next Steps</h2>
           <p>
-            If you&apos;re ready to see what&apos;s being posted right
-            now, browse current{" "}
+            Browse current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
             </Link>{" "}
-            on Solar Roles. If you&apos;re still deciding between training
-            routes, the{" "}
+            on Solar Roles when you are ready to apply. If you are still
+            choosing a training route, the{" "}
             <Link href="/resources/solar-installer-apprenticeship-programs">
               apprenticeship guide
             </Link>{" "}
@@ -940,9 +928,8 @@ export default function HowToBecomeASolarInstaller() {
             <Link href="/resources/nabcep-training-providers-compared">
               NABCEP training provider comparison
             </Link>{" "}
-            are the two most useful next reads. Whichever path you take,
-            the fastest way to become a solar installer employers want to
-            hire is still pairing hands-on hours with a NABCEP credential.
+            are useful next reads. Whichever route you choose, pair hands-on
+            hours with a recognized credential.
           </p>
          
 
