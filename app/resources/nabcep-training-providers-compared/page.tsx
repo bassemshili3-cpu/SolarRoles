@@ -13,7 +13,7 @@ interface Provider {
 // Swap this for your real domain once, everything below reads from it.
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/nabcep-training-providers-compared";
-const PAGE_TITLE = "NABCEP Training Providers Compared (2026): HeatSpring vs Everblue vs SEI";
+const PAGE_TITLE = "HeatSpring vs Everblue vs SEI (NABCEP Training Providers Comparison)";
 const PAGE_DESCRIPTION =
   "An independent, updated comparison of NABCEP training providers, HeatSpring, Everblue, SEI, and in-person options, covering price, hours, and exam fees so you can pick the right path.";
 

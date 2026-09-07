@@ -12,7 +12,7 @@ const sora = Sora({
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-get-nabcep-certified";
 const PAGE_TITLE =
-  "How to Get NABCEP Certified (2026): PV Associate vs Installation Professional, Costs, and the Real Timeline";
+  "Must Know to Get NABCEP Certified: Credentials Comparison, and the Real Timeline";
 const PAGE_DESCRIPTION =
   "Learn how to get NABCEP certified in 2026: PV Associate vs PVIP, eligibility, exam format, costs, and a realistic study timeline.";
 export const metadata: Metadata = {

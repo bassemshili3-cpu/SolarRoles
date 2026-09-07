@@ -6,21 +6,34 @@ import { HardHat, ClipboardCheck, DollarSign, ShieldCheck, Award, Users } from '
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
 import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 
 export const revalidate = 3600
 
-export async function generateMetadata(): Promise<Metadata> {
-  const stats = await getRoleSalaryStats('lead-solar-installer')
+const LEAD_INSTALLER_LANDING_FILTERS = {
+  descriptionContainsAny: ['lead installer', 'installation foreman', 'crew lead', 'installation supervisor'],
+  titleContainsAny: ['lead', 'Lead'],
+}
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('lead-solar-installer'),
+    getLandingJobCount(LEAD_INSTALLER_LANDING_FILTERS),
+  ])
   const salarySuffix =
     stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
       ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
       : ''
 
   return {
-    title: salarySuffix
-      ? `Lead Solar Installer Jobs${salarySuffix}`
-      : 'Lead Solar Installer Jobs | Foreman & Crew Lead Positions',
+    title: withLandingJobCount(
+      salarySuffix
+        ? `Lead Solar Installer Jobs${salarySuffix}`
+        : 'Lead Solar Installer Jobs | Foreman & Crew Lead Positions',
+      jobCount,
+    ),
     description: 'Lead solar installer and foreman positions across the United States. Crew leadership roles with pay ranges, certification requirements, and what the job involves day to day.',
     keywords: 'lead solar installer jobs, solar foreman jobs, solar crew lead, installation supervisor solar, solar installation foreman, nabcep installation professional jobs',
     openGraph: {
@@ -33,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Lead Solar Installer Jobs',
       description: 'Find lead installer and foreman openings in solar across the US. Residential, commercial, and utility-scale employers hiring now.',
     },
-    alternates: { canonical: 'https://www.solarroles.com/lead-solar-installer-jobs' },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/lead-solar-installer-jobs', params) },
   }
 }
 
@@ -43,11 +56,6 @@ const jsonLd = {
   name: 'Lead Solar Installer Jobs',
   description: 'Lead solar installer and foreman job listings across the United States, covering residential, commercial, and utility-scale employers.',
   url: 'https://www.solarroles.com/lead-solar-installer-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Lead Solar Installer Jobs',
-    description: 'Current lead installer and foreman job listings',
-  },
 }
 
 const leadRoles = [
@@ -132,15 +140,16 @@ const faqs = [
 
 export default async function LeadSolarInstallerJobsPage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
 
   const initialData = await getJobs({
     // Scopes this landing page to leadership-level roles via a keyword
     // AND-filter, independent of the user's own `what` search box below —
     // same pattern used on /solar-pv-installer-jobs.
-    descriptionContainsAny: ['lead installer', 'installation foreman', 'crew lead', 'installation supervisor'],
-    titleContainsAny: ['lead', 'Lead'],
+    ...LEAD_INSTALLER_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -178,6 +187,8 @@ export default async function LeadSolarInstallerJobsPage({ searchParams }: any) 
     titleContainsAny= {['lead', 'Lead']}
                 whatJobsTitleIncludesAll={['lead', 'installer']}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
               />
             </Suspense>
           </div>

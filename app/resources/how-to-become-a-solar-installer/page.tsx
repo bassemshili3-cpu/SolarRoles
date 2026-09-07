@@ -12,7 +12,7 @@ const sora = Sora({
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-become-a-solar-installer";
 const PAGE_TITLE =
-  "How to Become a Solar Installer (2026): Real Timeline, Pay, and What the Job Is Like";
+  "How to Become a Solar Installer in 2026: Timeline & Salary Expectations";
 const PAGE_DESCRIPTION =
   "Learn how to become a solar installer in 2026: entry pathways, NABCEP certification, real pay by stage, and what the job is like.";
 export const metadata: Metadata = {

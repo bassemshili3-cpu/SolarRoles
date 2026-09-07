@@ -1,0 +1,2141 @@
+{
+  "date": "2026-09-06",
+  "extractedAt": "2026-09-06T15:05:49.352Z",
+  "activeJobs": 2014,
+  "keywordCandidates": 276,
+  "excludedCandidates": 193,
+  "screenedGroups": 55,
+  "incompleteGroups": 1,
+  "groups": 54,
+  "advertisers": 30,
+  "recordCount": 82,
+  "recordTravelCount": 59,
+  "travelCount": 40,
+  "travelShare": 74.1,
+  "categoryCounts": {
+    "quantified": 14,
+    "unquantified": 25,
+    "conflicting": 1,
+    "not_stated": 11,
+    "field": 2,
+    "office": 1,
+    "incomplete": 0
+  },
+  "rows": [
+    {
+      "company": "Moss",
+      "title": "Solar Engineering Lead - Preliminary Design",
+      "ids": [
+        "adzuna-5620625349"
+      ],
+      "remoteEvidence": "eded to support project execution, up to 20-25% travel - if remote. Work hard, be nice, and have fun! JOB TITLE: ASSOC IATE , SME, ENGINEERING SERVICES (P RELIMINARY DESIGN) JOB LOCATION: FORT LAUDERDALE, FL , HYBRID, OR REMOTE CLASSIFICATI",
+      "travelEvidence": "up to 20-25% travel - if remote",
+      "travelKind": "quantified",
+      "min": null,
+      "max": 25,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Up to 20–25%",
+      "qualifier": "ceiling",
+      "reviewed": true,
+      "id": "role-01",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5620625349",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5620625349",
+      "sources": [
+        {
+          "id": "adzuna-5620625349",
+          "url": "https://www.adzuna.com/details/5620625349",
+          "location": "Fort Lauderdale, Broward County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:02:49.159Z",
+          "textSha256": "3532368c8e85fa14869c0de5ad0ebb621a135fdfd3dfcf5c4900495840e1280e"
+        }
+      ]
+    },
+    {
+      "company": "FindTalent",
+      "title": "Solar Project Manager",
+      "ids": [
+        "adzuna-5655765763"
+      ],
+      "remoteEvidence": "n, closeout, and client handoff. While this position offers remote flexibility, regular travel to active project sites is required. The ideal candidate is a strong leader with expertise in electrical construction, contract management, budge",
+      "travelEvidence": "regular travel to active project sites is required",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Regular site travel",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-02",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5655765763",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5655765763",
+      "sources": [
+        {
+          "id": "adzuna-5655765763",
+          "url": "https://www.adzuna.com/details/5655765763",
+          "location": "Green Bay, Brown County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:56.619Z",
+          "textSha256": "451bf5f3d4728956c052c05b0a4d1d6cc21f17334c5d683f102be9f0eca62a81"
+        }
+      ]
+    },
+    {
+      "company": "EVS",
+      "title": "Technical Civil Solar Project Manager",
+      "ids": [
+        "adzuna-5674837370"
+      ],
+      "remoteEvidence": "SOLAR PROJECT MANAGER Location: Eden Prairie, MN | Hybrid | Remote Schedule: Full-Time Salary: $100,000 – $140,000 (based on experience) EVS is seeking a Technical Civil Solar Project Manager to support the planning, coordination, and execu",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-03",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5674837370",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5674837370",
+      "sources": [
+        {
+          "id": "adzuna-5674837370",
+          "url": "https://www.adzuna.com/details/5674837370",
+          "location": "Eden Prairie, Hennepin County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:20.420Z",
+          "textSha256": "2cce524e1963d54a7bdf5887c87ac80b5f4e748bfe3efeea442566e5998ceb27"
+        }
+      ]
+    },
+    {
+      "company": "J.Riley Recruitment",
+      "title": "Project Manager - Solar & Renewable Energy",
+      "ids": [
+        "adzuna-5686913212"
+      ],
+      "remoteEvidence": "ects across the country. The role offers the flexibility of remote work combined with field engagement, exposure to utility-scale solar projects, and the ability to lead impactful work in a growing sector. About J.Riley Recruitment J.Riley",
+      "travelEvidence": "Travel to project sites regularly",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Regular site travel",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-04",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5686913212",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5686913212",
+      "sources": [
+        {
+          "id": "adzuna-5686913212",
+          "url": "https://www.adzuna.com/details/5686913212",
+          "location": "Bexley, Franklin County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:25.767Z",
+          "textSha256": "25ea5ece0caa9797d8113c324c6f9d90479d0f2fafaa041a3ab2b3105c7161a3"
+        }
+      ]
+    },
+    {
+      "company": "Intertek",
+      "title": "PV Solar Engineer",
+      "ids": [
+        "adzuna-5699944770"
+      ],
+      "remoteEvidence": "Description PV Solar Engineer - Remote/Travel Based Position Intertek's Clean Energy Associates (CEA) serves as a trusted partner to some of the world’s leading solar project developers, owners and financiers, pr",
+      "travelEvidence": "This position requires over 80% of travel.",
+      "travelKind": "conflicting",
+      "min": null,
+      "max": null,
+      "notes": "The same description says both over 80% and up to 80%. Excluded from consistent percentage comparisons.",
+      "remoteSource": "description",
+      "travelLabel": "Over 80%; elsewhere up to 80%",
+      "qualifier": "conflicting",
+      "reviewed": true,
+      "id": "role-05",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5699944770",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5699944770",
+      "sources": [
+        {
+          "id": "adzuna-5699944770",
+          "url": "https://www.adzuna.com/details/5699944770",
+          "location": "Rolling Meadows, Cook County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:32:49.736Z",
+          "textSha256": "43fa6d8d6c0c7a5c5e304a860c2b550af26b1328d5c13b8a980a22574d866235"
+        }
+      ]
+    },
+    {
+      "company": "Cypress Creek Renewables",
+      "title": "QA/QC Solar Technician",
+      "ids": [
+        "adzuna-5711376023"
+      ],
+      "remoteEvidence": "nd corrective maintenance on solar PV systems. This role is remote, ideally based in North Carolina, with extensive travel required to job sites nationwide. Essential Duties and Responsibilities: Conduct on-site inspections and evaluations",
+      "travelEvidence": "extensive travel (90% required)",
+      "travelKind": "quantified",
+      "min": 90,
+      "max": 90,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "90%",
+      "qualifier": "stated",
+      "reviewed": true,
+      "id": "role-06",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5711376023",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5711376023",
+      "sources": [
+        {
+          "id": "adzuna-5711376023",
+          "url": "https://www.adzuna.com/details/5711376023",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T08:59:30.611Z",
+          "textSha256": "f30eb9ef6067747ab24d81462e542fd96ee05257c4ed169a2a1c57da6bbda542"
+        }
+      ]
+    },
+    {
+      "company": "US Tech Solutions",
+      "title": "BESS Engineer",
+      "ids": [
+        "adzuna-5716327612"
+      ],
+      "remoteEvidence": "e the energy storage field. Juno Beach (preferred); Open to remote only for strong candidates willing to include additional travel % dedicated to in office visits. Duties & Responsibilities Support design phase and engineer major components",
+      "travelEvidence": "Travel 25% of the time for project specific duties.",
+      "travelKind": "quantified",
+      "min": 25,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "25% + additional office visits",
+      "qualifier": "stated_plus",
+      "reviewed": true,
+      "id": "role-07",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5716327612",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5716327612",
+      "sources": [
+        {
+          "id": "adzuna-5716327612",
+          "url": "https://www.adzuna.com/details/5716327612",
+          "location": "Juno Beach, Palm Beach County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:11.797Z",
+          "textSha256": "af4adbb2eb454cfe578f6a02e53a57f5c05694d2caf697369dc557e30fd353f3"
+        }
+      ]
+    },
+    {
+      "company": "Green House",
+      "title": "Solar Sales Representative",
+      "ids": [
+        "adzuna-5726560254"
+      ],
+      "remoteEvidence": "(1099) – Unlimited Earning Potential! Location: NJ/NY/PA – Remote/Field-Based | Compensation: Commission-Only ($150K for Top Performers) Green House Solar is growing – and we’re looking for superstar sales reps ready to build a high-income",
+      "travelEvidence": "Remote/Field-Based",
+      "travelKind": "field",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Field-based; frequency unspecified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-08",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5726560254",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5726560254",
+      "sources": [
+        {
+          "id": "adzuna-5726560254",
+          "url": "https://www.adzuna.com/details/5726560254",
+          "location": "Madison, Morris County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:32:26.082Z",
+          "textSha256": "efa201cd36713dabc0ecd29ec8fbf1087a6055084e2b31cabecb6a8e6382fa22"
+        }
+      ]
+    },
+    {
+      "company": "Origis Energy",
+      "title": "Solar EPC Project Manager or Senior Project Manager - Grid Power",
+      "ids": [
+        "adzuna-5787830500"
+      ],
+      "remoteEvidence": "ke timely and sound decisions Location Austin TX; Miami FL; remote considered for the right candidate Travel Up to 40% travel as needed Job Level Manager or Senior Project Manager depending on candidate - no direct reports Origis Energy is",
+      "travelEvidence": "Up to 40% travel as needed",
+      "travelKind": "quantified",
+      "min": null,
+      "max": 40,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Up to 40%",
+      "qualifier": "ceiling",
+      "reviewed": true,
+      "id": "role-09",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5787830500",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5787830500",
+      "sources": [
+        {
+          "id": "adzuna-5787830500",
+          "url": "https://www.adzuna.com/details/5787830500",
+          "location": "Austin, Travis County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-08T12:25:53.534Z",
+          "textSha256": "9e095d0a9102b3d7d8e40e42c57dae05d4e6601e64868285960cbb5dbc335148"
+        }
+      ]
+    },
+    {
+      "company": "Birch Creek Energy",
+      "title": "Project Manager (utility-scale solar development)",
+      "ids": [
+        "adzuna-5792169714"
+      ],
+      "remoteEvidence": "main offices are located in St. Louis (HQ) and Los Angeles. Remote-work candidates are welcome. Summary Under the direction of the Vice President of Execution, the Project Manager is responsible for managing all aspects and phases of multip",
+      "travelEvidence": "Occasional travel may be required for site visits",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Occasional travel may be required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-10",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5792169714",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5792169714",
+      "sources": [
+        {
+          "id": "adzuna-5792169714",
+          "url": "https://www.adzuna.com/details/5792169714",
+          "location": "Saint Louis, Saint Louis County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:31.670Z",
+          "textSha256": "6f02381756d0a969e74513e1e42c3e9facf34018dec33db99a0f27a214d36412"
+        }
+      ]
+    },
+    {
+      "company": "Doral Renewables",
+      "title": "Project Manager (Project Management) Utility Scale Solar",
+      "ids": [
+        "adzuna-5799457833"
+      ],
+      "remoteEvidence": "ugh commercial operation of the facility. This role will be remote, but the ideal candidate must be able to travel to project sites up to 25% of the time. Responsibilities Support the EPC selection process, contract execution (including exh",
+      "travelEvidence": "Ability to travel up to 25% of the time.",
+      "travelKind": "quantified",
+      "min": null,
+      "max": 25,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Up to 25%",
+      "qualifier": "ceiling",
+      "reviewed": true,
+      "id": "role-11",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5799457833",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5799457833",
+      "sources": [
+        {
+          "id": "adzuna-5799457833",
+          "url": "https://www.adzuna.com/details/5799457833",
+          "location": "Penn Ctr, Philadelphia County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:32.601Z",
+          "textSha256": "efd79c0d6a26abd3f9ed82007b683acefe48a4552e492e336f9ed6f81560b9bf"
+        }
+      ]
+    },
+    {
+      "company": "Keystone Clearwater Solutions",
+      "title": "Senior Project Manager – Solar Construction",
+      "ids": [
+        "adzuna-5806114144"
+      ],
+      "remoteEvidence": "ading solar EPC organization. This position is eligible for remote work. However, preference will be given to candidates located in the Northeast or along the East Coast, particularly those within or near our primary operating regions. Resp",
+      "travelEvidence": "Ability to travel to project sites as needed",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Site travel as needed",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-12",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5806114144",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5806114144",
+      "sources": [
+        {
+          "id": "adzuna-5806114144",
+          "url": "https://www.adzuna.com/details/5806114144",
+          "location": "Swatara Sta, Dauphin County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:24.642Z",
+          "textSha256": "021be114a808ba31d37fce0c34d9f58ec25a5a46c02fb5332cf5b70fb30e6a1a"
+        }
+      ]
+    },
+    {
+      "company": "Jobot",
+      "title": "Solar Project Manager - Community Solar (REMOTE)",
+      "ids": [
+        "adzuna-5821420492",
+        "adzuna-5821420544",
+        "adzuna-5821420668",
+        "adzuna-5821420862",
+        "adzuna-5836706084",
+        "adzuna-5851404509",
+        "adzuna-5851404654",
+        "adzuna-5851404815",
+        "adzuna-5851862886"
+      ],
+      "remoteEvidence": "Solar Project Manager - Community Solar (REMOTE) | Houston, Harris County",
+      "travelEvidence": "minimal travel (once/month to job sites",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Monthly site visits",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-13",
+      "listingCount": 9,
+      "sourceUrl": "https://www.adzuna.com/details/5821420492",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5821420492",
+      "sources": [
+        {
+          "id": "adzuna-5821420492",
+          "url": "https://www.adzuna.com/details/5821420492",
+          "location": "Houston, Harris County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:16.946Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5821420544",
+          "url": "https://www.adzuna.com/details/5821420544",
+          "location": "Orlando, Orange County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:17.129Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5821420668",
+          "url": "https://www.adzuna.com/details/5821420668",
+          "location": "Dallas, Texas",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:17.312Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5821420862",
+          "url": "https://www.adzuna.com/details/5821420862",
+          "location": "Denver, Colorado",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:17.495Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5836706084",
+          "url": "https://www.adzuna.com/details/5836706084",
+          "location": "New York City, New York",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:19.496Z",
+          "textSha256": "2ba65ea0d3fa6b62a52cf14d783c49b24c5d1a1fd500e55aed0e1539d41a8f84"
+        },
+        {
+          "id": "adzuna-5851404509",
+          "url": "https://www.adzuna.com/details/5851404509",
+          "location": "Dallas, Texas",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:19.685Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5851404654",
+          "url": "https://www.adzuna.com/details/5851404654",
+          "location": "Denver, Colorado",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:19.314Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5851404815",
+          "url": "https://www.adzuna.com/details/5851404815",
+          "location": "Orlando, Orange County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:19.868Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        },
+        {
+          "id": "adzuna-5851862886",
+          "url": "https://www.adzuna.com/details/5851862886",
+          "location": "Houston, Harris County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:20.052Z",
+          "textSha256": "51b4ac1c3aa70a07214a3fe098c386a05d9641a8c196148b153f85a8d1853dac"
+        }
+      ]
+    },
+    {
+      "company": "Rise Technical Recruitment",
+      "title": "Project Manager",
+      "ids": [
+        "adzuna-5827229918",
+        "adzuna-5866122441"
+      ],
+      "remoteEvidence": "O 401(k) Match Additional Benefits Clear Career Progression Remote from Pennsylvania Are you an experienced Project Manager or Engineer from an EPC or energy construction background looking for the opportunity to take ownership of major ren",
+      "travelEvidence": "work remotely with travel to project sites",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Site travel; frequency unspecified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-14",
+      "listingCount": 2,
+      "sourceUrl": "https://www.adzuna.com/details/5827229918",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5827229918",
+      "sources": [
+        {
+          "id": "adzuna-5827229918",
+          "url": "https://www.adzuna.com/details/5827229918",
+          "location": "Pennsylvania, US",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-30T11:56:15.653Z",
+          "textSha256": "f73647fecd3c10f57a964123115bbaa4ac1359b648fa7ec7a4a68d255412d154"
+        },
+        {
+          "id": "adzuna-5866122441",
+          "url": "https://www.adzuna.com/details/5866122441",
+          "location": "Pennsylvania, US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:43.430Z",
+          "textSha256": "f73647fecd3c10f57a964123115bbaa4ac1359b648fa7ec7a4a68d255412d154"
+        }
+      ]
+    },
+    {
+      "company": "DEPCOM Power",
+      "title": "Estimator",
+      "ids": [
+        "adzuna-5831013479",
+        "adzuna-5831958425"
+      ],
+      "remoteEvidence": "uston, TX office, requiring 10% travel for site visits. For remote employees, this role will involve 25% travel, which includes monthly trips to Scottsdale for meetings with internal teams as well as attending site visits. Please note that",
+      "travelEvidence": "For remote employees, this role will involve 25% travel",
+      "travelKind": "quantified",
+      "min": 25,
+      "max": 25,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "25%",
+      "qualifier": "stated",
+      "reviewed": true,
+      "id": "role-15",
+      "listingCount": 2,
+      "sourceUrl": "https://www.adzuna.com/details/5831013479",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5831013479",
+      "sources": [
+        {
+          "id": "adzuna-5831013479",
+          "url": "https://www.adzuna.com/details/5831013479",
+          "location": "Scottsdale, Maricopa County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-08T12:26:28.934Z",
+          "textSha256": "9ec0d894e409ba6df262c8df00baaa692f04433d7782782b92d6e214824bb179"
+        },
+        {
+          "id": "adzuna-5831958425",
+          "url": "https://www.adzuna.com/details/5831958425",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-08T12:26:29.128Z",
+          "textSha256": "0fff1cacbbdaff5d781e593e178ca04e4188867e457b6da849690cb3b429b453"
+        }
+      ]
+    },
+    {
+      "company": "A2B DEVELOPMENT",
+      "title": "Sr. Project Manager - C&I",
+      "ids": [
+        "adzuna-5831499061"
+      ],
+      "remoteEvidence": "Senior Project Manager MARS Energy Solutions | Remote – U.S.-Based Candidates Job Summary MARS Energy Solutions is seeking an experienced Senior Project Manager to lead the execution of commercial and industrial solar projects",
+      "travelEvidence": "Ability to travel to local job sites up to 20%",
+      "travelKind": "quantified",
+      "min": null,
+      "max": 20,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Up to 20% (local)",
+      "qualifier": "ceiling",
+      "reviewed": true,
+      "id": "role-16",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5831499061",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5831499061",
+      "sources": [
+        {
+          "id": "adzuna-5831499061",
+          "url": "https://www.adzuna.com/details/5831499061",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:27.054Z",
+          "textSha256": "a71423119a35e02b00eeaaec8affaa67bcdd9e6a06d1fee2990b8d563a8bc50f"
+        }
+      ]
+    },
+    {
+      "company": "EDF power solutions",
+      "title": "Senior Solar Design Engineer [Remote]",
+      "ids": [
+        "adzuna-5836797425"
+      ],
+      "remoteEvidence": "Senior Solar Design Engineer [Remote] | US",
+      "travelEvidence": "occasional site visits may be performed",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Occasional site visits possible",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-17",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5836797425",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5836797425",
+      "sources": [
+        {
+          "id": "adzuna-5836797425",
+          "url": "https://www.adzuna.com/details/5836797425",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:32:57.487Z",
+          "textSha256": "732bb2cef79b77b0e8d98ed7df2ab4ead1c1f4deda98ae3be46a47113c30865e"
+        }
+      ]
+    },
+    {
+      "company": "EDF power solutions",
+      "title": "Utility Scale Solar & BESS Project Manager [Hybrid]",
+      "ids": [
+        "adzuna-5836797433"
+      ],
+      "remoteEvidence": "sed in either our Columbia, MD or West Lebanon, NH offices. Remote may be considered for exceptional candidates located in select east coast/mid-Atlantic states. Salary Range The full pay range for this role is $105,100 - 175,100 per year.",
+      "travelEvidence": "approximately 25% of overall work time",
+      "travelKind": "quantified",
+      "min": 25,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Approximately 25% + other possible trips",
+      "qualifier": "approximate_plus",
+      "reviewed": true,
+      "id": "role-18",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5836797433",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5836797433",
+      "sources": [
+        {
+          "id": "adzuna-5836797433",
+          "url": "https://www.adzuna.com/details/5836797433",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:24.839Z",
+          "textSha256": "c4a5c93344b1751800d0ba258b9d5b40d102c7d0d5ed9c13997aaa81ee954bd0"
+        }
+      ]
+    },
+    {
+      "company": "Jobot",
+      "title": "Solar / EPC Project Manager",
+      "ids": [
+        "adzuna-5841840200",
+        "adzuna-5841840294",
+        "adzuna-5841847369",
+        "adzuna-5841847371",
+        "adzuna-5841847431",
+        "adzuna-5841847522",
+        "adzuna-5841847531",
+        "adzuna-5841847579"
+      ],
+      "remoteEvidence": "Fully-Covered Family Healthcare | 100% Remote | Solar/EPC Project Manager Opportunity! This Jobot Job is hosted by: David DeCristofaro Are you a fit? Easy Apply now by clicking the \"Quick Apply\" button and sending us yo",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-19",
+      "listingCount": 8,
+      "sourceUrl": "https://www.adzuna.com/details/5841840200",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5841840200",
+      "sources": [
+        {
+          "id": "adzuna-5841840200",
+          "url": "https://www.adzuna.com/details/5841840200",
+          "location": "Bozeman, Gallatin County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:14.207Z",
+          "textSha256": "836a1b684077dcc16881b8530c329260d0bd68bc614b1302ab9a9cd1ce99edd0"
+        },
+        {
+          "id": "adzuna-5841840294",
+          "url": "https://www.adzuna.com/details/5841840294",
+          "location": "Los Angeles, Los Angeles County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:26.867Z",
+          "textSha256": "df0bc13383e499dd1a01a29a5f0627bbef97b4bdd93f4bea7e1fdc707067ea2c"
+        },
+        {
+          "id": "adzuna-5841847369",
+          "url": "https://www.adzuna.com/details/5841847369",
+          "location": "Salt Lake City, Salt Lake County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:14.389Z",
+          "textSha256": "836a1b684077dcc16881b8530c329260d0bd68bc614b1302ab9a9cd1ce99edd0"
+        },
+        {
+          "id": "adzuna-5841847371",
+          "url": "https://www.adzuna.com/details/5841847371",
+          "location": "Seattle, King County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:14.572Z",
+          "textSha256": "836a1b684077dcc16881b8530c329260d0bd68bc614b1302ab9a9cd1ce99edd0"
+        },
+        {
+          "id": "adzuna-5841847431",
+          "url": "https://www.adzuna.com/details/5841847431",
+          "location": "Phoenix, Maricopa County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:14.755Z",
+          "textSha256": "836a1b684077dcc16881b8530c329260d0bd68bc614b1302ab9a9cd1ce99edd0"
+        },
+        {
+          "id": "adzuna-5841847522",
+          "url": "https://www.adzuna.com/details/5841847522",
+          "location": "Idaho City, Boise County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:27.416Z",
+          "textSha256": "df0bc13383e499dd1a01a29a5f0627bbef97b4bdd93f4bea7e1fdc707067ea2c"
+        },
+        {
+          "id": "adzuna-5841847531",
+          "url": "https://www.adzuna.com/details/5841847531",
+          "location": "Albuquerque, Bernalillo County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:27.050Z",
+          "textSha256": "df0bc13383e499dd1a01a29a5f0627bbef97b4bdd93f4bea7e1fdc707067ea2c"
+        },
+        {
+          "id": "adzuna-5841847579",
+          "url": "https://www.adzuna.com/details/5841847579",
+          "location": "Denver, Colorado",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:27.233Z",
+          "textSha256": "df0bc13383e499dd1a01a29a5f0627bbef97b4bdd93f4bea7e1fdc707067ea2c"
+        }
+      ]
+    },
+    {
+      "company": "DEPCOM Power",
+      "title": "Civil Estimator",
+      "ids": [
+        "adzuna-5842336977",
+        "adzuna-5846534777"
+      ],
+      "remoteEvidence": "ton, TX, Scottsdale, AZ, or Bedminster, NJ office; however, remote work within the U.S. is an option. This position is not eligible for VISA Sponsorship. What You Will Do As a Civil Estimator at DEPCOM Power, you will help develop accurate,",
+      "travelEvidence": "Conduct site visits as needed",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Site visits as needed",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-20",
+      "listingCount": 2,
+      "sourceUrl": "https://www.adzuna.com/details/5842336977",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5842336977",
+      "sources": [
+        {
+          "id": "adzuna-5842336977",
+          "url": "https://www.adzuna.com/details/5842336977",
+          "location": "Scottsdale, Maricopa County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:51.612Z",
+          "textSha256": "f071752dc5ddf04f2e15c5d7f1124a2e44d72356319c93e36f8de870e50ab11a"
+        },
+        {
+          "id": "adzuna-5846534777",
+          "url": "https://www.adzuna.com/details/5846534777",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:54.549Z",
+          "textSha256": "bc6fad452e8e92e2b482d70540c91a8f244fe5854b6877b51b3433ab472291b1"
+        }
+      ]
+    },
+    {
+      "company": "Mortenson",
+      "title": "Senior Construction Electrical Project Manager I- Solar",
+      "ids": [
+        "adzuna-5846390585"
+      ],
+      "remoteEvidence": "nce, with consideration given to internal equity. LI-GL1 LI-remote IND-GNL Please make note: Visa sponsorship is not offered for this position. Our postings are typically open a minimum of 5 days and an average of 44 days. ABOUT MORTENSON A",
+      "travelEvidence": "Travel: Up to 50% of the time",
+      "travelKind": "quantified",
+      "min": null,
+      "max": 50,
+      "notes": "Remote evidence is an LI-remote tag; the body names headquarters or a regional office. Not proof of unrestricted home working.",
+      "remoteSource": "description",
+      "travelLabel": "Up to 50%",
+      "qualifier": "ceiling",
+      "reviewed": true,
+      "id": "role-21",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5846390585",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5846390585",
+      "sources": [
+        {
+          "id": "adzuna-5846390585",
+          "url": "https://www.adzuna.com/details/5846390585",
+          "location": "Minnesota, US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:28.983Z",
+          "textSha256": "f6318163fd0a897ce12b241f29797a2b4613650b741b9b497dedf35dd76044a9"
+        }
+      ]
+    },
+    {
+      "company": "DEPCOM Power",
+      "title": "Electrical Estimator",
+      "ids": [
+        "adzuna-5850778217"
+      ],
+      "remoteEvidence": "is ideally based in Scottsdale, AZ or Bedminster, NJ, with remote options available within the U.S. This position is not eligible for visa sponsorship. What You Will Do Refine electrical estimating processes and templates to improve accura",
+      "travelEvidence": "Conduct site visits as needed",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Site visits as needed",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-22",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5850778217",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5850778217",
+      "sources": [
+        {
+          "id": "adzuna-5850778217",
+          "url": "https://www.adzuna.com/details/5850778217",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:57.925Z",
+          "textSha256": "c6c3e5a431c17b5ef8c310e1db9001b782554fc2d29803317ab185a30ea58db1"
+        }
+      ]
+    },
+    {
+      "company": "LPL Solar",
+      "title": "Engineering Project Manager",
+      "ids": [
+        "adzuna-5858897080",
+        "adzuna-5860845485"
+      ],
+      "remoteEvidence": "Project Job Title: Project Manager - Engineering Location: Remote Job Type: Full-Time Reports To: Director of Engineering (or designated Engineering Manager) LPL Solar is a self-perform solar EPC (Engineering, Procurement, and Construction",
+      "travelEvidence": "Ability to travel as required to support client meetings and project needs.",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Travel as required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-23",
+      "listingCount": 2,
+      "sourceUrl": "https://www.adzuna.com/details/5858897080",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5858897080",
+      "sources": [
+        {
+          "id": "adzuna-5858897080",
+          "url": "https://www.adzuna.com/details/5858897080",
+          "location": "Fort Lauderdale, Broward County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:03.274Z",
+          "textSha256": "91d2b26806162b858c5808f5d5312e5db6bb898f57e541a87c9e8f8cc8e26013"
+        },
+        {
+          "id": "adzuna-5860845485",
+          "url": "https://www.adzuna.com/details/5860845485",
+          "location": "Port Everglades, Broward County",
+          "source": "adzuna",
+          "fetchedAt": "2026-09-02T12:33:03.657Z",
+          "textSha256": "e9addd438b84b2f45a9440b7900f2d88087a451decf73fe9ba1c8061400dfcc4"
+        }
+      ]
+    },
+    {
+      "company": "Consolidated Electrical Distributors",
+      "title": "Commercial Solar Design Project Lead",
+      "ids": [
+        "adzuna-5861738016"
+      ],
+      "remoteEvidence": "or similar preliminary design software Working Conditions: Remote work on a small team, with multiple weekly check-ins Work standard business hours of 8am to 5pm within your time zone or within the time zone of the Division assigned Travel",
+      "travelEvidence": "Travel to a Greentech or customer location at least once per week",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "At least weekly visits",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-24",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5861738016",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5861738016",
+      "sources": [
+        {
+          "id": "adzuna-5861738016",
+          "url": "https://www.adzuna.com/details/5861738016",
+          "location": "Irving, Dallas",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-30T11:56:08.215Z",
+          "textSha256": "dc9f64d8a0d6d1b75312bb1f3078c36e2df1e75b7e9fb402b23419bb7b356c03"
+        }
+      ]
+    },
+    {
+      "company": "Hanwha Convergence USA",
+      "title": "Regional Commercial Solar Technician 4",
+      "ids": [
+        "cms38bop8000dvebnaj9yiay2"
+      ],
+      "remoteEvidence": "Regional Commercial Solar Technician 4 | Remote",
+      "travelEvidence": "Travel throughout the assigned region (approximately 60–75%)",
+      "travelKind": "quantified",
+      "min": 60,
+      "max": 75,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Approximately 60–75%",
+      "qualifier": "approximate_range",
+      "reviewed": true,
+      "id": "role-25",
+      "listingCount": 1,
+      "sourceUrl": "https://job-boards.greenhouse.io/hanwhaconvergence/jobs/4323539009",
+      "jobUrl": "https://www.solarroles.com/jobs/cms38bop8000dvebnaj9yiay2",
+      "sources": [
+        {
+          "id": "cms38bop8000dvebnaj9yiay2",
+          "url": "https://job-boards.greenhouse.io/hanwhaconvergence/jobs/4323539009",
+          "location": "Remote",
+          "source": "greenhouse",
+          "fetchedAt": "2026-07-27T12:54:56.204Z",
+          "textSha256": "c39fa0475f320ad9ddcf6aee5a59ef036eda88ea9de31f9431dea3d272709434"
+        }
+      ]
+    },
+    {
+      "company": "RES",
+      "title": "Field Service Technician II – Solar BESS- Traveler",
+      "ids": [
+        "cmshlj6pc0000hrcmx3fkbu8e"
+      ],
+      "remoteEvidence": "Field Service Technician II – Solar BESS- Traveler | Remote, United States",
+      "travelEvidence": "Domestic travel 76-100% required.",
+      "travelKind": "quantified",
+      "min": 76,
+      "max": 100,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "76–100%",
+      "qualifier": "range",
+      "reviewed": true,
+      "id": "role-26",
+      "listingCount": 1,
+      "sourceUrl": "https://jobs.jobvite.com/resgroup/job/otCrAfwQ",
+      "jobUrl": "https://www.solarroles.com/jobs/cmshlj6pc0000hrcmx3fkbu8e",
+      "sources": [
+        {
+          "id": "cmshlj6pc0000hrcmx3fkbu8e",
+          "url": "https://jobs.jobvite.com/resgroup/job/otCrAfwQ",
+          "location": "Remote, United States",
+          "source": "jobvite",
+          "fetchedAt": "2026-09-02T13:45:05.749Z",
+          "textSha256": "f313c0482d4901463e6bb9e3088ef27dca3db884183353703762d7f13594af65"
+        }
+      ]
+    },
+    {
+      "company": "RES",
+      "title": "Lead Estimator - High Voltage & BESS",
+      "ids": [
+        "cmskdtprl00001qxtllcmbf0c"
+      ],
+      "remoteEvidence": "Lead Estimator - High Voltage & BESS | Remote, United States",
+      "travelEvidence": "Ability to travel 5-15% required.",
+      "travelKind": "quantified",
+      "min": 5,
+      "max": 15,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "5–15%",
+      "qualifier": "range",
+      "reviewed": true,
+      "id": "role-27",
+      "listingCount": 1,
+      "sourceUrl": "https://jobs.jobvite.com/resgroup/job/optyAfwK",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskdtprl00001qxtllcmbf0c",
+      "sources": [
+        {
+          "id": "cmskdtprl00001qxtllcmbf0c",
+          "url": "https://jobs.jobvite.com/resgroup/job/optyAfwK",
+          "location": "Remote, United States",
+          "source": "jobvite",
+          "fetchedAt": "2026-09-02T13:45:05.466Z",
+          "textSha256": "259eb715a37d6a92fee4f40f43a1857086eab9fd519ee4094860d6851184315f"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Estimator, Services (Remote)",
+      "ids": [
+        "cmskecm53002w1qxtp9lsiaav"
+      ],
+      "remoteEvidence": "Estimator, Services (Remote) | Remote, CA",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-28",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Estimator--Services_J12749",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecm53002w1qxtp9lsiaav",
+      "sources": [
+        {
+          "id": "cmskecm53002w1qxtp9lsiaav",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Estimator--Services_J12749",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-08T13:15:42.230Z",
+          "textSha256": "7aa40834120dc83ce721f66f5c7254ba58531489fee08779400bca5faac521b0"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Assistant Commissioning Project Manager, PV",
+      "ids": [
+        "cmskecmqi00301qxt4zuvj5ga",
+        "cmskecpf5003c1qxt69z0wpfd",
+        "cmskecpki003d1qxt0jglxsdo",
+        "cmsubo3a2000mahnnfx2hrptk"
+      ],
+      "remoteEvidence": "Assistant Commissioning Project Manager, PV | Remote, CA",
+      "travelEvidence": "Travel is expected, including extended out‑of‑town stays",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Extended out-of-town stays",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-29",
+      "listingCount": 4,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--PV_J13771",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecmqi00301qxt4zuvj5ga",
+      "sources": [
+        {
+          "id": "cmskecmqi00301qxt4zuvj5ga",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--PV_J13771",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:19.768Z",
+          "textSha256": "20f33ac2ac9d1899e19b4dc6984686c0cdaa326439ce79e6167677db2f91bfc0"
+        },
+        {
+          "id": "cmskecpf5003c1qxt69z0wpfd",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--PV_J13224",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-12T22:31:54.421Z",
+          "textSha256": "aaf70377be20c39e70b2c1d2357149ebd82b0af48abd31316a0d88509980ddd8"
+        },
+        {
+          "id": "cmskecpki003d1qxt0jglxsdo",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--PV_J13225",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-12T22:31:54.616Z",
+          "textSha256": "d1dfbee98471c7e3fe71d5af37195c2e082087c4d1f2ff81a1cf37b93a923779"
+        },
+        {
+          "id": "cmsubo3a2000mahnnfx2hrptk",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--PV_J13223",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:19.582Z",
+          "textSha256": "453d0406cfe4ccd90b299b5d5d64dddb042a85a6e5509d4cee4b6f89bd74ef67"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Commissioning Project Manager (Remote)",
+      "ids": [
+        "cmskecoiu00361qxtj4jwb8pk",
+        "cmskecp9q003b1qxtz85ts09m"
+      ],
+      "remoteEvidence": "Commissioning Project Manager (Remote) | Remote, ND",
+      "travelEvidence": "remote with travel required within the Midwest region",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "Grouped regional versions mention Midwest or South Central travel; both require travel.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Regional travel required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-30",
+      "listingCount": 2,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---ND/Commissioning-Project-Manager--Remote-_J13694",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecoiu00361qxtj4jwb8pk",
+      "sources": [
+        {
+          "id": "cmskecoiu00361qxtj4jwb8pk",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---ND/Commissioning-Project-Manager--Remote-_J13694",
+          "location": "Remote, ND",
+          "source": "workday",
+          "fetchedAt": "2026-08-08T13:15:45.318Z",
+          "textSha256": "317eb75b13b7b4f8fa351fdb4b9073fbaac8f2064aa7c598e464ae585396a94d"
+        },
+        {
+          "id": "cmskecp9q003b1qxtz85ts09m",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---TX/Commissioning-Project-Manager--Remote-_J13219",
+          "location": "Remote, TX",
+          "source": "workday",
+          "fetchedAt": "2026-08-08T13:15:46.286Z",
+          "textSha256": "2bfe0acc1342487c889d2308ab969920207567ab0c3e9b967daf139caf6d3f66"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Assistant Commissioning Project Manager, HV",
+      "ids": [
+        "cmskecoyz00391qxtac1u1tof",
+        "cmskecpv8003f1qxtnp3rqn8b"
+      ],
+      "remoteEvidence": "Assistant Commissioning Project Manager, HV | Remote, CA",
+      "travelEvidence": "Travel is expected, including extended out‑of‑town stays",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Extended out-of-town stays",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-31",
+      "listingCount": 2,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--HV_J13014",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecoyz00391qxtac1u1tof",
+      "sources": [
+        {
+          "id": "cmskecoyz00391qxtac1u1tof",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--HV_J13014",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-21T16:21:38.484Z",
+          "textSha256": "807c53de37105f033b8c9ad03df8417987772ccb8b9d427579b858cd1a40cbf9"
+        },
+        {
+          "id": "cmskecpv8003f1qxtnp3rqn8b",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/HV-Assistant-Commissioning-Project-Manager_J12899",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-17T09:36:29.140Z",
+          "textSha256": "41313a35fe64f38789bf560bd38f5e7e98dc8663210c6c6ec76dd7b32c0954c9"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Assistant Commissioning Project Manager, BESS",
+      "ids": [
+        "cmskecp4e003a1qxt2j5oplt9"
+      ],
+      "remoteEvidence": "Assistant Commissioning Project Manager, BESS | Remote, CA",
+      "travelEvidence": "Travel is expected, including extended out‑of‑town stays",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Extended out-of-town stays",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-32",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--BESS_J13205",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecp4e003a1qxt2j5oplt9",
+      "sources": [
+        {
+          "id": "cmskecp4e003a1qxt2j5oplt9",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Assistant-Commissioning-Project-Manager--BESS_J13205",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-12T22:31:54.227Z",
+          "textSha256": "d9205e733b19fbba94111da0b9d39cce7c3444e71e0c8ec96cf279276294b538"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "SCADA Project Manager II, EPC (Remote)",
+      "ids": [
+        "cmskecqbh003i1qxt8l8dggnp"
+      ],
+      "remoteEvidence": "SCADA Project Manager II, EPC (Remote) | San Diego Renewable Group, CA",
+      "travelEvidence": "with regular in-office presence in San Diego, CA or Bend, OR",
+      "travelKind": "office",
+      "min": null,
+      "max": null,
+      "notes": "Remote or hybrid options appear alongside regular office presence; the text does not clearly allocate that condition to one option.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Office attendance wording is ambiguous",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-33",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/San-Diego-CA-Renewable-Group/SCADA-Project-Manager-II--EPC--Remote-_J13403",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecqbh003i1qxt8l8dggnp",
+      "sources": [
+        {
+          "id": "cmskecqbh003i1qxt8l8dggnp",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/San-Diego-CA-Renewable-Group/SCADA-Project-Manager-II--EPC--Remote-_J13403",
+          "location": "San Diego Renewable Group, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:23.477Z",
+          "textSha256": "336eaed225edb73777ace4b90871275640bfe25e88769789fac9210250699563"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "BESS Engineer II (Remote)",
+      "ids": [
+        "cmskecqrs003k1qxtcf06fl5c"
+      ],
+      "remoteEvidence": "BESS Engineer II (Remote) | Remote, CA",
+      "travelEvidence": "Travel as required to support project execution.",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Travel as required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-34",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/BESS-Engineer-II--Remote-_J13228",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecqrs003k1qxtcf06fl5c",
+      "sources": [
+        {
+          "id": "cmskecqrs003k1qxtcf06fl5c",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/BESS-Engineer-II--Remote-_J13228",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:23.662Z",
+          "textSha256": "dd745bbeec6cdb47a4a32f0af33827c618f5a231dc26c82bab013e49cef2ccf3"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "EPC Regional Manager, Utility Scale Solar (West Region)",
+      "ids": [
+        "cmskecr2r003l1qxtqh6wt1dn"
+      ],
+      "remoteEvidence": "hybrid, with regular in-office presence in San Diego, CA or remote within the West Region (CA, NV, WA) and will require travel. Specific location details and expectations will be discussed during the interview process. Job Description: *Thi",
+      "travelEvidence": "will require travel",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "Travel required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-35",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/San-Diego-CA-Renewable-Group/EPC-Regional-Manager--Utility-Scale-Solar--West-Region-_J12638",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecr2r003l1qxtqh6wt1dn",
+      "sources": [
+        {
+          "id": "cmskecr2r003l1qxtqh6wt1dn",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/San-Diego-CA-Renewable-Group/EPC-Regional-Manager--Utility-Scale-Solar--West-Region-_J12638",
+          "location": "San Diego Renewable Group, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:24.033Z",
+          "textSha256": "dcef200ec844caaa7e45995bd1190b7c18b86eaa3489aff34d22804c95a32c1a"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "HV Project Manager (Remote)",
+      "ids": [
+        "cmskecrdh003m1qxtsoue1xcx",
+        "cmskecs4j003p1qxtuqdlf6j3"
+      ],
+      "remoteEvidence": "HV Project Manager (Remote) | Remote, CA",
+      "travelEvidence": "Regular travel required to project sites, utility offices, and vendor facilities",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "Remote-title and office-or-remote versions grouped as one employer-role combination; both state regular travel.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Regular site and office travel",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-36",
+      "listingCount": 2,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/HV-Project-Manager_J13268",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecrdh003m1qxtsoue1xcx",
+      "sources": [
+        {
+          "id": "cmskecrdh003m1qxtsoue1xcx",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/HV-Project-Manager_J13268",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-08T13:15:49.013Z",
+          "textSha256": "f16001809ac33aaa2ef2d34a37c9aa68481e0cb12713b915445b0507397ad28f"
+        },
+        {
+          "id": "cmskecs4j003p1qxtuqdlf6j3",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Edison-NJ/HV-Project-Manager_J13214",
+          "location": "Edison, NJ",
+          "source": "workday",
+          "fetchedAt": "2026-08-08T13:15:49.987Z",
+          "textSha256": "72241def71156ffd2cb41ba3edaffc028b9c4e3a745ecdbf140502500775fc79"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Senior Project Controls Scheduler, BESS (Remote)",
+      "ids": [
+        "cmskecrtr003n1qxt1ujzj0wz"
+      ],
+      "remoteEvidence": "Senior Project Controls Scheduler, BESS (Remote) | Remote, CA",
+      "travelEvidence": "Position requires travel to jobsites",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Site travel required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-37",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Senior-Project-Controls-Scheduler--BESS--Remote-_J13196",
+      "jobUrl": "https://www.solarroles.com/jobs/cmskecrtr003n1qxt1ujzj0wz",
+      "sources": [
+        {
+          "id": "cmskecrtr003n1qxt1ujzj0wz",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Senior-Project-Controls-Scheduler--BESS--Remote-_J13196",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-21T16:21:40.948Z",
+          "textSha256": "7f53b8d9747cf3337bd07c24c239a26a1648c24fb73fc06840e61f066600d567"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "Commissioning Project Manager, BESS",
+      "ids": [
+        "cmsubo3mz000nahnnhrql8jmb",
+        "cmsubo3s8000oahnnnnoun0sh"
+      ],
+      "remoteEvidence": "Commissioning Project Manager, BESS | Remote, CA",
+      "travelEvidence": "Frequent travel and extended project-site assignments are expected",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Frequent travel and extended assignments",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-38",
+      "listingCount": 2,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Commissioning-Project-Manager--BESS_J13802",
+      "jobUrl": "https://www.solarroles.com/jobs/cmsubo3mz000nahnnhrql8jmb",
+      "sources": [
+        {
+          "id": "cmsubo3mz000nahnnhrql8jmb",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Commissioning-Project-Manager--BESS_J13802",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:20.143Z",
+          "textSha256": "de0d0e10018b766c3a6c8f598b8df5cd50c3a4665d3d692bb1aed18dfe1bc47a"
+        },
+        {
+          "id": "cmsubo3s8000oahnnnnoun0sh",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/Commissioning-Project-Manager--BESS_J13801",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-08-17T09:36:25.178Z",
+          "textSha256": "5d53306bd418c7e9901a86d2ba5c6ea363b9644c379f3f6877f884cdea9bc35e"
+        }
+      ]
+    },
+    {
+      "company": "Venture Solar",
+      "title": "Inside Sales Specialist (Fully Remote)",
+      "ids": [
+        "cmt3dswcp0001niddeo9sm8tx",
+        "cmt3dswpj0003niddbx37e10f",
+        "cmt3dswzp0005nidd4k2yql51"
+      ],
+      "remoteEvidence": "Inside Sales Specialist (Fully Remote) | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-39",
+      "listingCount": 3,
+      "sourceUrl": "https://venturesolar.applytojob.com/apply/WFtpmp4eQr/Inside-Sales-Specialist-Fully-Remote",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt3dswcp0001niddeo9sm8tx",
+      "sources": [
+        {
+          "id": "cmt3dswcp0001niddeo9sm8tx",
+          "url": "https://venturesolar.applytojob.com/apply/WFtpmp4eQr/Inside-Sales-Specialist-Fully-Remote",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:55:42.905Z",
+          "textSha256": "e4035aed8d57c2861c2b3c78cc759219029746e152d18d6a54111868a624b8a9"
+        },
+        {
+          "id": "cmt3dswpj0003niddbx37e10f",
+          "url": "https://venturesolar.applytojob.com/apply/Yoj1POmefJ/Inside-Sales-Specialist-Fully-Remote",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:55:44.088Z",
+          "textSha256": "e5fc8cbb14c79b22dfe603a54127bc023391063a9dae659552daf1f64a970ec1"
+        },
+        {
+          "id": "cmt3dswzp0005nidd4k2yql51",
+          "url": "https://venturesolar.applytojob.com/apply/mFEJip230J/Remote-Inside-Sales-Specialist",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:55:43.907Z",
+          "textSha256": "00becdad2179b56bb263291013033357bbca9b505fa9b0b90385dff6235359ff"
+        }
+      ]
+    },
+    {
+      "company": "Solar.com",
+      "title": "Senior Full-Stack Engineer",
+      "ids": [
+        "cmt7tkhef0000xak3hlg5zsst"
+      ],
+      "remoteEvidence": "Senior Full-Stack Engineer | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-40",
+      "listingCount": 1,
+      "sourceUrl": "https://www.solar.com/careers/senior-full-stack-engineer/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tkhef0000xak3hlg5zsst",
+      "sources": [
+        {
+          "id": "cmt7tkhef0000xak3hlg5zsst",
+          "url": "https://www.solar.com/careers/senior-full-stack-engineer/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:49:46.892Z",
+          "textSha256": "96e98e8c5f966208db74d31493bf8af8b9fc8e573d00b4d98eb9f8945ee3673a"
+        }
+      ]
+    },
+    {
+      "company": "Solar.com",
+      "title": "Product Manager",
+      "ids": [
+        "cmt7tkhnz0001xak3ovxktqa2"
+      ],
+      "remoteEvidence": "Product Manager | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-41",
+      "listingCount": 1,
+      "sourceUrl": "https://www.solar.com/careers/product-manager/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tkhnz0001xak3ovxktqa2",
+      "sources": [
+        {
+          "id": "cmt7tkhnz0001xak3ovxktqa2",
+          "url": "https://www.solar.com/careers/product-manager/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:49:47.163Z",
+          "textSha256": "027767dea4e694ac66b45a3cd55e160237fc56ec18c1d157b5bade9e91148616"
+        }
+      ]
+    },
+    {
+      "company": "Solar.com",
+      "title": "Pricing Analyst",
+      "ids": [
+        "cmt7tkht30002xak3vs9hwyt7"
+      ],
+      "remoteEvidence": "Pricing Analyst | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-42",
+      "listingCount": 1,
+      "sourceUrl": "https://www.solar.com/careers/solar-pricing-analyst/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tkht30002xak3vs9hwyt7",
+      "sources": [
+        {
+          "id": "cmt7tkht30002xak3vs9hwyt7",
+          "url": "https://www.solar.com/careers/solar-pricing-analyst/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:49:47.343Z",
+          "textSha256": "1ef8e7f278d13a1219e77458920f92ae86c515a20f2ff41ef2bf86f057b90715"
+        }
+      ]
+    },
+    {
+      "company": "Solar.com",
+      "title": "Energy Advisor",
+      "ids": [
+        "cmt7tki0k0003xak3q6oosvgx"
+      ],
+      "remoteEvidence": "Energy Advisor | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-43",
+      "listingCount": 1,
+      "sourceUrl": "https://www.solar.com/careers/energy-advisor/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tki0k0003xak3q6oosvgx",
+      "sources": [
+        {
+          "id": "cmt7tki0k0003xak3q6oosvgx",
+          "url": "https://www.solar.com/careers/energy-advisor/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:49:47.610Z",
+          "textSha256": "d2f0bf0b7c5dcada2ab114b12161ec4aefeac42d3523f5f4c5b91baa18f86e29"
+        }
+      ]
+    },
+    {
+      "company": "Solar.com",
+      "title": "Installer Partnerships Manager",
+      "ids": [
+        "cmt7tki5m0004xak32b3xi83v"
+      ],
+      "remoteEvidence": "Installer Partnerships Manager | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-44",
+      "listingCount": 1,
+      "sourceUrl": "https://www.solar.com/careers/installer-partnerships-manager/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tki5m0004xak32b3xi83v",
+      "sources": [
+        {
+          "id": "cmt7tki5m0004xak32b3xi83v",
+          "url": "https://www.solar.com/careers/installer-partnerships-manager/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:49:47.806Z",
+          "textSha256": "70aa086ce0de8b13e7fe2b82708580c9c5383862604cdfb4b94252da762d5685"
+        }
+      ]
+    },
+    {
+      "company": "Solar.com",
+      "title": "Growth Marketer",
+      "ids": [
+        "cmt7tkiap0005xak3w3f42pqk"
+      ],
+      "remoteEvidence": "Growth Marketer | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-45",
+      "listingCount": 1,
+      "sourceUrl": "https://www.solar.com/careers/growth-marketer/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tkiap0005xak3w3f42pqk",
+      "sources": [
+        {
+          "id": "cmt7tkiap0005xak3w3f42pqk",
+          "url": "https://www.solar.com/careers/growth-marketer/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:49:48.012Z",
+          "textSha256": "9186dee3d2a37e0d86d9d5e21f820f96828daa52aaf5c6e84b7dd1e0438e539e"
+        }
+      ]
+    },
+    {
+      "company": "Solar Tech Elec LLC",
+      "title": "Virtual Sales Agents",
+      "ids": [
+        "cmt7tllhb000dxak30c24oikj"
+      ],
+      "remoteEvidence": "Virtual Sales Agents | Remote",
+      "travelEvidence": "",
+      "travelKind": "not_stated",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "No travel or attendance requirement identified",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-46",
+      "listingCount": 1,
+      "sourceUrl": "https://solartechelec.com/careers/virtual-sales-agents/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmt7tllhb000dxak30c24oikj",
+      "sources": [
+        {
+          "id": "cmt7tllhb000dxak30c24oikj",
+          "url": "https://solartechelec.com/careers/virtual-sales-agents/",
+          "location": "Remote",
+          "source": "custom-scrape",
+          "fetchedAt": "2026-09-02T14:50:38.409Z",
+          "textSha256": "4e876044bdc323735c79470cb83d61d134305c57e2cbc8ac560c4c1ad9d8dbf1"
+        }
+      ]
+    },
+    {
+      "company": "SOLV Energy",
+      "title": "BESS Engineer III (Remote)",
+      "ids": [
+        "cmtfp9ewt000k12ivd22xiume"
+      ],
+      "remoteEvidence": "BESS Engineer III (Remote) | Remote, CA",
+      "travelEvidence": "Travel as required to support project execution.",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Travel as required",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-48",
+      "listingCount": 1,
+      "sourceUrl": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/BESS-Engineer-III--Remote-_J13825",
+      "jobUrl": "https://www.solarroles.com/jobs/cmtfp9ewt000k12ivd22xiume",
+      "sources": [
+        {
+          "id": "cmtfp9ewt000k12ivd22xiume",
+          "url": "https://solvenergy.wd1.myworkdayjobs.com/SOLV_External_Career/job/Remote---CA/BESS-Engineer-III--Remote-_J13825",
+          "location": "Remote, CA",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:19:18.471Z",
+          "textSha256": "0ca53f43ceccddfe95c029439ab4d5214d5cf2ca7a06ecfe4c3a28cd69154c37"
+        }
+      ]
+    },
+    {
+      "company": "Moss Construction",
+      "title": "Project Manager, BESS Preconstruction Management",
+      "ids": [
+        "cmtk79gwu000d4f9iejbrni93"
+      ],
+      "remoteEvidence": "areer development. In Office - Ability to travel up to 25%. Remote – Ability to travel 25%, up to 50%. JOB TITLE: PRECONSTRUCTION PROJECT MANAGER, BESS - PRECONSTRUCTION MANAGEMENT JOB LOCATION: FORT LAUDERDALE, FL [OPEN TO REMOTE FOR THE R",
+      "travelEvidence": "Remote – Ability to travel 25%, up to 50%.",
+      "travelKind": "quantified",
+      "min": 25,
+      "max": 50,
+      "notes": "",
+      "remoteSource": "description",
+      "travelLabel": "25%, up to 50% (remote option)",
+      "qualifier": "range",
+      "reviewed": true,
+      "id": "role-49",
+      "listingCount": 1,
+      "sourceUrl": "https://mosscm.wd1.myworkdayjobs.com/Moss_Careers/job/FORT-LAUDERDALE-FL/Project-Manager--BESS-Preconstruction-Management_R-2929",
+      "jobUrl": "https://www.solarroles.com/jobs/cmtk79gwu000d4f9iejbrni93",
+      "sources": [
+        {
+          "id": "cmtk79gwu000d4f9iejbrni93",
+          "url": "https://mosscm.wd1.myworkdayjobs.com/Moss_Careers/job/FORT-LAUDERDALE-FL/Project-Manager--BESS-Preconstruction-Management_R-2929",
+          "location": "FORT LAUDERDALE, FL",
+          "source": "workday",
+          "fetchedAt": "2026-09-02T14:37:00.510Z",
+          "textSha256": "37b38884b91e5c6e0c4714a5a0dad13863695c6f8a80a8434ba9280cc76eb8e4"
+        }
+      ]
+    },
+    {
+      "company": "Clean Energy Services",
+      "title": "BESS Field Technician 1 – Operations & Maintenance",
+      "ids": [
+        "cmtk7p6j4000f4f9iroqqvxh2"
+      ],
+      "remoteEvidence": "BESS Field Technician 1 – Operations & Maintenance | Remote (United States)",
+      "travelEvidence": "traveling to new sites as part of their regular schedule",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Regular travel to sites",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-50",
+      "listingCount": 1,
+      "sourceUrl": "https://ats.rippling.com/clean-energy-services-careers/jobs/c9888608-4bc4-499f-bd81-b33b08637ab5",
+      "jobUrl": "https://www.solarroles.com/jobs/cmtk7p6j4000f4f9iroqqvxh2",
+      "sources": [
+        {
+          "id": "cmtk7p6j4000f4f9iroqqvxh2",
+          "url": "https://ats.rippling.com/clean-energy-services-careers/jobs/c9888608-4bc4-499f-bd81-b33b08637ab5",
+          "location": "Remote (United States)",
+          "source": "rippling",
+          "fetchedAt": "2026-09-02T14:49:13.553Z",
+          "textSha256": "6fd1c305128427b5908144866f023f27c5e5ccf9b4f2ad9e3f565d3c018fc30e"
+        }
+      ]
+    },
+    {
+      "company": "Clean Energy Services",
+      "title": "Battery Storage Technician",
+      "ids": [
+        "cmtk7p7j6000g4f9iu7z3j1z9"
+      ],
+      "remoteEvidence": "Battery Storage Technician | Remote (United States)",
+      "travelEvidence": "traveling to new sites as part of their regular schedule",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Regular travel to sites",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-51",
+      "listingCount": 1,
+      "sourceUrl": "https://ats.rippling.com/clean-energy-services-careers/jobs/14a644e9-6933-4fa8-93a4-74903183d901",
+      "jobUrl": "https://www.solarroles.com/jobs/cmtk7p7j6000g4f9iu7z3j1z9",
+      "sources": [
+        {
+          "id": "cmtk7p7j6000g4f9iu7z3j1z9",
+          "url": "https://ats.rippling.com/clean-energy-services-careers/jobs/14a644e9-6933-4fa8-93a4-74903183d901",
+          "location": "Remote (United States)",
+          "source": "rippling",
+          "fetchedAt": "2026-09-02T14:49:14.850Z",
+          "textSha256": "b47fde6f5ab110da65767d6427eb0aa31e9407c848aeedba50d4830e06a2e921"
+        }
+      ]
+    },
+    {
+      "company": "Clean Energy Services",
+      "title": "Solar Maintenance Technician",
+      "ids": [
+        "cmtk7p836000i4f9ie8vsevog"
+      ],
+      "remoteEvidence": "Solar Maintenance Technician | Remote (United States)",
+      "travelEvidence": "traveling to new sites as part of their regular schedule",
+      "travelKind": "unquantified",
+      "min": null,
+      "max": null,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Regular travel to sites",
+      "qualifier": null,
+      "reviewed": true,
+      "id": "role-52",
+      "listingCount": 1,
+      "sourceUrl": "https://ats.rippling.com/clean-energy-services-careers/jobs/f99d36d3-c343-4050-952a-20661d46d86c",
+      "jobUrl": "https://www.solarroles.com/jobs/cmtk7p836000i4f9ie8vsevog",
+      "sources": [
+        {
+          "id": "cmtk7p836000i4f9ie8vsevog",
+          "url": "https://ats.rippling.com/clean-energy-services-careers/jobs/f99d36d3-c343-4050-952a-20661d46d86c",
+          "location": "Remote (United States)",
+          "source": "rippling",
+          "fetchedAt": "2026-09-02T14:49:15.571Z",
+          "textSha256": "b47fde6f5ab110da65767d6427eb0aa31e9407c848aeedba50d4830e06a2e921"
+        }
+      ]
+    },
+    {
+      "company": "ENGIE",
+      "title": "Field Service Technician II (Traveling)",
+      "ids": [
+        "cmtk7piwc000o4f9i587bpwg5"
+      ],
+      "remoteEvidence": "Field Service Technician II (Traveling) | Remote, US, Texas",
+      "travelEvidence": "Must be available to travel domestically up to 85% of the time",
+      "travelKind": "quantified",
+      "min": null,
+      "max": 85,
+      "notes": "",
+      "remoteSource": "title_or_location",
+      "travelLabel": "Up to 85%",
+      "qualifier": "ceiling",
+      "reviewed": true,
+      "id": "role-53",
+      "listingCount": 1,
+      "sourceUrl": "https://jobs.engie.com/job/Remote-Field-Service-Technician-II-%28Traveling%29-Texas/1365874955/",
+      "jobUrl": "https://www.solarroles.com/jobs/cmtk7piwc000o4f9i587bpwg5",
+      "sources": [
+        {
+          "id": "cmtk7piwc000o4f9i587bpwg5",
+          "url": "https://jobs.engie.com/job/Remote-Field-Service-Technician-II-%28Traveling%29-Texas/1365874955/",
+          "location": "Remote, US, Texas",
+          "source": "successfactors",
+          "fetchedAt": "2026-09-02T14:49:29.580Z",
+          "textSha256": "27225abcceced05df2cac5eb8f417083b73d79589eacd48135064f412754bec6"
+        }
+      ]
+    },
+    {
+      "company": "Sargent Electric",
+      "title": "Solar Project Manager",
+      "ids": [
+        "adzuna-5537287546"
+      ],
+      "remoteEvidence": "s, in the safest possible way, for multi-million-dollar solar projects. This position can be worked remotely. Travel to project sites on a r",
+      "remoteSource": "description",
+      "travelEvidence": "Travel to project sites on a regular basis is required.",
+      "travelKind": "unquantified",
+      "travelLabel": "Regular site travel required",
+      "min": null,
+      "max": null,
+      "qualifier": null,
+      "notes": "",
+      "reviewed": true,
+      "id": "role-54",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5537287546",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5537287546",
+      "sources": [
+        {
+          "id": "adzuna-5537287546",
+          "url": "https://www.adzuna.com/details/5537287546",
+          "location": "US",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:13.298Z",
+          "textSha256": "8cead70a950eced0b3f854e95406505656b6627ea93120b83802d4ba52447423"
+        }
+      ]
+    },
+    {
+      "company": "Bowman",
+      "title": "Assistant Project Manager, Solar PV & BESS",
+      "ids": [
+        "adzuna-5806665284"
+      ],
+      "remoteEvidence": "iption Bowman has an opportunity for an Assistant Project Manager, Solar PV & BESS to join our team remotely. At Bowman, we believe in creat",
+      "remoteSource": "description",
+      "travelEvidence": "Mobility around a job/construction site",
+      "travelKind": "field",
+      "travelLabel": "Site work appears in physical demands",
+      "min": null,
+      "max": null,
+      "qualifier": null,
+      "notes": "Site conditions are described, but there is no explicit travel frequency or office attendance schedule.",
+      "reviewed": true,
+      "id": "role-55",
+      "listingCount": 1,
+      "sourceUrl": "https://www.adzuna.com/details/5806665284",
+      "jobUrl": "https://www.solarroles.com/jobs/adzuna-5806665284",
+      "sources": [
+        {
+          "id": "adzuna-5806665284",
+          "url": "https://www.adzuna.com/details/5806665284",
+          "location": "Reston, Fairfax County",
+          "source": "adzuna",
+          "fetchedAt": "2026-08-17T09:03:25.218Z",
+          "textSha256": "1c4fdfbcda68a59b3b2d6d305299e9b5a3f0797f7f4735bd84ff28333c32d1f1"
+        }
+      ]
+    }
+  ],
+  "employerConcentration": [
+    {
+      "company": "SOLV Energy",
+      "groups": 12,
+      "share": 22.2,
+      "travelCount": 10
+    },
+    {
+      "company": "Solar.com",
+      "groups": 6,
+      "share": 11.1,
+      "travelCount": 0
+    },
+    {
+      "company": "Clean Energy Services",
+      "groups": 3,
+      "share": 5.6,
+      "travelCount": 3
+    },
+    {
+      "company": "DEPCOM Power",
+      "groups": 3,
+      "share": 5.6,
+      "travelCount": 3
+    },
+    {
+      "company": "EDF power solutions",
+      "groups": 2,
+      "share": 3.7,
+      "travelCount": 2
+    },
+    {
+      "company": "Jobot",
+      "groups": 2,
+      "share": 3.7,
+      "travelCount": 1
+    },
+    {
+      "company": "Moss",
+      "groups": 2,
+      "share": 3.7,
+      "travelCount": 2
+    },
+    {
+      "company": "RES",
+      "groups": 2,
+      "share": 3.7,
+      "travelCount": 2
+    },
+    {
+      "company": "A2B DEVELOPMENT",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Birch Creek Energy",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Bowman",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 0
+    },
+    {
+      "company": "Consolidated Electrical Distributors",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Cypress Creek Renewables",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Doral Renewables",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "ENGIE",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "EVS",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 0
+    },
+    {
+      "company": "FindTalent",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Green House",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 0
+    },
+    {
+      "company": "Hanwha Convergence USA",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Intertek",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "J.Riley Recruitment",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Keystone Clearwater Solutions",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "LPL Solar",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Mortenson",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Origis Energy",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Rise Technical Recruitment",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Sargent Electric",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Solar Tech Elec LLC",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 0
+    },
+    {
+      "company": "US Tech Solutions",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 1
+    },
+    {
+      "company": "Venture Solar",
+      "groups": 1,
+      "share": 1.9,
+      "travelCount": 0
+    }
+  ],
+  "withoutTopEmployer": {
+    "excludedCompany": "SOLV Energy",
+    "groups": 42,
+    "travelCount": 30,
+    "travelShare": 71.4,
+    "percentagePointChange": -2.6
+  }
+}

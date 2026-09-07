@@ -11,7 +11,7 @@ interface OutreachRow {
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/osha-safety-guide-solar-installers";
 const PAGE_TITLE =
-  "OSHA Safety Guide for Solar Installers (2026): OSHA 10 vs 30, Fall Protection, Electrical Hazards";
+  "OSHA Safety Guide for Solar Installers: OSHA 10 vs 30, Fall Protection, Electrical Hazards";
 const PAGE_DESCRIPTION =
   "A standalone guide to OSHA rules for solar installers: OSHA 10 vs OSHA 30, fall protection thresholds on residential and commercial roofs, electrical and arc hazards specific to PV, and what employers vs workers are each responsible for.";
 

@@ -13,7 +13,7 @@ interface MfrRow {
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/manufacturer-certifications-tesla-enphase-solaredge";
 const PAGE_TITLE =
-  "Tesla, Enphase, and SolarEdge Certifications for Installers (2026): Company vs Individual";
+  "Solar Manufacturer Certifications: How to make the right choice";
 const PAGE_DESCRIPTION =
   "How manufacturer certifications work for solar installers: which ones a company enrolls in, which ones an individual technician can complete directly, and whether they're worth pursuing.";
 

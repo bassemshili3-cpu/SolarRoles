@@ -1,0 +1,29 @@
+rank,metro_code,metro,median_hourly_wage_usd,median_annual_wage_usd,one_bedroom_monthly_fmr_usd,gross_work_hours_for_rent,rent_pct_annual_gross_wage,electrician_median_hourly_wage_usd,roofer_median_hourly_wage_usd,county_fips,wage_period,rent_period,hud_source
+1,10740,"Albuquerque, NM",28.75,59800,1185,41.2174,23.7793,28.43,22.01,35001|35043|35057|35061,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=35
+2,12540,"Bakersfield-Delano, CA",27.4,56990,1140,41.6058,24.0042,36.47,29.15,06029,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=3
+3,24300,"Grand Junction, CO",22.9,47620,986,43.0568,24.8467,27.19,24.1,08077,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=5
+4,39340,"Provo-Orem-Lehi, UT",28.82,59950,1265,43.8931,25.3211,29.26,22.41,49023|49049,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=48
+5,29820,"Las Vegas-Henderson-North Las Vegas, NV",32.6,67810,1478,45.3374,26.1554,34.08,23.94,32003,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=32
+6,33700,"Modesto, CA",28.81,59920,1356,47.0670,27.1562,36.88,30.26,06099,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+7,44700,"Stockton-Lodi, CA",28.42,59110,1395,49.0852,28.3201,36.74,29.78,06077,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+8,29540,"Lancaster, PA",24.01,49950,1220,50.8122,29.3093,30.52,25.31,42071,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=41
+9,38900,"Portland-Vancouver-Hillsboro, OR-WA",31.88,66320,1677,52.6035,30.3438,50.53,29.43,41005|41009|41051|41067|41071|53011|53059,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=40
+10,37980,"Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",28.05,58350,1520,54.1889,31.2596,35.86,28.72,10003|24015|34005|34007|34015|34033|42017|42029|42045|42091|42101,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=7
+11,36260,"Ogden, UT",23.22,48290,1281,55.1680,31.8327,29.82,24.86,49011|49029|49057,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=48
+12,10580,"Albany-Schenectady-Troy, NY",23.79,49470,1417,59.5628,34.3723,36.01,30.73,36001|36083|36091|36093|36095,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=35
+13,46520,"Urban Honolulu, HI",33.63,69940,2016,59.9465,34.5896,48.21,28.47,15003,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=10
+14,40140,"Riverside-San Bernardino-Ontario, CA",28.87,60050,1777,61.5518,35.5104,35,29.83,06065|06071,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+15,12420,"Austin-Round Rock-San Marcos, TX",24.32,50580,1562,64.2270,37.0581,29.03,22.76,48021|48055|48209|48453|48491,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=45
+16,38060,"Phoenix-Mesa-Chandler, AZ",24.61,51200,1583,64.3234,37.1016,29.43,22.96,04013|04021,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=2
+17,19740,"Denver-Aurora-Centennial, CO",25.55,53140,1754,68.6497,39.6086,30.36,26.84,08001|08005|08014|08019|08031|08035|08039|08047|08059|08093,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+18,45300,"Tampa-St. Petersburg-Clearwater, FL",24.6,51170,1696,68.9431,39.7733,27.62,22.68,12053|12057|12101|12103,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=8
+19,42020,"San Luis Obispo-Paso Robles, CA",29.34,61020,2036,69.3933,40.0393,36.8,30.3,06079,May 2025,FY 2026,https://www.federalregister.gov/documents/2026/04/21/2026-07741/fair-market-rents-for-the-housing-choice-voucher-program-moderate-rehabilitation-single-room
+20,12580,"Baltimore-Columbia-Towson, MD",21.74,45220,1511,69.5032,40.0973,31.54,27.11,24003|24005|24013|24025|24027|24035|24510,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=22
+21,22380,"Flagstaff, AZ",24.47,50890,1727,70.5762,40.7231,29.49,,04005,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=2
+22,42220,"Santa Rosa-Petaluma, CA",29.72,61810,2155,72.5101,41.8379,37.2,30.78,06097,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+23,41500,"Salinas, CA",29.93,62260,2232,74.5740,43.0196,37.88,29.58,06053,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+24,36740,"Orlando-Kissimmee-Sanford, FL",22.43,46660,1731,77.1734,44.5178,24.43,22.74,12069|12095|12097|12117,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=7
+25,37100,"Oxnard-Thousand Oaks-Ventura, CA",28.68,59650,2250,78.4519,45.2640,31.17,30.21,06111,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+26,41740,"San Diego-Chula Vista-Carlsbad, CA",29.49,61340,2459,83.3842,48.1056,36.62,29.9,06073,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+27,42200,"Santa Maria-Santa Barbara, CA",28.83,59960,2746,95.2480,54.9566,36.2,29.51,06083,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4
+28,42100,"Santa Cruz-Watsonville, CA",33.44,69550,3298,98.6244,56.9029,36.83,29.64,06087,May 2025,FY 2026,https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf#page=4

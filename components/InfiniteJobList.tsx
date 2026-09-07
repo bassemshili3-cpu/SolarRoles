@@ -1,5 +1,6 @@
 'use client'
 import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import JobCard from './JobCard'
 import WhatJobsFeed from './WhatJobsFeed'
@@ -123,6 +124,8 @@ interface JobListProps {
   salary_min?: string
   searchLabel?: string   // libellé affiché (ex: "fly in fly out "), sinon dérivé de `what`
   initialData?: { results: any[]; count: number } // ← données SSR pour Googlebot
+  initialPage?: number
+  landingPageSeo?: boolean
 }
 
 function AlertDropdown({
@@ -188,7 +191,7 @@ function AlertDropdown({
   )
 }
 
-export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, entryLevel, includeWhatJobs = true, whatJobsTitleIncludesAny, whatJobsTitleIncludesAll, whatJobsTitleExcludes, where, salary_min, searchLabel, initialData }: JobListProps) {
+export default function JobList({ what, whatPhrases, excludePhrases, descriptionContainsAny, requiredDomainTerms, titleContainsAny, isFifo, entryLevel, includeWhatJobs = true, whatJobsTitleIncludesAny, whatJobsTitleIncludesAll, whatJobsTitleExcludes, where, salary_min, searchLabel, initialData, initialPage = 1, landingPageSeo = false }: JobListProps) {
   const searchParams = useSearchParams()
   const [page, setPage] = useState(() => {
   const fromUrl = parseInt(searchParams.get('page') || '1', 10)
@@ -254,13 +257,13 @@ export default function JobList({ what, whatPhrases, excludePhrases, description
   // jamais réinjecté après coup — sinon un changement de mot-clé/lieu peut se faire
   // écraser par les anciennes données SSR au lieu de déclencher un vrai fetch.
   const initialDataRef = useRef(
-  page === 1 && initialData && !hasFilters
-    ? { forPage: 1, forWhat: resolvedWhat, forWhere: resolvedWhere, data: initialData }
+  initialData && !hasFilters
+    ? { forPage: initialPage, forWhat: resolvedWhat, forWhere: resolvedWhere, data: initialData }
     : null
 )
 
 const canUseSSRInitialData =
-  page === 1 &&
+  page === initialDataRef.current?.forPage &&
   !hasFilters &&
   resolvedWhat === (initialDataRef.current?.forWhat ?? resolvedWhat) &&
   resolvedWhere === (initialDataRef.current?.forWhere ?? resolvedWhere) &&
@@ -311,7 +314,8 @@ const canUseSSRInitialData =
     const params = new URLSearchParams(searchParams.toString())
     if (targetPage > 1) params.set('page', targetPage.toString())
     else params.delete('page')
-    return `${pathname}?${params.toString()}`
+    const query = params.toString()
+    return query ? `${pathname}?${query}` : pathname
   }, [pathname, searchParams])
 
   const buildJobsApiParams = useCallback((targetPage: number) => {
@@ -491,7 +495,7 @@ const canUseSSRInitialData =
           onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
         >
           {firstPartyJobs.map((job: any) => (
-            <JobCard key={job.id} job={job} backUrl={backUrl} />
+            <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
           ))}
           {page === 1 && shouldShowWhatJobs && (
             <WhatJobsFeed
@@ -503,23 +507,39 @@ const canUseSSRInitialData =
             />
           )}
           {otherPartnerJobs.map((job: any) => (
-            <JobCard key={job.id} job={job} backUrl={backUrl} />
+            <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
           ))}
           {adzunaJobs.map((job: any) => (
-            <JobCard key={job.id} job={job} backUrl={backUrl} />
+            <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
           ))}
         </div>
       )}
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-4 mt-10">
-       <Button variant="outline" onClick={() => goToPage(Math.max(1, page - 1))} disabled={page === 1}>
-  ← Previous
-</Button>
-<span className="text-sm text-muted-foreground">Page {page}</span>
-<Button variant="outline" onClick={() => goToPage(page + 1)} disabled={page >= totalPages}>
-  Next →
-</Button>
+        {landingPageSeo && page > 1 ? (
+          <Button variant="outline" asChild>
+            <Link href={buildPageHref(page - 1)} replace onClick={() => setPage(page - 1)}>
+              ← Previous
+            </Link>
+          </Button>
+        ) : (
+          <Button variant="outline" onClick={() => goToPage(Math.max(1, page - 1))} disabled={page === 1}>
+            ← Previous
+          </Button>
+        )}
+        <span className="text-sm text-muted-foreground">Page {page}</span>
+        {landingPageSeo && page < totalPages ? (
+          <Button variant="outline" asChild>
+            <Link href={buildPageHref(page + 1)} replace onClick={() => setPage(page + 1)}>
+              Next →
+            </Link>
+          </Button>
+        ) : (
+          <Button variant="outline" onClick={() => goToPage(page + 1)} disabled={page >= totalPages}>
+            Next →
+          </Button>
+        )}
 
       </div>
 

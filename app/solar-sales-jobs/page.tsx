@@ -6,21 +6,34 @@ import { Phone, Home, DollarSign, ShieldCheck, Award, Users, TrendingUp, Scale }
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
 import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 
 export const revalidate = 3600
 
-export async function generateMetadata(): Promise<Metadata> {
-  const stats = await getRoleSalaryStats('solar-sales-representative')
+const SALES_LANDING_FILTERS = {
+  descriptionContainsAny: ['solar sales', 'sales representative', 'sales consultant', 'sales engineer', 'account executive', 'door to door', 'd2d'],
+  requiredDomainTerms: ['sales', 'Sales'],
+}
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('solar-sales-representative'),
+    getLandingJobCount(SALES_LANDING_FILTERS),
+  ])
   const salarySuffix =
     stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
       ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
       : ''
 
   return {
-    title: salarySuffix
-      ? `Solar Sales Jobs${salarySuffix}`
-      : 'Solar Sales Jobs | D2D, In-Home & Technical Sales Openings',
+    title: withLandingJobCount(
+      salarySuffix
+        ? `Solar Sales Jobs${salarySuffix}`
+        : 'Solar Sales Jobs | D2D, In-Home & Technical Sales Openings',
+      jobCount,
+    ),
     description: 'Solar sales positions across the United States, door-to-door, in-home, inside sales, and technical sales roles. Commission structures, what employers screen for, and realistic pay ranges.',
     keywords: 'solar sales jobs, solar sales rep jobs, door to door solar sales, in home solar sales, solar sales consultant, solar technical sales, solar sales engineer jobs',
     openGraph: {
@@ -33,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar Sales Jobs',
       description: 'Find solar sales openings across the US. D2D, in-home, inside sales, and technical sales employers hiring now.',
     },
-    alternates: { canonical: 'https://www.solarroles.com/solar-sales-jobs' },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-sales-jobs', params) },
   }
 }
 
@@ -43,11 +56,6 @@ const jsonLd = {
   name: 'Solar Sales Jobs',
   description: 'Solar sales job listings across the United States, covering door-to-door, in-home, inside sales, and technical sales roles.',
   url: 'https://www.solarroles.com/solar-sales-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Solar Sales Jobs',
-    description: 'Current solar sales job listings',
-  },
 }
 
 const salesRoles = [
@@ -107,16 +115,17 @@ const faqs = [
 
 export default async function SolarSalesJobsPage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
 
   const initialData = await getJobs({
     // Scopes this landing page to sales roles via a keyword AND-filter,
     // independent of the user's own `what` search box below — same
     // pattern used on /lead-solar-installer-jobs and
     // /solar-jobs-no-experience.
-    descriptionContainsAny: ['solar sales', 'sales representative', 'sales consultant', 'sales engineer', 'account executive', 'door to door', 'd2d'],
-    requiredDomainTerms: ['sales', 'Sales'],
+    ...SALES_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -151,6 +160,8 @@ export default async function SolarSalesJobsPage({ searchParams }: any) {
                     descriptionContainsAny= {['solar sales', 'sales representative', 'sales consultant', 'sales engineer', 'account executive', 'door to door', 'd2d']}
     requiredDomainTerms= {['sales', 'Sales']}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
                 whatJobsTitleIncludesAll={['solar', 'sales']}
               />
             </Suspense>

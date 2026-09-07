@@ -1,0 +1,62 @@
+[
+  {
+    "id": "cmt7tllhb000dxak30c24oikj",
+    "advertiser": "Solar Tech Elec LLC",
+    "category": "An advertising budget",
+    "worker": "An advertising budget, a computer and internet access. The description also mentions a commission for the marketing team, without explaining who pays it or how it is calculated.",
+    "support": "Email, CRM and proposal software; company teams manage campaigns and creative work.",
+    "unknown": "Required ad budget, reimbursement terms and the marketing commission rate are not specified.",
+    "evidence": ["all new leads are generated through your ad spend budget."],
+    "interpretation": "This is the clearest cash-expense disclosure among the selected examples. It identifies the representative's advertising budget but gives no dollar amount."
+  },
+  {
+    "id": "adzuna-5828968486",
+    "advertiser": "ATX Solar",
+    "category": "Company leads after sales milestones",
+    "worker": "Generate a personal pipeline through referrals, networking, door-to-door outreach and other sales methods. The role is advertised as 1099 and commission-only.",
+    "support": "Supplemental company leads may become available after consistent production and self-generated sales milestones.",
+    "unknown": "The milestone threshold is not given. Self-generation does not establish a requirement to buy leads or advertising.",
+    "evidence": ["Successful representatives who demonstrate consistent sales production and reach self-generated sales milestones may receive access to supplemental company-provided leads to support continued growth."],
+    "interpretation": "Company leads are described as conditional support, not something a new representative can assume will be supplied from day one."
+  },
+  {
+    "id": "adzuna-5831580940",
+    "advertiser": "SolarShoppers",
+    "category": "Your own prospecting",
+    "worker": "Generate leads through door-to-door work, referrals, networking and community contacts. Reliable transportation is required; compensation is advertised as commission-only.",
+    "support": "An installation team is described. The listing emphasizes the representative's own prospecting.",
+    "unknown": "No advertising purchase or lead fee is stated. Reliable transportation does not necessarily mean owning a vehicle.",
+    "evidence": ["Prospect and generate your own leads across the Antelope Valley", "Compensation: Commission only - uncapped."],
+    "interpretation": "This is a prospecting obligation. The wording alone cannot tell us whether the representative will spend money acquiring customers."
+  },
+  {
+    "id": "cmtq6bsg6002v8xz1ipe1xunq",
+    "advertiser": "SalesDraft Recruiting (listing names Powur)",
+    "category": "No base salary or draw",
+    "worker": "Generate leads in a commission-only independent contractor role. The listing explicitly rules out a base salary, draws and guaranteed income.",
+    "support": "Powur training and a platform for project operations and virtual outreach are described.",
+    "unknown": "No required advertising expense or purchased-lead fee is stated. Training and platform charges, if any, cannot be established from the description.",
+    "evidence": ["There is no base salary, no draws, and no guarantees", "You will need to generate your own leads."],
+    "interpretation": "A lack of guaranteed income matters when assessing the offer, but it is not evidence of a mandatory business expense. SalesDraft is the recruiting advertiser; the description names Powur."
+  },
+  {
+    "id": "adzuna-5803520463",
+    "advertiser": "Exact Solar",
+    "category": "Transportation, with leads supplied",
+    "worker": "A valid driver's license and own transportation are required.",
+    "support": "Company leads, no door-knocking requirement and paid training as necessary are advertised for the independent contractor sales role.",
+    "unknown": "Mileage reimbursement and transportation costs are not specified. Owning transportation does not prove an unreimbursed expense.",
+    "evidence": ["leads are provided for you; no door-knocking required", "valid drivers license and own transportation", "Paid training, as necessary"],
+    "interpretation": "An offer can require a personal resource while supplying customer leads. These are separate terms of the arrangement."
+  },
+  {
+    "id": "adzuna-5782613572",
+    "advertiser": "Brooklyn SolarWorks",
+    "category": "Commission pay with an explicit floor",
+    "worker": "Develop personal leads alongside company-provided opportunities. Commissions are paid at booking, installation and final utility approval.",
+    "support": "Company leads, training and back-office support. The W-2 listing explicitly guarantees an applicable NYC minimum-wage floor for hours worked when commissions fall short.",
+    "unknown": "No requirement to buy advertising or leads is stated. The description does not establish an individual worker's earnings or expenses.",
+    "evidence": ["Generate and develop your own leads while working company-provided opportunities", "Brooklyn SolarWorks guarantees you'll always earn at least the applicable New York City minimum wage for all hours worked in any week where commissions fall short."],
+    "interpretation": "The same description uses a commission-only label and spells out a pay floor. Treating every commission-only listing as offering zero guaranteed pay would misread this offer."
+  }
+]

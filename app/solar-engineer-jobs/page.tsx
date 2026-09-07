@@ -6,20 +6,33 @@ import JobFilters from '@/components/JobFilters'
 import { Compass, DraftingCompass, Building2, Cable, Calculator, Sun, Zap, BadgeCheck, DollarSign, ShieldCheck } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 export const revalidate = 3600
 
-export async function generateMetadata(): Promise<Metadata> {
-  const stats = await getRoleSalaryStats('solar-engineer')
+const ENGINEER_LANDING_FILTERS = {
+  titleContainsAny: ['engineer'],
+  excludePhrases: ['bess'],
+}
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('solar-engineer'),
+    getLandingJobCount(ENGINEER_LANDING_FILTERS),
+  ])
   const salarySuffix =
     stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
       ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
       : ''
 
   return {
-    title: salarySuffix
-      ? `Solar Engineer Jobs${salarySuffix}`
-      : 'Solar Engineer Jobs | PV Design, Systems & Electrical Roles',
+    title: withLandingJobCount(
+      salarySuffix
+        ? `Solar Engineer Jobs${salarySuffix}`
+        : 'Solar Engineer Jobs | PV Design, Systems & Electrical Roles',
+      jobCount,
+    ),
     description: 'Solar engineer jobs across the United States. Browse PV design, solar systems, project, electrical engineering, and BESS engineering roles.',
     keywords: 'solar engineer jobs, solar design engineer jobs, PV systems engineer jobs, solar project engineer, BESS engineer jobs, photovoltaic engineering roles',
     openGraph: {
@@ -32,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar Engineer Jobs',
       description: 'Find solar engineer and PV design jobs across the US.',
     },
-    alternates: { canonical: 'https://www.solarroles.com/solar-engineer-jobs' },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-engineer-jobs', params) },
   }
 }
 
@@ -42,11 +55,6 @@ const jsonLd = {
   name: 'Solar Engineer Jobs',
   description: 'Solar engineer job listings across the United States, including PV design, systems engineering, project engineering, electrical, and BESS roles.',
   url: 'https://www.solarroles.com/solar-engineer-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Solar Engineer Jobs',
-    description: 'Current solar engineer and photovoltaic engineering job listings',
-  },
 }
 
 const engineerRoles = [
@@ -129,14 +137,15 @@ const faqs = [
 
 export default async function SolarEngineerJobsPage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
  
 
   const initialData = await getJobs({
   
-    titleContainsAny: ['engineer',],
-    excludePhrases: ['bess'],
+    ...ENGINEER_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -174,6 +183,8 @@ export default async function SolarEngineerJobsPage({ searchParams }: any) {
                 whatJobsTitleIncludesAll={['solar', 'engineer']}
                 whatJobsTitleExcludes={['bess']}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
               />
             </Suspense>
           </div>

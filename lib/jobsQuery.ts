@@ -10,7 +10,7 @@ export type JobsListResult = {
 }
 
 const JOB_SELECT = {
-  id: true, title: true, company: true, location: true,
+  id: true, title: true, company: true, location: true, canonicalSlug: true,
   addressRegion: true, url: true, applyUrl: true,
   salaryMin: true, salaryMax: true, salary: true,
   contractType: true, contractTime: true, source: true, postedAt: true,
@@ -49,6 +49,7 @@ export async function fetchJobsPageUncached(
     title: job.title,
     company: job.company,
     location: job.location,
+    canonicalSlug: job.canonicalSlug,
     addressRegion: job.addressRegion,
     url: job.url,
     applyUrl: job.applyUrl,

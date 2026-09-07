@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Solar Career Advice & Job Market Insights | Solar Roles Blog',
+  title: 'Solar Career Advice — Get In, Know the Work, Move Up',
   description:
     'Practical career advice, salary data, interview tips, and solar job market trends. Written for US solar PV installers and solar industry professionals in 2026.',
   keywords: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://www.solarroles.com/blog' },
   openGraph: {
-    title: 'Solar Career Advice & Job Market Insights | Solar Roles Blog',
+    title: 'Solar Career Advice — Get In, Know the Work, Move Up',
     description:
       'Practical career advice, salary data, interview tips, and solar job market trends for US solar PV installers and solar industry professionals.',
     url: 'https://www.solarroles.com/blog',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Solar Career Advice & Job Market Insights | Solar Roles Blog',
+    title: 'Solar Career Advice — Get In, Know the Work, Move Up',
     description:
       'Practical career advice, salary data, interview tips, and solar job market trends for US solar PV installers.',
   },

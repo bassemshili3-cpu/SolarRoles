@@ -1,0 +1,9 @@
+segment,unique_active_postings,share_of_segment_explicit_sample,snapshot_date,classification_basis
+Battery storage,174,47.0%,2026-09-04,Explicit job-title signal
+Utility-scale solar,158,42.7%,2026-09-04,Explicit job-title signal
+Commercial solar,19,5.1%,2026-09-04,Explicit job-title signal
+Residential solar,19,5.1%,2026-09-04,Explicit job-title signal
+All segment-explicit postings,370,100.0%,2026-09-04,After employer-title-site deduplication
+Strict operations and maintenance roles,221,13.8%,2026-09-04,After role review and employer-title-site deduplication
+All unique active Solar Roles postings,1601,,2026-09-04,After employer-title-site deduplication
+All active Solar Roles source rows,1896,,2026-09-04,Before report deduplication

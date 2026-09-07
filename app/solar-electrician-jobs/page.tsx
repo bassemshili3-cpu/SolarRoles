@@ -6,20 +6,41 @@ import JobFilters from '@/components/JobFilters'
 import { BadgeCheck, Cable, DollarSign, ShieldCheck, Wrench, Zap } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 export const revalidate = 3600
 
-export async function generateMetadata(): Promise<Metadata> {
-  const stats = await getRoleSalaryStats('solar-electrician')
+const ELECTRICIAN_DESCRIPTION_PHRASES = [
+  'solar electrician',
+  'photovoltaic electrician',
+  'pv electrician',
+  'electrical technician',
+  'journeyman electrician',
+  'licensed electrician',
+]
+const ELECTRICIAN_LANDING_FILTERS = {
+  descriptionContainsAny: ELECTRICIAN_DESCRIPTION_PHRASES,
+  titleContainsAny: ['solar electrician'],
+}
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('solar-electrician'),
+    getLandingJobCount(ELECTRICIAN_LANDING_FILTERS),
+  ])
   const salarySuffix =
     stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
       ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
       : ''
 
   return {
-    title: salarySuffix
-      ? `Solar Electrician Jobs${salarySuffix}`
-      : 'Solar Electrician Jobs | PV, Electrical & Commissioning Roles',
+    title: withLandingJobCount(
+      salarySuffix
+        ? `Solar Electrician Jobs${salarySuffix}`
+        : 'Solar Electrician Jobs | PV, Electrical & Commissioning Roles',
+      jobCount,
+    ),
     description: 'Solar electrician jobs across the United States. Browse residential, commercial, utility-scale, commissioning, and solar O&M electrical roles.',
     keywords: 'solar electrician jobs, photovoltaic electrician jobs, solar electrical technician jobs, solar journeyman electrician, PV commissioning electrician, solar O&M electrician',
     openGraph: {
@@ -32,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar Electrician Jobs',
       description: 'Find solar electrician and PV electrical jobs across the US.',
     },
-    alternates: { canonical: 'https://www.solarroles.com/solar-electrician-jobs' },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-electrician-jobs', params) },
   }
 }
 
@@ -42,11 +63,6 @@ const jsonLd = {
   name: 'Solar Electrician Jobs',
   description: 'Solar electrician job listings across the United States, including installation, commissioning, service, and operations roles.',
   url: 'https://www.solarroles.com/solar-electrician-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Solar Electrician Jobs',
-    description: 'Current solar electrician and photovoltaic electrical job listings',
-  },
 }
 
 const electricianRoles = [
@@ -125,20 +141,12 @@ const faqs = [
 
 export default async function SolarElectricianJobsPage({ searchParams }: any) {
   const params = await searchParams
-  const descriptionContainsAny = [
-    'solar electrician',
-    'photovoltaic electrician',
-    'pv electrician',
-    'electrical technician',
-    'journeyman electrician',
-    'licensed electrician',
-  ]
-
+  const page = getLandingPageNumber(params.page)
   const initialData = await getJobs({
-    descriptionContainsAny,
-    titleContainsAny: ['solar electrician',],
+    ...ELECTRICIAN_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -170,11 +178,13 @@ export default async function SolarElectricianJobsPage({ searchParams }: any) {
                 searchLabel="solar electrician "
                 where={params.where || ''}
                 salary_min={params.salary_min}
-                descriptionContainsAny={descriptionContainsAny}
+                descriptionContainsAny={ELECTRICIAN_DESCRIPTION_PHRASES}
                 requiredDomainTerms={['solar', 'photovoltaic', ' pv ']}
                 titleContainsAny={['solar electrician']}
                 whatJobsTitleIncludesAll={['solar', 'electrician']}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
               />
             </Suspense>
           </div>

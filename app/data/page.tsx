@@ -2,23 +2,23 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { Building2, MapPin, DollarSign, TrendingUp, Briefcase } from 'lucide-react'
+import { ArrowRight, Building2, MapPin, DollarSign, TrendingUp, Briefcase } from 'lucide-react'
 import { STATES, STATE_CODE_TO_NAME, stateToSlug, codeToSlug } from '@/lib/usStates'
 
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'US Job Market Data Center | Salary Stats, Hiring Trends & More',
-  description: 'Live job market data pulled from thousands of active listings across the US. Average salaries by state, top hiring companies, job market snapshots, and more. Updated daily.',
-  keywords: 'US job market data, average salary by state, top hiring companies, job market statistics 2026, employment data',
+  title: 'US Solar Job Market Data | Hiring Reports & Salaries',
+  description: 'Original research and live US solar job market data, including hiring reports, salaries by state and active job-market snapshots.',
+  keywords: 'US solar job market data, solar hiring reports, solar salary by state, solar employment data',
   alternates: { canonical: 'https://www.solarroles.com/data' },
 }
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'US Job Market Data Center',
-  description: 'Live job market statistics from active US job listings. Updated daily.',
+  '@type': 'CollectionPage',
+  name: 'US Solar Job Market Data',
+  description: 'Original research and live statistics from active US solar job listings.',
   url: 'https://www.solarroles.com/data',
 }
 
@@ -222,12 +222,10 @@ export default async function DataCenterPage() {
         {/* ── HEADER ── */}
         <header className="text-center mb-16">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            US Job Market Data Center
+            US Solar Job Market Data
           </h1>
           <p className="text-gray-500 max-w-2xl mx-auto">
-            Live statistics pulled from {totalJobs.toLocaleString('en-US')} active job listings across the United States.
-            Every number on this page is computed from real postings in our database.
-            Updated daily.
+            Original reports and live statistics drawn from {totalJobs.toLocaleString('en-US')} active solar job listings across the United States.
           </p>
         </header>
 
@@ -259,6 +257,59 @@ export default async function DataCenterPage() {
             <p className="text-sm text-gray-500 mt-1">States covered</p>
           </div>
         </div>
+
+        <Link href="/data/solar-sales-jobs-business-expenses" className="group mb-6 block rounded-3xl border border-amber-200 bg-[#FFF8EC] p-6 transition hover:border-amber-300 hover:bg-amber-100/70 sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-amber-700">Latest Solar Roles data report</p>
+          <h2 className="mt-3 max-w-2xl text-2xl font-bold leading-tight text-gray-900">A solar sales job—or a business you have to fund?</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">One listing puts the ad budget on the rep. Six selected job descriptions show who supplies leads, equipment and income support.</p>
+          <p className="mt-4 text-sm font-semibold text-amber-800">Read the report →</p>
+        </Link>
+
+        <Link href="/data/remote-solar-jobs-travel-requirements" className="group mb-6 block rounded-3xl border border-amber-200 bg-[#FFF8EC] p-6 transition hover:border-amber-300 hover:bg-amber-100/70 sm:p-8">
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-amber-700">Solar Roles data report</p>
+              <h2 className="mt-3 max-w-2xl text-2xl font-bold leading-tight text-gray-900">Remote solar jobs can still require 90% travel</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">40 of 54 remote-advertised roles in our review mentioned travel or site visits. Read the requirements behind the labels.</p>
+            </div>
+            <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-amber-700 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          </div>
+        </Link>
+
+        <Link
+          href="/data/solar-installer-salary-rent-report"
+          className="group mb-6 block rounded-3xl border border-amber-200 bg-[#FFF8EC] p-6 transition hover:border-amber-300 hover:bg-amber-100/70 sm:p-8"
+        >
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-amber-700">Solar Roles data report</p>
+              <h2 className="mt-3 max-w-2xl text-2xl font-bold leading-tight text-gray-900">Where solar installer pay goes furthest on rent</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">A one-bedroom rent takes 41 hours of installer pay in Albuquerque and 99 in Santa Cruz. Compare pay and housing costs across 28 US metros.</p>
+            </div>
+            <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-amber-700 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          </div>
+        </Link>
+
+        <Link
+          href="/data/battery-storage-leads-segment-specific-solar-hiring"
+          className="group mb-20 block rounded-3xl border border-amber-200 bg-[#FFF8EC] p-6 transition hover:border-amber-300 hover:bg-amber-100/70 sm:p-8"
+        >
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-amber-700">
+                Solar Roles data report
+              </p>
+              <h2 className="mt-3 max-w-2xl text-2xl font-bold leading-tight text-gray-900">
+                Battery storage leads the solar jobs that name a market segment
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
+                Of 370 unique US openings with a segment in the title, 174 named
+                battery storage and 158 named utility-scale solar.
+              </p>
+            </div>
+            <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-amber-700 transition-transform group-hover:translate-x-1" />
+          </div>
+        </Link>
 
         {/* ── SECTION: Job Market by State ── */}
         <section className="mb-20">

@@ -3,11 +3,19 @@ import { Metadata } from 'next'
 import { getCachedJobsPage } from '@/lib/jobsQuery'
 import { parseJobWhereParams } from '@/lib/job-where'
 import JobsPageClient from './JobsPageClient'
+import { getLandingJobCount, withLandingJobCount } from '@/lib/landingJobTitle'
 
-export const metadata: Metadata = {
-  title: 'Search Solar Roles Jobs in The US | Filter by Salary, Type & Experience | Solar Roles',
-  description:
-    'Browse thousands of solar photovoltaic installer positions in the US across all 50 states, updated daily.',
+export async function generateMetadata(): Promise<Metadata> {
+  const count = await getLandingJobCount({})
+
+  return {
+    title: withLandingJobCount(
+      'Solar Jobs in the US | Filter by Salary, Type & Experience | Solar Roles',
+      count,
+    ),
+    description:
+      'Browse thousands of solar photovoltaic installer positions in the US across all 50 states, updated daily.',
+  }
 }
 
 // Aligné avec le revalidate de getCachedJobsPage — inutile de garder le HTML

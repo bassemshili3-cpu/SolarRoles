@@ -13,7 +13,7 @@ interface ProgramRow {
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/solar-installer-apprenticeship-programs";
 const PAGE_TITLE =
-  "Solar Installer Apprenticeships (2026): How Registered Apprenticeship Programs Work";
+  "How Registered Apprenticeship Programs for Solar Installers Work";
 const PAGE_DESCRIPTION =
   "A standalone guide to paid, earn-while-you-learn apprenticeship pathways for solar PV installers in the US: how Registered Apprenticeship Programs work, why solar installer isn't officially apprenticeable yet, and how the IRA tax credit changed employer incentives.";
 

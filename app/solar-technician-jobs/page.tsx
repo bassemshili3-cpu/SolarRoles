@@ -6,20 +6,33 @@ import JobFilters from '@/components/JobFilters'
 import { Wrench, Sun, Zap, ShieldCheck, Award, DollarSign, TrendingUp, GraduationCap, Settings, HardHat, SearchCheck } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 export const revalidate = 3600
 
-export async function generateMetadata(): Promise<Metadata> {
-  const stats = await getRoleSalaryStats('solar-technician')
+const TECHNICIAN_LANDING_FILTERS = {
+  titleContainsAny: ['technician', 'tech', 'service', 'field', 'o&m', 'maintenance', 'repair'],
+  excludePhrases: ['bess', 'engineer', 'sales', 'supervisor', 'manager'],
+}
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('solar-technician'),
+    getLandingJobCount(TECHNICIAN_LANDING_FILTERS),
+  ])
   const salarySuffix =
     stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
       ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
       : ''
 
   return {
-    title: salarySuffix
-      ? `Solar Technician Jobs${salarySuffix}`
-      : 'Solar Technician Jobs | Service, Field & Repair Technician Roles',
+    title: withLandingJobCount(
+      salarySuffix
+        ? `Solar Technician Jobs${salarySuffix}`
+        : 'Solar Technician Jobs | Service, Field & Repair Technician Roles',
+      jobCount,
+    ),
     description: 'Solar technician jobs across the United States. Browse solar service technician, O&M technician, and solar panel repair technician roles.',
     keywords: 'solar technician, solar power technician jobs, solar technician salary, solar technician training, solar panel repair technician, solar field technician jobs, solar service technician jobs, solar technician apprenticeship, solar repair technician, pv technician jobs, solar o&m technician',
     openGraph: {
@@ -32,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar Technician Jobs',
       description: 'Find solar technician, field service, and solar repair technician openings across the US.',
     },
-    alternates: { canonical: 'https://www.solarroles.com/solar-technician-jobs' },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-technician-jobs', params) },
   }
 }
 
@@ -42,11 +55,6 @@ const jsonLd = {
   name: 'Solar Technician Jobs',
   description: 'Solar technician job listings across the United States, covering solar service technician, solar field technician, and solar panel repair technician roles for residential, commercial, and utility-scale employers.',
   url: 'https://www.solarroles.com/solar-technician-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Solar Technician Jobs',
-    description: 'Current solar technician, solar service technician, and solar field technician job listings',
-  },
 }
 
 const technicianRoles = [
@@ -133,15 +141,16 @@ const faqs = [
 ]
 export default async function SolarTechnicianJobsPage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
 
   const initialData = await getJobs({
     // Scopes this landing page to solar technician / service / repair / O&M
     // roles via a keyword AND-filter, independent of the user's own `what`
     // search box below — same pattern used on the other niche landing pages.
-    titleContainsAny: ['technician', 'tech', 'service', 'field', 'o&m', 'maintenance', 'repair'],
-    excludePhrases: ['bess', 'engineer', 'sales', 'supervisor', 'manager'],
+    ...TECHNICIAN_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -185,6 +194,8 @@ export default async function SolarTechnicianJobsPage({ searchParams }: any) {
                 whatJobsTitleIncludesAll={['solar', 'technician']}
                 whatJobsTitleExcludes={['bess', 'engineer', 'sales', 'supervisor', 'manager']}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
               />
             </Suspense>
           </div>

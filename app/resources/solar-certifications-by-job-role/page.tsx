@@ -13,7 +13,7 @@ interface RoleRow {
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/solar-certifications-by-job-role";
 const PAGE_TITLE =
-  "Solar Certifications by Job Role (2026): Which Credential for Which Position";
+  "Solar Certifications by Job Role: Which Credential for Which Position";
 const PAGE_DESCRIPTION =
   "A single reference table mapping US solar job roles to the certifications and licenses that apply to them: what's legally required, what's most valued by employers, and what's manufacturer-specific.";
 

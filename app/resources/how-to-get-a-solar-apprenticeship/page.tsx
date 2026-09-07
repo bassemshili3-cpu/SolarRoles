@@ -11,7 +11,7 @@ interface StepRow {
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/how-to-get-a-solar-apprenticeship";
 const PAGE_TITLE =
-  "How to Land a Solar Installer Apprenticeship (2026): Application, Testing, and Selection";
+  "How to Land a Solar Installer Apprenticeship: 2026 Edition";
 const PAGE_DESCRIPTION =
   "A practical guide to getting into a solar apprenticeship: how JATC-style electrical apprenticeships rank and select candidates, what the aptitude test covers, and how employer-run and state-registered programs differ.";
 

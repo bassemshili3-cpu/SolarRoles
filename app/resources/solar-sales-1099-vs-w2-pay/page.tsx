@@ -11,7 +11,7 @@ const body = Inter({ subsets: ['latin'], weight: ['400', '500'], variable: '--fo
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['500'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'Solar Sales: 1099 vs W2, Which Pays More | Solar Roles',
+  title: 'Solar Sales: 1099 vs W2, Which Pays More ? | Solar Roles',
   description:
     'A straight comparison of 1099 commission-only and W2 base-plus-commission solar sales jobs: what each structure pays, and the risks to be aware of.',
   openGraph: {

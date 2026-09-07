@@ -5,24 +5,37 @@ import JobFilters from '@/components/JobFilters'
 import { BatteryCharging, Zap, DollarSign, ShieldCheck, Award, Wrench, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'BESS Technician Jobs | Battery Energy Storage Installer & Service Roles',
-  description: 'Battery Energy Storage System technician positions across the United States. Installation, commissioning, and maintenance roles with pay ranges, certification requirements, and what the job involves day to day.',
-  keywords: 'bess technician jobs, battery energy storage jobs, battery storage technician, bess field technician, energy storage installer jobs, battery storage commissioning technician',
-  openGraph: {
-    title: 'BESS Technician Jobs | Now Hiring Nationwide',
-    description: 'Browse open Battery Energy Storage System technician positions. Installation, commissioning, and field service roles across residential, commercial, and utility scale projects.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'BESS Technician Jobs',
-    description: 'Find Battery Energy Storage System technician openings across the US. Residential, commercial, and utility scale employers hiring now.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/bess-technician-jobs' },
+const BESS_LANDING_FILTERS = {
+  titleContainsAny: ['bess technician', 'Sr. Service Technician', 'solar & bess technician'],
+}
+
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const jobCount = await getLandingJobCount(BESS_LANDING_FILTERS)
+
+  return {
+    title: withLandingJobCount(
+      'BESS Technician Jobs | Battery Energy Storage Installer & Service Roles',
+      jobCount,
+    ),
+    description: 'Battery Energy Storage System technician positions across the United States. Installation, commissioning, and maintenance roles with pay ranges, certification requirements, and what the job involves day to day.',
+    keywords: 'bess technician jobs, battery energy storage jobs, battery storage technician, bess field technician, energy storage installer jobs, battery storage commissioning technician',
+    openGraph: {
+      title: 'BESS Technician Jobs | Now Hiring Nationwide',
+      description: 'Browse open Battery Energy Storage System technician positions. Installation, commissioning, and field service roles across residential, commercial, and utility scale projects.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'BESS Technician Jobs',
+      description: 'Find Battery Energy Storage System technician openings across the US. Residential, commercial, and utility scale employers hiring now.',
+    },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/bess-technician-jobs', params) },
+  }
 }
 
 const jsonLd = {
@@ -31,11 +44,6 @@ const jsonLd = {
   name: 'BESS Technician Jobs',
   description: 'Battery Energy Storage System technician job listings across the United States, covering residential, commercial, and utility scale employers.',
   url: 'https://www.solarroles.com/bess-technician-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available BESS Technician Jobs',
-    description: 'Current BESS technician job listings',
-  },
 }
 
 const bessRoles = [
@@ -147,15 +155,17 @@ const faqs = [
 
 export default async function BessTechnicianJobsPage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
 
   const initialData = await getJobs({
     // Scopes this landing page to battery storage roles via a keyword
     // AND filter, independent of the user's own `what` search box below,
     // same pattern used on /solar-pv-installer-jobs and /lead-solar-installer-jobs.
   
-    titleContainsAny: ['bess technician', 'Sr. Service Technician', 'solar & bess technician'],
+    ...BESS_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -189,6 +199,8 @@ export default async function BessTechnicianJobsPage({ searchParams }: any) {
               titleContainsAny={['bess technician', 'Sr. Service Technician', 'solar & bess technician']}
               whatJobsTitleIncludesAny={['bess technician', 'battery storage technician', 'energy storage technician']}
               initialData={initialData}
+              initialPage={page}
+              landingPageSeo
               />
             </Suspense>
           </div>

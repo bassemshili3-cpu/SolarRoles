@@ -7,7 +7,7 @@ const sora = Sora({ subsets: ["latin"], weight: ["700", "800"], display: "swap" 
 
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/solar-engineer-jobs";
-const PAGE_TITLE = "Types of Solar Engineer Jobs (2026 Guide)";
+const PAGE_TITLE = "All Types of Solar Engineer Jobs (2026 Guide)";
 const PAGE_DESCRIPTION =
   "Every solar engineer job title mapped to what to know which one is a fit for you.";
 

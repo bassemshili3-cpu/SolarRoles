@@ -54,7 +54,13 @@ const paycheckPages: string[] = [
 ]
 
 // ── Data Center pages ────────────────────────────────────────
-const dataPages: string[] = ['/data']
+const dataPages: string[] = [
+  '/data',
+  '/data/solar-sales-jobs-business-expenses',
+  '/data/remote-solar-jobs-travel-requirements',
+  '/data/solar-installer-salary-rent-report',
+  '/data/battery-storage-leads-segment-specific-solar-hiring',
+]
 
 const dataSalaryPages: string[] = [
   'solar-photovoltaic-installer', 'lead-solar-installer',

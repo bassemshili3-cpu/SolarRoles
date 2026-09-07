@@ -1,0 +1,965 @@
+[
+  {
+    "company": "Moss",
+    "title": "Solar Engineering Lead - Preliminary Design",
+    "ids": [
+      "adzuna-5620625349"
+    ],
+    "remoteEvidence": "eded to support project execution, up to 20-25% travel - if remote. Work hard, be nice, and have fun! JOB TITLE: ASSOC IATE , SME, ENGINEERING SERVICES (P RELIMINARY DESIGN) JOB LOCATION: FORT LAUDERDALE, FL , HYBRID, OR REMOTE CLASSIFICATI",
+    "travelEvidence": "up to 20-25% travel - if remote",
+    "travelKind": "quantified",
+    "min": null,
+    "max": 25,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Up to 20–25%",
+    "qualifier": "ceiling",
+    "reviewed": true
+  },
+  {
+    "company": "FindTalent",
+    "title": "Solar Project Manager",
+    "ids": [
+      "adzuna-5655765763"
+    ],
+    "remoteEvidence": "n, closeout, and client handoff. While this position offers remote flexibility, regular travel to active project sites is required. The ideal candidate is a strong leader with expertise in electrical construction, contract management, budge",
+    "travelEvidence": "regular travel to active project sites is required",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Regular site travel",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "EVS",
+    "title": "Technical Civil Solar Project Manager",
+    "ids": [
+      "adzuna-5674837370"
+    ],
+    "remoteEvidence": "SOLAR PROJECT MANAGER Location: Eden Prairie, MN | Hybrid | Remote Schedule: Full-Time Salary: $100,000 – $140,000 (based on experience) EVS is seeking a Technical Civil Solar Project Manager to support the planning, coordination, and execu",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "J.Riley Recruitment",
+    "title": "Project Manager - Solar & Renewable Energy",
+    "ids": [
+      "adzuna-5686913212"
+    ],
+    "remoteEvidence": "ects across the country. The role offers the flexibility of remote work combined with field engagement, exposure to utility-scale solar projects, and the ability to lead impactful work in a growing sector. About J.Riley Recruitment J.Riley",
+    "travelEvidence": "Travel to project sites regularly",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Regular site travel",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Intertek",
+    "title": "PV Solar Engineer",
+    "ids": [
+      "adzuna-5699944770"
+    ],
+    "remoteEvidence": "Description PV Solar Engineer - Remote/Travel Based Position Intertek's Clean Energy Associates (CEA) serves as a trusted partner to some of the world’s leading solar project developers, owners and financiers, pr",
+    "travelEvidence": "This position requires over 80% of travel.",
+    "travelKind": "conflicting",
+    "min": null,
+    "max": null,
+    "notes": "The same description says both over 80% and up to 80%. Excluded from consistent percentage comparisons.",
+    "remoteSource": "description",
+    "travelLabel": "Over 80%; elsewhere up to 80%",
+    "qualifier": "conflicting",
+    "reviewed": true
+  },
+  {
+    "company": "Cypress Creek Renewables",
+    "title": "QA/QC Solar Technician",
+    "ids": [
+      "adzuna-5711376023"
+    ],
+    "remoteEvidence": "nd corrective maintenance on solar PV systems. This role is remote, ideally based in North Carolina, with extensive travel required to job sites nationwide. Essential Duties and Responsibilities: Conduct on-site inspections and evaluations",
+    "travelEvidence": "extensive travel (90% required)",
+    "travelKind": "quantified",
+    "min": 90,
+    "max": 90,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "90%",
+    "qualifier": "stated",
+    "reviewed": true
+  },
+  {
+    "company": "US Tech Solutions",
+    "title": "BESS Engineer",
+    "ids": [
+      "adzuna-5716327612"
+    ],
+    "remoteEvidence": "e the energy storage field. Juno Beach (preferred); Open to remote only for strong candidates willing to include additional travel % dedicated to in office visits. Duties & Responsibilities Support design phase and engineer major components",
+    "travelEvidence": "Travel 25% of the time for project specific duties.",
+    "travelKind": "quantified",
+    "min": 25,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "25% + additional office visits",
+    "qualifier": "stated_plus",
+    "reviewed": true
+  },
+  {
+    "company": "Green House",
+    "title": "Solar Sales Representative",
+    "ids": [
+      "adzuna-5726560254"
+    ],
+    "remoteEvidence": "(1099) – Unlimited Earning Potential! Location: NJ/NY/PA – Remote/Field-Based | Compensation: Commission-Only ($150K for Top Performers) Green House Solar is growing – and we’re looking for superstar sales reps ready to build a high-income",
+    "travelEvidence": "Remote/Field-Based",
+    "travelKind": "field",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Field-based; frequency unspecified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Origis Energy",
+    "title": "Solar EPC Project Manager or Senior Project Manager - Grid Power",
+    "ids": [
+      "adzuna-5787830500"
+    ],
+    "remoteEvidence": "ke timely and sound decisions Location Austin TX; Miami FL; remote considered for the right candidate Travel Up to 40% travel as needed Job Level Manager or Senior Project Manager depending on candidate - no direct reports Origis Energy is",
+    "travelEvidence": "Up to 40% travel as needed",
+    "travelKind": "quantified",
+    "min": null,
+    "max": 40,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Up to 40%",
+    "qualifier": "ceiling",
+    "reviewed": true
+  },
+  {
+    "company": "Birch Creek Energy",
+    "title": "Project Manager (utility-scale solar development)",
+    "ids": [
+      "adzuna-5792169714"
+    ],
+    "remoteEvidence": "main offices are located in St. Louis (HQ) and Los Angeles. Remote-work candidates are welcome. Summary Under the direction of the Vice President of Execution, the Project Manager is responsible for managing all aspects and phases of multip",
+    "travelEvidence": "Occasional travel may be required for site visits",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Occasional travel may be required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Doral Renewables",
+    "title": "Project Manager (Project Management) Utility Scale Solar",
+    "ids": [
+      "adzuna-5799457833"
+    ],
+    "remoteEvidence": "ugh commercial operation of the facility. This role will be remote, but the ideal candidate must be able to travel to project sites up to 25% of the time. Responsibilities Support the EPC selection process, contract execution (including exh",
+    "travelEvidence": "Ability to travel up to 25% of the time.",
+    "travelKind": "quantified",
+    "min": null,
+    "max": 25,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Up to 25%",
+    "qualifier": "ceiling",
+    "reviewed": true
+  },
+  {
+    "company": "Keystone Clearwater Solutions",
+    "title": "Senior Project Manager – Solar Construction",
+    "ids": [
+      "adzuna-5806114144"
+    ],
+    "remoteEvidence": "ading solar EPC organization. This position is eligible for remote work. However, preference will be given to candidates located in the Northeast or along the East Coast, particularly those within or near our primary operating regions. Resp",
+    "travelEvidence": "Ability to travel to project sites as needed",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Site travel as needed",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Jobot",
+    "title": "Solar Project Manager - Community Solar (REMOTE)",
+    "ids": [
+      "adzuna-5821420492",
+      "adzuna-5821420544",
+      "adzuna-5821420668",
+      "adzuna-5821420862",
+      "adzuna-5836706084",
+      "adzuna-5851404509",
+      "adzuna-5851404654",
+      "adzuna-5851404815",
+      "adzuna-5851862886"
+    ],
+    "remoteEvidence": "Solar Project Manager - Community Solar (REMOTE) | Houston, Harris County",
+    "travelEvidence": "minimal travel (once/month to job sites",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Monthly site visits",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Rise Technical Recruitment",
+    "title": "Project Manager",
+    "ids": [
+      "adzuna-5827229918",
+      "adzuna-5866122441"
+    ],
+    "remoteEvidence": "O 401(k) Match Additional Benefits Clear Career Progression Remote from Pennsylvania Are you an experienced Project Manager or Engineer from an EPC or energy construction background looking for the opportunity to take ownership of major ren",
+    "travelEvidence": "work remotely with travel to project sites",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Site travel; frequency unspecified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "DEPCOM Power",
+    "title": "Estimator",
+    "ids": [
+      "adzuna-5831013479",
+      "adzuna-5831958425"
+    ],
+    "remoteEvidence": "uston, TX office, requiring 10% travel for site visits. For remote employees, this role will involve 25% travel, which includes monthly trips to Scottsdale for meetings with internal teams as well as attending site visits. Please note that",
+    "travelEvidence": "For remote employees, this role will involve 25% travel",
+    "travelKind": "quantified",
+    "min": 25,
+    "max": 25,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "25%",
+    "qualifier": "stated",
+    "reviewed": true
+  },
+  {
+    "company": "A2B DEVELOPMENT",
+    "title": "Sr. Project Manager - C&I",
+    "ids": [
+      "adzuna-5831499061"
+    ],
+    "remoteEvidence": "Senior Project Manager MARS Energy Solutions | Remote – U.S.-Based Candidates Job Summary MARS Energy Solutions is seeking an experienced Senior Project Manager to lead the execution of commercial and industrial solar projects",
+    "travelEvidence": "Ability to travel to local job sites up to 20%",
+    "travelKind": "quantified",
+    "min": null,
+    "max": 20,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Up to 20% (local)",
+    "qualifier": "ceiling",
+    "reviewed": true
+  },
+  {
+    "company": "EDF power solutions",
+    "title": "Senior Solar Design Engineer [Remote]",
+    "ids": [
+      "adzuna-5836797425"
+    ],
+    "remoteEvidence": "Senior Solar Design Engineer [Remote] | US",
+    "travelEvidence": "occasional site visits may be performed",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Occasional site visits possible",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "EDF power solutions",
+    "title": "Utility Scale Solar & BESS Project Manager [Hybrid]",
+    "ids": [
+      "adzuna-5836797433"
+    ],
+    "remoteEvidence": "sed in either our Columbia, MD or West Lebanon, NH offices. Remote may be considered for exceptional candidates located in select east coast/mid-Atlantic states. Salary Range The full pay range for this role is $105,100 - 175,100 per year.",
+    "travelEvidence": "approximately 25% of overall work time",
+    "travelKind": "quantified",
+    "min": 25,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Approximately 25% + other possible trips",
+    "qualifier": "approximate_plus",
+    "reviewed": true
+  },
+  {
+    "company": "Jobot",
+    "title": "Solar / EPC Project Manager",
+    "ids": [
+      "adzuna-5841840200",
+      "adzuna-5841840294",
+      "adzuna-5841847369",
+      "adzuna-5841847371",
+      "adzuna-5841847431",
+      "adzuna-5841847522",
+      "adzuna-5841847531",
+      "adzuna-5841847579"
+    ],
+    "remoteEvidence": "Fully-Covered Family Healthcare | 100% Remote | Solar/EPC Project Manager Opportunity! This Jobot Job is hosted by: David DeCristofaro Are you a fit? Easy Apply now by clicking the \"Quick Apply\" button and sending us yo",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "DEPCOM Power",
+    "title": "Civil Estimator",
+    "ids": [
+      "adzuna-5842336977",
+      "adzuna-5846534777"
+    ],
+    "remoteEvidence": "ton, TX, Scottsdale, AZ, or Bedminster, NJ office; however, remote work within the U.S. is an option. This position is not eligible for VISA Sponsorship. What You Will Do As a Civil Estimator at DEPCOM Power, you will help develop accurate,",
+    "travelEvidence": "Conduct site visits as needed",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Site visits as needed",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Mortenson",
+    "title": "Senior Construction Electrical Project Manager I- Solar",
+    "ids": [
+      "adzuna-5846390585"
+    ],
+    "remoteEvidence": "nce, with consideration given to internal equity. LI-GL1 LI-remote IND-GNL Please make note: Visa sponsorship is not offered for this position. Our postings are typically open a minimum of 5 days and an average of 44 days. ABOUT MORTENSON A",
+    "travelEvidence": "Travel: Up to 50% of the time",
+    "travelKind": "quantified",
+    "min": null,
+    "max": 50,
+    "notes": "Remote evidence is an LI-remote tag; the body names headquarters or a regional office. Not proof of unrestricted home working.",
+    "remoteSource": "description",
+    "travelLabel": "Up to 50%",
+    "qualifier": "ceiling",
+    "reviewed": true
+  },
+  {
+    "company": "DEPCOM Power",
+    "title": "Electrical Estimator",
+    "ids": [
+      "adzuna-5850778217"
+    ],
+    "remoteEvidence": "is ideally based in Scottsdale, AZ or Bedminster, NJ, with remote options available within the U.S. This position is not eligible for visa sponsorship. What You Will Do Refine electrical estimating processes and templates to improve accura",
+    "travelEvidence": "Conduct site visits as needed",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Site visits as needed",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "LPL Solar",
+    "title": "Engineering Project Manager",
+    "ids": [
+      "adzuna-5858897080",
+      "adzuna-5860845485"
+    ],
+    "remoteEvidence": "Project Job Title: Project Manager - Engineering Location: Remote Job Type: Full-Time Reports To: Director of Engineering (or designated Engineering Manager) LPL Solar is a self-perform solar EPC (Engineering, Procurement, and Construction",
+    "travelEvidence": "Ability to travel as required to support client meetings and project needs.",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Travel as required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Consolidated Electrical Distributors",
+    "title": "Commercial Solar Design Project Lead",
+    "ids": [
+      "adzuna-5861738016"
+    ],
+    "remoteEvidence": "or similar preliminary design software Working Conditions: Remote work on a small team, with multiple weekly check-ins Work standard business hours of 8am to 5pm within your time zone or within the time zone of the Division assigned Travel",
+    "travelEvidence": "Travel to a Greentech or customer location at least once per week",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "At least weekly visits",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Hanwha Convergence USA",
+    "title": "Regional Commercial Solar Technician 4",
+    "ids": [
+      "cms38bop8000dvebnaj9yiay2"
+    ],
+    "remoteEvidence": "Regional Commercial Solar Technician 4 | Remote",
+    "travelEvidence": "Travel throughout the assigned region (approximately 60–75%)",
+    "travelKind": "quantified",
+    "min": 60,
+    "max": 75,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Approximately 60–75%",
+    "qualifier": "approximate_range",
+    "reviewed": true
+  },
+  {
+    "company": "RES",
+    "title": "Field Service Technician II – Solar BESS- Traveler",
+    "ids": [
+      "cmshlj6pc0000hrcmx3fkbu8e"
+    ],
+    "remoteEvidence": "Field Service Technician II – Solar BESS- Traveler | Remote, United States",
+    "travelEvidence": "Domestic travel 76-100% required.",
+    "travelKind": "quantified",
+    "min": 76,
+    "max": 100,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "76–100%",
+    "qualifier": "range",
+    "reviewed": true
+  },
+  {
+    "company": "RES",
+    "title": "Lead Estimator - High Voltage & BESS",
+    "ids": [
+      "cmskdtprl00001qxtllcmbf0c"
+    ],
+    "remoteEvidence": "Lead Estimator - High Voltage & BESS | Remote, United States",
+    "travelEvidence": "Ability to travel 5-15% required.",
+    "travelKind": "quantified",
+    "min": 5,
+    "max": 15,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "5–15%",
+    "qualifier": "range",
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Estimator, Services (Remote)",
+    "ids": [
+      "cmskecm53002w1qxtp9lsiaav"
+    ],
+    "remoteEvidence": "Estimator, Services (Remote) | Remote, CA",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Assistant Commissioning Project Manager, PV",
+    "ids": [
+      "cmskecmqi00301qxt4zuvj5ga",
+      "cmskecpf5003c1qxt69z0wpfd",
+      "cmskecpki003d1qxt0jglxsdo",
+      "cmsubo3a2000mahnnfx2hrptk"
+    ],
+    "remoteEvidence": "Assistant Commissioning Project Manager, PV | Remote, CA",
+    "travelEvidence": "Travel is expected, including extended out‑of‑town stays",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Extended out-of-town stays",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Commissioning Project Manager (Remote)",
+    "ids": [
+      "cmskecoiu00361qxtj4jwb8pk",
+      "cmskecp9q003b1qxtz85ts09m"
+    ],
+    "remoteEvidence": "Commissioning Project Manager (Remote) | Remote, ND",
+    "travelEvidence": "remote with travel required within the Midwest region",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "Grouped regional versions mention Midwest or South Central travel; both require travel.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Regional travel required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Assistant Commissioning Project Manager, HV",
+    "ids": [
+      "cmskecoyz00391qxtac1u1tof",
+      "cmskecpv8003f1qxtnp3rqn8b"
+    ],
+    "remoteEvidence": "Assistant Commissioning Project Manager, HV | Remote, CA",
+    "travelEvidence": "Travel is expected, including extended out‑of‑town stays",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Extended out-of-town stays",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Assistant Commissioning Project Manager, BESS",
+    "ids": [
+      "cmskecp4e003a1qxt2j5oplt9"
+    ],
+    "remoteEvidence": "Assistant Commissioning Project Manager, BESS | Remote, CA",
+    "travelEvidence": "Travel is expected, including extended out‑of‑town stays",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Extended out-of-town stays",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "SCADA Project Manager II, EPC (Remote)",
+    "ids": [
+      "cmskecqbh003i1qxt8l8dggnp"
+    ],
+    "remoteEvidence": "SCADA Project Manager II, EPC (Remote) | San Diego Renewable Group, CA",
+    "travelEvidence": "with regular in-office presence in San Diego, CA or Bend, OR",
+    "travelKind": "office",
+    "min": null,
+    "max": null,
+    "notes": "Remote or hybrid options appear alongside regular office presence; the text does not clearly allocate that condition to one option.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Office attendance wording is ambiguous",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "BESS Engineer II (Remote)",
+    "ids": [
+      "cmskecqrs003k1qxtcf06fl5c"
+    ],
+    "remoteEvidence": "BESS Engineer II (Remote) | Remote, CA",
+    "travelEvidence": "Travel as required to support project execution.",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Travel as required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "EPC Regional Manager, Utility Scale Solar (West Region)",
+    "ids": [
+      "cmskecr2r003l1qxtqh6wt1dn"
+    ],
+    "remoteEvidence": "hybrid, with regular in-office presence in San Diego, CA or remote within the West Region (CA, NV, WA) and will require travel. Specific location details and expectations will be discussed during the interview process. Job Description: *Thi",
+    "travelEvidence": "will require travel",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "Travel required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "HV Project Manager (Remote)",
+    "ids": [
+      "cmskecrdh003m1qxtsoue1xcx",
+      "cmskecs4j003p1qxtuqdlf6j3"
+    ],
+    "remoteEvidence": "HV Project Manager (Remote) | Remote, CA",
+    "travelEvidence": "Regular travel required to project sites, utility offices, and vendor facilities",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "Remote-title and office-or-remote versions grouped as one employer-role combination; both state regular travel.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Regular site and office travel",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Senior Project Controls Scheduler, BESS (Remote)",
+    "ids": [
+      "cmskecrtr003n1qxt1ujzj0wz"
+    ],
+    "remoteEvidence": "Senior Project Controls Scheduler, BESS (Remote) | Remote, CA",
+    "travelEvidence": "Position requires travel to jobsites",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Site travel required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "Commissioning Project Manager, BESS",
+    "ids": [
+      "cmsubo3mz000nahnnhrql8jmb",
+      "cmsubo3s8000oahnnnnoun0sh"
+    ],
+    "remoteEvidence": "Commissioning Project Manager, BESS | Remote, CA",
+    "travelEvidence": "Frequent travel and extended project-site assignments are expected",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "Remote location label; body explicitly describes a hybrid arrangement and required site presence.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Frequent travel and extended assignments",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Venture Solar",
+    "title": "Inside Sales Specialist (Fully Remote)",
+    "ids": [
+      "cmt3dswcp0001niddeo9sm8tx",
+      "cmt3dswpj0003niddbx37e10f",
+      "cmt3dswzp0005nidd4k2yql51"
+    ],
+    "remoteEvidence": "Inside Sales Specialist (Fully Remote) | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar.com",
+    "title": "Senior Full-Stack Engineer",
+    "ids": [
+      "cmt7tkhef0000xak3hlg5zsst"
+    ],
+    "remoteEvidence": "Senior Full-Stack Engineer | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar.com",
+    "title": "Product Manager",
+    "ids": [
+      "cmt7tkhnz0001xak3ovxktqa2"
+    ],
+    "remoteEvidence": "Product Manager | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar.com",
+    "title": "Pricing Analyst",
+    "ids": [
+      "cmt7tkht30002xak3vs9hwyt7"
+    ],
+    "remoteEvidence": "Pricing Analyst | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar.com",
+    "title": "Energy Advisor",
+    "ids": [
+      "cmt7tki0k0003xak3q6oosvgx"
+    ],
+    "remoteEvidence": "Energy Advisor | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar.com",
+    "title": "Installer Partnerships Manager",
+    "ids": [
+      "cmt7tki5m0004xak32b3xi83v"
+    ],
+    "remoteEvidence": "Installer Partnerships Manager | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar.com",
+    "title": "Growth Marketer",
+    "ids": [
+      "cmt7tkiap0005xak3w3f42pqk"
+    ],
+    "remoteEvidence": "Growth Marketer | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Solar Tech Elec LLC",
+    "title": "Virtual Sales Agents",
+    "ids": [
+      "cmt7tllhb000dxak30c24oikj"
+    ],
+    "remoteEvidence": "Virtual Sales Agents | Remote",
+    "travelEvidence": "",
+    "travelKind": "not_stated",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "No travel or attendance requirement identified",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "RNWBL",
+    "title": "Solar Technician II (2)",
+    "ids": [
+      "cmt7waq0k000t14u3ghtd7eph"
+    ],
+    "remoteEvidence": "Solar Technician II (2) | Tonopah, AZ | Remote (Phoenix, Arizona, US)",
+    "travelEvidence": "",
+    "travelKind": "incomplete",
+    "min": null,
+    "max": null,
+    "notes": "Only a generic company introduction was available. Excluded from the analytical denominator.",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Insufficient role description",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "SOLV Energy",
+    "title": "BESS Engineer III (Remote)",
+    "ids": [
+      "cmtfp9ewt000k12ivd22xiume"
+    ],
+    "remoteEvidence": "BESS Engineer III (Remote) | Remote, CA",
+    "travelEvidence": "Travel as required to support project execution.",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Travel as required",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Moss Construction",
+    "title": "Project Manager, BESS Preconstruction Management",
+    "ids": [
+      "cmtk79gwu000d4f9iejbrni93"
+    ],
+    "remoteEvidence": "areer development. In Office - Ability to travel up to 25%. Remote – Ability to travel 25%, up to 50%. JOB TITLE: PRECONSTRUCTION PROJECT MANAGER, BESS - PRECONSTRUCTION MANAGEMENT JOB LOCATION: FORT LAUDERDALE, FL [OPEN TO REMOTE FOR THE R",
+    "travelEvidence": "Remote – Ability to travel 25%, up to 50%.",
+    "travelKind": "quantified",
+    "min": 25,
+    "max": 50,
+    "notes": "",
+    "remoteSource": "description",
+    "travelLabel": "25%, up to 50% (remote option)",
+    "qualifier": "range",
+    "reviewed": true
+  },
+  {
+    "company": "Clean Energy Services",
+    "title": "BESS Field Technician 1 – Operations & Maintenance",
+    "ids": [
+      "cmtk7p6j4000f4f9iroqqvxh2"
+    ],
+    "remoteEvidence": "BESS Field Technician 1 – Operations & Maintenance | Remote (United States)",
+    "travelEvidence": "traveling to new sites as part of their regular schedule",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Regular travel to sites",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Clean Energy Services",
+    "title": "Battery Storage Technician",
+    "ids": [
+      "cmtk7p7j6000g4f9iu7z3j1z9"
+    ],
+    "remoteEvidence": "Battery Storage Technician | Remote (United States)",
+    "travelEvidence": "traveling to new sites as part of their regular schedule",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Regular travel to sites",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "Clean Energy Services",
+    "title": "Solar Maintenance Technician",
+    "ids": [
+      "cmtk7p836000i4f9ie8vsevog"
+    ],
+    "remoteEvidence": "Solar Maintenance Technician | Remote (United States)",
+    "travelEvidence": "traveling to new sites as part of their regular schedule",
+    "travelKind": "unquantified",
+    "min": null,
+    "max": null,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Regular travel to sites",
+    "qualifier": null,
+    "reviewed": true
+  },
+  {
+    "company": "ENGIE",
+    "title": "Field Service Technician II (Traveling)",
+    "ids": [
+      "cmtk7piwc000o4f9i587bpwg5"
+    ],
+    "remoteEvidence": "Field Service Technician II (Traveling) | Remote, US, Texas",
+    "travelEvidence": "Must be available to travel domestically up to 85% of the time",
+    "travelKind": "quantified",
+    "min": null,
+    "max": 85,
+    "notes": "",
+    "remoteSource": "title_or_location",
+    "travelLabel": "Up to 85%",
+    "qualifier": "ceiling",
+    "reviewed": true
+  },
+  {
+    "company": "Sargent Electric",
+    "title": "Solar Project Manager",
+    "ids": [
+      "adzuna-5537287546"
+    ],
+    "remoteEvidence": "s, in the safest possible way, for multi-million-dollar solar projects. This position can be worked remotely. Travel to project sites on a r",
+    "remoteSource": "description",
+    "travelEvidence": "Travel to project sites on a regular basis is required.",
+    "travelKind": "unquantified",
+    "travelLabel": "Regular site travel required",
+    "min": null,
+    "max": null,
+    "qualifier": null,
+    "notes": "",
+    "reviewed": true
+  },
+  {
+    "company": "Bowman",
+    "title": "Assistant Project Manager, Solar PV & BESS",
+    "ids": [
+      "adzuna-5806665284"
+    ],
+    "remoteEvidence": "iption Bowman has an opportunity for an Assistant Project Manager, Solar PV & BESS to join our team remotely. At Bowman, we believe in creat",
+    "remoteSource": "description",
+    "travelEvidence": "Mobility around a job/construction site",
+    "travelKind": "field",
+    "travelLabel": "Site work appears in physical demands",
+    "min": null,
+    "max": null,
+    "qualifier": null,
+    "notes": "Site conditions are described, but there is no explicit travel frequency or office attendance schedule.",
+    "reviewed": true
+  }
+]

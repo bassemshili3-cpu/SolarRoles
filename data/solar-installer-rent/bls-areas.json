@@ -1,0 +1,2441 @@
+[
+  {
+    "FIPS Code": "04",
+    "State": "Arizona",
+    "State Abbreviation": "AZ",
+    "May 2025 Area Code": "22380",
+    "May 2025 Area Title": "Flagstaff, AZ",
+    "County Code": "005",
+    "County Name": "Coconino County"
+  },
+  {
+    "FIPS Code": "04",
+    "State": "Arizona",
+    "State Abbreviation": "AZ",
+    "May 2025 Area Code": "38060",
+    "May 2025 Area Title": "Phoenix-Mesa-Chandler, AZ",
+    "County Code": "013",
+    "County Name": "Maricopa County"
+  },
+  {
+    "FIPS Code": "04",
+    "State": "Arizona",
+    "State Abbreviation": "AZ",
+    "May 2025 Area Code": "38060",
+    "May 2025 Area Title": "Phoenix-Mesa-Chandler, AZ",
+    "County Code": "021",
+    "County Name": "Pinal County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41860",
+    "May 2025 Area Title": "San Francisco-Oakland-Fremont, CA",
+    "County Code": "001",
+    "County Name": "Alameda County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41860",
+    "May 2025 Area Title": "San Francisco-Oakland-Fremont, CA",
+    "County Code": "013",
+    "County Name": "Contra Costa County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "40900",
+    "May 2025 Area Title": "Sacramento-Roseville-Folsom, CA",
+    "County Code": "017",
+    "County Name": "El Dorado County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "23420",
+    "May 2025 Area Title": "Fresno, CA",
+    "County Code": "019",
+    "County Name": "Fresno County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "12540",
+    "May 2025 Area Title": "Bakersfield-Delano, CA",
+    "County Code": "029",
+    "County Name": "Kern County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "31080",
+    "May 2025 Area Title": "Los Angeles-Long Beach-Anaheim, CA",
+    "County Code": "037",
+    "County Name": "Los Angeles County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "23420",
+    "May 2025 Area Title": "Fresno, CA",
+    "County Code": "039",
+    "County Name": "Madera County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41860",
+    "May 2025 Area Title": "San Francisco-Oakland-Fremont, CA",
+    "County Code": "041",
+    "County Name": "Marin County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41500",
+    "May 2025 Area Title": "Salinas, CA",
+    "County Code": "053",
+    "County Name": "Monterey County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "31080",
+    "May 2025 Area Title": "Los Angeles-Long Beach-Anaheim, CA",
+    "County Code": "059",
+    "County Name": "Orange County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "40900",
+    "May 2025 Area Title": "Sacramento-Roseville-Folsom, CA",
+    "County Code": "061",
+    "County Name": "Placer County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "40140",
+    "May 2025 Area Title": "Riverside-San Bernardino-Ontario, CA",
+    "County Code": "065",
+    "County Name": "Riverside County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "40900",
+    "May 2025 Area Title": "Sacramento-Roseville-Folsom, CA",
+    "County Code": "067",
+    "County Name": "Sacramento County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41940",
+    "May 2025 Area Title": "San Jose-Sunnyvale-Santa Clara, CA",
+    "County Code": "069",
+    "County Name": "San Benito County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "40140",
+    "May 2025 Area Title": "Riverside-San Bernardino-Ontario, CA",
+    "County Code": "071",
+    "County Name": "San Bernardino County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41740",
+    "May 2025 Area Title": "San Diego-Chula Vista-Carlsbad, CA",
+    "County Code": "073",
+    "County Name": "San Diego County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41860",
+    "May 2025 Area Title": "San Francisco-Oakland-Fremont, CA",
+    "County Code": "075",
+    "County Name": "San Francisco County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "44700",
+    "May 2025 Area Title": "Stockton-Lodi, CA",
+    "County Code": "077",
+    "County Name": "San Joaquin County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "42020",
+    "May 2025 Area Title": "San Luis Obispo-Paso Robles, CA",
+    "County Code": "079",
+    "County Name": "San Luis Obispo County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41860",
+    "May 2025 Area Title": "San Francisco-Oakland-Fremont, CA",
+    "County Code": "081",
+    "County Name": "San Mateo County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "42200",
+    "May 2025 Area Title": "Santa Maria-Santa Barbara, CA",
+    "County Code": "083",
+    "County Name": "Santa Barbara County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "41940",
+    "May 2025 Area Title": "San Jose-Sunnyvale-Santa Clara, CA",
+    "County Code": "085",
+    "County Name": "Santa Clara County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "42100",
+    "May 2025 Area Title": "Santa Cruz-Watsonville, CA",
+    "County Code": "087",
+    "County Name": "Santa Cruz County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "42220",
+    "May 2025 Area Title": "Santa Rosa-Petaluma, CA",
+    "County Code": "097",
+    "County Name": "Sonoma County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "33700",
+    "May 2025 Area Title": "Modesto, CA",
+    "County Code": "099",
+    "County Name": "Stanislaus County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "37100",
+    "May 2025 Area Title": "Oxnard-Thousand Oaks-Ventura, CA",
+    "County Code": "111",
+    "County Name": "Ventura County"
+  },
+  {
+    "FIPS Code": "06",
+    "State": "California",
+    "State Abbreviation": "CA",
+    "May 2025 Area Code": "40900",
+    "May 2025 Area Title": "Sacramento-Roseville-Folsom, CA",
+    "County Code": "113",
+    "County Name": "Yolo County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "001",
+    "County Name": "Adams County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "005",
+    "County Name": "Arapahoe County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "014",
+    "County Name": "Broomfield County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "019",
+    "County Name": "Clear Creek County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "031",
+    "County Name": "Denver County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "035",
+    "County Name": "Douglas County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "039",
+    "County Name": "Elbert County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "047",
+    "County Name": "Gilpin County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "059",
+    "County Name": "Jefferson County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "24300",
+    "May 2025 Area Title": "Grand Junction, CO",
+    "County Code": "077",
+    "County Name": "Mesa County"
+  },
+  {
+    "FIPS Code": "08",
+    "State": "Colorado",
+    "State Abbreviation": "CO",
+    "May 2025 Area Code": "19740",
+    "May 2025 Area Title": "Denver-Aurora-Centennial, CO",
+    "County Code": "093",
+    "County Name": "Park County"
+  },
+  {
+    "FIPS Code": "10",
+    "State": "Delaware",
+    "State Abbreviation": "DE",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "003",
+    "County Name": "New Castle County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "33100",
+    "May 2025 Area Title": "Miami-Fort Lauderdale-West Palm Beach, FL",
+    "County Code": "011",
+    "County Name": "Broward County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "19660",
+    "May 2025 Area Title": "Deltona-Daytona Beach-Ormond Beach, FL",
+    "County Code": "035",
+    "County Name": "Flagler County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "45300",
+    "May 2025 Area Title": "Tampa-St. Petersburg-Clearwater, FL",
+    "County Code": "053",
+    "County Name": "Hernando County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "45300",
+    "May 2025 Area Title": "Tampa-St. Petersburg-Clearwater, FL",
+    "County Code": "057",
+    "County Name": "Hillsborough County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "36740",
+    "May 2025 Area Title": "Orlando-Kissimmee-Sanford, FL",
+    "County Code": "069",
+    "County Name": "Lake County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "33100",
+    "May 2025 Area Title": "Miami-Fort Lauderdale-West Palm Beach, FL",
+    "County Code": "086",
+    "County Name": "Miami-Dade County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "36740",
+    "May 2025 Area Title": "Orlando-Kissimmee-Sanford, FL",
+    "County Code": "095",
+    "County Name": "Orange County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "36740",
+    "May 2025 Area Title": "Orlando-Kissimmee-Sanford, FL",
+    "County Code": "097",
+    "County Name": "Osceola County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "33100",
+    "May 2025 Area Title": "Miami-Fort Lauderdale-West Palm Beach, FL",
+    "County Code": "099",
+    "County Name": "Palm Beach County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "45300",
+    "May 2025 Area Title": "Tampa-St. Petersburg-Clearwater, FL",
+    "County Code": "101",
+    "County Name": "Pasco County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "45300",
+    "May 2025 Area Title": "Tampa-St. Petersburg-Clearwater, FL",
+    "County Code": "103",
+    "County Name": "Pinellas County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "36740",
+    "May 2025 Area Title": "Orlando-Kissimmee-Sanford, FL",
+    "County Code": "117",
+    "County Name": "Seminole County"
+  },
+  {
+    "FIPS Code": "12",
+    "State": "Florida",
+    "State Abbreviation": "FL",
+    "May 2025 Area Code": "19660",
+    "May 2025 Area Title": "Deltona-Daytona Beach-Ormond Beach, FL",
+    "County Code": "127",
+    "County Name": "Volusia County"
+  },
+  {
+    "FIPS Code": "15",
+    "State": "Hawaii",
+    "State Abbreviation": "HI",
+    "May 2025 Area Code": "46520",
+    "May 2025 Area Title": "Urban Honolulu, HI",
+    "County Code": "003",
+    "County Name": "Honolulu County"
+  },
+  {
+    "FIPS Code": "15",
+    "State": "Hawaii",
+    "State Abbreviation": "HI",
+    "May 2025 Area Code": "27980",
+    "May 2025 Area Title": "Kahului-Wailuku, HI",
+    "County Code": "005",
+    "County Name": "Kalawao County"
+  },
+  {
+    "FIPS Code": "15",
+    "State": "Hawaii",
+    "State Abbreviation": "HI",
+    "May 2025 Area Code": "27980",
+    "May 2025 Area Title": "Kahului-Wailuku, HI",
+    "County Code": "009",
+    "County Name": "Maui County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "011",
+    "County Name": "Boone County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "013",
+    "County Name": "Brown County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "057",
+    "County Name": "Hamilton County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "059",
+    "County Name": "Hancock County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "063",
+    "County Name": "Hendricks County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "081",
+    "County Name": "Johnson County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "095",
+    "County Name": "Madison County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "097",
+    "County Name": "Marion County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "109",
+    "County Name": "Morgan County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "145",
+    "County Name": "Shelby County"
+  },
+  {
+    "FIPS Code": "18",
+    "State": "Indiana",
+    "State Abbreviation": "IN",
+    "May 2025 Area Code": "26900",
+    "May 2025 Area Title": "Indianapolis-Carmel-Greenwood, IN",
+    "County Code": "159",
+    "County Name": "Tipton County"
+  },
+  {
+    "FIPS Code": "20",
+    "State": "Kansas",
+    "State Abbreviation": "KS",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "091",
+    "County Name": "Johnson County"
+  },
+  {
+    "FIPS Code": "20",
+    "State": "Kansas",
+    "State Abbreviation": "KS",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "103",
+    "County Name": "Leavenworth County"
+  },
+  {
+    "FIPS Code": "20",
+    "State": "Kansas",
+    "State Abbreviation": "KS",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "107",
+    "County Name": "Linn County"
+  },
+  {
+    "FIPS Code": "20",
+    "State": "Kansas",
+    "State Abbreviation": "KS",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "121",
+    "County Name": "Miami County"
+  },
+  {
+    "FIPS Code": "20",
+    "State": "Kansas",
+    "State Abbreviation": "KS",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "209",
+    "County Name": "Wyandotte County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "003",
+    "County Name": "Anne Arundel County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "005",
+    "County Name": "Baltimore County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "013",
+    "County Name": "Carroll County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "015",
+    "County Name": "Cecil County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "025",
+    "County Name": "Harford County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "027",
+    "County Name": "Howard County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "035",
+    "County Name": "Queen Anne's County"
+  },
+  {
+    "FIPS Code": "24",
+    "State": "Maryland",
+    "State Abbreviation": "MD",
+    "May 2025 Area Code": "12580",
+    "May 2025 Area Title": "Baltimore-Columbia-Towson, MD",
+    "County Code": "510",
+    "County Name": "Baltimore city"
+  },
+  {
+    "FIPS Code": "25",
+    "State": "Massachusetts",
+    "State Abbreviation": "MA",
+    "May 2025 Area Code": "39300",
+    "May 2025 Area Title": "Providence-Warwick, RI-MA",
+    "County Code": "005",
+    "County Name": "Bristol County"
+  },
+  {
+    "FIPS Code": "25",
+    "State": "Massachusetts",
+    "State Abbreviation": "MA",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "009",
+    "County Name": "Essex County"
+  },
+  {
+    "FIPS Code": "25",
+    "State": "Massachusetts",
+    "State Abbreviation": "MA",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "017",
+    "County Name": "Middlesex County"
+  },
+  {
+    "FIPS Code": "25",
+    "State": "Massachusetts",
+    "State Abbreviation": "MA",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "021",
+    "County Name": "Norfolk County"
+  },
+  {
+    "FIPS Code": "25",
+    "State": "Massachusetts",
+    "State Abbreviation": "MA",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "023",
+    "County Name": "Plymouth County"
+  },
+  {
+    "FIPS Code": "25",
+    "State": "Massachusetts",
+    "State Abbreviation": "MA",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "025",
+    "County Name": "Suffolk County"
+  },
+  {
+    "FIPS Code": "26",
+    "State": "Michigan",
+    "State Abbreviation": "MI",
+    "May 2025 Area Code": "19820",
+    "May 2025 Area Title": "Detroit-Warren-Dearborn, MI",
+    "County Code": "087",
+    "County Name": "Lapeer County"
+  },
+  {
+    "FIPS Code": "26",
+    "State": "Michigan",
+    "State Abbreviation": "MI",
+    "May 2025 Area Code": "19820",
+    "May 2025 Area Title": "Detroit-Warren-Dearborn, MI",
+    "County Code": "093",
+    "County Name": "Livingston County"
+  },
+  {
+    "FIPS Code": "26",
+    "State": "Michigan",
+    "State Abbreviation": "MI",
+    "May 2025 Area Code": "19820",
+    "May 2025 Area Title": "Detroit-Warren-Dearborn, MI",
+    "County Code": "099",
+    "County Name": "Macomb County"
+  },
+  {
+    "FIPS Code": "26",
+    "State": "Michigan",
+    "State Abbreviation": "MI",
+    "May 2025 Area Code": "19820",
+    "May 2025 Area Title": "Detroit-Warren-Dearborn, MI",
+    "County Code": "125",
+    "County Name": "Oakland County"
+  },
+  {
+    "FIPS Code": "26",
+    "State": "Michigan",
+    "State Abbreviation": "MI",
+    "May 2025 Area Code": "19820",
+    "May 2025 Area Title": "Detroit-Warren-Dearborn, MI",
+    "County Code": "147",
+    "County Name": "St. Clair County"
+  },
+  {
+    "FIPS Code": "26",
+    "State": "Michigan",
+    "State Abbreviation": "MI",
+    "May 2025 Area Code": "19820",
+    "May 2025 Area Title": "Detroit-Warren-Dearborn, MI",
+    "County Code": "163",
+    "County Name": "Wayne County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "013",
+    "County Name": "Bates County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "025",
+    "County Name": "Caldwell County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "037",
+    "County Name": "Cass County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "047",
+    "County Name": "Clay County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "049",
+    "County Name": "Clinton County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "095",
+    "County Name": "Jackson County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "107",
+    "County Name": "Lafayette County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "165",
+    "County Name": "Platte County"
+  },
+  {
+    "FIPS Code": "29",
+    "State": "Missouri",
+    "State Abbreviation": "MO",
+    "May 2025 Area Code": "28140",
+    "May 2025 Area Title": "Kansas City, MO-KS",
+    "County Code": "177",
+    "County Name": "Ray County"
+  },
+  {
+    "FIPS Code": "32",
+    "State": "Nevada",
+    "State Abbreviation": "NV",
+    "May 2025 Area Code": "29820",
+    "May 2025 Area Title": "Las Vegas-Henderson-North Las Vegas, NV",
+    "County Code": "003",
+    "County Name": "Clark County"
+  },
+  {
+    "FIPS Code": "33",
+    "State": "New Hampshire",
+    "State Abbreviation": "NH",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "015",
+    "County Name": "Rockingham County"
+  },
+  {
+    "FIPS Code": "33",
+    "State": "New Hampshire",
+    "State Abbreviation": "NH",
+    "May 2025 Area Code": "14460",
+    "May 2025 Area Title": "Boston-Cambridge-Newton, MA-NH",
+    "County Code": "017",
+    "County Name": "Strafford County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "12100",
+    "May 2025 Area Title": "Atlantic City-Hammonton, NJ",
+    "County Code": "001",
+    "County Name": "Atlantic County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "003",
+    "County Name": "Bergen County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "005",
+    "County Name": "Burlington County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "007",
+    "County Name": "Camden County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "12100",
+    "May 2025 Area Title": "Atlantic City-Hammonton, NJ",
+    "County Code": "009",
+    "County Name": "Cape May County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "013",
+    "County Name": "Essex County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "015",
+    "County Name": "Gloucester County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "017",
+    "County Name": "Hudson County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "019",
+    "County Name": "Hunterdon County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "023",
+    "County Name": "Middlesex County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "025",
+    "County Name": "Monmouth County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "027",
+    "County Name": "Morris County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "029",
+    "County Name": "Ocean County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "031",
+    "County Name": "Passaic County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "033",
+    "County Name": "Salem County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "035",
+    "County Name": "Somerset County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "037",
+    "County Name": "Sussex County"
+  },
+  {
+    "FIPS Code": "34",
+    "State": "New Jersey",
+    "State Abbreviation": "NJ",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "039",
+    "County Name": "Union County"
+  },
+  {
+    "FIPS Code": "35",
+    "State": "New Mexico",
+    "State Abbreviation": "NM",
+    "May 2025 Area Code": "10740",
+    "May 2025 Area Title": "Albuquerque, NM",
+    "County Code": "001",
+    "County Name": "Bernalillo County"
+  },
+  {
+    "FIPS Code": "35",
+    "State": "New Mexico",
+    "State Abbreviation": "NM",
+    "May 2025 Area Code": "10740",
+    "May 2025 Area Title": "Albuquerque, NM",
+    "County Code": "043",
+    "County Name": "Sandoval County"
+  },
+  {
+    "FIPS Code": "35",
+    "State": "New Mexico",
+    "State Abbreviation": "NM",
+    "May 2025 Area Code": "10740",
+    "May 2025 Area Title": "Albuquerque, NM",
+    "County Code": "057",
+    "County Name": "Torrance County"
+  },
+  {
+    "FIPS Code": "35",
+    "State": "New Mexico",
+    "State Abbreviation": "NM",
+    "May 2025 Area Code": "10740",
+    "May 2025 Area Title": "Albuquerque, NM",
+    "County Code": "061",
+    "County Name": "Valencia County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "10580",
+    "May 2025 Area Title": "Albany-Schenectady-Troy, NY",
+    "County Code": "001",
+    "County Name": "Albany County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "005",
+    "County Name": "Bronx County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "047",
+    "County Name": "Kings County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "059",
+    "County Name": "Nassau County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "061",
+    "County Name": "New York County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "079",
+    "County Name": "Putnam County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "081",
+    "County Name": "Queens County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "10580",
+    "May 2025 Area Title": "Albany-Schenectady-Troy, NY",
+    "County Code": "083",
+    "County Name": "Rensselaer County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "085",
+    "County Name": "Richmond County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "087",
+    "County Name": "Rockland County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "10580",
+    "May 2025 Area Title": "Albany-Schenectady-Troy, NY",
+    "County Code": "091",
+    "County Name": "Saratoga County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "10580",
+    "May 2025 Area Title": "Albany-Schenectady-Troy, NY",
+    "County Code": "093",
+    "County Name": "Schenectady County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "10580",
+    "May 2025 Area Title": "Albany-Schenectady-Troy, NY",
+    "County Code": "095",
+    "County Name": "Schoharie County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "103",
+    "County Name": "Suffolk County"
+  },
+  {
+    "FIPS Code": "36",
+    "State": "New York",
+    "State Abbreviation": "NY",
+    "May 2025 Area Code": "35620",
+    "May 2025 Area Title": "New York-Newark-Jersey City, NY-NJ",
+    "County Code": "119",
+    "County Name": "Westchester County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "007",
+    "County Name": "Anson County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "025",
+    "County Name": "Cabarrus County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "029",
+    "County Name": "Camden County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "053",
+    "County Name": "Currituck County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "071",
+    "County Name": "Gaston County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "073",
+    "County Name": "Gates County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "097",
+    "County Name": "Iredell County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "109",
+    "County Name": "Lincoln County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "119",
+    "County Name": "Mecklenburg County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "159",
+    "County Name": "Rowan County"
+  },
+  {
+    "FIPS Code": "37",
+    "State": "North Carolina",
+    "State Abbreviation": "NC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "179",
+    "County Name": "Union County"
+  },
+  {
+    "FIPS Code": "41",
+    "State": "Oregon",
+    "State Abbreviation": "OR",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "005",
+    "County Name": "Clackamas County"
+  },
+  {
+    "FIPS Code": "41",
+    "State": "Oregon",
+    "State Abbreviation": "OR",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "009",
+    "County Name": "Columbia County"
+  },
+  {
+    "FIPS Code": "41",
+    "State": "Oregon",
+    "State Abbreviation": "OR",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "051",
+    "County Name": "Multnomah County"
+  },
+  {
+    "FIPS Code": "41",
+    "State": "Oregon",
+    "State Abbreviation": "OR",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "067",
+    "County Name": "Washington County"
+  },
+  {
+    "FIPS Code": "41",
+    "State": "Oregon",
+    "State Abbreviation": "OR",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "071",
+    "County Name": "Yamhill County"
+  },
+  {
+    "FIPS Code": "42",
+    "State": "Pennsylvania",
+    "State Abbreviation": "PA",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "017",
+    "County Name": "Bucks County"
+  },
+  {
+    "FIPS Code": "42",
+    "State": "Pennsylvania",
+    "State Abbreviation": "PA",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "029",
+    "County Name": "Chester County"
+  },
+  {
+    "FIPS Code": "42",
+    "State": "Pennsylvania",
+    "State Abbreviation": "PA",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "045",
+    "County Name": "Delaware County"
+  },
+  {
+    "FIPS Code": "42",
+    "State": "Pennsylvania",
+    "State Abbreviation": "PA",
+    "May 2025 Area Code": "29540",
+    "May 2025 Area Title": "Lancaster, PA",
+    "County Code": "071",
+    "County Name": "Lancaster County"
+  },
+  {
+    "FIPS Code": "42",
+    "State": "Pennsylvania",
+    "State Abbreviation": "PA",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "091",
+    "County Name": "Montgomery County"
+  },
+  {
+    "FIPS Code": "42",
+    "State": "Pennsylvania",
+    "State Abbreviation": "PA",
+    "May 2025 Area Code": "37980",
+    "May 2025 Area Title": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "County Code": "101",
+    "County Name": "Philadelphia County"
+  },
+  {
+    "FIPS Code": "44",
+    "State": "Rhode Island",
+    "State Abbreviation": "RI",
+    "May 2025 Area Code": "39300",
+    "May 2025 Area Title": "Providence-Warwick, RI-MA",
+    "County Code": "001",
+    "County Name": "Bristol County"
+  },
+  {
+    "FIPS Code": "44",
+    "State": "Rhode Island",
+    "State Abbreviation": "RI",
+    "May 2025 Area Code": "39300",
+    "May 2025 Area Title": "Providence-Warwick, RI-MA",
+    "County Code": "003",
+    "County Name": "Kent County"
+  },
+  {
+    "FIPS Code": "44",
+    "State": "Rhode Island",
+    "State Abbreviation": "RI",
+    "May 2025 Area Code": "39300",
+    "May 2025 Area Title": "Providence-Warwick, RI-MA",
+    "County Code": "005",
+    "County Name": "Newport County"
+  },
+  {
+    "FIPS Code": "44",
+    "State": "Rhode Island",
+    "State Abbreviation": "RI",
+    "May 2025 Area Code": "39300",
+    "May 2025 Area Title": "Providence-Warwick, RI-MA",
+    "County Code": "007",
+    "County Name": "Providence County"
+  },
+  {
+    "FIPS Code": "44",
+    "State": "Rhode Island",
+    "State Abbreviation": "RI",
+    "May 2025 Area Code": "39300",
+    "May 2025 Area Title": "Providence-Warwick, RI-MA",
+    "County Code": "009",
+    "County Name": "Washington County"
+  },
+  {
+    "FIPS Code": "45",
+    "State": "South Carolina",
+    "State Abbreviation": "SC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "023",
+    "County Name": "Chester County"
+  },
+  {
+    "FIPS Code": "45",
+    "State": "South Carolina",
+    "State Abbreviation": "SC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "057",
+    "County Name": "Lancaster County"
+  },
+  {
+    "FIPS Code": "45",
+    "State": "South Carolina",
+    "State Abbreviation": "SC",
+    "May 2025 Area Code": "16740",
+    "May 2025 Area Title": "Charlotte-Concord-Gastonia, NC-SC",
+    "County Code": "091",
+    "County Name": "York County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "015",
+    "County Name": "Austin County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "12420",
+    "May 2025 Area Title": "Austin-Round Rock-San Marcos, TX",
+    "County Code": "021",
+    "County Name": "Bastrop County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "039",
+    "County Name": "Brazoria County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "12420",
+    "May 2025 Area Title": "Austin-Round Rock-San Marcos, TX",
+    "County Code": "055",
+    "County Name": "Caldwell County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "071",
+    "County Name": "Chambers County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "085",
+    "County Name": "Collin County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "113",
+    "County Name": "Dallas County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "121",
+    "County Name": "Denton County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "139",
+    "County Name": "Ellis County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "157",
+    "County Name": "Fort Bend County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "167",
+    "County Name": "Galveston County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "201",
+    "County Name": "Harris County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "12420",
+    "May 2025 Area Title": "Austin-Round Rock-San Marcos, TX",
+    "County Code": "209",
+    "County Name": "Hays County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "231",
+    "County Name": "Hunt County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "251",
+    "County Name": "Johnson County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "257",
+    "County Name": "Kaufman County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "291",
+    "County Name": "Liberty County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "339",
+    "County Name": "Montgomery County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "367",
+    "County Name": "Parker County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "397",
+    "County Name": "Rockwall County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "407",
+    "County Name": "San Jacinto County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "439",
+    "County Name": "Tarrant County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "12420",
+    "May 2025 Area Title": "Austin-Round Rock-San Marcos, TX",
+    "County Code": "453",
+    "County Name": "Travis County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "26420",
+    "May 2025 Area Title": "Houston-Pasadena-The Woodlands, TX",
+    "County Code": "473",
+    "County Name": "Waller County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "12420",
+    "May 2025 Area Title": "Austin-Round Rock-San Marcos, TX",
+    "County Code": "491",
+    "County Name": "Williamson County"
+  },
+  {
+    "FIPS Code": "48",
+    "State": "Texas",
+    "State Abbreviation": "TX",
+    "May 2025 Area Code": "19100",
+    "May 2025 Area Title": "Dallas-Fort Worth-Arlington, TX",
+    "County Code": "497",
+    "County Name": "Wise County"
+  },
+  {
+    "FIPS Code": "49",
+    "State": "Utah",
+    "State Abbreviation": "UT",
+    "May 2025 Area Code": "36260",
+    "May 2025 Area Title": "Ogden, UT",
+    "County Code": "011",
+    "County Name": "Davis County"
+  },
+  {
+    "FIPS Code": "49",
+    "State": "Utah",
+    "State Abbreviation": "UT",
+    "May 2025 Area Code": "39340",
+    "May 2025 Area Title": "Provo-Orem-Lehi, UT",
+    "County Code": "023",
+    "County Name": "Juab County"
+  },
+  {
+    "FIPS Code": "49",
+    "State": "Utah",
+    "State Abbreviation": "UT",
+    "May 2025 Area Code": "36260",
+    "May 2025 Area Title": "Ogden, UT",
+    "County Code": "029",
+    "County Name": "Morgan County"
+  },
+  {
+    "FIPS Code": "49",
+    "State": "Utah",
+    "State Abbreviation": "UT",
+    "May 2025 Area Code": "39340",
+    "May 2025 Area Title": "Provo-Orem-Lehi, UT",
+    "County Code": "049",
+    "County Name": "Utah County"
+  },
+  {
+    "FIPS Code": "49",
+    "State": "Utah",
+    "State Abbreviation": "UT",
+    "May 2025 Area Code": "36260",
+    "May 2025 Area Title": "Ogden, UT",
+    "County Code": "057",
+    "County Name": "Weber County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "073",
+    "County Name": "Gloucester County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "093",
+    "County Name": "Isle of Wight County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "095",
+    "County Name": "James City County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "115",
+    "County Name": "Mathews County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "181",
+    "County Name": "Surry County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "199",
+    "County Name": "York County"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "550",
+    "County Name": "Chesapeake city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "650",
+    "County Name": "Hampton city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "700",
+    "County Name": "Newport News city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "710",
+    "County Name": "Norfolk city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "735",
+    "County Name": "Poquoson city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "740",
+    "County Name": "Portsmouth city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "800",
+    "County Name": "Suffolk city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "810",
+    "County Name": "Virginia Beach city"
+  },
+  {
+    "FIPS Code": "51",
+    "State": "Virginia",
+    "State Abbreviation": "VA",
+    "May 2025 Area Code": "47260",
+    "May 2025 Area Title": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "County Code": "830",
+    "County Name": "Williamsburg city"
+  },
+  {
+    "FIPS Code": "53",
+    "State": "Washington",
+    "State Abbreviation": "WA",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "011",
+    "County Name": "Clark County"
+  },
+  {
+    "FIPS Code": "53",
+    "State": "Washington",
+    "State Abbreviation": "WA",
+    "May 2025 Area Code": "42660",
+    "May 2025 Area Title": "Seattle-Tacoma-Bellevue, WA",
+    "County Code": "033",
+    "County Name": "King County"
+  },
+  {
+    "FIPS Code": "53",
+    "State": "Washington",
+    "State Abbreviation": "WA",
+    "May 2025 Area Code": "42660",
+    "May 2025 Area Title": "Seattle-Tacoma-Bellevue, WA",
+    "County Code": "053",
+    "County Name": "Pierce County"
+  },
+  {
+    "FIPS Code": "53",
+    "State": "Washington",
+    "State Abbreviation": "WA",
+    "May 2025 Area Code": "38900",
+    "May 2025 Area Title": "Portland-Vancouver-Hillsboro, OR-WA",
+    "County Code": "059",
+    "County Name": "Skamania County"
+  },
+  {
+    "FIPS Code": "53",
+    "State": "Washington",
+    "State Abbreviation": "WA",
+    "May 2025 Area Code": "42660",
+    "May 2025 Area Title": "Seattle-Tacoma-Bellevue, WA",
+    "County Code": "061",
+    "County Name": "Snohomish County"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "003",
+    "County Name": "Aguada Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "005",
+    "County Name": "Aguadilla Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "007",
+    "County Name": "Aguas Buenas Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "009",
+    "County Name": "Aibonito Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "011",
+    "County Name": "Anasco Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "017",
+    "County Name": "Barceloneta Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "019",
+    "County Name": "Barranquitas Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "021",
+    "County Name": "Bayamon Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "025",
+    "County Name": "Caguas Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "029",
+    "County Name": "Canovanas Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "031",
+    "County Name": "Carolina Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "033",
+    "County Name": "Catano Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "035",
+    "County Name": "Cayey Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "037",
+    "County Name": "Ceiba Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "039",
+    "County Name": "Ciales Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "041",
+    "County Name": "Cidra Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "045",
+    "County Name": "Comerio Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "047",
+    "County Name": "Corozal Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "051",
+    "County Name": "Dorado Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "053",
+    "County Name": "Fajardo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "054",
+    "County Name": "Florida Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "061",
+    "County Name": "Guaynabo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "063",
+    "County Name": "Gurabo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "069",
+    "County Name": "Humacao Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "071",
+    "County Name": "Isabela Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "077",
+    "County Name": "Juncos Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "085",
+    "County Name": "Las Piedras Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "087",
+    "County Name": "Loiza Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "089",
+    "County Name": "Luquillo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "091",
+    "County Name": "Manati Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "095",
+    "County Name": "Maunabo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "099",
+    "County Name": "Moca Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "101",
+    "County Name": "Morovis Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "103",
+    "County Name": "Naguabo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "105",
+    "County Name": "Naranjito Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "107",
+    "County Name": "Orocovis Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "117",
+    "County Name": "Rincon Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "119",
+    "County Name": "Rio Grande Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "127",
+    "County Name": "San Juan Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "129",
+    "County Name": "San Lorenzo Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "10380",
+    "May 2025 Area Title": "Aguadilla, PR",
+    "County Code": "131",
+    "County Name": "San Sebastian Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "135",
+    "County Name": "Toa Alta Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "137",
+    "County Name": "Toa Baja Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "139",
+    "County Name": "Trujillo Alto Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "143",
+    "County Name": "Vega Alta Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "145",
+    "County Name": "Vega Baja Municipio"
+  },
+  {
+    "FIPS Code": "72",
+    "State": "Puerto Rico",
+    "State Abbreviation": "PR",
+    "May 2025 Area Code": "41980",
+    "May 2025 Area Title": "San Juan-Bayamon-Caguas, PR",
+    "County Code": "151",
+    "County Name": "Yabucoa Municipio"
+  }
+]

@@ -5,7 +5,7 @@ import { AffiliateLink } from '@/components/click_affiliate_link';
 const SITE_URL = "https://www.solarroles.com";
 const PAGE_PATH = "/resources/nabcep-board-eligible-status";
 const PAGE_TITLE =
-  "NABCEP Board Eligible Status (2026): The New Path to PVIP Without the Chicken-and-Egg Problem";
+  "NABCEP Board Eligible Status: How To Pass NABCEP PVIP Without The Field Experience";
 const PAGE_DESCRIPTION =
   "How NABCEP's Board Eligible pathway lets you pass the PVIP exam before you have the field experience, with up to 3 years to convert to full Board Certified status.";
 

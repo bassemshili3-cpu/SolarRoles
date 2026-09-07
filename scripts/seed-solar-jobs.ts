@@ -1,10 +1,11 @@
 // scripts/seed-solar-jobs.ts
 /**
- * Pulls solar-installer-relevant jobs from Lever, Ashby, SmartRecruiters,
- * and Pinpoint for the companies listed in lib/ats/company-seed.ts, and
- * upserts them into the Job table.
+ * Pulls solar-installer-relevant jobs from ATS providers by default and
+ * upserts them into the Job table. Custom scraping requires an explicit
+ * custom-scrape provider argument.
  *
  * Usage: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts
+ * Custom scrape only: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts custom-scrape
  */
 import { PrismaClient } from '@prisma/client';
 import { fetchGreenhouseJobs } from '../lib/ats/greenhouse';
@@ -17,6 +18,8 @@ import {
   RIPPLING_COMPANIES,
   WORKDAY_COMPANIES,
   SUCCESSFACTORS_COMPANIES,
+  JAZZHR_COMPANIES,
+  BREEZY_COMPANIES,
 } from '../lib/ats/company-seed';
 import { CUSTOM_SCRAPE_COMPANIES } from '../lib/ats/custom-scrape/config';
 import { fetchLeverJobs, type NormalizedJob } from '../lib/ats/lever';
@@ -28,6 +31,8 @@ import { fetchWorkdayJobs } from '../lib/ats/workday';
 import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
 import { fetchRipplingJobs } from '../lib/ats/rippling';
 import { fetchSuccessFactorsJobs } from '../lib/ats/successfactors';
+import { fetchJazzHrJobs } from '../lib/ats/jazzhr';
+import { fetchBreezyJobs } from '../lib/ats/breezy';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 import { buildJobSlug } from '../lib/slugify';
@@ -56,6 +61,8 @@ function provider<T>(
 }
 
 const PROVIDERS: AtsProvider<any>[] = [
+   provider('jazzhr',          JAZZHR_COMPANIES,          fetchJazzHrJobs,          (c) => c.slug),
+  provider('breezy',          BREEZY_COMPANIES,          fetchBreezyJobs,          (c) => c.slug),
   provider('lever',           LEVER_COMPANIES,           fetchLeverJobs,           (c) => c.slug),
   provider('ashby',           ASHBY_COMPANIES,           fetchAshbyJobs,           (c) => c.slug),
   provider('smartrecruiters', SMARTRECRUITERS_COMPANIES, fetchSmartRecruitersJobs, (c) => c.slug),
@@ -66,6 +73,7 @@ const PROVIDERS: AtsProvider<any>[] = [
   provider('rippling',        RIPPLING_COMPANIES,        fetchRipplingJobs,        (c) => c.slug),
   provider('successfactors',  SUCCESSFACTORS_COMPANIES,  fetchSuccessFactorsJobs,  (c) => c.baseUrl),
   provider('custom-scrape',   CUSTOM_SCRAPE_COMPANIES,   fetchCustomScrapeJobs,    (c) => c.domain),
+ 
 ];
 
 const requestedProvider = process.argv[2];
@@ -170,7 +178,7 @@ async function main() {
 
   const providers = requestedProvider
     ? PROVIDERS.filter((provider) => provider.name === requestedProvider)
-    : PROVIDERS;
+    : PROVIDERS.filter((provider) => provider.name !== 'custom-scrape');
 
   if (requestedProvider && providers.length === 0) {
     throw new Error(`Unknown provider "${requestedProvider}". Available providers: ${PROVIDERS.map((provider) => provider.name).join(', ')}`);

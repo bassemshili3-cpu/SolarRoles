@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { getCanonicalJobSlug } from '@/lib/slugify'
 import { usePathname } from 'next/navigation'  
 import { formatDistanceToNow } from 'date-fns'
 import { useState, useEffect } from 'react'  // probablement déjà importé
@@ -10,6 +11,7 @@ interface JobCardProps {
     id: string
     title: string
     company: string
+    canonicalSlug?: string | null
     url?: string
     apply_url?: string
     source?: 'lensa' | 'adzuna'
@@ -22,6 +24,7 @@ interface JobCardProps {
     company_logo?: string
   }
   backUrl?: string
+  useCanonicalDetailLink?: boolean
 }
 
 function getCompanyDomain(companyName: string): string {
@@ -31,7 +34,7 @@ function getCompanyDomain(companyName: string): string {
     + '.com'
 }
 
-export default function JobCard({ job, backUrl }: JobCardProps) {
+export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }: JobCardProps) {
  
   const formatSalary = (min?: number, max?: number, period?: string) => {
     if (!min && !max) return null
@@ -59,7 +62,17 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
   const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
   const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
   const externalApplyUrl = job.apply_url || job.url || '#'
-  const detailHref = `/jobs/${job.id}?from=${encodeURIComponent(backUrl || '/jobs')}`
+  const jobLocation = typeof job.location === 'string' ? job.location : job.location?.display_name
+  const detailPath = useCanonicalDetailLink
+    ? `/jobs/${job.id}/${getCanonicalJobSlug({
+        canonicalSlug: job.canonicalSlug,
+        title: job.title,
+        location: jobLocation,
+      })}`
+    : `/jobs/${job.id}`
+  const detailHref = useCanonicalDetailLink
+    ? detailPath
+    : `${detailPath}?from=${encodeURIComponent(backUrl || '/jobs')}`
 
   const locationLabel =
     typeof job.location === 'string'
@@ -72,7 +85,11 @@ export default function JobCard({ job, backUrl }: JobCardProps) {
         href={detailHref}
         className="absolute inset-0 z-0"
         aria-label={`View details for ${job.title} at ${job.company}`}
-      />
+      >
+        {useCanonicalDetailLink && (
+          <span className="sr-only">{job.title} at {job.company}</span>
+        )}
+      </Link>
 
       <div className="relative z-10 flex items-start gap-3 mb-3 pointer-events-none">
         <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">

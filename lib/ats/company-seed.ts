@@ -7,7 +7,28 @@ export type AtsCompanySeed = {
   slug: string;
   name: string;
   verified: boolean;
+  /** Exact titles approved beyond the shared solar taxonomy. */
+  includeJobTitles?: string[];
 };
+
+// ───────────────────────────────────────────────────────────
+// JAZZHR  →  https://<slug>.applytojob.com/apply  (subdomain = slug)
+// Confirmé "Powered by JazzHR" sur les offres Venture Solar.
+// ───────────────────────────────────────────────────────────
+export const JAZZHR_COMPANIES: AtsCompanySeed[] = [
+  // ★ Résidentiel Solar Installer, NY (Hicksville) — $20-30/hr
+  { slug: 'venturesolar', name: 'Venture Solar', verified: true },
+  { slug: 'teamsunshineconstructionllc', name: 'Team Sunshine Construction', verified: true, includeJobTitles: ['Solar Appointment Setter'] },
+];
+
+// Breezy HR - https://<slug>.breezy.hr/
+// Public career pages verified; ingested by the dedicated Breezy connector.
+// Include relevant solar roles regardless of remote status.
+export const BREEZY_COMPANIES: AtsCompanySeed[] = [
+  { slug: 'sunlove-solar', name: 'Reach', verified: true },
+  { slug: 'solar-pros', name: 'Solar Pros / Freedom Pros', verified: true },
+  { slug: 'salesdraft-recruiting', name: 'SalesDraft Recruiting', verified: true },
+];
 
 // Rippling — https://ats.rippling.com/<slug>/jobs
 // `roleFilter` deliberately preserves the manually requested role scope per employer.
@@ -150,14 +171,7 @@ export const JOBVITE_COMPANIES: AtsCompanySeed[] = [
   { slug: 'canadian-solar', name: 'Canadian Solar',  verified: true  },
 ];
 
-// ───────────────────────────────────────────────────────────
-// JAZZHR  →  https://<slug>.applytojob.com/apply  (subdomain = slug)
-// Confirmé "Powered by JazzHR" sur les offres Venture Solar.
-// ───────────────────────────────────────────────────────────
-export const JAZZHR_COMPANIES: AtsCompanySeed[] = [
-  // ★ Résidentiel Solar Installer, NY (Hicksville) — $20-30/hr
-  { slug: 'venturesolar', name: 'Venture Solar', verified: true },
-];
+
 
 // WORKDAY  →  https://{tenant}.{host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs
 // Gros installateurs/EPC nationaux — pas de "slug" unique, il faut les

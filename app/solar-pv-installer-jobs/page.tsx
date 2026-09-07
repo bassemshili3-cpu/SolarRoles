@@ -6,6 +6,7 @@ import { Sun, Wrench, DollarSign, ShieldCheck, Award, TrendingUp } from 'lucide-
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
 import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 import { getPrimaryCertificationForCategory } from '@/lib/certification-detector' // ajustez le chemin
 
@@ -13,20 +14,31 @@ export const revalidate = 3600
 
 const INSTALLER_TITLE_PHRASES = ['solar installer', 'pv installer', 'solar laborer']
 const INSTALLER_EXCLUDE_PHRASES = ['lead', 'commercial', 'telecommunications']
+const INSTALLER_LANDING_FILTERS = {
+  titleContainsAny: INSTALLER_TITLE_PHRASES,
+  excludePhrases: INSTALLER_EXCLUDE_PHRASES,
+}
 
 
 
-export async function generateMetadata(): Promise<Metadata> {
-  const stats = await getRoleSalaryStats('solar-photovoltaic-installer')
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('solar-photovoltaic-installer'),
+    getLandingJobCount(INSTALLER_LANDING_FILTERS),
+  ])
   const salarySuffix =
     stats && stats.count >= MIN_SALARY_LISTINGS && stats.avgMax > 0
       ? ` — Up to ${formatSalaryK(stats.avgMax)}/yr`
       : ''
 
   return {
-    title: salarySuffix
-      ? `Solar PV Installer Jobs${salarySuffix}`
-      : 'Solar PV Installer Jobs | Residential, Commercial & Utility-Scale',
+    title: withLandingJobCount(
+      salarySuffix
+        ? `Solar PV Installer Jobs${salarySuffix}`
+        : 'Solar PV Installer Jobs | Residential, Commercial & Utility-Scale',
+      jobCount,
+    ),
     description: 'Solar photovoltaic installer positions across the United States. Residential, commercial, and utility-scale roles with pay ranges, certification requirements, and career paths.',
     keywords: 'solar installer jobs, solar pv installer, solar technician jobs, nabcep jobs, residential solar installer, utility scale solar jobs, solar panel installer',
     openGraph: {
@@ -39,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar PV Installer Jobs',
       description: 'Find solar photovoltaic installer openings across the US. Residential, commercial, and utility-scale employers hiring now.',
     },
-    alternates: { canonical: 'https://www.solarroles.com/solar-pv-installer-jobs' },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-pv-installer-jobs', params) },
   }
 }
 
@@ -49,11 +61,6 @@ const jsonLd = {
   name: 'Solar PV Installer Jobs',
   description: 'Solar photovoltaic installer job listings across the United States, covering residential, commercial, and utility-scale employers.',
   url: 'https://www.solarroles.com/solar-pv-installer-jobs',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Solar PV Installer Jobs',
-    description: 'Current solar photovoltaic installer job listings',
-  },
 }
 
 const installerRoles = [
@@ -141,6 +148,7 @@ const faqs = [
 
 export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
   const cert = getPrimaryCertificationForCategory('solar-pv-installer')
 
   const initialData = await getJobs({
@@ -149,10 +157,10 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
     // used elsewhere for niche landing pages (see job-where.ts comment).
    
   
-     titleContainsAny: INSTALLER_TITLE_PHRASES,
-     excludePhrases: INSTALLER_EXCLUDE_PHRASES,
+    ...INSTALLER_LANDING_FILTERS,
     ...(params.what ? { what: params.what } : {}),
     where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -192,6 +200,8 @@ export default async function SolarPvInstallerJobsPage({ searchParams }: any) {
                 whatJobsTitleIncludesAll={['solar', 'installer']}
                 whatJobsTitleExcludes={INSTALLER_EXCLUDE_PHRASES}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
               />
             </Suspense>
           </div>

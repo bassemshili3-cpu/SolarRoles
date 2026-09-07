@@ -5,25 +5,34 @@ import JobFilters from '@/components/JobFilters'
 import { HardHat, ClipboardCheck, DollarSign, ShieldCheck, GraduationCap, Users, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
+import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Solar Jobs No Experience Required | Entry-Level Installer Openings',
-  description: 'Entry-level solar jobs that don\u2019t require prior experience, helper, apprentice, and trainee roles across the United States. Pay ranges, what employers screen for, and what the work involves.',
-  keywords: 'solar jobs no experience, entry level solar installer jobs, solar apprentice jobs, solar helper jobs, no experience solar technician jobs, solar trainee jobs',
-  openGraph: {
-    title: 'Solar Jobs No Experience Required | Now Hiring Nationwide',
-    description: 'Browse open entry-level solar positions, helper, apprentice, and trainee roles with no prior experience required.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solar Jobs No Experience Required',
-    description: 'Find entry-level solar installer openings across the US. No prior experience required, training provided on the job.',
-  },
-  alternates: { canonical: 'https://www.solarroles.com/solar-jobs-no-experience' },
+export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
+  const params = await searchParams
+  const jobCount = await getLandingJobCount(NO_EXPERIENCE_LANDING_FILTERS)
+
+  return {
+    title: withLandingJobCount(
+      'Solar Jobs No Experience Required | Entry-Level Installer Openings',
+      jobCount,
+    ),
+    description: 'Entry-level solar jobs that don\u2019t require prior experience, helper, apprentice, and trainee roles across the United States. Pay ranges, what employers screen for, and what the work involves.',
+    keywords: 'solar jobs no experience, entry level solar installer jobs, solar apprentice jobs, solar helper jobs, no experience solar technician jobs, solar trainee jobs',
+    openGraph: {
+      title: 'Solar Jobs No Experience Required | Now Hiring Nationwide',
+      description: 'Browse open entry-level solar positions, helper, apprentice, and trainee roles with no prior experience required.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Solar Jobs No Experience Required',
+      description: 'Find entry-level solar installer openings across the US. No prior experience required, training provided on the job.',
+    },
+    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-jobs-no-experience', params) },
+  }
 }
 
 const jsonLd = {
@@ -32,11 +41,6 @@ const jsonLd = {
   name: 'Solar Jobs No Experience Required',
   description: 'Entry-level solar job listings across the United States that do not require prior installation experience, including helper, apprentice, and trainee roles.',
   url: 'https://www.solarroles.com/solar-jobs-no-experience',
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Available Entry-Level Solar Jobs',
-    description: 'Current no-experience-required solar job listings',
-  },
 }
 
 const entryRoles = [
@@ -110,17 +114,22 @@ const NO_EXPERIENCE_EXCLUDE_PHRASES = [
   'not an entry level', 'not an entry-level', 'all experience levels',
 ]
 
+const NO_EXPERIENCE_LANDING_FILTERS = {
+  entryLevel: true,
+  excludePhrases: NO_EXPERIENCE_EXCLUDE_PHRASES,
+}
+
 export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
   const params = await searchParams
+  const page = getLandingPageNumber(params.page)
 
  const initialData = await getJobs({
   // Scopes this landing page to entry-level roles via a keyword
   // AND-filter, independent of the user's own `what` search box below —
   // same pattern used on /lead-solar-installer-jobs.
-  entryLevel: true,
+  ...NO_EXPERIENCE_LANDING_FILTERS,
   // Écarte les offres qui matchent un des mots-clés ci-dessus (ex: "apprentice")
   // mais sont en réalité des postes senior/confirmés exigeant de l'expérience.
-   excludePhrases: NO_EXPERIENCE_EXCLUDE_PHRASES,
    /* Legacy list kept here temporarily for reference:
    'experienced',                         // couvre "Experienced X" en titre, très fréquent
   'years of experience required',
@@ -135,7 +144,8 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
   'nabcep certified required', 'nabcep certification required',
    */
   ...(params.what ? { what: params.what } : {}),
-  where: params.where || '',
+    where: params.where || '',
+    page,
     resultsPerPage: 30,
     salaryMin: params.salary_min ? Number(params.salary_min) : undefined,
     postedWithin: params.posted_within ? Number(params.posted_within) : undefined,
@@ -171,6 +181,8 @@ export default async function SolarJobsNoExperiencePage({ searchParams }: any) {
                 excludePhrases={NO_EXPERIENCE_EXCLUDE_PHRASES}
                 includeWhatJobs={false}
                 initialData={initialData}
+                initialPage={page}
+                landingPageSeo
               />
             </Suspense>
           </div>
