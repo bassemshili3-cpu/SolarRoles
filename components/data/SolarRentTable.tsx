@@ -36,7 +36,7 @@ export default function SolarRentTable({ rows }: { rows: Row[] }) {
           {['Metro area', 'Annual pay', 'Hourly pay', 'Monthly rent', 'Hours for rent', 'Rent / gross pay'].map(label => <th scope="col" key={label} className="px-4 py-4 font-semibold">{label}</th>)}
         </tr></thead>
         <tbody>{visible.map(row => <tr key={row.area} className="border-t border-gray-200 odd:bg-white even:bg-[#F7F7F4]">
-          <th scope="row" className="px-4 py-4 font-medium"><a href={row.hudSource} className="underline decoration-gray-300 underline-offset-4 hover:decoration-amber-600">{row.metro}</a></th>
+          <th scope="row" className="px-4 py-4 font-medium"><a href={row.hudSource} rel="nofollow" className="underline decoration-gray-300 underline-offset-4 hover:decoration-amber-600">{row.metro}</a></th>
           <td className="whitespace-nowrap px-4 py-4 tabular-nums">{dollars(row.annualWage)}</td>
           <td className="px-4 py-4 tabular-nums">${row.hourlyWage.toFixed(2)}</td>
           <td className="px-4 py-4 tabular-nums">{dollars(row.monthlyRent)}</td>

@@ -371,7 +371,7 @@ export default async function SalaryReportPage({
                   <a
                     href={cert.heatspringUrl}
                     target="_blank"
-                    rel="noopener sponsored"
+                    rel="nofollow noopener sponsored"
                     className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
                   >
                     Get certified on HeatSpring →

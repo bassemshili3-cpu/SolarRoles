@@ -2,6 +2,12 @@
 import type { WorkdayCompanySeed } from './workday';
 import type { RipplingCompanySeed } from './rippling';
 import type { SuccessFactorsCompanySeed } from './successfactors';
+import type { OracleCloudCompanySeed } from './oracle-cloud';
+import type { UkgCompanySeed } from './ukg';
+import type { IcimsCompanySeed } from './icims';
+import type { AdpCompanySeed } from './adp';
+import type { PaylocityCompanySeed } from './paylocity';
+import type { PaycomCompanySeed } from './paycom';
 
 export type AtsCompanySeed = {
   slug: string;
@@ -19,6 +25,9 @@ export const JAZZHR_COMPANIES: AtsCompanySeed[] = [
   // ★ Résidentiel Solar Installer, NY (Hicksville) — $20-30/hr
   { slug: 'venturesolar', name: 'Venture Solar', verified: true },
   { slug: 'teamsunshineconstructionllc', name: 'Team Sunshine Construction', verified: true, includeJobTitles: ['Solar Appointment Setter'] },
+  { slug: 'lplsolarllc', name: 'LPL Solar', verified: true },
+  { slug: 'powerflex', name: 'PowerFlex', verified: true },
+  { slug: 'vanguardenergypartnersllc', name: 'Vanguard Energy Partners', verified: true },
 ];
 
 // Breezy HR - https://<slug>.breezy.hr/
@@ -39,6 +48,7 @@ export const RIPPLING_COMPANIES: RipplingCompanySeed[] = [
   { slug: 'zeo-energy-corp', name: 'ZEO Energy', verified: true, roleFilter: 'solar_taxonomy' },
   { slug: 'photon-brothers', name: 'Photon Brothers', verified: true, roleFilter: 'solar_installer' },
   { slug: 'rnwbl', name: 'RNWBL', verified: true, roleFilter: 'solar_om_or_technician' },
+  { slug: 'qesolar', name: 'QE Solar', verified: true, roleFilter: 'solar_taxonomy' },
 ];
 
 // SAP SuccessFactors Recruiting Marketing — public RSS feeds expose the
@@ -50,6 +60,20 @@ export const SUCCESSFACTORS_COMPANIES: SuccessFactorsCompanySeed[] = [
     verified: true,
     locale: 'en_US',
     keywords: ['bess'],
+  },
+  {
+    baseUrl: 'https://jobs.nexteraenergy.com',
+    name: 'NextEra Energy',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar'],
+  },
+  {
+    baseUrl: 'https://jobs.rwe.com',
+    name: 'RWE Americas',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar', 'battery storage'],
   },
 ];
 
@@ -74,7 +98,7 @@ export const SMARTRECRUITERS_COMPANIES: AtsCompanySeed[] = [
   { slug: 'ib-vogt-gmbh',      name: 'ib vogt GmbH',             verified: true }, // ★ Solar & BESS Engineer APAC
   { slug: 'EcoEnergySolutions',name: 'EcoEnergy Solutions',      verified: true }, // Solar Technician Pakistan
   { slug: 'WunderCapital',     name: 'Wunder Capital',           verified: true },
-  { slug: 'SOLV-Energy',       name: 'SOLV Energy',              verified: false },
+  { slug: 'SilfabSolar',       name: 'Silfab Solar',             verified: true },
   { slug: 'AECOM2',       name: 'AECOM',              verified: false },
 
 
@@ -86,35 +110,20 @@ export const LEVER_COMPANIES: AtsCompanySeed[] = [
   // ── déjà en seed ──
   { slug: 'freedomsolarpower', name: 'Freedom Solar Power', verified: true },
   { slug: 'goodleap', name: 'GoodLeap', verified: true },
-  { slug: 'sunnova', name: 'Sunnova Energy International', verified: true },
   { slug: 'octoenergy', name: 'Octopus Energy Group', verified: true },
+  { slug: 'intersect', name: 'Intersect', verified: true },
 
   // ── residential installers US ──
-  { slug: 'sunrun', name: 'Sunrun', verified: true }, // leader résidentiel US
-  { slug: 'blue-raven-solar', name: 'Blue Raven Solar', verified: true },
-  { slug: 'momentum-solar', name: 'Momentum Solar', verified: true },
-  { slug: 'palmetto-solar', name: 'Palmetto Solar', verified: true },
-  { slug: 'trinity-solar', name: 'Trinity Solar', verified: true },
   { slug: 'semper-solaris', name: 'Semper Solaris', verified: true },
   { slug: 'solar-optimum', name: 'Solar Optimum', verified: true },
-  { slug: 'lumio', name: 'Lumio', verified: true },
-  { slug: 'complete-solar', name: 'Complete Solar', verified: true },
 
   // ── commercial / utility-scale EPC ──
-  { slug: 'swinerton-renewables', name: 'Swinerton Renewable Energy', verified: true },
-  { slug: 'solv-energy', name: 'SOLV Energy', verified: true },
   { slug: 'mortenson', name: 'Mortenson', verified: true },
-  { slug: 'cypress-creek-renewables', name: 'Cypress Creek Renewables', verified: true },
-  { slug: 'silicon-ranch', name: 'Silicon Ranch', verified: true },
 
   // ── battery / storage + solar ──
-  { slug: 'enphase-energy', name: 'Enphase Energy', verified: true },
-  { slug: 'solaredge', name: 'SolarEdge', verified: true },
   { slug: 'sonnen', name: 'sonnen', verified: true },
-  { slug: 'fluence', name: 'Fluence', verified: true },
 
   // ── clean energy platforms (hire field ops) ──
-  { slug: 'arcadia', name: 'Arcadia', verified: true },
   { slug: 'generate-capital', name: 'Generate Capital', verified: true },
 
   // ── additional companies ──
@@ -127,17 +136,13 @@ export const LEVER_COMPANIES: AtsCompanySeed[] = [
 
 // Workable — apply.workable.com/<slug>
 export const WORKABLE_COMPANIES: AtsCompanySeed[] = [
-  { slug: 'adt-solar', name: 'ADT Solar', verified: true }, // ex-SunPro
   { slug: 'baker-electric', name: 'Baker Electric Home Energy', verified: true },
   { slug: 'robco-electric', name: 'Robco Electric', verified: true },
   { slug: 'esa-solar', name: 'ESA Solar', verified: true },
   { slug: 'safari-energy', name: 'Safari Energy', verified: true },
-  { slug: 'pivot-energy', name: 'Pivot Energy', verified: true },
   { slug: 'dynamic-energy', name: 'Dynamic Energy Solutions', verified: true },
-  { slug: 'solar-landscape', name: 'Solar Landscape', verified: true },
   { slug: 'southern-current', name: 'Southern Current', verified: true },
   { slug: 'revision-energy', name: 'ReVision Energy', verified: true }, // NE
-  { slug: 'greenspark-solar', name: 'GreenSpark Solar', verified: true }, // NY
   { slug: 'powur-energy', name: 'Powur Energy', verified: true },
   { slug: 'solar-universe', name: 'Solar Universe', verified: true },
   { slug: 'ericson-solar', name: 'Ericson Solar', verified: true },
@@ -162,13 +167,81 @@ export const PINPOINT_COMPANIES: AtsCompanySeed[] = [
 // Pas d'API publique, HTML scraping, mid-market peu agrégé
 // ───────────────────────────────────────────────────────────
 export const JOBVITE_COMPANIES: AtsCompanySeed[] = [
-  // ★★★ Goldmine — Solar Installer I/II/III dans 15+ états US
-  { slug: 'freedomforever', name: 'Freedom Forever', verified: true  },
   // Field Service Tech Solar/PV
   { slug: 'enphase-energy', name: 'Enphase Energy',  verified: true  },
   // Solar Field Engineer / Tech utility-scale
   { slug: 'resgroup',       name: 'RES',             verified: true  },
-  { slug: 'canadian-solar', name: 'Canadian Solar',  verified: true  },
+  { slug: 'cei',            name: 'Cupertino Electric', verified: true },
+];
+
+// Oracle Recruiting Cloud — public Candidate Experience portal.
+export const ORACLE_CLOUD_COMPANIES: OracleCloudCompanySeed[] = [
+  {
+    baseUrl: 'https://icczjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1',
+    name: 'MN8 Energy',
+    verified: true,
+  },
+  {
+    baseUrl: 'https://fa-esbv-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1',
+    name: 'First Solar',
+    verified: true,
+  },
+];
+
+// ADP Workforce Now — public Career Center JSON API.
+export const ADP_COMPANIES: AdpCompanySeed[] = [
+  {
+    cid: 'b5d87377-1bbe-4787-8322-eb5c7abdc9c7',
+    name: 'NovaSource Power Services',
+    verified: true,
+  },
+];
+
+// Paylocity — public board HTML with JobPosting JSON-LD on detail pages.
+export const PAYLOCITY_COMPANIES: PaylocityCompanySeed[] = [
+  {
+    boardUrl: 'https://recruiting.paylocity.com/recruiting/jobs/All/a8590bda-2f17-4a4e-8c2e-1c0225fe6969/Pure-Power-Engineering-Inc',
+    name: 'Pure Power Engineering',
+    verified: true,
+  },
+  {
+    boardUrl: 'https://recruiting.paylocity.com/recruiting/jobs/All/76521e27-2487-44e7-9da3-015c68858b91/Terra--Gen-Operating-Company-LLC',
+    name: 'Terra-Gen',
+    verified: true,
+  },
+];
+
+// Paycom — public client career portal rendered by the current Paycom SPA.
+export const PAYCOM_COMPANIES: PaycomCompanySeed[] = [
+  {
+    clientKey: 'BBC98E01F1F27C80A5FDE6ABEECA4271',
+    name: 'Shoals Technologies',
+    verified: true,
+  },
+];
+
+// UKG Pro Recruiting — public job-board API and opportunity details.
+export const UKG_COMPANIES: UkgCompanySeed[] = [
+  {
+    baseUrl: 'https://onestrata.rec.pro.ukg.net/STR1027SSOL/JobBoard/95da68de-9d94-406f-9c99-aa8627d1e992',
+    name: 'Strata Clean Energy',
+    verified: true,
+  },
+];
+
+// iCIMS — Solect is a Pattern Energy subsidiary and shares its tenant.
+export const ICIMS_COMPANIES: IcimsCompanySeed[] = [
+  {
+    baseUrl: 'https://careers-patternenergy.icims.com',
+    name: 'Solect Energy',
+    categoryName: 'Solect',
+    verified: true,
+  },
+  {
+    baseUrl: 'https://careers-edf-re.icims.com',
+    name: 'EDF power solutions North America',
+    verified: true,
+  },
 ];
 
 
@@ -182,12 +255,15 @@ export const JOBVITE_COMPANIES: AtsCompanySeed[] = [
 export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
   // ★★★ confirmé — page carrière + tenant Workday vérifiés le 29/07/2026 
   { tenant: 'sunrun', host: 'wd5', site: 'Sunrun_Careers', name: 'Sunrun', verified: true },
+  { tenant: 'arraytechinc', host: 'wd5', site: 'Array_Careers', name: 'Array Technologies', verified: true },
+  { tenant: 'blattner', host: 'wd5', site: 'BlattnerCompany', name: 'Blattner', verified: true },
+  { tenant: 'recurrentenergy', host: 'wd12', site: 'RecurrentEnergy', name: 'Recurrent Energy', verified: true },
+  { tenant: 'illuminateusa', host: 'wd503', site: 'Illuminate_Careers', name: 'Illuminate USA', verified: true },
 
   { tenant: 'aes', host: 'wd1', site: 'AES_US', name: 'AES', verified: false }, // ★ utility-scale solar/energy storage
   { tenant: 'nextracker', host: 'wd5', site: 'nextpower_careers', name: 'Nextracker', verified: false }, // ★ solar tracker systems
   { tenant: 'igsenergy', host: 'wd1', site: 'IGS', name: 'IGS Energy', verified: false }, // ★ solar installer
   { tenant: 'faithtechnologies', host: 'wd1', site: 'FTI', name: 'Faith Technologies', verified: false }, // ★ electrical/solar contractor
-  { tenant: 'sunrun', host: 'wd5', site: 'Sunrun_Careers', name: 'Sunrun Duplicate Check', verified: false }, // ★ duplicate check
   { tenant: 'solvenergy', host: 'wd1', site: 'SOLV_External_Career', name: 'SOLV Energy', verified: false },
   { tenant: 'prim', host: 'wd108', site: 'Primoris', name: 'Primoris', verified: false }, // ★ solar/energy — verify tenant/host
   { tenant: 'mosscm', host: 'wd1', site: 'Moss_Careers', name: 'Moss Construction', verified: false }, // ★ solar EPC
@@ -197,9 +273,9 @@ export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
   // direct — "site" est une déduction (probablement 'Careers'), à
   // confirmer avant de faire confiance à ce verified:true.
   { tenant: 'rosendin', host: 'wd1', site: 'Careers', name: 'Rosendin Electric', verified: false },
-{ tenant: 'enbridge', host: 'wd3', site: 'enbridge_careers', name: 'Enbridge', verified: false },
-{ tenant: 'canadiansolar', host: 'wd5', site: 'CanadianSolar', name: 'CanadianSolar', verified: false },
-{ tenant: 'invenergyllc', host: 'wd3', site: 'invenergycareers', name: 'Invenergy', verified: false },
+  { tenant: 'enbridge', host: 'wd3', site: 'enbridge_careers', name: 'Enbridge', verified: false },
+  { tenant: 'canadiansolar', host: 'wd5', site: 'CanadianSolar', name: 'Canadian Solar', verified: false },
+  { tenant: 'invenergyllc', host: 'wd3', site: 'invenergycareers', name: 'Invenergy', verified: false },
 ];
 
 // ───────────────────────────────────────────────────────────
@@ -208,6 +284,14 @@ export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
 // LE seul ATS avec une vraie densité de jobs solar installer/technician.
 // ───────────────────────────────────────────────────────────
 export const GREENHOUSE_COMPANIES: AtsCompanySeed[] = [
+  { slug: 'origisenergy', name: 'Origis Energy', verified: true },
+  { slug: 'madisonenergyinfrastructure', name: 'Madison Energy Infrastructure', verified: true },
+  { slug: 'clenera', name: 'Clēnera', verified: true },
+  { slug: 'newleafenergy', name: 'New Leaf Energy', verified: true },
+  { slug: 'arevonenergyimpltest', name: 'Arevon Energy', verified: true },
+  { slug: 'avantus', name: 'Avantus', verified: true },
+  { slug: 'smaamerica', name: 'SMA America', verified: true },
+  { slug: 'adapturerenewables', name: 'Adapture Renewables', verified: true },
   // ★★★ 20+ solar field service jobs — utility-scale O&M
   { slug: 'pearceservices',     name: 'Pearce Services',         verified: true },
   // ★★★ Solar Technician I/II/III ($54-107K)
@@ -232,9 +316,5 @@ export const GREENHOUSE_COMPANIES: AtsCompanySeed[] = [
   { slug: 'brightcoreenergy', name: 'Brightcore Energy',       verified: true }, // installateur géothermie/solaire commercial, IGSHPA certifié requis
   { slug: 'soligent',         name: 'Soligent',                verified: false }, // plus gros distributeur solaire US — jobs surtout ops/warehouse, peu d'"installer" pur
   { slug: 'sunnova',          name: 'Sunnova Energy',          verified: true }, // ★ major residential solar — confirmed Greenhouse
-  
-
-  { slug: 'vivint-solar',     name: 'Vivint Solar',            verified: false }, // ★ residential solar installer
-  { slug: 'sunrun-grow',      name: 'Sunrun',                  verified: false }, // ★ residential leader — duplicate check needed
   { slug: '3mgroofing',       name: '3M Roofing',              verified: false }, // ★ solar + roofing — verify Greenhouse
 ];

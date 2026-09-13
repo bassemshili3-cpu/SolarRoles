@@ -50,7 +50,9 @@ export async function fetchAshbyJobs(company: AtsCompanySeed): Promise<Normalize
 
   const data = (await res.json()) as AshbyBoardResponse;
   const jobs = data.jobs ?? [];
-  const filtered = jobs.filter((j) => isSolarInstallerRole(j.title));
+  const filtered = jobs.filter((j) =>
+    isSolarInstallerRole(j.title, j.descriptionPlain ?? j.descriptionHtml),
+  );
 
   return filtered.map((j) => ({
     source: 'ashby',

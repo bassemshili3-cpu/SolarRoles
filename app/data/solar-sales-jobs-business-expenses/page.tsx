@@ -59,7 +59,7 @@ export default function SolarSalesExpensesReportPage() {
             <p className="mt-4 leading-8 text-gray-700">Solar Tech Elec&apos;s Virtual Sales Agents listing offers a company email account, CRM access and proposal software. Its teams handle marketing campaigns and creative work. The source of the advertising money appears in a separate sentence about commission pay.</p>
             <figure className="my-7 rounded-2xl bg-[#1C2126] p-6 text-white sm:p-8">
               <blockquote className="text-xl font-semibold leading-9 sm:text-2xl">“{report.rows[0].evidence[0]}”</blockquote>
-              <figcaption className="mt-4 text-sm leading-6 text-white/70">Solar Tech Elec LLC · Virtual Sales Agents · <a href={report.rows[0].sourceUrl} className="text-[#F2A93B] underline underline-offset-4">Employer listing</a></figcaption>
+              <figcaption className="mt-4 text-sm leading-6 text-white/70">Solar Tech Elec LLC · Virtual Sales Agents · <a href={report.rows[0].sourceUrl} rel="nofollow" className="text-[#F2A93B] underline underline-offset-4">Employer listing</a></figcaption>
             </figure>
             <p className="mt-4 leading-8 text-gray-700">The description requires a computer and internet access, too. It mentions a marketing-team commission without explaining the payment arrangement. No advertising amount or reimbursement terms are specified, so we cannot calculate the representative&apos;s expenses or take-home earnings.</p>
             <p className="mt-4 leading-8 text-gray-700">For an applicant, the distinction is concrete: access to company sales software does not mean the company supplies the money to attract customers. This listing makes that budget a question to settle before accepting the offer.</p>
@@ -102,7 +102,7 @@ export default function SolarSalesExpensesReportPage() {
                 {row.evidence.map(quote => <blockquote key={quote} className="border-l-2 border-amber-500 pl-4">“{quote}”</blockquote>)}
                 <p>{row.interpretation}</p><p className="text-gray-600"><strong>Still unspecified:</strong> {row.unknown}</p>
                 <p className="text-xs text-gray-500">Stored location: {row.location} · Source: {row.source} · Retrieved {new Date(row.fetchedAt).toISOString().slice(0, 10)} (UTC)</p>
-                <a href={row.sourceUrl} className="inline-flex items-center gap-1 font-semibold text-[#744600] underline">Open the source listing<ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
+                <a href={row.sourceUrl} rel="nofollow" className="inline-flex items-center gap-1 font-semibold text-[#744600] underline">Open the source listing<ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
               </div>
             </details>)}</div>
           </section>

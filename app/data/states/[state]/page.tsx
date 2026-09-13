@@ -436,7 +436,7 @@ export default async function StateDataPage({
                   <a
                     href={cert.heatspringUrl}
                     target="_blank"
-                    rel="noopener sponsored"
+                    rel="nofollow noopener sponsored"
                     className="shrink-0 text-sm font-semibold text-[#C9991F] underline hover:text-[#3D1654]"
                   >
                     Get certified on HeatSpring →

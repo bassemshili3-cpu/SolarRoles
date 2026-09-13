@@ -5,7 +5,7 @@
  * pour /postings/{id} (batch parallèle).
  */
 
-import { isSolarInstallerRole } from './solar-taxonomy';
+import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './ashby';
 import type { AtsCompanySeed } from './company-seed';
@@ -63,7 +63,9 @@ export async function fetchSmartRecruitersJobs(company: AtsCompanySeed): Promise
   const postings = data.content ?? [];
 
   // Filter via ta taxonomy partagée — même logique que ashby.ts
-  const matched = postings.filter((p) => isSolarInstallerRole(p.name));
+  const matched = postings.filter((p) =>
+    isSolarInstallerRole(p.name) || isGenericInstallerTitle(p.name),
+  );
 
   // Detail calls en parallèle (description + salary)
   const detailed = await Promise.all(
@@ -79,10 +81,11 @@ export async function fetchSmartRecruitersJobs(company: AtsCompanySeed): Promise
     })
   );
 
-  return detailed.map(({ p, detail }) => {
+  return detailed.flatMap(({ p, detail }) => {
     const location = formatLocation(p.location);
     const description = extractDescription(detail) || p.name;
-    return {
+    if (!isSolarInstallerRole(p.name, description)) return [];
+    return [{
       source: 'smartrecruiters',
       externalId: p.id,
       title: p.name,
@@ -95,6 +98,6 @@ export async function fetchSmartRecruitersJobs(company: AtsCompanySeed): Promise
       contractType: p.typeOfEmployment?.label,
       postedAt: p.releasedDate ? new Date(p.releasedDate) : undefined,
       salary: detail?.compensation?.summary,
-    };
+    }];
   });
 }

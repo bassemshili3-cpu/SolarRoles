@@ -28,7 +28,7 @@ function approved(company: AtsCompanySeed, title: string): boolean {
 export function parseHostedLinks(html: string, source: HostedBoard, company: AtsCompanySeed) {
   const base = boardUrl(source, company.slug);
   const $ = cheerio.load(html);
-  const links = new Map<string, { url: string; title: string }>();
+  const links = new Map<string, { url: string; title: string; location: string }>();
   $('a[href]').each((_, element) => {
     const anchor = $(element);
     try {
@@ -38,14 +38,16 @@ export function parseHostedLinks(html: string, source: HostedBoard, company: Ats
       if (!id) return;
       const title = clean(anchor.find('h2, h3, .position-title').first().text() || anchor.text());
       if (!approved(company, title) && !isSolarInstallerRole(title) && !isGenericInstallerTitle(title)) return;
+      const row = anchor.closest('tr, li, .position, .job');
+      const location = clean(row.find('.resumator-job-location-column, .location, [class*="location"]').first().text());
       url.search = ''; url.hash = '';
-      if (!links.has(id)) links.set(id, { url: url.href, title });
+      if (!links.has(id)) links.set(id, { url: url.href, title, location });
     } catch { /* Ignore malformed links and links to application forms. */ }
   });
   return [...links.values()];
 }
 
-export function parseHostedDetail(html: string, url: string, source: HostedBoard, company: AtsCompanySeed): NormalizedJob | undefined {
+export function parseHostedDetail(html: string, url: string, source: HostedBoard, company: AtsCompanySeed, fallbackLocation = ''): NormalizedJob | undefined {
   const $ = cheerio.load(html);
   const id = jobId(source, new URL(url));
   if (!id) return;
@@ -53,7 +55,6 @@ export function parseHostedDetail(html: string, url: string, source: HostedBoard
   let selectors = source === 'jazzhr'
     ? { title: '.job-header h2', description: '#job-description', location: '.job-attributes-container [title="Location"]', employmentType: '#resumator-job-employment' }
     : undefined;
-  if (source === 'jazzhr' && !$('#job-description').length) return;
   let schema: any;
   const visit = (value: any): void => {
     if (Array.isArray(value)) { value.forEach(visit); return; }
@@ -69,7 +70,10 @@ export function parseHostedDetail(html: string, url: string, source: HostedBoard
     selectors = { title: '.position-header h1', description: '.job-description .description', location: '.position-header .fa-map-marker + span', employmentType: '.position-header .type .label' };
   }
   if (schema?.validThrough && new Date(schema.validThrough).getTime() < Date.now()) return;
-  const detail = extractJobDetail(html, url, selectors);
+  // Some JazzHR themes embed nested CSS syntax that jsdom logs as a parse
+  // error. Styles carry no job data, so remove them before detail parsing.
+  const detailHtml = html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
+  const detail = extractJobDetail(detailHtml, url, selectors);
   if (detail.canonicalUrl) {
     const canonical = new URL(detail.canonicalUrl);
     if (canonical.origin !== new URL(url).origin || jobId(source, canonical) !== id) return;
@@ -81,7 +85,7 @@ export function parseHostedDetail(html: string, url: string, source: HostedBoard
   const addresses = [schema?.jobLocation].flat().filter(Boolean).map((place: any) => place.address).filter(Boolean);
   const countryName = (country: any): string => typeof country === 'string' ? country : country?.name ?? '';
   const locations = addresses.map((address: any) => [address.addressLocality, address.addressRegion, countryName(address.addressCountry)].filter(Boolean).join(', '));
-  const rawLocation = selectors ? clean($(selectors.location).text()) : locations.join(' / ');
+  const rawLocation = (selectors ? clean($(selectors.location).text()) : locations.join(' / ')) || fallbackLocation;
   const requirements = [schema?.applicantLocationRequirements].flat().filter(Boolean);
   const us = /\b(?:united states|USA|US)\b/i;
   const explicitUs = addresses.some((address: any) => us.test(countryName(address.addressCountry)))
@@ -124,7 +128,7 @@ export async function fetchHostedJobs(source: HostedBoard, company: AtsCompanySe
       try {
         const detail = await fetchPage(link.url);
         if (new URL(detail.url).origin !== new URL(link.url).origin || jobId(source, new URL(detail.url)) !== jobId(source, new URL(link.url))) continue;
-        const job = parseHostedDetail(detail.html, detail.url, source, company);
+        const job = parseHostedDetail(detail.html, detail.url, source, company, link.location);
         if (job) jobs.push(job);
       } catch (error) { console.warn(`[${source}] ${link.url}: ${(error as Error).message}`); }
       await new Promise((resolve) => setTimeout(resolve, 250));

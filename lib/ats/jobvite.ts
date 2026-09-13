@@ -6,7 +6,9 @@ import type { AtsCompanySeed } from './company-seed';
 
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
-const LIST_URL = (slug: string) => `https://jobs.jobvite.com/${slug}/jobs`;
+// `nl=1&fr=false` requests the embeddable Jobvite board. Some employers
+// redirect the bare /jobs URL to their corporate careers page instead.
+const LIST_URL = (slug: string) => `https://jobs.jobvite.com/${slug}/jobs?nl=1&fr=false`;
 
 interface ScrapedJobRow {
   title: string;

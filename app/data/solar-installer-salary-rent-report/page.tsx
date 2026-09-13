@@ -73,7 +73,7 @@ export default function SolarInstallerRentReportPage() {
                 <div className="mb-2 flex items-baseline justify-between gap-3 text-sm"><span>{row.metro}</span><strong className="shrink-0 tabular-nums">{row.rentHours.toFixed(1)} hrs</strong></div>
                 <div className="h-3 rounded-full bg-gray-200" aria-hidden="true"><div className={`h-3 rounded-full ${row.rentHours > 70 ? 'bg-[#4B5965]' : 'bg-[#D68A1F]'}`} style={{ width: `${row.rentHours / 110 * 100}%` }} /></div>
               </li>)}</ol>
-              <p className="mt-6 text-xs leading-5 text-gray-600">Source: Solar Roles calculations using <a className="underline" href={BLS}>BLS OEWS</a> and <a className="underline" href={HUD}>HUD Fair Market Rents</a>. Full results below.</p>
+              <p className="mt-6 text-xs leading-5 text-gray-600">Source: Solar Roles calculations using <a className="underline" href={BLS} rel="nofollow">BLS OEWS</a> and <a className="underline" href={HUD} rel="nofollow">HUD Fair Market Rents</a>. Full results below.</p>
             </figure>
           </section>
 
@@ -106,10 +106,10 @@ export default function SolarInstallerRentReportPage() {
             <h2 id="sources-title" className="text-xl font-bold">Sources and data downloads</h2>
             <p className="mt-3 text-sm leading-7 text-gray-600">Two federal datasets provide the pay and rent inputs. The BLS county definitions establish the geographic match; HUD&apos;s revision notice updates the affected rent.</p>
             <ul className="mt-4 space-y-3 text-sm text-[#744600] underline underline-offset-4">
-              <li><a href={BLS}>BLS: May 2025 metropolitan wage estimates (ZIP)</a></li>
-              <li><a href="https://www.bls.gov/oes/area_definitions_m2025.xlsx">BLS: May 2025 area definitions (XLSX)</a></li>
-              <li><a href={HUD}>HUD: FY 2026 rent schedule and county coverage (PDF)</a></li>
-              <li><a href={REVISION}>HUD: revised FY 2026 rents, effective May 21, 2026</a></li>
+              <li><a href={BLS} rel="nofollow">BLS: May 2025 metropolitan wage estimates (ZIP)</a></li>
+              <li><a href="https://www.bls.gov/oes/area_definitions_m2025.xlsx" rel="nofollow">BLS: May 2025 area definitions (XLSX)</a></li>
+              <li><a href={HUD} rel="nofollow">HUD: FY 2026 rent schedule and county coverage (PDF)</a></li>
+              <li><a href={REVISION} rel="nofollow">HUD: revised FY 2026 rents, effective May 21, 2026</a></li>
               <li><a href={CSV} download>Solar Roles: all 28 metro calculations (CSV)</a></li>
             </ul>
             <p className="mt-6 text-sm leading-7 text-gray-700">For coverage, cite <strong>Solar Roles&apos; 2026 Solar Installer Pay and Rent Report</strong> and link to this page. The CSV includes source links and calculations to four decimal places for checking the findings. <Link href="/contact" className="text-[#744600] underline">Contact Solar Roles</Link> for questions about the analysis.</p>

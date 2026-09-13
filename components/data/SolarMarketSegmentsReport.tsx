@@ -26,7 +26,7 @@ const reportJsonLd = {
         'Battery storage accounted for 47% of 370 unique US solar openings that named a market segment in the title.',
       url: 'https://www.solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring',
       datePublished: '2026-09-04',
-      dateModified: '2026-09-04',
+      dateModified: '2026-09-10',
       author: {
         '@type': 'Organization',
         name: 'Solar Roles Research',
@@ -127,11 +127,35 @@ export default function SolarMarketSegmentsReport() {
                 <Check className="mt-1.5 h-5 w-5 shrink-0 text-[#A96300]" />
                 <span>
                   <strong className="text-[#1C2126]">This release is a fixed baseline.</strong>{' '}
-                  It does not yet measure growth since the residential tax credit expired.
+                  It records advertised demand after the 25D credit ended,
+                  providing a reference for a planned November–December 2026 follow-up.
                 </span>
               </li>
             </ul>
           </div>
+
+          <section aria-labelledby="why-now" className="mt-10 rounded-2xl border border-black/10 bg-white p-6 sm:p-8">
+            <h2 id="why-now" className="text-2xl font-bold text-[#1C2126]">
+              After the 25D deadline, where does solar hiring stand?
+            </h2>
+            <p className="mt-4 leading-7 text-[#4C5358]">
+              December 31, 2025 was the deadline for qualifying installations
+              under the federal residential clean energy credit (Section 25D),
+              which covered 30% of eligible costs. The deadline applied to home
+              battery storage as well as solar.{' '}
+              <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" rel="nofollow" className="font-semibold text-[#744600] underline underline-offset-4">
+                See the IRS eligibility rules.
+              </a>
+            </p>
+            <p className="mt-4 leading-7 text-[#4C5358]">
+              This September snapshot puts a dated marker on the hiring picture
+              during that adjustment. Its 174 storage titles span a category
+              that is not limited to home batteries; the 19 residential titles
+              do not capture every residential vacancy. Those counts establish
+              a starting point for tracking advertised demand, not a measure
+              of jobs gained or lost because of the tax change.
+            </p>
+          </section>
 
           <figure className="mt-10" aria-labelledby="segment-chart-title">
             <figcaption>
@@ -234,7 +258,7 @@ export default function SolarMarketSegmentsReport() {
               <a
                 href="https://irecusa.org/census-solar-job-trends/"
                 target="_blank"
-                rel="noreferrer"
+                rel="nofollow noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#8A5200] underline decoration-[#F2A93B] decoration-2 underline-offset-4 hover:text-[#603900]"
               >
                 Read the IREC census
@@ -299,7 +323,7 @@ export default function SolarMarketSegmentsReport() {
             <a
               href="https://irecusa.org/census-workforce-development/"
               target="_blank"
-              rel="noreferrer"
+              rel="nofollow noreferrer"
               className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#8A5200] underline decoration-[#F2A93B] decoration-2 underline-offset-4 hover:text-[#603900]"
             >
               See IREC’s workforce findings
@@ -309,22 +333,25 @@ export default function SolarMarketSegmentsReport() {
 
           <section aria-labelledby="growth-baseline" className="mt-12 rounded-2xl bg-[#1C2126] p-6 text-white sm:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#F2A93B]">
-              The next number
+              November–December 2026 follow-up
             </p>
             <h2 id="growth-baseline" className="mt-3 text-2xl font-bold leading-tight">
-              The growth comparison starts with this baseline
+              The next release will ask what changed after September
             </h2>
             <p className="mt-4 leading-7 text-white/72">
-              Solar Roles cannot yet support the claim that battery storage
-              postings have grown X% faster than residential solar since the
-              federal residential credit expired. The database does not contain
-              a stable pre-expiration series built with the same sources and
-              deduplication rules.
+              September 4, 2026 remains the fixed reference date. A follow-up
+              is planned for November–December 2026, subject to recovering the
+              original employer-level cohort and collecting comparable records.
+              It will report changes in posting counts and segment shares
+              among employers and feeds observed at both dates, with new or
+              missing sources reported separately.
             </p>
             <p className="mt-4 leading-7 text-white/72">
-              Repeating this snapshot will turn that question into a measured
-              trend. For now, the defensible finding is narrower: storage is the
-              largest category among current titles that name a market segment.
+              Both observations would fall after the 25D deadline. They could
+              show a September-to-winter change, not a before-and-after estimate
+              of the credit expiration. That question requires comparable
+              pre-2026 records and an analysis that separates policy effects
+              from seasonality, employer coverage and other market changes.
             </p>
           </section>
 
@@ -341,6 +368,22 @@ export default function SolarMarketSegmentsReport() {
                 <dd>
                   1,896 active US listings on September 4, 2026, collected from
                   Adzuna and direct employer ATS feeds.
+                  Adzuna is an aggregation channel; ATS feeds supply postings
+                  directly from employer recruitment systems. These are
+                  collection sources, not counts of distinct employers.
+                </dd>
+              </div>
+              <div className="grid gap-1 sm:grid-cols-[140px_1fr]">
+                <dt className="font-bold text-[#1C2126]">Employer coverage</dt>
+                <dd>
+                  The retained September 4 CSV contains aggregate counts only.
+                  It does not establish the number of distinct employers in
+                  either the 1,601-listing universe or the 370-title subset,
+                  the share contributed by the largest employers, or the split
+                  between Adzuna and direct feeds. Those measures are unavailable
+                  for this release. Employer size is also unverified, so this
+                  sample cannot be described as representative of small firms
+                  or of the US solar industry.
                 </dd>
               </div>
               <div className="grid gap-1 sm:grid-cols-[140px_1fr]">

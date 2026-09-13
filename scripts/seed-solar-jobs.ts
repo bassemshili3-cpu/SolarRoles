@@ -18,6 +18,12 @@ import {
   RIPPLING_COMPANIES,
   WORKDAY_COMPANIES,
   SUCCESSFACTORS_COMPANIES,
+  ORACLE_CLOUD_COMPANIES,
+  UKG_COMPANIES,
+  ICIMS_COMPANIES,
+  ADP_COMPANIES,
+  PAYLOCITY_COMPANIES,
+  PAYCOM_COMPANIES,
   JAZZHR_COMPANIES,
   BREEZY_COMPANIES,
 } from '../lib/ats/company-seed';
@@ -31,6 +37,12 @@ import { fetchWorkdayJobs } from '../lib/ats/workday';
 import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
 import { fetchRipplingJobs } from '../lib/ats/rippling';
 import { fetchSuccessFactorsJobs } from '../lib/ats/successfactors';
+import { fetchOracleCloudJobs } from '../lib/ats/oracle-cloud';
+import { fetchUkgJobs } from '../lib/ats/ukg';
+import { fetchIcimsJobs } from '../lib/ats/icims';
+import { fetchAdpJobs } from '../lib/ats/adp';
+import { fetchPaylocityJobs } from '../lib/ats/paylocity';
+import { fetchPaycomJobs } from '../lib/ats/paycom';
 import { fetchJazzHrJobs } from '../lib/ats/jazzhr';
 import { fetchBreezyJobs } from '../lib/ats/breezy';
 import { isUSJob } from '../lib/ats/geo';
@@ -72,6 +84,12 @@ const PROVIDERS: AtsProvider<any>[] = [
   provider('workday',         WORKDAY_COMPANIES,         fetchWorkdayJobs,         (c) => `${c.tenant}/${c.site}`),
   provider('rippling',        RIPPLING_COMPANIES,        fetchRipplingJobs,        (c) => c.slug),
   provider('successfactors',  SUCCESSFACTORS_COMPANIES,  fetchSuccessFactorsJobs,  (c) => c.baseUrl),
+  provider('oraclecloud',     ORACLE_CLOUD_COMPANIES,     fetchOracleCloudJobs,      (c) => c.baseUrl),
+  provider('ukg',             UKG_COMPANIES,              fetchUkgJobs,              (c) => c.baseUrl),
+  provider('icims',           ICIMS_COMPANIES,            fetchIcimsJobs,            (c) => c.baseUrl),
+  provider('adp',             ADP_COMPANIES,               fetchAdpJobs,               (c) => c.cid),
+  provider('paylocity',       PAYLOCITY_COMPANIES,         fetchPaylocityJobs,         (c) => c.boardUrl),
+  provider('paycom',          PAYCOM_COMPANIES,            fetchPaycomJobs,            (c) => c.clientKey),
   provider('custom-scrape',   CUSTOM_SCRAPE_COMPANIES,   fetchCustomScrapeJobs,    (c) => c.domain),
  
 ];
