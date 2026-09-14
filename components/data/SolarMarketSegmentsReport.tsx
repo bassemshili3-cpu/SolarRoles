@@ -1,4 +1,5 @@
 import { BarChart3, CalendarDays, Check, Download, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 
 const DOWNLOAD_URL = '/data/solar-hiring-market-segments-2026-09-04.csv'
 
@@ -214,8 +215,10 @@ export default function SolarMarketSegmentsReport() {
               <p className="mt-4 leading-7 text-[#4C5358]">
                 Job-title conventions matter. BESS and utility-scale employers
                 tend to name the project type. Residential employers often post
-                “Solar Installer,” “Lead Installer” or “Solar Sales
-                Representative” and leave the segment to the description.
+                “<Link href="/solar-pv-installer-jobs" className="font-semibold text-[#744600] underline underline-offset-4">Solar Installer</Link>,”
+                {' '}“<Link href="/lead-solar-installer-jobs" className="font-semibold text-[#744600] underline underline-offset-4">Lead Installer</Link>” or
+                {' '}“<Link href="/solar-sales-jobs" className="font-semibold text-[#744600] underline underline-offset-4">Solar Sales Representative</Link>”
+                {' '}and leave the segment to the description.
               </p>
               <p className="mt-4 leading-7 text-[#4C5358]">
                 The result measures the signal carried by titles. It does not
@@ -319,6 +322,16 @@ export default function SolarMarketSegmentsReport() {
               points the same way: O&amp;M was the only sector where hiring
               difficulty increased in 2024, and 53% of its positions were newly
               created.
+            </p>
+            <p className="mt-4 text-sm leading-6 text-[#5B6267]">
+              Candidates can compare the titles behind these categories in current{' '}
+              <Link href="/bess-technician-jobs" className="font-semibold text-[#744600] underline underline-offset-4">
+                BESS technician jobs
+              </Link>{' '}
+              and{' '}
+              <Link href="/solar-technician-jobs" className="font-semibold text-[#744600] underline underline-offset-4">
+                solar technician jobs
+              </Link>.
             </p>
             <a
               href="https://irecusa.org/census-workforce-development/"

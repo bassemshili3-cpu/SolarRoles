@@ -91,6 +91,16 @@ export default function RemoteSolarTravelReportPage() {
 
           <section className="mt-12" aria-labelledby="candidate-title"><h2 id="candidate-title" className="text-2xl font-bold tracking-tight">Ask about nights away before accepting an interview</h2><p className="mt-4 leading-8 text-gray-700">{report.categoryCounts.not_stated} reviewed roles had no explicit travel or attendance requirement we could identify. Silence is not a no-travel guarantee. A useful follow-up is: “How many overnight trips did the person in this role take last quarter, and how long did each trip last?” Ask separately about local site visits, office days and peak construction periods.</p></section>
 
+          <nav aria-label="Related solar job searches" className="mt-12 rounded-2xl border border-amber-200 bg-[#FFF8EC] p-6">
+            <h2 className="text-xl font-bold tracking-tight">Compare current roles mentioned in this report</h2>
+            <p className="mt-3 text-sm leading-7 text-gray-700">Travel expectations vary by employer and assignment. Review the full descriptions in current openings for the occupations represented in the sample.</p>
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3 text-sm font-bold text-[#744600] underline underline-offset-4">
+              <Link href="/solar-technician-jobs">Solar technician jobs</Link>
+              <Link href="/solar-engineer-jobs">Solar engineer jobs</Link>
+              <Link href="/bess-technician-jobs">BESS technician jobs</Link>
+            </div>
+          </nav>
+
           <section id="methodology" className="mt-12 scroll-mt-24 border-t border-gray-200 pt-9" aria-labelledby="method-title">
             <h2 id="method-title" className="text-2xl font-bold tracking-tight">How we reviewed the listings</h2>
             <div className="mt-4 space-y-4 text-sm leading-7 text-gray-700">

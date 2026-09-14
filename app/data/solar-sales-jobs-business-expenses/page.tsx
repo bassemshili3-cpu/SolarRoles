@@ -54,6 +54,14 @@ export default function SolarSalesExpensesReportPage() {
             <strong>These are case studies, not a market estimate.</strong> We selected six descriptions to compare explicit expenses, personal resources, prospecting duties and company support. They do not tell us what share of solar sales jobs requires workers to spend money.
           </aside>
 
+          <p className="mt-6 text-sm leading-7 text-gray-700">
+            Applicants can use these questions while comparing current{' '}
+            <Link href="/solar-sales-jobs" className="font-bold text-[#744600] underline underline-offset-4">
+              solar sales jobs
+            </Link>{' '}
+            and checking each employer&apos;s published compensation, lead and expense terms.
+          </p>
+
           <section className="mt-10" aria-labelledby="budget-title">
             <h2 id="budget-title" className="text-2xl font-bold tracking-tight">The company runs the campaigns. The rep brings the ad budget.</h2>
             <p className="mt-4 leading-8 text-gray-700">Solar Tech Elec&apos;s Virtual Sales Agents listing offers a company email account, CRM access and proposal software. Its teams handle marketing campaigns and creative work. The source of the advertising money appears in a separate sentence about commission pay.</p>

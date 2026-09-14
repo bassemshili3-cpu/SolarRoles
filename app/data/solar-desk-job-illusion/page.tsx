@@ -569,6 +569,20 @@ export default function SolarDeskJobIllusionReport() {
               whether rotations are fixed, and how the travel percentage in the
               posting compares with the schedule employees actually work.
             </p>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Compare the wording in current{' '}
+              <a href="/solar-pv-installer-jobs" className="font-semibold text-amber-800 underline underline-offset-4">
+                solar PV installer jobs
+              </a>,{' '}
+              <a href="/solar-electrician-jobs" className="font-semibold text-amber-800 underline underline-offset-4">
+                solar electrician jobs
+              </a>{' '}
+              and{' '}
+              <a href="/solar-engineer-jobs" className="font-semibold text-amber-800 underline underline-offset-4">
+                solar engineering jobs
+              </a>{' '}
+              before treating the title alone as a guide to field time.
+            </p>
           </div>
 
           <div className="mt-7 grid gap-4 sm:grid-cols-2">

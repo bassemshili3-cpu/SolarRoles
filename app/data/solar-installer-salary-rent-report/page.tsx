@@ -116,6 +116,8 @@ export default function SolarInstallerRentReportPage() {
           </section>
           <div className="mt-9 flex flex-wrap gap-5 border-t border-gray-200 pt-7 text-sm font-bold text-[#744600]">
             <Link href="/solar-pv-installer-jobs" className="inline-flex items-center gap-2 hover:underline">Browse solar installer jobs<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+            <Link href="/lead-solar-installer-jobs" className="hover:underline">Browse lead solar installer jobs</Link>
+            <Link href="/solar-electrician-jobs" className="hover:underline">Browse solar electrician jobs</Link>
             <Link href="/data/battery-storage-leads-segment-specific-solar-hiring" className="hover:underline">Read our battery storage hiring report</Link>
           </div>
         </div>
