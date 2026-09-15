@@ -22,8 +22,8 @@ export default function JobsWidgetPage() {
     <main className="mx-auto max-w-6xl px-6 py-14 md:py-20">
       <ResourceHeader
         eyebrow="Free educator tool"
-        title="Publish current solar openings on a program website"
-        intro="The widget embeds a state-filtered feed of Solar Roles openings for community colleges, training providers, career centers and workforce programs. Program staff select a state and optional entry-level filter, then add the generated iframe to an approved page."
+        title="Current solar openings Widget"
+        intro="The widget embeds current Solar Roles openings for community colleges, training providers, career centers and workforce programs. Program staff can select a state, a solar job title and an optional entry-level filter before adding the generated iframe to an approved page."
       />
 
       <section className="mb-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4" aria-label="Widget cost and access">
@@ -38,7 +38,7 @@ export default function JobsWidgetPage() {
 
       <section className="mt-14 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-gray-200 p-5"><h2 className="font-semibold text-gray-950">Database updates</h2><p className="mt-2 text-sm leading-6 text-gray-600">The embed reads from Solar Roles. Expired openings leave the feed as the underlying job database changes.</p></div>
-        <div className="rounded-2xl border border-gray-200 p-5"><h2 className="font-semibold text-gray-950">State and entry-level filters</h2><p className="mt-2 text-sm leading-6 text-gray-600">A career center can publish a state feed and optionally limit the display to postings with explicit entry-level language.</p></div>
+        <div className="rounded-2xl border border-gray-200 p-5"><h2 className="font-semibold text-gray-950">State, title and entry-level filters</h2><p className="mt-2 text-sm leading-6 text-gray-600">A career center can publish openings for a state or trade and optionally limit the feed to postings with explicit entry-level language.</p></div>
         <div className="rounded-2xl border border-gray-200 p-5"><h2 className="font-semibold text-gray-950">Visible attribution</h2><p className="mt-2 text-sm leading-6 text-gray-600">The widget includes a visible “Powered by Solar Roles” link. The embed contains no hidden or keyword-prescribed link.</p></div>
       </section>
 
@@ -64,7 +64,7 @@ export default function JobsWidgetPage() {
           <article className="rounded-2xl border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-950">Does the job list require JavaScript?</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              No. Job cards and links are rendered on the server. The supplied iframe is sandboxed without script permission, and every generated embed includes a direct jobs-page link as a fallback.
+              No. Job cards and links are rendered on the server. Every generated embed includes a direct jobs-page link as a fallback if an institutional site blocks the iframe.
             </p>
           </article>
           <article className="rounded-2xl border border-gray-200 p-5">
@@ -79,7 +79,7 @@ export default function JobsWidgetPage() {
 
       <section className="mt-14 rounded-3xl bg-gray-950 p-7 text-white">
         <h2 className="text-xl font-bold">Custom geographic and occupational feeds</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300">Programs serving a metro area, a specific trade or a multi-state region may need filters beyond the standard state and entry-level options. Solar Roles can review those requirements with program and web staff.</p>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300">Programs serving a metro area, a multi-state region or an occupation outside the standard title list can request a tailored feed. Solar Roles can review those requirements with program and web staff.</p>
         <Link href="/contact" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-300 hover:text-blue-200">Ask for a program-specific feed <ExternalLink className="h-4 w-4" /></Link>
       </section>
     </main>
