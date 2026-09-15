@@ -89,6 +89,19 @@ const resourcePages: string[] = [
 'do-you-need-to-be-an-electrician-for-bess',
 ].map(s => `/resources/${s}`)
 
+const workforceResourcePages: string[] = [
+  '/workforce-resources',
+  '/workforce-resources/entry-level-solar-jobs',
+  '/workforce-resources/solar-career-pathways',
+  '/workforce-resources/solar-apprenticeship-licensing',
+  '/workforce-resources/solar-salary-explorer',
+  '/workforce-resources/solar-job-market-by-state',
+  '/workforce-resources/solar-skills-certifications',
+  '/workforce-resources/solar-employers-hiring',
+  '/workforce-resources/jobs-widget',
+  '/workforce-resources/jobs-widget/privacy',
+]
+
 // ── Articles de blog ─────────────────────────────────────────
 const blogPosts: string[] = [
   '/blog/how-to-land-first-solar-job',
@@ -115,6 +128,7 @@ const sections: {
   { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
   { routes: dataSalaryPages, changeFrequency: "weekly", priority: 0.8 },
   { routes: resourcePages, changeFrequency: "monthly", priority: 0.7 },
+  { routes: workforceResourcePages, changeFrequency: "weekly", priority: 0.8 },
   { routes: blogPosts, changeFrequency: "monthly", priority: 0.6 },
 ]
 

@@ -5,8 +5,7 @@ import Footer from '@/components/Footer'
 import { Providers } from './providers'
 import { FilterDrawerProvider } from '@/contexts/filter-drawer-context'
 import CookieBanner from '@/components/CookieBanner'
-import { Analytics } from "@vercel/analytics/next"
-import Script from 'next/script'
+import SiteChrome from '@/components/SiteChrome'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -54,13 +53,19 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <FilterDrawerProvider>
-            <CookieBanner />
-            <Navbar />
-            {children}
-            <Footer />
+            <SiteChrome
+              header={
+                <>
+                  <CookieBanner />
+                  <Navbar />
+                </>
+              }
+              footer={<Footer />}
+            >
+              {children}
+            </SiteChrome>
           </FilterDrawerProvider>
         </Providers>
-        <Analytics/>
       </body>
     </html>
   )

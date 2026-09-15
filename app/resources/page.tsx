@@ -458,6 +458,27 @@ export default function ResourcesHub() {
         </div>
       </section>
 
+      <section className="max-w-7xl mx-auto px-4 md:px-8 pb-4">
+        <Link
+          href="/workforce-resources"
+          className="group flex flex-col gap-5 rounded-3xl border border-blue-200 bg-blue-50 p-6 transition hover:border-blue-300 hover:bg-blue-100/70 md:flex-row md:items-center md:justify-between md:p-8"
+        >
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-700">
+              For educators &amp; workforce programs
+            </div>
+            <h2 className="mt-2 text-2xl font-bold text-[#1C2126]">Educator &amp; workforce tools</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#1C2126]/65">
+              Use live hiring data, career pathways, licensing references and an embeddable jobs widget for curriculum and advising decisions.
+            </p>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-blue-800">
+            Explore workforce resources
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </span>
+        </Link>
+      </section>
+
       {/* RESOURCE LIBRARY — remplace Featured + All resources by group */}
       <section id="courses" className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
         <div className="mb-8">

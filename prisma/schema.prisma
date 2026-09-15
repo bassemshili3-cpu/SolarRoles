@@ -115,3 +115,16 @@ model RoleStateDemand {
   @@unique([roleSlug, state])
   @@index([roleSlug])
 }
+
+model MarketSnapshot {
+  id             String   @id @default(cuid())
+  snapshotDate   DateTime @unique @db.Date
+  totalJobs      Int
+  employerCount  Int
+  metrics        Json
+  activeJobIds   Json
+  employerCounts Json
+  stateCounts    Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

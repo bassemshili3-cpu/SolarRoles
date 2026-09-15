@@ -26,6 +26,7 @@
     "seed:paycom": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --env-file=.env.local --import tsx scripts/seed-solar-jobs.ts paycom",
     "export:ats-jobs": "node --env-file=.env.local scripts/export-ats-jobs.cjs",
     "export:ats-plus-adzuna": "node --env-file=.env.local scripts/export-ats-jobs.cjs --include-adzuna",
+    "export:all-jobs": "node --env-file=.env.local scripts/export-ats-jobs.cjs --all-sources",
     "dry-run:custom-scrape": "tsx scripts/dry-run-custom-scrape.ts",
     "filter:healthcare-providers": "tsx scripts/filter-healthcare-provider-targets.ts",
     "research:healthcare-domains": "node --env-file=.env --experimental-strip-types scripts/research-healthcare-domains.ts",
