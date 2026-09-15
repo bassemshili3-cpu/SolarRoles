@@ -107,7 +107,7 @@ export default async function SolarApprenticeshipLicensingPage() {
               key={tool.href}
               href={tool.href}
               target="_blank"
-              rel="noreferrer"
+              rel="nofollow noreferrer"
               className="group rounded-2xl border border-gray-200 p-5 transition hover:border-blue-300 hover:shadow-sm"
             >
               <div className="flex items-start justify-between gap-4">
