@@ -8,35 +8,69 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
 
+function authErrorMessage(reason: string | null) {
+  if (!reason) return ''
+  if (reason === 'missing_code') {
+    return 'Google did not return an authorization code. Check the Supabase redirect URL configuration.'
+  }
+  if (reason.includes('code_verifier')) {
+    return 'The secure Google sign-in cookie was not available when the callback returned. Allow cookies for this site and try again.'
+  }
+  if (reason.startsWith('oauth_')) {
+    return `Google authorization was rejected (${reason.replace('oauth_', '')}). Please try again.`
+  }
+  if (reason.startsWith('exchange_')) {
+    return `Google authorization returned, but Supabase could not create the session (${reason.replace('exchange_', '')}).`
+  }
+  return 'Google sign-in could not be completed. Please try again.'
+}
+
 export default function Login() {
   const supabase = createClient()
   const router = useRouter()
   const searchParams = useSearchParams()
   const paramRedirect = searchParams.get('redirectTo')
+  const authError = searchParams.get('error')
+  const isEmployerRedirect = paramRedirect?.startsWith('/dashboard/employer') ?? false
 
-  const [userType, setUserType] = useState<'candidate' | 'employer'>('candidate')
+  const [userType, setUserType] = useState<'candidate' | 'employer' | null>(
+    isEmployerRedirect ? 'employer' : null,
+  )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(authErrorMessage(authError))
 
-  const setUserTypeAndPersist = async (type: 'candidate' | 'employer') => {
+  const selectUserType = (type: 'candidate' | 'employer') => {
     setUserType(type)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      await supabase.auth.updateUser({ data: { accountType: type } })
-    }
+    setError('')
   }
 
   const redirectTo = paramRedirect || (userType === 'employer' ? '/dashboard/employer' : '/dashboard')
 
   const loginWithGoogle = async () => {
+    if (!userType) {
+      setError('Choose Job seeker or Employer before continuing.')
+      return
+    }
     setIsLoading(true)
     setError('')
+
+    const redirectResponse = await fetch('/api/auth/redirect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ redirectTo, accountType: userType }),
+    })
+    if (!redirectResponse.ok) {
+      setError('Could not prepare Google sign-in. Please try again.')
+      setIsLoading(false)
+      return
+    }
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback?redirectTo=${redirectTo}` }
+      options: { redirectTo: `${window.location.origin}/auth/callback` }
     })
     if (error) {
       setError(error.message)
@@ -45,6 +79,10 @@ export default function Login() {
   }
 
   const loginWithEmail = async () => {
+    if (!userType) {
+      setError('Choose Job seeker or Employer before continuing.')
+      return
+    }
     if (!email || !password) {
       setError('Please enter your email and password')
       return
@@ -56,6 +94,7 @@ export default function Login() {
       setError(error.message)
       setIsLoading(false)
     } else {
+      await supabase.auth.updateUser({ data: { accountType: userType } })
       router.push(redirectTo)
       router.refresh()
     }
@@ -112,7 +151,8 @@ export default function Login() {
             <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
               <button
                 type="button"
-                onClick={() => setUserTypeAndPersist('candidate')}
+                onClick={() => selectUserType('candidate')}
+                aria-pressed={userType === 'candidate'}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
                   userType === 'candidate' ? 'bg-white text-[#0B1A2E] shadow-sm' : 'text-slate-500 hover:text-[#0B1A2E]'
                 }`}
@@ -121,7 +161,8 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                onClick={() => setUserTypeAndPersist('employer')}
+                onClick={() => selectUserType('employer')}
+                aria-pressed={userType === 'employer'}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
                   userType === 'employer' ? 'bg-white text-[#0B1A2E] shadow-sm' : 'text-slate-500 hover:text-[#0B1A2E]'
                 }`}
@@ -131,12 +172,26 @@ export default function Login() {
             </div>
           </div>
 
+          {!userType && (
+            <p className="-mt-5 mb-8 text-center text-sm font-medium text-amber-700">
+              Choose an account type to continue.
+            </p>
+          )}
+
           <div className="hidden lg:block mb-10">
             <h2 className="text-3xl font-bold text-[#0B1A2E] mb-2">
-              {userType === 'employer' ? 'Employer sign in' : 'Welcome back'}
+              {userType === 'employer'
+                ? 'Employer sign in'
+                : userType === 'candidate'
+                  ? 'Welcome back'
+                  : 'Choose how you use Solar Roles'}
             </h2>
             <p className="text-slate-500">
-              {userType === 'employer' ? 'Sign in to post jobs and track applications' : 'Please enter your details to sign in'}
+              {userType === 'employer'
+                ? 'Sign in to post jobs and track applications'
+                : userType === 'candidate'
+                  ? 'Please enter your details to sign in'
+                  : 'Select Job seeker or Employer above before signing in'}
             </p>
           </div>
 
@@ -153,7 +208,7 @@ export default function Login() {
             variant="outline"
             className="w-full flex items-center justify-center gap-3 h-14 text-base font-medium border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 rounded-xl mb-6"
             onClick={loginWithGoogle}
-            disabled={isLoading}
+            disabled={isLoading || !userType}
           >
             {isLoading ? (
               <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -187,6 +242,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={handleKeyPress}
                 autoComplete="email"
+                disabled={!userType}
                 className="h-12 text-base px-4 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0F9FF] focus:border-[#0B1A2E] transition-all"
               />
             </div>
@@ -206,11 +262,13 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={handleKeyPress}
                   autoComplete="current-password"
+                  disabled={!userType}
                   className="h-12 text-base px-4 pr-11 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0F9FF] focus:border-[#0B1A2E] transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
+                  disabled={!userType}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   tabIndex={-1}
                 >
@@ -222,7 +280,7 @@ export default function Login() {
             <Button
               className="w-full h-14 text-base font-semibold bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] rounded-xl shadow-lg shadow-[#F5B819]/25 transition-all duration-200 hover:shadow-xl hover:shadow-[#F5B819]/30"
               onClick={loginWithEmail}
-              disabled={isLoading}
+              disabled={isLoading || !userType}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -241,7 +299,7 @@ export default function Login() {
           <p className="text-center text-slate-500 mt-8">
             New to Solar Roles?{' '}
             <Link
-              href={paramRedirect ? `/auth/signup?redirectTo=${paramRedirect}` : '/auth/signup'}
+              href={paramRedirect ? `/auth/signup?redirectTo=${encodeURIComponent(paramRedirect)}` : '/auth/signup'}
               className="font-semibold text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors"
             >
               Create a free account
