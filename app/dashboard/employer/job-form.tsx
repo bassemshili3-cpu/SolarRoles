@@ -38,16 +38,24 @@ export type JobFormInitialData = {
   notificationEmail: string
 }
 
-type DraftPayload = JobFormInitialData
+type PostingPlan = 'featured' | 'partner'
+type DraftPayload = JobFormInitialData & {
+  plan: PostingPlan
+  featureWithPartner: boolean
+}
 
 export default function JobForm({
   mode,
   jobId,
   initialData,
+  plan = 'featured',
+  partnerFeaturedRemaining = 0,
 }: {
   mode: 'create' | 'edit'
   jobId?: string
   initialData?: JobFormInitialData
+  plan?: PostingPlan
+  partnerFeaturedRemaining?: number
 }) {
   const router = useRouter()
   const supabase = createClient()
@@ -67,6 +75,8 @@ export default function JobForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [autoSubmitting, setAutoSubmitting] = useState(false)
+  const [postingPlan, setPostingPlan] = useState<PostingPlan>(plan)
+  const [featureWithPartner, setFeatureWithPartner] = useState(false)
 
   async function submitPayload(payload: Record<string, unknown>) {
     const res =
@@ -82,10 +92,34 @@ export default function JobForm({
             body: JSON.stringify(payload),
           })
 
+    const data = await res.json().catch(() => null)
     if (!res.ok) {
-      const data = await res.json().catch(() => null)
       throw new Error(data?.error || 'Something went wrong. Try again.')
     }
+    return data as { id: string; requiresCheckout?: boolean }
+  }
+
+  async function startFeaturedCheckout(jobId: string) {
+    const res = await fetch('/api/stripe/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: 'featured', jobId }),
+    })
+    const data = await res.json().catch(() => null)
+    if (!res.ok || !data?.url) {
+      throw new Error(data?.error || 'Checkout is temporarily unavailable. Your draft is saved in the dashboard.')
+    }
+    window.location.assign(data.url)
+  }
+
+  async function finishSubmission(payload: Record<string, unknown>) {
+    const result = await submitPayload(payload)
+    if (mode === 'create' && result.requiresCheckout) {
+      await startFeaturedCheckout(result.id)
+      return
+    }
+    router.push(mode === 'create' ? '/dashboard/employer?posted=1' : '/dashboard/employer')
+    router.refresh()
   }
 
   function buildPayload(values: {
@@ -116,6 +150,8 @@ export default function JobForm({
       salaryPeriod: values.salaryPeriod,
       description: values.description.trim(),
       notificationEmail: values.notificationEmail.trim(),
+      plan: postingPlan,
+      featureWithPartner: postingPlan === 'partner' && featureWithPartner,
     }
   }
 
@@ -161,6 +197,7 @@ export default function JobForm({
     const draft: DraftPayload = {
       title, company, employmentType, remote, city, stateName, zipCode,
       salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
+      plan: postingPlan, featureWithPartner,
     }
     sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
   }
@@ -194,6 +231,8 @@ export default function JobForm({
     setSalaryPeriod(draft.salaryPeriod)
     setDescription(draft.description)
     setNotificationEmail(draft.notificationEmail)
+    setPostingPlan(draft.plan)
+    setFeatureWithPartner(draft.featureWithPartner)
 
     const validationError = validateValues(draft)
     if (validationError) {
@@ -203,11 +242,14 @@ export default function JobForm({
 
     setAutoSubmitting(true)
     setIsSubmitting(true)
-    submitPayload(buildPayload(draft))
-      .then(() => {
-        router.push('/dashboard/employer?posted=1')
-        router.refresh()
-      })
+    setPostingPlan(draft.plan)
+    setFeatureWithPartner(draft.featureWithPartner)
+    const payload = {
+      ...buildPayload(draft),
+      plan: draft.plan,
+      featureWithPartner: draft.plan === 'partner' && draft.featureWithPartner,
+    }
+    finishSubmission(payload)
       .catch((err) => {
         setAutoSubmitting(false)
         setIsSubmitting(false)
@@ -242,14 +284,12 @@ export default function JobForm({
     }
 
     try {
-      await submitPayload(
+      await finishSubmission(
         buildPayload({
           title, company, employmentType, remote, city, stateName, zipCode,
           salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
         })
       )
-      router.push(mode === 'create' ? '/dashboard/employer?posted=1' : '/dashboard/employer')
-      router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
       setIsSubmitting(false)
@@ -259,7 +299,7 @@ export default function JobForm({
   if (autoSubmitting) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-        <p className="text-slate-500">Publishing your job...</p>
+        <p className="text-slate-500">Preparing your listing...</p>
       </div>
     )
   }
@@ -282,6 +322,19 @@ export default function JobForm({
       {error && (
         <div className="mb-8 px-4 py-3 border border-red-200 rounded-md bg-red-50">
           <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
+
+      {mode === 'create' && (
+        <div className="mb-8 rounded-md border border-amber-200 bg-amber-50 px-5 py-4">
+          <p className="text-sm font-semibold text-[#1a2340]">
+            {postingPlan === 'partner' ? 'Hiring Partner listing' : 'Featured Job · $39 for 30 days'}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            {postingPlan === 'partner'
+              ? 'This listing is included in your active Hiring Partner subscription.'
+              : 'Your job will be saved as a private draft, then published and featured after Stripe confirms payment.'}
+          </p>
         </div>
       )}
 
@@ -442,16 +495,36 @@ export default function JobForm({
               className={inputClass}
             />
             <p className="text-sm text-slate-400 mt-1.5">
-              Candidates apply on Oh My Job. We&apos;ll email every application to this address.
+              Candidates apply on Solar Roles. We&apos;ll email every application to this address.
             </p>
           </div>
         </section>
 
+        {mode === 'create' && postingPlan === 'partner' && partnerFeaturedRemaining > 0 && (
+          <section>
+            <SectionHeader number="06" title="Partner visibility" />
+            <label className="flex items-start gap-3 rounded-md border border-slate-200 p-4 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={featureWithPartner}
+                onChange={(event) => setFeatureWithPartner(event.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#1a2340] focus:ring-[#1a2340]"
+              />
+              <span>
+                <strong className="block text-[#1a2340]">Use one featured slot</strong>
+                {partnerFeaturedRemaining} of 3 featured slots currently available.
+              </span>
+            </label>
+          </section>
+        )}
+
         <div className="pt-2">
           <Button type="submit" className="w-full h-12 rounded-md text-base" disabled={isSubmitting}>
             {isSubmitting
-              ? mode === 'create' ? 'Posting your job...' : 'Saving changes...'
-              : mode === 'create' ? 'Post job' : 'Save changes'}
+              ? mode === 'create' ? 'Preparing your listing...' : 'Saving changes...'
+              : mode === 'create'
+                ? postingPlan === 'featured' ? 'Continue to secure checkout · $39' : 'Publish included job'
+                : 'Save changes'}
           </Button>
         </div>
       </form>

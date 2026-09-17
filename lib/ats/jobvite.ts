@@ -31,6 +31,7 @@ const ROW_CONTAINER_SELECTORS = [
   '.jv-job-list-single',
   'li.jv-job-list-item',
   '[data-testid="job-list-item"]',
+  'tr',
   'li',
 ];
 
@@ -69,15 +70,6 @@ function findRowContainer($: cheerio.CheerioAPI, anchor: cheerio.Cheerio<any>) {
   return null;
 }
 
-function extractLocationFromTitle(title: string): string {
-  const dashIndex = title.lastIndexOf(' - ');
-  if (dashIndex === -1) return '';
-
-  let loc = title.slice(dashIndex + 3).trim();
-  loc = loc.replace(/\(.*?\)\s*$/, '').trim(); // vire "(6 month Temporary Assignment)"
-  return loc;
-}
-
 // Extraction "best effort" depuis la page liste — utilisée seulement
 // comme dernier filet de sécurité si la page detail ne donne rien.
 function extractListLocation($: cheerio.CheerioAPI, row: cheerio.Cheerio<any> | null, title: string): string {
@@ -89,7 +81,66 @@ function extractListLocation($: cheerio.CheerioAPI, row: cheerio.Cheerio<any> | 
     const stripped = row.text().replace(title, '').trim();
     if (stripped) return stripped;
   }
-  return extractLocationFromTitle(title);
+  return '';
+}
+
+function structuredCountryName(country: unknown): string {
+  if (typeof country === 'string') return country.trim();
+  if (country && typeof country === 'object' && 'name' in country) {
+    const name = (country as { name?: unknown }).name;
+    return typeof name === 'string' ? name.trim() : '';
+  }
+  return '';
+}
+
+function jsonLdJobPostings(value: unknown): Record<string, unknown>[] {
+  if (Array.isArray(value)) return value.flatMap(jsonLdJobPostings);
+  if (!value || typeof value !== 'object') return [];
+
+  const record = value as Record<string, unknown>;
+  const graph = jsonLdJobPostings(record['@graph']);
+  const types = Array.isArray(record['@type']) ? record['@type'] : [record['@type']];
+  return types.includes('JobPosting') ? [record, ...graph] : graph;
+}
+
+function extractStructuredLocation($: cheerio.CheerioAPI): string {
+  const formatted: Array<{ value: string; isUnitedStates: boolean }> = [];
+
+  $('script[type="application/ld+json"]').each((_, element) => {
+    const raw = $(element).html();
+    if (!raw) return;
+
+    try {
+      for (const posting of jsonLdJobPostings(JSON.parse(raw))) {
+        const locations = Array.isArray(posting.jobLocation) ? posting.jobLocation : [posting.jobLocation];
+        for (const place of locations) {
+          if (!place || typeof place !== 'object') continue;
+          const address = (place as { address?: unknown }).address;
+          if (!address || typeof address !== 'object') continue;
+
+          const fields = address as Record<string, unknown>;
+          const locality = typeof fields.addressLocality === 'string' ? fields.addressLocality.trim() : '';
+          const region = typeof fields.addressRegion === 'string' ? fields.addressRegion.trim() : '';
+          const country = structuredCountryName(fields.addressCountry);
+          const value = [locality, region, country].filter(Boolean).join(', ');
+          if (value) {
+            formatted.push({
+              value,
+              isUnitedStates: /^(?:United States(?: of America)?|US|USA)$/i.test(country),
+            });
+          }
+        }
+      }
+    } catch {
+      // Ignore malformed or unrelated JSON-LD blocks and keep the HTML fallback.
+    }
+  });
+
+  const usLocations = formatted.filter((location) => location.isUnitedStates);
+  return (usLocations.length ? usLocations : formatted)
+    .map((location) => location.value)
+    .filter((value, index, values) => values.indexOf(value) === index)
+    .join(' / ');
 }
 
 function parseJobRows(html: string): ScrapedJobRow[] {
@@ -146,8 +197,9 @@ async function fetchJobDetail(href: string): Promise<JobDetail> {
       .replace(/\s+/g, ' ')
       .trim();
 
-    let location = '';
+    let location = extractStructuredLocation($);
     for (const selector of DETAIL_LOCATION_SELECTORS) {
+      if (location) break;
       const loc = $(selector).first().text().trim();
       if (loc) {
         location = loc;

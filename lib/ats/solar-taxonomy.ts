@@ -62,6 +62,11 @@
  *      description. isSolarInstallerRole(title) alone will never
  *      trigger Tier 2 — always pass the job description when available.
  *
+ * Sep 2026 hardening: added narrowly-scoped patterns observed on active US
+ * solar boards (Solar Consultant, Foreperson, Field Operations Technician,
+ * Commissioning/Development Engineer, Electrical Apprentice, Project Executive,
+ * solar QA/Quality, solar Safety, and extra PV-manufacturing titles).
+ *
  * Tune this list as you see false positives/negatives in production.
  */
 
@@ -98,6 +103,17 @@ const INCLUDE_PATTERNS: RegExp[] = [
   /lead\s*solar\s*install(er)?/i, // "solar" obligatoire ici — sinon matche n'importe quel "Lead Installer" (télécom, etc.)
   /solar\s*(crew|foreman)/i,
   /solar\s*laborer/i, // ★ solar-specific laborer role
+
+  // --- Sep 2026 production-gap fixes ---
+  // Titles observed on active US solar-company boards that are clearly in-scope
+  // but were missed by the previous matcher. Keep these explicit/narrow so the
+  // taxonomy does not become a generic renewable-energy matcher.
+  /solar\s*(?:sales\s*)?consultant/i, // "Solar Consultant", "Solar Sales Consultant"
+  /solar\s*foreperson/i, // Sunrun-style inclusive variant of foreman
+  /(?:solar|pv)\s*(?:quality|qa|qc)\s*(?:manager|engineer|lead|specialist)/i,
+  /(?:solar|pv|bess|energy\s*storage)\s*project\s*executive/i,
+  /solar\s*safety\s*(?:tech(?:nician)?|coordinator|manager|specialist)/i,
+
   /residential\s*solar\s*install/i,
   /commercial\s*solar\s*install/i,
   /rooftop\s*solar/i,
@@ -285,7 +301,10 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\bservice\s*tech(nician)?\b/i,
   /\bmaintenance\s*tech(nician)?\b/i,
   /\bcommissioning\s*tech(nician)?\b/i,
+  /\bcommissioning\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
+  /\bfield\s*operations?\s*tech(nician)?\b/i,
   /\belectrician\s*(i{1,3}|1|2|3)?$/i,
+  /\belectrical\s*apprentice\b/i,
   /\blead\s*install(er)?\b/i, // e.g. "Lead Installer" or "Telecommunications Lead Installer" without "solar" in the title
   /^helper\s*(i{1,3}|1|2|3)?$/i, // "Solar Helper" vs generic "Helper"
   /^laborer\s*(i{1,3}|1|2|3)?$/i,
@@ -309,6 +328,8 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\bsystems?\s*engineer\b/i,
   /\bdesign\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
   /\bproject\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
+  /\bproject\s*executive\b/i,
+  /\bdevelopment\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
   /\bapplications?\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
   /\belectrical\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
   /\bmechanical\s*engineer(?:\s*(?:i{1,3}|\d+))?\b/i,
@@ -320,6 +341,7 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
   /\bscada\s*engineer\b/i,
   /\bperformance\s*engineer\b/i,
   /\binterconnection\s*(?:manager|engineer)\b/i,
+  /\bquality\s*(?:manager|lead|specialist)\b/i,
 
   // --- corporate solar generic titles (added Aug 2026 — Venture Solar extraction) ---
   // No solar token in the title itself: rely on the description fallback,
@@ -331,8 +353,9 @@ const GENERIC_TITLE_PATTERNS: RegExp[] = [
 ];
 
 const MANUFACTURING_TITLE_PATTERNS: RegExp[] = [
-  /\bproduction\s*(?:operator|tech(?:nician)?)\b/i,
-  /\bmanufacturing\s*(?:engineer|tech(?:nician)?)\b/i,
+  /\bproduction\s*(?:operator|tech(?:nician)?|associate|specialist)\b/i,
+  /\bproduction\s*engineering\s*specialist\b/i,
+  /\bmanufacturing\s*(?:engineer|tech(?:nician)?|associate|specialist)\b/i,
   /\bprocess\s*engineer\b/i,
   /\bequipment\s*(?:engineer|tech(?:nician)?)\b/i,
   /\bquality\s*(?:engineer|tech(?:nician)?|inspector)\b/i,
@@ -351,7 +374,7 @@ const APPROVED_ROLE_SIGNALS: RegExp[] = [
   /\binstall(?:er|ation|ing)?\b/i,
   /\btech(?:nician)?\b/i,
   /\belectric(?:ian|al\s*tech(?:nician)?)\b/i,
-  /\b(?:laborer|mechanic|wireman|foreman|superintendent|inspector|surveyor)\b/i,
+  /\b(?:laborer|mechanic|wireman|foreman|foreperson|superintendent|inspector|surveyor)\b/i,
   /\b(?:commissioning|maintenance|service|field\s*service|o\s*(?:and\s*)?m)\b/i,
   /\b(?:project|construction)\s*(?:manager|coordinator|engineer)\b/i,
   /\b(?:design|applications?|electrical|mechanical|systems?|scada|performance|interconnection)\s*engineer\b/i,
@@ -462,6 +485,16 @@ export function isSolarInstallerRole(title: string, description?: string): boole
   // relevant retail and sales jobs. Exclusions deliberately govern the role
   // being advertised (its title); Tier 2 still requires a strong solar signal.
 
+  // Solar/PV field-quality titles are valid QA/QC roles even when they use
+  // "Quality Engineer". Check this BEFORE the manufacturing gate, because a
+  // generic Quality Engineer still must prove PV-module manufacturing context.
+  if (
+    /\b(?:solar|pv)\b.*\b(?:quality|qa|qc)\b.*\b(?:manager|engineer|lead|specialist)\b/i.test(normalizedTitle) ||
+    /\b(?:quality|qa|qc)\b.*\b(?:manager|engineer|lead|specialist)\b.*\b(?:solar|pv)\b/i.test(normalizedTitle)
+  ) {
+    return true;
+  }
+
   // Manufacturing titles are intentionally description-gated. A solar-panel
   // company can also employ generic factory roles unrelated to PV production.
   if (MANUFACTURING_TITLE_PATTERNS.some((re) => re.test(normalizedTitle))) {
@@ -521,16 +554,17 @@ export function getSolarRoleFamily(title: string, description?: string): SolarRo
     hasSolarManufacturingContext(normalizedDescription)
   ) return 'manufacturing';
   if (/estimat(or|ing)/i.test(normalizedTitle)) return 'estimating';
-  if (/project\s*(manager|coordinator)|construction\s*manager/i.test(normalizedTitle)) return 'project_management';
+  if (/project\s*(manager|coordinator|executive)|construction\s*manager/i.test(normalizedTitle)) return 'project_management';
   if (/sales/i.test(normalizedTitle)) return 'sales';
   if (/(consultant|brand\s*ambassador|business\s*development|sales\s*development|retail|renewable\s*energy)/i.test(normalizedTitle)) return 'sales';
-  if (/\belectrician|wireman/i.test(normalizedTitle)) return 'electrician';
-  if (/\bengineer(ing)?\b/i.test(normalizedTitle)) return 'engineering';
-  if (/supervisor|superintendent|crew\s*lead|foreman/i.test(normalizedTitle)) return 'supervisor';
+  if (/\belectrician|wireman|electrical\s*apprentice/i.test(normalizedTitle)) return 'electrician';
+  // Specific field families must win before the broad "engineer" bucket.
   if (/commissioning/i.test(normalizedTitle)) return 'commissioning';
-  if (/(o\s*(?:and\s*)?m|om\s*tech|service\s*tech|maintenance\s*tech|repair\s*tech|troubleshoot|field\s*service)/i.test(normalizedTitle)) return 'om';
+  if (/(qa\s*qc|\bqa\b|\bqc\b|quality\s*(?:manager|engineer|lead|specialist)|inspector)/i.test(normalizedTitle)) return 'qa_qc';
+  if (/supervisor|superintendent|crew\s*lead|foreman|foreperson/i.test(normalizedTitle)) return 'supervisor';
+  if (/(o\s*(?:and\s*)?m|om\s*tech|service\s*tech|maintenance\s*tech|repair\s*tech|troubleshoot|field\s*service|field\s*operations?\s*tech)/i.test(normalizedTitle)) return 'om';
   if (/battery|storage|\bbess\b/i.test(normalizedTitle)) return 'storage';
-  if (/qa\s*qc|inspector/i.test(normalizedTitle)) return 'qa_qc';
+  if (/\bengineer(ing)?\b/i.test(normalizedTitle)) return 'engineering';
   if (/thermal|hot\s*water/i.test(normalizedTitle)) return 'thermal';
   if (/install|racking|array|module|crew|apprentice|journeyman|tracker|helper|laborer/i.test(normalizedTitle)) return 'installer';
   return 'other';

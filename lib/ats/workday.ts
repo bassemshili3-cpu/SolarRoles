@@ -134,6 +134,9 @@ function isUsableLocationText(raw: string | undefined): raw is string {
   if (!raw) return false;
   const trimmed = raw.trim();
   if (!trimmed) return false;
+  // Workday sometimes exposes the requisition number in bulletFields[0].
+  // It is an identifier, not a location (for example J11054 or R8745).
+  if (/^[A-Z]\d{4,}(?:-\d+)?$/i.test(trimmed)) return false;
   if (/^\d+\s+Location/i.test(trimmed)) return false;
   if (/^(multiple|various|several)\s+locations?$/i.test(trimmed)) return false;
   if (NON_LOCATION_BULLET_VALUES.has(trimmed.toLowerCase())) return false;
@@ -172,7 +175,11 @@ function titleHasRemoteSignal(title: string): boolean {
   return /\(\s*remote\s*\)/i.test(title) || /\bfully\s+remote\b/i.test(title);
 }
 
-function resolveLocation(p: WorkdayJobPosting, detailLocation?: string): string {
+function resolveLocation(
+  p: WorkdayJobPosting,
+  detailLocation?: string,
+  detailIsUnitedStates = false,
+): string {
   const candidates: (string | undefined)[] = [
     p.locationsText,
     p.bulletFields?.[0],
@@ -198,13 +205,16 @@ function resolveLocation(p: WorkdayJobPosting, detailLocation?: string): string 
   }
 
   // 3. Signal remote — y compris dans le titre lui-même, pas juste les facets
-  if (candidates.some(isRemoteSignal) || titleHasRemoteSignal(p.title)) {
+  if (detailIsUnitedStates && (candidates.some(isRemoteSignal) || titleHasRemoteSignal(p.title))) {
     return 'Remote, US';
   }
 
   // 4. Rien d'exploitable : on retombe sur le premier candidat "propre"
   //    même non géolocalisable, pour garder une trace brute en debug.
   const firstUsable = candidates.find(isUsableLocationText);
+  if (detailIsUnitedStates && firstUsable) {
+    return `${normalizeWorkdayLocation(firstUsable)}, US`;
+  }
   return firstUsable ? normalizeWorkdayLocation(firstUsable) : (p.locationsText || p.bulletFields?.[0] || '');
 }
 
@@ -228,8 +238,52 @@ interface WorkdayJobDetailResponse {
   jobPostingInfo?: {
     jobDescription?: string; // HTML
     location?: string;
+    additionalLocations?: string[];
+    jobRequisitionLocation?: {
+      descriptor?: string;
+      country?: { alpha2Code?: string; descriptor?: string };
+    };
+    country?: { alpha2Code?: string; descriptor?: string };
     startDate?: string;
     jobReqId?: string;
+  };
+}
+
+type WorkdayDetailLocation = {
+  location?: string;
+  isUnitedStates: boolean;
+};
+
+function resolveDetailLocation(info: WorkdayJobDetailResponse['jobPostingInfo']): WorkdayDetailLocation {
+  if (!info) return { isUnitedStates: false };
+
+  // Multi-location Workday postings often expose only "Field" as the main
+  // location and put the actual US cities in additionalLocations.
+  const candidates = [
+    info.location,
+    ...(info.additionalLocations ?? []),
+    info.jobRequisitionLocation?.descriptor,
+  ];
+
+  const stateLocation = candidates.find((raw) => {
+    if (!isUsableLocationText(raw)) return false;
+    return Boolean(extractStateFromLocation(normalizeWorkdayLocation(raw)));
+  });
+  const country = info.jobRequisitionLocation?.country ?? info.country;
+  const isUnitedStates = country?.alpha2Code?.toUpperCase() === 'US'
+    || /^United States(?: of America)?$/i.test(country?.descriptor ?? '');
+  if (stateLocation) return { location: stateLocation, isUnitedStates: true };
+
+  const hasRemoteOrTravelingLabel = candidates.some(
+    (raw) => raw && /\bremote\b|\btravell?ing\b/i.test(raw),
+  );
+  if (isUnitedStates && hasRemoteOrTravelingLabel) {
+    return { location: 'Remote, US', isUnitedStates: true };
+  }
+
+  return {
+    location: candidates.find(isUsableLocationText),
+    isUnitedStates,
   };
 }
 
@@ -438,7 +492,7 @@ async function humanizePageInteraction(page: Page): Promise<void> {
 
   await randomDelay(400, 900);
 }
-const REMOTE_BULLET_VALUES = new Set(['remote', 'virtual']);
+const REMOTE_BULLET_VALUES = new Set(['remote', 'virtual', 'remote, us']);
 
 function isRemoteSignal(raw: string | undefined): boolean {
   if (!raw) return false;
@@ -609,7 +663,7 @@ async function fetchJobDetail(
   page: Page,
   externalPath: string,
   expectedOrigin: string,
-): Promise<{ description: string; location?: string }> {
+): Promise<{ description: string; location?: string; isUnitedStates?: boolean }> {
   if (!externalPath) {
     console.warn(`[workday] ${company.tenant}/${company.site}: externalPath manquant, poste ignoré`);
     return { description: '' };
@@ -626,9 +680,11 @@ async function fetchJobDetail(
       `${cxsBaseUrl(company)}/job${path}`
     );
     if (!result.ok) return { description: '' };
+    const info = result.data.jobPostingInfo;
+    const detailLocation = resolveDetailLocation(info);
     return {
-      description: stripHtml(result.data.jobPostingInfo?.jobDescription ?? ''),
-      location: result.data.jobPostingInfo?.location,
+      description: stripHtml(info?.jobDescription ?? ''),
+      ...detailLocation,
     };
   } catch (err) {
     console.warn(`[workday] échec récupération description ${externalPath}: ${(err as Error).message}`);
@@ -668,7 +724,7 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
       await randomDelay(REQUEST_DELAY_MIN_MS, REQUEST_DELAY_MAX_MS);
 
       if (isSolarInstallerRole(p.title, detail.description)) {
-        results.push(normalize(company, p, detail.description, detail.location));
+        results.push(normalize(company, p, detail.description, detail.location, detail.isUnitedStates));
       }
     }
   } finally {
@@ -683,9 +739,10 @@ function normalize(
   company: WorkdayCompanySeed,
   p: WorkdayJobPosting,
   description: string,
-  detailLocation?: string
+  detailLocation?: string,
+  detailIsUnitedStates = false,
 ): NormalizedJob {
-  const location = resolveLocation(p, detailLocation);
+  const location = resolveLocation(p, detailLocation, detailIsUnitedStates);
   const url = `https://${company.tenant}.${company.host}.myworkdayjobs.com/${company.site}${p.externalPath}`;
   return {
     source: 'workday',

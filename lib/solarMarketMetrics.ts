@@ -100,6 +100,26 @@ function annualizedSalary(job: ActiveJob): number | null {
   return values.reduce((sum, value) => sum + value, 0) / values.length
 }
 
+function annualizedSalaryRangeWidth(job: ActiveJob): number | null {
+  if (job.salaryMin == null || job.salaryMax == null) return null
+
+  const multiplier = annualMultiplier(job.salaryPeriod)
+  const minimum = job.salaryMin * multiplier
+  const maximum = job.salaryMax * multiplier
+
+  if (
+    !Number.isFinite(minimum) ||
+    !Number.isFinite(maximum) ||
+    minimum < SALARY_MIN ||
+    maximum > SALARY_MAX ||
+    maximum < minimum
+  ) {
+    return null
+  }
+
+  return maximum - minimum
+}
+
 function postingAgeDays(job: ActiveJob, now: Date): number | null {
   if (!job.postedAt) return null
   const days = (now.getTime() - job.postedAt.getTime()) / DAY_MS
@@ -145,15 +165,20 @@ function isEngineering(job: ActiveJob) {
 }
 
 function isOperations(job: ActiveJob) {
-  return has(titleText(job), /\b(operations|maintenance|o\s*&\s*m|field service|service technician|asset manager|commissioning technician)\b/i)
+  return has(titleText(job), /\b(operations|maintenance|o\s*(?:&|and)\s*m|field service|service technician|asset manager)\b/i)
 }
 
 function isProjectManagement(job: ActiveJob) {
   return has(titleText(job), /\b(project|program|construction) (manager|coordinator|director)|\bproject management\b/i)
 }
 
+function isProjectDelivery(job: ActiveJob) {
+  return isProjectManagement(job) ||
+    has(titleText(job), /\b(epc|project delivery|project execution|project engineer|project executive)\b/i)
+}
+
 function isTechnical(job: ActiveJob) {
-  return isInstallation(job) || isElectrical(job) || isEngineering(job) || isOperations(job) ||
+  return isInstallation(job) || isElectrical(job) || isEngineering(job) || isOperations(job) || isProjectDelivery(job) ||
     has(titleText(job), /\b(technician|commissioning|quality control|estimator|survey(or)?|interconnection)\b/i)
 }
 
@@ -172,14 +197,78 @@ function roleFamily(job: ActiveJob): (typeof ROLE_LABELS)[number] {
   return 'Other solar roles'
 }
 
-type Segment = 'Battery storage' | 'Utility-scale solar' | 'Residential solar' | 'Commercial solar'
+function isBuildOriented(job: ActiveJob) {
+  return isInstallation(job) || isProjectDelivery(job) ||
+    has(titleText(job), /\b(epc|commissioning|construction|project delivery|project execution)\b/i)
+}
+
+function isEntryAccessible(job: ActiveJob) {
+  const value = text(job)
+  return has((job.experienceLevel ?? '').toLowerCase(), /entry|intern|apprentice/i) ||
+    has(titleText(job), /\b(entry[ -]?level|junior|jr\.?|apprentice|trainee|helper|intern(?:ship)?)\b/i) ||
+    has(value, /\b(no (?:prior |previous )?experience(?: required| necessary)?|no solar experience required|0\s*(?:-|to)\s*[12]\s+years?|will train|training provided|on[ -]the[ -]job training)\b/i)
+}
+
+const OPTIONAL_REQUIREMENT_LANGUAGE = /\b(preferred|nice to have|a plus|desired|ideally|bonus|not required)\b/i
+
+function hasNonOptionalMatch(value: string, pattern: RegExp) {
+  const flags = pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`
+  const globalPattern = new RegExp(pattern.source, flags)
+
+  for (const match of value.matchAll(globalPattern)) {
+    const start = match.index ?? 0
+    const context = value.slice(Math.max(0, start - 90), Math.min(value.length, start + match[0].length + 90))
+    if (!OPTIONAL_REQUIREMENT_LANGUAGE.test(context)) return true
+  }
+
+  return false
+}
+
+function requiresPriorExperience(job: ActiveJob) {
+  const value = text(job)
+  const patterns = [
+    /\b(?:minimum(?: of)?|at least)\s+\d{1,2}\+?\s+years?\b.{0,80}\bexperience\b/i,
+    /\b\d{1,2}\s*(?:\+|(?:-|to)\s*\d{1,2})?\s+years?\b.{0,80}\bexperience\b/i,
+    /\b(?:must have|must possess|requires?|required to have)\b.{0,100}\b(?:prior|previous|professional|trade|role-specific|relevant|related|solar|construction|electrical)?\s*experience\b/i,
+    /\b(?:prior|previous|professional|trade|role-specific|relevant|related|solar|construction|electrical)\s+experience\s+(?:is\s+)?(?:required|mandatory)\b/i,
+  ]
+
+  return patterns.some((pattern) => hasNonOptionalMatch(value, pattern))
+}
+
+function requiresTradeCredential(job: ActiveJob) {
+  const value = text(job)
+  const credential = '(?:nabcep|osha(?:[\\s-]?(?:10|30))?|journeyman|master electrician|licensed electrician|electrical licen[cs]e|trade certification|cdl)'
+  return hasNonOptionalMatch(
+    value,
+    new RegExp(`(?:\\b(?:required|mandatory|must have|must hold|must possess)\\b.{0,100}\\b${credential}\\b|\\b${credential}\\b.{0,100}\\b(?:required|mandatory|must have|must hold|must possess)\\b)`, 'i'),
+  )
+}
+
+function mentionsEmployerTraining(job: ActiveJob) {
+  return has(
+    text(job),
+    /\b(paid training|company[ -](?:paid|provided|sponsored) training|employer[ -](?:paid|provided|sponsored) training|training (?:is )?provided|we (?:will )?train|will train|on[ -]the[ -]job training|structured (?:training|ojt)|ojt program|train(?:ing)? program provided)\b/i,
+  )
+}
+
+function mentionsApprenticeship(job: ActiveJob) {
+  return has(text(job), /\b(apprentice|apprenticeship)\b/i)
+}
+
+type Segment = 'Battery storage' | 'Utility-scale solar' | 'Residential solar' | 'Commercial & industrial solar'
 
 function segment(job: ActiveJob): Segment | null {
   const explicit = `${job.specialty ?? ''} ${job.title}`.toLowerCase()
   if (has(explicit, /\b(battery storage|energy storage|bess)\b/i)) return 'Battery storage'
   if (has(explicit, /\b(utility[ -]?scale|solar farm|solar plant)\b/i)) return 'Utility-scale solar'
   if (has(explicit, /\bresidential(?: solar)?\b/i)) return 'Residential solar'
-  if (has(explicit, /\b(commercial|c&i|c & i)(?: solar)?\b/i)) return 'Commercial solar'
+  if (
+    has(explicit, /\bc\s*(?:&|and)\s*i\b/i) ||
+    has(explicit, /\bcommercial\s*(?:(?:&|and)\s*industrial\s*)?(?:solar|pv|photovoltaic)\b/i) ||
+    has(explicit, /\bindustrial\s+(?:solar|pv|photovoltaic)\b/i) ||
+    job.specialty === 'Commercial Solar'
+  ) return 'Commercial & industrial solar'
   return null
 }
 
@@ -194,6 +283,7 @@ export async function getSolarMarketData() {
   const totalJobs = jobs.length
   const jobText = new Map(jobs.map((job) => [job.id, text(job)]))
   const salaries = jobs.map(annualizedSalary).filter((value): value is number => value != null)
+  const salaryRangeWidths = jobs.map(annualizedSalaryRangeWidth).filter((value): value is number => value != null)
   const ages = jobs.map((job) => postingAgeDays(job, now)).filter((value): value is number => value != null)
   const technicalJobs = jobs.filter(isTechnical)
   const fieldJobs = jobs.filter(isField)
@@ -230,11 +320,9 @@ export async function getSolarMarketData() {
     return age >= 0 && age <= days
   }).length
 
-  const entryLevel = jobs.filter((job) => {
-    const value = jobText.get(job.id) ?? ''
-    return has(value, /\b(entry[ -]?level|no (?:prior )?experience|no experience (?:required|necessary)|will train|paid training)\b/i) ||
-      has((job.experienceLevel ?? '').toLowerCase(), /entry|intern|apprentice/i)
-  }).length
+  const entryLevelJobs = jobs.filter(isEntryAccessible)
+  const entryLevel = entryLevelJobs.length
+  const entryAccessibleTechnicalJobs = jobs.filter((job) => (isTechnical(job) || isField(job)) && isEntryAccessible(job))
 
   const degree = matches(jobs, /\b(bachelor(?:'s|s)? degree|baccalaureate|four[ -]?year degree|college degree)\b/i)
   const remote = jobs.filter((job) => has(`${job.title} ${job.location}`.toLowerCase(), /\b(remote|work from home|home[- ]based)\b/i)).length
@@ -254,9 +342,19 @@ export async function getSolarMarketData() {
   }).length
   const commissionOnly = matches(salesJobs, /\b(commission[ -]?only|100\s*% commission|straight commission)\b/i)
   const omJobs = technicalJobs.filter((job) => isOperations(job)).length
+  const buildJobs = technicalJobs.filter(isBuildOriented).length
+  const storageSkills = matches(technicalJobs, /\b(battery|bess|energy storage|battery storage|storage system|power conversion system|pcs|energy management system|ems|battery management system|bms)\b/i)
   const manufacturing = jobs.filter((job) => has(titleText(job), /\b(manufacturing|production|factory|plant) (?:engineer|manager|technician|operator|associate|supervisor|worker)|\bmodule manufacturing\b/i)).length
-  const apprenticeships = matches(technicalJobs, /\b(apprentice|apprenticeship)\b/i)
+  const apprenticeships = technicalJobs.filter(mentionsApprenticeship).length
   const policySignals = matches(technicalJobs, /\b(prevailing wage|davis[ -]?bacon|project labor agreement|registered apprenticeship)\b/i)
+  const trainingMentions = entryAccessibleTechnicalJobs.filter(mentionsEmployerTraining).length
+  const trainingGaps = entryAccessibleTechnicalJobs.filter((job) =>
+    (requiresPriorExperience(job) || requiresTradeCredential(job)) &&
+    !mentionsEmployerTraining(job) &&
+    !mentionsApprenticeship(job)
+  ).length
+  const experienceRequirements = jobs.filter(requiresPriorExperience).length
+  const entryLevelContradictions = entryLevelJobs.filter(requiresPriorExperience).length
 
   const metrics: Record<string, MetricValue> = {
     totalJobs: countMetric(totalJobs),
@@ -267,6 +365,11 @@ export async function getSolarMarketData() {
     salaryP25: distributionMetric(percentile(salaries, 0.25), 'currency', salaries.length, totalJobs),
     salaryP75: distributionMetric(percentile(salaries, 0.75), 'currency', salaries.length, totalJobs),
     salaryDisclosureRate: rateMetric(salaries.length, totalJobs),
+    medianSalaryRangeWidth: {
+      value: percentile(salaryRangeWidths, 0.5),
+      unit: 'currency',
+      denominator: salaryRangeWidths.length,
+    },
     medianPostingAgeDays: distributionMetric(percentile(ages, 0.5), 'days', ages.length, totalJobs),
     aged30Rate: rateMetric(agedAtLeast(30), ages.length),
     aged60Rate: rateMetric(agedAtLeast(60), ages.length),
@@ -277,7 +380,8 @@ export async function getSolarMarketData() {
     storageShare: rateMetric(segmentCount('Battery storage'), segmentedJobs.length),
     utilityShare: rateMetric(segmentCount('Utility-scale solar'), segmentedJobs.length),
     residentialShare: rateMetric(segmentCount('Residential solar'), segmentedJobs.length),
-    commercialShare: rateMetric(segmentCount('Commercial solar'), segmentedJobs.length),
+    commercialShare: rateMetric(segmentCount('Commercial & industrial solar'), segmentedJobs.length),
+    ciShare: rateMetric(segmentCount('Commercial & industrial solar'), segmentedJobs.length),
     nabcepRate: rateMetric(nabcep, technicalJobs.length),
     oshaRate: rateMetric(osha, fieldJobs.length),
     electricalLicenseRate: rateMetric(electricalLicense, electricalJobs.length),
@@ -288,9 +392,15 @@ export async function getSolarMarketData() {
     signOnBonusRate: rateMetric(signOn, fieldJobs.length),
     sales1099Rate: rateMetric(sales1099, salesJobs.length),
     commissionOnlyRate: rateMetric(commissionOnly, salesJobs.length),
+    buildShareTechnical: rateMetric(buildJobs, technicalJobs.length),
     omShareTechnical: rateMetric(omJobs, technicalJobs.length),
+    storageSkillsRate: rateMetric(storageSkills, technicalJobs.length),
     manufacturingShare: rateMetric(manufacturing, totalJobs),
     apprenticeshipRate: rateMetric(apprenticeships, technicalJobs.length),
+    trainingGapRate: rateMetric(trainingGaps, entryAccessibleTechnicalJobs.length),
+    trainingMentionRate: rateMetric(trainingMentions, entryAccessibleTechnicalJobs.length),
+    experienceRequirementRate: rateMetric(experienceRequirements, totalJobs),
+    entryLevelContradictionRate: rateMetric(entryLevelContradictions, entryLevelJobs.length),
     policySignalRate: rateMetric(policySignals, technicalJobs.length),
   }
 
@@ -315,7 +425,7 @@ export async function getSolarMarketData() {
     employerCounts,
     stateCounts,
     lastUpdated: jobs.reduce<Date | null>((latest, job) => !latest || job.fetchedAt > latest ? job.fetchedAt : latest, null),
-    segmentMix: (['Battery storage', 'Utility-scale solar', 'Residential solar', 'Commercial solar'] as Segment[]).map((name) => ({
+    segmentMix: (['Battery storage', 'Utility-scale solar', 'Residential solar', 'Commercial & industrial solar'] as Segment[]).map((name) => ({
       segment: name,
       count: segmentCount(name),
       share: segmentedJobs.length > 0 ? (segmentCount(name) / segmentedJobs.length) * 100 : 0,

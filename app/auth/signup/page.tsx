@@ -48,6 +48,8 @@ export default function Signup() {
 
   const redirectTo = paramRedirect || '/dashboard'
 
+  const accountType = redirectTo.startsWith('/dashboard/employer') ? 'employer' : 'candidate'
+
 
   const [email, setEmail] = useState('')
 
@@ -64,11 +66,29 @@ export default function Signup() {
 
   const signupWithGoogle = async () => {
 
+    const redirectResponse = await fetch('/api/auth/redirect', {
+
+      method: 'POST',
+
+      headers: { 'Content-Type': 'application/json' },
+
+      body: JSON.stringify({ redirectTo, accountType }),
+
+    })
+
+    if (!redirectResponse.ok) {
+
+      setError('Could not prepare Google sign-in. Please try again.')
+
+      return
+
+    }
+
     await supabase.auth.signInWithOAuth({
 
       provider: 'google',
 
-      options: { redirectTo: `${window.location.origin}/auth/callback?redirectTo=${redirectTo}` },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
 
     })
 
@@ -106,6 +126,8 @@ export default function Signup() {
         password,
 
         options: {
+
+          data: { accountType },
 
           emailRedirectTo: `${window.location.origin}/auth/callback?redirectTo=${redirectTo}`,
 
@@ -447,7 +469,7 @@ export default function Signup() {
 
                   <Link
 
-                    href={paramRedirect ? `/auth/login?redirectTo=${paramRedirect}` : '/auth/login'}
+                    href={paramRedirect ? `/auth/login?redirectTo=${encodeURIComponent(paramRedirect)}` : '/auth/login'}
 
                     className="font-medium text-[#F59E0B] hover:underline underline-offset-2"
 

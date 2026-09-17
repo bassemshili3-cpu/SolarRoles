@@ -4,9 +4,13 @@
  * upserts them into the Job table. Custom scraping requires an explicit
  * custom-scrape provider argument.
  *
- * Usage: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts
+ * Usage:
+ *   npm run seed:new-sources       # seed only the newly added companies
+ *   npm run dry-run:new-sources    # fetch and classify them without DB writes
+ *   npm run seed:new-34-sources    # seed only the latest group of 34 companies
+ *   npm run seed:new-98-sources    # seed only the latest group of 98 companies
  * Custom scrape only: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts custom-scrape
- */
+ */ 
 import { PrismaClient } from '@prisma/client';
 import { fetchGreenhouseJobs } from '../lib/ats/greenhouse';
 import {
@@ -26,6 +30,11 @@ import {
   PAYCOM_COMPANIES,
   JAZZHR_COMPANIES,
   BREEZY_COMPANIES,
+  HRMDIRECT_COMPANIES,
+  SAASHR_COMPANIES,
+  NEW_SOURCE_KEYS_BY_PROVIDER,
+  NEW_34_SOURCE_KEYS_BY_PROVIDER,
+  NEW_98_SOURCE_KEYS_BY_PROVIDER,
 } from '../lib/ats/company-seed';
 import { CUSTOM_SCRAPE_COMPANIES } from '../lib/ats/custom-scrape/config';
 import { fetchLeverJobs, type NormalizedJob } from '../lib/ats/lever';
@@ -45,6 +54,8 @@ import { fetchPaylocityJobs } from '../lib/ats/paylocity';
 import { fetchPaycomJobs } from '../lib/ats/paycom';
 import { fetchJazzHrJobs } from '../lib/ats/jazzhr';
 import { fetchBreezyJobs } from '../lib/ats/breezy';
+import { fetchHrmDirectJobs } from '../lib/ats/hrmdirect';
+import { fetchSaaShrJobs } from '../lib/ats/saashr';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 import { buildJobSlug } from '../lib/slugify';
@@ -73,7 +84,7 @@ function provider<T>(
 }
 
 const PROVIDERS: AtsProvider<any>[] = [
-   provider('jazzhr',          JAZZHR_COMPANIES,          fetchJazzHrJobs,          (c) => c.slug),
+  provider('jazzhr',          JAZZHR_COMPANIES,          fetchJazzHrJobs,          (c) => c.slug),
   provider('breezy',          BREEZY_COMPANIES,          fetchBreezyJobs,          (c) => c.slug),
   provider('lever',           LEVER_COMPANIES,           fetchLeverJobs,           (c) => c.slug),
   provider('ashby',           ASHBY_COMPANIES,           fetchAshbyJobs,           (c) => c.slug),
@@ -86,15 +97,44 @@ const PROVIDERS: AtsProvider<any>[] = [
   provider('successfactors',  SUCCESSFACTORS_COMPANIES,  fetchSuccessFactorsJobs,  (c) => c.baseUrl),
   provider('oraclecloud',     ORACLE_CLOUD_COMPANIES,     fetchOracleCloudJobs,      (c) => c.baseUrl),
   provider('ukg',             UKG_COMPANIES,              fetchUkgJobs,              (c) => c.baseUrl),
-  provider('icims',           ICIMS_COMPANIES,            fetchIcimsJobs,            (c) => c.baseUrl),
+  provider('icims',           ICIMS_COMPANIES,            fetchIcimsJobs,            (c) => c.categoryName ? `${c.baseUrl}#${c.categoryName}` : c.baseUrl),
   provider('adp',             ADP_COMPANIES,               fetchAdpJobs,               (c) => c.cid),
   provider('paylocity',       PAYLOCITY_COMPANIES,         fetchPaylocityJobs,         (c) => c.boardUrl),
   provider('paycom',          PAYCOM_COMPANIES,            fetchPaycomJobs,            (c) => c.clientKey),
+  provider('hrmdirect',       HRMDIRECT_COMPANIES,         fetchHrmDirectJobs,         (c) => c.subdomain),
+  provider('saashr',          SAASHR_COMPANIES,            fetchSaaShrJobs,            (c) => c.careersUrl),
   provider('custom-scrape',   CUSTOM_SCRAPE_COMPANIES,   fetchCustomScrapeJobs,    (c) => c.domain),
  
 ];
 
 const requestedProvider = process.argv[2];
+const dryRun = process.argv.includes('--dry-run');
+
+function selectSourceProviders(
+  sourceKeysByProvider: Readonly<Record<string, readonly string[]>>,
+  groupName: string,
+): AtsProvider<any>[] {
+  const configuredProviders = new Set(Object.keys(sourceKeysByProvider));
+  const missingProviders = [...configuredProviders].filter(
+    (providerName) => !PROVIDERS.some((item) => item.name === providerName),
+  );
+  if (missingProviders.length > 0) {
+    throw new Error(`${groupName} provider(s) are not registered: ${missingProviders.join(', ')}`);
+  }
+
+  return PROVIDERS
+    .filter((item) => configuredProviders.has(item.name))
+    .map((item) => {
+      const requestedKeys = sourceKeysByProvider[item.name];
+      const companies = item.companies.filter((company) => requestedKeys.includes(item.label(company)));
+      const foundKeys = new Set(companies.map((company) => item.label(company)));
+      const missingKeys = requestedKeys.filter((key) => !foundKeys.has(key));
+      if (missingKeys.length > 0) {
+        throw new Error(`${groupName} ${item.name} source(s) are missing from company-seed.ts: ${missingKeys.join(', ')}`);
+      }
+      return { ...item, companies };
+    });
+}
 
 
 async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'created' | 'updated'> {
@@ -192,14 +232,21 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
 async function main() {
   let created = 0;
   let updated = 0;
+  let matched = 0;
   let skippedNonUS = 0;
 
-  const providers = requestedProvider
-    ? PROVIDERS.filter((provider) => provider.name === requestedProvider)
-    : PROVIDERS.filter((provider) => provider.name !== 'custom-scrape');
+  const providers = requestedProvider === 'new-sources'
+    ? selectSourceProviders(NEW_SOURCE_KEYS_BY_PROVIDER, 'New-source')
+    : requestedProvider === 'new-34-sources'
+      ? selectSourceProviders(NEW_34_SOURCE_KEYS_BY_PROVIDER, 'New-34-source')
+    : requestedProvider === 'new-98-sources'
+      ? selectSourceProviders(NEW_98_SOURCE_KEYS_BY_PROVIDER, 'New-98-source')
+    : requestedProvider
+      ? PROVIDERS.filter((provider) => provider.name === requestedProvider)
+      : PROVIDERS.filter((provider) => provider.name !== 'custom-scrape');
 
   if (requestedProvider && providers.length === 0) {
-    throw new Error(`Unknown provider "${requestedProvider}". Available providers: ${PROVIDERS.map((provider) => provider.name).join(', ')}`);
+    throw new Error(`Unknown provider "${requestedProvider}". Available providers: new-sources, new-34-sources, new-98-sources, ${PROVIDERS.map((provider) => provider.name).join(', ')}`);
   }
 
   for (const provider of providers) {
@@ -220,13 +267,18 @@ async function main() {
         }
         const taxonomy = extractSolarJobTaxonomy({ title: job.title, description: job.description });
         if (job.experienceLevel) taxonomy.experienceLevel = job.experienceLevel;
+        matched++;
+        if (dryRun) {
+          console.log(`  ↳ dry-run: ${job.title} — ${job.location}`);
+          continue;
+        }
         const result = await upsertJob(job, taxonomy);
         result === 'created' ? created++ : updated++;
       }
     }
   }
 
-  console.log(`\nDone. Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}`);
+  console.log(`\nDone${dryRun ? ' (dry-run)' : ''}. Matched: ${matched}, Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}`);
   await prisma.$disconnect();
 }
 

@@ -24,6 +24,10 @@ interface GreenhouseJob {
   absolute_url: string;
 }
 
+interface GreenhouseJobDetail {
+  questions?: Array<{ label?: string }>;
+}
+
 function stripHtml(html: string): string {
   return html
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
@@ -48,6 +52,25 @@ function getSalary(j: GreenhouseJob): string | undefined {
   if (min) return `from $${min}`;
   if (max) return `up to $${max}`;
   return undefined;
+}
+
+async function hasExplicitUSRemoteEligibility(companySlug: string, job: GreenhouseJob): Promise<boolean> {
+  if (!/^remote$/i.test(job.location?.name?.trim() ?? '')) return false;
+
+  try {
+    const res = await fetch(
+      `https://boards-api.greenhouse.io/v1/boards/${companySlug}/jobs/${job.id}?questions=true`,
+      { headers: { 'User-Agent': USER_AGENT } },
+    );
+    if (!res.ok) return false;
+
+    const detail = (await res.json()) as GreenhouseJobDetail;
+    return (detail.questions ?? []).some((question) =>
+      /authorized to work in (?:the )?(?:US|U\.S\.|United States)/i.test(question.label ?? ''),
+    );
+  } catch {
+    return false;
+  }
 }
 
 export async function fetchGreenhouseJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
@@ -92,8 +115,11 @@ export async function fetchGreenhouseJobs(company: AtsCompanySeed): Promise<Norm
     })
     .filter(({ j, extendedDescription }) => isSolarInstallerRole(j.title, extendedDescription));
 
-  return matched.map(({ j, description }) => {
-    const location = j.location?.name ?? '';
+  return Promise.all(matched.map(async ({ j, description }) => {
+    const rawLocation = j.location?.name ?? '';
+    const location = await hasExplicitUSRemoteEligibility(company.slug, j)
+      ? 'Remote, US'
+      : rawLocation;
     return {
       source: 'greenhouse',
       externalId: String(j.id),
@@ -108,5 +134,5 @@ export async function fetchGreenhouseJobs(company: AtsCompanySeed): Promise<Norm
       postedAt: j.created_at ? new Date(j.created_at) : undefined,
       salary: getSalary(j),
     };
-  });
+  }));
 }

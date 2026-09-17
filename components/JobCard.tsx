@@ -22,6 +22,7 @@ interface JobCardProps {
     category?: { label?: string }
     created?: string
     company_logo?: string
+    featured?: boolean
   }
   backUrl?: string
   useCanonicalDetailLink?: boolean
@@ -123,8 +124,8 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500 truncate">
               {job.company}
             </p>
-            {job.source === 'lensa' && (
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-blue-50 text-blue-600 font-medium">
+            {(job.featured || job.source === 'lensa') && (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-amber-50 text-amber-700 font-medium">
                 Featured
               </span>
             )}

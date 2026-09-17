@@ -4,6 +4,11 @@ import { createServerSupabase } from '@/lib/supabase-server'
 import { prisma } from '@/lib/prisma'
 import { sendJobPostedConfirmation } from '@/lib/sendJobPostedConfirmation'
 import { customAlphabet } from 'nanoid'
+import {
+  hasPartnerAccess,
+  PARTNER_ACTIVE_JOB_LIMIT,
+  PARTNER_FEATURED_JOB_LIMIT,
+} from '@/lib/employerBilling'
 
 
 const ALLOWED_EMPLOYMENT_TYPES = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
@@ -32,7 +37,12 @@ export async function POST(request: Request) {
   const {
     title, company, employmentType, remote, city, state, zipCode,
     salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
+    plan, featureWithPartner,
   } = body
+
+  if (plan !== 'featured' && plan !== 'partner') {
+    return NextResponse.json({ error: 'Choose a valid posting plan.' }, { status: 400 })
+  }
 
   if (typeof title !== 'string' || !title.trim()) {
     return NextResponse.json({ error: 'A job title is required.' }, { status: 400 })
@@ -63,6 +73,38 @@ const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)
   const { contractType, contractTime } = EMPLOYMENT_TYPE_MAP[employmentType]
   const salaryMinValue = Number(salaryMin)
   const salaryMaxValue = Number(salaryMax)
+  const now = new Date()
+  const subscription = await prisma.employerSubscription.findUnique({ where: { userId: user.id } })
+  const partnerAccess = hasPartnerAccess(subscription)
+
+  if (plan === 'partner' && !partnerAccess) {
+    return NextResponse.json({ error: 'An active Hiring Partner subscription is required.' }, { status: 403 })
+  }
+
+  let partnerFeatured = false
+  if (plan === 'partner') {
+    const activeJobCount = await prisma.job.count({
+      where: { postedByUserId: user.id, active: true, expiresAt: { gt: now } },
+    })
+    if (activeJobCount >= PARTNER_ACTIVE_JOB_LIMIT) {
+      return NextResponse.json({ error: `Hiring Partner includes up to ${PARTNER_ACTIVE_JOB_LIMIT} active jobs.` }, { status: 409 })
+    }
+
+    if (featureWithPartner === true) {
+      const featuredJobCount = await prisma.job.count({
+        where: {
+          postedByUserId: user.id,
+          active: true,
+          featured: true,
+          featuredUntil: { gt: now },
+        },
+      })
+      if (featuredJobCount >= PARTNER_FEATURED_JOB_LIMIT) {
+        return NextResponse.json({ error: `Hiring Partner includes up to ${PARTNER_FEATURED_JOB_LIMIT} featured jobs.` }, { status: 409 })
+      }
+      partnerFeatured = true
+    }
+  }
 
 let job
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -79,18 +121,22 @@ let job
           postalCode: remote ? null : zipCode.trim(),
           salaryPeriod,
           description: description.trim(),
-          url: `https://www.oh-my-job.com/jobs/${id}`,
+          url: `https://www.solarroles.com/jobs/${id}`,
           applyUrl: `mailto:${notificationEmail.trim()}`,
           salaryMin: annualizedSalary(salaryMinValue, salaryPeriod),
           salaryMax: annualizedSalary(salaryMaxValue, salaryPeriod),
           salary: `$${salaryMinValue.toLocaleString()} - $${salaryMaxValue.toLocaleString()} ${salaryPeriod === 'hour' ? 'an hour' : 'a year'}`,
           contractType,
           contractTime,
-          postedAt: new Date(),
-          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-          active: true,
+          postedAt: plan === 'partner' ? now : null,
+          expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+          active: plan === 'partner',
           sourcePriority: 0,
           postedByUserId: user.id,
+          featured: partnerFeatured,
+          featuredUntil: partnerFeatured ? new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) : null,
+          listingPlan: plan === 'partner' ? 'PARTNER' : 'FEATURED',
+          paymentStatus: plan === 'partner' ? 'included' : 'pending',
         },
       })
       break
@@ -104,14 +150,19 @@ let job
     return NextResponse.json({ error: 'Could not create job. Try again.' }, { status: 500 })
   }
 
-  await sendJobPostedConfirmation({
-    employerEmail: notificationEmail.trim(),
-    jobTitle: job.title,
-    jobUrl: job.url,
-    expiresAt: job.expiresAt,
-  })
+  if (plan === 'partner') {
+    await sendJobPostedConfirmation({
+      employerEmail: notificationEmail.trim(),
+      jobTitle: job.title,
+      jobUrl: job.url,
+      expiresAt: job.expiresAt,
+    })
+  }
 
-  return NextResponse.json({ id: job.id }, { status: 201 })
+  return NextResponse.json({
+    id: job.id,
+    requiresCheckout: plan === 'featured',
+  }, { status: 201 })
 
  
 }

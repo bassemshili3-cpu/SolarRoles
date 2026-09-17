@@ -14,6 +14,7 @@ const JOB_SELECT = {
   addressRegion: true, url: true, applyUrl: true,
   salaryMin: true, salaryMax: true, salary: true,
   contractType: true, contractTime: true, source: true, postedAt: true,
+  featured: true, featuredUntil: true,
 } as const
 
 export async function fetchJobsPageUncached(
@@ -24,11 +25,13 @@ export async function fetchJobsPageUncached(
   const whereClause = buildJobWhere(params)
   const orderBy: Prisma.JobOrderByWithRelationInput[] = params.sort === 'newest'
     ? [
+        { featured: 'desc' },
         { postedAt: { sort: 'desc', nulls: 'last' } },
         { sourcePriority: 'asc' },
         { fetchedAt: 'desc' },
       ]
     : [
+        { featured: 'desc' },
         { sourcePriority: 'asc' },
         { fetchedAt: 'desc' },
       ]
@@ -62,6 +65,8 @@ export async function fetchJobsPageUncached(
     contractType: job.contractType,
     contractTime: job.contractTime,
     source: job.source,
+    featured: job.featured && Boolean(job.featuredUntil && job.featuredUntil > new Date()),
+    featuredUntil: job.featuredUntil?.toISOString() || null,
     postedAt: job.postedAt?.toISOString() || null,
     created: job.postedAt?.toISOString() || null,
   }))

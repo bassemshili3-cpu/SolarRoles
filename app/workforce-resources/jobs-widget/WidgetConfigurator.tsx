@@ -239,7 +239,7 @@ export default function WidgetConfigurator({
         <p className="mt-2 text-sm leading-6 text-gray-600">
           This is the widget visitors will see. Change the settings on
           the left and the preview updates immediately.
-        </p>
+        </p>tu
 
         <iframe
           key={previewSrc}

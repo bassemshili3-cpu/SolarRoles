@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabase } from '@/lib/supabase-server'
 import { prisma } from '@/lib/prisma'
+import { hasPartnerAccess, PARTNER_ACTIVE_JOB_LIMIT } from '@/lib/employerBilling'
+import { getStripe } from '@/lib/stripe'
 
 const ALLOWED_EMPLOYMENT_TYPES = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
 
@@ -42,6 +44,23 @@ export async function PATCH(
     const { action } = body
     if (action !== 'pause' && action !== 'activate') {
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
+    }
+
+    if (action === 'activate' && job.paymentStatus !== 'paid' && job.paymentStatus !== 'included' && job.paymentStatus !== 'not_required') {
+      return NextResponse.json({ error: 'This listing cannot be activated before payment is confirmed.' }, { status: 402 })
+    }
+
+    if (action === 'activate' && job.listingPlan === 'PARTNER') {
+      const subscription = await prisma.employerSubscription.findUnique({ where: { userId: user.id } })
+      if (!hasPartnerAccess(subscription)) {
+        return NextResponse.json({ error: 'An active Hiring Partner subscription is required.' }, { status: 403 })
+      }
+      const activeJobCount = await prisma.job.count({
+        where: { postedByUserId: user.id, active: true, expiresAt: { gt: new Date() } },
+      })
+      if (activeJobCount >= PARTNER_ACTIVE_JOB_LIMIT) {
+        return NextResponse.json({ error: `Hiring Partner includes up to ${PARTNER_ACTIVE_JOB_LIMIT} active jobs.` }, { status: 409 })
+      }
     }
 
     const updated = await prisma.job.update({
@@ -123,6 +142,24 @@ export async function DELETE(
 
   const job = await getOwnedJob(id, user.id)
   if (!job) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  if (job.paymentStatus === 'pending' && job.stripeCheckoutId) {
+    try {
+      const session = await getStripe().checkout.sessions.retrieve(job.stripeCheckoutId)
+      if (session.status === 'complete') {
+        return NextResponse.json(
+          { error: 'Stripe is still confirming this payment. This draft cannot be deleted yet.' },
+          { status: 409 },
+        )
+      }
+      if (session.status === 'open') {
+        await getStripe().checkout.sessions.expire(session.id)
+      }
+    } catch (error) {
+      console.error(`Could not close Stripe Checkout for job ${id}:`, error)
+      return NextResponse.json({ error: 'Could not safely delete this paid draft. Try again shortly.' }, { status: 502 })
+    }
+  }
 
   await prisma.job.delete({ where: { id } })
   return NextResponse.json({ ok: true })

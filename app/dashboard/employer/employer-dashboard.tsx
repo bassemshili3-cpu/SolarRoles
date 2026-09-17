@@ -1,7 +1,7 @@
 // app/dashboard/employer/employer-dashboard.tsx
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,7 +11,7 @@ import {
 import { buildJobSlug } from '@/lib/slugify'
 import { useSearchParams, useRouter } from 'next/navigation'
 
-type JobStatus = 'active' | 'paused' | 'expired'
+type JobStatus = 'active' | 'paused' | 'expired' | 'draft'
 
 interface EmployerJob {
   id: string
@@ -21,6 +21,19 @@ interface EmployerJob {
   status: JobStatus
   clicks: number
   applications: number
+  paymentStatus: string
+  featuredUntil: Date | null
+  expiresAt: Date
+}
+
+interface EmployerBilling {
+  partnerAccess: boolean
+  status: string | null
+  cancelAtPeriodEnd: boolean
+  currentPeriodEnd: Date | null
+  activeJobLimit: number
+  featuredJobLimit: number
+  activeFeaturedJobs: number
 }
 
 function formatRelativeDate(date: Date) {
@@ -32,27 +45,43 @@ function formatRelativeDate(date: Date) {
   return months === 1 ? '1 month ago' : `${months} months ago`
 }
 
+function formatDaysRemaining(expiresAt: Date) {
+  const millisecondsRemaining = new Date(expiresAt).getTime() - Date.now()
+  const daysRemaining = Math.max(0, Math.ceil(millisecondsRemaining / (1000 * 60 * 60 * 24)))
+  if (daysRemaining === 0) return 'Expires today'
+  return `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`
+}
+
 const statusLabel: Record<JobStatus, string> = {
   active: 'Active',
   paused: 'Paused',
   expired: 'Expired',
+  draft: 'Awaiting payment',
 }
 
 const statusBar: Record<JobStatus, string> = {
   active: 'bg-emerald-500',
   paused: 'bg-amber-500',
   expired: 'bg-slate-300',
+  draft: 'bg-violet-500',
 }
 
 const statusText: Record<JobStatus, string> = {
   active: 'text-emerald-700',
   paused: 'text-amber-700',
   expired: 'text-slate-500',
+  draft: 'text-violet-700',
 }
 
 type Filter = 'all' | JobStatus
 
-export default function EmployerDashboard({ initialJobs }: { initialJobs: EmployerJob[] }) {
+export default function EmployerDashboard({
+  initialJobs,
+  billing,
+}: {
+  initialJobs: EmployerJob[]
+  billing: EmployerBilling
+}) {
   const [jobs, setJobs] = useState<EmployerJob[]>(initialJobs)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
@@ -60,12 +89,68 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
   const searchParams = useSearchParams()
   const router = useRouter()
   const justPosted = searchParams.get('posted') === '1'
+  const payment = searchParams.get('payment')
+  const paymentPlan = searchParams.get('plan')
+  const upgrade = searchParams.get('upgrade')
+  const checkoutStarted = useRef(false)
+
+  useEffect(() => {
+    setJobs(initialJobs)
+  }, [initialJobs])
+
+  async function openStripeEndpoint(endpoint: '/api/stripe/checkout' | '/api/stripe/portal', payload?: object) {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: payload ? { 'Content-Type': 'application/json' } : undefined,
+      body: payload ? JSON.stringify(payload) : undefined,
+    })
+    const data = await res.json().catch(() => null)
+    if (!res.ok || !data?.url) throw new Error(data?.error || 'Stripe is temporarily unavailable.')
+    window.location.assign(data.url)
+  }
 
   useEffect(() => {
     if (justPosted) {
       router.replace('/dashboard/employer', { scroll: false })
     }
   }, [justPosted, router])
+
+  useEffect(() => {
+    if (payment !== 'success') return
+    const refreshes = [
+      window.setTimeout(() => router.refresh(), 1500),
+      window.setTimeout(() => router.refresh(), 4000),
+      window.setTimeout(() => router.refresh(), 8000),
+    ]
+    return () => refreshes.forEach(window.clearTimeout)
+  }, [payment, router])
+
+  useEffect(() => {
+    if (upgrade !== 'partner' || billing.partnerAccess || checkoutStarted.current) return
+    checkoutStarted.current = true
+    openStripeEndpoint('/api/stripe/checkout', { plan: 'partner' }).catch((error) => {
+      checkoutStarted.current = false
+      alert(error instanceof Error ? error.message : 'Stripe is temporarily unavailable.')
+      router.replace('/dashboard/employer', { scroll: false })
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [upgrade, billing.partnerAccess, router])
+
+  async function payForDraft(jobId: string) {
+    try {
+      await openStripeEndpoint('/api/stripe/checkout', { plan: 'featured', jobId })
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Stripe is temporarily unavailable.')
+    }
+  }
+
+  async function manageBilling() {
+    try {
+      await openStripeEndpoint('/api/stripe/portal')
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Billing management is temporarily unavailable.')
+    }
+  }
 
   const stats = useMemo(() => {
     const active = jobs.filter((j) => j.status === 'active').length
@@ -86,7 +171,16 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
     active: jobs.filter((j) => j.status === 'active').length,
     paused: jobs.filter((j) => j.status === 'paused').length,
     expired: jobs.filter((j) => j.status === 'expired').length,
+    draft: jobs.filter((j) => j.status === 'draft').length,
   }), [jobs])
+
+  const partnerPayment = payment === 'success' && (
+    paymentPlan === 'partner' || (paymentPlan === null && billing.partnerAccess)
+  )
+  const paymentStillPending = payment === 'success' && (
+    partnerPayment ? !billing.partnerAccess : counts.draft > 0
+  )
+  const remainingJobSlots = Math.max(0, billing.activeJobLimit - stats.active)
 
   async function toggleStatus(id: string, currentStatus: JobStatus) {
     const action = currentStatus === 'active' ? 'pause' : 'activate'
@@ -161,6 +255,29 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
           </p>
         </div>
       )}
+      {payment === 'success' && (
+        <div className={`mb-8 rounded-md border px-5 py-4 ${paymentStillPending ? 'border-amber-200 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
+          <p className={`text-sm font-medium ${paymentStillPending ? 'text-amber-900' : 'text-emerald-800'}`}>
+            {paymentStillPending
+              ? `Payment received. ${partnerPayment ? 'Partner activation' : 'Publication'} is being confirmed.`
+              : partnerPayment
+                ? 'Hiring Partner is now active.'
+                : 'Payment confirmed. Your job is now active.'}
+          </p>
+          <p className={`mt-0.5 text-sm ${paymentStillPending ? 'text-amber-800' : 'text-emerald-700'}`}>
+            {paymentStillPending
+              ? 'This normally takes less than a minute. The dashboard will refresh automatically.'
+              : partnerPayment
+                ? `${remainingJobSlots} of ${billing.activeJobLimit} active job slots available · ${billing.featuredJobLimit} featured slots included.`
+                : 'Your featured listing will remain live for 30 days.'}
+          </p>
+        </div>
+      )}
+      {payment === 'cancelled' && (
+        <div className="mb-8 rounded-md border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+          Checkout was cancelled. Your job remains a private draft and can be paid from this dashboard.
+        </div>
+      )}
       {/* Header */}
       <header className="mb-10 md:mb-14">
         <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-slate-500 font-medium mb-5">
@@ -178,13 +295,31 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
             </p>
           </div>
           <Button asChild>
-            <Link href="/dashboard/employer/new">
+            <Link href={`/dashboard/employer/new?plan=${billing.partnerAccess ? 'partner' : 'featured'}`}>
               Post a job
               <ArrowRight size={16} className="ml-2" />
             </Link>
           </Button>
         </div>
       </header>
+
+      <section className="mb-10 flex flex-wrap items-center justify-between gap-5 rounded-lg border border-slate-200 bg-slate-50 px-5 py-4">
+        <div>
+          <p className="text-sm font-semibold text-[#1a2340]">
+            {billing.partnerAccess ? 'Hiring Partner · active' : 'Featured Job · $39 per listing'}
+          </p>
+          <p className="mt-1 text-sm text-slate-500">
+            {billing.partnerAccess
+              ? `${remainingJobSlots} of ${billing.activeJobLimit} job slots remaining · ${stats.active}/${billing.activeJobLimit} active · ${billing.activeFeaturedJobs}/${billing.featuredJobLimit} featured slots used${billing.cancelAtPeriodEnd ? ' · cancels at period end' : ''}`
+              : `1 job per purchase · ${stats.active} currently active · 30 days featured. Additional jobs are billed separately.`}
+          </p>
+        </div>
+        {billing.partnerAccess ? (
+          <Button type="button" variant="outline" onClick={manageBilling}>Manage billing</Button>
+        ) : (
+          <Button asChild><Link href="/dashboard/employer?upgrade=partner">Upgrade to Partner · $99/mo</Link></Button>
+        )}
+      </section>
 
       {/* Stats — flat grid, no card, just borders */}
       <section className="grid grid-cols-2 md:grid-cols-4 md:gap-0 gap-x-6 border-t border-slate-200 mb-12 md:mb-14">
@@ -222,7 +357,7 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
             Your first listing takes about two minutes. We&apos;ll guide you through it.
           </p>
           <Button asChild>
-            <Link href="/dashboard/employer/new">
+            <Link href={`/dashboard/employer/new?plan=${billing.partnerAccess ? 'partner' : 'featured'}`}>
               Post your first job
              
             </Link>
@@ -241,6 +376,7 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
                 { key: 'active' as Filter, label: 'Active' },
                 { key: 'paused' as Filter, label: 'Paused' },
                 { key: 'expired' as Filter, label: 'Expired' },
+                { key: 'draft' as Filter, label: 'Awaiting payment' },
               ]).map((f) => (
                 <button
                   key={f.key}
@@ -296,19 +432,28 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
                 {/* Job info */}
                 <div className="flex-1 min-w-0 pl-4">
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <Link
-                      href={`https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`}
-                      target="_blank"
-                      rel="nofollow noopener noreferrer"
-                      className="text-[15px] font-medium text-[#1a2340] hover:underline underline-offset-2 decoration-slate-300 truncate"
-                    >
-                      {job.title}
-                    </Link>
+                    {job.status === 'draft' ? (
+                      <span className="truncate text-[15px] font-medium text-[#1a2340]">{job.title}</span>
+                    ) : (
+                      <Link
+                        href={`https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`}
+                        target="_blank"
+                        rel="nofollow noopener noreferrer"
+                        className="truncate text-[15px] font-medium text-[#1a2340] hover:underline underline-offset-2 decoration-slate-300"
+                      >
+                        {job.title}
+                      </Link>
+                    )}
                     <span
                       className={`text-[10px] uppercase tracking-[0.1em] font-semibold ${statusText[job.status]}`}
                     >
                       {statusLabel[job.status]}
                     </span>
+                    {job.status === 'active' && (
+                      <span className="text-[11px] font-medium text-slate-400">
+                        {formatDaysRemaining(job.expiresAt)}
+                      </span>
+                    )}
                   </div>
                   <div className="text-[13px] text-slate-500 mt-1 flex items-center gap-2">
                     <span className="truncate">{job.location}</span>
@@ -346,7 +491,16 @@ export default function EmployerDashboard({ initialJobs }: { initialJobs: Employ
                   >
                     <Pencil size={15} />
                   </Link>
-                  {job.status !== 'expired' && (
+                  {job.status === 'draft' && (
+                    <button
+                      type="button"
+                      onClick={() => payForDraft(job.id)}
+                      className="mr-2 rounded-md bg-[#1a2340] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#263658]"
+                    >
+                      Pay $39
+                    </button>
+                  )}
+                  {job.status !== 'expired' && job.status !== 'draft' && (
                     <button
                       type="button"
                       title={job.status === 'active' ? 'Pause' : 'Activate'}

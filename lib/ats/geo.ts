@@ -1,6 +1,7 @@
 // lib/ats/geo.ts
 
 import { STATE_CODE_TO_NAME } from '@/lib/usStates';
+import { REMOTE_US } from '@/lib/parseLocation';
 
 const US_STATE_CODES = new Set([
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -55,6 +56,10 @@ export function isUSJob(
   const rawRegion = job.addressRegion || '';
   const normalizedRegion = rawRegion ? normalizeRegion(rawRegion) : undefined;
 
+  // extractStateFromLocation uses this sentinel only when a remote posting is
+  // explicitly limited to the United States.
+  if (rawRegion === REMOTE_US) return true;
+
   // Workday renvoie addressRegion tantôt en code ("IL"), tantôt en nom complet
   // ("Illinois"). On ne rejette sur la région QUE si elle est non vide ET
   // non reconnaissable comme état US (ni code ni nom connu) — sinon on
@@ -63,12 +68,14 @@ export function isUSJob(
     return false;
   }
 
+  // A recognized US state is stronger evidence than a city-name marker.
+  // This keeps places such as East Berlin, CT from being rejected as Germany.
+  if (normalizedRegion) return true;
+
   for (const marker of NON_US_MARKERS) {
     const re = new RegExp(`\\b${marker}\\b`, 'i');
     if (re.test(location)) return false;
   }
-
-  if (normalizedRegion) return true;
 
   if (/\bunited states\b|\bu\.?s\.?a?\.?\b/i.test(location)) return true;
 
