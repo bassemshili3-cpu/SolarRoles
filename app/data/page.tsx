@@ -16,6 +16,12 @@ import {
   Wrench,
 } from 'lucide-react'
 
+import {
+  HistoryPeriodSelector,
+  MarketHistoryProvider,
+  MetricCard,
+} from '@/components/data/MarketMetricCard'
+import { mergeCurrentHistoryPoint, type MarketHistoryPoint } from '@/lib/marketHistory'
 import { prisma } from '@/lib/prisma'
 import { getSolarMarketData, type MetricValue } from '@/lib/solarMarketMetrics'
 
@@ -62,18 +68,6 @@ type SnapshotRow = {
   activeJobIds?: unknown
   employerCounts?: unknown
   stateCounts?: unknown
-}
-
-type HistoryPoint = {
-  date: Date
-  value: number
-  numerator?: number
-  denominator?: number
-}
-
-type Change = {
-  label: string
-  tone: 'up' | 'down' | 'flat'
 }
 
 const REPORTS = [
@@ -133,8 +127,8 @@ async function getHistory() {
 
     if (!delegate) return []
 
-    return await delegate.findMany({
-      orderBy: { snapshotDate: 'asc' },
+    const rows = await delegate.findMany({
+      orderBy: { snapshotDate: 'desc' },
       take: 180,
       select: {
         snapshotDate: true,
@@ -146,43 +140,45 @@ async function getHistory() {
         stateCounts: true,
       },
     })
+    return rows.reverse()
   } catch (error) {
     console.warn('Solar market history unavailable:', error)
     return []
   }
 }
 
-function historyFor(rows: SnapshotRow[], key: string): HistoryPoint[] {
+function historyFor(rows: SnapshotRow[], key: string): MarketHistoryPoint[] {
   return rows
     .map((row) => {
-      if (key === 'totalJobs') return { date: new Date(row.snapshotDate), value: row.totalJobs }
-      if (key === 'employerCount') return { date: new Date(row.snapshotDate), value: row.employerCount }
+      const date = row.snapshotDate.toISOString().slice(0, 10)
+      if (key === 'totalJobs') return { date, value: row.totalJobs }
+      if (key === 'employerCount') return { date, value: row.employerCount }
 
       const metric = asMetricRecord(row.metrics)[key]
       if (!metric || metric.value == null) return null
 
       return {
-        date: new Date(row.snapshotDate),
+        date,
         value: metric.value,
         numerator: metric.numerator,
         denominator: metric.denominator,
       }
     })
-    .filter((point): point is HistoryPoint => point != null)
+    .filter((point): point is MarketHistoryPoint => point != null)
 }
 
-function stateBreadthHistory(rows: SnapshotRow[]): HistoryPoint[] {
+function stateBreadthHistory(rows: SnapshotRow[]): MarketHistoryPoint[] {
   return rows
     .map((row) => {
       const stateCounts = asStateCounts(row.stateCounts)
       if (!Object.keys(stateCounts).length) return null
 
       return {
-        date: new Date(row.snapshotDate),
+        date: row.snapshotDate.toISOString().slice(0, 10),
         value: Object.values(stateCounts).filter((count) => count > 0).length,
       }
     })
-    .filter((point): point is HistoryPoint => point != null)
+    .filter((point): point is MarketHistoryPoint => point != null)
 }
 
 function employerShareMetric(employerCounts: Record<string, number>, totalJobs: number, topN: number): MetricValue {
@@ -200,9 +196,9 @@ function employerShareMetric(employerCounts: Record<string, number>, totalJobs: 
   } as MetricValue
 }
 
-function employerShareHistory(rows: SnapshotRow[], topN: number): HistoryPoint[] {
+function employerShareHistory(rows: SnapshotRow[], topN: number): MarketHistoryPoint[] {
   return rows
-    .map<HistoryPoint | null>((row) => {
+    .map<MarketHistoryPoint | null>((row) => {
       const employerCounts = asEmployerCounts(row.employerCounts)
       if (!Object.keys(employerCounts).length || row.totalJobs <= 0) return null
 
@@ -213,150 +209,13 @@ function employerShareHistory(rows: SnapshotRow[], topN: number): HistoryPoint[]
         .reduce((sum, count) => sum + count, 0)
 
       return {
-        date: new Date(row.snapshotDate),
+        date: row.snapshotDate.toISOString().slice(0, 10),
         value: (numerator / row.totalJobs) * 100,
         numerator,
         denominator: row.totalJobs,
       }
     })
-    .filter((point): point is HistoryPoint => point != null)
-}
-
-function closestHistoricalPoint(points: HistoryPoint[], daysAgo: number) {
-  if (!points.length) return null
-  const target = Date.now() - daysAgo * 86_400_000
-
-  return points.reduce<HistoryPoint | null>((best, point) => {
-    const distance = Math.abs(point.date.getTime() - target)
-    if (!best) return point
-    return distance < Math.abs(best.date.getTime() - target) ? point : best
-  }, null)
-}
-
-function changeLabel(current: MetricValue | undefined, points: HistoryPoint[], daysAgo: number): Change | null {
-  if (!current || current.value == null || points.length < 2) return null
-  const previous = closestHistoricalPoint(points, daysAgo)
-  if (!previous || previous.value === 0) return null
-
-  if (current.unit === 'rate') {
-    const delta = current.value - previous.value
-    const rounded = Math.abs(delta).toFixed(1)
-    return {
-      label: `${delta > 0 ? '+' : delta < 0 ? '−' : ''}${rounded} pp vs ${daysAgo}d`,
-      tone: delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat',
-    }
-  }
-
-  const delta = ((current.value - previous.value) / Math.abs(previous.value)) * 100
-  return {
-    label: `${delta > 0 ? '+' : delta < 0 ? '−' : ''}${Math.abs(delta).toFixed(1)}% vs ${daysAgo}d`,
-    tone: delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat',
-  }
-}
-
-function formatMetric(metric: MetricValue | undefined) {
-  if (!metric || metric.value == null) return '—'
-  if (metric.unit === 'currency') return `$${Math.round(metric.value).toLocaleString('en-US')}`
-  if (metric.unit === 'rate') return `${metric.value.toFixed(1)}%`
-  if (metric.unit === 'days') return `${Math.round(metric.value)} days`
-  return Math.round(metric.value).toLocaleString('en-US')
-}
-
-function sampleLine(metric: MetricValue | undefined, noun = 'eligible openings') {
-  if (!metric || metric.numerator == null || metric.denominator == null || metric.denominator <= 0) return null
-  return `${metric.numerator.toLocaleString('en-US')} of ${metric.denominator.toLocaleString('en-US')} ${noun}`
-}
-
-function Sparkline({ points }: { points: HistoryPoint[] }) {
-  if (points.length < 2) {
-    return (
-      <div className="mt-4 flex h-12 items-center rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 text-[11px] text-slate-400">
-        Daily history will appear after snapshots begin collecting.
-      </div>
-    )
-  }
-
-  const values = points.map((point) => point.value)
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  const range = max - min || 1
-  const width = 260
-  const height = 46
-  const coordinates = points.map((point, index) => {
-    const x = (index / Math.max(points.length - 1, 1)) * width
-    const y = height - ((point.value - min) / range) * (height - 6) - 3
-    return `${x.toFixed(1)},${y.toFixed(1)}`
-  })
-
-  return (
-    <div className="mt-4">
-      <svg viewBox={`0 0 ${width} ${height}`} className="h-12 w-full" role="img" aria-label="Daily metric history">
-        <polyline
-          points={coordinates.join(' ')}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          vectorEffect="non-scaling-stroke"
-          className="text-slate-700"
-        />
-      </svg>
-      <div className="mt-1 flex justify-between text-[10px] text-slate-400">
-        <span>{points[0].date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-        <span>{points[points.length - 1].date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-      </div>
-    </div>
-  )
-}
-
-function ChangePill({ change }: { change: Change | null }) {
-  if (!change) return <span className="text-xs text-slate-400">History building</span>
-
-  const classes =
-    change.tone === 'up'
-      ? 'bg-emerald-50 text-emerald-700'
-      : change.tone === 'down'
-        ? 'bg-rose-50 text-rose-700'
-        : 'bg-slate-100 text-slate-600'
-
-  return <span className={`rounded-full px-2 py-1 text-xs font-semibold ${classes}`}>{change.label}</span>
-}
-
-function MetricCard({
-  label,
-  metric,
-  points,
-  note,
-  denominatorLabel,
-  compareDays = 30,
-  compact = false,
-}: {
-  label: string
-  metric: MetricValue | undefined
-  points: HistoryPoint[]
-  note: string
-  denominatorLabel?: string
-  compareDays?: number
-  compact?: boolean
-}) {
-  const change = changeLabel(metric, points, compareDays)
-  const sample = denominatorLabel ? sampleLine(metric, denominatorLabel) : sampleLine(metric)
-
-  return (
-    <article className={`rounded-2xl border border-slate-200 bg-white shadow-sm shadow-slate-100/60 ${compact ? 'p-4' : 'p-5'}`}>
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">{label}</p>
-          <p className={`${compact ? 'mt-1.5 text-2xl' : 'mt-2 text-3xl'} font-bold tracking-tight text-slate-950`}>
-            {formatMetric(metric)}
-          </p>
-        </div>
-        <ChangePill change={change} />
-      </div>
-      <Sparkline points={points} />
-      <p className="mt-3 text-sm leading-5 text-slate-600">{note}</p>
-      {sample ? <p className="mt-2 text-xs text-slate-400">{sample}</p> : null}
-    </article>
-  )
+    .filter((point): point is MarketHistoryPoint => point != null)
 }
 
 function SectionHeading({
@@ -409,7 +268,17 @@ function definitionBox(title: string, body: string) {
 export default async function DataPage() {
   const [market, history] = await Promise.all([getSolarMarketData(), getHistory()])
   const metrics = market.metrics
-  const h = (key: string) => historyFor(history, key)
+  const currentDate = new Date().toISOString().slice(0, 10)
+  const h = (key: string) => {
+    const metric = metricValue(metrics, key)
+    return mergeCurrentHistoryPoint(
+      historyFor(history, key),
+      metric?.value == null
+        ? null
+        : { value: metric.value, numerator: metric.numerator, denominator: metric.denominator },
+      currentDate,
+    )
+  }
 
   const statesWithDemand = Object.values(market.stateCounts).filter((count) => count > 0).length
   const stateBreadthMetric = {
@@ -419,6 +288,21 @@ export default async function DataPage() {
 
   const top10Share = employerShareMetric(market.employerCounts, market.totalJobs, 10)
   const top25Share = employerShareMetric(market.employerCounts, market.totalJobs, 25)
+  const stateBreadthPoints = mergeCurrentHistoryPoint(
+    stateBreadthHistory(history),
+    { value: statesWithDemand },
+    currentDate,
+  )
+  const top10SharePoints = mergeCurrentHistoryPoint(
+    employerShareHistory(history, 10),
+    { value: top10Share.value ?? 0, numerator: top10Share.numerator, denominator: top10Share.denominator },
+    currentDate,
+  )
+  const top25SharePoints = mergeCurrentHistoryPoint(
+    employerShareHistory(history, 25),
+    { value: top25Share.value ?? 0, numerator: top25Share.numerator, denominator: top25Share.denominator },
+    currentDate,
+  )
 
   const lastUpdated = market.lastUpdated
     ? market.lastUpdated.toLocaleDateString('en-US', {
@@ -433,7 +317,8 @@ export default async function DataPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <main className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
+      <MarketHistoryProvider>
+        <main className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <header className="border-b border-slate-200 pb-10">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
             <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">Updated daily</span>
@@ -489,6 +374,7 @@ export default async function DataPage() {
               </a>
             ))}
           </nav>
+          <HistoryPeriodSelector />
         </header>
 
         <section className="py-12" id="hiring-pulse">
@@ -505,18 +391,24 @@ export default async function DataPage() {
               label="Active openings · volume"
               metric={metricValue(metrics, 'totalJobs')}
               points={h('totalJobs')}
+              comparisonMode="relative-percent"
+              currentDate={currentDate}
               note="Active US solar job postings currently indexed by Solar Roles."
             />
             <MetricCard
               label="Employers hiring · participation"
               metric={metricValue(metrics, 'employerCount')}
               points={h('employerCount')}
+              comparisonMode="relative-percent"
+              currentDate={currentDate}
               note="Distinct employers with at least one active indexed opening."
             />
             <MetricCard
               label="States with demand · breadth"
               metric={stateBreadthMetric}
-              points={stateBreadthHistory(history)}
+              points={stateBreadthPoints}
+              comparisonMode="absolute"
+              currentDate={currentDate}
               note="Number of US states represented by at least one active indexed opening."
             />
           </div>
@@ -541,33 +433,37 @@ export default async function DataPage() {
               label="Residential"
               metric={metricValue(metrics, 'residentialShare')}
               points={h('residentialShare')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of segment-classified openings tied to residential solar."
               denominatorLabel="segment-classified openings"
-              compareDays={90}
             />
             <MetricCard
               label="C&I"
               metric={metricValue(metrics, 'ciShare')}
               points={h('ciShare')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of segment-classified openings tied to commercial and industrial solar."
               denominatorLabel="segment-classified openings"
-              compareDays={90}
             />
             <MetricCard
               label="Utility-scale"
               metric={metricValue(metrics, 'utilityShare')}
               points={h('utilityShare')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of segment-classified openings tied to utility-scale solar."
               denominatorLabel="segment-classified openings"
-              compareDays={90}
             />
             <MetricCard
               label="BESS / storage"
               metric={metricValue(metrics, 'storageShare')}
               points={h('storageShare')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of segment-classified openings tied explicitly to battery energy storage."
               denominatorLabel="segment-classified openings"
-              compareDays={90}
             />
           </div>
 
@@ -591,17 +487,19 @@ export default async function DataPage() {
               label="Build / construction share"
               metric={metricValue(metrics, 'buildShareTechnical')}
               points={h('buildShareTechnical')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Construction, installation, EPC, commissioning and project-delivery roles as a share of technical openings."
               denominatorLabel="technical openings"
-              compareDays={90}
             />
             <MetricCard
               label="Operate / O&M share"
               metric={metricValue(metrics, 'omShareTechnical')}
               points={h('omShareTechnical')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Operations, maintenance, field-service and asset-management roles as a share of technical openings."
               denominatorLabel="technical openings"
-              compareDays={90}
             />
           </div>
 
@@ -625,17 +523,19 @@ export default async function DataPage() {
               label="Storage skill penetration"
               metric={metricValue(metrics, 'storageSkillsRate')}
               points={h('storageSkillsRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of technical openings mentioning battery, BESS, energy storage, PCS, EMS or closely related storage-system work."
               denominatorLabel="technical openings"
-              compareDays={90}
             />
             <MetricCard
               label="Grid / high-voltage penetration"
               metric={metricValue(metrics, 'gridSkillsRate')}
               points={h('gridSkillsRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of technical openings mentioning SCADA, substations, interconnection, medium/high voltage, switchgear, relays or related grid skills."
               denominatorLabel="technical openings"
-              compareDays={90}
             />
           </div>
 
@@ -659,25 +559,28 @@ export default async function DataPage() {
               label="Advertised training gap"
               metric={metricValue(metrics, 'trainingGapRate')}
               points={h('trainingGapRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of entry-accessible technical/field openings that ask for prior experience or a trade credential without mentioning employer-provided training or apprenticeship."
               denominatorLabel="entry-accessible technical/field openings"
-              compareDays={90}
             />
             <MetricCard
               label="Employer training mentioned"
               metric={metricValue(metrics, 'trainingMentionRate')}
               points={h('trainingMentionRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of entry-accessible technical/field openings that explicitly mention employer-provided training, paid training or structured on-the-job training."
               denominatorLabel="entry-accessible technical/field openings"
-              compareDays={90}
             />
             <MetricCard
               label="Apprenticeship mentioned"
               metric={metricValue(metrics, 'apprenticeshipRate')}
               points={h('apprenticeshipRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of technical openings that explicitly mention an apprentice role, apprenticeship or registered apprenticeship."
               denominatorLabel="technical openings"
-              compareDays={90}
             />
           </div>
 
@@ -701,17 +604,19 @@ export default async function DataPage() {
               label="Pay disclosure rate"
               metric={metricValue(metrics, 'salaryDisclosureRate')}
               points={h('salaryDisclosureRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of active postings with a usable compensation range after normalization."
               denominatorLabel="active openings"
-              compareDays={90}
             />
             <MetricCard
               label="Median advertised range width"
               metric={metricValue(metrics, 'medianSalaryRangeWidth')}
               points={h('medianSalaryRangeWidth')}
+              comparisonMode="relative-percent"
+              currentDate={currentDate}
               note="Median difference between normalized annual minimum and maximum pay among postings with a usable range."
               denominatorLabel="postings with usable pay ranges"
-              compareDays={90}
             />
           </div>
 
@@ -734,18 +639,20 @@ export default async function DataPage() {
             <MetricCard
               label="Top 10 employer share"
               metric={top10Share}
-              points={employerShareHistory(history, 10)}
+              points={top10SharePoints}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of all active indexed openings posted by the 10 employers with the largest current hiring footprints."
               denominatorLabel="active openings"
-              compareDays={30}
             />
             <MetricCard
               label="Top 25 employer share"
               metric={top25Share}
-              points={employerShareHistory(history, 25)}
+              points={top25SharePoints}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of all active indexed openings posted by the 25 employers with the largest current hiring footprints."
               denominatorLabel="active openings"
-              compareDays={30}
             />
           </div>
 
@@ -788,33 +695,37 @@ export default async function DataPage() {
               label="Prior experience required"
               metric={metricValue(metrics, 'experienceRequirementRate')}
               points={h('experienceRequirementRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of active openings explicitly asking for prior professional, trade or role-specific experience."
               denominatorLabel="active openings"
-              compareDays={90}
             />
             <MetricCard
               label="Bachelor's degree mentioned"
               metric={metricValue(metrics, 'degreeRequirementRate')}
               points={h('degreeRequirementRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of active openings explicitly mentioning a bachelor's or comparable four-year degree requirement."
               denominatorLabel="active openings"
-              compareDays={90}
             />
             <MetricCard
               label="Entry-level signal"
               metric={metricValue(metrics, 'entryLevelRate')}
               points={h('entryLevelRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of active postings tagged entry-level or explicitly open to candidates with little or no prior experience."
               denominatorLabel="active openings"
-              compareDays={90}
             />
             <MetricCard
               label="Entry-level contradiction"
               metric={metricValue(metrics, 'entryLevelContradictionRate')}
               points={h('entryLevelContradictionRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
               note="Share of entry-level-labeled openings that also explicitly ask for prior experience."
               denominatorLabel="entry-level-labeled openings"
-              compareDays={90}
             />
           </div>
 
@@ -841,9 +752,10 @@ export default async function DataPage() {
                 label="Sign-on bonus"
                 metric={metricValue(metrics, 'signOnBonusRate')}
                 points={h('signOnBonusRate')}
+                comparisonMode="percentage-points"
+                currentDate={currentDate}
                 note="Explicit bonus mentions among field-oriented openings."
                 denominatorLabel="field-oriented openings"
-                compareDays={90}
                 compact
               />
             </div>
@@ -874,7 +786,7 @@ export default async function DataPage() {
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <p className="text-sm font-bold text-slate-900">Prefer trends to one-day moves</p>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Daily postings are noisy. Structural indicators are generally more useful over 30- or 90-day windows than as single-day changes.
+                Daily postings are noisy. Use the 7-day view for recent movement and the 30-day view for a more stable structural signal.
               </p>
             </div>
           </div>
@@ -924,7 +836,7 @@ export default async function DataPage() {
             <div className="rounded-2xl border border-slate-200 p-5 md:col-span-2">
               <p className="font-bold text-slate-900">Historical comparisons</p>
               <p className="mt-2">
-                Daily snapshots retain numerator, denominator and value for each rate. Shares are compared in percentage points. Reporter-facing trend claims should use the date shown on the page and should distinguish a change in the indexed hiring market from a change in total solar employment.
+                Daily observed snapshots retain numerator, denominator and value for each rate; no past dates are reconstructed from job posting dates. Shares are compared in percentage points against their daily eligible population, while opening and employer counts remain raw measures of the indexed market. Each card shows the current and comparison bases when applicable. Reporter-facing trend claims should distinguish a change in indexed hiring from a change in source coverage or total solar employment.
               </p>
             </div>
           </div>
@@ -959,7 +871,8 @@ export default async function DataPage() {
             Figures update daily and may be revised as job records are refreshed, deduplicated or reclassified. Use the date shown at the top of the page when citing a snapshot.
           </p>
         </section>
-      </main>
+        </main>
+      </MarketHistoryProvider>
     </>
   )
 }

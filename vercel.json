@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/google-indexing",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/solar-market-snapshot",
+      "schedule": "45 23 * * *"
     }
   ]
 }

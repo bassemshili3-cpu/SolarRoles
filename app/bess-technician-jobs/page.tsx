@@ -5,6 +5,7 @@ import JobFilters from '@/components/JobFilters'
 import { BatteryCharging, Zap, DollarSign, ShieldCheck, Award, Wrench, TrendingUp } from 'lucide-react'
 import { getJobs } from '@/lib/getJobs'
 import Link from 'next/link'
+import { formatSalaryK, getRoleSalaryStats, MIN_SALARY_LISTINGS } from '@/lib/roleSalary'
 import { getLandingCanonical, getLandingJobCount, getLandingPageNumber, withLandingJobCount } from '@/lib/landingJobTitle'
 
 export const revalidate = 3600
@@ -15,23 +16,33 @@ const BESS_LANDING_FILTERS = {
 
 export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
   const params = await searchParams
-  const jobCount = await getLandingJobCount(BESS_LANDING_FILTERS)
+  const [stats, jobCount] = await Promise.all([
+    getRoleSalaryStats('bess-technician'),
+    getLandingJobCount(BESS_LANDING_FILTERS),
+  ])
+  const salarySuffix =
+    stats && stats.count >= MIN_SALARY_LISTINGS && stats.maxSalary > 0
+      ? ` — Up to ${formatSalaryK(stats.maxSalary)}/yr`
+      : ''
+  const title = withLandingJobCount(
+    salarySuffix
+      ? `BESS Technician Jobs${salarySuffix}`
+      : 'BESS Technician Jobs | Battery Energy Storage Installer & Service Roles',
+    jobCount,
+  )
 
   return {
-    title: withLandingJobCount(
-      'BESS Technician Jobs | Battery Energy Storage Installer & Service Roles',
-      jobCount,
-    ),
+    title,
     description: 'Battery Energy Storage System technician positions across the United States. Installation, commissioning, and maintenance roles with pay ranges, certification requirements, and what the job involves day to day.',
     keywords: 'bess technician jobs, battery energy storage jobs, battery storage technician, bess field technician, energy storage installer jobs, battery storage commissioning technician',
     openGraph: {
-      title: 'BESS Technician Jobs | Now Hiring Nationwide',
+      title,
       description: 'Browse open Battery Energy Storage System technician positions. Installation, commissioning, and field service roles across residential, commercial, and utility scale projects.',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'BESS Technician Jobs',
+      title,
       description: 'Find Battery Energy Storage System technician openings across the US. Residential, commercial, and utility scale employers hiring now.',
     },
     alternates: { canonical: getLandingCanonical('https://www.solarroles.com/bess-technician-jobs', params) },

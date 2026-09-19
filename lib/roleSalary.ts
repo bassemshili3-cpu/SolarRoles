@@ -15,6 +15,7 @@
 import { Prisma } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from './prisma'
+import { SALARY_MAX_THRESHOLD, SALARY_MIN_THRESHOLD } from './salaryBounds'
 
 // React cache() n'est disponible que dans le runtime serveur React (Next.js).
 // Hors de ce contexte (scripts Node isolés), on retombe sur l'identité.
@@ -48,6 +49,32 @@ const NOISE = [
 ]
 
 export const ROLES: Record<string, Role> = {
+  'bess-technician': {
+    title: 'BESS Technician',
+    include: [
+      'bess technician',
+      'battery storage technician',
+      'energy storage technician',
+      'solar & bess technician',
+    ],
+    exclude: [
+      'engineer',
+      'manager',
+      'director',
+      'sales',
+      'supervisor',
+      'instructor',
+      'trainer',
+    ],
+    editorial: {
+      dayToDay:
+        'A BESS Technician installs, commissions, inspects, and repairs battery energy storage systems. The work combines electrical troubleshooting, controls checks, preventive maintenance, and safety procedures for high-voltage DC equipment.',
+      certification:
+        'Employers commonly ask for electrical or field-service experience, OSHA training, and familiarity with NFPA 70E. Manufacturer training and an electrical license can support progression into commissioning and lead service roles.',
+      progression:
+        'Technicians can progress into commissioning, O&M leadership, field engineering, or regional service roles as they build experience diagnosing battery controls, inverters, and site communication systems.',
+    },
+  },
   'solar-technician': {
   title: 'Solar Technician',
   include: [
@@ -234,6 +261,7 @@ export type RoleSalaryStats = {
   count: number
   avgMin: number
   avgMax: number
+  maxSalary: number
   midpoint: number
 }
 
@@ -247,11 +275,12 @@ export const getRoleSalaryStats = memoize(async (slug: string): Promise<RoleSala
   const agg = await prisma.job.aggregate({
     where: {
       active: true,
-      salaryMin: { not: null, gt: 0 },
-      salaryMax: { not: null, gt: 0 },
+      salaryMin: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
+      salaryMax: { gte: SALARY_MIN_THRESHOLD, lte: SALARY_MAX_THRESHOLD },
       ...titleFilterPrisma(role),
     },
     _avg: { salaryMin: true, salaryMax: true },
+    _max: { salaryMax: true },
     _count: { id: true },
   })
 
@@ -259,6 +288,7 @@ export const getRoleSalaryStats = memoize(async (slug: string): Promise<RoleSala
     count: agg._count.id,
     avgMin: Math.round(agg._avg.salaryMin || 0),
     avgMax: Math.round(agg._avg.salaryMax || 0),
+    maxSalary: Math.round(agg._max.salaryMax || 0),
     midpoint: Math.round(((agg._avg.salaryMin || 0) + (agg._avg.salaryMax || 0)) / 2),
   }
 })
