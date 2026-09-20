@@ -1,0 +1,115 @@
+{
+  "state": "AK",
+  "sourceFacilities": 2,
+  "modeledFacilities": 2,
+  "unableToModelFacilities": 0,
+  "currentDcGW": 0.0118,
+  "modeledDcGW": 0.0032,
+  "additionalDcGW": -0.0086,
+  "headroomPct": -73.05,
+  "byAxis": [
+    {
+      "label": "Single-axis tracker",
+      "plants": 1,
+      "currentDcMW": 3.4,
+      "modeledDcMW": 0.323,
+      "additionalDcMW": -3.077,
+      "headroomPct": -90.506
+    },
+    {
+      "label": "Fixed tilt",
+      "plants": 1,
+      "currentDcMW": 8.4,
+      "modeledDcMW": 2.857,
+      "additionalDcMW": -5.543,
+      "headroomPct": -65.986
+    }
+  ],
+  "byVintage": [
+    {
+      "label": "2020 or later",
+      "plants": 2,
+      "currentDcMW": 11.8,
+      "modeledDcMW": 3.18,
+      "additionalDcMW": -8.62,
+      "headroomPct": -73.051
+    }
+  ],
+  "unableToModelReasons": {},
+  "topPlants": [
+    {
+      "id": "405016",
+      "name": "Kotzebue Hybrid",
+      "state": "AK",
+      "county": "Northwest Arctic",
+      "year": 2020,
+      "axis": "tracker",
+      "latitude": 66.8385,
+      "longitude": -162.5531,
+      "currentDcMW": 3.4,
+      "modeledDcMW": 0.3228,
+      "additionalDcMW": -3.0772,
+      "headroomPct": -90.506,
+      "footprintAcres": 2.145,
+      "packedGcrPct": 19.254,
+      "rowPitchM": 13.417,
+      "moduleCount": 538
+    },
+    {
+      "id": "406374",
+      "name": "Houston Solar",
+      "state": "AK",
+      "county": "Matanuska-Susitna",
+      "year": 2023,
+      "axis": "fixed",
+      "latitude": 61.5874,
+      "longitude": -149.7894,
+      "currentDcMW": 8.4,
+      "modeledDcMW": 2.8572,
+      "additionalDcMW": -5.5428,
+      "headroomPct": -65.986,
+      "footprintAcres": 42.253,
+      "packedGcrPct": 8.651,
+      "rowPitchM": 54.202,
+      "moduleCount": 4762
+    }
+  ],
+  "plants": [
+    {
+      "id": "405016",
+      "name": "Kotzebue Hybrid",
+      "state": "AK",
+      "county": "Northwest Arctic",
+      "year": 2020,
+      "axis": "tracker",
+      "latitude": 66.8385,
+      "longitude": -162.5531,
+      "currentDcMW": 3.4,
+      "modeledDcMW": 0.3228,
+      "additionalDcMW": -3.0772,
+      "headroomPct": -90.506,
+      "footprintAcres": 2.145,
+      "packedGcrPct": 19.254,
+      "rowPitchM": 13.417,
+      "moduleCount": 538
+    },
+    {
+      "id": "406374",
+      "name": "Houston Solar",
+      "state": "AK",
+      "county": "Matanuska-Susitna",
+      "year": 2023,
+      "axis": "fixed",
+      "latitude": 61.5874,
+      "longitude": -149.7894,
+      "currentDcMW": 8.4,
+      "modeledDcMW": 2.8572,
+      "additionalDcMW": -5.5428,
+      "headroomPct": -65.986,
+      "footprintAcres": 42.253,
+      "packedGcrPct": 8.651,
+      "rowPitchM": 54.202,
+      "moduleCount": 4762
+    }
+  ]
+}

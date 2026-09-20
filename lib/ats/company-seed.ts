@@ -55,6 +55,17 @@ export const JAZZHR_COMPANIES: AtsCompanySeed[] = [
 
   // September 17, 2026 — active taxonomy-matching board.
   { slug: 'sargentelectric', name: 'Sargent Electric', verified: true },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  { slug: 'cleanchoiceenergy', name: 'CleanChoice Energy', verified: true, includeJobTitles: ['Energy Markets Analyst'] },
+  { slug: 'sunkeepersolar', name: 'Sunkeeper Solar', verified: true },
+  { slug: 'inmansolarllc', name: 'Inman Solar', verified: true, includeJobTitles: ['Construction Manager', 'Design Engineer', 'Pre-Construction Engineer'] },
+  { slug: 'sunstrongmanagementllc', name: 'SunStrong Management', verified: true },
+  { slug: 'wattch', name: 'Wattch', verified: true, includeJobTitles: ['Technical Project Manager'] },
+  { slug: 'kwhanalytics', name: 'kWh Analytics', verified: true, includeJobTitles: ['Tax Underwriter, Renewable Energy'] },
+  { slug: 'sungagefinancial', name: 'Sungage Financial', verified: true },
+  { slug: 'keycaptureenergyllc', name: 'Key Capture Energy', verified: true, includeJobTitles: ['Market Operations Analyst'] },
+
 ];
 
 // Breezy HR - https://<slug>.breezy.hr/
@@ -118,6 +129,11 @@ export const RIPPLING_COMPANIES: RipplingCompanySeed[] = [
   // September 17, 2026 — active taxonomy-matching boards.
   { slug: 'oneenergyrenewables', name: 'OneEnergy Renewables', verified: true, roleFilter: 'solar_taxonomy' },
   { slug: 'simply-solar', name: 'Simply Solar', verified: true, roleFilter: 'solar_taxonomy' },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  { slug: 'bluewave', name: 'BlueWave', verified: true, roleFilter: 'solar_taxonomy' },
+  { slug: 'raptor-maps-inc', name: 'Raptor Maps', verified: true, roleFilter: 'solar_taxonomy' },
+
 ];
 
 // SAP SuccessFactors Recruiting Marketing — public RSS feeds expose the
@@ -132,7 +148,7 @@ export const SUCCESSFACTORS_COMPANIES: SuccessFactorsCompanySeed[] = [
   },
   {
     baseUrl: 'https://jobs.nexteraenergy.com',
-    name: 'NextEra Energy',
+    name: 'NextEra Energy Resources',
     verified: true,
     locale: 'en_US',
     keywords: ['solar'],
@@ -172,6 +188,58 @@ export const SUCCESSFACTORS_COMPANIES: SuccessFactorsCompanySeed[] = [
     locale: 'en_US',
     keywords: ['DEPCOM Power', 'solar'],
   },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  {
+    baseUrl: 'https://careers.pcl.com',
+    name: 'PCL Solar Constructors USA',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar'],
+  },
+  {
+    baseUrl: 'https://kiewitcareers.kiewit.com',
+    name: 'Kiewit',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar'],
+  },
+  {
+    baseUrl: 'https://careers.dominionenergy.com',
+    name: 'Dominion Energy',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar'],
+  },
+  {
+    baseUrl: 'https://jobs.entergy.com',
+    name: 'Entergy',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar', 'solar PV'],
+  },
+  {
+    baseUrl: 'https://careers.aps.com',
+    name: 'Arizona Public Service (APS)',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar', 'BESS'],
+  },
+  {
+    baseUrl: 'https://careers.pge.com',
+    name: 'Pacific Gas & Electric (PG&E)',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar', 'battery storage'],
+  },
+  {
+    baseUrl: 'https://careers.nrgenergy.com',
+    name: 'NRG Energy',
+    verified: true,
+    locale: 'en_US',
+    keywords: ['solar', 'storage'],
+  },
+
 ];
 
 export const ASHBY_COMPANIES: AtsCompanySeed[] = [
@@ -199,6 +267,11 @@ export const ASHBY_COMPANIES: AtsCompanySeed[] = [
   { slug: 'base-power', name: 'Base Power', verified: true },
   { slug: 'tar', name: 'TAR', verified: true },
   { slug: 'rowan', name: 'Rowan Digital Infrastructure', verified: true },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  { slug: 'aurorasolar', name: 'Aurora Solar', verified: true, includeJobTitles: ['Staff Analytics Engineer'] },
+  { slug: 'inductive-automation-llc', name: 'Inductive Automation', verified: true, includeJobTitles: ['Sales Operations Lead - Strategic Initiatives'] },
+
 ];
 
 export const SMARTRECRUITERS_COMPANIES: AtsCompanySeed[] = [
@@ -257,6 +330,11 @@ export const LEVER_COMPANIES: AtsCompanySeed[] = [
 
   // September 17, 2026 — active taxonomy-matching board.
   { slug: 'primee', name: 'Prime Electric', verified: true },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  { slug: 'omnidian', name: 'Omnidian', verified: true, includeJobTitles: ['Portfolio Operations Manager, Commercial'] },
+  { slug: 'solestial', name: 'Solestial', verified: true },
+
 ];
 
 // Workable — apply.workable.com/<slug>
@@ -277,6 +355,14 @@ export const WORKABLE_COMPANIES: AtsCompanySeed[] = [
 
   // September 2026 batch 3.
   { slug: 'solamerica-energy', name: 'SolAmerica Energy', verified: true },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  { slug: 'nautilus-solar-energy', name: 'Nautilus Solar Energy', verified: true, includeJobTitles: ['Portfolio Operations Analyst', 'Capital Markets Associate'] },
+  { slug: 'urban-grid-solar-projects', name: 'Urban Grid', verified: true },
+  { slug: 'emc-renewables', name: 'EMC Renewables', verified: true, includeJobTitles: ['Substation Engineer'] },
+  { slug: 'terabase-energy', name: 'Terabase Energy', verified: true, includeJobTitles: ['Sr. Controls Engineer - OT SCADA Projects'] },
+  { slug: 'solar-energy-solutions', name: 'Solar Energy Solutions', verified: true },
+
 ];
 
 // Pinpoint — app.pinpoint.hire/<slug>
@@ -306,6 +392,10 @@ export const JOBVITE_COMPANIES: AtsCompanySeed[] = [
   // September 16, 2026 — requested source retained disabled until the
   // current Jobvite tenant is re-confirmed.
   { slug: 'epma', name: 'EPMA', verified: false },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  { slug: 'freedomforever', name: 'Freedom Forever', verified: true },
+
 ];
 
 // Oracle Recruiting Cloud — public Candidate Experience portal.
@@ -518,6 +608,24 @@ export const PAYLOCITY_COMPANIES: PaylocityCompanySeed[] = [
     name: 'Icon Power',
     verified: true,
   },
+
+  // September 18, 2026 — 30-company US active-solar ATS batch.
+  {
+    boardUrl: 'https://recruiting.paylocity.com/recruiting/jobs/All/c8c3eee1-dc50-471c-976c-a5a3aa36568c/Perch-Energy',
+    name: 'Perch Energy',
+    verified: true,
+  },
+  {
+    boardUrl: 'https://recruiting.paylocity.com/Recruiting/Jobs/All/08eac160-0a1e-4180-8eb0-8381757e63b5',
+    name: 'GRID Alternatives',
+    verified: true,
+  },
+  {
+    boardUrl: 'https://recruiting.paylocity.com/Recruiting/Jobs/All/4983d57a-d944-4691-a600-8d7a4ee2b26f',
+    name: 'Runergy USA',
+    verified: true,
+  },
+
 ];
 
 // Paycom — public client career portal rendered by the current Paycom SPA.
@@ -669,7 +777,7 @@ export const WORKDAY_COMPANIES: WorkdayCompanySeed[] = [
   { tenant: 'illuminateusa', host: 'wd503', site: 'Illuminate_Careers', name: 'Illuminate USA', verified: true },
 
   // Existing candidates not yet safe to enable.
-  { tenant: 'aes', host: 'wd1', site: 'AES_US', name: 'AES', verified: false },
+  { tenant: 'aes', host: 'wd1', site: 'AES_US', name: 'AES Clean Energy', verified: false },
   { tenant: 'igsenergy', host: 'wd1', site: 'IGS', name: 'IGS Energy', verified: false },
   { tenant: 'faithtechnologies', host: 'wd1', site: 'FTI', name: 'Faith Technologies', verified: false },
   { tenant: 'rosendin', host: 'wd1', site: 'Careers', name: 'Rosendin Electric', verified: false },
@@ -838,6 +946,16 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'r2contractors',
     'esvolta',
     'newedgepower',
+    // September 18, 2026 — 30-company US active-solar batch
+    'cleanchoiceenergy',
+    'sunkeepersolar',
+    'inmansolarllc',
+    'sunstrongmanagementllc',
+    'wattch',
+    'kwhanalytics',
+    'sungagefinancial',
+    'keycaptureenergyllc',
+
   ],
 
   breezy: [
@@ -869,6 +987,10 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'elevate-infrastructure',
     'alderbuck-energy',
     'stem-inc',
+    // September 18, 2026 — 30-company US active-solar batch
+    'bluewave',
+    'raptor-maps-inc',
+
   ],
 
   smartrecruiters: [
@@ -889,6 +1011,9 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'resgroup',
     'mccarthy-building-co',
     'canadian-solar',
+    // September 18, 2026 — 30-company US active-solar batch
+    'freedomforever',
+
   ],
 
   lever: [
@@ -902,10 +1027,21 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'EnergyVault',
     'highlandfleets-2',
     'stanleygroup',
+    // September 18, 2026 — 30-company US active-solar batch
+    'omnidian',
+    'solestial',
+
   ],
 
   workable: [
     'solamerica-energy',
+    // September 18, 2026 — 30-company US active-solar batch
+    'nautilus-solar-energy',
+    'urban-grid-solar-projects',
+    'emc-renewables',
+    'terabase-energy',
+    'solar-energy-solutions',
+
   ],
 
   paylocity: [
@@ -937,6 +1073,11 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'https://recruiting.paylocity.com/Recruiting/Jobs/All/3bd0602e-cc8c-4df1-8dac-c8a4e2c52178',
     'https://recruiting.paylocity.com/Recruiting/Jobs/All/8621004a-7a46-404c-aa9a-8b2bd393de65',
     'https://recruiting.paylocity.com/Recruiting/Jobs/All/c6dfa158-1325-4b9a-8a3f-4eb66d4dc903',
+    // September 18, 2026 — 30-company US active-solar batch
+    'https://recruiting.paylocity.com/recruiting/jobs/All/c8c3eee1-dc50-471c-976c-a5a3aa36568c/Perch-Energy',
+    'https://recruiting.paylocity.com/Recruiting/Jobs/All/08eac160-0a1e-4180-8eb0-8381757e63b5',
+    'https://recruiting.paylocity.com/Recruiting/Jobs/All/4983d57a-d944-4691-a600-8d7a4ee2b26f',
+
   ],
 
   greenhouse: [
@@ -980,6 +1121,10 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'base-power',
     'tar',
     'rowan',
+    // September 18, 2026 — 30-company US active-solar batch
+    'aurorasolar',
+    'inductive-automation-llc',
+
   ],
 
   icims: [
@@ -1010,6 +1155,15 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
     'https://careers.lightsourcebp.com',
     'https://careers.bv.com',
     'https://jobs.kochcareers.com',
+    // September 18, 2026 — 30-company US active-solar batch
+    'https://careers.pcl.com',
+    'https://kiewitcareers.kiewit.com',
+    'https://careers.dominionenergy.com',
+    'https://jobs.entergy.com',
+    'https://careers.aps.com',
+    'https://careers.pge.com',
+    'https://careers.nrgenergy.com',
+
   ],
 
   oraclecloud: [
@@ -1026,6 +1180,59 @@ export const NEW_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly strin
 
   paycom: ['FEA94D4A9CE8BC5311CB1583A27A2B8D'],
   saashr: ['https://secure10.saashr.com/ta/6186826.careers?CareersSearch=&lang=en-US'],
+};
+
+
+/** The 30 ATS companies added on September 18, 2026 after active US solar-job verification. */
+export const NEW_30_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly string[]>> = {
+  jazzhr: [
+    'cleanchoiceenergy',
+    'sunkeepersolar',
+    'inmansolarllc',
+    'sunstrongmanagementllc',
+    'wattch',
+    'kwhanalytics',
+    'sungagefinancial',
+    'keycaptureenergyllc',
+  ],
+  rippling: ['bluewave', 'raptor-maps-inc'],
+  successfactors: [
+    'https://careers.pcl.com',
+    'https://kiewitcareers.kiewit.com',
+    'https://careers.dominionenergy.com',
+    'https://jobs.entergy.com',
+    'https://careers.aps.com',
+    'https://careers.pge.com',
+    'https://careers.nrgenergy.com',
+  ],
+  ashby: ['aurorasolar', 'inductive-automation-llc'],
+  lever: ['omnidian', 'solestial'],
+  workable: [
+    'nautilus-solar-energy',
+    'urban-grid-solar-projects',
+    'emc-renewables',
+    'terabase-energy',
+    'solar-energy-solutions',
+  ],
+  jobvite: ['freedomforever'],
+  paylocity: [
+    'https://recruiting.paylocity.com/recruiting/jobs/All/c8c3eee1-dc50-471c-976c-a5a3aa36568c/Perch-Energy',
+    'https://recruiting.paylocity.com/Recruiting/Jobs/All/08eac160-0a1e-4180-8eb0-8381757e63b5',
+    'https://recruiting.paylocity.com/Recruiting/Jobs/All/4983d57a-d944-4691-a600-8d7a4ee2b26f',
+  ],
+};
+
+/** Exact providers from the September 19, 2026 requested ATS batch. */
+export const NEW_ATS_2026_09_19_SOURCE_KEYS_BY_PROVIDER: Readonly<Record<string, readonly string[]>> = {
+  successfactors: ['https://jobs.nexteraenergy.com'],
+  'custom-scrape': ['www.tesla.com'],
+  greenhouse: ['onenergy', 'pearceservices'],
+  paylocity: [
+    'https://recruiting.paylocity.com/recruiting/jobs/All/76521e27-2487-44e7-9da3-015c68858b91/Terra--Gen-Operating-Company-LLC',
+  ],
+  workday: ['aes/AES_US'],
+  rippling: ['clean-energy-services-careers'],
+  jobvite: ['enphase-energy'],
 };
 
 /** The 34 ATS companies from the preceding September 2026 batch. */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { STATES } from "@/lib/usStates";
 import { STATE_RULES, type GenericQuestionId, type StateKey } from "@/lib/solarHoursRules";
 
@@ -26,6 +26,21 @@ type ResultData = {
   nextSteps: string[];
 };
 
+const DEFAULT_ACCENT = "#047857";
+
+function normalizeAccent(value?: string): string | null {
+  if (!value) return null;
+  const candidate = value.trim();
+  const withHash = candidate.startsWith("#") ? candidate : `#${candidate}`;
+  return /^#[0-9a-f]{6}$/i.test(withHash) ? withHash.toLowerCase() : null;
+}
+
+function accentTextColor(hex: string) {
+  const channels = [1, 3, 5].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16));
+  const luminance = (0.299 * channels[0] + 0.587 * channels[1] + 0.114 * channels[2]) / 255;
+  return luminance > 0.62 ? "#0f172a" : "#ffffff";
+}
+
 const ALL_STATE_OPTIONS = Object.entries(STATES)
   .map(([name, code]) => ({
     name,
@@ -33,6 +48,19 @@ const ALL_STATE_OPTIONS = Object.entries(STATES)
     credential: STATE_RULES[code as StateKey].credential,
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
+
+function resolveInitialState(value?: string): StateKey | "" {
+  if (!value) return "";
+
+  const normalized = value.trim().toLowerCase().replace(/[_\s]+/g, "-");
+  const match = ALL_STATE_OPTIONS.find(
+    (option) =>
+      option.code.toLowerCase() === normalized ||
+      option.name.toLowerCase().replace(/\s+/g, "-") === normalized
+  );
+
+  return match?.code ?? "";
+}
 
 const CA_CATEGORIES = [
   { key: "stock", label: "Stock room and material handling", cap: 300 },
@@ -103,7 +131,7 @@ function ProgressBar({
         </span>
       </div>
       <div className="h-2.5 overflow-hidden rounded-full bg-slate-200" aria-hidden="true">
-        <div className="h-full rounded-full bg-emerald-700" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-[var(--checker-accent)]" style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
@@ -146,16 +174,16 @@ function Choice<T extends string>({
       type="button"
       onClick={() => onChange(value)}
       aria-pressed={selected}
-      className={`w-full rounded-xl border px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 ${
+      className={`w-full rounded-xl border px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-[var(--checker-accent)] focus:ring-offset-2 ${
         selected
-          ? "border-emerald-700 bg-emerald-50"
+          ? "border-[var(--checker-accent)] bg-[var(--checker-accent-soft)]"
           : "border-slate-300 bg-white hover:border-slate-400"
       }`}
     >
       <span className="flex items-start gap-3">
         <span
           className={`mt-1 h-4 w-4 shrink-0 rounded-full border ${
-            selected ? "border-[5px] border-emerald-700 bg-white" : "border-slate-400 bg-white"
+            selected ? "border-[5px] border-[var(--checker-accent)] bg-white" : "border-slate-400 bg-white"
           }`}
         />
         <span>
@@ -211,7 +239,7 @@ function NumberInput({
           step={1}
           value={value || ""}
           onChange={(event) => onChange(clampNumber(event.target.value))}
-          className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-base tabular-nums text-slate-950 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+          className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-base tabular-nums text-slate-950 outline-none focus:border-[var(--checker-accent)] focus:ring-2 focus:ring-[var(--checker-accent-ring)]"
           placeholder="0"
         />
         <span className="text-sm text-slate-500">{suffix}</span>
@@ -247,7 +275,7 @@ function BackButton({ onClick, label }: { onClick: () => void; label: string }) 
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-800 transition hover:text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2"
+      className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--checker-accent)] transition hover:text-[var(--checker-accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--checker-accent)] focus:ring-offset-2"
     >
       <span aria-hidden="true">←</span>
       <span>{label}</span>
@@ -325,7 +353,7 @@ function Results({
       <button
         type="button"
         onClick={onReset}
-        className="text-sm font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-4 hover:text-emerald-950"
+        className="text-sm font-semibold text-[var(--checker-accent)] underline decoration-[var(--checker-accent)] underline-offset-4 hover:text-[var(--checker-accent-dark)]"
       >
         Check another work history
       </button>
@@ -389,7 +417,7 @@ function StateSearch({ onSelect }: { onSelect: (state: StateKey) => void }) {
           aria-hidden="true"
           viewBox="0 0 20 20"
           fill="none"
-          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+          className="pointer-events-none absolute left-4 top-7 h-5 w-5 -translate-y-1/2 text-slate-400"
         >
           <path
             d="m14.25 14.25 3.5 3.5M8.75 15.5a6.75 6.75 0 1 1 0-13.5 6.75 6.75 0 0 1 0 13.5Z"
@@ -437,14 +465,14 @@ function StateSearch({ onSelect }: { onSelect: (state: StateKey) => void }) {
               setOpen(false);
             }
           }}
-          className="w-full rounded-xl border border-slate-300 bg-white py-3.5 pl-12 pr-4 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+          className="w-full rounded-xl border border-slate-300 bg-white py-3.5 pl-12 pr-4 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[var(--checker-accent)] focus:ring-2 focus:ring-[var(--checker-accent-ring)]"
         />
 
         {open ? (
           <div
             id="solar-hours-state-options"
             role="listbox"
-            className="absolute z-20 mt-2 max-h-80 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg"
+            className="mt-2 max-h-80 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg"
           >
             {matches.length ? (
               matches.map((option, index) => (
@@ -457,18 +485,15 @@ function StateSearch({ onSelect }: { onSelect: (state: StateKey) => void }) {
                   onMouseDown={(event) => event.preventDefault()}
                   onMouseEnter={() => setActiveIndex(index)}
                   onClick={() => choose(option)}
-                  className={`flex w-full items-center justify-between gap-4 rounded-lg px-3.5 py-3 text-left transition ${
+                  className={`block w-full rounded-lg px-3.5 py-3 text-left transition ${
                     index === activeIndex ? "bg-slate-100" : "hover:bg-slate-50"
                   }`}
                 >
                   <span className="min-w-0">
                     <span className="block text-sm font-semibold text-slate-950">{option.name}</span>
-                    <span className="mt-0.5 block truncate text-xs text-slate-500">
+                    <span className="mt-0.5 block text-xs leading-5 text-slate-500">
                       {option.code} · {option.credential}
                     </span>
-                  </span>
-                  <span className="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800">
-                    Available
                   </span>
                 </button>
               ))
@@ -500,7 +525,7 @@ function OfficialSources({ state }: { state: StateKey }) {
               href={source.href}
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-semibold text-emerald-800 underline decoration-emerald-200 underline-offset-4 hover:text-emerald-950"
+              className="text-sm font-semibold text-[var(--checker-accent)] underline decoration-[var(--checker-accent)] underline-offset-4 hover:text-[var(--checker-accent-dark)]"
             >
               {source.label}
             </a>
@@ -512,8 +537,26 @@ function OfficialSources({ state }: { state: StateKey }) {
   );
 }
 
-export default function SolarHoursChecker() {
-  const [state, setState] = useState<StateKey | "">("");
+export default function SolarHoursChecker({
+  initialState,
+  stateOnly = false,
+  accent,
+}: {
+  initialState?: string;
+  stateOnly?: boolean;
+  accent?: string;
+}) {
+  const resolvedInitialState = resolveInitialState(initialState);
+  const isStateLocked = stateOnly && Boolean(resolvedInitialState);
+  const accentColor = normalizeAccent(accent) ?? DEFAULT_ACCENT;
+  const themeStyle = {
+    "--checker-accent": accentColor,
+    "--checker-on-accent": accentTextColor(accentColor),
+    "--checker-accent-soft": `color-mix(in srgb, ${accentColor} 12%, white)`,
+    "--checker-accent-ring": `color-mix(in srgb, ${accentColor} 22%, transparent)`,
+    "--checker-accent-dark": `color-mix(in srgb, ${accentColor} 82%, black)`,
+  } as CSSProperties;
+  const [state, setState] = useState<StateKey | "">(() => resolvedInitialState);
   const [showResult, setShowResult] = useState(false);
 
   // California
@@ -1268,7 +1311,7 @@ export default function SolarHoursChecker() {
   ]);
 
   return (
-    <section id="solar-hours-checker" className="scroll-mt-24">
+    <section id="solar-hours-checker" className="scroll-mt-24" style={themeStyle}>
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-200 bg-slate-50 px-4 py-4 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1321,9 +1364,11 @@ export default function SolarHoursChecker() {
             <div>
               <div className="mb-7 flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-6">
                 <div>
-                  <div className="mb-2">
-                    <BackButton onClick={() => setState("")} label="Back to state selection" />
-                  </div>
+                  {!isStateLocked ? (
+                    <div className="mb-2">
+                      <BackButton onClick={() => setState("")} label="Back to state selection" />
+                    </div>
+                  ) : null}
                   <h2 className="text-xl font-semibold text-slate-950">{STATE_RULES[state].name}</h2>
                   <p className="mt-1 text-sm text-slate-600">Checking: {STATE_RULES[state].credential}</p>
                 </div>
@@ -1485,7 +1530,7 @@ export default function SolarHoursChecker() {
                         type="date"
                         value={waExpiration}
                         onChange={(event) => setWaExpiration(event.target.value)}
-                        className="rounded-lg border border-slate-300 px-3 py-2.5 text-base text-slate-950 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+                        className="rounded-lg border border-slate-300 px-3 py-2.5 text-base text-slate-950 outline-none focus:border-[var(--checker-accent)] focus:ring-2 focus:ring-[var(--checker-accent-ring)]"
                       />
                     </Question>
                   ) : null}
@@ -1540,7 +1585,7 @@ export default function SolarHoursChecker() {
                         value={genericJurisdiction}
                         onChange={(event) => setGenericJurisdiction(event.target.value)}
                         placeholder="City or county"
-                        className="w-full max-w-xl rounded-lg border border-slate-300 px-3 py-2.5 text-base text-slate-950 outline-none placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+                        className="w-full max-w-xl rounded-lg border border-slate-300 px-3 py-2.5 text-base text-slate-950 outline-none placeholder:text-slate-400 focus:border-[var(--checker-accent)] focus:ring-2 focus:ring-[var(--checker-accent-ring)]"
                       />
                     </Question>
                   ) : null}
@@ -1617,7 +1662,7 @@ export default function SolarHoursChecker() {
                       document.getElementById("solar-hours-checker")?.scrollIntoView({ behavior: "smooth", block: "start" });
                     }, 0);
                   }}
-                  className="rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300"
+                  className="rounded-xl bg-[var(--checker-accent)] px-5 py-3 text-sm font-semibold text-[var(--checker-on-accent)] shadow-sm transition hover:bg-[var(--checker-accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--checker-accent)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-white"
                 >
                   Check my hours
                 </button>

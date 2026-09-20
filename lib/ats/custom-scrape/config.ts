@@ -5,6 +5,14 @@ import type { CustomScrapeSeed } from './types';
  * omitted selectors intentionally use the generic discovery/detail heuristics.
  */
 export const CUSTOM_SCRAPE_COMPANIES: CustomScrapeSeed[] = [
+  {
+    provider: 'custom-scrape',
+    companyName: 'Tesla Energy',
+    careersUrl: 'https://www.tesla.com/careers/search/',
+    domain: 'www.tesla.com',
+    verified: true,
+    status: 'active',
+  },
   
   {
     provider: 'custom-scrape',

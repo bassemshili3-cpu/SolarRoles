@@ -5,10 +5,8 @@ import { getCanonicalJobSlug } from "@/lib/slugify";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
 import { JobDetail } from "@/lib/jobDetail";
 import { CERTIFICATIONS } from "@/app/certifications/[slug]/certifications-data"
-import { STATES, SLUG_TO_STATE } from "@/lib/usStates";
 
 const BASE_URL = 'https://www.solarroles.com'
-const MIN_JOBS_THRESHOLD = 20 // doit rester synchro avec app/data/states/[state]/page.tsx
 
 
 const ATS_SOURCES = [
@@ -37,21 +35,6 @@ const priorityLandingPages: string[] = [
 const certificationPages: string[] = CERTIFICATIONS.map(
   c => `/certifications/${c.slug}`
 )
-
-// ── Paycheck calculator pages ────────────────────────────────
-const paycheckPages: string[] = [
-  '/paycheck-calculator',
-  '/paycheck-calculator/california',
-  '/paycheck-calculator/illinois',
-  '/paycheck-calculator/ohio',
-  '/paycheck-calculator/michigan',
-  '/paycheck-calculator/washington',
-  '/paycheck-calculator/maryland',
-  '/paycheck-calculator/new-york',
-  '/paycheck-calculator/virginia',
-  '/paycheck-calculator/nevada',
-  '/paycheck-calculator/utah',
-]
 
 // ── Data Center pages ────────────────────────────────────────
 const dataPages: string[] = [
@@ -124,7 +107,6 @@ const sections: {
 }[] = [
   { routes: priorityLandingPages, changeFrequency: "monthly", priority: 0.8 },
   { routes: certificationPages, changeFrequency: "monthly", priority: 0.8 },
-  { routes: paycheckPages, changeFrequency: "monthly", priority: 0.6 },
   { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
   { routes: dataSalaryPages, changeFrequency: "weekly", priority: 0.8 },
   { routes: resourcePages, changeFrequency: "monthly", priority: 0.7 },
@@ -151,35 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // ── State pages — seulement celles au-dessus du seuil ─────
-  // Doit matcher exactement la condition dans
-  // app/data/states/[state]/page.tsx (notFound() runtime).
-  const stateSlugs = Object.keys(SLUG_TO_STATE)
-  try {
-    const stateCounts = await Promise.all(
-      stateSlugs.map(async (slug) => {
-        const stateName = SLUG_TO_STATE[slug]
-        const stateCode = STATES[stateName]
-        const count = await prisma.job.count({
-          where: { active: true, addressRegion: { in: [stateName, stateCode] } },
-        })
-        return { slug, count }
-      })
-    )
-    for (const { slug, count } of stateCounts) {
-      if (count < MIN_JOBS_THRESHOLD) continue
-      entries.push({
-        url: `${BASE_URL}/data/states/${slug}`,
-        changeFrequency: "weekly",
-        priority: 0.8,
-      })
-    }
-  } catch (err) {
-    console.error("sitemap state count error:", err)
-    // En cas d'échec, on n'ajoute aucune state page plutôt que de risquer
-    // de lister des URLs sous le seuil.
-  }
-
+  // State data pages are intentionally excluded from the sitemap.
 
   // ── Jobs "own" (indexables) ──────────────────────────────
 const oneMonthAgo = new Date(Date.now() - 30 * 86_400_000)

@@ -1,0 +1,71 @@
+{
+  "state": "NH",
+  "sourceFacilities": 1,
+  "modeledFacilities": 1,
+  "unableToModelFacilities": 0,
+  "currentDcGW": 0.003,
+  "modeledDcGW": 0.003,
+  "additionalDcGW": 0,
+  "headroomPct": 0.24,
+  "byAxis": [
+    {
+      "label": "Fixed tilt",
+      "plants": 1,
+      "currentDcMW": 3,
+      "modeledDcMW": 3.007,
+      "additionalDcMW": 0.007,
+      "headroomPct": 0.24
+    }
+  ],
+  "byVintage": [
+    {
+      "label": "2015–2019",
+      "plants": 1,
+      "currentDcMW": 3,
+      "modeledDcMW": 3.007,
+      "additionalDcMW": 0.007,
+      "headroomPct": 0.24
+    }
+  ],
+  "unableToModelReasons": {},
+  "topPlants": [
+    {
+      "id": "404204",
+      "name": "Merrimack Solar Farm, LLC",
+      "state": "NH",
+      "county": "Hillsborough",
+      "year": 2019,
+      "axis": "fixed",
+      "latitude": 42.8114,
+      "longitude": -71.5005,
+      "currentDcMW": 3,
+      "modeledDcMW": 3.0072,
+      "additionalDcMW": 0.0072,
+      "headroomPct": 0.24,
+      "footprintAcres": 8.941,
+      "packedGcrPct": 43.027,
+      "rowPitchM": 10.335,
+      "moduleCount": 5012
+    }
+  ],
+  "plants": [
+    {
+      "id": "404204",
+      "name": "Merrimack Solar Farm, LLC",
+      "state": "NH",
+      "county": "Hillsborough",
+      "year": 2019,
+      "axis": "fixed",
+      "latitude": 42.8114,
+      "longitude": -71.5005,
+      "currentDcMW": 3,
+      "modeledDcMW": 3.0072,
+      "additionalDcMW": 0.0072,
+      "headroomPct": 0.24,
+      "footprintAcres": 8.941,
+      "packedGcrPct": 43.027,
+      "rowPitchM": 10.335,
+      "moduleCount": 5012
+    }
+  ]
+}

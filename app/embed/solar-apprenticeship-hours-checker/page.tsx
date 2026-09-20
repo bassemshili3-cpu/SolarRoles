@@ -9,11 +9,27 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function SolarApprenticeshipHoursCheckerEmbedPage() {
+export default async function SolarApprenticeshipHoursCheckerEmbedPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    state?: string | string[];
+    state_only?: string | string[];
+    accent?: string | string[];
+  }>;
+}) {
+  const params = await searchParams
+  const initialState = Array.isArray(params.state) ? params.state[0] : params.state
+  const stateOnlyParam = Array.isArray(params.state_only)
+    ? params.state_only[0]
+    : params.state_only
+  const stateOnly = stateOnlyParam === '1' || stateOnlyParam?.toLowerCase() === 'true'
+  const accent = Array.isArray(params.accent) ? params.accent[0] : params.accent
+
   return (
     <main className="min-h-screen min-w-0 overflow-x-hidden bg-white p-2 text-slate-950 sm:p-4">
       <EmbedHeightReporter />
-      <SolarHoursChecker />
+      <SolarHoursChecker initialState={initialState} stateOnly={stateOnly} accent={accent} />
       <p className="mt-3 text-right text-[11px] text-slate-500">
         <Link
           href="/tools/solar-apprenticeship-hours-checker"

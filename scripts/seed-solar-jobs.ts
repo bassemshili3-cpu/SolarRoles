@@ -7,8 +7,10 @@
  * Usage:
  *   npm run seed:new-sources       # seed only the newly added companies
  *   npm run dry-run:new-sources    # fetch and classify them without DB writes
+ *   npm run seed:new-30-sources    # seed only the latest group of 30 companies
  *   npm run seed:new-34-sources    # seed only the latest group of 34 companies
  *   npm run seed:new-98-sources    # seed only the latest group of 98 companies
+ *   npm run seed:new-ats-2026-09-19 # seed only sources added from the September 19 request
  * Custom scrape only: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts custom-scrape
  */ 
 import { PrismaClient } from '@prisma/client';
@@ -30,11 +32,14 @@ import {
   PAYCOM_COMPANIES,
   JAZZHR_COMPANIES,
   BREEZY_COMPANIES,
+  WORKABLE_COMPANIES,
   HRMDIRECT_COMPANIES,
   SAASHR_COMPANIES,
   NEW_SOURCE_KEYS_BY_PROVIDER,
+  NEW_30_SOURCE_KEYS_BY_PROVIDER,
   NEW_34_SOURCE_KEYS_BY_PROVIDER,
   NEW_98_SOURCE_KEYS_BY_PROVIDER,
+  NEW_ATS_2026_09_19_SOURCE_KEYS_BY_PROVIDER,
 } from '../lib/ats/company-seed';
 import { CUSTOM_SCRAPE_COMPANIES } from '../lib/ats/custom-scrape/config';
 import { fetchLeverJobs, type NormalizedJob } from '../lib/ats/lever';
@@ -54,6 +59,7 @@ import { fetchPaylocityJobs } from '../lib/ats/paylocity';
 import { fetchPaycomJobs } from '../lib/ats/paycom';
 import { fetchJazzHrJobs } from '../lib/ats/jazzhr';
 import { fetchBreezyJobs } from '../lib/ats/breezy';
+import { fetchWorkableJobs } from '../lib/ats/workable';
 import { fetchHrmDirectJobs } from '../lib/ats/hrmdirect';
 import { fetchSaaShrJobs } from '../lib/ats/saashr';
 import { isUSJob } from '../lib/ats/geo';
@@ -86,6 +92,7 @@ function provider<T>(
 const PROVIDERS: AtsProvider<any>[] = [
   provider('jazzhr',          JAZZHR_COMPANIES,          fetchJazzHrJobs,          (c) => c.slug),
   provider('breezy',          BREEZY_COMPANIES,          fetchBreezyJobs,          (c) => c.slug),
+  provider('workable',        WORKABLE_COMPANIES,        fetchWorkableJobs,        (c) => c.slug),
   provider('lever',           LEVER_COMPANIES,           fetchLeverJobs,           (c) => c.slug),
   provider('ashby',           ASHBY_COMPANIES,           fetchAshbyJobs,           (c) => c.slug),
   provider('smartrecruiters', SMARTRECRUITERS_COMPANIES, fetchSmartRecruitersJobs, (c) => c.slug),
@@ -237,16 +244,20 @@ async function main() {
 
   const providers = requestedProvider === 'new-sources'
     ? selectSourceProviders(NEW_SOURCE_KEYS_BY_PROVIDER, 'New-source')
+    : requestedProvider === 'new-30-sources'
+      ? selectSourceProviders(NEW_30_SOURCE_KEYS_BY_PROVIDER, 'New-30-source')
     : requestedProvider === 'new-34-sources'
       ? selectSourceProviders(NEW_34_SOURCE_KEYS_BY_PROVIDER, 'New-34-source')
     : requestedProvider === 'new-98-sources'
       ? selectSourceProviders(NEW_98_SOURCE_KEYS_BY_PROVIDER, 'New-98-source')
+    : requestedProvider === 'new-ats-2026-09-19'
+      ? selectSourceProviders(NEW_ATS_2026_09_19_SOURCE_KEYS_BY_PROVIDER, 'New-ATS-2026-09-19')
     : requestedProvider
       ? PROVIDERS.filter((provider) => provider.name === requestedProvider)
       : PROVIDERS.filter((provider) => provider.name !== 'custom-scrape');
 
   if (requestedProvider && providers.length === 0) {
-    throw new Error(`Unknown provider "${requestedProvider}". Available providers: new-sources, new-34-sources, new-98-sources, ${PROVIDERS.map((provider) => provider.name).join(', ')}`);
+    throw new Error(`Unknown provider "${requestedProvider}". Available providers: new-sources, new-30-sources, new-34-sources, new-98-sources, new-ats-2026-09-19, ${PROVIDERS.map((provider) => provider.name).join(', ')}`);
   }
 
   for (const provider of providers) {

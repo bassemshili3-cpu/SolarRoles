@@ -13,6 +13,10 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/jobs/employer-',
         disallow: ['/api/', '/auth/', '/admin/'],
       },
+      {
+        userAgent: 'GPTBot',
+        disallow: '/',
+      },
     ],
     sitemap: ['https://www.solarroles.com/sitemap.xml'],
   }

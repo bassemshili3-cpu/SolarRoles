@@ -1,0 +1,103 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "case_id": 900001,
+        "p_name": "Synthetic Fixed-Tilt Example",
+        "p_state": "AZ",
+        "p_county": "Example",
+        "p_year": 2012,
+        "p_area": 40000,
+        "p_dig_conf": 4,
+        "p_sys_type": "ground",
+        "p_axis": "fixed-tilt",
+        "p_azimuth": 180,
+        "p_tilt": 25,
+        "p_cap_dc": 3.0,
+        "p_cap_ac": 2.4,
+        "p_agrivolt": "non-agrivoltaic",
+        "p_zscore": 0.1,
+        "ylat": 33.45,
+        "xlong": -112.07
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -112.07107,
+              33.4491
+            ],
+            [
+              -112.06893,
+              33.4491
+            ],
+            [
+              -112.06893,
+              33.4509
+            ],
+            [
+              -112.07107,
+              33.4509
+            ],
+            [
+              -112.07107,
+              33.4491
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "case_id": 900002,
+        "p_name": "Synthetic Tracker Example",
+        "p_state": "TX",
+        "p_county": "Example",
+        "p_year": 2015,
+        "p_area": 50000,
+        "p_dig_conf": 4,
+        "p_sys_type": "ground",
+        "p_axis": "single-axis",
+        "p_azimuth": 180,
+        "p_tilt": 0,
+        "p_cap_dc": 2.5,
+        "p_cap_ac": 2.0,
+        "p_agrivolt": "non-agrivoltaic",
+        "p_zscore": 0.2,
+        "ylat": 31.0,
+        "xlong": -100.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -100.00115,
+              30.999
+            ],
+            [
+              -99.99885,
+              30.999
+            ],
+            [
+              -99.99885,
+              31.001
+            ],
+            [
+              -100.00115,
+              31.001
+            ],
+            [
+              -100.00115,
+              30.999
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

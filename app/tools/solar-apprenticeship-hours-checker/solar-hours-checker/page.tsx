@@ -36,7 +36,23 @@ const jsonLd = {
     "An informational screening tool that compares reported solar work experience with selected electrician licensing and apprenticeship rules published by state agencies.",
 };
 
-export default function SolarApprenticeshipHoursCheckerPage() {
+export default async function SolarApprenticeshipHoursCheckerPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    state?: string | string[];
+    state_only?: string | string[];
+    accent?: string | string[];
+  }>;
+}) {
+  const params = await searchParams;
+  const initialState = Array.isArray(params.state) ? params.state[0] : params.state;
+  const stateOnlyParam = Array.isArray(params.state_only)
+    ? params.state_only[0]
+    : params.state_only;
+  const stateOnly = stateOnlyParam === "1" || stateOnlyParam?.toLowerCase() === "true";
+  const accent = Array.isArray(params.accent) ? params.accent[0] : params.accent;
+
   return (
     <main className="bg-white">
       <script
@@ -80,7 +96,7 @@ export default function SolarApprenticeshipHoursCheckerPage() {
           </div>
         </header>
 
-        <SolarHoursChecker />
+        <SolarHoursChecker initialState={initialState} stateOnly={stateOnly} accent={accent} />
 
         <EmbedCode />
 

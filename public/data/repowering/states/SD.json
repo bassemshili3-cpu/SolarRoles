@@ -1,0 +1,159 @@
+{
+  "state": "SD",
+  "sourceFacilities": 3,
+  "modeledFacilities": 3,
+  "unableToModelFacilities": 0,
+  "currentDcGW": 0.2282,
+  "modeledDcGW": 0.2883,
+  "additionalDcGW": 0.0601,
+  "headroomPct": 26.33,
+  "byAxis": [
+    {
+      "label": "Single-axis tracker",
+      "plants": 1,
+      "currentDcMW": 128,
+      "modeledDcMW": 199.793,
+      "additionalDcMW": 71.793,
+      "headroomPct": 56.088
+    },
+    {
+      "label": "Fixed tilt",
+      "plants": 2,
+      "currentDcMW": 100.2,
+      "modeledDcMW": 88.488,
+      "additionalDcMW": -11.712,
+      "headroomPct": -11.689
+    }
+  ],
+  "byVintage": [
+    {
+      "label": "2020 or later",
+      "plants": 2,
+      "currentDcMW": 226.9,
+      "modeledDcMW": 286.558,
+      "additionalDcMW": 59.658,
+      "headroomPct": 26.292
+    },
+    {
+      "label": "2015–2019",
+      "plants": 1,
+      "currentDcMW": 1.3,
+      "modeledDcMW": 1.723,
+      "additionalDcMW": 0.423,
+      "headroomPct": 32.554
+    }
+  ],
+  "unableToModelReasons": {},
+  "topPlants": [
+    {
+      "id": "406413",
+      "name": "Wild Springs",
+      "state": "SD",
+      "county": "Pennington",
+      "year": 2024,
+      "axis": "tracker",
+      "latitude": 44.0718,
+      "longitude": -102.8348,
+      "currentDcMW": 128,
+      "modeledDcMW": 199.7928,
+      "additionalDcMW": 71.7928,
+      "headroomPct": 56.088,
+      "footprintAcres": 744.303,
+      "packedGcrPct": 34.341,
+      "rowPitchM": 13.417,
+      "moduleCount": 332988
+    },
+    {
+      "id": "401871",
+      "name": "Pierre Solar",
+      "state": "SD",
+      "county": "Hughes",
+      "year": 2016,
+      "axis": "fixed",
+      "latitude": 44.3887,
+      "longitude": -100.3071,
+      "currentDcMW": 1.3,
+      "modeledDcMW": 1.7232,
+      "additionalDcMW": 0.4232,
+      "headroomPct": 32.554,
+      "footprintAcres": 6.414,
+      "packedGcrPct": 34.368,
+      "rowPitchM": 13.68,
+      "moduleCount": 2872
+    },
+    {
+      "id": "405704",
+      "name": "Fall River Solar, LLC",
+      "state": "SD",
+      "county": "Fall River",
+      "year": 2023,
+      "axis": "fixed",
+      "latitude": 43.1551,
+      "longitude": -103.3397,
+      "currentDcMW": 98.9,
+      "modeledDcMW": 86.7648,
+      "additionalDcMW": -12.1352,
+      "headroomPct": -12.27,
+      "footprintAcres": 398.058,
+      "packedGcrPct": 27.886,
+      "rowPitchM": 16.711,
+      "moduleCount": 144608
+    }
+  ],
+  "plants": [
+    {
+      "id": "406413",
+      "name": "Wild Springs",
+      "state": "SD",
+      "county": "Pennington",
+      "year": 2024,
+      "axis": "tracker",
+      "latitude": 44.0718,
+      "longitude": -102.8348,
+      "currentDcMW": 128,
+      "modeledDcMW": 199.7928,
+      "additionalDcMW": 71.7928,
+      "headroomPct": 56.088,
+      "footprintAcres": 744.303,
+      "packedGcrPct": 34.341,
+      "rowPitchM": 13.417,
+      "moduleCount": 332988
+    },
+    {
+      "id": "401871",
+      "name": "Pierre Solar",
+      "state": "SD",
+      "county": "Hughes",
+      "year": 2016,
+      "axis": "fixed",
+      "latitude": 44.3887,
+      "longitude": -100.3071,
+      "currentDcMW": 1.3,
+      "modeledDcMW": 1.7232,
+      "additionalDcMW": 0.4232,
+      "headroomPct": 32.554,
+      "footprintAcres": 6.414,
+      "packedGcrPct": 34.368,
+      "rowPitchM": 13.68,
+      "moduleCount": 2872
+    },
+    {
+      "id": "405704",
+      "name": "Fall River Solar, LLC",
+      "state": "SD",
+      "county": "Fall River",
+      "year": 2023,
+      "axis": "fixed",
+      "latitude": 43.1551,
+      "longitude": -103.3397,
+      "currentDcMW": 98.9,
+      "modeledDcMW": 86.7648,
+      "additionalDcMW": -12.1352,
+      "headroomPct": -12.27,
+      "footprintAcres": 398.058,
+      "packedGcrPct": 27.886,
+      "rowPitchM": 16.711,
+      "moduleCount": 144608
+    }
+  ]
+}

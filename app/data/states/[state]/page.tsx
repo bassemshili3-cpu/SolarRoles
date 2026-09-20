@@ -80,6 +80,7 @@ export async function generateMetadata(
     description: `How much do Solar Photovoltaic Installers and Lead Solar Installers earn in ${stateName}? Live salary data, top hiring companies, and open listings. Updated daily.`,
     keywords: `${stateName} solar installer salary, ${stateName} solar jobs, solar photovoltaic installer ${stateName}, lead solar installer ${stateName}, ${stateName} solar job market 2026`,
     alternates: { canonical: `https://www.solarroles.com/data/states/${slug}` },
+    robots: { index: false, follow: false },
   }
 }
 

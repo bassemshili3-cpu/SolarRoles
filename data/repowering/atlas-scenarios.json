@@ -1,0 +1,41 @@
+{
+  "module": {
+    "powerW": 600,
+    "lengthM": 2.384,
+    "widthM": 1.303,
+    "orientation": "portrait"
+  },
+  "layout": {
+    "modulesAcross": 2,
+    "gapCrossM": 0.02,
+    "gapAlongM": 0.02,
+    "phaseSteps": 4,
+    "stripSampleCount": 5,
+    "maxRows": 50000,
+    "referenceDcAcRatio": 1.32,
+    "useExistingFixedTilt": true,
+    "useExistingFixedAzimuth": true,
+    "fixedFallbackAzimuthDeg": 180,
+    "trackerRowAzimuthDeg": 0
+  },
+  "scenarios": {
+    "conservative": {
+      "boundaryClearanceM": 2.0,
+      "fixedDesignSolarTime": 9.0,
+      "fixedMinEdgeGapM": 1.0,
+      "trackerTargetGcr": 0.30
+    },
+    "reference": {
+      "boundaryClearanceM": 1.0,
+      "fixedDesignSolarTime": 9.0,
+      "fixedMinEdgeGapM": 0.5,
+      "trackerTargetGcr": 0.35
+    },
+    "dense": {
+      "boundaryClearanceM": 0.5,
+      "fixedDesignSolarTime": 10.0,
+      "fixedMinEdgeGapM": 0.25,
+      "trackerTargetGcr": 0.40
+    }
+  }
+}

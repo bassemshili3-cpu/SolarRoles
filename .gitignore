@@ -20,3 +20,7 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# Solar repowering batch artifacts
+data/repowering/uspvdb.geojson
+data/repowering/output/

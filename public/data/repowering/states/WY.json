@@ -1,0 +1,115 @@
+{
+  "state": "WY",
+  "sourceFacilities": 2,
+  "modeledFacilities": 2,
+  "unableToModelFacilities": 0,
+  "currentDcGW": 0.248,
+  "modeledDcGW": 0.3157,
+  "additionalDcGW": 0.0677,
+  "headroomPct": 27.29,
+  "byAxis": [
+    {
+      "label": "Single-axis tracker",
+      "plants": 2,
+      "currentDcMW": 248,
+      "modeledDcMW": 315.679,
+      "additionalDcMW": 67.679,
+      "headroomPct": 27.29
+    }
+  ],
+  "byVintage": [
+    {
+      "label": "2020 or later",
+      "plants": 1,
+      "currentDcMW": 150,
+      "modeledDcMW": 201.504,
+      "additionalDcMW": 51.504,
+      "headroomPct": 34.336
+    },
+    {
+      "label": "2015–2019",
+      "plants": 1,
+      "currentDcMW": 98,
+      "modeledDcMW": 114.175,
+      "additionalDcMW": 16.175,
+      "headroomPct": 16.505
+    }
+  ],
+  "unableToModelReasons": {},
+  "topPlants": [
+    {
+      "id": "406468",
+      "name": "South Cheyenne Solar",
+      "state": "WY",
+      "county": "Laramie",
+      "year": 2024,
+      "axis": "tracker",
+      "latitude": 41.0166,
+      "longitude": -104.8003,
+      "currentDcMW": 150,
+      "modeledDcMW": 201.504,
+      "additionalDcMW": 51.504,
+      "headroomPct": 34.336,
+      "footprintAcres": 742.497,
+      "packedGcrPct": 34.719,
+      "rowPitchM": 13.417,
+      "moduleCount": 335840
+    },
+    {
+      "id": "402305",
+      "name": "Sweetwater Solar",
+      "state": "WY",
+      "county": "Sweetwater",
+      "year": 2018,
+      "axis": "tracker",
+      "latitude": 41.627,
+      "longitude": -109.6828,
+      "currentDcMW": 98,
+      "modeledDcMW": 114.1752,
+      "additionalDcMW": 16.1752,
+      "headroomPct": 16.505,
+      "footprintAcres": 423.101,
+      "packedGcrPct": 34.523,
+      "rowPitchM": 13.417,
+      "moduleCount": 190292
+    }
+  ],
+  "plants": [
+    {
+      "id": "406468",
+      "name": "South Cheyenne Solar",
+      "state": "WY",
+      "county": "Laramie",
+      "year": 2024,
+      "axis": "tracker",
+      "latitude": 41.0166,
+      "longitude": -104.8003,
+      "currentDcMW": 150,
+      "modeledDcMW": 201.504,
+      "additionalDcMW": 51.504,
+      "headroomPct": 34.336,
+      "footprintAcres": 742.497,
+      "packedGcrPct": 34.719,
+      "rowPitchM": 13.417,
+      "moduleCount": 335840
+    },
+    {
+      "id": "402305",
+      "name": "Sweetwater Solar",
+      "state": "WY",
+      "county": "Sweetwater",
+      "year": 2018,
+      "axis": "tracker",
+      "latitude": 41.627,
+      "longitude": -109.6828,
+      "currentDcMW": 98,
+      "modeledDcMW": 114.1752,
+      "additionalDcMW": 16.1752,
+      "headroomPct": 16.505,
+      "footprintAcres": 423.101,
+      "packedGcrPct": 34.523,
+      "rowPitchM": 13.417,
+      "moduleCount": 190292
+    }
+  ]
+}
