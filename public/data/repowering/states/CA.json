@@ -35,7 +35,7 @@
   ],
   "byVintage": [
     {
-      "label": "2020 or later",
+      "label": "2020–2026",
       "plants": 305,
       "currentDcMW": 12697.1,
       "modeledDcMW": 17180.404,
@@ -59,20 +59,12 @@
       "headroomPct": 50.044
     },
     {
-      "label": "2005–2009",
-      "plants": 31,
-      "currentDcMW": 67.5,
-      "modeledDcMW": 128.747,
-      "additionalDcMW": 61.247,
-      "headroomPct": 90.736
-    },
-    {
-      "label": "Before 2005",
-      "plants": 2,
-      "currentDcMW": 109.2,
-      "modeledDcMW": 706.304,
-      "additionalDcMW": 597.104,
-      "headroomPct": 546.799
+      "label": "Before 2010",
+      "plants": 33,
+      "currentDcMW": 176.7,
+      "modeledDcMW": 835.051,
+      "additionalDcMW": 658.351,
+      "headroomPct": 372.581
     }
   ],
   "unableToModelReasons": {},

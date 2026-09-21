@@ -161,10 +161,6 @@ const pathways: Pathway[] = [
     roleKey: 'project-management',
     links: [
       {
-        href: '/resources/solar-engineer-jobs',
-        label: 'Project engineer → project manager transition',
-      },
-      {
         href: '/workforce-resources/solar-employers-hiring',
         label: 'Employers hiring now',
       },

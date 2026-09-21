@@ -7,6 +7,7 @@ import type {
   RepoweringPlant,
   RepoweringStateDetail,
   RepoweringStateSummary,
+  RepoweringVintageCohort,
 } from '../lib/repowering/atlasTypes'
 
 export interface AtlasConfig {
@@ -437,13 +438,20 @@ function axisLabel(axis: AxisClass) {
   return 'Unknown axis (fixed-layout fallback)'
 }
 
-function vintageLabel(year: number | null) {
-  if (year === null) return 'Unknown'
-  if (year < 2005) return 'Before 2005'
-  if (year < 2010) return '2005–2009'
+const VINTAGE_COHORTS: RepoweringVintageCohort['label'][] = [
+  'Before 2010',
+  '2010–2014',
+  '2015–2019',
+  '2020–2026',
+]
+
+function vintageLabel(year: number | null): RepoweringVintageCohort['label'] | null {
+  if (year === null) return null
+  if (year < 2010) return 'Before 2010'
   if (year < 2015) return '2010–2014'
   if (year < 2020) return '2015–2019'
-  return '2020 or later'
+  if (year <= 2026) return '2020–2026'
+  return null
 }
 
 export function buildRepoweringAtlas(
@@ -468,7 +476,7 @@ export function buildRepoweringAtlas(
       modeled.forEach((run) => {
         const axis = axisLabel(run.record.axisClass)
         axisGroups.set(axis, [...(axisGroups.get(axis) ?? []), run])
-        const vintage = vintageLabel(run.record.year)
+        const vintage = vintageLabel(run.record.year) ?? 'Year unavailable or outside range'
         vintageGroups.set(vintage, [...(vintageGroups.get(vintage) ?? []), run])
       })
       const plants = modeled.map(plantFromRun).sort((a, b) => b.additionalDcMW - a.additionalDcMW)
@@ -494,6 +502,23 @@ export function buildRepoweringAtlas(
   const nationalModeled = runs.filter((run): run is ModeledRun => run.status === 'modeled')
   const nationalCurrentDcMW = sum(nationalModeled, (run) => run.result.currentDcMW)
   const nationalModeledDcMW = sum(nationalModeled, (run) => run.result.modeledDcMW)
+  const nationalAdditionalDcMW = nationalModeledDcMW - nationalCurrentDcMW
+  const vintageCohorts = VINTAGE_COHORTS.map((label) => {
+    const cohortRuns = nationalModeled.filter((run) => vintageLabel(run.record.year) === label)
+    const currentDcMW = sum(cohortRuns, (run) => run.result.currentDcMW)
+    const modeledDcMW = sum(cohortRuns, (run) => run.result.modeledDcMW)
+    const additionalDcMW = modeledDcMW - currentDcMW
+    return {
+      label,
+      facilities: cohortRuns.length,
+      currentDcGW: round(currentDcMW / 1000, 3) ?? 0,
+      modeledDcGW: round(modeledDcMW / 1000, 3) ?? 0,
+      additionalDcGW: round(additionalDcMW / 1000, 3) ?? 0,
+      headroomPct: currentDcMW > 0 ? round(additionalDcMW / currentDcMW * 100, 2) : null,
+      currentCapacitySharePct: nationalCurrentDcMW > 0 ? round(currentDcMW / nationalCurrentDcMW * 100, 2) ?? 0 : 0,
+      nationalHeadroomSharePct: nationalAdditionalDcMW !== 0 ? round(additionalDcMW / nationalAdditionalDcMW * 100, 2) ?? 0 : 0,
+    } satisfies RepoweringVintageCohort
+  })
   return {
     atlas: {
       metadata,
@@ -501,12 +526,14 @@ export function buildRepoweringAtlas(
         sourceFacilities: runs.length,
         modeledFacilities: nationalModeled.length,
         unableToModelFacilities: runs.length - nationalModeled.length,
+        facilitiesWithoutCohortYear: nationalModeled.filter((run) => vintageLabel(run.record.year) === null).length,
         currentDcGW: round(nationalCurrentDcMW / 1000, 3) ?? 0,
         modeledDcGW: round(nationalModeledDcMW / 1000, 3) ?? 0,
-        additionalDcGW: round((nationalModeledDcMW - nationalCurrentDcMW) / 1000, 3) ?? 0,
+        additionalDcGW: round(nationalAdditionalDcMW / 1000, 3) ?? 0,
         headroomPct: nationalCurrentDcMW > 0
-          ? round((nationalModeledDcMW - nationalCurrentDcMW) / nationalCurrentDcMW * 100, 2)
+          ? round(nationalAdditionalDcMW / nationalCurrentDcMW * 100, 2)
           : null,
+        vintageCohorts,
       },
       states,
     } satisfies RepoweringAtlas,

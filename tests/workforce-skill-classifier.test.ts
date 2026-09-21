@@ -2,6 +2,9 @@ import assert from 'node:assert/strict'
 import {
   matchesBessJobContext,
   matchesElectricalJourneyman,
+  matchesProjectManagementTitle,
+  matchesSolarTechnicianTitle,
+  ROLE_DEFINITIONS,
 } from '../app/workforce-resources/_lib/workforceData'
 
 assert.equal(
@@ -71,6 +74,78 @@ assert.equal(
   ),
   true,
   'a technician title with local electrical and PV context should match'
+)
+
+assert.equal(
+  matchesSolarTechnicianTitle('Utility Solar Technician II'),
+  true,
+  'a solar technician title should match the O&M family'
+)
+
+assert.equal(
+  matchesProjectManagementTitle('Utility Solar Technician II'),
+  false,
+  'an O&M title should not inherit the project-management matcher'
+)
+
+assert.equal(
+  matchesProjectManagementTitle('Assistant Construction Project Manager'),
+  true,
+  'a project manager title should match the project-management family'
+)
+
+assert.equal(
+  matchesSolarTechnicianTitle('Assistant Construction Project Manager'),
+  false,
+  'a project manager title should not inherit the O&M matcher'
+)
+
+const bessTechnicianDefinition = ROLE_DEFINITIONS.find(
+  (role) => role.key === 'bess-technician'
+)
+
+assert.ok(bessTechnicianDefinition, 'the BESS technician role should be defined')
+
+const workforceJob = (title: string, specialty: string | null = null) => ({
+  id: title,
+  title,
+  company: null,
+  description: null,
+  addressRegion: null,
+  location: null,
+  salaryMin: null,
+  salaryMax: null,
+  salaryPeriod: null,
+  experienceLevel: null,
+  specialty,
+  postedAt: null,
+  fetchedAt: new Date(0),
+  source: null,
+  url: null,
+  applyUrl: null,
+  canonicalSlug: null,
+})
+
+assert.equal(
+  bessTechnicianDefinition.test(workforceJob('Advanced BESS Technician')),
+  true,
+  'a BESS technician title should match the technician family'
+)
+
+assert.equal(
+  bessTechnicianDefinition.test(
+    workforceJob('BESS Project Manager', 'Battery Storage')
+  ),
+  false,
+  'BESS management titles should not be mixed into technician pay'
+)
+
+assert.equal(
+  bessTechnicianDefinition.test(
+    workforceJob('Retail Solar Sales Representative', 'Battery Storage')
+  ),
+  false,
+  'a broad storage specialty should not pull sales jobs into technician pay'
 )
 
 console.log('workforce skill classifier tests passed')

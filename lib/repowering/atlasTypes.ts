@@ -51,10 +51,23 @@ export interface RepoweringNationalSummary {
   sourceFacilities: number
   modeledFacilities: number
   unableToModelFacilities: number
+  facilitiesWithoutCohortYear: number
   currentDcGW: number
   modeledDcGW: number
   additionalDcGW: number
   headroomPct: number | null
+  vintageCohorts: RepoweringVintageCohort[]
+}
+
+export interface RepoweringVintageCohort {
+  label: 'Before 2010' | '2010–2014' | '2015–2019' | '2020–2026'
+  facilities: number
+  currentDcGW: number
+  modeledDcGW: number
+  additionalDcGW: number
+  headroomPct: number | null
+  currentCapacitySharePct: number
+  nationalHeadroomSharePct: number
 }
 
 export interface RepoweringAtlas {

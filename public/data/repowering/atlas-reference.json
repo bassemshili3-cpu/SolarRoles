@@ -3,17 +3,60 @@
     "dataset": "USPVDB v4.0",
     "datasetDate": "April 2026",
     "datasetUrl": "https://www.usgs.gov/data/united-states-large-scale-solar-photovoltaic-database-ver-40-april-2026",
-    "analysisRun": "2026-09-20T18:31:55.447Z",
+    "analysisRun": "2026-09-20T23:28:50.438Z",
     "scenario": "reference"
   },
   "national": {
     "sourceFacilities": 6611,
     "modeledFacilities": 6611,
     "unableToModelFacilities": 0,
+    "facilitiesWithoutCohortYear": 0,
     "currentDcGW": 162.802,
     "modeledDcGW": 208.266,
     "additionalDcGW": 45.464,
-    "headroomPct": 27.93
+    "headroomPct": 27.93,
+    "vintageCohorts": [
+      {
+        "label": "Before 2010",
+        "facilities": 63,
+        "currentDcGW": 0.302,
+        "modeledDcGW": 1.152,
+        "additionalDcGW": 0.85,
+        "headroomPct": 281.32,
+        "currentCapacitySharePct": 0.19,
+        "nationalHeadroomSharePct": 1.87
+      },
+      {
+        "label": "2010–2014",
+        "facilities": 977,
+        "currentDcGW": 10.599,
+        "modeledDcGW": 16.535,
+        "additionalDcGW": 5.936,
+        "headroomPct": 56,
+        "currentCapacitySharePct": 6.51,
+        "nationalHeadroomSharePct": 13.06
+      },
+      {
+        "label": "2015–2019",
+        "facilities": 2426,
+        "currentDcGW": 39.655,
+        "modeledDcGW": 50.319,
+        "additionalDcGW": 10.664,
+        "headroomPct": 26.89,
+        "currentCapacitySharePct": 24.36,
+        "nationalHeadroomSharePct": 23.46
+      },
+      {
+        "label": "2020–2026",
+        "facilities": 3145,
+        "currentDcGW": 112.246,
+        "modeledDcGW": 140.26,
+        "additionalDcGW": 28.014,
+        "headroomPct": 24.96,
+        "currentCapacitySharePct": 68.95,
+        "nationalHeadroomSharePct": 61.62
+      }
+    ]
   },
   "states": [
     {
@@ -45,7 +88,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 2,
           "currentDcMW": 11.8,
           "modeledDcMW": 3.18,
@@ -122,7 +165,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 4,
           "currentDcMW": 543.1,
           "modeledDcMW": 651.013,
@@ -351,7 +394,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 48,
           "currentDcMW": 2109,
           "modeledDcMW": 2588.442,
@@ -588,7 +631,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 28,
           "currentDcMW": 3961.5,
           "modeledDcMW": 5250.263,
@@ -612,20 +655,12 @@
           "headroomPct": 88.444
         },
         {
-          "label": "Before 2005",
-          "plants": 2,
-          "currentDcMW": 6.3,
-          "modeledDcMW": 20.616,
-          "additionalDcMW": 14.316,
-          "headroomPct": 227.238
-        },
-        {
-          "label": "2005–2009",
-          "plants": 1,
-          "currentDcMW": 3.3,
-          "modeledDcMW": 7.825,
-          "additionalDcMW": 4.525,
-          "headroomPct": 137.127
+          "label": "Before 2010",
+          "plants": 3,
+          "currentDcMW": 9.6,
+          "modeledDcMW": 28.441,
+          "additionalDcMW": 18.841,
+          "headroomPct": 196.263
         }
       ],
       "unableToModelReasons": {},
@@ -849,7 +884,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 305,
           "currentDcMW": 12697.1,
           "modeledDcMW": 17180.404,
@@ -873,20 +908,12 @@
           "headroomPct": 50.044
         },
         {
-          "label": "2005–2009",
-          "plants": 31,
-          "currentDcMW": 67.5,
-          "modeledDcMW": 128.747,
-          "additionalDcMW": 61.247,
-          "headroomPct": 90.736
-        },
-        {
-          "label": "Before 2005",
-          "plants": 2,
-          "currentDcMW": 109.2,
-          "modeledDcMW": 706.304,
-          "additionalDcMW": 597.104,
-          "headroomPct": 546.799
+          "label": "Before 2010",
+          "plants": 33,
+          "currentDcMW": 176.7,
+          "modeledDcMW": 835.051,
+          "additionalDcMW": 658.351,
+          "headroomPct": 372.581
         }
       ],
       "unableToModelReasons": {},
@@ -1110,7 +1137,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 73,
           "currentDcMW": 2089.1,
           "modeledDcMW": 2711.742,
@@ -1134,7 +1161,7 @@
           "headroomPct": 47.702
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 7,
           "currentDcMW": 20.2,
           "modeledDcMW": 36.307,
@@ -1363,7 +1390,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 42,
           "currentDcMW": 383.5,
           "modeledDcMW": 301.328,
@@ -1608,7 +1635,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 11,
           "currentDcMW": 24.5,
           "modeledDcMW": 21.694,
@@ -1837,7 +1864,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 4,
           "currentDcMW": 72.3,
           "modeledDcMW": 75.142,
@@ -2082,7 +2109,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 133,
           "currentDcMW": 11182.7,
           "modeledDcMW": 13760.92,
@@ -2106,7 +2133,7 @@
           "headroomPct": 82.255
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 1,
           "currentDcMW": 27.6,
           "modeledDcMW": 43.931,
@@ -2343,7 +2370,7 @@
           "headroomPct": 27.889
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 77,
           "currentDcMW": 4795.1,
           "modeledDcMW": 5598.307,
@@ -2580,7 +2607,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 10,
           "currentDcMW": 363.5,
           "modeledDcMW": 387.602,
@@ -2604,7 +2631,7 @@
           "headroomPct": 40.494
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 1,
           "currentDcMW": 1.2,
           "modeledDcMW": 2.894,
@@ -2841,7 +2868,7 @@
           "headroomPct": 4.958
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 21,
           "currentDcMW": 800.8,
           "modeledDcMW": 794.808,
@@ -3070,7 +3097,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 4,
           "currentDcMW": 495.9,
           "modeledDcMW": 841.223,
@@ -3307,7 +3334,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 218,
           "currentDcMW": 4055.4,
           "modeledDcMW": 4068.614,
@@ -3323,7 +3350,7 @@
           "headroomPct": 15.567
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 1,
           "currentDcMW": 10,
           "modeledDcMW": 8.798,
@@ -3560,7 +3587,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 48,
           "currentDcMW": 4063.8,
           "modeledDcMW": 4471.566,
@@ -3805,7 +3832,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 32,
           "currentDcMW": 287.7,
           "modeledDcMW": 443.993,
@@ -4042,7 +4069,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 10,
           "currentDcMW": 880.9,
           "modeledDcMW": 1024.296,
@@ -4279,7 +4306,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 11,
           "currentDcMW": 1495.7,
           "modeledDcMW": 1832.614,
@@ -4524,7 +4551,7 @@
           "headroomPct": 4.474
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 160,
           "currentDcMW": 716.2,
           "modeledDcMW": 661.176,
@@ -4761,7 +4788,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 93,
           "currentDcMW": 478.6,
           "modeledDcMW": 398.246,
@@ -5006,7 +5033,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 137,
           "currentDcMW": 1112.8,
           "modeledDcMW": 906.526,
@@ -5243,7 +5270,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 49,
           "currentDcMW": 2033.8,
           "modeledDcMW": 2639.016,
@@ -5480,7 +5507,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 272,
           "currentDcMW": 889.9,
           "modeledDcMW": 987.716,
@@ -5725,7 +5752,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 12,
           "currentDcMW": 999.7,
           "modeledDcMW": 1258.931,
@@ -5970,7 +5997,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 15,
           "currentDcMW": 1445.9,
           "modeledDcMW": 1751.842,
@@ -6199,7 +6226,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 2,
           "currentDcMW": 82.5,
           "modeledDcMW": 114.814,
@@ -6426,7 +6453,7 @@
           "headroomPct": 51.477
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 136,
           "currentDcMW": 2610.4,
           "modeledDcMW": 2641.374,
@@ -6442,7 +6469,7 @@
           "headroomPct": 27.081
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 1,
           "currentDcMW": 1.2,
           "modeledDcMW": 2.376,
@@ -6671,7 +6698,7 @@
           "headroomPct": 15.78
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 11,
           "currentDcMW": 121.6,
           "modeledDcMW": 129.962,
@@ -6951,7 +6978,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 89,
           "currentDcMW": 412.1,
           "modeledDcMW": 363.284,
@@ -6967,7 +6994,7 @@
           "headroomPct": 1.724
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 11,
           "currentDcMW": 23.8,
           "modeledDcMW": 34.151,
@@ -7204,7 +7231,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 22,
           "currentDcMW": 2053.1,
           "modeledDcMW": 2833.224,
@@ -7449,7 +7476,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 27,
           "currentDcMW": 2976.5,
           "modeledDcMW": 4617.731,
@@ -7473,7 +7500,7 @@
           "headroomPct": 88.618
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 3,
           "currentDcMW": 27.7,
           "modeledDcMW": 154.835,
@@ -7702,7 +7729,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 442,
           "currentDcMW": 2811.5,
           "modeledDcMW": 3058.44,
@@ -7947,7 +7974,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 37,
           "currentDcMW": 4731.7,
           "modeledDcMW": 5396.411,
@@ -8192,7 +8219,7 @@
           "headroomPct": 24.318
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 7,
           "currentDcMW": 248.3,
           "modeledDcMW": 454.182,
@@ -8421,7 +8448,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 82,
           "currentDcMW": 720.3,
           "modeledDcMW": 896.56,
@@ -8666,7 +8693,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 35,
           "currentDcMW": 1063.6,
           "modeledDcMW": 942.08,
@@ -8690,7 +8717,7 @@
           "headroomPct": 15.982
         },
         {
-          "label": "2005–2009",
+          "label": "Before 2010",
           "plants": 2,
           "currentDcMW": 4.2,
           "modeledDcMW": 5.557,
@@ -8919,7 +8946,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 44,
           "currentDcMW": 386.2,
           "modeledDcMW": 359.41,
@@ -9164,7 +9191,7 @@
           "headroomPct": 18.442
         },
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 54,
           "currentDcMW": 1277.1,
           "modeledDcMW": 1445.95,
@@ -9393,7 +9420,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 2,
           "currentDcMW": 226.9,
           "modeledDcMW": 286.558,
@@ -9504,7 +9531,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 14,
           "currentDcMW": 517,
           "modeledDcMW": 616.444,
@@ -9749,7 +9776,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 122,
           "currentDcMW": 24705.4,
           "modeledDcMW": 35010.27,
@@ -9994,7 +10021,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 22,
           "currentDcMW": 1315,
           "modeledDcMW": 1921.613,
@@ -10239,7 +10266,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 90,
           "currentDcMW": 4531.8,
           "modeledDcMW": 4582.754,
@@ -10484,7 +10511,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 12,
           "currentDcMW": 35.5,
           "modeledDcMW": 33.953,
@@ -10721,7 +10748,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 5,
           "currentDcMW": 313.9,
           "modeledDcMW": 422.642,
@@ -10904,7 +10931,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 66,
           "currentDcMW": 2818,
           "modeledDcMW": 3180.299,
@@ -11141,7 +11168,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 4,
           "currentDcMW": 147.6,
           "modeledDcMW": 140.407,
@@ -11246,7 +11273,7 @@
       ],
       "byVintage": [
         {
-          "label": "2020 or later",
+          "label": "2020–2026",
           "plants": 1,
           "currentDcMW": 150,
           "modeledDcMW": 201.504,

@@ -189,6 +189,8 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
         <Stat label="Technical headroom" value={`${signed(national.additionalDcGW, ' GWdc')} · ${signed(national.headroomPct, '%')}`} accent />
       </div>
 
+      <VintageAnalysis national={national} />
+
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
         <p className="text-xs font-medium text-slate-600">
           <a href={atlas.metadata.datasetUrl} target="_blank" rel="noreferrer" className="font-bold text-slate-900 underline decoration-slate-300 underline-offset-2 hover:text-teal-700">{atlas.metadata.dataset}</a> · {atlas.metadata.datasetDate} · Analysis run: {analysisDate} · Scenario: {atlas.metadata.scenario[0]?.toUpperCase() + atlas.metadata.scenario.slice(1)}
@@ -332,6 +334,59 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
           <button type="button" onClick={() => setView('table')} className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${view === 'table' ? 'bg-slate-900 text-white' : 'text-slate-600'}`}><Table2 className="h-4 w-4" /> Table</button>
         </div>
         <a href={`/data/repowering/plant-results-${atlas.metadata.scenario}.csv`} download className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700 hover:text-teal-900"><Download className="h-4 w-4" /> Export modeled facilities (CSV)</a>
+      </div>
+    </section>
+  )
+}
+
+function VintageAnalysis({ national }: { national: RepoweringAtlas['national'] }) {
+  const olderFleet = national.vintageCohorts.filter((cohort) => cohort.label === 'Before 2010' || cohort.label === '2010–2014')
+  const olderCapacityShare = olderFleet.reduce((total, cohort) => total + cohort.currentCapacitySharePct, 0)
+  const olderHeadroomShare = olderFleet.reduce((total, cohort) => total + cohort.nationalHeadroomSharePct, 0)
+  const highestRelative = national.vintageCohorts.reduce((highest, cohort) => (
+    (cohort.headroomPct ?? Number.NEGATIVE_INFINITY) > (highest.headroomPct ?? Number.NEGATIVE_INFINITY) ? cohort : highest
+  ))
+
+  return (
+    <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white" aria-labelledby="fleet-age-title">
+      <div className="border-b border-slate-200 bg-slate-950 px-5 py-6 text-white sm:px-7">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Fleet age analysis</p>
+        <h3 id="fleet-age-title" className="mt-2 text-2xl font-semibold tracking-tight">Is America&apos;s oldest solar fleet also its biggest repowering opportunity?</h3>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
+          Facilities built before 2015 represent <strong className="text-white">{format(olderCapacityShare)}% of current capacity</strong> but <strong className="text-white">{format(olderHeadroomShare)}% of modeled repowering headroom</strong>.
+        </p>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-[760px] w-full border-collapse text-sm">
+          <thead className="bg-slate-50 text-left text-xs text-slate-600">
+            <tr>
+              <th className="px-5 py-3 font-semibold">Commissioning cohort</th>
+              <th className="px-3 py-3 text-right font-semibold">Facilities</th>
+              <th className="px-3 py-3 text-right font-semibold">Current GWdc</th>
+              <th className="px-3 py-3 text-right font-semibold">Modeled modern GWdc</th>
+              <th className="px-3 py-3 text-right font-semibold">Headroom GWdc</th>
+              <th className="px-5 py-3 text-right font-semibold">Headroom %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {national.vintageCohorts.map((cohort) => (
+              <tr key={cohort.label} className="border-t border-slate-200">
+                <th className="px-5 py-4 text-left font-semibold text-slate-950">{cohort.label}</th>
+                <td className="px-3 py-4 text-right text-slate-600">{cohort.facilities.toLocaleString('en-US')}</td>
+                <td className="px-3 py-4 text-right text-slate-600">{format(cohort.currentDcGW)}</td>
+                <td className="px-3 py-4 text-right text-slate-600">{format(cohort.modeledDcGW)}</td>
+                <td className="px-3 py-4 text-right font-semibold text-slate-900">{signed(cohort.additionalDcGW, '')}</td>
+                <td className="px-5 py-4 text-right font-bold text-teal-700">{signed(cohort.headroomPct, '%')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="border-t border-slate-200 px-5 py-4 text-xs leading-5 text-slate-600 sm:px-7">
+        <strong className="text-slate-900">What the data says:</strong> {highestRelative.label} has the highest modeled headroom relative to its current capacity. Most absolute headroom can still come from newer cohorts because they contain far more installed capacity.
+        {national.facilitiesWithoutCohortYear > 0 ? ` ${national.facilitiesWithoutCohortYear} modeled facilities are omitted from the cohort table because their commissioning year is unavailable or outside 1985–2026.` : ' Every modeled facility has a commissioning year and is included in one of the four cohorts.'}
       </div>
     </section>
   )

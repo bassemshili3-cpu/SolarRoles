@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { calculate } from '../lib/repowering/calculator';
 import { demoRectangleGeoJSON, packGeoJSON } from '../lib/repowering/polygonPacking';
-import { runFeature, type AtlasConfig } from '../scripts/uspvdbBatch';
+import { buildRepoweringAtlas, runFeature, type AtlasConfig } from '../scripts/uspvdbBatch';
 
 const base = calculate({
   siteName: 'test', footprintAcres: 100, currentDcMW: 20, currentAcMW: 16, latitudeDeg: 35, mountType: 'fixed',
@@ -30,11 +30,23 @@ const atlasConfig: AtlasConfig = {
 };
 const officialRecord = demoRectangleGeoJSON(-112, 35, 100, 100);
 officialRecord.properties = {
-  p_name: 'Official record', p_state: 'AZ', p_cap_dc: 0.01, p_axis: 'unknown', p_tilt: -9999,
+  p_name: 'Official record', p_state: 'AZ', p_cap_dc: 0.01, p_axis: 'unknown', p_tilt: -9999, p_year: 2009,
   p_dig_conf: 1, p_zscore: 99,
 };
 const modeled = runFeature(officialRecord, atlasConfig, 'reference');
 assert.equal(modeled.status, 'modeled', 'QA-like source attributes must not exclude a modelable facility');
+
+const modernRecord = demoRectangleGeoJSON(-111, 35, 100, 100);
+modernRecord.properties = { p_name: 'Modern record', p_state: 'AZ', p_cap_dc: 0.02, p_axis: 'single-axis', p_year: 2022 };
+const modern = runFeature(modernRecord, atlasConfig, 'reference');
+assert.equal(modern.status, 'modeled');
+const { atlas } = buildRepoweringAtlas([modeled, modern], {
+  dataset: 'test', datasetDate: 'test', datasetUrl: 'https://example.com', analysisRun: 'test', scenario: 'reference',
+});
+assert.deepEqual(atlas.national.vintageCohorts.map((cohort) => cohort.label), ['Before 2010', '2010–2014', '2015–2019', '2020–2026']);
+assert.equal(atlas.national.facilitiesWithoutCohortYear, 0);
+assert.equal(atlas.national.vintageCohorts[0].facilities, 1);
+assert.equal(atlas.national.vintageCohorts[3].facilities, 1);
 
 const missingCapacity = demoRectangleGeoJSON(-112, 35, 100, 100);
 missingCapacity.properties = { p_name: 'Missing capacity', p_state: 'AZ', p_cap_dc: null };

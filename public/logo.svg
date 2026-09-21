@@ -1,5 +1,5 @@
 <svg width="320" height="70" viewBox="0 0 320 70" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SolarRoles Logo">
-  <g transform="translate(10,5)">
+  <g transform="translate(16,11) scale(0.8)">
     <g stroke="#F5B819" stroke-width="4" stroke-linecap="round">
       <line x1="30" y1="-6" x2="30" y2="2"/>
       <line x1="30" y1="58" x2="30" y2="66"/>
@@ -13,7 +13,7 @@
     <circle cx="30" cy="30" r="19" fill="#F5B819"/>
   </g>
 
-  <text x="90" y="44" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0B1A2E">
+  <text x="82" y="46" font-family="Arial, sans-serif" font-size="32.2" font-weight="700" fill="#0B1A2E">
     Solar<tspan fill="#F5B819">Roles</tspan>
   </text>
 </svg>

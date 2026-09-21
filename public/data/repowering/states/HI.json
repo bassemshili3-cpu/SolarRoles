@@ -35,7 +35,7 @@
   ],
   "byVintage": [
     {
-      "label": "2020 or later",
+      "label": "2020–2026",
       "plants": 10,
       "currentDcMW": 363.5,
       "modeledDcMW": 387.602,
@@ -59,7 +59,7 @@
       "headroomPct": 40.494
     },
     {
-      "label": "2005–2009",
+      "label": "Before 2010",
       "plants": 1,
       "currentDcMW": 1.2,
       "modeledDcMW": 2.894,

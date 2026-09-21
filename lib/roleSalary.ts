@@ -228,6 +228,22 @@ export const SALARY_TO_LANDING: Record<string, string> = {
   'solar-technician': 'solar-technician-jobs',
 }
 
+// In-memory equivalent of the title-only Prisma filters below. Keeping this
+// beside the role definitions prevents workforce reports from drifting to a
+// broader interpretation of the same occupation.
+export function matchesRoleTitle(role: Role, title: string) {
+  const normalizedTitle = title.toLowerCase()
+
+  return (
+    role.include.some((pattern) =>
+      normalizedTitle.includes(pattern.toLowerCase())
+    ) &&
+    !role.exclude.some((pattern) =>
+      normalizedTitle.includes(pattern.toLowerCase())
+    )
+  )
+}
+
 // Construit le WHERE (title LIKE p1 OR title LIKE p2 ...) AND NOT (...) pour la
 // requête raw, à partir des patterns include/exclude d'un rôle.
 export function titleFilterSql(role: Role) {

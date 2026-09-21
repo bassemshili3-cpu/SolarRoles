@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { STATE_CODE_TO_NAME } from '@/lib/usStates'
@@ -12,7 +13,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Solar Jobs Widget | Solar Roles',
-  robots: { index: false, follow: false },
+  robots: { index: false, follow: true },
 }
 
 type SearchParams = Promise<{
@@ -91,14 +92,10 @@ export default async function SolarJobsEmbedPage({ searchParams }: { searchParam
     take: limit,
   })
 
-  const browseParams = new URLSearchParams()
-  if (stateName) browseParams.set('where', stateName)
-  if (entryOnly) {
-    browseParams.set('entry_level', 'true')
-    if (selectedTitle) browseParams.set('what', selectedTitle.searchTerm)
-  }
-  const browsePath = selectedTitle && !entryOnly ? selectedTitle.jobsPath : '/jobs'
-  const browseHref = `${browsePath}${browseParams.size ? `?${browseParams}` : ''}`
+  const browseHref = selectedTitle?.jobsPath ?? '/jobs'
+  const browseLabel = selectedTitle
+    ? `Browse ${selectedTitle.heading.toLowerCase()}`
+    : 'Browse solar jobs'
   const heading = selectedTitle?.heading ?? 'Solar jobs'
   const headingLabel = `${entryOnly ? `Entry-level ${heading.toLowerCase()}` : heading}${stateName ? ` in ${stateName}` : ''}`
 
@@ -106,7 +103,17 @@ export default async function SolarJobsEmbedPage({ searchParams }: { searchParam
     <main className="min-h-screen bg-white p-4 text-gray-950">
       <div className="rounded-2xl border border-gray-200 bg-white">
         <div className="border-b border-gray-100 px-5 py-4">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-700">Current openings</p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-700">Current openings</p>
+            <Image
+              src="/logo.svg"
+              alt="Solar Roles"
+              width={320}
+              height={70}
+              className="h-7 w-auto"
+              priority
+            />
+          </div>
           <h1 className="mt-1 text-lg font-bold">{headingLabel}</h1>
         </div>
 
@@ -134,9 +141,8 @@ export default async function SolarJobsEmbedPage({ searchParams }: { searchParam
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-4 border-t border-gray-100 px-5 py-4">
-          <Link href={browseHref} target="_blank" className="text-xs font-semibold text-blue-700 hover:text-blue-900">{entryOnly ? 'Search more entry-level jobs' : 'Browse related jobs'} →</Link>
-          <Link href="/" target="_blank" className="text-[11px] font-medium text-gray-400 hover:text-gray-700">Powered by Solar Roles</Link>
+        <div className="border-t border-gray-100 px-5 py-4">
+          <Link href={browseHref} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-blue-700 hover:text-blue-900">{browseLabel} →</Link>
         </div>
       </div>
     </main>

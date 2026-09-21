@@ -82,18 +82,11 @@ export default function WidgetConfigurator({
 
   const browseLocation = selectedState?.name ?? state
   const selectedTitle = getWidgetJobRole(title)
-  const browseParams = new URLSearchParams({ where: browseLocation })
-
-  if (entryOnly) {
-    browseParams.set('entry_level', 'true')
-    if (selectedTitle) browseParams.set('what', selectedTitle.searchTerm)
-  }
-
-  const browsePath = selectedTitle && !entryOnly ? selectedTitle.jobsPath : '/jobs'
-  const browseUrl = `https://www.solarroles.com${browsePath}?${browseParams}`
-  const browseLabel = entryOnly
-    ? `Search entry-level ${selectedTitle?.label.toLowerCase() ?? 'solar'} jobs in ${browseLocation}`
-    : `Browse ${selectedTitle?.label.toLowerCase() ?? 'solar'} jobs in ${browseLocation}`
+  const browsePath = selectedTitle?.jobsPath ?? '/jobs'
+  const browseUrl = `https://www.solarroles.com${browsePath}`
+  const browseLabel = selectedTitle
+    ? `Browse ${selectedTitle.heading.toLowerCase()}`
+    : 'Browse solar jobs'
 
   const embedCode = `<div style="max-width:760px">
   <iframe
@@ -110,7 +103,7 @@ export default function WidgetConfigurator({
     <a
       href="${browseUrl}"
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
     >${browseLabel}</a>
   </p>
 </div>`
@@ -239,7 +232,7 @@ export default function WidgetConfigurator({
         <p className="mt-2 text-sm leading-6 text-gray-600">
           This is the widget visitors will see. Change the settings on
           the left and the preview updates immediately.
-        </p>tu
+        </p>
 
         <iframe
           key={previewSrc}

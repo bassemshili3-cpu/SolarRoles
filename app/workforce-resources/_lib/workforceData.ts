@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { matchesRoleTitle, ROLES } from '@/lib/roleSalary'
 import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
 
 const STATE_NAMES = STATE_CODE_TO_NAME as Record<string, string>
@@ -243,6 +244,24 @@ function matchesPostingPattern(job: WorkforceJob, pattern: RegExp) {
   return pattern.test(`${job.title} ${job.description ?? ''}`)
 }
 
+export function matchesSolarTechnicianTitle(title: string) {
+  const normalizedTitle = text(title)
+  return (
+    containsAny(normalizedTitle, ['solar technician', 'pv technician', 'solar field service', 'pv field service']) ||
+    (containsAny(normalizedTitle, ['technician', 'o&m', 'field service']) &&
+      containsAny(normalizedTitle, ['solar', 'pv', 'photovoltaic']))
+  )
+}
+
+export function matchesProjectManagementTitle(title: string) {
+  return containsAny(text(title), [
+    'project manager',
+    'assistant project manager',
+    'construction manager',
+    'superintendent',
+  ])
+}
+
 export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     key: 'pv-installer',
@@ -287,13 +306,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     key: 'technician',
     label: 'Solar Technician / O&M',
-    test: (job) => {
-      const t = text(job.title)
-      return (
-        containsAny(t, ['solar technician', 'pv technician', 'solar field service', 'pv field service']) ||
-        (containsAny(t, ['technician', 'o&m', 'field service']) && containsAny(t, ['solar', 'pv', 'photovoltaic']))
-      )
-    },
+    test: (job) => matchesSolarTechnicianTitle(job.title),
     jobsHref: '/solar-technician-jobs',
     salaryHref: '/data/salaries/solar-technician',
     guideHref: '/resources/solar-certifications-by-job-role',
@@ -326,19 +339,13 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     key: 'project-management',
     label: 'Project Management',
-    test: (job) => {
-      const t = text(job.title)
-      return containsAny(t, ['project manager', 'assistant project manager', 'construction manager', 'superintendent'])
-    },
+    test: (job) => matchesProjectManagementTitle(job.title),
     guideHref: '/resources',
   },
   {
-    key: 'storage',
-    label: 'Battery Storage / BESS',
-    test: (job) => {
-      const t = `${text(job.title)} ${text(job.specialty)}`
-      return containsAny(t, ['bess', 'battery storage', 'energy storage'])
-    },
+    key: 'bess-technician',
+    label: 'BESS Technician',
+    test: (job) => matchesRoleTitle(ROLES['bess-technician'], job.title),
     jobsHref: '/bess-technician-jobs',
     guideHref: '/resources/do-you-need-to-be-an-electrician-for-bess',
   },
