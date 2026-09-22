@@ -188,7 +188,9 @@ function buildDiscoverySql(
 
   const statements = batches.map((batch, index) => {
     const batchOutput = sqlPath(path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`))
-    return `COPY (
+    return `SELECT 'discovery batch ${index + 1}/${batches.length}' AS status;
+
+COPY (
   SELECT
     crawl,
     url,
