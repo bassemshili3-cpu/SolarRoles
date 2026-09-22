@@ -31,6 +31,8 @@ interface CliOptions {
   registry: string
   outputDir: string
   duckdb: string
+  threads: number
+  memoryLimit: string
   sqlOnly: boolean
 }
 
@@ -39,11 +41,9 @@ interface RawDiscoveryRow {
   url: string
   url_host_name: string
   url_path: string
-  fetch_time: string
-  content_digest: string
-  warc_filename: string
-  warc_record_offset: number
-  warc_record_length: number
+  first_seen: string
+  last_seen: string
+  capture_count: number
 }
 
 interface EmployerDiscoverySpec {
@@ -72,6 +72,8 @@ function parseOptions(args: string[]): CliOptions {
     registry: arg(args, '--registry', DEFAULT_REGISTRY),
     outputDir: arg(args, '--output', `data/common-crawl-historical-jobs/discovery-${year}`),
     duckdb: arg(args, '--duckdb', DEFAULT_DUCKDB),
+    threads: Number(arg(args, '--threads', '4')),
+    memoryLimit: arg(args, '--memory-limit', '4GB'),
     sqlOnly: args.includes('--sql-only'),
   }
 }
@@ -118,10 +120,6 @@ function employerSpecs(employers: HistoricalEmployer[]): EmployerDiscoverySpec[]
     const compactName = normalizeAlias(employer.employerName)
     if (compactName.length >= 5) aliases.add(compactName)
 
-    for (const word of employer.employerName.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)) {
-      if (word.length >= 5 && !GENERIC_ALIAS_WORDS.has(word)) aliases.add(word)
-    }
-
     for (const target of targets) {
       const hostLabel = normalizeAlias(target.host.split('.')[0] ?? '')
       if (hostLabel.length >= 5 && !GENERIC_ALIAS_WORDS.has(hostLabel)) aliases.add(hostLabel)
@@ -162,7 +160,14 @@ function chunks<T>(values: T[], size: number) {
   return Array.from({ length: Math.ceil(values.length / size) }, (_, index) => values.slice(index * size, (index + 1) * size))
 }
 
-function buildDiscoverySql(parquetFiles: string[], crawlIds: string[], specs: EmployerDiscoverySpec[], outputDir: string) {
+function buildDiscoverySql(
+  parquetFiles: string[],
+  crawlIds: string[],
+  specs: EmployerDiscoverySpec[],
+  outputDir: string,
+  threads: number,
+  memoryLimit: string,
+) {
   const aliases = [...new Set(specs.flatMap((spec) => spec.aliases))].sort((a, b) => b.length - a.length)
   const roots = [...new Set(specs.flatMap((spec) => spec.firstPartyRoots))].sort()
   if (!aliases.length && !roots.length) throw new Error('No discovery aliases or first-party domains were generated')
@@ -176,7 +181,6 @@ function buildDiscoverySql(parquetFiles: string[], crawlIds: string[], specs: Em
   ).join('\n      OR ')
 
   const rawJson = sqlPath(path.join(outputDir, 'discovery-raw.jsonl'))
-  const rawParquet = sqlPath(path.join(outputDir, 'discovery-raw.parquet'))
   const tempDir = sqlPath(path.join(outputDir, 'duckdb-tmp'))
 
   const inserts = chunks(parquetFiles, 10).map((batch) => `INSERT INTO discovery_raw
@@ -185,11 +189,7 @@ SELECT
   url,
   lower(url_host_name) AS url_host_name,
   coalesce(url_path, '/') AS url_path,
-  fetch_time,
-  content_digest,
-  warc_filename,
-  warc_record_offset,
-  warc_record_length
+  fetch_time
 FROM read_parquet([
   ${batch.map((filename) => sqlPath(filename)).join(',\n  ')}
 ], hive_partitioning = true, union_by_name = true)
@@ -210,8 +210,8 @@ WHERE fetch_status = 200
   return `-- Historical source discovery for ${crawlIds.join(', ')}
 SET preserve_insertion_order = false;
 SET enable_progress_bar = true;
-SET threads = 1;
-SET memory_limit = '1GB';
+SET threads = ${threads};
+SET memory_limit = ${sqlString(memoryLimit)};
 SET temp_directory = ${tempDir};
 
 CREATE OR REPLACE TEMP TABLE discovery_raw (
@@ -219,23 +219,23 @@ CREATE OR REPLACE TEMP TABLE discovery_raw (
   url VARCHAR,
   url_host_name VARCHAR,
   url_path VARCHAR,
-  fetch_time TIMESTAMP,
-  content_digest VARCHAR,
-  warc_filename VARCHAR,
-  warc_record_offset BIGINT,
-  warc_record_length BIGINT
+  fetch_time TIMESTAMP
 );
 
 ${inserts}
 
 COPY (
-  SELECT DISTINCT * FROM discovery_raw
-  ORDER BY crawl, url_host_name, url, fetch_time
+  SELECT
+    crawl,
+    url,
+    url_host_name,
+    url_path,
+    min(fetch_time) AS first_seen,
+    max(fetch_time) AS last_seen,
+    count(*)::INTEGER AS capture_count
+  FROM discovery_raw
+  GROUP BY crawl, url, url_host_name, url_path
 ) TO ${rawJson} (FORMAT JSON, ARRAY false);
-
-COPY (
-  SELECT DISTINCT * FROM discovery_raw
-) TO ${rawParquet} (FORMAT PARQUET, COMPRESSION ZSTD);
 
 SELECT
   crawl,
@@ -320,7 +320,11 @@ async function main() {
 
   const sqlFile = path.join(outputDir, 'discovery.sql')
   const planFile = path.join(outputDir, 'discovery-plan.json')
-  await writeFile(sqlFile, buildDiscoverySql(parquetFiles, selectedCrawls, specs, outputDir), 'utf8')
+  await writeFile(
+    sqlFile,
+    buildDiscoverySql(parquetFiles, selectedCrawls, specs, outputDir, options.threads, options.memoryLimit),
+    'utf8',
+  )
   await writeFile(planFile, `${JSON.stringify({
     generatedAt: new Date().toISOString(),
     year: options.year,
@@ -328,12 +332,13 @@ async function main() {
     parquetDir: path.resolve(options.parquetDir),
     parquetFiles: parquetFiles.length,
     employers: employers.length,
+    duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
     aliases: Object.fromEntries(specs.map((spec) => [spec.employer.employerId, spec.aliases])),
     firstPartyRoots: Object.fromEntries(specs.map((spec) => [spec.employer.employerId, spec.firstPartyRoots])),
     sqlFile: path.relative(process.cwd(), sqlFile),
   }, null, 2)}\n`, 'utf8')
 
-  console.log(`[discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${employers.length} employers`)
+  console.log(`[discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${employers.length} employers | ${options.threads} threads | ${options.memoryLimit}`)
   console.log(`[discovery] SQL plan: ${path.relative(process.cwd(), sqlFile)}`)
   if (options.sqlOnly) return
 
@@ -404,7 +409,9 @@ async function main() {
       const host = String(row.url_host_name)
       const pathPrefix = String(row.inferredPathPrefix)
       const key = `${match.employerId}|${host}|${pathPrefix}`
-      const timestamp = String(row.fetch_time)
+      const firstSeen = String(row.first_seen)
+      const lastSeen = String(row.last_seen)
+      const captureCount = Number(row.capture_count) || 1
       const current = aggregates.get(key) ?? {
         employerId: match.employerId,
         employerName: match.employerName,
@@ -413,18 +420,18 @@ async function main() {
         pathPrefix,
         captures: 0,
         urls: new Set<string>(),
-        firstSeen: timestamp,
-        lastSeen: timestamp,
+        firstSeen,
+        lastSeen,
         aliases: new Set<string>(),
         firstParty: false,
         atsHost: Boolean(row.atsHost),
         known: false,
         ambiguousCaptures: 0,
       }
-      current.captures += 1
+      current.captures += captureCount
       current.urls.add(String(row.url))
-      if (timestamp < current.firstSeen) current.firstSeen = timestamp
-      if (timestamp > current.lastSeen) current.lastSeen = timestamp
+      if (firstSeen < current.firstSeen) current.firstSeen = firstSeen
+      if (lastSeen > current.lastSeen) current.lastSeen = lastSeen
       match.aliasMatches.forEach((alias) => current.aliases.add(alias))
       current.firstParty ||= match.firstPartyDomainMatch
       current.known ||= match.knownPatternMatch
@@ -489,7 +496,8 @@ async function main() {
     crawlIds: selectedCrawls,
     parquetFiles: parquetFiles.length,
     employers: employers.length,
-    rawCandidateCaptures: rawRows.length,
+    rawCandidateUrls: rawRows.length,
+    rawCandidateCaptures: rawRows.reduce((sum, row) => sum + (Number(row.capture_count) || 1), 0),
     attributedCandidateCaptures: attributed.length,
     sourceCandidates: sources.length,
     newSourceCandidates: sources.filter((source) => !source.knownPattern).length,
