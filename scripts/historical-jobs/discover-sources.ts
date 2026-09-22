@@ -42,9 +42,7 @@ interface RawDiscoveryRow {
   url: string
   url_host_name: string
   url_path: string
-  first_seen: string
-  last_seen: string
-  capture_count: number
+  fetch_time: string
 }
 
 interface EmployerDiscoverySpec {
@@ -194,9 +192,7 @@ COPY (
     url,
     lower(url_host_name) AS url_host_name,
     coalesce(url_path, '/') AS url_path,
-    min(fetch_time) AS first_seen,
-    max(fetch_time) AS last_seen,
-    count(*)::INTEGER AS capture_count
+    fetch_time
   FROM read_parquet([
     ${parquetFiles.map((filename) => sqlPath(filename)).join(',\n    ')}
   ], hive_partitioning = true, union_by_name = true)
@@ -213,7 +209,6 @@ COPY (
       regexp_matches(lower(url), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit|job-search|search-jobs)(?:/|[-_?=&]|$)')
       OR ${atsPredicate}
     )
-  GROUP BY crawl, url, lower(url_host_name), coalesce(url_path, '/')
 ) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
 `
 }
@@ -358,18 +353,31 @@ async function main() {
     for (const line of body.split(/\r?\n/).filter(Boolean)) {
       const row = JSON.parse(line) as RawDiscoveryRow
       const key = `${row.crawl}|${row.url_host_name}|${row.url_path}|${row.url}`
+      const timestamp = String(row.fetch_time)
       const current = rawMap.get(key)
       if (!current) {
-        rawMap.set(key, row)
+        rawMap.set(key, {
+          crawl: row.crawl,
+          url: row.url,
+          url_host_name: row.url_host_name,
+          url_path: row.url_path,
+          fetch_time: timestamp,
+        })
         continue
       }
-      current.capture_count += Number(row.capture_count) || 0
-      if (row.first_seen < current.first_seen) current.first_seen = row.first_seen
-      if (row.last_seen > current.last_seen) current.last_seen = row.last_seen
+      if (timestamp < current.fetch_time) current.fetch_time = timestamp
     }
   }
 
-  const rawRows = [...rawMap.values()]
+  const rawRows = [...rawMap.values()].map((row) => ({
+    crawl: row.crawl,
+    url: row.url,
+    url_host_name: row.url_host_name,
+    url_path: row.url_path,
+    first_seen: row.fetch_time,
+    last_seen: row.fetch_time,
+    capture_count: 1,
+  }))
   const rawPath = path.join(outputDir, 'discovery-raw.jsonl')
   await writeFile(rawPath, rawRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
   const attributed: Array<Record<string, unknown>> = []
@@ -521,7 +529,7 @@ async function main() {
     parquetFiles: parquetFiles.length,
     employers: employers.length,
     rawCandidateUrls: rawRows.length,
-    rawCandidateCaptures: rawRows.reduce((sum, row) => sum + (Number(row.capture_count) || 1), 0),
+    rawCandidateCaptures: rawRows.length,
     attributedCandidateCaptures: attributed.length,
     sourceCandidates: sources.length,
     newSourceCandidates: sources.filter((source) => !source.knownPattern).length,
