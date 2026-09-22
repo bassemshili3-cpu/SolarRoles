@@ -323,6 +323,8 @@ async function main() {
   console.log(`[discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${parquetBatches.length} batch(es) | ${employers.length} employers | ${options.threads} threads | ${options.memoryLimit}`)
   console.log('[discovery] each batch runs in a fresh DuckDB process; existing batch outputs are reused')
 
+  const failedBatches: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
+
   for (let index = 0; index < parquetBatches.length; index += 1) {
     const label = String(index + 1).padStart(4, '0')
     const batchOutput = path.join(batchDir, `batch-${label}.jsonl`)
@@ -355,14 +357,34 @@ async function main() {
     }
 
     console.log(`[discovery] batch ${index + 1}/${parquetBatches.length}: scanning ${parquetBatches[index].length} Parquet file(s)`)
-    await runDuckDb(options.duckdb, batchSql)
+    try {
+      await runDuckDb(options.duckdb, batchSql)
+    } catch (error) {
+      failedBatches.push({
+        batch: index + 1,
+        parquetFiles: parquetBatches[index],
+        error: String(error),
+      })
+      console.warn(`[discovery] batch ${index + 1}/${parquetBatches.length}: FAILED; continuing. File(s): ${parquetBatches[index].join(', ')}`)
+    }
   }
 
   if (options.sqlOnly) return
+
+  await writeFile(
+    path.join(outputDir, 'discovery-failures.json'),
+    `${JSON.stringify(failedBatches, null, 2)}\n`,
+    'utf8',
+  )
   const rawMap = new Map<string, AggregatedDiscoveryRow>()
   for (let index = 0; index < parquetBatches.length; index += 1) {
     const batchFile = path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`)
-    const body = await readFile(batchFile, 'utf8')
+    let body: string
+    try {
+      body = await readFile(batchFile, 'utf8')
+    } catch {
+      continue
+    }
     for (const line of body.split(/\r?\n/).filter(Boolean)) {
       const row = JSON.parse(line) as RawDiscoveryRow
       const key = `${row.crawl}|${row.url_host_name}|${row.url_path}|${row.url}`
@@ -547,6 +569,8 @@ async function main() {
     recommendedForReview: recommended.length,
     ambiguousAttributedCaptures: attributed.filter((row) => row.ambiguousEmployerMatch).length,
     employersWithRecommendedCandidates: new Set(recommended.map((source) => source.employerId)).size,
+    failedBatches: failedBatches.length,
+    failedParquetFiles: failedBatches.reduce((sum, batch) => sum + batch.parquetFiles.length, 0),
   }
   await writeFile(path.join(outputDir, 'discovery-report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8')
   console.log(JSON.stringify(report, null, 2))
