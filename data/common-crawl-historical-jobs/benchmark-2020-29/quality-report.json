@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-22T20:31:20.928Z",
+  "generatedAt": "2026-09-22T20:48:39.964Z",
   "parserVersion": "common-crawl-parser-v3",
-  "classifierVersion": "common-crawl-classifier-v1",
+  "classifierVersion": "common-crawl-classifier-v2",
   "taxonomyVersion": "common-crawl-taxonomy-v1",
   "options": {
     "phase": "extract",
@@ -30,13 +30,13 @@
     "capturesAttempted": 710,
     "parsedJobObservations": 156,
     "distinctParsedJobs": 143,
-    "distinctValidSolarUsJobs": 13
+    "distinctValidSolarUsJobs": 30
   },
   "rejectionBreakdown": {
     "local_html_missing": 1,
     "missing_job_content": 553,
-    "not_solar_related": 101,
-    "not_us_or_unknown": 41
+    "not_solar_related": 81,
+    "not_us_or_unknown": 36
   },
   "yearly": [
     {
@@ -45,12 +45,12 @@
       "capturesAttempted": 710,
       "capturesDownloaded": 709,
       "parsedJobs": 143,
-      "validSolarUsJobs": 13,
+      "validSolarUsJobs": 30,
       "employersRepresented": 3,
-      "completeDescriptions": 13,
+      "completeDescriptions": 30,
       "descriptionsCompletePct": 100,
       "parsedJobYieldPct": 22,
-      "solarUsYieldPct": 2
+      "solarUsYieldPct": 5.5
     }
   ],
   "employerCoverage": [
@@ -159,7 +159,7 @@
       "indexMatches": 229,
       "warcDownloads": 229,
       "parsedJobs": 63,
-      "validJobs": 2,
+      "validJobs": 3,
       "coverageStatus": "covered"
     },
     {
@@ -195,7 +195,7 @@
       "indexMatches": 259,
       "warcDownloads": 258,
       "parsedJobs": 35,
-      "validJobs": 6,
+      "validJobs": 19,
       "coverageStatus": "covered"
     },
     {
@@ -411,7 +411,7 @@
       "indexMatches": 10,
       "warcDownloads": 10,
       "parsedJobs": 10,
-      "validJobs": 5,
+      "validJobs": 8,
       "coverageStatus": "covered"
     },
     {
