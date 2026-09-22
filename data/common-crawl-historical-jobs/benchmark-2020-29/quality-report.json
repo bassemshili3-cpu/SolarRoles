@@ -1,6 +1,8 @@
 {
-  "generatedAt": "2026-09-22T18:31:10.667Z",
-  "parserVersion": "common-crawl-poc-v1",
+  "generatedAt": "2026-09-22T20:31:20.928Z",
+  "parserVersion": "common-crawl-parser-v3",
+  "classifierVersion": "common-crawl-classifier-v1",
+  "taxonomyVersion": "common-crawl-taxonomy-v1",
   "options": {
     "phase": "extract",
     "employerIds": [],
@@ -11,9 +13,10 @@
     "maxCrawlsPerYear": 0,
     "maxCapturesPerEmployerYear": 0,
     "indexDelayMs": 1300,
-    "warcDelayMs": 250,
+    "warcDelayMs": 0,
     "outputDir": "data/common-crawl-historical-jobs/benchmark-2020-29",
-    "reuseHtml": false
+    "reuseHtml": true,
+    "localOnly": true
   },
   "crawls": {
     "2020": [
@@ -25,7 +28,15 @@
     "indexQueries": 73,
     "indexMatches": 710,
     "capturesAttempted": 710,
-    "distinctValidSolarJobs": 15
+    "parsedJobObservations": 156,
+    "distinctParsedJobs": 143,
+    "distinctValidSolarUsJobs": 13
+  },
+  "rejectionBreakdown": {
+    "local_html_missing": 1,
+    "missing_job_content": 553,
+    "not_solar_related": 101,
+    "not_us_or_unknown": 41
   },
   "yearly": [
     {
@@ -33,11 +44,13 @@
       "indexMatches": 710,
       "capturesAttempted": 710,
       "capturesDownloaded": 709,
-      "validSolarJobs": 15,
+      "parsedJobs": 143,
+      "validSolarUsJobs": 13,
       "employersRepresented": 3,
-      "completeDescriptions": 15,
+      "completeDescriptions": 13,
       "descriptionsCompletePct": 100,
-      "extractionYieldPct": 2.3
+      "parsedJobYieldPct": 22,
+      "solarUsYieldPct": 2
     }
   ],
   "employerCoverage": [
@@ -49,6 +62,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -60,6 +74,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -71,6 +86,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -82,6 +98,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -93,6 +110,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -104,6 +122,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -115,6 +134,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -126,6 +146,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -137,6 +158,7 @@
       "domainSearched": true,
       "indexMatches": 229,
       "warcDownloads": 229,
+      "parsedJobs": 63,
       "validJobs": 2,
       "coverageStatus": "covered"
     },
@@ -148,6 +170,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -159,6 +182,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -170,7 +194,8 @@
       "domainSearched": true,
       "indexMatches": 259,
       "warcDownloads": 258,
-      "validJobs": 8,
+      "parsedJobs": 35,
+      "validJobs": 6,
       "coverageStatus": "covered"
     },
     {
@@ -181,6 +206,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -192,6 +218,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -203,6 +230,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -214,6 +242,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -225,6 +254,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -236,6 +266,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -247,6 +278,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -258,6 +290,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -269,6 +302,7 @@
       "domainSearched": true,
       "indexMatches": 11,
       "warcDownloads": 11,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "captures_without_valid_jobs"
     },
@@ -280,6 +314,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -291,6 +326,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -302,6 +338,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -313,6 +350,7 @@
       "domainSearched": true,
       "indexMatches": 2,
       "warcDownloads": 2,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "captures_without_valid_jobs"
     },
@@ -324,6 +362,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -335,6 +374,7 @@
       "domainSearched": true,
       "indexMatches": 11,
       "warcDownloads": 11,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "captures_without_valid_jobs"
     },
@@ -346,6 +386,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -357,6 +398,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -368,6 +410,7 @@
       "domainSearched": true,
       "indexMatches": 10,
       "warcDownloads": 10,
+      "parsedJobs": 10,
       "validJobs": 5,
       "coverageStatus": "covered"
     },
@@ -379,6 +422,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -390,6 +434,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -401,6 +446,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -412,6 +458,7 @@
       "domainSearched": true,
       "indexMatches": 77,
       "warcDownloads": 77,
+      "parsedJobs": 22,
       "validJobs": 0,
       "coverageStatus": "captures_without_valid_jobs"
     },
@@ -423,6 +470,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     },
@@ -434,6 +482,7 @@
       "domainSearched": true,
       "indexMatches": 111,
       "warcDownloads": 111,
+      "parsedJobs": 13,
       "validJobs": 0,
       "coverageStatus": "captures_without_valid_jobs"
     },
@@ -445,6 +494,7 @@
       "domainSearched": true,
       "indexMatches": 0,
       "warcDownloads": 0,
+      "parsedJobs": 0,
       "validJobs": 0,
       "coverageStatus": "searched_no_capture"
     }
