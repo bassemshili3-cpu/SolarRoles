@@ -5,6 +5,8 @@ import {
   extractHttpPayloadFromWarc,
   isHistoricalSolarRole,
   parseHistoricalJobHtml,
+  parseHistoricalJobHtmlDetailed,
+  repairCommonMojibake,
   spreadSample,
   type HistoricalEmployer,
 } from '../lib/historical-jobs/commonCrawl'
@@ -42,12 +44,17 @@ const taxonomy = extractHistoricalTaxonomy('Solar Electrician', 'NABCEP preferre
 assert.equal(taxonomy.electrician, true)
 assert.equal(taxonomy.nabcep, true)
 assert.equal(taxonomy.paidTraining, true)
+assert.equal(extractHistoricalTaxonomy('Lead Estimator', 'Minimum 5+ years’ experience in construction estimating.').minimumExperienceYears, 5)
+assert.equal(extractHistoricalTaxonomy('PV Tech III', 'Report to the operations manager.').management, false)
 assert.equal(extractHistoricalTaxonomy('Transmission Strategist - Solar and Storage Development', '').bessStorage, true)
 assert.equal(extractHistoricalTaxonomy('Software Engineer', 'Build cloud object storage systems.').bessStorage, false)
 assert.equal(isHistoricalSolarRole('Director, PV Energy & Performance Engineering', 'Lead a utility-scale generation team.'), true)
 assert.equal(isHistoricalSolarRole('Senior Project Accountant', 'Work for a solar energy company.'), false)
 assert.equal(isHistoricalSolarRole('Wind Field Service Technician III', 'Our portfolio produces renewable energy from wind and solar.'), false)
 assert.equal(isHistoricalSolarRole('Dev Ops Engineer', 'We are a global solar energy company building clean energy products.'), false)
+assert.equal(isHistoricalSolarRole('Finance Operations Manager', 'We are a global solar energy company building clean energy products.'), false)
+assert.equal(isHistoricalSolarRole('Project Engineer', 'Design utility-scale photovoltaic systems and solar projects.'), true)
+assert.equal(repairCommonMojibake('candidateâ€™s â€œsolarâ€\u009d role'), 'candidate’s “solar” role')
 
 const foreignHtml = html.replace(
   'Solar Commissioning Technician',
@@ -56,7 +63,28 @@ const foreignHtml = html.replace(
   '"addressLocality":"Austin","addressRegion":"TX","addressCountry":"US"',
   '"addressLocality":"Binan, LAG, PH","addressRegion":"","addressCountry":""',
 )
-assert.equal(parseHistoricalJobHtml(foreignHtml, 'https://boards.greenhouse.io/examplesolar/jobs/43', employer), null)
+const foreignParsed = parseHistoricalJobHtmlDetailed(foreignHtml, 'https://boards.greenhouse.io/examplesolar/jobs/43', employer)
+assert.equal(foreignParsed.job, null)
+assert.equal(foreignParsed.rejectionReason, 'not_us_or_unknown')
+
+const boilerplateOnlyHtml = html.replace(
+  'Solar Commissioning Technician',
+  'Finance Operations Manager',
+).replace(
+  '<p>Commission utility-scale solar and BESS systems. OSHA-30 required. Travel up to 50%. Two years of experience.</p>',
+  '<p>We are a global solar energy company building clean energy products. Manage finance operations and reporting.</p>',
+)
+const boilerplateParsed = parseHistoricalJobHtmlDetailed(boilerplateOnlyHtml, 'https://boards.greenhouse.io/examplesolar/jobs/44', employer)
+assert.equal(boilerplateParsed.job, null)
+assert.equal(boilerplateParsed.rejectionReason, 'not_solar_related')
+
+const unknownLocationHtml = html.replace(
+  '"addressLocality":"Austin","addressRegion":"TX","addressCountry":"US"',
+  '"addressLocality":"London","addressRegion":"","addressCountry":""',
+)
+const unknownLocationParsed = parseHistoricalJobHtmlDetailed(unknownLocationHtml, 'https://boards.greenhouse.io/examplesolar/jobs/45', employer)
+assert.equal(unknownLocationParsed.job, null)
+assert.equal(unknownLocationParsed.rejectionReason, 'not_us_or_unknown')
 
 const warc = Buffer.from(`WARC/1.0\r\nWARC-Type: response\r\nContent-Length: ${html.length}\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n${html}`)
 const payload = extractHttpPayloadFromWarc(gzipSync(warc))
