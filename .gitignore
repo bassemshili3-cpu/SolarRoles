@@ -33,6 +33,7 @@ data/common-crawl-historical-jobs/**/index-records.parquet
 data/common-crawl-historical-jobs/**/discovery-raw.parquet
 data/common-crawl-historical-jobs/**/discovery-raw.jsonl
 data/common-crawl-historical-jobs/**/discovery-attributed.jsonl
+data/common-crawl-historical-jobs/**/discovery-batches/
 data/common-crawl-historical-jobs/**/duckdb-tmp/
 data/common-crawl-historical-jobs/url-index-smoke/
 data/common-crawl-historical-jobs/url-index-local-test/
