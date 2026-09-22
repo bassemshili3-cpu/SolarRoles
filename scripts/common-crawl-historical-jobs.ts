@@ -1,8 +1,11 @@
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import {
+  buildHistoricalJobFeatures,
   extractHttpPayloadFromWarc,
+  HISTORICAL_CLASSIFIER_VERSION,
   HISTORICAL_PARSER_VERSION,
+  HISTORICAL_TAXONOMY_VERSION,
   parseHistoricalJobHtmlDetailed,
   sha256,
   spreadSample,
@@ -222,7 +225,9 @@ async function main() {
   }
 
   const captures: Array<Record<string, unknown>> = []
-  const jobsById = new Map<string, ParsedHistoricalJob>()
+  const parsedJobsById = new Map<string, ParsedHistoricalJob>()
+  const solarUsJobsById = new Map<string, ParsedHistoricalJob>()
+  const classificationsById = new Map<string, Record<string, unknown>>()
   await writeFile(path.join(root, 'captures.jsonl'), '')
   for (const capture of selected) {
     const employer = employers.find((candidate) => candidate.employerId === capture.employerId)
@@ -248,7 +253,19 @@ async function main() {
       }
       const parsed = parseHistoricalJobHtmlDetailed(html, capture.url, employer)
       const job = parsed.job
-      if (job) jobsById.set(job.historicalJobId, job)
+      if (job) {
+        parsedJobsById.set(job.historicalJobId, job)
+        classificationsById.set(job.historicalJobId, {
+          historicalJobId: job.historicalJobId,
+          isUsJob: parsed.isUsJob,
+          isSolarRelated: parsed.isSolarRelated,
+          usEvidence: parsed.usEvidence,
+          solarEvidence: parsed.solarEvidence,
+          rejectionReason: parsed.rejectionReason,
+          classifierVersion: HISTORICAL_CLASSIFIER_VERSION,
+        })
+        if (parsed.isUsJob && parsed.isSolarRelated) solarUsJobsById.set(job.historicalJobId, job)
+      }
       const row = {
         captureId,
         historicalJobId: job?.historicalJobId ?? null,
@@ -264,7 +281,10 @@ async function main() {
         localWarcPath: path.relative(process.cwd(), warcPath),
         localHtmlPath: path.relative(process.cwd(), htmlPath),
         httpStatusLine: statusLine,
-        extractionStatus: job ? 'valid_solar_job' : 'not_a_valid_solar_job',
+        parsedHistoricalJobId: job?.historicalJobId ?? null,
+        extractionStatus: job
+          ? parsed.isUsJob && parsed.isSolarRelated ? 'valid_solar_us_job' : 'parsed_non_target_job'
+          : 'not_a_job_page',
         rejectionReason: parsed.rejectionReason,
         isJobPage: parsed.isJobPage,
         isUsJob: parsed.isUsJob,
@@ -275,7 +295,7 @@ async function main() {
       }
       captures.push(row)
       await appendFile(path.join(root, 'captures.jsonl'), jsonLine(row))
-      console.log(`[warc] ${capture.year} ${capture.employerId}: ${job ? job.title : 'rejected'}`)
+      console.log(`[warc] ${capture.year} ${capture.employerId}: ${job ? `${job.title} [${parsed.isUsJob && parsed.isSolarRelated ? 'solar-us' : 'parsed'}]` : 'not-job'}`)
     } catch (error) {
       const localHtmlMissing = String(error).includes('LOCAL_HTML_MISSING')
       const row = { captureId, historicalJobId: null, employerId: capture.employerId, year: capture.year, crawlId: capture.crawlId, captureTimestamp: capture.timestamp, sourceUrl: capture.url, extractionStatus: localHtmlMissing ? 'local_html_missing' : 'download_or_parse_failed', rejectionReason: localHtmlMissing ? 'local_html_missing' : null, parserVersion: HISTORICAL_PARSER_VERSION, error: String(error) }
@@ -286,23 +306,39 @@ async function main() {
     await sleep(options.warcDelayMs)
   }
 
-  const jobs = [...jobsById.values()]
-  await writeFile(path.join(root, 'historical-jobs.jsonl'), jobs.map(jsonLine).join(''))
+  const parsedJobs = [...parsedJobsById.values()]
+  const solarUsJobs = [...solarUsJobsById.values()]
+  const classifications = [...classificationsById.values()]
+  const features = solarUsJobs.map(buildHistoricalJobFeatures)
+
+  await writeFile(path.join(root, 'parsed-jobs.jsonl'), parsedJobs.map(jsonLine).join(''))
+  await writeFile(path.join(root, 'job-classifications.jsonl'), classifications.map(jsonLine).join(''))
+  await writeFile(path.join(root, 'solar-us-jobs.jsonl'), solarUsJobs.map(jsonLine).join(''))
+  await writeFile(path.join(root, 'solar-us-job-features.jsonl'), features.map(jsonLine).join(''))
+  // Backward-compatible alias for older tooling. Prefer solar-us-jobs.jsonl in new work.
+  await writeFile(path.join(root, 'historical-jobs.jsonl'), solarUsJobs.map(jsonLine).join(''))
 
   const yearly = options.years.map((year) => {
     const yearCaptures = captures.filter((capture) => capture.year === year)
-    const yearJobIds = new Set(yearCaptures.map((capture) => capture.historicalJobId).filter(Boolean))
-    const yearJobs = jobs.filter((job) => yearJobIds.has(job.historicalJobId))
+    const parsedIds = new Set(yearCaptures.map((capture) => capture.parsedHistoricalJobId).filter(Boolean))
+    const solarUsIds = new Set(yearCaptures
+      .filter((capture) => capture.extractionStatus === 'valid_solar_us_job')
+      .map((capture) => capture.parsedHistoricalJobId)
+      .filter(Boolean))
+    const yearParsedJobs = parsedJobs.filter((job) => parsedIds.has(job.historicalJobId))
+    const yearSolarUsJobs = solarUsJobs.filter((job) => solarUsIds.has(job.historicalJobId))
     return {
       year,
       indexMatches: indexed.filter((capture) => capture.year === year).length,
       capturesAttempted: yearCaptures.length,
       capturesDownloaded: yearCaptures.filter((capture) => !['download_or_parse_failed', 'local_html_missing'].includes(String(capture.extractionStatus))).length,
-      validSolarJobs: yearJobs.length,
-      employersRepresented: new Set(yearJobs.map((job) => job.employerId)).size,
-      completeDescriptions: yearJobs.filter((job) => job.descriptionText.length >= 300).length,
-      descriptionsCompletePct: yearJobs.length ? Number((100 * yearJobs.filter((job) => job.descriptionText.length >= 300).length / yearJobs.length).toFixed(1)) : null,
-      extractionYieldPct: yearCaptures.length ? Number((100 * yearCaptures.filter((capture) => capture.extractionStatus === 'valid_solar_job').length / yearCaptures.length).toFixed(1)) : null,
+      parsedJobs: yearParsedJobs.length,
+      validSolarUsJobs: yearSolarUsJobs.length,
+      employersRepresented: new Set(yearSolarUsJobs.map((job) => job.employerId)).size,
+      completeDescriptions: yearSolarUsJobs.filter((job) => job.descriptionText.length >= 300).length,
+      descriptionsCompletePct: yearSolarUsJobs.length ? Number((100 * yearSolarUsJobs.filter((job) => job.descriptionText.length >= 300).length / yearSolarUsJobs.length).toFixed(1)) : null,
+      parsedJobYieldPct: yearCaptures.length ? Number((100 * yearCaptures.filter((capture) => capture.parsedHistoricalJobId).length / yearCaptures.length).toFixed(1)) : null,
+      solarUsYieldPct: yearCaptures.length ? Number((100 * yearCaptures.filter((capture) => capture.extractionStatus === 'valid_solar_us_job').length / yearCaptures.length).toFixed(1)) : null,
     }
   })
   const employerCoverage = options.years.flatMap((year) => employers.map((employer) => {
@@ -316,9 +352,13 @@ async function main() {
       domainSearched: true,
       indexMatches: indexed.filter((capture) => capture.year === year && capture.employerId === employer.employerId).length,
       warcDownloads: employerCaptures.filter((capture) => !['download_or_parse_failed', 'local_html_missing'].includes(String(capture.extractionStatus))).length,
-      validJobs: new Set(employerCaptures.map((capture) => capture.historicalJobId).filter(Boolean)).size,
+      parsedJobs: new Set(employerCaptures.map((capture) => capture.parsedHistoricalJobId).filter(Boolean)).size,
+      validJobs: new Set(employerCaptures
+        .filter((capture) => capture.extractionStatus === 'valid_solar_us_job')
+        .map((capture) => capture.parsedHistoricalJobId)
+        .filter(Boolean)).size,
       coverageStatus: employerQueries.some((query) => query.status === 'query_failed') ? 'query_failed'
-        : employerCaptures.some((capture) => capture.extractionStatus === 'valid_solar_job') ? 'covered'
+        : employerCaptures.some((capture) => capture.extractionStatus === 'valid_solar_us_job') ? 'covered'
           : employerQueries.some((query) => Number(query.matches) > 0) ? 'captures_without_valid_jobs'
             : 'searched_no_capture',
     }
@@ -331,9 +371,18 @@ async function main() {
   const report = {
     generatedAt: new Date().toISOString(),
     parserVersion: HISTORICAL_PARSER_VERSION,
+    classifierVersion: HISTORICAL_CLASSIFIER_VERSION,
+    taxonomyVersion: HISTORICAL_TAXONOMY_VERSION,
     options,
     crawls: Object.fromEntries([...crawlMap.entries()]),
-    totals: { employers: employers.length, indexQueries: queries.length, indexMatches: indexed.length, capturesAttempted: captures.length, distinctValidSolarJobs: jobs.length },
+    totals: {
+      employers: employers.length,
+      indexQueries: queries.length,
+      indexMatches: indexed.length,
+      capturesAttempted: captures.length,
+      distinctParsedJobs: parsedJobs.length,
+      distinctValidSolarUsJobs: solarUsJobs.length,
+    },
     rejectionBreakdown,
     yearly,
     employerCoverage,
@@ -341,7 +390,7 @@ async function main() {
   }
   await writeFile(path.join(root, 'quality-report.json'), `${JSON.stringify(report, null, 2)}\n`)
 
-  const reviewRows = spreadSample(jobs.sort((a, b) => a.datePosted?.localeCompare(b.datePosted ?? '') ?? 0), 30)
+  const reviewRows = spreadSample(solarUsJobs.sort((a, b) => a.datePosted?.localeCompare(b.datePosted ?? '') ?? 0), 30)
   const reviewHeader = ['historical_job_id', 'employer', 'title', 'location', 'source_url', 'description_excerpt', 'review_outcome', 'review_reason']
   const reviewCsv = [reviewHeader.map(csvCell).join(','), ...reviewRows.map((job) => [job.historicalJobId, job.employerName, job.title, job.locationRaw, job.sourceUrl, job.descriptionText.slice(0, 500), '', ''].map(csvCell).join(','))].join('\n')
   await writeFile(path.join(root, 'manual-review.csv'), `${reviewCsv}\n`)
