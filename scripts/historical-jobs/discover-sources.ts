@@ -162,13 +162,13 @@ function chunks<T>(values: T[], size: number) {
   return Array.from({ length: Math.ceil(values.length / size) }, (_, index) => values.slice(index * size, (index + 1) * size))
 }
 
-function buildDiscoverySql(
+function buildDiscoveryBatchSql(
   parquetFiles: string[],
   specs: EmployerDiscoverySpec[],
-  outputDir: string,
+  batchOutput: string,
+  tempDir: string,
   threads: number,
   memoryLimit: string,
-  filesPerBatch: number,
 ) {
   const aliases = [...new Set(specs.flatMap((spec) => spec.aliases))].sort((a, b) => b.length - a.length)
   const roots = [...new Set(specs.flatMap((spec) => spec.firstPartyRoots))].sort()
@@ -182,13 +182,11 @@ function buildDiscoverySql(
     `(lower(url_host_name) = ${sqlString(suffix)} OR ends_with(lower(url_host_name), ${sqlString(`.${suffix}`)}))`,
   ).join('\n      OR ')
 
-  const batchDir = path.join(outputDir, 'discovery-batches')
-  const tempDir = sqlPath(path.join(outputDir, 'duckdb-tmp'))
-  const batches = chunks(parquetFiles, filesPerBatch)
-
-  const statements = batches.map((batch, index) => {
-    const batchOutput = sqlPath(path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`))
-    return `SELECT 'discovery batch ${index + 1}/${batches.length}' AS status;
+  return `SET preserve_insertion_order = false;
+SET enable_progress_bar = true;
+SET threads = ${threads};
+SET memory_limit = ${sqlString(memoryLimit)};
+SET temp_directory = ${sqlPath(tempDir)};
 
 COPY (
   SELECT
@@ -200,7 +198,7 @@ COPY (
     max(fetch_time) AS last_seen,
     count(*)::INTEGER AS capture_count
   FROM read_parquet([
-    ${batch.map((filename) => sqlPath(filename)).join(',\n    ')}
+    ${parquetFiles.map((filename) => sqlPath(filename)).join(',\n    ')}
   ], hive_partitioning = true, union_by_name = true)
   WHERE fetch_status = 200
     AND (
@@ -216,16 +214,7 @@ COPY (
       OR ${atsPredicate}
     )
   GROUP BY crawl, url, lower(url_host_name), coalesce(url_path, '/')
-) TO ${batchOutput} (FORMAT JSON, ARRAY false);`
-  })
-
-  return `SET preserve_insertion_order = false;
-SET enable_progress_bar = true;
-SET threads = ${threads};
-SET memory_limit = ${sqlString(memoryLimit)};
-SET temp_directory = ${tempDir};
-
-${statements.join('\n\n')}
+) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
 `
 }
 async function runDuckDb(executable: string, sqlFile: string) {
@@ -302,25 +291,13 @@ async function main() {
     throw new Error('--files-per-batch must be a positive integer')
   }
 
-  const sqlFile = path.join(outputDir, 'discovery.sql')
   const planFile = path.join(outputDir, 'discovery-plan.json')
   const batchDir = path.join(outputDir, 'discovery-batches')
+  const tempDir = path.join(outputDir, 'duckdb-tmp')
   await mkdir(batchDir, { recursive: true })
-  await mkdir(path.join(outputDir, 'duckdb-tmp'), { recursive: true })
+  await mkdir(tempDir, { recursive: true })
 
   const parquetBatches = chunks(parquetFiles, options.filesPerBatch)
-  await writeFile(
-    sqlFile,
-    buildDiscoverySql(
-      parquetFiles,
-      specs,
-      outputDir,
-      options.threads,
-      options.memoryLimit,
-      options.filesPerBatch,
-    ),
-    'utf8',
-  )
   await writeFile(planFile, `${JSON.stringify({
     generatedAt: new Date().toISOString(),
     year: options.year,
@@ -333,15 +310,47 @@ async function main() {
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
     aliases: Object.fromEntries(specs.map((spec) => [spec.employer.employerId, spec.aliases])),
     firstPartyRoots: Object.fromEntries(specs.map((spec) => [spec.employer.employerId, spec.firstPartyRoots])),
-    sqlFile: path.relative(process.cwd(), sqlFile),
   }, null, 2)}\n`, 'utf8')
 
   console.log(`[discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${parquetBatches.length} batch(es) | ${employers.length} employers | ${options.threads} threads | ${options.memoryLimit}`)
-  console.log(`[discovery] SQL plan: ${path.relative(process.cwd(), sqlFile)}`)
+  console.log('[discovery] each batch runs in a fresh DuckDB process; existing batch outputs are reused')
+
+  for (let index = 0; index < parquetBatches.length; index += 1) {
+    const label = String(index + 1).padStart(4, '0')
+    const batchOutput = path.join(batchDir, `batch-${label}.jsonl`)
+    const batchSql = path.join(batchDir, `batch-${label}.sql`)
+
+    try {
+      await access(batchOutput)
+      console.log(`[discovery] batch ${index + 1}/${parquetBatches.length}: cached`)
+      continue
+    } catch {
+      // Missing output: generate and run this batch.
+    }
+
+    await writeFile(
+      batchSql,
+      buildDiscoveryBatchSql(
+        parquetBatches[index],
+        specs,
+        batchOutput,
+        tempDir,
+        options.threads,
+        options.memoryLimit,
+      ),
+      'utf8',
+    )
+
+    if (options.sqlOnly) {
+      console.log(`[discovery] batch ${index + 1}/${parquetBatches.length}: SQL generated`)
+      continue
+    }
+
+    console.log(`[discovery] batch ${index + 1}/${parquetBatches.length}: scanning ${parquetBatches[index].length} Parquet file(s)`)
+    await runDuckDb(options.duckdb, batchSql)
+  }
+
   if (options.sqlOnly) return
-
-  await runDuckDb(options.duckdb, sqlFile)
-
   const rawMap = new Map<string, RawDiscoveryRow>()
   for (let index = 0; index < parquetBatches.length; index += 1) {
     const batchFile = path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`)
