@@ -72,7 +72,7 @@ export interface HistoricalParseResult {
 }
 
 export const HISTORICAL_PARSER_VERSION = 'common-crawl-parser-v3'
-export const HISTORICAL_CLASSIFIER_VERSION = 'common-crawl-classifier-v1'
+export const HISTORICAL_CLASSIFIER_VERSION = 'common-crawl-classifier-v2'
 export const HISTORICAL_TAXONOMY_VERSION = 'common-crawl-taxonomy-v1'
 const US_STATE_CODES = new Set(Object.keys(STATE_CODE_TO_NAME))
 const US_STATE_NAMES = new Set(Object.values(STATE_CODE_TO_NAME).map((value) => value.toLowerCase()))
@@ -321,7 +321,7 @@ export function isHistoricalSolarRole(title: string, description: string) {
   return evaluateHistoricalSolarRole(title, description).isSolarRelated
 }
 
-function evaluateUsLocation(locationRaw: string, state: string | null, country: string | null) {
+function evaluateUsLocation(locationRaw: string, state: string | null, country: string | null, sourceUrl = '') {
   const evidence: string[] = []
   if (country === 'US') evidence.push('structured_country_us')
   else if (country) return { isUsJob: false, evidence: [`structured_country_${country.toLowerCase()}`] }
@@ -340,6 +340,9 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
   if (/\b(?:US|USA|United States(?: of America)?)\b/i.test(locationRaw)) evidence.push('location_text_us')
   const stateCodeMatches = [...locationRaw.matchAll(/(?:^|[,\s])([A-Z]{2})(?=\s*(?:,|\d{5}(?:-\d{4})?|$))/g)]
   if (stateCodeMatches.some((match) => US_STATE_CODES.has(match[1]))) evidence.push('location_text_state')
+
+  const urlStateZip = sourceUrl.match(/(?:^|[-/])([A-Z]{2})-(\d{5})(?:[-/]|$)/)
+  if (urlStateZip && US_STATE_CODES.has(urlStateZip[1])) evidence.push('source_url_state_zip')
 
   return { isUsJob: evidence.length > 0, evidence }
 }
@@ -430,7 +433,7 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
     parserVersion: HISTORICAL_PARSER_VERSION,
   }
 
-  const us = evaluateUsLocation(locationRaw, structuredAddress.state, country)
+  const us = evaluateUsLocation(locationRaw, structuredAddress.state, country, sourceUrl)
   const solar = evaluateHistoricalSolarRole(title, descriptionText)
   const rejectionReason = !us.isUsJob
     ? 'not_us_or_unknown'
