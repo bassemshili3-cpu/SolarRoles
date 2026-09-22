@@ -1,0 +1,290 @@
+{
+  "generatedAt": "2026-09-22T16:07:23.011Z",
+  "parserVersion": "common-crawl-poc-v1",
+  "options": {
+    "phase": "extract",
+    "employerIds": [
+      "sunrun",
+      "first-solar",
+      "sunpower",
+      "solarcity",
+      "vivint-solar",
+      "sungevity"
+    ],
+    "years": [
+      2016,
+      2020,
+      2024
+    ],
+    "maxEmployers": 0,
+    "maxCrawlsPerYear": 0,
+    "maxCapturesPerEmployerYear": 30,
+    "indexDelayMs": 1300,
+    "warcDelayMs": 250,
+    "outputDir": "data/common-crawl-historical-jobs/poc-historical-domains",
+    "reuseHtml": true
+  },
+  "crawls": {
+    "2016": [
+      "CC-MAIN-2016-07",
+      "CC-MAIN-2016-30",
+      "CC-MAIN-2016-50"
+    ],
+    "2020": [
+      "CC-MAIN-2020-05",
+      "CC-MAIN-2020-29",
+      "CC-MAIN-2020-50"
+    ],
+    "2024": [
+      "CC-MAIN-2024-10",
+      "CC-MAIN-2024-33",
+      "CC-MAIN-2024-51"
+    ]
+  },
+  "totals": {
+    "employers": 6,
+    "indexQueries": 162,
+    "indexMatches": 687,
+    "capturesAttempted": 31,
+    "distinctValidSolarJobs": 1
+  },
+  "yearly": [
+    {
+      "year": 2016,
+      "indexMatches": 1,
+      "capturesAttempted": 1,
+      "capturesDownloaded": 1,
+      "validSolarJobs": 0,
+      "employersRepresented": 0,
+      "completeDescriptions": 0,
+      "descriptionsCompletePct": null,
+      "extractionYieldPct": 0
+    },
+    {
+      "year": 2020,
+      "indexMatches": 686,
+      "capturesAttempted": 30,
+      "capturesDownloaded": 30,
+      "validSolarJobs": 1,
+      "employersRepresented": 1,
+      "completeDescriptions": 1,
+      "descriptionsCompletePct": 100,
+      "extractionYieldPct": 3.3
+    },
+    {
+      "year": 2024,
+      "indexMatches": 0,
+      "capturesAttempted": 0,
+      "capturesDownloaded": 0,
+      "validSolarJobs": 0,
+      "employersRepresented": 0,
+      "completeDescriptions": 0,
+      "descriptionsCompletePct": null,
+      "extractionYieldPct": null
+    }
+  ],
+  "employerCoverage": [
+    {
+      "year": 2016,
+      "employerId": "sunrun",
+      "employerName": "Sunrun",
+      "atsProvider": "workday",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "first-solar",
+      "employerName": "First Solar",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "sunpower",
+      "employerName": "SunPower",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 1,
+      "warcDownloads": 1,
+      "validJobs": 0,
+      "coverageStatus": "captures_without_valid_jobs"
+    },
+    {
+      "year": 2016,
+      "employerId": "solarcity",
+      "employerName": "SolarCity",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "vivint-solar",
+      "employerName": "Vivint Solar",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "sungevity",
+      "employerName": "Sungevity",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "sunrun",
+      "employerName": "Sunrun",
+      "atsProvider": "workday",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "first-solar",
+      "employerName": "First Solar",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "sunpower",
+      "employerName": "SunPower",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 686,
+      "warcDownloads": 30,
+      "validJobs": 1,
+      "coverageStatus": "covered"
+    },
+    {
+      "year": 2020,
+      "employerId": "solarcity",
+      "employerName": "SolarCity",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "vivint-solar",
+      "employerName": "Vivint Solar",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "sungevity",
+      "employerName": "Sungevity",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "sunrun",
+      "employerName": "Sunrun",
+      "atsProvider": "workday",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "first-solar",
+      "employerName": "First Solar",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "sunpower",
+      "employerName": "SunPower",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "solarcity",
+      "employerName": "SolarCity",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "vivint-solar",
+      "employerName": "Vivint Solar",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "sungevity",
+      "employerName": "Sungevity",
+      "atsProvider": "proprietary_historical",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    }
+  ],
+  "manualReview": {
+    "status": "pending",
+    "falsePositiveRate": null
+  }
+}

@@ -81,3 +81,19 @@ export interface RepoweringAtlas {
   national: RepoweringNationalSummary
   states: RepoweringStateSummary[]
 }
+
+export interface EiaExpansionState {
+  state: string
+  plannedSolarMW: number
+  projects: number
+  shareBeyond5KmPct: number
+}
+
+export interface EiaExpansionData {
+  national: {
+    plannedSolarMW: number
+    projects: number
+    shareBeyond5KmPct: number
+  }
+  states: EiaExpansionState[]
+}

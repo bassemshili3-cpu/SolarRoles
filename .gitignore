@@ -24,3 +24,13 @@ Thumbs.db
 # Solar repowering batch artifacts
 data/repowering/uspvdb.geojson
 data/repowering/output/
+
+# Common Crawl POC payloads are reproducible and too large for Git.
+.tools/
+data/common-crawl-historical-jobs/**/raw/
+data/common-crawl-historical-jobs/**/html/
+data/common-crawl-historical-jobs/**/index-records.parquet
+data/common-crawl-historical-jobs/**/duckdb-tmp/
+data/common-crawl-historical-jobs/url-index-smoke/
+data/common-crawl-historical-jobs/url-index-local-test/
+data/common-crawl-historical-jobs/parquet/

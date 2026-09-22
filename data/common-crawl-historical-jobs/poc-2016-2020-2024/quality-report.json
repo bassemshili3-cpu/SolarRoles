@@ -1,0 +1,415 @@
+{
+  "generatedAt": "2026-09-22T16:10:27.936Z",
+  "parserVersion": "common-crawl-poc-v1",
+  "options": {
+    "phase": "extract",
+    "employerIds": [],
+    "years": [
+      2016,
+      2020,
+      2024
+    ],
+    "maxEmployers": 0,
+    "maxCrawlsPerYear": 0,
+    "maxCapturesPerEmployerYear": 20,
+    "indexDelayMs": 1300,
+    "warcDelayMs": 0,
+    "outputDir": "data/common-crawl-historical-jobs/poc-2016-2020-2024",
+    "reuseHtml": true
+  },
+  "crawls": {
+    "2016": [
+      "CC-MAIN-2016-07",
+      "CC-MAIN-2016-30",
+      "CC-MAIN-2016-50"
+    ],
+    "2020": [
+      "CC-MAIN-2020-05",
+      "CC-MAIN-2020-29",
+      "CC-MAIN-2020-50"
+    ],
+    "2024": [
+      "CC-MAIN-2024-10",
+      "CC-MAIN-2024-33",
+      "CC-MAIN-2024-51"
+    ]
+  },
+  "totals": {
+    "employers": 10,
+    "indexQueries": 117,
+    "indexMatches": 3703,
+    "capturesAttempted": 97,
+    "distinctValidSolarJobs": 5
+  },
+  "yearly": [
+    {
+      "year": 2016,
+      "indexMatches": 0,
+      "capturesAttempted": 0,
+      "capturesDownloaded": 0,
+      "validSolarJobs": 0,
+      "employersRepresented": 0,
+      "completeDescriptions": 0,
+      "descriptionsCompletePct": null,
+      "extractionYieldPct": null
+    },
+    {
+      "year": 2020,
+      "indexMatches": 671,
+      "capturesAttempted": 20,
+      "capturesDownloaded": 20,
+      "validSolarJobs": 0,
+      "employersRepresented": 0,
+      "completeDescriptions": 0,
+      "descriptionsCompletePct": null,
+      "extractionYieldPct": 0
+    },
+    {
+      "year": 2024,
+      "indexMatches": 3032,
+      "capturesAttempted": 77,
+      "capturesDownloaded": 77,
+      "validSolarJobs": 5,
+      "employersRepresented": 1,
+      "completeDescriptions": 5,
+      "descriptionsCompletePct": 100,
+      "extractionYieldPct": 6.5
+    }
+  ],
+  "employerCoverage": [
+    {
+      "year": 2016,
+      "employerId": "sunrun",
+      "employerName": "Sunrun",
+      "atsProvider": "workday",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "origis-energy",
+      "employerName": "Origis Energy",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "sunnova-energy",
+      "employerName": "Sunnova Energy",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "cypress-creek-renewables",
+      "employerName": "Cypress Creek Renewables",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "freedom-solar-power",
+      "employerName": "Freedom Solar Power",
+      "atsProvider": "lever",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "mortenson",
+      "employerName": "Mortenson",
+      "atsProvider": "lever",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "enphase-energy",
+      "employerName": "Enphase Energy",
+      "atsProvider": "jobvite",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "res",
+      "employerName": "RES",
+      "atsProvider": "jobvite",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "nextera-energy-resources",
+      "employerName": "NextEra Energy Resources",
+      "atsProvider": "successfactors",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2016,
+      "employerId": "engie",
+      "employerName": "ENGIE",
+      "atsProvider": "successfactors",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "sunrun",
+      "employerName": "Sunrun",
+      "atsProvider": "workday",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "origis-energy",
+      "employerName": "Origis Energy",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "sunnova-energy",
+      "employerName": "Sunnova Energy",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "cypress-creek-renewables",
+      "employerName": "Cypress Creek Renewables",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "freedom-solar-power",
+      "employerName": "Freedom Solar Power",
+      "atsProvider": "lever",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "mortenson",
+      "employerName": "Mortenson",
+      "atsProvider": "lever",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "enphase-energy",
+      "employerName": "Enphase Energy",
+      "atsProvider": "jobvite",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "res",
+      "employerName": "RES",
+      "atsProvider": "jobvite",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2020,
+      "employerId": "nextera-energy-resources",
+      "employerName": "NextEra Energy Resources",
+      "atsProvider": "successfactors",
+      "domainSearched": true,
+      "indexMatches": 671,
+      "warcDownloads": 20,
+      "validJobs": 0,
+      "coverageStatus": "captures_without_valid_jobs"
+    },
+    {
+      "year": 2020,
+      "employerId": "engie",
+      "employerName": "ENGIE",
+      "atsProvider": "successfactors",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "sunrun",
+      "employerName": "Sunrun",
+      "atsProvider": "workday",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "origis-energy",
+      "employerName": "Origis Energy",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 16,
+      "warcDownloads": 16,
+      "validJobs": 5,
+      "coverageStatus": "covered"
+    },
+    {
+      "year": 2024,
+      "employerId": "sunnova-energy",
+      "employerName": "Sunnova Energy",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "cypress-creek-renewables",
+      "employerName": "Cypress Creek Renewables",
+      "atsProvider": "greenhouse",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "freedom-solar-power",
+      "employerName": "Freedom Solar Power",
+      "atsProvider": "lever",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "mortenson",
+      "employerName": "Mortenson",
+      "atsProvider": "lever",
+      "domainSearched": true,
+      "indexMatches": 0,
+      "warcDownloads": 0,
+      "validJobs": 0,
+      "coverageStatus": "searched_no_capture"
+    },
+    {
+      "year": 2024,
+      "employerId": "enphase-energy",
+      "employerName": "Enphase Energy",
+      "atsProvider": "jobvite",
+      "domainSearched": true,
+      "indexMatches": 74,
+      "warcDownloads": 20,
+      "validJobs": 0,
+      "coverageStatus": "captures_without_valid_jobs"
+    },
+    {
+      "year": 2024,
+      "employerId": "res",
+      "employerName": "RES",
+      "atsProvider": "jobvite",
+      "domainSearched": true,
+      "indexMatches": 1,
+      "warcDownloads": 1,
+      "validJobs": 0,
+      "coverageStatus": "captures_without_valid_jobs"
+    },
+    {
+      "year": 2024,
+      "employerId": "nextera-energy-resources",
+      "employerName": "NextEra Energy Resources",
+      "atsProvider": "successfactors",
+      "domainSearched": true,
+      "indexMatches": 880,
+      "warcDownloads": 20,
+      "validJobs": 0,
+      "coverageStatus": "captures_without_valid_jobs"
+    },
+    {
+      "year": 2024,
+      "employerId": "engie",
+      "employerName": "ENGIE",
+      "atsProvider": "successfactors",
+      "domainSearched": true,
+      "indexMatches": 2061,
+      "warcDownloads": 20,
+      "validJobs": 0,
+      "coverageStatus": "captures_without_valid_jobs"
+    }
+  ],
+  "manualReview": {
+    "status": "pending",
+    "falsePositiveRate": null
+  }
+}

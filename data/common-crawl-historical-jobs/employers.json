@@ -1,0 +1,261 @@
+[
+  {
+    "employerId": "sunrun",
+    "employerName": "Sunrun",
+    "atsProvider": "workday",
+    "patterns": ["sunrun.wd5.myworkdayjobs.com/*", "www.sunrun.com/careers/*", "www.sunrun.com/jobs/*"],
+    "notes": "Current Workday tenant plus historical first-party career paths; coverage is not assumed."
+  },
+  {
+    "employerId": "origis-energy",
+    "employerName": "Origis Energy",
+    "atsProvider": "greenhouse",
+    "patterns": ["boards.greenhouse.io/origisenergy/*", "job-boards.greenhouse.io/origisenergy/*"],
+    "notes": "Both legacy and current Greenhouse hosts are queried."
+  },
+  {
+    "employerId": "sunnova-energy",
+    "employerName": "Sunnova Energy",
+    "atsProvider": "greenhouse",
+    "patterns": ["boards.greenhouse.io/sunnova/*", "job-boards.greenhouse.io/sunnova/*"],
+    "notes": "Both legacy and current Greenhouse hosts are queried."
+  },
+  {
+    "employerId": "cypress-creek-renewables",
+    "employerName": "Cypress Creek Renewables",
+    "atsProvider": "greenhouse",
+    "patterns": ["boards.greenhouse.io/cypresscreekrenewables/*", "job-boards.greenhouse.io/cypresscreekrenewables/*"],
+    "notes": "Both legacy and current Greenhouse hosts are queried."
+  },
+  {
+    "employerId": "freedom-solar-power",
+    "employerName": "Freedom Solar Power",
+    "atsProvider": "lever",
+    "patterns": ["jobs.lever.co/freedomsolarpower/*"],
+    "notes": "Verified current Solar Roles Lever tenant."
+  },
+  {
+    "employerId": "mortenson",
+    "employerName": "Mortenson",
+    "atsProvider": "lever",
+    "patterns": ["jobs.lever.co/mortenson/*"],
+    "notes": "Verified current Solar Roles Lever tenant."
+  },
+  {
+    "employerId": "enphase-energy",
+    "employerName": "Enphase Energy",
+    "atsProvider": "jobvite",
+    "patterns": ["jobs.jobvite.com/enphase-energy/*"],
+    "notes": "Verified current Solar Roles Jobvite tenant."
+  },
+  {
+    "employerId": "res",
+    "employerName": "RES",
+    "atsProvider": "jobvite",
+    "patterns": ["jobs.jobvite.com/resgroup/*"],
+    "notes": "Verified current Solar Roles Jobvite tenant."
+  },
+  {
+    "employerId": "nextera-energy-resources",
+    "employerName": "NextEra Energy Resources",
+    "atsProvider": "successfactors",
+    "patterns": ["jobs.nexteraenergy.com/job/*"],
+    "notes": "Narrow job-detail prefix used to avoid indexing search and navigation pages."
+  },
+  {
+    "employerId": "engie",
+    "employerName": "ENGIE",
+    "atsProvider": "successfactors",
+    "patterns": ["jobs.engie.com/job/*"],
+    "notes": "Narrow job-detail prefix used to avoid indexing search and navigation pages."
+  },
+  {
+    "employerId": "first-solar",
+    "employerName": "First Solar",
+    "atsProvider": "proprietary_historical",
+    "patterns": ["www.firstsolar.com/careers/*", "firstsolar.com/careers/*", "jobs.firstsolar.com/*"],
+    "notes": "Historical-domain candidates for the 2016 POC; each path must earn covered status from observed captures."
+  },
+  {
+    "employerId": "sunpower",
+    "employerName": "SunPower",
+    "atsProvider": "proprietary_historical",
+    "patterns": ["www.sunpower.com/careers/*", "sunpower.com/careers/*", "careers.sunpower.com/*"],
+    "notes": "Historical-domain candidates for the 2016 POC."
+  },
+  {
+    "employerId": "solarcity",
+    "employerName": "SolarCity",
+    "atsProvider": "proprietary_historical",
+    "patterns": ["www.solarcity.com/careers/*", "solarcity.com/careers/*", "jobs.solarcity.com/*"],
+    "notes": "Historical employer retained separately from Tesla for the 2016 panel."
+  },
+  {
+    "employerId": "vivint-solar",
+    "employerName": "Vivint Solar",
+    "atsProvider": "proprietary_historical",
+    "patterns": ["www.vivintsolar.com/careers/*", "vivintsolar.com/careers/*", "jobs.vivintsolar.com/*"],
+    "notes": "Historical employer retained separately from Sunrun for pre-acquisition observations."
+  },
+  {
+    "employerId": "sungevity",
+    "employerName": "Sungevity",
+    "atsProvider": "proprietary_historical",
+    "patterns": ["www.sungevity.com/careers/*", "sungevity.com/careers/*", "jobs.sungevity.com/*"],
+    "notes": "Historical employer candidate included to test whether 2016 can support a publishable panel."
+  },
+  {
+    "employerId": "array-technologies",
+    "employerName": "Array Technologies",
+    "atsProvider": "workday_candidate",
+    "patterns": ["arraytechinc.wd5.myworkdayjobs.com/*"],
+    "notes": "Current verified SolarRoles tenant; historical coverage must be established from captures."
+  },
+  {
+    "employerId": "blattner",
+    "employerName": "Blattner",
+    "atsProvider": "workday_candidate",
+    "patterns": ["blattner.wd5.myworkdayjobs.com/*"],
+    "notes": "Current verified SolarRoles tenant; historical coverage must be established from captures."
+  },
+  {
+    "employerId": "recurrent-energy",
+    "employerName": "Recurrent Energy",
+    "atsProvider": "workday_candidate",
+    "patterns": ["recurrentenergy.wd12.myworkdayjobs.com/*"],
+    "notes": "Current verified SolarRoles tenant; historical coverage must be established from captures."
+  },
+  {
+    "employerId": "solv-energy",
+    "employerName": "SOLV Energy",
+    "atsProvider": "workday_candidate",
+    "patterns": ["solvenergy.wd1.myworkdayjobs.com/*"],
+    "notes": "Current verified SolarRoles tenant; historical coverage must be established from captures."
+  },
+  {
+    "employerId": "moss",
+    "employerName": "Moss",
+    "atsProvider": "workday_candidate",
+    "patterns": ["mosscm.wd1.myworkdayjobs.com/*"],
+    "notes": "Current verified SolarRoles tenant; historical coverage must be established from captures."
+  },
+  {
+    "employerId": "aes-clean-energy",
+    "employerName": "AES Clean Energy",
+    "atsProvider": "workday_candidate",
+    "patterns": ["aes.wd1.myworkdayjobs.com/*", "www.aes.com/careers/*"],
+    "notes": "Broad tenant plus first-party career path; ownership and historical dates require capture-level review."
+  },
+  {
+    "employerId": "ameresco",
+    "employerName": "Ameresco",
+    "atsProvider": "workday_candidate",
+    "patterns": ["ameresco.wd5.myworkdayjobs.com/*", "www.ameresco.com/careers/*"],
+    "notes": "Current tenant plus first-party historical candidate."
+  },
+  {
+    "employerId": "nextracker",
+    "employerName": "Nextracker",
+    "atsProvider": "workday_candidate",
+    "patterns": ["nextracker.wd5.myworkdayjobs.com/*", "www.nextracker.com/careers/*"],
+    "notes": "Current tenant plus first-party historical candidate."
+  },
+  {
+    "employerId": "primoris",
+    "employerName": "Primoris",
+    "atsProvider": "workday_candidate",
+    "patterns": ["prim.wd108.myworkdayjobs.com/*", "jobs.prim.com/*"],
+    "notes": "Current tenant plus historical careers-host candidate."
+  },
+  {
+    "employerId": "invenergy",
+    "employerName": "Invenergy",
+    "atsProvider": "workday_candidate",
+    "patterns": ["invenergyllc.wd1.myworkdayjobs.com/*", "invenergy.com/careers/*", "www.invenergy.com/careers/*"],
+    "notes": "Current tenant plus first-party historical candidates."
+  },
+  {
+    "employerId": "leeward-renewable-energy",
+    "employerName": "Leeward Renewable Energy",
+    "atsProvider": "workday_candidate",
+    "patterns": ["leewardenergy.wd1.myworkdayjobs.com/*", "www.leewardenergy.com/careers/*"],
+    "notes": "Current tenant plus first-party historical candidate."
+  },
+  {
+    "employerId": "acciona-energy",
+    "employerName": "ACCIONA Energy",
+    "atsProvider": "workday_candidate",
+    "patterns": ["acciona.wd3.myworkdayjobs.com/*", "jobs.acciona.com/*"],
+    "notes": "Current tenant plus corporate careers-host candidate; US location filter remains required."
+  },
+  {
+    "employerId": "silicon-ranch",
+    "employerName": "Silicon Ranch",
+    "atsProvider": "greenhouse_candidate",
+    "patterns": ["boards.greenhouse.io/siliconranch/*", "job-boards.greenhouse.io/siliconranch/*", "www.siliconranch.com/careers/*"],
+    "notes": "Current Greenhouse slug plus first-party historical candidate."
+  },
+  {
+    "employerId": "nexamp",
+    "employerName": "Nexamp",
+    "atsProvider": "greenhouse_candidate",
+    "patterns": ["boards.greenhouse.io/nexamp/*", "job-boards.greenhouse.io/nexamp/*", "www.nexamp.com/careers/*"],
+    "notes": "Current Greenhouse slug plus first-party historical candidate."
+  },
+  {
+    "employerId": "pine-gate-renewables",
+    "employerName": "Pine Gate Renewables",
+    "atsProvider": "greenhouse_candidate",
+    "patterns": ["boards.greenhouse.io/pinegaterenewables/*", "job-boards.greenhouse.io/pinegaterenewables/*", "www.pinegaterenewables.com/careers/*"],
+    "notes": "Current Greenhouse slug plus first-party historical candidate."
+  },
+  {
+    "employerId": "canadian-solar",
+    "employerName": "Canadian Solar",
+    "atsProvider": "jobvite_candidate",
+    "patterns": ["jobs.jobvite.com/canadian-solar/*", "www.canadiansolar.com/careers/*"],
+    "notes": "Current Jobvite slug plus first-party historical candidate; US location filter remains required."
+  },
+  {
+    "employerId": "mccarthy-building-companies",
+    "employerName": "McCarthy Building Companies",
+    "atsProvider": "jobvite_candidate",
+    "patterns": ["jobs.jobvite.com/mccarthy-building-co/*", "www.mccarthy.com/careers/*"],
+    "notes": "Current Jobvite slug plus first-party historical candidate."
+  },
+  {
+    "employerId": "rwe-americas",
+    "employerName": "RWE Americas",
+    "atsProvider": "successfactors_candidate",
+    "patterns": ["jobs.rwe.com/job/*", "www.rwe.com/career/*"],
+    "notes": "Current SuccessFactors host plus first-party historical candidate; US location filter remains required."
+  },
+  {
+    "employerId": "edp-renewables-na",
+    "employerName": "EDP Renewables North America",
+    "atsProvider": "successfactors_candidate",
+    "patterns": ["jobs.edp.com/job/*", "www.edpr.com/north-america/careers/*"],
+    "notes": "Current SuccessFactors host plus first-party North America career path."
+  },
+  {
+    "employerId": "lightsource-bp",
+    "employerName": "Lightsource bp",
+    "atsProvider": "successfactors_candidate",
+    "patterns": ["careers.lightsourcebp.com/job/*", "www.lightsourcebp.com/careers/*"],
+    "notes": "Current SuccessFactors host plus first-party historical candidate; US location filter remains required."
+  },
+  {
+    "employerId": "black-veatch",
+    "employerName": "Black & Veatch / Overland Contracting",
+    "atsProvider": "successfactors_candidate",
+    "patterns": ["careers.bv.com/job/*", "www.bv.com/careers/*"],
+    "notes": "Current SuccessFactors host plus first-party historical candidate; solar-role filter remains required."
+  },
+  {
+    "employerId": "depcom-power",
+    "employerName": "DEPCOM Power",
+    "atsProvider": "successfactors_candidate",
+    "patterns": ["jobs.kochcareers.com/job/*", "www.depcompower.com/careers/*"],
+    "notes": "Corporate SuccessFactors host plus DEPCOM first-party historical candidate; employer attribution must be verified from page content."
+  }
+]
