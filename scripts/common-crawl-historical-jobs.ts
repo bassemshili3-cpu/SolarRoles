@@ -2,7 +2,8 @@ import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import {
   extractHttpPayloadFromWarc,
-  parseHistoricalJobHtml,
+  HISTORICAL_PARSER_VERSION,
+  parseHistoricalJobHtmlDetailed,
   sha256,
   spreadSample,
   type CommonCrawlRecord,
@@ -35,6 +36,7 @@ interface CliOptions {
   warcDelayMs: number
   outputDir: string
   reuseHtml: boolean
+  localOnly: boolean
 }
 
 function numberArg(args: string[], flag: string, fallback: number) {
@@ -66,6 +68,7 @@ function parseOptions(args: string[]): CliOptions {
     warcDelayMs: numberArg(args, '--warc-delay-ms', 250),
     outputDir: stringArg(args, '--output', 'data/common-crawl-historical-jobs/poc-2016-2020-2024'),
     reuseHtml: args.includes('--reuse-html'),
+    localOnly: args.includes('--local-only'),
   }
 }
 
@@ -235,6 +238,7 @@ async function main() {
         html = await readFile(htmlPath, 'utf8')
         statusLine = 'REUSED LOCAL HTML'
       } catch {
+        if (options.localOnly) throw new Error('LOCAL_HTML_MISSING')
         const compressed = await downloadCapture(capture)
         await writeFile(warcPath, compressed)
         const payload = extractHttpPayloadFromWarc(compressed)
@@ -242,7 +246,8 @@ async function main() {
         html = payload.body.toString(capture.encoding?.toLowerCase() === 'iso-8859-1' ? 'latin1' : 'utf8')
         await writeFile(htmlPath, html)
       }
-      const job = parseHistoricalJobHtml(html, capture.url, employer)
+      const parsed = parseHistoricalJobHtmlDetailed(html, capture.url, employer)
+      const job = parsed.job
       if (job) jobsById.set(job.historicalJobId, job)
       const row = {
         captureId,
@@ -260,12 +265,20 @@ async function main() {
         localHtmlPath: path.relative(process.cwd(), htmlPath),
         httpStatusLine: statusLine,
         extractionStatus: job ? 'valid_solar_job' : 'not_a_valid_solar_job',
+        rejectionReason: parsed.rejectionReason,
+        isJobPage: parsed.isJobPage,
+        isUsJob: parsed.isUsJob,
+        isSolarRelated: parsed.isSolarRelated,
+        usEvidence: parsed.usEvidence,
+        solarEvidence: parsed.solarEvidence,
+        parserVersion: HISTORICAL_PARSER_VERSION,
       }
       captures.push(row)
       await appendFile(path.join(root, 'captures.jsonl'), jsonLine(row))
       console.log(`[warc] ${capture.year} ${capture.employerId}: ${job ? job.title : 'rejected'}`)
     } catch (error) {
-      const row = { captureId, historicalJobId: null, employerId: capture.employerId, year: capture.year, crawlId: capture.crawlId, captureTimestamp: capture.timestamp, sourceUrl: capture.url, extractionStatus: 'download_or_parse_failed', error: String(error) }
+      const localHtmlMissing = String(error).includes('LOCAL_HTML_MISSING')
+      const row = { captureId, historicalJobId: null, employerId: capture.employerId, year: capture.year, crawlId: capture.crawlId, captureTimestamp: capture.timestamp, sourceUrl: capture.url, extractionStatus: localHtmlMissing ? 'local_html_missing' : 'download_or_parse_failed', rejectionReason: localHtmlMissing ? 'local_html_missing' : null, parserVersion: HISTORICAL_PARSER_VERSION, error: String(error) }
       captures.push(row)
       await appendFile(path.join(root, 'captures.jsonl'), jsonLine(row))
       console.warn(`[warc] failed ${capture.url}: ${String(error)}`)
@@ -284,7 +297,7 @@ async function main() {
       year,
       indexMatches: indexed.filter((capture) => capture.year === year).length,
       capturesAttempted: yearCaptures.length,
-      capturesDownloaded: yearCaptures.filter((capture) => capture.extractionStatus !== 'download_or_parse_failed').length,
+      capturesDownloaded: yearCaptures.filter((capture) => !['download_or_parse_failed', 'local_html_missing'].includes(String(capture.extractionStatus))).length,
       validSolarJobs: yearJobs.length,
       employersRepresented: new Set(yearJobs.map((job) => job.employerId)).size,
       completeDescriptions: yearJobs.filter((job) => job.descriptionText.length >= 300).length,
@@ -302,7 +315,7 @@ async function main() {
       atsProvider: employer.atsProvider,
       domainSearched: true,
       indexMatches: indexed.filter((capture) => capture.year === year && capture.employerId === employer.employerId).length,
-      warcDownloads: employerCaptures.filter((capture) => capture.extractionStatus !== 'download_or_parse_failed').length,
+      warcDownloads: employerCaptures.filter((capture) => !['download_or_parse_failed', 'local_html_missing'].includes(String(capture.extractionStatus))).length,
       validJobs: new Set(employerCaptures.map((capture) => capture.historicalJobId).filter(Boolean)).size,
       coverageStatus: employerQueries.some((query) => query.status === 'query_failed') ? 'query_failed'
         : employerCaptures.some((capture) => capture.extractionStatus === 'valid_solar_job') ? 'covered'
@@ -310,12 +323,18 @@ async function main() {
             : 'searched_no_capture',
     }
   }))
+  const rejectionBreakdown = Object.fromEntries(
+    [...new Set(captures.map((capture) => String(capture.rejectionReason ?? '')).filter(Boolean))]
+      .sort()
+      .map((reason) => [reason, captures.filter((capture) => capture.rejectionReason === reason).length]),
+  )
   const report = {
     generatedAt: new Date().toISOString(),
-    parserVersion: 'common-crawl-poc-v1',
+    parserVersion: HISTORICAL_PARSER_VERSION,
     options,
     crawls: Object.fromEntries([...crawlMap.entries()]),
     totals: { employers: employers.length, indexQueries: queries.length, indexMatches: indexed.length, capturesAttempted: captures.length, distinctValidSolarJobs: jobs.length },
+    rejectionBreakdown,
     yearly,
     employerCoverage,
     manualReview: { status: 'pending', falsePositiveRate: null },
