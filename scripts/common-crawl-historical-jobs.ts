@@ -226,6 +226,7 @@ async function main() {
 
   const captures: Array<Record<string, unknown>> = []
   const parsedJobsById = new Map<string, ParsedHistoricalJob>()
+  const parsedJobObservations: Array<Record<string, unknown>> = []
   const solarUsJobsById = new Map<string, ParsedHistoricalJob>()
   const classificationsById = new Map<string, Record<string, unknown>>()
   await writeFile(path.join(root, 'captures.jsonl'), '')
@@ -255,6 +256,16 @@ async function main() {
       const job = parsed.job
       if (job) {
         parsedJobsById.set(job.historicalJobId, job)
+        parsedJobObservations.push({
+          captureId,
+          crawlId: capture.crawlId,
+          captureTimestamp: capture.timestamp,
+          digest: capture.digest,
+          warcFilename: capture.filename,
+          warcOffset: Number(capture.offset),
+          warcLength: Number(capture.length),
+          ...job,
+        })
         classificationsById.set(job.historicalJobId, {
           historicalJobId: job.historicalJobId,
           isUsJob: parsed.isUsJob,
@@ -311,6 +322,7 @@ async function main() {
   const classifications = [...classificationsById.values()]
   const features = solarUsJobs.map(buildHistoricalJobFeatures)
 
+  await writeFile(path.join(root, 'parsed-job-observations.jsonl'), parsedJobObservations.map(jsonLine).join(''))
   await writeFile(path.join(root, 'parsed-jobs.jsonl'), parsedJobs.map(jsonLine).join(''))
   await writeFile(path.join(root, 'job-classifications.jsonl'), classifications.map(jsonLine).join(''))
   await writeFile(path.join(root, 'solar-us-jobs.jsonl'), solarUsJobs.map(jsonLine).join(''))
@@ -380,6 +392,7 @@ async function main() {
       indexQueries: queries.length,
       indexMatches: indexed.length,
       capturesAttempted: captures.length,
+      parsedJobObservations: parsedJobObservations.length,
       distinctParsedJobs: parsedJobs.length,
       distinctValidSolarUsJobs: solarUsJobs.length,
     },
