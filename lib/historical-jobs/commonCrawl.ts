@@ -250,17 +250,32 @@ export function extractHistoricalTaxonomy(title: string, description: string) {
 }
 
 function roleSpecificDescription(description: string) {
-  const markers = [
+  const startMarkers = [
     'the experience we would expect the ideal person to deliver is:',
     'position specific description',
     'summary of role',
   ]
   const lower = description.toLowerCase()
-  for (const marker of markers) {
+  let focused = description
+  for (const marker of startMarkers) {
     const index = lower.indexOf(marker)
-    if (index >= 0) return description.slice(index + marker.length).trim()
+    if (index >= 0) {
+      focused = description.slice(index + marker.length).trim()
+      break
+    }
   }
-  return description
+
+  const footerMarkers = [
+    'employee group:',
+    'job category:',
+    'at pine gate renewables, we are committed to developing solar farms',
+  ]
+  const focusedLower = focused.toLowerCase()
+  const footerIndexes = footerMarkers
+    .map((marker) => focusedLower.indexOf(marker))
+    .filter((index) => index >= 0)
+  if (footerIndexes.length) focused = focused.slice(0, Math.min(...footerIndexes)).trim()
+  return focused
 }
 
 export function evaluateHistoricalSolarRole(title: string, description: string) {
