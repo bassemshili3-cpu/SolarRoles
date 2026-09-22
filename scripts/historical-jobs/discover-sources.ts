@@ -33,6 +33,7 @@ interface CliOptions {
   duckdb: string
   threads: number
   memoryLimit: string
+  filesPerBatch: number
   sqlOnly: boolean
 }
 
@@ -74,6 +75,7 @@ function parseOptions(args: string[]): CliOptions {
     duckdb: arg(args, '--duckdb', DEFAULT_DUCKDB),
     threads: Number(arg(args, '--threads', '4')),
     memoryLimit: arg(args, '--memory-limit', '4GB'),
+    filesPerBatch: Number(arg(args, '--files-per-batch', '1')),
     sqlOnly: args.includes('--sql-only'),
   }
 }
@@ -162,11 +164,11 @@ function chunks<T>(values: T[], size: number) {
 
 function buildDiscoverySql(
   parquetFiles: string[],
-  crawlIds: string[],
   specs: EmployerDiscoverySpec[],
   outputDir: string,
   threads: number,
   memoryLimit: string,
+  filesPerBatch: number,
 ) {
   const aliases = [...new Set(specs.flatMap((spec) => spec.aliases))].sort((a, b) => b.length - a.length)
   const roots = [...new Set(specs.flatMap((spec) => spec.firstPartyRoots))].sort()
@@ -180,74 +182,50 @@ function buildDiscoverySql(
     `(lower(url_host_name) = ${sqlString(suffix)} OR ends_with(lower(url_host_name), ${sqlString(`.${suffix}`)}))`,
   ).join('\n      OR ')
 
-  const rawJson = sqlPath(path.join(outputDir, 'discovery-raw.jsonl'))
+  const batchDir = path.join(outputDir, 'discovery-batches')
   const tempDir = sqlPath(path.join(outputDir, 'duckdb-tmp'))
+  const batches = chunks(parquetFiles, filesPerBatch)
 
-  const inserts = chunks(parquetFiles, 10).map((batch) => `INSERT INTO discovery_raw
-SELECT
-  crawl,
-  url,
-  lower(url_host_name) AS url_host_name,
-  coalesce(url_path, '/') AS url_path,
-  fetch_time
-FROM read_parquet([
-  ${batch.map((filename) => sqlPath(filename)).join(',\n  ')}
-], hive_partitioning = true, union_by_name = true)
-WHERE fetch_status = 200
-  AND (
-    lower(coalesce(content_mime_type, '')) LIKE '%html%'
-    OR lower(coalesce(content_mime_detected, '')) LIKE '%html%'
-  )
-  AND (
-    regexp_matches(lower(url), ${sqlString(`(?:${aliasRegex})`)})
-    OR ${rootPredicate}
-  )
-  AND (
-    regexp_matches(lower(url), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit|job-search|search-jobs)(?:/|[-_?=&]|$)')
-    OR ${atsPredicate}
-  );`).join('\n\n')
+  const statements = batches.map((batch, index) => {
+    const batchOutput = sqlPath(path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`))
+    return `COPY (
+  SELECT
+    crawl,
+    url,
+    lower(url_host_name) AS url_host_name,
+    coalesce(url_path, '/') AS url_path,
+    min(fetch_time) AS first_seen,
+    max(fetch_time) AS last_seen,
+    count(*)::INTEGER AS capture_count
+  FROM read_parquet([
+    ${batch.map((filename) => sqlPath(filename)).join(',\n    ')}
+  ], hive_partitioning = true, union_by_name = true)
+  WHERE fetch_status = 200
+    AND (
+      lower(coalesce(content_mime_type, '')) LIKE '%html%'
+      OR lower(coalesce(content_mime_detected, '')) LIKE '%html%'
+    )
+    AND (
+      regexp_matches(lower(url), ${sqlString(`(?:${aliasRegex})`)})
+      OR ${rootPredicate}
+    )
+    AND (
+      regexp_matches(lower(url), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit|job-search|search-jobs)(?:/|[-_?=&]|$)')
+      OR ${atsPredicate}
+    )
+  GROUP BY crawl, url, lower(url_host_name), coalesce(url_path, '/')
+) TO ${batchOutput} (FORMAT JSON, ARRAY false);`
+  })
 
-  return `-- Historical source discovery for ${crawlIds.join(', ')}
-SET preserve_insertion_order = false;
+  return `SET preserve_insertion_order = false;
 SET enable_progress_bar = true;
 SET threads = ${threads};
 SET memory_limit = ${sqlString(memoryLimit)};
 SET temp_directory = ${tempDir};
 
-CREATE OR REPLACE TEMP TABLE discovery_raw (
-  crawl VARCHAR,
-  url VARCHAR,
-  url_host_name VARCHAR,
-  url_path VARCHAR,
-  fetch_time TIMESTAMP
-);
-
-${inserts}
-
-COPY (
-  SELECT
-    crawl,
-    url,
-    url_host_name,
-    url_path,
-    min(fetch_time) AS first_seen,
-    max(fetch_time) AS last_seen,
-    count(*)::INTEGER AS capture_count
-  FROM discovery_raw
-  GROUP BY crawl, url, url_host_name, url_path
-) TO ${rawJson} (FORMAT JSON, ARRAY false);
-
-SELECT
-  crawl,
-  count(*) AS candidate_captures,
-  count(DISTINCT url) AS candidate_urls,
-  count(DISTINCT url_host_name) AS candidate_hosts
-FROM discovery_raw
-GROUP BY crawl
-ORDER BY crawl;
+${statements.join('\n\n')}
 `
 }
-
 async function runDuckDb(executable: string, sqlFile: string) {
   await access(executable)
   await new Promise<void>((resolve, reject) => {
@@ -318,11 +296,27 @@ async function main() {
   })
   if (!parquetFiles.length) throw new Error('No Parquet files matched the selected crawl(s)')
 
+  if (!Number.isInteger(options.filesPerBatch) || options.filesPerBatch < 1) {
+    throw new Error('--files-per-batch must be a positive integer')
+  }
+
   const sqlFile = path.join(outputDir, 'discovery.sql')
   const planFile = path.join(outputDir, 'discovery-plan.json')
+  const batchDir = path.join(outputDir, 'discovery-batches')
+  await mkdir(batchDir, { recursive: true })
+  await mkdir(path.join(outputDir, 'duckdb-tmp'), { recursive: true })
+
+  const parquetBatches = chunks(parquetFiles, options.filesPerBatch)
   await writeFile(
     sqlFile,
-    buildDiscoverySql(parquetFiles, selectedCrawls, specs, outputDir, options.threads, options.memoryLimit),
+    buildDiscoverySql(
+      parquetFiles,
+      specs,
+      outputDir,
+      options.threads,
+      options.memoryLimit,
+      options.filesPerBatch,
+    ),
     'utf8',
   )
   await writeFile(planFile, `${JSON.stringify({
@@ -331,6 +325,8 @@ async function main() {
     crawlIds: selectedCrawls,
     parquetDir: path.resolve(options.parquetDir),
     parquetFiles: parquetFiles.length,
+    parquetBatches: parquetBatches.length,
+    filesPerBatch: options.filesPerBatch,
     employers: employers.length,
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
     aliases: Object.fromEntries(specs.map((spec) => [spec.employer.employerId, spec.aliases])),
@@ -338,16 +334,33 @@ async function main() {
     sqlFile: path.relative(process.cwd(), sqlFile),
   }, null, 2)}\n`, 'utf8')
 
-  console.log(`[discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${employers.length} employers | ${options.threads} threads | ${options.memoryLimit}`)
+  console.log(`[discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${parquetBatches.length} batch(es) | ${employers.length} employers | ${options.threads} threads | ${options.memoryLimit}`)
   console.log(`[discovery] SQL plan: ${path.relative(process.cwd(), sqlFile)}`)
   if (options.sqlOnly) return
 
   await runDuckDb(options.duckdb, sqlFile)
 
-  const rawPath = path.join(outputDir, 'discovery-raw.jsonl')
-  const rawBody = await readFile(rawPath, 'utf8')
-  const rawRows = rawBody.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line) as RawDiscoveryRow)
+  const rawMap = new Map<string, RawDiscoveryRow>()
+  for (let index = 0; index < parquetBatches.length; index += 1) {
+    const batchFile = path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`)
+    const body = await readFile(batchFile, 'utf8')
+    for (const line of body.split(/\r?\n/).filter(Boolean)) {
+      const row = JSON.parse(line) as RawDiscoveryRow
+      const key = `${row.crawl}|${row.url_host_name}|${row.url_path}|${row.url}`
+      const current = rawMap.get(key)
+      if (!current) {
+        rawMap.set(key, row)
+        continue
+      }
+      current.capture_count += Number(row.capture_count) || 0
+      if (row.first_seen < current.first_seen) current.first_seen = row.first_seen
+      if (row.last_seen > current.last_seen) current.last_seen = row.last_seen
+    }
+  }
 
+  const rawRows = [...rawMap.values()]
+  const rawPath = path.join(outputDir, 'discovery-raw.jsonl')
+  await writeFile(rawPath, rawRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
   const attributed: Array<Record<string, unknown>> = []
   for (const row of rawRows) {
     const host = row.url_host_name.toLowerCase()
