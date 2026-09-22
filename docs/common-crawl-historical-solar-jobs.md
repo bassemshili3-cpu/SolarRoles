@@ -292,11 +292,33 @@ Chaque répertoire d’exécution contient d’abord :
 
 Après l’extraction WARC, il contient aussi :
 
-- `captures.jsonl`, une ligne par observation téléchargée ;
-- `historical-jobs.jsonl`, les annonces distinctes retenues ;
+- `captures.jsonl`, une ligne par capture avec le résultat du parsing et les preuves de classification ;
+- `parsed-job-observations.jsonl`, **toutes les observations de pages emploi parsées**, avec le texte normalisé et les métadonnées de capture ; ce fichier préserve les différentes versions d’une même offre ;
+- `parsed-jobs.jsonl`, les offres parsées dédupliquées, sans dépendre du filtre solaire/US ni de la taxonomie analytique ;
+- `job-classifications.jsonl`, la classification US / solaire et ses preuves, versionnée séparément ;
+- `solar-us-jobs.jsonl`, le sous-ensemble courant des offres classées US + solaire ;
+- `solar-us-job-features.jsonl`, les features analytiques dérivées (BESS, SCADA, travel, expérience, etc.), recalculables à tout moment depuis le corpus ;
+- `historical-jobs.jsonl`, alias de compatibilité de `solar-us-jobs.jsonl` pour l’ancien POC ;
 - `quality-report.json`, les résultats par année et employeur ;
 - `manual-review.csv`, l’échantillon à contrôler manuellement ;
 - `raw/` et `html/`, conservés localement mais exclus de Git.
+
+### Architecture de conservation
+
+Le crawl ne doit pas figer les statistiques de recherche. La chaîne est volontairement séparée :
+
+```text
+Common Crawl capture
+  -> raw WARC / HTML
+  -> parsed-job-observations.jsonl
+  -> parsed-jobs.jsonl
+  -> job-classifications.jsonl
+  -> solar-us-jobs.jsonl
+  -> solar-us-job-features.jsonl
+  -> analyses / reports
+```
+
+Le parser, le classifieur solaire/US et la taxonomie possèdent des versions distinctes. Une nouvelle métrique ou une modification de taxonomie ne doit donc pas nécessiter un nouveau téléchargement Common Crawl.
 
 ## Résultat du premier passage — 22 septembre 2026
 
