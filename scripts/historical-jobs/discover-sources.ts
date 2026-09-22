@@ -194,7 +194,7 @@ function buildDiscoveryBatchSql(
   ).join('\n      OR ')
 
   return `SET preserve_insertion_order = false;
-SET enable_progress_bar = true;
+SET enable_progress_bar = false;
 SET threads = ${threads};
 SET memory_limit = ${sqlString(memoryLimit)};
 SET temp_directory = ${sqlPath(tempDir)};
@@ -227,14 +227,17 @@ COPY (
 }
 async function runDuckDb(executable: string, sqlFile: string) {
   await access(executable)
+  const sql = await readFile(sqlFile, 'utf8')
   await new Promise<void>((resolve, reject) => {
-    const child = spawn(path.resolve(executable), ['-init', path.resolve(sqlFile), ':memory:'], {
+    const child = spawn(path.resolve(executable), [':memory:'], {
       cwd: process.cwd(),
-      stdio: ['ignore', 'inherit', 'inherit'],
+      stdio: ['pipe', 'inherit', 'inherit'],
       windowsHide: true,
     })
     child.on('error', reject)
     child.on('exit', (code) => code === 0 ? resolve() : reject(new Error(`DuckDB exited with code ${code}`)))
+    child.stdin.on('error', reject)
+    child.stdin.end(sql)
   })
 }
 
