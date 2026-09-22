@@ -213,32 +213,32 @@ export function extractHistoricalTaxonomy(title: string, description: string) {
   const text = `${title}\n${description}`
   const test = (pattern: RegExp) => pattern.test(text)
   const titleTest = (pattern: RegExp) => pattern.test(title)
-  const experienceSuffix = String.raw`years?(?:\\s*['’])?\\s+(?:of\\s+)?experience`
+  const experienceSuffix = String.raw`years?(?:\s*['’])?\s+(?:of\s+)?experience`
   const numericExperiencePattern = new RegExp(
-    String.raw`(?:minimum\\s+(?:of\\s+)?)?(\\d{1,2})(?:\\s*[-–]\\s*(\\d{1,2}))?\\+?\\s+${experienceSuffix}`,
+    String.raw`(?:minimum\s+(?:of\s+)?)?(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?\+?\s+${experienceSuffix}`,
     'gi',
   )
   const numericExperienceYears = [...text.matchAll(numericExperiencePattern)]
     .map((match) => Number(match[1]))
     .filter(Number.isFinite)
   const numberWords: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 }
-  const writtenExperienceYears = [...text.matchAll(/\\b(one|two|three|four|five|six|seven|eight|nine|ten)\\s+years?(?:\\s*['’])?\\s+(?:of\\s+)?experience\\b/gi)]
+  const writtenExperienceYears = [...text.matchAll(/\b(one|two|three|four|five|six|seven|eight|nine|ten)\s+years?(?:\s*['’])?\s+(?:of\s+)?experience\b/gi)]
     .map((match) => numberWords[match[1].toLowerCase()])
   const experienceYears = [...numericExperienceYears, ...writtenExperienceYears]
   return {
-    bessStorage: test(/\\b(?:bess|battery energy storage|battery storage|energy storage)\\b|\\b(?:solar|renewable|clean energy).{0,30}\\bstorage\\b|\\bstorage\\b.{0,30}\\b(?:solar|renewable|clean energy)\\b/i),
-    scada: test(/\\bscada\\b/i),
-    commissioning: test(/\\bcommission(?:ing|ed)?\\b/i),
-    operationsMaintenance: test(/\\b(?:o\\s*&\\s*m|operations?\\s+(?:and|&)\\s+maintenance|maintenance technician)\\b/i),
-    travel: test(/\\b(?:travel|required travel|travel up to|overnight travel|on the road)\\b/i),
+    bessStorage: test(/\b(?:bess|battery energy storage|battery storage|energy storage)\b|\b(?:solar|renewable|clean energy).{0,30}\bstorage\b|\bstorage\b.{0,30}\b(?:solar|renewable|clean energy)\b/i),
+    scada: test(/\bscada\b/i),
+    commissioning: test(/\bcommission(?:ing|ed)?\b/i),
+    operationsMaintenance: test(/\b(?:o\s*&\s*m|operations?\s+(?:and|&)\s+maintenance|maintenance technician)\b/i),
+    travel: test(/\b(?:travel|required travel|travel up to|overnight travel|on the road)\b/i),
     minimumExperienceYears: experienceYears.length ? Math.min(...experienceYears) : null,
-    solarExperienceRequired: test(/(?:solar|photovoltaic|\\bpv\\b).{0,45}(?:experience|required)|(?:experience|required).{0,45}(?:solar|photovoltaic|\\bpv\\b)/i),
-    nabcep: test(/\\bnabcep\\b/i),
-    osha: test(/\\bosha(?:\\s*[- ]?(?:10|30))?\\b/i),
-    degreeRequirement: test(/\\b(?:bachelor'?s?|master'?s?|associate'?s?)\\s+(?:degree|required)|\\bdegree\\s+(?:in|required)/i),
-    paidTraining: test(/\\b(?:paid training|training provided|on[- ]the[- ]job training)\\b/i),
-    management: titleTest(/\\b(?:manager|management|supervisor|superintendent|director)\\b/i),
-    electrician: titleTest(/\\b(?:electrician|journeyman|wireman|electrical apprentice)\\b/i),
+    solarExperienceRequired: test(/(?:solar|photovoltaic|\bpv\b).{0,45}(?:experience|required)|(?:experience|required).{0,45}(?:solar|photovoltaic|\bpv\b)/i),
+    nabcep: test(/\bnabcep\b/i),
+    osha: test(/\bosha(?:\s*[- ]?(?:10|30))?\b/i),
+    degreeRequirement: test(/\b(?:bachelor'?s?|master'?s?|associate'?s?)\s+(?:degree|required)|\bdegree\s+(?:in|required)/i),
+    paidTraining: test(/\b(?:paid training|training provided|on[- ]the[- ]job training)\b/i),
+    management: titleTest(/\b(?:manager|management|supervisor|superintendent|director)\b/i),
+    electrician: titleTest(/\b(?:electrician|journeyman|wireman|electrical apprentice)\b/i),
   }
 }
 
@@ -246,12 +246,12 @@ export function evaluateHistoricalSolarRole(title: string, description: string) 
   const normalizedTitle = title.toLowerCase()
   const normalizedDescription = description.toLowerCase()
   const evidence: string[] = []
-  const titleHasEnergy = /\\b(?:solar|photovoltaic|pv|bess|battery storage|energy storage)\\b/i.test(normalizedTitle)
+  const titleHasEnergy = /\b(?:solar|photovoltaic|pv|bess|battery storage|energy storage)\b/i.test(normalizedTitle)
 
-  if (!titleHasEnergy && /\\b(?:wind|nuclear|fossil|coal|natural gas|gas turbine|hydroelectric)\\b/i.test(normalizedTitle)) {
+  if (!titleHasEnergy && /\b(?:wind|nuclear|fossil|coal|natural gas|gas turbine|hydroelectric)\b/i.test(normalizedTitle)) {
     return { isSolarRelated: false, evidence: ['explicit_non_solar_generation_title'] }
   }
-  if (!titleHasEnergy && /\\b(?:software|dev\\s*ops|devops|cloud|cyber|information technology|it systems?|data engineer)\\b/i.test(normalizedTitle)) {
+  if (!titleHasEnergy && /\b(?:software|dev\s*ops|devops|cloud|cyber|information technology|it systems?|data engineer)\b/i.test(normalizedTitle)) {
     return { isSolarRelated: false, evidence: ['software_or_it_title_without_solar_signal'] }
   }
   if (isSolarInstallerRole(title, description)) {
@@ -259,17 +259,17 @@ export function evaluateHistoricalSolarRole(title: string, description: string) 
     return { isSolarRelated: true, evidence }
   }
 
-  const titleHasOccupation = /\\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|manager|director|analyst|developer|development|designer|estimator|sales|trainer|supervisor|superintendent|construction|project|quality|scada)\\b/i.test(normalizedTitle)
+  const titleHasOccupation = /\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|manager|director|analyst|developer|development|designer|estimator|sales|trainer|supervisor|superintendent|construction|project|quality|scada)\b/i.test(normalizedTitle)
   if (titleHasEnergy && titleHasOccupation) {
     evidence.push('solar_or_storage_signal_in_title')
     return { isSolarRelated: true, evidence }
   }
 
-  const genericRelevantTitle = /\\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|project manager|construction manager|asset manager|designer|estimator|superintendent|foreman|field service|scada)\\b/i.test(normalizedTitle)
+  const genericRelevantTitle = /\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|project manager|construction manager|asset manager|designer|estimator|superintendent|foreman|field service|scada)\b/i.test(normalizedTitle)
   const strongSolarDescriptionSignal =
-    /\\b(?:solar|photovoltaic|pv)\\b.{0,60}\\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\\b/i.test(normalizedDescription)
-    || /\\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\\b.{0,60}\\b(?:solar|photovoltaic|pv)\\b/i.test(normalizedDescription)
-    || /\\b(?:bess|battery energy storage|battery storage)\\b.{0,60}\\b(?:project|projects|system|systems|plant|plants|development|portfolio|asset|assets|design|interconnection)\\b/i.test(normalizedDescription)
+    /\b(?:solar|photovoltaic|pv)\b.{0,60}\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\b/i.test(normalizedDescription)
+    || /\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\b.{0,60}\b(?:solar|photovoltaic|pv)\b/i.test(normalizedDescription)
+    || /\b(?:bess|battery energy storage|battery storage)\b.{0,60}\b(?:project|projects|system|systems|plant|plants|development|portfolio|asset|assets|design|interconnection)\b/i.test(normalizedDescription)
 
   if (genericRelevantTitle && strongSolarDescriptionSignal) {
     evidence.push('solar_project_or_system_signal_in_description')
@@ -293,10 +293,10 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
     evidence.push('structured_us_state')
   }
 
-  if (/\\b(?:US|USA|United States(?: of America)?)\\b/i.test(locationRaw)) evidence.push('location_text_us')
-  const stateCodeMatches = [...locationRaw.matchAll(/(?:^|[,\\s])([A-Z]{2})(?=\\s*(?:,|\\d{5}(?:-\\d{4})?|$))/g)]
+  if (/\b(?:US|USA|United States(?: of America)?)\b/i.test(locationRaw)) evidence.push('location_text_us')
+  const stateCodeMatches = [...locationRaw.matchAll(/(?:^|[,\s])([A-Z]{2})(?=\s*(?:,|\d{5}(?:-\d{4})?|$))/g)]
   if (stateCodeMatches.some((match) => US_STATE_CODES.has(match[1]))) evidence.push('location_text_state')
-  if (/\\b\\d{5}(?:-\\d{4})?\\b/.test(locationRaw)) evidence.push('us_zip_format')
+  if (/\b\d{5}(?:-\d{4})?\b/.test(locationRaw)) evidence.push('us_zip_format')
 
   return { isUsJob: evidence.length > 0, evidence }
 }
@@ -342,7 +342,7 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
   const locationRaw = repairCommonMojibake(
     structuredAddress.raw
       || $('[itemprop="jobLocation"], .job-location, .location').first().text(),
-  ).replace(/\\s+/g, ' ').trim()
+  ).replace(/\s+/g, ' ').trim()
   const country = normalizeCountry(structuredAddress.country)
   const us = evaluateUsLocation(locationRaw, structuredAddress.state, country)
   if (!us.isUsJob) {
@@ -375,7 +375,7 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
   const salary = job ? salaryFromJsonLd(job) : { min: null, max: null, currency: null, period: null }
   const canonicalUrl = canonicalizeHistoricalUrl(sourceUrl)
   const sourceJobId = sourceId(job, canonicalUrl)
-  const descriptionHash = sha256(descriptionText.toLowerCase().replace(/\\s+/g, ' '))
+  const descriptionHash = sha256(descriptionText.toLowerCase().replace(/\s+/g, ' '))
   const historicalJobId = sha256(sourceJobId
     ? `${employer.employerId}|${sourceJobId}`
     : `${employer.employerId}|${title.toLowerCase()}|${locationRaw.toLowerCase()}|${descriptionHash}`)
