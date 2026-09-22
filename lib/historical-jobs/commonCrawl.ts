@@ -60,6 +60,16 @@ export interface HistoricalJobFeatures {
   taxonomyVersion: string
 }
 
+export interface HistoricalJobClassification {
+  historicalJobId: string
+  isUsJob: boolean
+  isSolarRelated: boolean
+  usEvidence: string[]
+  solarEvidence: string[]
+  rejectionReason: 'not_us_or_unknown' | 'not_solar_related' | null
+  classifierVersion: string
+}
+
 export interface HistoricalParseResult {
   job: ParsedHistoricalJob | null
   isJobPage: boolean
@@ -347,6 +357,20 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
   return { isUsJob: evidence.length > 0, evidence }
 }
 
+export function classifyParsedHistoricalJob(job: ParsedHistoricalJob): HistoricalJobClassification {
+  const us = evaluateUsLocation(job.locationRaw, job.state, job.country, job.sourceUrl)
+  const solar = evaluateHistoricalSolarRole(job.title, job.descriptionText)
+  return {
+    historicalJobId: job.historicalJobId,
+    isUsJob: us.isUsJob,
+    isSolarRelated: solar.isSolarRelated,
+    usEvidence: us.evidence,
+    solarEvidence: solar.evidence,
+    rejectionReason: !us.isUsJob ? 'not_us_or_unknown' : !solar.isSolarRelated ? 'not_solar_related' : null,
+    classifierVersion: HISTORICAL_CLASSIFIER_VERSION,
+  }
+}
+
 export function buildHistoricalJobFeatures(job: ParsedHistoricalJob): HistoricalJobFeatures {
   return {
     historicalJobId: job.historicalJobId,
@@ -433,22 +457,16 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
     parserVersion: HISTORICAL_PARSER_VERSION,
   }
 
-  const us = evaluateUsLocation(locationRaw, structuredAddress.state, country, sourceUrl)
-  const solar = evaluateHistoricalSolarRole(title, descriptionText)
-  const rejectionReason = !us.isUsJob
-    ? 'not_us_or_unknown'
-    : !solar.isSolarRelated
-      ? 'not_solar_related'
-      : null
+  const classification = classifyParsedHistoricalJob(parsedJob)
 
   return {
     job: parsedJob,
     isJobPage: true,
-    isUsJob: us.isUsJob,
-    isSolarRelated: solar.isSolarRelated,
-    usEvidence: us.evidence,
-    solarEvidence: solar.evidence,
-    rejectionReason,
+    isUsJob: classification.isUsJob,
+    isSolarRelated: classification.isSolarRelated,
+    usEvidence: classification.usEvidence,
+    solarEvidence: classification.solarEvidence,
+    rejectionReason: classification.rejectionReason,
     extractionMethod,
   }
 }
