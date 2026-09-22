@@ -111,6 +111,16 @@ assert(foreignPostalParsed.job)
 assert.equal(foreignPostalParsed.isUsJob, false)
 assert.match(foreignPostalParsed.usEvidence.join(','), /location_country_code_fr/)
 
+const sourceUrlLocationHtml = '<html><body><h1>Solar Project Engineer</h1><div class="location">Nearest Major Market: Houston</div><div class="job-description">Design utility-scale solar projects and photovoltaic systems for customers.</div></body></html>'
+const sourceUrlLocationParsed = parseHistoricalJobHtmlDetailed(
+  sourceUrlLocationHtml,
+  'https://careers.example.com/job/Houston-Solar-Project-Engineer-TX-77027/123/',
+  employer,
+)
+assert(sourceUrlLocationParsed.job)
+assert.equal(sourceUrlLocationParsed.isUsJob, true)
+assert.match(sourceUrlLocationParsed.usEvidence.join(','), /source_url_state_zip/)
+
 const warc = Buffer.from(`WARC/1.0\r\nWARC-Type: response\r\nContent-Length: ${html.length}\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n${html}`)
 const payload = extractHttpPayloadFromWarc(gzipSync(warc))
 assert.match(payload.statusLine, /200 OK/)
