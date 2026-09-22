@@ -290,8 +290,8 @@ export function evaluateHistoricalSolarRole(title: string, description: string) 
   const genericRelevantTitle = /\b(?:engineer(?:ing)?|technician|tech\b|installer|install tech|electrician|operator|operations|maintenance|commissioning|manager|director|analyst|associate|controller|coordinator|consultant|project|construction|asset|designer|estimator|superintendent|foreman|field service|sales|finance|survey|permitting|permit|scada)\b/i.test(normalizedTitle)
   const solarWorkNouns = String.raw`project|projects|system|systems|plant|plants|farm|farms|panel|panels|array|arrays|installation|installations|install|installed|epc|construction|development|portfolio|asset|assets|design|interconnection|financing|finance|permit|permitting|product|products|business`
   const strongSolarDescriptionSignal =
-    new RegExp(String.raw`\\b(?:solar|photovoltaic|pv)\\b.{0,90}\\b(?:${solarWorkNouns})\\b`, 'i').test(normalizedDescription)
-    || new RegExp(String.raw`\\b(?:${solarWorkNouns})\\b.{0,90}\\b(?:solar|photovoltaic|pv)\\b`, 'i').test(normalizedDescription)
+    new RegExp(String.raw`\b(?:solar|photovoltaic|pv)\b.{0,90}\b(?:${solarWorkNouns})\b`, 'i').test(normalizedDescription)
+    || new RegExp(String.raw`\b(?:${solarWorkNouns})\b.{0,90}\b(?:solar|photovoltaic|pv)\b`, 'i').test(normalizedDescription)
     || /\b(?:bess|battery energy storage|battery storage)\b.{0,90}\b(?:project|projects|system|systems|plant|plants|development|portfolio|asset|assets|design|interconnection|construction)\b/i.test(normalizedDescription)
 
   if (genericRelevantTitle && strongSolarDescriptionSignal) {
