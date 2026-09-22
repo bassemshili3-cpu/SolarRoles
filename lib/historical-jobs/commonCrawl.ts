@@ -55,8 +55,20 @@ export interface ParsedHistoricalJob {
   parserVersion: string
 }
 
-export const HISTORICAL_PARSER_VERSION = 'common-crawl-poc-v1'
+export interface HistoricalParseResult {
+  job: ParsedHistoricalJob | null
+  isJobPage: boolean
+  isUsJob: boolean
+  isSolarRelated: boolean
+  usEvidence: string[]
+  solarEvidence: string[]
+  rejectionReason: 'missing_job_content' | 'not_us_or_unknown' | 'not_solar_related' | null
+  extractionMethod: 'json_ld' | 'html_fallback' | null
+}
+
+export const HISTORICAL_PARSER_VERSION = 'common-crawl-poc-v2'
 const US_STATE_CODES = new Set(Object.keys(STATE_CODE_TO_NAME))
+const US_STATE_NAMES = new Set(Object.values(STATE_CODE_TO_NAME).map((value) => value.toLowerCase()))
 
 export function sha256(value: string | Buffer) {
   return createHash('sha256').update(value).digest('hex')
@@ -121,15 +133,19 @@ function stripHtml(value: string) {
   return repairCommonMojibake(cheerio.load(value).text()).replace(/\s+/g, ' ').trim()
 }
 
-function repairCommonMojibake(value: string) {
+export function repairCommonMojibake(value: string) {
   return value
     .replaceAll('â€™', '\u2019')
+    .replaceAll('â€˜', '\u2018')
     .replaceAll('â€œ', '\u201c')
     .replaceAll('â€\u009d', '\u201d')
     .replaceAll('â€“', '\u2013')
     .replaceAll('â€”', '\u2014')
+    .replaceAll('â€¦', '\u2026')
+    .replaceAll('â€¢', '\u2022')
     .replaceAll('Â©', '\u00a9')
     .replaceAll('Â®', '\u00ae')
+    .replaceAll('Â·', '\u00b7')
     .replaceAll('Â ', ' ')
 }
 
@@ -196,46 +212,96 @@ function normalizeCountry(value: string | null) {
 export function extractHistoricalTaxonomy(title: string, description: string) {
   const text = `${title}\n${description}`
   const test = (pattern: RegExp) => pattern.test(text)
-  const numericExperienceYears = [...text.matchAll(/(?:minimum\s+(?:of\s+)?)?(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?\+?\s+years?\s+(?:of\s+)?experience/gi)]
+  const titleTest = (pattern: RegExp) => pattern.test(title)
+  const experienceSuffix = String.raw`years?(?:\\s*['’])?\\s+(?:of\\s+)?experience`
+  const numericExperiencePattern = new RegExp(
+    String.raw`(?:minimum\\s+(?:of\\s+)?)?(\\d{1,2})(?:\\s*[-–]\\s*(\\d{1,2}))?\\+?\\s+${experienceSuffix}`,
+    'gi',
+  )
+  const numericExperienceYears = [...text.matchAll(numericExperiencePattern)]
     .map((match) => Number(match[1]))
     .filter(Number.isFinite)
   const numberWords: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 }
-  const writtenExperienceYears = [...text.matchAll(/\b(one|two|three|four|five|six|seven|eight|nine|ten)\s+years?\s+(?:of\s+)?experience\b/gi)]
+  const writtenExperienceYears = [...text.matchAll(/\\b(one|two|three|four|five|six|seven|eight|nine|ten)\\s+years?(?:\\s*['’])?\\s+(?:of\\s+)?experience\\b/gi)]
     .map((match) => numberWords[match[1].toLowerCase()])
   const experienceYears = [...numericExperienceYears, ...writtenExperienceYears]
   return {
-    bessStorage: test(/\b(?:bess|battery energy storage|battery storage|energy storage)\b|\b(?:solar|renewable|clean energy).{0,30}\bstorage\b|\bstorage\b.{0,30}\b(?:solar|renewable|clean energy)\b/i),
-    scada: test(/\bscada\b/i),
-    commissioning: test(/\bcommission(?:ing|ed)?\b/i),
-    operationsMaintenance: test(/\b(?:o\s*&\s*m|operations?\s+(?:and|&)\s+maintenance|maintenance technician)\b/i),
-    travel: test(/\b(?:travel|required travel|travel up to|overnight travel|on the road)\b/i),
+    bessStorage: test(/\\b(?:bess|battery energy storage|battery storage|energy storage)\\b|\\b(?:solar|renewable|clean energy).{0,30}\\bstorage\\b|\\bstorage\\b.{0,30}\\b(?:solar|renewable|clean energy)\\b/i),
+    scada: test(/\\bscada\\b/i),
+    commissioning: test(/\\bcommission(?:ing|ed)?\\b/i),
+    operationsMaintenance: test(/\\b(?:o\\s*&\\s*m|operations?\\s+(?:and|&)\\s+maintenance|maintenance technician)\\b/i),
+    travel: test(/\\b(?:travel|required travel|travel up to|overnight travel|on the road)\\b/i),
     minimumExperienceYears: experienceYears.length ? Math.min(...experienceYears) : null,
-    solarExperienceRequired: test(/(?:solar|photovoltaic|\bpv\b).{0,45}(?:experience|required)|(?:experience|required).{0,45}(?:solar|photovoltaic|\bpv\b)/i),
-    nabcep: test(/\bnabcep\b/i),
-    osha: test(/\bosha(?:\s*[- ]?(?:10|30))?\b/i),
-    degreeRequirement: test(/\b(?:bachelor'?s?|master'?s?|associate'?s?)\s+(?:degree|required)|\bdegree\s+(?:in|required)/i),
-    paidTraining: test(/\b(?:paid training|training provided|on[- ]the[- ]job training)\b/i),
-    management: test(/\b(?:manager|management|supervisor|superintendent|director)\b/i),
-    electrician: test(/\b(?:electrician|journeyman|wireman|electrical apprentice)\b/i),
+    solarExperienceRequired: test(/(?:solar|photovoltaic|\\bpv\\b).{0,45}(?:experience|required)|(?:experience|required).{0,45}(?:solar|photovoltaic|\\bpv\\b)/i),
+    nabcep: test(/\\bnabcep\\b/i),
+    osha: test(/\\bosha(?:\\s*[- ]?(?:10|30))?\\b/i),
+    degreeRequirement: test(/\\b(?:bachelor'?s?|master'?s?|associate'?s?)\\s+(?:degree|required)|\\bdegree\\s+(?:in|required)/i),
+    paidTraining: test(/\\b(?:paid training|training provided|on[- ]the[- ]job training)\\b/i),
+    management: titleTest(/\\b(?:manager|management|supervisor|superintendent|director)\\b/i),
+    electrician: titleTest(/\\b(?:electrician|journeyman|wireman|electrical apprentice)\\b/i),
   }
 }
 
-export function isHistoricalSolarRole(title: string, description: string) {
+export function evaluateHistoricalSolarRole(title: string, description: string) {
   const normalizedTitle = title.toLowerCase()
   const normalizedDescription = description.toLowerCase()
-  const titleHasEnergy = /\b(?:solar|photovoltaic|pv|bess|battery storage|energy storage)\b/i.test(normalizedTitle)
-  if (!titleHasEnergy && /\b(?:wind|nuclear|fossil|coal|natural gas|gas turbine|hydroelectric)\b/i.test(normalizedTitle)) return false
-  if (!titleHasEnergy && /\b(?:software|dev\s*ops|devops|cloud|cyber|information technology|it systems?|data engineer)\b/i.test(normalizedTitle)) return false
-  if (isSolarInstallerRole(title, description)) return true
-  const titleHasOccupation = /\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|manager|director|analyst|developer|development|designer|estimator|sales|trainer|supervisor|superintendent|construction|project|quality|scada)\b/i.test(normalizedTitle)
-  if (titleHasEnergy && titleHasOccupation) return true
+  const evidence: string[] = []
+  const titleHasEnergy = /\\b(?:solar|photovoltaic|pv|bess|battery storage|energy storage)\\b/i.test(normalizedTitle)
 
-  const genericRelevantTitle = /\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|project manager|construction manager|asset manager|designer|estimator|superintendent|foreman|field service|scada)\b/i.test(normalizedTitle)
-  const descriptionEnergySignals = normalizedDescription.match(/\b(?:solar|photovoltaic|pv system|pv plant|solar farm|solar project|bess|battery energy storage)\b/gi)?.length ?? 0
-  return genericRelevantTitle && descriptionEnergySignals >= 2
+  if (!titleHasEnergy && /\\b(?:wind|nuclear|fossil|coal|natural gas|gas turbine|hydroelectric)\\b/i.test(normalizedTitle)) {
+    return { isSolarRelated: false, evidence: ['explicit_non_solar_generation_title'] }
+  }
+  if (!titleHasEnergy && /\\b(?:software|dev\\s*ops|devops|cloud|cyber|information technology|it systems?|data engineer)\\b/i.test(normalizedTitle)) {
+    return { isSolarRelated: false, evidence: ['software_or_it_title_without_solar_signal'] }
+  }
+  if (isSolarInstallerRole(title, description)) {
+    evidence.push('solar_installer_taxonomy')
+    return { isSolarRelated: true, evidence }
+  }
+
+  const titleHasOccupation = /\\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|manager|director|analyst|developer|development|designer|estimator|sales|trainer|supervisor|superintendent|construction|project|quality|scada)\\b/i.test(normalizedTitle)
+  if (titleHasEnergy && titleHasOccupation) {
+    evidence.push('solar_or_storage_signal_in_title')
+    return { isSolarRelated: true, evidence }
+  }
+
+  const genericRelevantTitle = /\\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|project manager|construction manager|asset manager|designer|estimator|superintendent|foreman|field service|scada)\\b/i.test(normalizedTitle)
+  const strongSolarDescriptionSignal =
+    /\\b(?:solar|photovoltaic|pv)\\b.{0,60}\\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\\b/i.test(normalizedDescription)
+    || /\\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\\b.{0,60}\\b(?:solar|photovoltaic|pv)\\b/i.test(normalizedDescription)
+    || /\\b(?:bess|battery energy storage|battery storage)\\b.{0,60}\\b(?:project|projects|system|systems|plant|plants|development|portfolio|asset|assets|design|interconnection)\\b/i.test(normalizedDescription)
+
+  if (genericRelevantTitle && strongSolarDescriptionSignal) {
+    evidence.push('solar_project_or_system_signal_in_description')
+    return { isSolarRelated: true, evidence }
+  }
+
+  return { isSolarRelated: false, evidence }
 }
 
-export function parseHistoricalJobHtml(html: string, sourceUrl: string, employer: HistoricalEmployer): ParsedHistoricalJob | null {
+export function isHistoricalSolarRole(title: string, description: string) {
+  return evaluateHistoricalSolarRole(title, description).isSolarRelated
+}
+
+function evaluateUsLocation(locationRaw: string, state: string | null, country: string | null) {
+  const evidence: string[] = []
+  if (country === 'US') evidence.push('structured_country_us')
+  else if (country) return { isUsJob: false, evidence: [`structured_country_${country.toLowerCase()}`] }
+
+  const normalizedState = state?.trim() ?? ''
+  if (normalizedState && (US_STATE_CODES.has(normalizedState.toUpperCase()) || US_STATE_NAMES.has(normalizedState.toLowerCase()))) {
+    evidence.push('structured_us_state')
+  }
+
+  if (/\\b(?:US|USA|United States(?: of America)?)\\b/i.test(locationRaw)) evidence.push('location_text_us')
+  const stateCodeMatches = [...locationRaw.matchAll(/(?:^|[,\\s])([A-Z]{2})(?=\\s*(?:,|\\d{5}(?:-\\d{4})?|$))/g)]
+  if (stateCodeMatches.some((match) => US_STATE_CODES.has(match[1]))) evidence.push('location_text_state')
+  if (/\\b\\d{5}(?:-\\d{4})?\\b/.test(locationRaw)) evidence.push('us_zip_format')
+
+  return { isUsJob: evidence.length > 0, evidence }
+}
+
+export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, employer: HistoricalEmployer): HistoricalParseResult {
   const $ = cheerio.load(html)
   const candidates: Record<string, unknown>[] = []
   $('script[type="application/ld+json"]').each((_, element) => {
@@ -247,32 +313,74 @@ export function parseHistoricalJobHtml(html: string, sourceUrl: string, employer
       // Invalid JSON-LD is common in historical captures; HTML fallback remains available.
     }
   })
+
   const job = candidates[0] ?? null
-  const title = textValue(job?.title) || $('h1').first().text().trim() || $('title').text().split('|')[0].trim()
+  const extractionMethod: HistoricalParseResult['extractionMethod'] = job ? 'json_ld' : 'html_fallback'
+  const title = textValue(job?.title)
+    || repairCommonMojibake($('[itemprop="title"], h1').first().text()).trim()
+    || repairCommonMojibake($('title').text().split('|')[0]).trim()
   const descriptionHtml = textValue(job?.description)
     || $('[itemprop="description"], .job-description, .jobDescription, #job-description, #jobDescription').first().html()
     || ''
   const descriptionText = stripHtml(descriptionHtml)
-  if (!title || descriptionText.length < 80) return null
+  const isJobPage = Boolean(title && descriptionText.length >= 80)
+
+  if (!isJobPage) {
+    return {
+      job: null,
+      isJobPage: false,
+      isUsJob: false,
+      isSolarRelated: false,
+      usEvidence: [],
+      solarEvidence: [],
+      rejectionReason: 'missing_job_content',
+      extractionMethod,
+    }
+  }
 
   const structuredAddress = job ? addressFromJsonLd(job) : { raw: '', city: null, state: null, country: null }
-  const locationRaw = structuredAddress.raw
-    || $('[itemprop="jobLocation"], .job-location, .location').first().text().replace(/\s+/g, ' ').trim()
+  const locationRaw = repairCommonMojibake(
+    structuredAddress.raw
+      || $('[itemprop="jobLocation"], .job-location, .location').first().text(),
+  ).replace(/\\s+/g, ' ').trim()
   const country = normalizeCountry(structuredAddress.country)
-  if (country && !/^(US|United States)$/i.test(country)) return null
-  const terminalCountryCode = locationRaw.match(/,\s*([A-Z]{2})\s*$/)?.[1]
-  if (terminalCountryCode && terminalCountryCode !== 'US' && !US_STATE_CODES.has(terminalCountryCode)) return null
-  if (!isHistoricalSolarRole(title, descriptionText)) return null
+  const us = evaluateUsLocation(locationRaw, structuredAddress.state, country)
+  if (!us.isUsJob) {
+    return {
+      job: null,
+      isJobPage: true,
+      isUsJob: false,
+      isSolarRelated: false,
+      usEvidence: us.evidence,
+      solarEvidence: [],
+      rejectionReason: 'not_us_or_unknown',
+      extractionMethod,
+    }
+  }
+
+  const solar = evaluateHistoricalSolarRole(title, descriptionText)
+  if (!solar.isSolarRelated) {
+    return {
+      job: null,
+      isJobPage: true,
+      isUsJob: true,
+      isSolarRelated: false,
+      usEvidence: us.evidence,
+      solarEvidence: solar.evidence,
+      rejectionReason: 'not_solar_related',
+      extractionMethod,
+    }
+  }
 
   const salary = job ? salaryFromJsonLd(job) : { min: null, max: null, currency: null, period: null }
   const canonicalUrl = canonicalizeHistoricalUrl(sourceUrl)
   const sourceJobId = sourceId(job, canonicalUrl)
-  const descriptionHash = sha256(descriptionText.toLowerCase().replace(/\s+/g, ' '))
+  const descriptionHash = sha256(descriptionText.toLowerCase().replace(/\\s+/g, ' '))
   const historicalJobId = sha256(sourceJobId
     ? `${employer.employerId}|${sourceJobId}`
     : `${employer.employerId}|${title.toLowerCase()}|${locationRaw.toLowerCase()}|${descriptionHash}`)
 
-  return {
+  const parsedJob: ParsedHistoricalJob = {
     historicalJobId,
     sourceUrl,
     canonicalUrl,
@@ -296,9 +404,24 @@ export function parseHistoricalJobHtml(html: string, sourceUrl: string, employer
     descriptionHash,
     roleFamily: getSolarRoleFamily(title, descriptionText),
     taxonomy: extractHistoricalTaxonomy(title, descriptionText),
-    extractionMethod: job ? 'json_ld' : 'html_fallback',
+    extractionMethod,
     parserVersion: HISTORICAL_PARSER_VERSION,
   }
+
+  return {
+    job: parsedJob,
+    isJobPage: true,
+    isUsJob: true,
+    isSolarRelated: true,
+    usEvidence: us.evidence,
+    solarEvidence: solar.evidence,
+    rejectionReason: null,
+    extractionMethod,
+  }
+}
+
+export function parseHistoricalJobHtml(html: string, sourceUrl: string, employer: HistoricalEmployer): ParsedHistoricalJob | null {
+  return parseHistoricalJobHtmlDetailed(html, sourceUrl, employer).job
 }
 
 export function spreadSample<T>(values: T[], limit: number) {
