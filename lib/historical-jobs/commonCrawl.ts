@@ -249,9 +249,24 @@ export function extractHistoricalTaxonomy(title: string, description: string) {
   }
 }
 
+function roleSpecificDescription(description: string) {
+  const markers = [
+    'the experience we would expect the ideal person to deliver is:',
+    'position specific description',
+    'summary of role',
+  ]
+  const lower = description.toLowerCase()
+  for (const marker of markers) {
+    const index = lower.indexOf(marker)
+    if (index >= 0) return description.slice(index + marker.length).trim()
+  }
+  return description
+}
+
 export function evaluateHistoricalSolarRole(title: string, description: string) {
   const normalizedTitle = title.toLowerCase()
-  const normalizedDescription = description.toLowerCase()
+  const focusedDescription = roleSpecificDescription(description)
+  const normalizedDescription = focusedDescription.toLowerCase()
   const evidence: string[] = []
   const titleHasEnergy = /\b(?:solar|photovoltaic|pv|bess|battery storage|energy storage)\b/i.test(normalizedTitle)
 
@@ -261,7 +276,7 @@ export function evaluateHistoricalSolarRole(title: string, description: string) 
   if (!titleHasEnergy && /\b(?:software|dev\s*ops|devops|cloud|cyber|information technology|it systems?|data engineer)\b/i.test(normalizedTitle)) {
     return { isSolarRelated: false, evidence: ['software_or_it_title_without_solar_signal'] }
   }
-  if (isSolarInstallerRole(title, description)) {
+  if (isSolarInstallerRole(title, focusedDescription)) {
     evidence.push('solar_installer_taxonomy')
     return { isSolarRelated: true, evidence }
   }
@@ -272,11 +287,12 @@ export function evaluateHistoricalSolarRole(title: string, description: string) 
     return { isSolarRelated: true, evidence }
   }
 
-  const genericRelevantTitle = /\b(?:engineer(?:ing)?|technician|installer|electrician|operator|operations|maintenance|commissioning|project manager|construction manager|asset manager|designer|estimator|superintendent|foreman|field service|scada)\b/i.test(normalizedTitle)
+  const genericRelevantTitle = /\b(?:engineer(?:ing)?|technician|tech\b|installer|install tech|electrician|operator|operations|maintenance|commissioning|manager|director|analyst|associate|controller|coordinator|consultant|project|construction|asset|designer|estimator|superintendent|foreman|field service|sales|finance|survey|permitting|permit|scada)\b/i.test(normalizedTitle)
+  const solarWorkNouns = String.raw`project|projects|system|systems|plant|plants|farm|farms|panel|panels|array|arrays|installation|installations|install|installed|epc|construction|development|portfolio|asset|assets|design|interconnection|financing|finance|permit|permitting|product|products|business`
   const strongSolarDescriptionSignal =
-    /\b(?:solar|photovoltaic|pv)\b.{0,60}\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\b/i.test(normalizedDescription)
-    || /\b(?:project|projects|system|systems|plant|plants|farm|farms|array|arrays|installation|installations|epc|construction|development|portfolio|asset|assets|design|interconnection)\b.{0,60}\b(?:solar|photovoltaic|pv)\b/i.test(normalizedDescription)
-    || /\b(?:bess|battery energy storage|battery storage)\b.{0,60}\b(?:project|projects|system|systems|plant|plants|development|portfolio|asset|assets|design|interconnection)\b/i.test(normalizedDescription)
+    new RegExp(String.raw`\\b(?:solar|photovoltaic|pv)\\b.{0,90}\\b(?:${solarWorkNouns})\\b`, 'i').test(normalizedDescription)
+    || new RegExp(String.raw`\\b(?:${solarWorkNouns})\\b.{0,90}\\b(?:solar|photovoltaic|pv)\\b`, 'i').test(normalizedDescription)
+    || /\b(?:bess|battery energy storage|battery storage)\b.{0,90}\b(?:project|projects|system|systems|plant|plants|development|portfolio|asset|assets|design|interconnection|construction)\b/i.test(normalizedDescription)
 
   if (genericRelevantTitle && strongSolarDescriptionSignal) {
     evidence.push('solar_project_or_system_signal_in_description')
@@ -300,10 +316,15 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
     evidence.push('structured_us_state')
   }
 
+  const explicitCountryCode = locationRaw.match(/,\s*([A-Z]{2})\s*,\s*[A-Z0-9 -]{2,10}\s*$/)?.[1]
+    ?? locationRaw.match(/,\s*([A-Z]{2})\s*,\s*\d{4,6}(?:-\d{3,4})?\s*$/)?.[1]
+  if (explicitCountryCode && explicitCountryCode !== 'US' && !US_STATE_CODES.has(explicitCountryCode)) {
+    return { isUsJob: false, evidence: [`location_country_code_${explicitCountryCode.toLowerCase()}`] }
+  }
+
   if (/\b(?:US|USA|United States(?: of America)?)\b/i.test(locationRaw)) evidence.push('location_text_us')
   const stateCodeMatches = [...locationRaw.matchAll(/(?:^|[,\s])([A-Z]{2})(?=\s*(?:,|\d{5}(?:-\d{4})?|$))/g)]
   if (stateCodeMatches.some((match) => US_STATE_CODES.has(match[1]))) evidence.push('location_text_state')
-  if (/\b\d{5}(?:-\d{4})?\b/.test(locationRaw)) evidence.push('us_zip_format')
 
   return { isUsJob: evidence.length > 0, evidence }
 }
