@@ -18,6 +18,7 @@ interface CliOptions {
   outputDir: string
   duckdbPath: string
   parquetDir: string
+  registry: string
   sqlOnly: boolean
 }
 
@@ -46,6 +47,7 @@ function parseOptions(args: string[]): CliOptions {
     outputDir: stringArg(args, '--output', 'data/common-crawl-historical-jobs/url-index-poc'),
     duckdbPath: stringArg(args, '--duckdb', DEFAULT_DUCKDB),
     parquetDir: stringArg(args, '--parquet-dir', ''),
+    registry: stringArg(args, '--registry', 'data/common-crawl-historical-jobs/employers.json'),
     sqlOnly: args.includes('--sql-only'),
   }
 }
@@ -119,7 +121,7 @@ async function main() {
   const outputDir = path.resolve(options.outputDir)
   await mkdir(outputDir, { recursive: true })
 
-  const registry = JSON.parse(await readFile('data/common-crawl-historical-jobs/employers.json', 'utf8')) as HistoricalEmployer[]
+  const registry = JSON.parse(await readFile(options.registry, 'utf8')) as HistoricalEmployer[]
   const employers = options.employerIds.length
     ? registry.filter((employer) => options.employerIds.includes(employer.employerId))
     : registry
