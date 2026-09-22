@@ -49,10 +49,15 @@ export interface ParsedHistoricalJob {
   salaryPeriod: string | null
   descriptionText: string
   descriptionHash: string
-  roleFamily: string
-  taxonomy: ReturnType<typeof extractHistoricalTaxonomy>
   extractionMethod: 'json_ld' | 'html_fallback'
   parserVersion: string
+}
+
+export interface HistoricalJobFeatures {
+  historicalJobId: string
+  roleFamily: string
+  taxonomy: ReturnType<typeof extractHistoricalTaxonomy>
+  taxonomyVersion: string
 }
 
 export interface HistoricalParseResult {
@@ -66,7 +71,9 @@ export interface HistoricalParseResult {
   extractionMethod: 'json_ld' | 'html_fallback' | null
 }
 
-export const HISTORICAL_PARSER_VERSION = 'common-crawl-poc-v2'
+export const HISTORICAL_PARSER_VERSION = 'common-crawl-parser-v3'
+export const HISTORICAL_CLASSIFIER_VERSION = 'common-crawl-classifier-v1'
+export const HISTORICAL_TAXONOMY_VERSION = 'common-crawl-taxonomy-v1'
 const US_STATE_CODES = new Set(Object.keys(STATE_CODE_TO_NAME))
 const US_STATE_NAMES = new Set(Object.values(STATE_CODE_TO_NAME).map((value) => value.toLowerCase()))
 
@@ -301,6 +308,15 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
   return { isUsJob: evidence.length > 0, evidence }
 }
 
+export function buildHistoricalJobFeatures(job: ParsedHistoricalJob): HistoricalJobFeatures {
+  return {
+    historicalJobId: job.historicalJobId,
+    roleFamily: getSolarRoleFamily(job.title, job.descriptionText),
+    taxonomy: extractHistoricalTaxonomy(job.title, job.descriptionText),
+    taxonomyVersion: HISTORICAL_TAXONOMY_VERSION,
+  }
+}
+
 export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, employer: HistoricalEmployer): HistoricalParseResult {
   const $ = cheerio.load(html)
   const candidates: Record<string, unknown>[] = []
@@ -314,12 +330,12 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
     }
   })
 
-  const job = candidates[0] ?? null
-  const extractionMethod: HistoricalParseResult['extractionMethod'] = job ? 'json_ld' : 'html_fallback'
-  const title = textValue(job?.title)
+  const structuredJob = candidates[0] ?? null
+  const extractionMethod: HistoricalParseResult['extractionMethod'] = structuredJob ? 'json_ld' : 'html_fallback'
+  const title = textValue(structuredJob?.title)
     || repairCommonMojibake($('[itemprop="title"], h1').first().text()).trim()
     || repairCommonMojibake($('title').text().split('|')[0]).trim()
-  const descriptionHtml = textValue(job?.description)
+  const descriptionHtml = textValue(structuredJob?.description)
     || $('[itemprop="description"], .job-description, .jobDescription, #job-description, #jobDescription').first().html()
     || ''
   const descriptionText = stripHtml(descriptionHtml)
@@ -338,43 +354,15 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
     }
   }
 
-  const structuredAddress = job ? addressFromJsonLd(job) : { raw: '', city: null, state: null, country: null }
+  const structuredAddress = structuredJob ? addressFromJsonLd(structuredJob) : { raw: '', city: null, state: null, country: null }
   const locationRaw = repairCommonMojibake(
     structuredAddress.raw
       || $('[itemprop="jobLocation"], .job-location, .location').first().text(),
   ).replace(/\s+/g, ' ').trim()
   const country = normalizeCountry(structuredAddress.country)
-  const us = evaluateUsLocation(locationRaw, structuredAddress.state, country)
-  if (!us.isUsJob) {
-    return {
-      job: null,
-      isJobPage: true,
-      isUsJob: false,
-      isSolarRelated: false,
-      usEvidence: us.evidence,
-      solarEvidence: [],
-      rejectionReason: 'not_us_or_unknown',
-      extractionMethod,
-    }
-  }
-
-  const solar = evaluateHistoricalSolarRole(title, descriptionText)
-  if (!solar.isSolarRelated) {
-    return {
-      job: null,
-      isJobPage: true,
-      isUsJob: true,
-      isSolarRelated: false,
-      usEvidence: us.evidence,
-      solarEvidence: solar.evidence,
-      rejectionReason: 'not_solar_related',
-      extractionMethod,
-    }
-  }
-
-  const salary = job ? salaryFromJsonLd(job) : { min: null, max: null, currency: null, period: null }
+  const salary = structuredJob ? salaryFromJsonLd(structuredJob) : { min: null, max: null, currency: null, period: null }
   const canonicalUrl = canonicalizeHistoricalUrl(sourceUrl)
-  const sourceJobId = sourceId(job, canonicalUrl)
+  const sourceJobId = sourceId(structuredJob, canonicalUrl)
   const descriptionHash = sha256(descriptionText.toLowerCase().replace(/\s+/g, ' '))
   const historicalJobId = sha256(sourceJobId
     ? `${employer.employerId}|${sourceJobId}`
@@ -393,35 +381,42 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
     city: structuredAddress.city,
     state: structuredAddress.state,
     country,
-    datePosted: textValue(job?.datePosted) || null,
-    validThrough: textValue(job?.validThrough) || null,
-    employmentType: textValue(job?.employmentType) || null,
+    datePosted: textValue(structuredJob?.datePosted) || null,
+    validThrough: textValue(structuredJob?.validThrough) || null,
+    employmentType: textValue(structuredJob?.employmentType) || null,
     salaryMin: salary.min,
     salaryMax: salary.max,
     salaryCurrency: salary.currency,
     salaryPeriod: salary.period,
     descriptionText,
     descriptionHash,
-    roleFamily: getSolarRoleFamily(title, descriptionText),
-    taxonomy: extractHistoricalTaxonomy(title, descriptionText),
     extractionMethod,
     parserVersion: HISTORICAL_PARSER_VERSION,
   }
 
+  const us = evaluateUsLocation(locationRaw, structuredAddress.state, country)
+  const solar = evaluateHistoricalSolarRole(title, descriptionText)
+  const rejectionReason = !us.isUsJob
+    ? 'not_us_or_unknown'
+    : !solar.isSolarRelated
+      ? 'not_solar_related'
+      : null
+
   return {
     job: parsedJob,
     isJobPage: true,
-    isUsJob: true,
-    isSolarRelated: true,
+    isUsJob: us.isUsJob,
+    isSolarRelated: solar.isSolarRelated,
     usEvidence: us.evidence,
     solarEvidence: solar.evidence,
-    rejectionReason: null,
+    rejectionReason,
     extractionMethod,
   }
 }
 
 export function parseHistoricalJobHtml(html: string, sourceUrl: string, employer: HistoricalEmployer): ParsedHistoricalJob | null {
-  return parseHistoricalJobHtmlDetailed(html, sourceUrl, employer).job
+  const parsed = parseHistoricalJobHtmlDetailed(html, sourceUrl, employer)
+  return parsed.job && parsed.isUsJob && parsed.isSolarRelated ? parsed.job : null
 }
 
 export function spreadSample<T>(values: T[], limit: number) {
