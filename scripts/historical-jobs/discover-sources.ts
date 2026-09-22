@@ -16,6 +16,8 @@ const ATS_HOST_SUFFIXES = [
   'workforcenow.adp.com', 'oraclecloud.com', 'jobs2web.com',
 ]
 
+const SHARED_RECRUITING_ROOTS = new Set(['kochcareers.com'])
+
 const GENERIC_ALIAS_WORDS = new Set([
   'solar', 'energy', 'power', 'renewable', 'renewables', 'america', 'americas',
   'north', 'company', 'companies', 'group', 'clean', 'resources', 'building',
@@ -131,7 +133,8 @@ function employerSpecs(employers: HistoricalEmployer[]): EmployerDiscoverySpec[]
       targets
         .map((target) => target.host)
         .filter((host) => !isAtsHost(host))
-        .map(registeredRoot),
+        .map(registeredRoot)
+        .filter((root) => !SHARED_RECRUITING_ROOTS.has(root)),
     )]
 
     return {
