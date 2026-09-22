@@ -56,6 +56,18 @@ assert.equal(isHistoricalSolarRole('Wind Field Service Technician III', 'Our por
 assert.equal(isHistoricalSolarRole('Dev Ops Engineer', 'We are a global solar energy company building clean energy products.'), false)
 assert.equal(isHistoricalSolarRole('Finance Operations Manager', 'We are a global solar energy company building clean energy products.'), false)
 assert.equal(isHistoricalSolarRole('Project Engineer', 'Design utility-scale photovoltaic systems and solar projects.'), true)
+assert.equal(isHistoricalSolarRole(
+  'Install Tech I',
+  'SunPower is a global solar company. The experience we would expect the ideal person to deliver is: Works within a team to install roof attachments, equipment racking supports and solar panels. Responsible for electrical wiring of solar arrays.',
+), true)
+assert.equal(isHistoricalSolarRole(
+  'Finance Operations Manager',
+  'SunPower is a global solar company. The experience we would expect the ideal person to deliver is: Manage general ledger reconciliations, reporting, controls and accounting operations.',
+), false)
+assert.equal(isHistoricalSolarRole(
+  'Title & Survey Manager',
+  'You will oversee title and survey needs for utility-scale solar projects in multiple states.',
+), true)
 assert.equal(repairCommonMojibake('candidateâ€™s â€œsolarâ€\u009d role'), 'candidate’s “solar” role')
 
 const foreignHtml = html.replace(
@@ -92,6 +104,12 @@ const unknownLocationParsed = parseHistoricalJobHtmlDetailed(unknownLocationHtml
 assert(unknownLocationParsed.job)
 assert.equal(unknownLocationParsed.isUsJob, false)
 assert.equal(unknownLocationParsed.rejectionReason, 'not_us_or_unknown')
+
+const foreignPostalHtml = '<html><body><h1>Solar Logistics Coordinator</h1><div class="location">MEYZIEU, 69, FR, 69330</div><div class="job-description">Coordinate solar panel logistics, installation inventory and project deliveries for utility-scale solar projects across the region.</div></body></html>'
+const foreignPostalParsed = parseHistoricalJobHtmlDetailed(foreignPostalHtml, 'https://example.com/jobs/foreign-postal', employer)
+assert(foreignPostalParsed.job)
+assert.equal(foreignPostalParsed.isUsJob, false)
+assert.match(foreignPostalParsed.usEvidence.join(','), /location_country_code_fr/)
 
 const warc = Buffer.from(`WARC/1.0\r\nWARC-Type: response\r\nContent-Length: ${html.length}\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n${html}`)
 const payload = extractHttpPayloadFromWarc(gzipSync(warc))
