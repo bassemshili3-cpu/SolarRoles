@@ -222,7 +222,7 @@ async function runDuckDb(executable: string, sqlFile: string) {
   await new Promise<void>((resolve, reject) => {
     const child = spawn(path.resolve(executable), ['-init', path.resolve(sqlFile), ':memory:'], {
       cwd: process.cwd(),
-      stdio: 'inherit',
+      stdio: ['ignore', 'inherit', 'inherit'],
       windowsHide: true,
     })
     child.on('error', reject)
