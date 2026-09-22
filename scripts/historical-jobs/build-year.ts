@@ -33,6 +33,13 @@ async function main() {
     await run('scripts/historical-jobs/discover-sources.ts', discoveryArgs)
     return
   }
+  if (stage === 'index') {
+    const registry = arg(args, '--registry', 'data/common-crawl-historical-jobs/employers.json')
+    const indexArgs = ['--years', year, '--parquet-dir', parquetDir, '--output', root, '--registry', registry]
+    if (crawl) indexArgs.push('--crawls', crawl)
+    await run('scripts/query-common-crawl-url-index.ts', indexArgs)
+    return
+  }
   if (stage === 'fetch') {
     await run('scripts/historical-jobs/fetch-captures.ts', ['--input', root])
     return
@@ -54,7 +61,7 @@ async function main() {
     return
   }
 
-  throw new Error(`Unknown --stage ${stage}. Use discovery, fetch, parse, classify, features, or audit.`)
+  throw new Error(`Unknown --stage ${stage}. Use discovery, index, fetch, parse, classify, features, or audit.`)
 }
 
 main().catch((error) => {
