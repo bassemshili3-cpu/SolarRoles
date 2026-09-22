@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { gzipSync } from 'node:zlib'
 import {
+  buildHistoricalJobFeatures,
   extractHistoricalTaxonomy,
   extractHttpPayloadFromWarc,
   isHistoricalSolarRole,
@@ -34,11 +35,12 @@ assert(parsed)
 assert.equal(parsed.sourceJobId, 'SOL-42')
 assert.equal(parsed.canonicalUrl, 'https://boards.greenhouse.io/examplesolar/jobs/42')
 assert.equal(parsed.state, 'TX')
-assert.equal(parsed.taxonomy.bessStorage, true)
-assert.equal(parsed.taxonomy.commissioning, true)
-assert.equal(parsed.taxonomy.osha, true)
-assert.equal(parsed.taxonomy.travel, true)
-assert.equal(parsed.taxonomy.minimumExperienceYears, 2)
+const parsedFeatures = buildHistoricalJobFeatures(parsed)
+assert.equal(parsedFeatures.taxonomy.bessStorage, true)
+assert.equal(parsedFeatures.taxonomy.commissioning, true)
+assert.equal(parsedFeatures.taxonomy.osha, true)
+assert.equal(parsedFeatures.taxonomy.travel, true)
+assert.equal(parsedFeatures.taxonomy.minimumExperienceYears, 2)
 
 const taxonomy = extractHistoricalTaxonomy('Solar Electrician', 'NABCEP preferred. Paid training and OSHA 10 are provided.')
 assert.equal(taxonomy.electrician, true)
@@ -64,8 +66,10 @@ const foreignHtml = html.replace(
   '"addressLocality":"Binan, LAG, PH","addressRegion":"","addressCountry":""',
 )
 const foreignParsed = parseHistoricalJobHtmlDetailed(foreignHtml, 'https://boards.greenhouse.io/examplesolar/jobs/43', employer)
-assert.equal(foreignParsed.job, null)
+assert(foreignParsed.job)
+assert.equal(foreignParsed.isUsJob, false)
 assert.equal(foreignParsed.rejectionReason, 'not_us_or_unknown')
+assert.equal(parseHistoricalJobHtml(foreignHtml, 'https://boards.greenhouse.io/examplesolar/jobs/43', employer), null)
 
 const boilerplateOnlyHtml = html.replace(
   'Solar Commissioning Technician',
@@ -75,15 +79,18 @@ const boilerplateOnlyHtml = html.replace(
   '<p>We are a global solar energy company building clean energy products. Manage finance operations and reporting.</p>',
 )
 const boilerplateParsed = parseHistoricalJobHtmlDetailed(boilerplateOnlyHtml, 'https://boards.greenhouse.io/examplesolar/jobs/44', employer)
-assert.equal(boilerplateParsed.job, null)
+assert(boilerplateParsed.job)
+assert.equal(boilerplateParsed.isSolarRelated, false)
 assert.equal(boilerplateParsed.rejectionReason, 'not_solar_related')
+assert.equal(parseHistoricalJobHtml(boilerplateOnlyHtml, 'https://boards.greenhouse.io/examplesolar/jobs/44', employer), null)
 
 const unknownLocationHtml = html.replace(
   '"addressLocality":"Austin","addressRegion":"TX","addressCountry":"US"',
   '"addressLocality":"London","addressRegion":"","addressCountry":""',
 )
 const unknownLocationParsed = parseHistoricalJobHtmlDetailed(unknownLocationHtml, 'https://boards.greenhouse.io/examplesolar/jobs/45', employer)
-assert.equal(unknownLocationParsed.job, null)
+assert(unknownLocationParsed.job)
+assert.equal(unknownLocationParsed.isUsJob, false)
 assert.equal(unknownLocationParsed.rejectionReason, 'not_us_or_unknown')
 
 const warc = Buffer.from(`WARC/1.0\r\nWARC-Type: response\r\nContent-Length: ${html.length}\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n${html}`)
