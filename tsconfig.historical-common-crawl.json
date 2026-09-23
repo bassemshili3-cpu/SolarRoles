@@ -21,6 +21,7 @@
     "scripts/historical-jobs/fetch-captures.ts",
     "scripts/historical-jobs/parse-jobs.ts",
     "scripts/historical-jobs/classify-jobs.ts",
+    "scripts/historical-jobs/process-sample-batched.ts",
     "scripts/historical-jobs/extract-features.ts",
     "scripts/historical-jobs/audit-dataset.ts",
     "scripts/historical-jobs/build-current-employer-registry.ts",
