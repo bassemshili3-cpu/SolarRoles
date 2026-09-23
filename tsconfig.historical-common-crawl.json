@@ -22,6 +22,8 @@
     "scripts/historical-jobs/classify-jobs.ts",
     "scripts/historical-jobs/extract-features.ts",
     "scripts/historical-jobs/audit-dataset.ts",
+    "scripts/historical-jobs/build-current-employer-registry.ts",
+    "scripts/historical-jobs/build-employer-universe.ts",
     "scripts/historical-jobs/build-year.ts",
     "tests/common-crawl-historical-jobs.test.ts"
   ],
