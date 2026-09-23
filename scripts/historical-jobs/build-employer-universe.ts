@@ -28,11 +28,24 @@ async function main() {
   const basePath = path.resolve(arg(args, '--base', 'data/common-crawl-historical-jobs/employers.json'))
   const currentPath = path.resolve(arg(args, '--current', 'data/common-crawl-historical-jobs/current-employer-source-discovery-registry.json'))
   const discoveredPath = path.resolve(arg(args, '--discovered', `data/common-crawl-historical-jobs/employer-discovery-${year}/discovered-employers.json`))
+  const queryScopedDiscoveredPath = path.resolve(arg(args, '--query-scoped-discovered', `data/common-crawl-historical-jobs/employer-discovery-${year}/query-scoped-discovered-employers.json`))
+  const currentQueryScopedPath = path.resolve(arg(args, '--current-query-scoped', 'data/common-crawl-historical-jobs/current-employer-query-scoped-hints.json'))
   const outputPath = path.resolve(arg(args, '--output', `data/common-crawl-historical-jobs/historical-employer-universe-${year}.json`))
 
   const base = await readJson<HistoricalEmployer[]>(basePath)
   const current = await readJson<HistoricalEmployer[]>(currentPath, true)
   const discovered = await readJson<HistoricalEmployer[]>(discoveredPath, true)
+  const queryScopedDiscovered = await readJson<HistoricalEmployer[]>(queryScopedDiscoveredPath, true)
+  const currentQueryScopedRaw = await readJson<Array<Record<string, unknown>>>(currentQueryScopedPath, true)
+  const currentQueryScoped: HistoricalEmployer[] = currentQueryScopedRaw
+    .filter((row) => typeof row.employerName === 'string' && typeof row.employerId === 'string')
+    .map((row) => ({
+      employerId: String(row.employerId),
+      employerName: String(row.employerName),
+      atsProvider: String(row.atsProvider ?? 'query_scoped_current'),
+      patterns: [],
+      notes: String(row.reason ?? 'Current SolarRoles source is query-scoped; retain employer identity as an alias-only historical discovery hint.'),
+    }))
 
   type Acc = HistoricalEmployer & { sources: Set<string>; providers: Set<string> }
   const merged = new Map<string, Acc>()
@@ -67,7 +80,9 @@ async function main() {
   // and additional validated patterns.
   ingest(base, 'historical_base', 1)
   ingest(current, 'current_solarroles_seed', 2)
-  ingest(discovered, 'open_common_crawl_discovery', 3)
+  ingest(currentQueryScoped, 'current_solarroles_query_scoped_hint', 3)
+  ingest(discovered, 'open_common_crawl_discovery', 4)
+  ingest(queryScopedDiscovered, 'open_common_crawl_query_scoped_discovery', 5)
 
   const output = [...merged.values()]
     .map((employer) => ({
@@ -87,7 +102,9 @@ async function main() {
     year,
     historicalBaseEmployers: base.length,
     currentSeedEmployersWithSafePatterns: current.length,
+    currentSeedQueryScopedHints: currentQueryScoped.length,
     openDiscoveryValidatedEmployers: discovered.length,
+    openDiscoveryQueryScopedEmployers: queryScopedDiscovered.length,
     mergedEmployerUniverse: output.length,
     note: 'This universe is for historical source discovery. It is intentionally broader than the final analytical panel and must not be treated as the final set of employers with usable historical jobs.',
   }, null, 2)}\n`, 'utf8')
@@ -96,7 +113,9 @@ async function main() {
     year,
     historicalBaseEmployers: base.length,
     currentSeedEmployersWithSafePatterns: current.length,
+    currentSeedQueryScopedHints: currentQueryScoped.length,
     openDiscoveryValidatedEmployers: discovered.length,
+    openDiscoveryQueryScopedEmployers: queryScopedDiscovered.length,
     mergedEmployerUniverse: output.length,
   }, null, 2))
 }
