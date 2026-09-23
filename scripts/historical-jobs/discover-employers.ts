@@ -32,6 +32,7 @@ interface BatchSourceRow {
   first_seen: string
   last_seen: string
   sample_rank: number
+  sample_hash: string
   sample_solar_url_signal: boolean
   sample_urlkey: string
   sample_timestamp: string
@@ -211,7 +212,12 @@ function buildBatchSql(
     WHEN host = 'workforcenow.adp.com'
       THEN coalesce(nullif(regexp_extract(url, '(?i)[?&](?:client|clientid|cid)=([^&#]+)', 1), ''), host)
     WHEN host = 'recruiting.paylocity.com'
-      THEN coalesce(nullif(regexp_extract(url, '(?i)[?&](?:clientid|companyid|company)=([^&#]+)', 1), ''), host)
+      THEN coalesce(
+        nullif(regexp_extract(url_path, '(?i)^/recruiting/jobs/details/[0-9]+/([^/]+)', 1), ''),
+        nullif(regexp_extract(url_path, '(?i)^/recruiting/jobs/all/[0-9a-f-]{36}/([^/]+)', 1), ''),
+        nullif(regexp_extract(url, '(?i)[?&](?:clientid|companyid|company)=([^&#]+)', 1), ''),
+        host
+      )
     WHEN ends_with(host, '.paycomonline.net')
       THEN coalesce(nullif(regexp_extract(url, '(?i)[?&]clientkey=([^&#]+)', 1), ''), host)
     WHEN host IN ('ats.rippling.com', 'apply.workable.com')
@@ -266,7 +272,11 @@ function buildBatchSql(
     )
     OR (host = 'jobs.lever.co' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9a-f-]{16,}'))
     OR (host = 'jobs.jobvite.com' AND regexp_matches(lower(url_path), '^/[^/]+/(?:job|jobs)/[^/]+'))
-    OR (host = 'jobs.smartrecruiters.com' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9]{6,}[-/]'))
+    OR (
+      host = 'jobs.smartrecruiters.com'
+      AND regexp_matches(lower(url_path), '^/[^/]+/[0-9]{6,}[-/]')
+      AND lower(regexp_extract(url_path, '^/([^/]+)', 1)) NOT IN ('oneclick-ui', 'external-referrals', 'referrals')
+    )
     OR (host = 'jobs.ashbyhq.com' AND regexp_matches(lower(url_path), '^/[^/]+/[^/]+'))
     OR (ends_with(host, '.icims.com') AND regexp_matches(lower(url_path), '/jobs?/[0-9]+(?:/|$)'))
     OR (ends_with(host, '.taleo.net') AND regexp_matches(lower(url_path), 'jobdetail\\.ftl'))
@@ -276,7 +286,13 @@ function buildBatchSql(
     OR (ends_with(host, '.oraclecloud.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
     OR (ends_with(host, '.ultipro.com') AND regexp_matches(lower(url), '(?i)opportunitydetail|/job(?:/|\\?|$)|requisition'))
     OR (ends_with(host, '.ukg.com') AND regexp_matches(lower(url), '(?i)/job(?:/|\\?|$)|opportunity|requisition'))
-    OR ((host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')) AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
+    OR (
+      (host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com'))
+      AND (
+        regexp_matches(lower(url_path), '^/recruiting/jobs/details/[0-9]+/[^/]+/[^/]+')
+        OR regexp_matches(lower(url_path), '^/recruiting/jobs/all/[0-9a-f-]{36}/[^/]+')
+      )
+    )
     OR (host = 'workforcenow.adp.com' AND regexp_matches(lower(url), '(?i)recruitment|job|position'))
     OR (ends_with(host, '.paycomonline.net') AND regexp_matches(lower(url), '(?i)jobdetails|job-detail|position'))
     OR (ends_with(host, '.jobs2web.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
@@ -392,6 +408,7 @@ COPY (
     stats.first_seen,
     stats.last_seen,
     ranked.sample_rank,
+    cast(hash(ranked.url) AS VARCHAR) AS sample_hash,
     ranked.solar_url_signal AS sample_solar_url_signal,
     ranked.url_surtkey AS sample_urlkey,
     strftime(ranked.fetch_time, '%Y%m%d%H%M%S') AS sample_timestamp,
@@ -433,11 +450,15 @@ async function runDuckDb(executable: string, sqlFile: string) {
 function addSample(aggregate: SourceAggregate, row: BatchSourceRow, limit: number) {
   if (!row.sample_url || aggregate.samples.some((sample) => sample.sample_url === row.sample_url)) return
   aggregate.samples.push(row)
-  aggregate.samples.sort((a, b) =>
-    Number(b.sample_solar_url_signal) - Number(a.sample_solar_url_signal)
-    || Number(a.sample_rank) - Number(b.sample_rank)
-    || a.sample_timestamp.localeCompare(b.sample_timestamp),
-  )
+  aggregate.samples.sort((a, b) => {
+    const solarOrder = Number(b.sample_solar_url_signal) - Number(a.sample_solar_url_signal)
+    if (solarOrder) return solarOrder
+    const aHash = BigInt(a.sample_hash || '0')
+    const bHash = BigInt(b.sample_hash || '0')
+    if (aHash < bHash) return -1
+    if (aHash > bHash) return 1
+    return a.sample_timestamp.localeCompare(b.sample_timestamp)
+  })
   if (aggregate.samples.length > limit) aggregate.samples.length = limit
 }
 
@@ -567,6 +588,7 @@ async function main() {
     for (const line of body.split(/\r?\n/).filter(Boolean)) {
       const row = JSON.parse(line) as BatchSourceRow
       const key = `${row.provider}|${row.source_key}`
+      const statsKey = `${key}|${row.source_pattern}|${row.host}`
       const current = sources.get(key) ?? {
         provider: row.provider,
         sourceKey: row.source_key,
@@ -582,10 +604,10 @@ async function main() {
 
       current.sourcePatterns.add(row.source_pattern)
       current.hosts.add(row.host)
-      if (!countedInBatch.has(key)) {
+      if (!countedInBatch.has(statsKey)) {
         current.captures += Number(row.captures) || 0
         current.solarUrlHits += Number(row.solar_url_hits) || 0
-        countedInBatch.add(key)
+        countedInBatch.add(statsKey)
       }
       if (row.first_seen < current.firstSeen) current.firstSeen = row.first_seen
       if (row.last_seen > current.lastSeen) current.lastSeen = row.last_seen
@@ -647,6 +669,7 @@ async function main() {
     discoverySourceScope: source.sourceScope,
     discoverySolarUrlHits: source.solarUrlHits,
     discoverySampleRank: sample.sample_rank,
+    discoverySampleHash: sample.sample_hash,
     discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
   })
 
