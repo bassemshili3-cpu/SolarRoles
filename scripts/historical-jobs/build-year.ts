@@ -33,8 +33,17 @@ async function main() {
     await run('scripts/historical-jobs/discover-employers.ts', discoveryArgs)
     return
   }
+  if (stage === 'current-registry') {
+    await run('scripts/historical-jobs/build-current-employer-registry.ts', [])
+    return
+  }
+  if (stage === 'universe') {
+    await run('scripts/historical-jobs/build-employer-universe.ts', ['--year', year])
+    return
+  }
   if (stage === 'source-discovery') {
-    const discoveryArgs = ['--year', year, '--parquet-dir', parquetDir, '--output', path.join(root, 'source-discovery')]
+    const registry = arg(args, '--registry', `data/common-crawl-historical-jobs/historical-employer-universe-${year}.json`)
+    const discoveryArgs = ['--year', year, '--parquet-dir', parquetDir, '--output', path.join(root, 'source-discovery'), '--registry', registry]
     if (crawl) discoveryArgs.push('--crawl', crawl)
     await run('scripts/historical-jobs/discover-sources.ts', discoveryArgs)
     return
@@ -93,7 +102,7 @@ async function main() {
     return
   }
 
-  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-summarize, discovery-deep-sample, source-discovery, index, fetch, parse, classify, features, or audit.`)
+  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-summarize, discovery-deep-sample, current-registry, universe, source-discovery, index, fetch, parse, classify, features, or audit.`)
 }
 
 main().catch((error) => {
