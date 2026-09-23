@@ -62,6 +62,17 @@ notes
 
 Les dates `active_from` et `active_to` peuvent rester nulles tant qu’elles ne sont pas vérifiées.
 
+## Open employer discovery v4
+
+La discovery ouverte conserve désormais deux niveaux d'échantillonnage :
+
+- un échantillon initial adaptatif par source : toutes les captures pour les très petites sources, puis 3 à 5 captures selon le volume et les signaux solaires ;
+- un réservoir local pouvant aller jusqu'à 32 captures par source pour le deep sampling, afin d'éviter de rescanner les 300 Parquet après le premier contrôle de contenu.
+
+Les sources de très gros volume ne sont pas rejetées après quelques pages négatives : le résumé peut demander jusqu'à 24, 28 ou 32 captures selon le volume. Les sources avec signal solaire URL, les matches avec les seeds SolarRoles actuels et les sources ambiguës sont également éligibles au deep sampling.
+
+La discovery couvre aussi les familles ATS présentes dans le seed SolarRoles (notamment JazzHR, Breezy, Rippling, Workable, Pinpoint et HRMDirect en plus des ATS principaux). Les seeds actuels servent de booster de rappel et de mapping ; ils ne plafonnent jamais l'univers historique.
+
 ## Pipeline révisée du POC 2020
 
 Le crawl `CC-MAIN-2020-29` déjà téléchargé localement sert de laboratoire. La discovery n'est plus plafonnée par `employers.json`.
