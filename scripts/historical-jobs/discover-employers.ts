@@ -178,7 +178,7 @@ function buildBatchSql(
     WHEN host = 'workforcenow.adp.com' THEN 'adp'
     WHEN ends_with(host, '.paycomonline.net') THEN 'paycom'
     WHEN ends_with(host, '.jobs2web.com') THEN 'jobs2web'
-    ELSE 'other'
+    ELSE 'first_party_solar_signal'
   END`
 
   const tenantExpr = `CASE
@@ -220,6 +220,10 @@ function buildBatchSql(
     OR (host = 'workforcenow.adp.com' AND regexp_matches(lower(url), 'recruit|job|position'))
     OR (ends_with(host, '.paycomonline.net') AND regexp_matches(lower(url), 'job|career|position'))
     OR (ends_with(host, '.jobs2web.com') AND regexp_matches(lower(url_path), '/job/'))
+    OR (
+      ${solarUrlSignal}
+      AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
+    )
   )`
 
   const solarUrlSignal = `regexp_matches(
@@ -265,6 +269,10 @@ COPY (
     FROM base
     WHERE (
       ${atsPredicate}
+      OR (
+        ${solarUrlSignal}
+        AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
+      )
     )
   ),
   classified AS (
@@ -410,11 +418,11 @@ async function main() {
     batches: batches.length,
     filesPerBatch: options.filesPerBatch,
     maxSamplesPerSource: options.maxSamplesPerSource,
-    scope: 'open ATS tenant discovery; no employer registry filter',
+    scope: 'open ATS tenant discovery plus solar-signaled first-party job URLs; no employer registry filter',
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
   }, null, 2)}\n`, 'utf8')
 
-  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN ATS discovery | ${options.threads} threads | ${options.memoryLimit}`)
+  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery | ${options.threads} threads | ${options.memoryLimit}`)
 
   const failures: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
 
