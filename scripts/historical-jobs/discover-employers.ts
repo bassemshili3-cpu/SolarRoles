@@ -5,7 +5,6 @@ import path from 'node:path'
 
 const DEFAULT_PARQUET_DIR = 'data/common-crawl-historical-jobs/parquet'
 const DEFAULT_DUCKDB = path.join('.tools', 'duckdb', 'duckdb.exe')
-const DISCOVERY_SCHEMA_VERSION = 'open-employer-discovery-v3'
 
 interface CliOptions {
   year: number
@@ -17,48 +16,36 @@ interface CliOptions {
   memoryLimit: string
   filesPerBatch: number
   maxSamplesPerSource: number
-  reservoirSamplesPerSource: number
   sqlOnly: boolean
 }
 
-interface BatchSourceRow {
+interface CandidateCaptureRow {
   provider: string
   source_key: string
   source_pattern: string
-  source_scope: 'host_or_path' | 'query_scoped' | 'first_party_lead'
   host: string
-  captures: number
-  solar_url_hits: number
-  first_seen: string
-  last_seen: string
-  sample_rank: number
-  sample_solar_url_signal: boolean
-  sample_urlkey: string
-  sample_timestamp: string
-  sample_url: string
-  sample_mime: string | null
-  sample_mime_detected: string | null
-  sample_status: string
-  sample_digest: string
-  sample_length: string
-  sample_offset: string
-  sample_filename: string
-  sample_languages: string | null
-  sample_encoding: string | null
+  solar_url_signal: boolean
+  urlkey: string
+  timestamp: string
+  url: string
+  mime: string | null
+  mime_detected: string | null
+  status: string
+  digest: string
+  length: string
+  offset: string
+  filename: string
+  languages: string | null
+  encoding: string | null
   crawl: string
 }
 
 interface SourceAggregate {
   provider: string
   sourceKey: string
-  sourceScope: BatchSourceRow['source_scope']
-  sourcePatterns: Set<string>
-  hosts: Set<string>
-  captures: number
-  solarUrlHits: number
-  firstSeen: string
-  lastSeen: string
-  samples: BatchSourceRow[]
+  sourcePattern: string
+  host: string
+  captures: CandidateCaptureRow[]
 }
 
 function arg(args: string[], flag: string, fallback = '') {
@@ -87,8 +74,7 @@ function parseOptions(args: string[]): CliOptions {
     threads: intArg(args, '--threads', 2),
     memoryLimit: arg(args, '--memory-limit', '3GB'),
     filesPerBatch: intArg(args, '--files-per-batch', 1),
-    maxSamplesPerSource: intArg(args, '--max-samples-per-source', 5),
-    reservoirSamplesPerSource: intArg(args, '--reservoir-samples-per-source', 20),
+    maxSamplesPerSource: intArg(args, '--max-samples-per-source', 12),
     sqlOnly: args.includes('--sql-only'),
   }
 }
@@ -144,7 +130,6 @@ function buildBatchSql(
   tempDir: string,
   threads: number,
   memoryLimit: string,
-  reservoirSamplesPerSource: number,
 ) {
   const atsPredicate = [
     "ends_with(host, '.myworkdayjobs.com')",
@@ -159,18 +144,12 @@ function buildBatchSql(
     "ends_with(host, '.taleo.net')",
     "ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu')",
     "ends_with(host, '.oraclecloud.com')",
-    "ends_with(host, '.ultipro.com')",
+    "host = 'recruiting.ultipro.com' OR ends_with(host, '.ultipro.com')",
     "ends_with(host, '.ukg.com')",
     "host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')",
     "host = 'workforcenow.adp.com'",
     "ends_with(host, '.paycomonline.net')",
     "ends_with(host, '.jobs2web.com')",
-    "ends_with(host, '.applytojob.com')",
-    "ends_with(host, '.breezy.hr')",
-    "host = 'ats.rippling.com'",
-    "host = 'apply.workable.com'",
-    "ends_with(host, '.pinpointhq.com')",
-    "ends_with(host, '.hrmdirect.com')",
   ].join('\n      OR ')
 
   const providerExpr = `CASE
@@ -186,18 +165,12 @@ function buildBatchSql(
     WHEN ends_with(host, '.taleo.net') THEN 'taleo'
     WHEN ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu') THEN 'successfactors'
     WHEN ends_with(host, '.oraclecloud.com') THEN 'oraclecloud'
-    WHEN ends_with(host, '.ultipro.com') THEN 'ultipro'
+    WHEN host = 'recruiting.ultipro.com' OR ends_with(host, '.ultipro.com') THEN 'ultipro'
     WHEN ends_with(host, '.ukg.com') THEN 'ukg'
     WHEN host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com') THEN 'paylocity'
     WHEN host = 'workforcenow.adp.com' THEN 'adp'
     WHEN ends_with(host, '.paycomonline.net') THEN 'paycom'
     WHEN ends_with(host, '.jobs2web.com') THEN 'jobs2web'
-    WHEN ends_with(host, '.applytojob.com') THEN 'jazzhr'
-    WHEN ends_with(host, '.breezy.hr') THEN 'breezy'
-    WHEN host = 'ats.rippling.com' THEN 'rippling'
-    WHEN host = 'apply.workable.com' THEN 'workable'
-    WHEN ends_with(host, '.pinpointhq.com') THEN 'pinpoint'
-    WHEN ends_with(host, '.hrmdirect.com') THEN 'hrmdirect'
     ELSE 'first_party_solar_signal'
   END`
 
@@ -206,37 +179,17 @@ function buildBatchSql(
       THEN regexp_extract(url_path, '^/([^/]+)', 1)
     WHEN host = 'jobs.dayforcehcm.com'
       THEN coalesce(nullif(regexp_extract(url_path, '^/(?:[a-z]{2}-[A-Z]{2}/)?([^/]+)', 1), ''), host)
-    WHEN ends_with(host, '.ultipro.com')
+    WHEN host = 'recruiting.ultipro.com'
       THEN coalesce(nullif(regexp_extract(url_path, '^/([^/]+)', 1), ''), host)
     WHEN host = 'workforcenow.adp.com'
       THEN coalesce(nullif(regexp_extract(url, '(?i)[?&](?:client|clientid|cid)=([^&#]+)', 1), ''), host)
     WHEN host = 'recruiting.paylocity.com'
       THEN coalesce(nullif(regexp_extract(url, '(?i)[?&](?:clientid|companyid|company)=([^&#]+)', 1), ''), host)
-    WHEN ends_with(host, '.paycomonline.net')
-      THEN coalesce(nullif(regexp_extract(url, '(?i)[?&]clientkey=([^&#]+)', 1), ''), host)
-    WHEN host IN ('ats.rippling.com', 'apply.workable.com')
-      THEN coalesce(nullif(regexp_extract(url_path, '^/([^/]+)', 1), ''), host)
     ELSE host
-  END`
-
-  const sourceScopeExpr = `CASE
-    WHEN host = 'workforcenow.adp.com'
-      OR host = 'recruiting.paylocity.com'
-      OR ends_with(host, '.paycomonline.net')
-      THEN 'query_scoped'
-    WHEN NOT (
-      ${atsPredicate}
-    )
-      THEN 'first_party_lead'
-    ELSE 'host_or_path'
   END`
 
   const patternExpr = `CASE
     WHEN host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io', 'jobs.lever.co', 'jobs.jobvite.com', 'jobs.smartrecruiters.com', 'jobs.ashbyhq.com')
-      THEN host || '/' || regexp_extract(url_path, '^/([^/]+)', 1) || '/*'
-    WHEN ends_with(host, '.ultipro.com')
-      THEN host || '/' || regexp_extract(url_path, '^/([^/]+)', 1) || '/*'
-    WHEN host IN ('ats.rippling.com', 'apply.workable.com')
       THEN host || '/' || regexp_extract(url_path, '^/([^/]+)', 1) || '/*'
     ELSE host || '/*'
   END`
@@ -246,977 +199,29 @@ function buildBatchSql(
     '(?:^|[^a-z])(?:solar|photovoltaic|renewable|bess|battery[-_ ]?storage|energy[-_ ]?storage|clean[-_ ]?energy)(?:[^a-z]|$)'
   )`
 
-  const firstPartyDetailPredicate = `(
-    ${solarUrlSignal}
-    AND regexp_matches(
-      lower(url_path),
-      '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunities?)/[^/?#]{3,}'
-    )
-    AND NOT regexp_matches(
-      lower(url_path),
-      '/(?:job|jobs|career|careers)/(?:search|login|browse|category|categories|page)(?:/|$)'
-    )
-  )`
-
   const jobDetailPredicate = `(
-    (ends_with(host, '.myworkdayjobs.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
-    OR (
-      host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io')
-      AND regexp_matches(lower(url_path), '^/[^/]+/jobs?/[0-9]+')
-    )
+    (ends_with(host, '.myworkdayjobs.com') AND regexp_matches(lower(url_path), '/job/'))
+    OR (host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io') AND regexp_matches(lower(url_path), '^/[^/]+/jobs?/[^/]+'))
     OR (host = 'jobs.lever.co' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9a-f-]{16,}'))
-    OR (host = 'jobs.jobvite.com' AND regexp_matches(lower(url_path), '^/[^/]+/(?:job|jobs)/[^/]+'))
-    OR (host = 'jobs.smartrecruiters.com' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9]{6,}[-/]'))
+    OR (host = 'jobs.jobvite.com' AND regexp_matches(lower(url_path), '^/[^/]+/(?:job|jobs)/'))
+    OR (host = 'jobs.smartrecruiters.com' AND regexp_matches(lower(url_path), '^/[^/]+/[^/]+'))
     OR (host = 'jobs.ashbyhq.com' AND regexp_matches(lower(url_path), '^/[^/]+/[^/]+'))
-    OR (ends_with(host, '.icims.com') AND regexp_matches(lower(url_path), '/jobs?/[0-9]+(?:/|$)'))
-    OR (ends_with(host, '.taleo.net') AND regexp_matches(lower(url_path), 'jobdetail\\.ftl'))
-    OR ((ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu')) AND regexp_matches(lower(url_path), '/job/[^/]+'))
-    OR ((host = 'jobs.bamboohr.com' OR ends_with(host, '.bamboohr.com')) AND regexp_matches(lower(url_path), '/careers?/[0-9]+'))
-    OR ((host = 'jobs.dayforcehcm.com' OR ends_with(host, '.dayforcehcm.com')) AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
-    OR (ends_with(host, '.oraclecloud.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
-    OR (ends_with(host, '.ultipro.com') AND regexp_matches(lower(url), '(?i)opportunitydetail|/job(?:/|\\?|$)|requisition'))
-    OR (ends_with(host, '.ukg.com') AND regexp_matches(lower(url), '(?i)/job(?:/|\\?|$)|opportunity|requisition'))
-    OR ((host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')) AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
-    OR (host = 'workforcenow.adp.com' AND regexp_matches(lower(url), '(?i)recruitment|job|position'))
-    OR (ends_with(host, '.paycomonline.net') AND regexp_matches(lower(url), '(?i)jobdetails|job-detail|position'))
-    OR (ends_with(host, '.jobs2web.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
-    OR (ends_with(host, '.applytojob.com') AND regexp_matches(url_path, '^/apply/[A-Za-z0-9]{10}/[^/]+/?
-  )`
-
-  return `SET preserve_insertion_order = false;
-SET enable_progress_bar = false;
-SET threads = ${threads};
-SET memory_limit = ${sqlString(memoryLimit)};
-SET temp_directory = ${sqlPath(tempDir)};
-
-COPY (
-  WITH base AS (
-    SELECT
-      crawl,
-      url_surtkey,
-      url,
-      lower(url_host_name) AS host,
-      coalesce(url_path, '/') AS url_path,
-      fetch_time,
-      fetch_status,
-      content_digest,
-      content_mime_type,
-      content_mime_detected,
-      content_charset,
-      content_languages,
-      warc_filename,
-      warc_record_offset,
-      warc_record_length
-    FROM read_parquet([
-      ${parquetFiles.map((filename) => sqlPath(filename)).join(',\n      ')}
-    ], hive_partitioning = true, union_by_name = true)
-    WHERE fetch_status = 200
-      AND (
-        lower(coalesce(content_mime_type, '')) LIKE '%html%'
-        OR lower(coalesce(content_mime_detected, '')) LIKE '%html%'
-      )
-  ),
-  candidate_rows AS (
-    SELECT *
-    FROM base
-    WHERE (
-      ${atsPredicate}
-      OR ${firstPartyDetailPredicate}
-    )
-  ),
-  classified AS (
-    SELECT
-      *,
-      ${providerExpr} AS provider,
-      ${tenantExpr} AS tenant,
-      ${sourceScopeExpr} AS source_scope,
-      ${patternExpr} AS source_pattern,
-      ${solarUrlSignal} AS solar_url_signal
-    FROM candidate_rows
-    WHERE ${jobDetailPredicate}
-  ),
-  keyed AS (
-    SELECT
-      *,
-      provider || ':' || tenant AS source_key
-    FROM classified
-    WHERE tenant IS NOT NULL AND tenant <> ''
-  ),
-  stats AS (
-    SELECT
-      provider,
-      source_key,
-      source_pattern,
-      source_scope,
-      host,
-      count(*)::BIGINT AS captures,
-      count(*) FILTER (WHERE solar_url_signal)::BIGINT AS solar_url_hits,
-      min(fetch_time) AS first_seen,
-      max(fetch_time) AS last_seen
-    FROM keyed
-    GROUP BY provider, source_key, source_pattern, source_scope, host
-  ),
-  ranked AS (
-    SELECT
-      *,
-      row_number() OVER (
-        PARTITION BY provider, source_key, source_pattern, source_scope, host
-        ORDER BY solar_url_signal DESC, hash(url), fetch_time
-      ) AS sample_rank
-    FROM keyed
-  )
-  SELECT
-    stats.provider,
-    stats.source_key,
-    stats.source_pattern,
-    stats.source_scope,
-    stats.host,
-    stats.captures,
-    stats.solar_url_hits,
-    stats.first_seen,
-    stats.last_seen,
-    ranked.sample_rank,
-    ranked.solar_url_signal AS sample_solar_url_signal,
-    ranked.url_surtkey AS sample_urlkey,
-    strftime(ranked.fetch_time, '%Y%m%d%H%M%S') AS sample_timestamp,
-    ranked.url AS sample_url,
-    ranked.content_mime_type AS sample_mime,
-    ranked.content_mime_detected AS sample_mime_detected,
-    cast(ranked.fetch_status AS VARCHAR) AS sample_status,
-    ranked.content_digest AS sample_digest,
-    cast(ranked.warc_record_length AS VARCHAR) AS sample_length,
-    cast(ranked.warc_record_offset AS VARCHAR) AS sample_offset,
-    ranked.warc_filename AS sample_filename,
-    ranked.content_languages AS sample_languages,
-    ranked.content_charset AS sample_encoding,
-    ranked.crawl
-  FROM stats
-  JOIN ranked
-    USING (provider, source_key, source_pattern, source_scope, host)
-  WHERE ranked.sample_rank <= least(stats.captures, ${reservoirSamplesPerSource})
-) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
-`
-}
-
-async function runDuckDb(executable: string, sqlFile: string) {
-  await access(executable)
-  const sql = await readFile(sqlFile, 'utf8')
-  await new Promise<void>((resolve, reject) => {
-    const child = spawn(path.resolve(executable), [':memory:'], {
-      cwd: process.cwd(),
-      stdio: ['pipe', 'inherit', 'inherit'],
-      windowsHide: true,
-    })
-    child.on('error', reject)
-    child.on('exit', (code) => code === 0 ? resolve() : reject(new Error(`DuckDB exited with code ${code}`)))
-    child.stdin.on('error', reject)
-    child.stdin.end(sql)
-  })
-}
-
-function addSample(aggregate: SourceAggregate, row: BatchSourceRow, limit: number) {
-  if (!row.sample_url || aggregate.samples.some((sample) => sample.sample_url === row.sample_url)) return
-  aggregate.samples.push(row)
-  aggregate.samples.sort((a, b) =>
-    Number(b.sample_solar_url_signal) - Number(a.sample_solar_url_signal)
-    || Number(a.sample_rank) - Number(b.sample_rank)
-    || a.sample_timestamp.localeCompare(b.sample_timestamp),
-  )
-  if (aggregate.samples.length > limit) aggregate.samples.length = limit
-}
-
-function initialSampleLimit(source: Pick<SourceAggregate, 'captures' | 'solarUrlHits'>, maxSamplesPerSource: number) {
-  if (source.captures <= maxSamplesPerSource) return source.captures
-  if (source.solarUrlHits > 0 || source.captures >= 100) return maxSamplesPerSource
-  if (source.captures >= 25) return Math.min(maxSamplesPerSource, 4)
-  return Math.min(maxSamplesPerSource, 3)
-}
-
-async function ensureCacheVersion(outputDir: string, batchDir: string) {
-  const versionFile = path.join(outputDir, 'employer-discovery-cache-version.txt')
-  let current = ''
-  try {
-    current = (await readFile(versionFile, 'utf8')).trim()
-  } catch {
-    // No cache marker yet.
-  }
-  if (current !== DISCOVERY_SCHEMA_VERSION) {
-    await rm(batchDir, { recursive: true, force: true })
-    await writeFile(versionFile, `${DISCOVERY_SCHEMA_VERSION}\n`, 'utf8')
-  }
-  await mkdir(batchDir, { recursive: true })
-}
-
-async function main() {
-  const options = parseOptions(process.argv.slice(2))
-  const outputDir = path.resolve(options.outputDir)
-  const batchDir = path.join(outputDir, 'employer-discovery-batches')
-  const tempDir = path.join(outputDir, 'duckdb-tmp')
-  await mkdir(outputDir, { recursive: true })
-  await ensureCacheVersion(outputDir, batchDir)
-  await mkdir(tempDir, { recursive: true })
-
-  const allParquet = await listParquetFiles(options.parquetDir)
-  if (!allParquet.length) throw new Error(`No Parquet files found under ${options.parquetDir}`)
-
-  const crawlIdsInFiles = [...new Set(allParquet.map(inferCrawlId).filter((value): value is string => Boolean(value)))].sort()
-  const selectedCrawls = options.crawlId
-    ? [options.crawlId]
-    : crawlIdsInFiles.filter((crawlId) => crawlId.startsWith(`CC-MAIN-${options.year}-`))
-  if (!selectedCrawls.length) {
-    throw new Error(`No local ${options.year} crawl found under ${options.parquetDir}. Available: ${crawlIdsInFiles.join(', ') || 'none'}`)
-  }
-
-  const parquetFiles = allParquet.filter((filename) => {
-    const crawlId = inferCrawlId(filename)
-    return crawlId ? selectedCrawls.includes(crawlId) : selectedCrawls.length === 1
-  })
-  const batches = chunks(parquetFiles, options.filesPerBatch)
-
-  await writeFile(path.join(outputDir, 'employer-discovery-plan.json'), `${JSON.stringify({
-    generatedAt: new Date().toISOString(),
-    schemaVersion: DISCOVERY_SCHEMA_VERSION,
-    year: options.year,
-    crawlIds: selectedCrawls,
-    parquetFiles: parquetFiles.length,
-    batches: batches.length,
-    filesPerBatch: options.filesPerBatch,
-    maxSamplesPerSource: options.maxSamplesPerSource,
-    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
-    samplingPolicy: 'initial fetch: all when source size <= maxSamples; otherwise 3 for <25, 4 for 25-99, maxSamples for >=100 or any solar URL hit; retain a larger local reservoir for deep sampling',
-    scope: 'open ATS tenant discovery plus strict solar-signaled first-party job-detail leads; no employer registry filter',
-    duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
-  }, null, 2)}\n`, 'utf8')
-
-  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery v3 | ${options.threads} threads | ${options.memoryLimit}`)
-
-  const failures: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
-
-  for (let index = 0; index < batches.length; index += 1) {
-    const label = String(index + 1).padStart(4, '0')
-    const batchOutput = path.join(batchDir, `batch-${label}.jsonl`)
-    const batchTempOutput = path.join(batchDir, `batch-${label}.jsonl.tmp`)
-    const batchSql = path.join(batchDir, `batch-${label}.sql`)
-
-    try {
-      await access(batchOutput)
-      console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: cached`)
-      continue
-    } catch {
-      // Missing output: scan this batch.
-    }
-
-    await rm(batchTempOutput, { force: true })
-    await writeFile(
-      batchSql,
-      buildBatchSql(
-        batches[index],
-        batchTempOutput,
-        tempDir,
-        options.threads,
-        options.memoryLimit,
-        options.reservoirSamplesPerSource,
-      ),
-      'utf8',
-    )
-    if (options.sqlOnly) {
-      console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: SQL generated`)
-      continue
-    }
-
-    console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: scanning ${batches[index].length} Parquet file(s)`)
-    try {
-      await runDuckDb(options.duckdb, batchSql)
-      await rename(batchTempOutput, batchOutput)
-    } catch (error) {
-      await rm(batchTempOutput, { force: true })
-      failures.push({ batch: index + 1, parquetFiles: batches[index], error: String(error) })
-      console.warn(`[employer-discovery] batch ${index + 1}/${batches.length}: FAILED; continuing`)
-    }
-  }
-
-  if (options.sqlOnly) return
-
-  const sources = new Map<string, SourceAggregate>()
-  for (let index = 0; index < batches.length; index += 1) {
-    const batchFile = path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`)
-    let body: string
-    try {
-      body = await readFile(batchFile, 'utf8')
-    } catch {
-      continue
-    }
-
-    const countedInBatch = new Set<string>()
-    for (const line of body.split(/\r?\n/).filter(Boolean)) {
-      const row = JSON.parse(line) as BatchSourceRow
-      const key = `${row.provider}|${row.source_key}`
-      const current = sources.get(key) ?? {
-        provider: row.provider,
-        sourceKey: row.source_key,
-        sourceScope: row.source_scope,
-        sourcePatterns: new Set<string>(),
-        hosts: new Set<string>(),
-        captures: 0,
-        solarUrlHits: 0,
-        firstSeen: row.first_seen,
-        lastSeen: row.last_seen,
-        samples: [],
-      }
-
-      current.sourcePatterns.add(row.source_pattern)
-      current.hosts.add(row.host)
-      if (!countedInBatch.has(key)) {
-        current.captures += Number(row.captures) || 0
-        current.solarUrlHits += Number(row.solar_url_hits) || 0
-        countedInBatch.add(key)
-      }
-      if (row.first_seen < current.firstSeen) current.firstSeen = row.first_seen
-      if (row.last_seen > current.lastSeen) current.lastSeen = row.last_seen
-      addSample(current, row, options.reservoirSamplesPerSource)
-      sources.set(key, current)
-    }
-  }
-
-  const sourceRows = [...sources.values()].map((source) => ({
-    provider: source.provider,
-    sourceKey: source.sourceKey,
-    sourceScope: source.sourceScope,
-    sourcePattern: [...source.sourcePatterns][0] ?? '',
-    sourcePatterns: [...source.sourcePatterns].sort(),
-    hosts: [...source.hosts].sort(),
-    captures: source.captures,
-    solarUrlHits: source.solarUrlHits,
-    firstSeen: source.firstSeen,
-    lastSeen: source.lastSeen,
-    samples: source.samples,
-  })).sort((a, b) =>
-    Number(b.solarUrlHits > 0) - Number(a.solarUrlHits > 0)
-    || b.solarUrlHits - a.solarUrlHits
-    || b.captures - a.captures
-    || a.sourceKey.localeCompare(b.sourceKey),
-  )
-
-  const provisionalEmployers = sourceRows.map((source) => ({
-    employerId: stableId(source.sourceKey),
-    employerName: displayName(source.sourceKey),
-    atsProvider: source.provider,
-    patterns: source.sourcePatterns,
-    discoverySourceKey: source.sourceKey,
-    discoverySourceScope: source.sourceScope,
-    notes: `Provisional source discovered from Common Crawl URL Index. sourceKey=${source.sourceKey}; not validated as a solar employer until content sampling.`,
-  }))
-
-  const employerIdBySource = new Map(sourceRows.map((source) => [source.sourceKey, stableId(source.sourceKey)]))
-  const sampleToManifest = (source: typeof sourceRows[number], sample: BatchSourceRow) => ({
-    urlkey: sample.sample_urlkey,
-    timestamp: sample.sample_timestamp,
-    url: sample.sample_url,
-    mime: sample.sample_mime,
-    'mime-detected': sample.sample_mime_detected,
-    status: sample.sample_status,
-    digest: sample.sample_digest,
-    length: sample.sample_length,
-    offset: sample.sample_offset,
-    filename: sample.sample_filename,
-    languages: sample.sample_languages,
-    encoding: sample.sample_encoding,
-    crawlId: sample.crawl,
-    year: options.year,
-    employerId: employerIdBySource.get(source.sourceKey),
-    employerName: displayName(source.sourceKey),
-    atsProvider: source.provider,
-    pattern: source.sourcePattern,
-    discoverySourceKey: source.sourceKey,
-    discoverySourceScope: source.sourceScope,
-    discoverySolarUrlHits: source.solarUrlHits,
-    discoverySampleRank: sample.sample_rank,
-    discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
-  })
-
-  const manifest = sourceRows.flatMap((source) =>
-    source.samples
-      .slice(0, initialSampleLimit(source, options.maxSamplesPerSource))
-      .map((sample) => sampleToManifest(source, sample)),
-  )
-
-  const sampleReservoir = sourceRows.flatMap((source) =>
-    source.samples.map((sample) => ({
-      ...sampleToManifest(source, sample),
-      discoverySourceCaptures: source.captures,
-    })),
-  )
-
-  const compactSourceRows = sourceRows.map((source) => ({
-    provider: source.provider,
-    sourceKey: source.sourceKey,
-    sourceScope: source.sourceScope,
-    sourcePattern: source.sourcePattern,
-    sourcePatterns: source.sourcePatterns,
-    hosts: source.hosts,
-    captures: source.captures,
-    solarUrlHits: source.solarUrlHits,
-    firstSeen: source.firstSeen,
-    lastSeen: source.lastSeen,
-    initialSampleCount: initialSampleLimit(source, options.maxSamplesPerSource),
-    reservoirSampleCount: source.samples.length,
-  }))
-
-  const reviewHeader = [
-    'source_key', 'provider', 'scope', 'patterns', 'hosts', 'captures', 'solar_url_hits',
-    'first_seen', 'last_seen', 'initial_sample_count', 'reservoir_sample_count', 'priority', 'validation_status', 'notes',
-  ]
-  const csv = (value: unknown) => `"${String(value ?? '').replaceAll('"', '""')}"`
-  const reviewRows = sourceRows.map((source) => [
-    source.sourceKey,
-    source.provider,
-    source.sourceScope,
-    source.sourcePatterns.join(' | '),
-    source.hosts.join(' | '),
-    source.captures,
-    source.solarUrlHits,
-    source.firstSeen,
-    source.lastSeen,
-    initialSampleLimit(source, options.maxSamplesPerSource),
-    source.samples.length,
-    source.solarUrlHits > 0 ? 'solar_url_signal' : source.captures >= 25 ? 'high_volume_sample' : 'content_sample',
-    '',
-    '',
-  ])
-
-  await writeFile(path.join(outputDir, 'source-candidates.jsonl'), compactSourceRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'sample-reservoir.jsonl'), sampleReservoir.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'provisional-employers.json'), `${JSON.stringify(provisionalEmployers, null, 2)}\n`, 'utf8')
-  await writeFile(path.join(outputDir, 'index-records.jsonl'), manifest.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'employer-discovery-review.csv'), [
-    reviewHeader.map(csv).join(','),
-    ...reviewRows.map((row) => row.map(csv).join(',')),
-  ].join('\n') + '\n', 'utf8')
-  await writeFile(path.join(outputDir, 'employer-discovery-failures.json'), `${JSON.stringify(failures, null, 2)}\n`, 'utf8')
-
-  const sampleCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
-    const key = String(initialSampleLimit(source, options.maxSamplesPerSource))
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
-  const reservoirCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
-    const key = String(source.samples.length)
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
-
-  const report = {
-    generatedAt: new Date().toISOString(),
-    schemaVersion: DISCOVERY_SCHEMA_VERSION,
-    year: options.year,
-    crawlIds: selectedCrawls,
-    parquetFiles: parquetFiles.length,
-    failedBatches: failures.length,
-    sourceCandidates: sourceRows.length,
-    providers: Object.fromEntries([...new Set(sourceRows.map((source) => source.provider))].sort().map((provider) => [
-      provider,
-      sourceRows.filter((source) => source.provider === provider).length,
-    ])),
-    scopes: Object.fromEntries(['host_or_path', 'query_scoped', 'first_party_lead'].map((scope) => [
-      scope,
-      sourceRows.filter((source) => source.sourceScope === scope).length,
-    ])),
-    sourcesWithSolarUrlSignals: sourceRows.filter((source) => source.solarUrlHits > 0).length,
-    sampleCapturesPrepared: manifest.length,
-    reservoirCapturesPrepared: sampleReservoir.length,
-    sampleCountDistribution,
-    reservoirCountDistribution,
-    maxSamplesPerSource: options.maxSamplesPerSource,
-    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
-    registryFilterApplied: false,
-  }
-  await writeFile(path.join(outputDir, 'employer-discovery-report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8')
-  console.log(JSON.stringify(report, null, 2))
-  console.log(`[employer-discovery] sample manifest: ${path.relative(process.cwd(), path.join(outputDir, 'index-records.jsonl'))}`)
-  console.log(`[employer-discovery] provisional registry: ${path.relative(process.cwd(), path.join(outputDir, 'provisional-employers.json'))}`)
-}
-
-main().catch((error) => {
-  console.error(error)
-  process.exitCode = 1
-})
-))
-    OR (ends_with(host, '.breezy.hr') AND regexp_matches(lower(url_path), '^/p/[a-f0-9]{12}-[^/]+/?
-  )`
-
-  return `SET preserve_insertion_order = false;
-SET enable_progress_bar = false;
-SET threads = ${threads};
-SET memory_limit = ${sqlString(memoryLimit)};
-SET temp_directory = ${sqlPath(tempDir)};
-
-COPY (
-  WITH base AS (
-    SELECT
-      crawl,
-      url_surtkey,
-      url,
-      lower(url_host_name) AS host,
-      coalesce(url_path, '/') AS url_path,
-      fetch_time,
-      fetch_status,
-      content_digest,
-      content_mime_type,
-      content_mime_detected,
-      content_charset,
-      content_languages,
-      warc_filename,
-      warc_record_offset,
-      warc_record_length
-    FROM read_parquet([
-      ${parquetFiles.map((filename) => sqlPath(filename)).join(',\n      ')}
-    ], hive_partitioning = true, union_by_name = true)
-    WHERE fetch_status = 200
-      AND (
-        lower(coalesce(content_mime_type, '')) LIKE '%html%'
-        OR lower(coalesce(content_mime_detected, '')) LIKE '%html%'
-      )
-  ),
-  candidate_rows AS (
-    SELECT *
-    FROM base
-    WHERE (
-      ${atsPredicate}
-      OR ${firstPartyDetailPredicate}
-    )
-  ),
-  classified AS (
-    SELECT
-      *,
-      ${providerExpr} AS provider,
-      ${tenantExpr} AS tenant,
-      ${sourceScopeExpr} AS source_scope,
-      ${patternExpr} AS source_pattern,
-      ${solarUrlSignal} AS solar_url_signal
-    FROM candidate_rows
-    WHERE ${jobDetailPredicate}
-  ),
-  keyed AS (
-    SELECT
-      *,
-      provider || ':' || tenant AS source_key
-    FROM classified
-    WHERE tenant IS NOT NULL AND tenant <> ''
-  ),
-  stats AS (
-    SELECT
-      provider,
-      source_key,
-      source_pattern,
-      source_scope,
-      host,
-      count(*)::BIGINT AS captures,
-      count(*) FILTER (WHERE solar_url_signal)::BIGINT AS solar_url_hits,
-      min(fetch_time) AS first_seen,
-      max(fetch_time) AS last_seen
-    FROM keyed
-    GROUP BY provider, source_key, source_pattern, source_scope, host
-  ),
-  ranked AS (
-    SELECT
-      *,
-      row_number() OVER (
-        PARTITION BY provider, source_key, source_pattern, source_scope, host
-        ORDER BY solar_url_signal DESC, hash(url), fetch_time
-      ) AS sample_rank
-    FROM keyed
-  )
-  SELECT
-    stats.provider,
-    stats.source_key,
-    stats.source_pattern,
-    stats.source_scope,
-    stats.host,
-    stats.captures,
-    stats.solar_url_hits,
-    stats.first_seen,
-    stats.last_seen,
-    ranked.sample_rank,
-    ranked.solar_url_signal AS sample_solar_url_signal,
-    ranked.url_surtkey AS sample_urlkey,
-    strftime(ranked.fetch_time, '%Y%m%d%H%M%S') AS sample_timestamp,
-    ranked.url AS sample_url,
-    ranked.content_mime_type AS sample_mime,
-    ranked.content_mime_detected AS sample_mime_detected,
-    cast(ranked.fetch_status AS VARCHAR) AS sample_status,
-    ranked.content_digest AS sample_digest,
-    cast(ranked.warc_record_length AS VARCHAR) AS sample_length,
-    cast(ranked.warc_record_offset AS VARCHAR) AS sample_offset,
-    ranked.warc_filename AS sample_filename,
-    ranked.content_languages AS sample_languages,
-    ranked.content_charset AS sample_encoding,
-    ranked.crawl
-  FROM stats
-  JOIN ranked
-    USING (provider, source_key, source_pattern, source_scope, host)
-  WHERE ranked.sample_rank <= least(stats.captures, ${reservoirSamplesPerSource})
-) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
-`
-}
-
-async function runDuckDb(executable: string, sqlFile: string) {
-  await access(executable)
-  const sql = await readFile(sqlFile, 'utf8')
-  await new Promise<void>((resolve, reject) => {
-    const child = spawn(path.resolve(executable), [':memory:'], {
-      cwd: process.cwd(),
-      stdio: ['pipe', 'inherit', 'inherit'],
-      windowsHide: true,
-    })
-    child.on('error', reject)
-    child.on('exit', (code) => code === 0 ? resolve() : reject(new Error(`DuckDB exited with code ${code}`)))
-    child.stdin.on('error', reject)
-    child.stdin.end(sql)
-  })
-}
-
-function addSample(aggregate: SourceAggregate, row: BatchSourceRow, limit: number) {
-  if (!row.sample_url || aggregate.samples.some((sample) => sample.sample_url === row.sample_url)) return
-  aggregate.samples.push(row)
-  aggregate.samples.sort((a, b) =>
-    Number(b.sample_solar_url_signal) - Number(a.sample_solar_url_signal)
-    || Number(a.sample_rank) - Number(b.sample_rank)
-    || a.sample_timestamp.localeCompare(b.sample_timestamp),
-  )
-  if (aggregate.samples.length > limit) aggregate.samples.length = limit
-}
-
-function initialSampleLimit(source: Pick<SourceAggregate, 'captures' | 'solarUrlHits'>, maxSamplesPerSource: number) {
-  if (source.captures <= maxSamplesPerSource) return source.captures
-  if (source.solarUrlHits > 0 || source.captures >= 100) return maxSamplesPerSource
-  if (source.captures >= 25) return Math.min(maxSamplesPerSource, 4)
-  return Math.min(maxSamplesPerSource, 3)
-}
-
-async function ensureCacheVersion(outputDir: string, batchDir: string) {
-  const versionFile = path.join(outputDir, 'employer-discovery-cache-version.txt')
-  let current = ''
-  try {
-    current = (await readFile(versionFile, 'utf8')).trim()
-  } catch {
-    // No cache marker yet.
-  }
-  if (current !== DISCOVERY_SCHEMA_VERSION) {
-    await rm(batchDir, { recursive: true, force: true })
-    await writeFile(versionFile, `${DISCOVERY_SCHEMA_VERSION}\n`, 'utf8')
-  }
-  await mkdir(batchDir, { recursive: true })
-}
-
-async function main() {
-  const options = parseOptions(process.argv.slice(2))
-  const outputDir = path.resolve(options.outputDir)
-  const batchDir = path.join(outputDir, 'employer-discovery-batches')
-  const tempDir = path.join(outputDir, 'duckdb-tmp')
-  await mkdir(outputDir, { recursive: true })
-  await ensureCacheVersion(outputDir, batchDir)
-  await mkdir(tempDir, { recursive: true })
-
-  const allParquet = await listParquetFiles(options.parquetDir)
-  if (!allParquet.length) throw new Error(`No Parquet files found under ${options.parquetDir}`)
-
-  const crawlIdsInFiles = [...new Set(allParquet.map(inferCrawlId).filter((value): value is string => Boolean(value)))].sort()
-  const selectedCrawls = options.crawlId
-    ? [options.crawlId]
-    : crawlIdsInFiles.filter((crawlId) => crawlId.startsWith(`CC-MAIN-${options.year}-`))
-  if (!selectedCrawls.length) {
-    throw new Error(`No local ${options.year} crawl found under ${options.parquetDir}. Available: ${crawlIdsInFiles.join(', ') || 'none'}`)
-  }
-
-  const parquetFiles = allParquet.filter((filename) => {
-    const crawlId = inferCrawlId(filename)
-    return crawlId ? selectedCrawls.includes(crawlId) : selectedCrawls.length === 1
-  })
-  const batches = chunks(parquetFiles, options.filesPerBatch)
-
-  await writeFile(path.join(outputDir, 'employer-discovery-plan.json'), `${JSON.stringify({
-    generatedAt: new Date().toISOString(),
-    schemaVersion: DISCOVERY_SCHEMA_VERSION,
-    year: options.year,
-    crawlIds: selectedCrawls,
-    parquetFiles: parquetFiles.length,
-    batches: batches.length,
-    filesPerBatch: options.filesPerBatch,
-    maxSamplesPerSource: options.maxSamplesPerSource,
-    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
-    samplingPolicy: 'initial fetch: all when source size <= maxSamples; otherwise 3 for <25, 4 for 25-99, maxSamples for >=100 or any solar URL hit; retain a larger local reservoir for deep sampling',
-    scope: 'open ATS tenant discovery plus strict solar-signaled first-party job-detail leads; no employer registry filter',
-    duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
-  }, null, 2)}\n`, 'utf8')
-
-  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery v3 | ${options.threads} threads | ${options.memoryLimit}`)
-
-  const failures: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
-
-  for (let index = 0; index < batches.length; index += 1) {
-    const label = String(index + 1).padStart(4, '0')
-    const batchOutput = path.join(batchDir, `batch-${label}.jsonl`)
-    const batchTempOutput = path.join(batchDir, `batch-${label}.jsonl.tmp`)
-    const batchSql = path.join(batchDir, `batch-${label}.sql`)
-
-    try {
-      await access(batchOutput)
-      console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: cached`)
-      continue
-    } catch {
-      // Missing output: scan this batch.
-    }
-
-    await rm(batchTempOutput, { force: true })
-    await writeFile(
-      batchSql,
-      buildBatchSql(
-        batches[index],
-        batchTempOutput,
-        tempDir,
-        options.threads,
-        options.memoryLimit,
-        options.reservoirSamplesPerSource,
-      ),
-      'utf8',
-    )
-    if (options.sqlOnly) {
-      console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: SQL generated`)
-      continue
-    }
-
-    console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: scanning ${batches[index].length} Parquet file(s)`)
-    try {
-      await runDuckDb(options.duckdb, batchSql)
-      await rename(batchTempOutput, batchOutput)
-    } catch (error) {
-      await rm(batchTempOutput, { force: true })
-      failures.push({ batch: index + 1, parquetFiles: batches[index], error: String(error) })
-      console.warn(`[employer-discovery] batch ${index + 1}/${batches.length}: FAILED; continuing`)
-    }
-  }
-
-  if (options.sqlOnly) return
-
-  const sources = new Map<string, SourceAggregate>()
-  for (let index = 0; index < batches.length; index += 1) {
-    const batchFile = path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`)
-    let body: string
-    try {
-      body = await readFile(batchFile, 'utf8')
-    } catch {
-      continue
-    }
-
-    const countedInBatch = new Set<string>()
-    for (const line of body.split(/\r?\n/).filter(Boolean)) {
-      const row = JSON.parse(line) as BatchSourceRow
-      const key = `${row.provider}|${row.source_key}`
-      const current = sources.get(key) ?? {
-        provider: row.provider,
-        sourceKey: row.source_key,
-        sourceScope: row.source_scope,
-        sourcePatterns: new Set<string>(),
-        hosts: new Set<string>(),
-        captures: 0,
-        solarUrlHits: 0,
-        firstSeen: row.first_seen,
-        lastSeen: row.last_seen,
-        samples: [],
-      }
-
-      current.sourcePatterns.add(row.source_pattern)
-      current.hosts.add(row.host)
-      if (!countedInBatch.has(key)) {
-        current.captures += Number(row.captures) || 0
-        current.solarUrlHits += Number(row.solar_url_hits) || 0
-        countedInBatch.add(key)
-      }
-      if (row.first_seen < current.firstSeen) current.firstSeen = row.first_seen
-      if (row.last_seen > current.lastSeen) current.lastSeen = row.last_seen
-      addSample(current, row, options.reservoirSamplesPerSource)
-      sources.set(key, current)
-    }
-  }
-
-  const sourceRows = [...sources.values()].map((source) => ({
-    provider: source.provider,
-    sourceKey: source.sourceKey,
-    sourceScope: source.sourceScope,
-    sourcePattern: [...source.sourcePatterns][0] ?? '',
-    sourcePatterns: [...source.sourcePatterns].sort(),
-    hosts: [...source.hosts].sort(),
-    captures: source.captures,
-    solarUrlHits: source.solarUrlHits,
-    firstSeen: source.firstSeen,
-    lastSeen: source.lastSeen,
-    samples: source.samples,
-  })).sort((a, b) =>
-    Number(b.solarUrlHits > 0) - Number(a.solarUrlHits > 0)
-    || b.solarUrlHits - a.solarUrlHits
-    || b.captures - a.captures
-    || a.sourceKey.localeCompare(b.sourceKey),
-  )
-
-  const provisionalEmployers = sourceRows.map((source) => ({
-    employerId: stableId(source.sourceKey),
-    employerName: displayName(source.sourceKey),
-    atsProvider: source.provider,
-    patterns: source.sourcePatterns,
-    discoverySourceKey: source.sourceKey,
-    discoverySourceScope: source.sourceScope,
-    notes: `Provisional source discovered from Common Crawl URL Index. sourceKey=${source.sourceKey}; not validated as a solar employer until content sampling.`,
-  }))
-
-  const employerIdBySource = new Map(sourceRows.map((source) => [source.sourceKey, stableId(source.sourceKey)]))
-  const sampleToManifest = (source: typeof sourceRows[number], sample: BatchSourceRow) => ({
-    urlkey: sample.sample_urlkey,
-    timestamp: sample.sample_timestamp,
-    url: sample.sample_url,
-    mime: sample.sample_mime,
-    'mime-detected': sample.sample_mime_detected,
-    status: sample.sample_status,
-    digest: sample.sample_digest,
-    length: sample.sample_length,
-    offset: sample.sample_offset,
-    filename: sample.sample_filename,
-    languages: sample.sample_languages,
-    encoding: sample.sample_encoding,
-    crawlId: sample.crawl,
-    year: options.year,
-    employerId: employerIdBySource.get(source.sourceKey),
-    employerName: displayName(source.sourceKey),
-    atsProvider: source.provider,
-    pattern: source.sourcePattern,
-    discoverySourceKey: source.sourceKey,
-    discoverySourceScope: source.sourceScope,
-    discoverySolarUrlHits: source.solarUrlHits,
-    discoverySampleRank: sample.sample_rank,
-    discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
-  })
-
-  const manifest = sourceRows.flatMap((source) =>
-    source.samples
-      .slice(0, initialSampleLimit(source, options.maxSamplesPerSource))
-      .map((sample) => sampleToManifest(source, sample)),
-  )
-
-  const sampleReservoir = sourceRows.flatMap((source) =>
-    source.samples.map((sample) => ({
-      ...sampleToManifest(source, sample),
-      discoverySourceCaptures: source.captures,
-    })),
-  )
-
-  const compactSourceRows = sourceRows.map((source) => ({
-    provider: source.provider,
-    sourceKey: source.sourceKey,
-    sourceScope: source.sourceScope,
-    sourcePattern: source.sourcePattern,
-    sourcePatterns: source.sourcePatterns,
-    hosts: source.hosts,
-    captures: source.captures,
-    solarUrlHits: source.solarUrlHits,
-    firstSeen: source.firstSeen,
-    lastSeen: source.lastSeen,
-    initialSampleCount: initialSampleLimit(source, options.maxSamplesPerSource),
-    reservoirSampleCount: source.samples.length,
-  }))
-
-  const reviewHeader = [
-    'source_key', 'provider', 'scope', 'patterns', 'hosts', 'captures', 'solar_url_hits',
-    'first_seen', 'last_seen', 'initial_sample_count', 'reservoir_sample_count', 'priority', 'validation_status', 'notes',
-  ]
-  const csv = (value: unknown) => `"${String(value ?? '').replaceAll('"', '""')}"`
-  const reviewRows = sourceRows.map((source) => [
-    source.sourceKey,
-    source.provider,
-    source.sourceScope,
-    source.sourcePatterns.join(' | '),
-    source.hosts.join(' | '),
-    source.captures,
-    source.solarUrlHits,
-    source.firstSeen,
-    source.lastSeen,
-    initialSampleLimit(source, options.maxSamplesPerSource),
-    source.samples.length,
-    source.solarUrlHits > 0 ? 'solar_url_signal' : source.captures >= 25 ? 'high_volume_sample' : 'content_sample',
-    '',
-    '',
-  ])
-
-  await writeFile(path.join(outputDir, 'source-candidates.jsonl'), compactSourceRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'sample-reservoir.jsonl'), sampleReservoir.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'provisional-employers.json'), `${JSON.stringify(provisionalEmployers, null, 2)}\n`, 'utf8')
-  await writeFile(path.join(outputDir, 'index-records.jsonl'), manifest.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'employer-discovery-review.csv'), [
-    reviewHeader.map(csv).join(','),
-    ...reviewRows.map((row) => row.map(csv).join(',')),
-  ].join('\n') + '\n', 'utf8')
-  await writeFile(path.join(outputDir, 'employer-discovery-failures.json'), `${JSON.stringify(failures, null, 2)}\n`, 'utf8')
-
-  const sampleCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
-    const key = String(initialSampleLimit(source, options.maxSamplesPerSource))
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
-  const reservoirCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
-    const key = String(source.samples.length)
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
-
-  const report = {
-    generatedAt: new Date().toISOString(),
-    schemaVersion: DISCOVERY_SCHEMA_VERSION,
-    year: options.year,
-    crawlIds: selectedCrawls,
-    parquetFiles: parquetFiles.length,
-    failedBatches: failures.length,
-    sourceCandidates: sourceRows.length,
-    providers: Object.fromEntries([...new Set(sourceRows.map((source) => source.provider))].sort().map((provider) => [
-      provider,
-      sourceRows.filter((source) => source.provider === provider).length,
-    ])),
-    scopes: Object.fromEntries(['host_or_path', 'query_scoped', 'first_party_lead'].map((scope) => [
-      scope,
-      sourceRows.filter((source) => source.sourceScope === scope).length,
-    ])),
-    sourcesWithSolarUrlSignals: sourceRows.filter((source) => source.solarUrlHits > 0).length,
-    sampleCapturesPrepared: manifest.length,
-    reservoirCapturesPrepared: sampleReservoir.length,
-    sampleCountDistribution,
-    reservoirCountDistribution,
-    maxSamplesPerSource: options.maxSamplesPerSource,
-    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
-    registryFilterApplied: false,
-  }
-  await writeFile(path.join(outputDir, 'employer-discovery-report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8')
-  console.log(JSON.stringify(report, null, 2))
-  console.log(`[employer-discovery] sample manifest: ${path.relative(process.cwd(), path.join(outputDir, 'index-records.jsonl'))}`)
-  console.log(`[employer-discovery] provisional registry: ${path.relative(process.cwd(), path.join(outputDir, 'provisional-employers.json'))}`)
-}
-
-main().catch((error) => {
-  console.error(error)
-  process.exitCode = 1
-})
-))
-    OR (host = 'ats.rippling.com' AND regexp_matches(lower(url_path), '^/[^/]+/jobs/[^/]+'))
+    OR (ends_with(host, '.icims.com') AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
+    OR (ends_with(host, '.taleo.net') AND regexp_matches(lower(url_path), 'jobdetail|careersection'))
+    OR ((ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu')) AND regexp_matches(lower(url_path), '/job/'))
+    OR ((host = 'jobs.bamboohr.com' OR ends_with(host, '.bamboohr.com')) AND regexp_matches(lower(url_path), '/careers?/[^/]+'))
+    OR ((host = 'jobs.dayforcehcm.com' OR ends_with(host, '.dayforcehcm.com')) AND regexp_matches(lower(url_path), '/jobs?/'))
+    OR (ends_with(host, '.oraclecloud.com') AND regexp_matches(lower(url_path), '/job/'))
+    OR ((host = 'recruiting.ultipro.com' OR ends_with(host, '.ultipro.com')) AND regexp_matches(lower(url_path), '/job|opportunity|requisition'))
+    OR (ends_with(host, '.ukg.com') AND regexp_matches(lower(url_path), '/job|opportunity|requisition'))
+    OR ((host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')) AND regexp_matches(lower(url_path), '/jobs?/'))
+    OR (host = 'workforcenow.adp.com' AND regexp_matches(lower(url), 'recruit|job|position'))
+    OR (ends_with(host, '.paycomonline.net') AND regexp_matches(lower(url), 'job|career|position'))
+    OR (ends_with(host, '.jobs2web.com') AND regexp_matches(lower(url_path), '/job/'))
     OR (
-      host = 'apply.workable.com'
-      AND (
-        regexp_matches(lower(url_path), '^/[^/]+/j/[^/]+')
-        OR regexp_matches(lower(url_path), '^/[^/]+/jobs/view/[^/]+')
-      )
+      ${solarUrlSignal}
+      AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
     )
-    OR (ends_with(host, '.pinpointhq.com') AND regexp_matches(lower(url_path), '/postings/[^/]+'))
-    OR (
-      ends_with(host, '.hrmdirect.com')
-      AND regexp_matches(lower(url_path), '^/employment/')
-      AND regexp_matches(lower(url), '(?i)job|position|req(?:uirement)?=')
-    )
-    OR ${firstPartyDetailPredicate}
   )`
 
   return `SET preserve_insertion_order = false;
@@ -1252,12 +257,15 @@ COPY (
         OR lower(coalesce(content_mime_detected, '')) LIKE '%html%'
       )
   ),
-  candidate_rows AS (
+  candidates AS (
     SELECT *
     FROM base
     WHERE (
       ${atsPredicate}
-      OR ${firstPartyDetailPredicate}
+      OR (
+        ${solarUrlSignal}
+        AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
+      )
     )
   ),
   classified AS (
@@ -1265,71 +273,32 @@ COPY (
       *,
       ${providerExpr} AS provider,
       ${tenantExpr} AS tenant,
-      ${sourceScopeExpr} AS source_scope,
       ${patternExpr} AS source_pattern,
       ${solarUrlSignal} AS solar_url_signal
-    FROM candidate_rows
+    FROM candidates
     WHERE ${jobDetailPredicate}
-  ),
-  keyed AS (
-    SELECT
-      *,
-      provider || ':' || tenant AS source_key
-    FROM classified
-    WHERE tenant IS NOT NULL AND tenant <> ''
-  ),
-  stats AS (
-    SELECT
-      provider,
-      source_key,
-      source_pattern,
-      source_scope,
-      host,
-      count(*)::BIGINT AS captures,
-      count(*) FILTER (WHERE solar_url_signal)::BIGINT AS solar_url_hits,
-      min(fetch_time) AS first_seen,
-      max(fetch_time) AS last_seen
-    FROM keyed
-    GROUP BY provider, source_key, source_pattern, source_scope, host
-  ),
-  ranked AS (
-    SELECT
-      *,
-      row_number() OVER (
-        PARTITION BY provider, source_key, source_pattern, source_scope, host
-        ORDER BY solar_url_signal DESC, hash(url), fetch_time
-      ) AS sample_rank
-    FROM keyed
   )
   SELECT
-    stats.provider,
-    stats.source_key,
-    stats.source_pattern,
-    stats.source_scope,
-    stats.host,
-    stats.captures,
-    stats.solar_url_hits,
-    stats.first_seen,
-    stats.last_seen,
-    ranked.sample_rank,
-    ranked.solar_url_signal AS sample_solar_url_signal,
-    ranked.url_surtkey AS sample_urlkey,
-    strftime(ranked.fetch_time, '%Y%m%d%H%M%S') AS sample_timestamp,
-    ranked.url AS sample_url,
-    ranked.content_mime_type AS sample_mime,
-    ranked.content_mime_detected AS sample_mime_detected,
-    cast(ranked.fetch_status AS VARCHAR) AS sample_status,
-    ranked.content_digest AS sample_digest,
-    cast(ranked.warc_record_length AS VARCHAR) AS sample_length,
-    cast(ranked.warc_record_offset AS VARCHAR) AS sample_offset,
-    ranked.warc_filename AS sample_filename,
-    ranked.content_languages AS sample_languages,
-    ranked.content_charset AS sample_encoding,
-    ranked.crawl
-  FROM stats
-  JOIN ranked
-    USING (provider, source_key, source_pattern, source_scope, host)
-  WHERE ranked.sample_rank <= least(stats.captures, ${reservoirSamplesPerSource})
+    provider,
+    provider || ':' || tenant AS source_key,
+    source_pattern,
+    host,
+    solar_url_signal,
+    url_surtkey AS urlkey,
+    strftime(fetch_time, '%Y%m%d%H%M%S') AS timestamp,
+    url,
+    content_mime_type AS mime,
+    content_mime_detected AS mime_detected,
+    cast(fetch_status AS VARCHAR) AS status,
+    content_digest AS digest,
+    cast(warc_record_length AS VARCHAR) AS length,
+    cast(warc_record_offset AS VARCHAR) AS "offset",
+    warc_filename AS filename,
+    content_languages AS languages,
+    content_charset AS encoding,
+    crawl
+  FROM classified
+  WHERE tenant IS NOT NULL AND tenant <> ''
 ) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
 `
 }
@@ -1350,46 +319,88 @@ async function runDuckDb(executable: string, sqlFile: string) {
   })
 }
 
-function addSample(aggregate: SourceAggregate, row: BatchSourceRow, limit: number) {
-  if (!row.sample_url || aggregate.samples.some((sample) => sample.sample_url === row.sample_url)) return
-  aggregate.samples.push(row)
-  aggregate.samples.sort((a, b) =>
-    Number(b.sample_solar_url_signal) - Number(a.sample_solar_url_signal)
-    || Number(a.sample_rank) - Number(b.sample_rank)
-    || a.sample_timestamp.localeCompare(b.sample_timestamp),
+function desiredSampleCount(captures: number, maxSamples: number) {
+  let desired = 1
+  if (captures <= 3) desired = captures
+  else if (captures <= 9) desired = 3
+  else if (captures <= 24) desired = 4
+  else if (captures <= 49) desired = 5
+  else if (captures <= 99) desired = 6
+  else if (captures <= 249) desired = 8
+  else if (captures <= 499) desired = 10
+  else desired = 12
+  return Math.min(captures, desired, maxSamples)
+}
+
+function uniqueCaptures(rows: CandidateCaptureRow[]) {
+  const byKey = new Map<string, CandidateCaptureRow>()
+  for (const row of rows) {
+    const key = `${row.url}|${row.digest}`
+    if (!byKey.has(key)) byKey.set(key, row)
+  }
+  return [...byKey.values()].sort((a, b) => a.timestamp.localeCompare(b.timestamp) || a.url.localeCompare(b.url))
+}
+
+function spreadPick<T>(values: T[], count: number) {
+  if (count <= 0) return []
+  if (values.length <= count) return values
+  if (count === 1) return [values[Math.floor(values.length / 2)]]
+  const indexes = new Set(
+    Array.from({ length: count }, (_, index) => Math.round(index * (values.length - 1) / (count - 1))),
   )
-  if (aggregate.samples.length > limit) aggregate.samples.length = limit
+  return [...indexes].map((index) => values[index])
 }
 
-function initialSampleLimit(source: Pick<SourceAggregate, 'captures' | 'solarUrlHits'>, maxSamplesPerSource: number) {
-  if (source.captures <= maxSamplesPerSource) return source.captures
-  if (source.solarUrlHits > 0 || source.captures >= 100) return maxSamplesPerSource
-  if (source.captures >= 25) return Math.min(maxSamplesPerSource, 4)
-  return Math.min(maxSamplesPerSource, 3)
+function chooseSamples(rows: CandidateCaptureRow[], maxSamples: number) {
+  const unique = uniqueCaptures(rows)
+  const desired = desiredSampleCount(unique.length, maxSamples)
+  const solar = unique.filter((row) => row.solar_url_signal)
+  const ordinary = unique.filter((row) => !row.solar_url_signal)
+  const picked: CandidateCaptureRow[] = []
+
+  for (const row of spreadPick(solar, Math.min(solar.length, desired))) picked.push(row)
+  const remaining = desired - picked.length
+  if (remaining > 0) {
+    for (const row of spreadPick(ordinary, remaining)) picked.push(row)
+  }
+  return picked.sort((a, b) => a.timestamp.localeCompare(b.timestamp) || a.url.localeCompare(b.url))
 }
 
-async function ensureCacheVersion(outputDir: string, batchDir: string) {
-  const versionFile = path.join(outputDir, 'employer-discovery-cache-version.txt')
-  let current = ''
-  try {
-    current = (await readFile(versionFile, 'utf8')).trim()
-  } catch {
-    // No cache marker yet.
+function toManifestRow(row: CandidateCaptureRow, year: number) {
+  return {
+    urlkey: row.urlkey,
+    timestamp: row.timestamp,
+    url: row.url,
+    mime: row.mime,
+    'mime-detected': row.mime_detected,
+    status: row.status,
+    digest: row.digest,
+    length: row.length,
+    offset: row.offset,
+    filename: row.filename,
+    languages: row.languages,
+    encoding: row.encoding,
+    crawlId: row.crawl,
+    year,
+    employerId: stableId(row.source_key),
+    employerName: displayName(row.source_key),
+    atsProvider: row.provider,
+    pattern: row.source_pattern,
+    discoverySourceKey: row.source_key,
+    discoverySolarUrlSignal: row.solar_url_signal,
   }
-  if (current !== DISCOVERY_SCHEMA_VERSION) {
-    await rm(batchDir, { recursive: true, force: true })
-    await writeFile(versionFile, `${DISCOVERY_SCHEMA_VERSION}\n`, 'utf8')
-  }
-  await mkdir(batchDir, { recursive: true })
+}
+
+function csvCell(value: unknown) {
+  return `"${String(value ?? '').replaceAll('"', '""')}"`
 }
 
 async function main() {
   const options = parseOptions(process.argv.slice(2))
   const outputDir = path.resolve(options.outputDir)
-  const batchDir = path.join(outputDir, 'employer-discovery-batches')
+  const batchDir = path.join(outputDir, 'employer-discovery-batches-v2')
   const tempDir = path.join(outputDir, 'duckdb-tmp')
-  await mkdir(outputDir, { recursive: true })
-  await ensureCacheVersion(outputDir, batchDir)
+  await mkdir(batchDir, { recursive: true })
   await mkdir(tempDir, { recursive: true })
 
   const allParquet = await listParquetFiles(options.parquetDir)
@@ -1411,27 +422,26 @@ async function main() {
 
   await writeFile(path.join(outputDir, 'employer-discovery-plan.json'), `${JSON.stringify({
     generatedAt: new Date().toISOString(),
-    schemaVersion: DISCOVERY_SCHEMA_VERSION,
+    pipelineVersion: 2,
     year: options.year,
     crawlIds: selectedCrawls,
     parquetFiles: parquetFiles.length,
     batches: batches.length,
     filesPerBatch: options.filesPerBatch,
     maxSamplesPerSource: options.maxSamplesPerSource,
-    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
-    samplingPolicy: 'initial fetch: all when source size <= maxSamples; otherwise 3 for <25, 4 for 25-99, maxSamples for >=100 or any solar URL hit; retain a larger local reservoir for deep sampling',
-    scope: 'open ATS tenant discovery plus strict solar-signaled first-party job-detail leads; no employer registry filter',
+    scope: 'open ATS tenant discovery plus solar-signaled first-party job URLs; no employer registry filter',
+    retention: 'all candidate capture pointers are retained locally so later sampling does not require another Parquet scan',
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
   }, null, 2)}\n`, 'utf8')
 
-  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery v3 | ${options.threads} threads | ${options.memoryLimit}`)
+  console.log(`[employer-discovery] v2 | ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery | ${options.threads} threads | ${options.memoryLimit}`)
 
   const failures: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
 
   for (let index = 0; index < batches.length; index += 1) {
     const label = String(index + 1).padStart(4, '0')
     const batchOutput = path.join(batchDir, `batch-${label}.jsonl`)
-    const batchTempOutput = path.join(batchDir, `batch-${label}.jsonl.tmp`)
+    const tempOutput = `${batchOutput}.tmp`
     const batchSql = path.join(batchDir, `batch-${label}.sql`)
 
     try {
@@ -1439,20 +449,13 @@ async function main() {
       console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: cached`)
       continue
     } catch {
-      // Missing output: scan this batch.
+      // Missing complete output: scan this batch.
     }
 
-    await rm(batchTempOutput, { force: true })
+    await rm(tempOutput, { force: true })
     await writeFile(
       batchSql,
-      buildBatchSql(
-        batches[index],
-        batchTempOutput,
-        tempDir,
-        options.threads,
-        options.memoryLimit,
-        options.reservoirSamplesPerSource,
-      ),
+      buildBatchSql(batches[index], tempOutput, tempDir, options.threads, options.memoryLimit),
       'utf8',
     )
     if (options.sqlOnly) {
@@ -1463,9 +466,9 @@ async function main() {
     console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: scanning ${batches[index].length} Parquet file(s)`)
     try {
       await runDuckDb(options.duckdb, batchSql)
-      await rename(batchTempOutput, batchOutput)
+      await rename(tempOutput, batchOutput)
     } catch (error) {
-      await rm(batchTempOutput, { force: true })
+      await rm(tempOutput, { force: true })
       failures.push({ batch: index + 1, parquetFiles: batches[index], error: String(error) })
       console.warn(`[employer-discovery] batch ${index + 1}/${batches.length}: FAILED; continuing`)
     }
@@ -1473,7 +476,9 @@ async function main() {
 
   if (options.sqlOnly) return
 
+  const allCaptures: CandidateCaptureRow[] = []
   const sources = new Map<string, SourceAggregate>()
+
   for (let index = 0; index < batches.length; index += 1) {
     const batchFile = path.join(batchDir, `batch-${String(index + 1).padStart(4, '0')}.jsonl`)
     let body: string
@@ -1483,50 +488,39 @@ async function main() {
       continue
     }
 
-    const countedInBatch = new Set<string>()
     for (const line of body.split(/\r?\n/).filter(Boolean)) {
-      const row = JSON.parse(line) as BatchSourceRow
-      const key = `${row.provider}|${row.source_key}`
-      const current = sources.get(key) ?? {
+      const row = JSON.parse(line) as CandidateCaptureRow
+      allCaptures.push(row)
+      const current = sources.get(row.source_key) ?? {
         provider: row.provider,
         sourceKey: row.source_key,
-        sourceScope: row.source_scope,
-        sourcePatterns: new Set<string>(),
-        hosts: new Set<string>(),
-        captures: 0,
-        solarUrlHits: 0,
-        firstSeen: row.first_seen,
-        lastSeen: row.last_seen,
-        samples: [],
+        sourcePattern: row.source_pattern,
+        host: row.host,
+        captures: [],
       }
-
-      current.sourcePatterns.add(row.source_pattern)
-      current.hosts.add(row.host)
-      if (!countedInBatch.has(key)) {
-        current.captures += Number(row.captures) || 0
-        current.solarUrlHits += Number(row.solar_url_hits) || 0
-        countedInBatch.add(key)
-      }
-      if (row.first_seen < current.firstSeen) current.firstSeen = row.first_seen
-      if (row.last_seen > current.lastSeen) current.lastSeen = row.last_seen
-      addSample(current, row, options.reservoirSamplesPerSource)
-      sources.set(key, current)
+      current.captures.push(row)
+      sources.set(row.source_key, current)
     }
   }
 
-  const sourceRows = [...sources.values()].map((source) => ({
-    provider: source.provider,
-    sourceKey: source.sourceKey,
-    sourceScope: source.sourceScope,
-    sourcePattern: [...source.sourcePatterns][0] ?? '',
-    sourcePatterns: [...source.sourcePatterns].sort(),
-    hosts: [...source.hosts].sort(),
-    captures: source.captures,
-    solarUrlHits: source.solarUrlHits,
-    firstSeen: source.firstSeen,
-    lastSeen: source.lastSeen,
-    samples: source.samples,
-  })).sort((a, b) =>
+  const sourceRows = [...sources.values()].map((source) => {
+    const unique = uniqueCaptures(source.captures)
+    const selected = chooseSamples(source.captures, options.maxSamplesPerSource)
+    return {
+      provider: source.provider,
+      sourceKey: source.sourceKey,
+      sourcePattern: source.sourcePattern,
+      host: source.host,
+      captures: unique.length,
+      rawCaptureRows: source.captures.length,
+      solarUrlHits: unique.filter((row) => row.solar_url_signal).length,
+      firstSeen: unique[0]?.timestamp ?? '',
+      lastSeen: unique.at(-1)?.timestamp ?? '',
+      sampleCount: selected.length,
+      sampleStrategy: 'solar-url-priority-then-time-spread',
+      samples: selected.map((row) => toManifestRow(row, options.year)),
+    }
+  }).sort((a, b) =>
     Number(b.solarUrlHits > 0) - Number(a.solarUrlHits > 0)
     || b.solarUrlHits - a.solarUrlHits
     || b.captures - a.captures
@@ -1537,139 +531,76 @@ async function main() {
     employerId: stableId(source.sourceKey),
     employerName: displayName(source.sourceKey),
     atsProvider: source.provider,
-    patterns: source.sourcePatterns,
-    discoverySourceKey: source.sourceKey,
-    discoverySourceScope: source.sourceScope,
-    notes: `Provisional source discovered from Common Crawl URL Index. sourceKey=${source.sourceKey}; not validated as a solar employer until content sampling.`,
+    patterns: [source.sourcePattern],
+    notes: `Provisional employer/source discovered from Common Crawl URL Index. sourceKey=${source.sourceKey}; not validated as solar until content sampling.`,
   }))
 
-  const employerIdBySource = new Map(sourceRows.map((source) => [source.sourceKey, stableId(source.sourceKey)]))
-  const sampleToManifest = (source: typeof sourceRows[number], sample: BatchSourceRow) => ({
-    urlkey: sample.sample_urlkey,
-    timestamp: sample.sample_timestamp,
-    url: sample.sample_url,
-    mime: sample.sample_mime,
-    'mime-detected': sample.sample_mime_detected,
-    status: sample.sample_status,
-    digest: sample.sample_digest,
-    length: sample.sample_length,
-    offset: sample.sample_offset,
-    filename: sample.sample_filename,
-    languages: sample.sample_languages,
-    encoding: sample.sample_encoding,
-    crawlId: sample.crawl,
-    year: options.year,
-    employerId: employerIdBySource.get(source.sourceKey),
-    employerName: displayName(source.sourceKey),
-    atsProvider: source.provider,
-    pattern: source.sourcePattern,
-    discoverySourceKey: source.sourceKey,
-    discoverySourceScope: source.sourceScope,
-    discoverySolarUrlHits: source.solarUrlHits,
-    discoverySampleRank: sample.sample_rank,
-    discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
-  })
-
-  const manifest = sourceRows.flatMap((source) =>
-    source.samples
-      .slice(0, initialSampleLimit(source, options.maxSamplesPerSource))
-      .map((sample) => sampleToManifest(source, sample)),
-  )
-
-  const sampleReservoir = sourceRows.flatMap((source) =>
-    source.samples.map((sample) => ({
-      ...sampleToManifest(source, sample),
-      discoverySourceCaptures: source.captures,
-    })),
-  )
-
-  const compactSourceRows = sourceRows.map((source) => ({
-    provider: source.provider,
-    sourceKey: source.sourceKey,
-    sourceScope: source.sourceScope,
-    sourcePattern: source.sourcePattern,
-    sourcePatterns: source.sourcePatterns,
-    hosts: source.hosts,
-    captures: source.captures,
-    solarUrlHits: source.solarUrlHits,
-    firstSeen: source.firstSeen,
-    lastSeen: source.lastSeen,
-    initialSampleCount: initialSampleLimit(source, options.maxSamplesPerSource),
-    reservoirSampleCount: source.samples.length,
-  }))
+  const manifest = sourceRows.flatMap((source) => source.samples)
 
   const reviewHeader = [
-    'source_key', 'provider', 'scope', 'patterns', 'hosts', 'captures', 'solar_url_hits',
-    'first_seen', 'last_seen', 'initial_sample_count', 'reservoir_sample_count', 'priority', 'validation_status', 'notes',
+    'source_key', 'provider', 'pattern', 'host', 'captures', 'solar_url_hits',
+    'first_seen', 'last_seen', 'sample_count', 'sample_strategy', 'validation_status', 'notes',
   ]
-  const csv = (value: unknown) => `"${String(value ?? '').replaceAll('"', '""')}"`
   const reviewRows = sourceRows.map((source) => [
     source.sourceKey,
     source.provider,
-    source.sourceScope,
-    source.sourcePatterns.join(' | '),
-    source.hosts.join(' | '),
+    source.sourcePattern,
+    source.host,
     source.captures,
     source.solarUrlHits,
     source.firstSeen,
     source.lastSeen,
-    initialSampleLimit(source, options.maxSamplesPerSource),
-    source.samples.length,
-    source.solarUrlHits > 0 ? 'solar_url_signal' : source.captures >= 25 ? 'high_volume_sample' : 'content_sample',
+    source.sampleCount,
+    source.sampleStrategy,
     '',
     '',
   ])
 
-  await writeFile(path.join(outputDir, 'source-candidates.jsonl'), compactSourceRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
-  await writeFile(path.join(outputDir, 'sample-reservoir.jsonl'), sampleReservoir.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
+  await writeFile(
+    path.join(outputDir, 'candidate-captures.jsonl'),
+    allCaptures.map((row) => `${JSON.stringify(row)}\n`).join(''),
+    'utf8',
+  )
+  await writeFile(path.join(outputDir, 'source-candidates.jsonl'), sourceRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
   await writeFile(path.join(outputDir, 'provisional-employers.json'), `${JSON.stringify(provisionalEmployers, null, 2)}\n`, 'utf8')
   await writeFile(path.join(outputDir, 'index-records.jsonl'), manifest.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
   await writeFile(path.join(outputDir, 'employer-discovery-review.csv'), [
-    reviewHeader.map(csv).join(','),
-    ...reviewRows.map((row) => row.map(csv).join(',')),
+    reviewHeader.map(csvCell).join(','),
+    ...reviewRows.map((row) => row.map(csvCell).join(',')),
   ].join('\n') + '\n', 'utf8')
   await writeFile(path.join(outputDir, 'employer-discovery-failures.json'), `${JSON.stringify(failures, null, 2)}\n`, 'utf8')
 
-  const sampleCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
-    const key = String(initialSampleLimit(source, options.maxSamplesPerSource))
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
-  const reservoirCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
-    const key = String(source.samples.length)
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
+  const sampleCountDistribution = Object.fromEntries(
+    [...new Set(sourceRows.map((source) => source.sampleCount))]
+      .sort((a, b) => a - b)
+      .map((count) => [String(count), sourceRows.filter((source) => source.sampleCount === count).length]),
+  )
 
   const report = {
     generatedAt: new Date().toISOString(),
-    schemaVersion: DISCOVERY_SCHEMA_VERSION,
+    pipelineVersion: 2,
     year: options.year,
     crawlIds: selectedCrawls,
     parquetFiles: parquetFiles.length,
     failedBatches: failures.length,
+    candidateCaptureRows: allCaptures.length,
     sourceCandidates: sourceRows.length,
     providers: Object.fromEntries([...new Set(sourceRows.map((source) => source.provider))].sort().map((provider) => [
       provider,
       sourceRows.filter((source) => source.provider === provider).length,
     ])),
-    scopes: Object.fromEntries(['host_or_path', 'query_scoped', 'first_party_lead'].map((scope) => [
-      scope,
-      sourceRows.filter((source) => source.sourceScope === scope).length,
-    ])),
     sourcesWithSolarUrlSignals: sourceRows.filter((source) => source.solarUrlHits > 0).length,
     sampleCapturesPrepared: manifest.length,
-    reservoirCapturesPrepared: sampleReservoir.length,
     sampleCountDistribution,
-    reservoirCountDistribution,
     maxSamplesPerSource: options.maxSamplesPerSource,
-    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
+    samplingStrategy: 'all captures for <=3; then 3/4/5/6/8/10/12 by source size, prioritizing solar-signaled URLs and spreading the remainder through time',
     registryFilterApplied: false,
+    candidateCapturePointersRetained: true,
   }
   await writeFile(path.join(outputDir, 'employer-discovery-report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8')
   console.log(JSON.stringify(report, null, 2))
   console.log(`[employer-discovery] sample manifest: ${path.relative(process.cwd(), path.join(outputDir, 'index-records.jsonl'))}`)
-  console.log(`[employer-discovery] provisional registry: ${path.relative(process.cwd(), path.join(outputDir, 'provisional-employers.json'))}`)
+  console.log(`[employer-discovery] all candidate pointers retained: ${path.relative(process.cwd(), path.join(outputDir, 'candidate-captures.jsonl'))}`)
 }
 
 main().catch((error) => {
