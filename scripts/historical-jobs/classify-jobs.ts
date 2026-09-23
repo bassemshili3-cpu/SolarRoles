@@ -62,14 +62,43 @@ async function main() {
       await writeJsonLine(solarUsStream, job)
     }
 
+    if (classification.solarCandidate && classification.usStatus !== 'foreign') {
+      solarUsCandidates += 1
+      await writeJsonLine(solarUsCandidateStream, {
+        ...job,
+        discoveryClassification: {
+          usStatus: classification.usStatus,
+          solarConfidence: classification.solarConfidence,
+          usEvidence: classification.usEvidence,
+          solarEvidence: classification.solarEvidence,
+          solarCandidateEvidence: classification.solarCandidateEvidence,
+          strictSolarUs: classification.isUsJob && classification.isSolarRelated,
+        },
+      })
+      if (classification.usStatus === 'unknown') {
+        solarUnknownLocationCandidates += 1
+        await writeJsonLine(solarUnknownLocationStream, {
+          ...job,
+          discoveryClassification: {
+            solarConfidence: classification.solarConfidence,
+            solarCandidateEvidence: classification.solarCandidateEvidence,
+          },
+        })
+      }
+    } else if (classification.solarCandidate && classification.usStatus === 'foreign') {
+      explicitForeignSolarCandidates += 1
+    }
+
     if (parsedJobs % 5000 === 0) {
-      console.log(`[classify] ${parsedJobs} jobs | ${solarUsJobs} solar+US`)
+      console.log(`[classify] ${parsedJobs} jobs | ${solarUsJobs} strict solar+US | ${solarUsCandidates} high-recall candidates`)
     }
   }
 
   await Promise.all([
     finishStream(classificationStream),
     finishStream(solarUsStream),
+    finishStream(solarUsCandidateStream),
+    finishStream(solarUnknownLocationStream),
   ])
   await Promise.all([
     rename(classificationsTemp, classificationsPath),
@@ -80,6 +109,9 @@ async function main() {
     classifierVersion: HISTORICAL_CLASSIFIER_VERSION,
     parsedJobs,
     solarUsJobs,
+    solarUsCandidates,
+    solarUnknownLocationCandidates,
+    explicitForeignSolarCandidates,
     notSolarRelated,
     notUsOrUnknown,
   }
