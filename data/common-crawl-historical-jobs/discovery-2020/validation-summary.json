@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-09-23T09:28:36.269Z",
+  "source": "CC-MAIN-2020-29 discovery review",
+  "candidatesReviewed": 39,
+  "decisions": {
+    "accepted": 8,
+    "narrowed": 2,
+    "duplicate": 3,
+    "rejected": 26
+  },
+  "registryAdditions": {
+    "sunrun": [
+      "careers-sunrun.icims.com/jobs/*"
+    ],
+    "engie": [
+      "jobs.engie.com/jobs/*",
+      "www.jobs.engie.com/jobs/*",
+      "engie.taleo.net/*"
+    ],
+    "first-solar": [
+      "firstsolar.wd1.myworkdayjobs.com/en-US/FirstSolar/job/*",
+      "firstsolar.wd1.myworkdayjobs.com/FirstSolar/job/*"
+    ],
+    "ameresco": [
+      "careers-ameresco.icims.com/jobs/*"
+    ],
+    "nextracker": [
+      "flextronics.wd1.myworkdayjobs.com/Nextracker_Careers/job/*"
+    ],
+    "acciona-energy": [
+      "employmentchannel.acciona.com/vacancies/*",
+      "acciona.taleo.net/*"
+    ]
+  },
+  "importantFinding": "The generic alias northamerica created multiple false EDP Renewables attributions (Valtech, BlueScope, Bright Horizons, KTM, INDEVCO). Future discovery now treats northamerica as generic.",
+  "policy": "Only employer-owned or employer-specific ATS/job-detail routes are added. Non-US routes, landing pages, broad shared ATS roots, and ambiguous matches are excluded."
+}
