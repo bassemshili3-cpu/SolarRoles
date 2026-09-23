@@ -28,7 +28,7 @@
     "test:market-history": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx tests/market-history.test.ts",
     "historical:common-crawl": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/query-common-crawl-url-index.ts",
     "historical:common-crawl-cdx": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/common-crawl-historical-jobs.ts",
-    "historical:discover": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-sources.ts",
+    "historical:discover": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-employers.ts",
     "historical:fetch": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/fetch-captures.ts",
     "historical:parse": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/parse-jobs.ts",
     "historical:classify": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/classify-jobs.ts",
@@ -81,7 +81,9 @@
     "normalize:listing-priorities": "node --env-file=.env.local --experimental-strip-types scripts/normalize-listing-priorities.ts",
     "submit-indexnow": "tsx scripts/submit-indexnow.ts",
     "submit-google-indexing": "tsx scripts/submit-google-indexing.ts",
-    "backfill:job-canonical-slugs": "node --env-file=.env.local --experimental-strip-types scripts/backfill-job-canonical-slugs.ts"
+    "backfill:job-canonical-slugs": "node --env-file=.env.local --experimental-strip-types scripts/backfill-job-canonical-slugs.ts",
+    "historical:discover-employers": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-employers.ts",
+    "historical:discover-sources": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-sources.ts"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.27",
