@@ -39,6 +39,28 @@ async function main() {
     await run('scripts/historical-jobs/discover-sources.ts', discoveryArgs)
     return
   }
+  if (stage === 'discovery-fetch') {
+    await run('scripts/historical-jobs/fetch-captures.ts', ['--input', path.join(root, 'employer-discovery')])
+    return
+  }
+  if (stage === 'discovery-parse') {
+    const discoveryRoot = path.join(root, 'employer-discovery')
+    await run('scripts/historical-jobs/parse-jobs.ts', [
+      '--input', discoveryRoot,
+      '--output', discoveryRoot,
+      '--registry', path.join(discoveryRoot, 'provisional-employers.json'),
+    ])
+    return
+  }
+  if (stage === 'discovery-classify') {
+    const discoveryRoot = path.join(root, 'employer-discovery')
+    await run('scripts/historical-jobs/classify-jobs.ts', ['--input', discoveryRoot, '--output', discoveryRoot])
+    return
+  }
+  if (stage === 'discovery-summarize') {
+    await run('scripts/historical-jobs/summarize-employer-discovery.ts', ['--input', path.join(root, 'employer-discovery')])
+    return
+  }
   if (stage === 'index') {
     const registry = arg(args, '--registry', 'data/common-crawl-historical-jobs/employers.json')
     const indexArgs = ['--years', year, '--parquet-dir', parquetDir, '--output', root, '--registry', registry]
@@ -67,7 +89,7 @@ async function main() {
     return
   }
 
-  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, source-discovery, index, fetch, parse, classify, features, or audit.`)
+  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-summarize, source-discovery, index, fetch, parse, classify, features, or audit.`)
 }
 
 main().catch((error) => {
