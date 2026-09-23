@@ -1,10 +1,11 @@
-import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 
 const DEFAULT_PARQUET_DIR = 'data/common-crawl-historical-jobs/parquet'
 const DEFAULT_DUCKDB = path.join('.tools', 'duckdb', 'duckdb.exe')
+const DISCOVERY_SCHEMA_VERSION = 'open-employer-discovery-v2'
 
 interface CliOptions {
   year: number
@@ -23,11 +24,14 @@ interface BatchSourceRow {
   provider: string
   source_key: string
   source_pattern: string
+  source_scope: 'host_or_path' | 'query_scoped' | 'first_party_lead'
   host: string
   captures: number
   solar_url_hits: number
   first_seen: string
   last_seen: string
+  sample_rank: number
+  sample_solar_url_signal: boolean
   sample_urlkey: string
   sample_timestamp: string
   sample_url: string
@@ -46,8 +50,9 @@ interface BatchSourceRow {
 interface SourceAggregate {
   provider: string
   sourceKey: string
-  sourcePattern: string
-  host: string
+  sourceScope: BatchSourceRow['source_scope']
+  sourcePatterns: Set<string>
+  hosts: Set<string>
   captures: number
   solarUrlHits: number
   firstSeen: string
@@ -81,7 +86,7 @@ function parseOptions(args: string[]): CliOptions {
     threads: intArg(args, '--threads', 2),
     memoryLimit: arg(args, '--memory-limit', '3GB'),
     filesPerBatch: intArg(args, '--files-per-batch', 1),
-    maxSamplesPerSource: intArg(args, '--max-samples-per-source', 3),
+    maxSamplesPerSource: intArg(args, '--max-samples-per-source', 5),
     sqlOnly: args.includes('--sql-only'),
   }
 }
@@ -137,6 +142,7 @@ function buildBatchSql(
   tempDir: string,
   threads: number,
   memoryLimit: string,
+  maxSamplesPerSource: number,
 ) {
   const atsPredicate = [
     "ends_with(host, '.myworkdayjobs.com')",
@@ -151,7 +157,7 @@ function buildBatchSql(
     "ends_with(host, '.taleo.net')",
     "ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu')",
     "ends_with(host, '.oraclecloud.com')",
-    "host = 'recruiting.ultipro.com' OR ends_with(host, '.ultipro.com')",
+    "ends_with(host, '.ultipro.com')",
     "ends_with(host, '.ukg.com')",
     "host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')",
     "host = 'workforcenow.adp.com'",
@@ -172,7 +178,7 @@ function buildBatchSql(
     WHEN ends_with(host, '.taleo.net') THEN 'taleo'
     WHEN ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu') THEN 'successfactors'
     WHEN ends_with(host, '.oraclecloud.com') THEN 'oraclecloud'
-    WHEN host = 'recruiting.ultipro.com' OR ends_with(host, '.ultipro.com') THEN 'ultipro'
+    WHEN ends_with(host, '.ultipro.com') THEN 'ultipro'
     WHEN ends_with(host, '.ukg.com') THEN 'ukg'
     WHEN host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com') THEN 'paylocity'
     WHEN host = 'workforcenow.adp.com' THEN 'adp'
@@ -186,17 +192,33 @@ function buildBatchSql(
       THEN regexp_extract(url_path, '^/([^/]+)', 1)
     WHEN host = 'jobs.dayforcehcm.com'
       THEN coalesce(nullif(regexp_extract(url_path, '^/(?:[a-z]{2}-[A-Z]{2}/)?([^/]+)', 1), ''), host)
-    WHEN host = 'recruiting.ultipro.com'
+    WHEN ends_with(host, '.ultipro.com')
       THEN coalesce(nullif(regexp_extract(url_path, '^/([^/]+)', 1), ''), host)
     WHEN host = 'workforcenow.adp.com'
       THEN coalesce(nullif(regexp_extract(url, '(?i)[?&](?:client|clientid|cid)=([^&#]+)', 1), ''), host)
     WHEN host = 'recruiting.paylocity.com'
       THEN coalesce(nullif(regexp_extract(url, '(?i)[?&](?:clientid|companyid|company)=([^&#]+)', 1), ''), host)
+    WHEN ends_with(host, '.paycomonline.net')
+      THEN coalesce(nullif(regexp_extract(url, '(?i)[?&]clientkey=([^&#]+)', 1), ''), host)
     ELSE host
+  END`
+
+  const sourceScopeExpr = `CASE
+    WHEN host = 'workforcenow.adp.com'
+      OR host = 'recruiting.paylocity.com'
+      OR ends_with(host, '.paycomonline.net')
+      THEN 'query_scoped'
+    WHEN NOT (
+      ${atsPredicate}
+    )
+      THEN 'first_party_lead'
+    ELSE 'host_or_path'
   END`
 
   const patternExpr = `CASE
     WHEN host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io', 'jobs.lever.co', 'jobs.jobvite.com', 'jobs.smartrecruiters.com', 'jobs.ashbyhq.com')
+      THEN host || '/' || regexp_extract(url_path, '^/([^/]+)', 1) || '/*'
+    WHEN ends_with(host, '.ultipro.com')
       THEN host || '/' || regexp_extract(url_path, '^/([^/]+)', 1) || '/*'
     ELSE host || '/*'
   END`
@@ -206,30 +228,49 @@ function buildBatchSql(
     '(?:^|[^a-z])(?:solar|photovoltaic|renewable|bess|battery[-_ ]?storage|energy[-_ ]?storage|clean[-_ ]?energy)(?:[^a-z]|$)'
   )`
 
-  const jobDetailPredicate = `(
-    (ends_with(host, '.myworkdayjobs.com') AND regexp_matches(lower(url_path), '/job/'))
-    OR (host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io') AND regexp_matches(lower(url_path), '^/[^/]+/jobs?/[^/]+'))
-    OR (host = 'jobs.lever.co' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9a-f-]{16,}'))
-    OR (host = 'jobs.jobvite.com' AND regexp_matches(lower(url_path), '^/[^/]+/(?:job|jobs)/'))
-    OR (host = 'jobs.smartrecruiters.com' AND regexp_matches(lower(url_path), '^/[^/]+/[^/]+'))
-    OR (host = 'jobs.ashbyhq.com' AND regexp_matches(lower(url_path), '^/[^/]+/[^/]+'))
-    OR (ends_with(host, '.icims.com') AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
-    OR (ends_with(host, '.taleo.net') AND regexp_matches(lower(url_path), 'jobdetail|careersection'))
-    OR ((ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu')) AND regexp_matches(lower(url_path), '/job/'))
-    OR ((host = 'jobs.bamboohr.com' OR ends_with(host, '.bamboohr.com')) AND regexp_matches(lower(url_path), '/careers?/[^/]+'))
-    OR ((host = 'jobs.dayforcehcm.com' OR ends_with(host, '.dayforcehcm.com')) AND regexp_matches(lower(url_path), '/jobs?/'))
-    OR (ends_with(host, '.oraclecloud.com') AND regexp_matches(lower(url_path), '/job/'))
-    OR ((host = 'recruiting.ultipro.com' OR ends_with(host, '.ultipro.com')) AND regexp_matches(lower(url_path), '/job|opportunity|requisition'))
-    OR (ends_with(host, '.ukg.com') AND regexp_matches(lower(url_path), '/job|opportunity|requisition'))
-    OR ((host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')) AND regexp_matches(lower(url_path), '/jobs?/'))
-    OR (host = 'workforcenow.adp.com' AND regexp_matches(lower(url), 'recruit|job|position'))
-    OR (ends_with(host, '.paycomonline.net') AND regexp_matches(lower(url), 'job|career|position'))
-    OR (ends_with(host, '.jobs2web.com') AND regexp_matches(lower(url_path), '/job/'))
-    OR (
-      ${solarUrlSignal}
-      AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
+  const firstPartyDetailPredicate = `(
+    ${solarUrlSignal}
+    AND regexp_matches(
+      lower(url_path),
+      '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunities?)/[^/?#]{3,}'
+    )
+    AND NOT regexp_matches(
+      lower(url_path),
+      '/(?:job|jobs|career|careers)/(?:search|login|browse|category|categories|page)(?:/|$)'
     )
   )`
+
+  const jobDetailPredicate = `(
+    (ends_with(host, '.myworkdayjobs.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
+    OR (
+      host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io')
+      AND regexp_matches(lower(url_path), '^/[^/]+/jobs?/[0-9]+')
+    )
+    OR (host = 'jobs.lever.co' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9a-f-]{16,}'))
+    OR (host = 'jobs.jobvite.com' AND regexp_matches(lower(url_path), '^/[^/]+/(?:job|jobs)/[^/]+'))
+    OR (host = 'jobs.smartrecruiters.com' AND regexp_matches(lower(url_path), '^/[^/]+/[0-9]{6,}[-/]'))
+    OR (host = 'jobs.ashbyhq.com' AND regexp_matches(lower(url_path), '^/[^/]+/[^/]+'))
+    OR (ends_with(host, '.icims.com') AND regexp_matches(lower(url_path), '/jobs?/[0-9]+(?:/|$)'))
+    OR (ends_with(host, '.taleo.net') AND regexp_matches(lower(url_path), 'jobdetail\\.ftl'))
+    OR ((ends_with(host, '.successfactors.com') OR ends_with(host, '.successfactors.eu')) AND regexp_matches(lower(url_path), '/job/[^/]+'))
+    OR ((host = 'jobs.bamboohr.com' OR ends_with(host, '.bamboohr.com')) AND regexp_matches(lower(url_path), '/careers?/[0-9]+'))
+    OR ((host = 'jobs.dayforcehcm.com' OR ends_with(host, '.dayforcehcm.com')) AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
+    OR (ends_with(host, '.oraclecloud.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
+    OR (ends_with(host, '.ultipro.com') AND regexp_matches(lower(url), '(?i)opportunitydetail|/job(?:/|\\?|$)|requisition'))
+    OR (ends_with(host, '.ukg.com') AND regexp_matches(lower(url), '(?i)/job(?:/|\\?|$)|opportunity|requisition'))
+    OR ((host = 'recruiting.paylocity.com' OR ends_with(host, '.paylocity.com')) AND regexp_matches(lower(url_path), '/jobs?/[^/]+'))
+    OR (host = 'workforcenow.adp.com' AND regexp_matches(lower(url), '(?i)recruitment|job|position'))
+    OR (ends_with(host, '.paycomonline.net') AND regexp_matches(lower(url), '(?i)jobdetails|job-detail|position'))
+    OR (ends_with(host, '.jobs2web.com') AND regexp_matches(lower(url_path), '/job/[^/]+'))
+    OR ${firstPartyDetailPredicate}
+  )`
+
+  const desiredSamples = `CASE
+    WHEN stats.solar_url_hits > 0 OR stats.captures >= 100 THEN ${maxSamplesPerSource}
+    WHEN stats.captures >= 25 THEN least(${maxSamplesPerSource}, 3)
+    WHEN stats.captures >= 10 THEN least(${maxSamplesPerSource}, 2)
+    ELSE 1
+  END`
 
   return `SET preserve_insertion_order = false;
 SET enable_progress_bar = false;
@@ -264,15 +305,12 @@ COPY (
         OR lower(coalesce(content_mime_detected, '')) LIKE '%html%'
       )
   ),
-  ats AS (
+  candidate_rows AS (
     SELECT *
     FROM base
     WHERE (
       ${atsPredicate}
-      OR (
-        ${solarUrlSignal}
-        AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
-      )
+      OR ${firstPartyDetailPredicate}
     )
   ),
   classified AS (
@@ -280,9 +318,10 @@ COPY (
       *,
       ${providerExpr} AS provider,
       ${tenantExpr} AS tenant,
+      ${sourceScopeExpr} AS source_scope,
       ${patternExpr} AS source_pattern,
       ${solarUrlSignal} AS solar_url_signal
-    FROM ats
+    FROM candidate_rows
     WHERE ${jobDetailPredicate}
   ),
   keyed AS (
@@ -291,70 +330,59 @@ COPY (
       provider || ':' || tenant AS source_key
     FROM classified
     WHERE tenant IS NOT NULL AND tenant <> ''
+  ),
+  stats AS (
+    SELECT
+      provider,
+      source_key,
+      source_pattern,
+      source_scope,
+      host,
+      count(*)::BIGINT AS captures,
+      count(*) FILTER (WHERE solar_url_signal)::BIGINT AS solar_url_hits,
+      min(fetch_time) AS first_seen,
+      max(fetch_time) AS last_seen
+    FROM keyed
+    GROUP BY provider, source_key, source_pattern, source_scope, host
+  ),
+  ranked AS (
+    SELECT
+      *,
+      row_number() OVER (
+        PARTITION BY provider, source_key, source_pattern, source_scope, host
+        ORDER BY solar_url_signal DESC, hash(url), fetch_time
+      ) AS sample_rank
+    FROM keyed
   )
   SELECT
-    provider,
-    source_key,
-    source_pattern,
-    host,
-    count(*)::BIGINT AS captures,
-    count(*) FILTER (WHERE solar_url_signal)::BIGINT AS solar_url_hits,
-    min(fetch_time) AS first_seen,
-    max(fetch_time) AS last_seen,
-    coalesce(
-      arg_min(url_surtkey, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(url_surtkey, fetch_time)
-    ) AS sample_urlkey,
-    strftime(
-      coalesce(
-        min(fetch_time) FILTER (WHERE solar_url_signal),
-        min(fetch_time)
-      ),
-      '%Y%m%d%H%M%S'
-    ) AS sample_timestamp,
-    coalesce(
-      arg_min(url, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(url, fetch_time)
-    ) AS sample_url,
-    coalesce(
-      arg_min(content_mime_type, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(content_mime_type, fetch_time)
-    ) AS sample_mime,
-    coalesce(
-      arg_min(content_mime_detected, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(content_mime_detected, fetch_time)
-    ) AS sample_mime_detected,
-    cast(coalesce(
-      arg_min(fetch_status, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(fetch_status, fetch_time)
-    ) AS VARCHAR) AS sample_status,
-    coalesce(
-      arg_min(content_digest, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(content_digest, fetch_time)
-    ) AS sample_digest,
-    cast(coalesce(
-      arg_min(warc_record_length, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(warc_record_length, fetch_time)
-    ) AS VARCHAR) AS sample_length,
-    cast(coalesce(
-      arg_min(warc_record_offset, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(warc_record_offset, fetch_time)
-    ) AS VARCHAR) AS sample_offset,
-    coalesce(
-      arg_min(warc_filename, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(warc_filename, fetch_time)
-    ) AS sample_filename,
-    coalesce(
-      arg_min(content_languages, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(content_languages, fetch_time)
-    ) AS sample_languages,
-    coalesce(
-      arg_min(content_charset, fetch_time) FILTER (WHERE solar_url_signal),
-      arg_min(content_charset, fetch_time)
-    ) AS sample_encoding,
-    arg_min(crawl, fetch_time) AS crawl
-  FROM keyed
-  GROUP BY provider, source_key, source_pattern, host
+    stats.provider,
+    stats.source_key,
+    stats.source_pattern,
+    stats.source_scope,
+    stats.host,
+    stats.captures,
+    stats.solar_url_hits,
+    stats.first_seen,
+    stats.last_seen,
+    ranked.sample_rank,
+    ranked.solar_url_signal AS sample_solar_url_signal,
+    ranked.url_surtkey AS sample_urlkey,
+    strftime(ranked.fetch_time, '%Y%m%d%H%M%S') AS sample_timestamp,
+    ranked.url AS sample_url,
+    ranked.content_mime_type AS sample_mime,
+    ranked.content_mime_detected AS sample_mime_detected,
+    cast(ranked.fetch_status AS VARCHAR) AS sample_status,
+    ranked.content_digest AS sample_digest,
+    cast(ranked.warc_record_length AS VARCHAR) AS sample_length,
+    cast(ranked.warc_record_offset AS VARCHAR) AS sample_offset,
+    ranked.warc_filename AS sample_filename,
+    ranked.content_languages AS sample_languages,
+    ranked.content_charset AS sample_encoding,
+    ranked.crawl
+  FROM stats
+  JOIN ranked
+    USING (provider, source_key, source_pattern, source_scope, host)
+  WHERE ranked.sample_rank <= ${desiredSamples}
 ) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
 `
 }
@@ -379,10 +407,26 @@ function addSample(aggregate: SourceAggregate, row: BatchSourceRow, limit: numbe
   if (!row.sample_url || aggregate.samples.some((sample) => sample.sample_url === row.sample_url)) return
   aggregate.samples.push(row)
   aggregate.samples.sort((a, b) =>
-    Number(b.solar_url_hits > 0) - Number(a.solar_url_hits > 0)
+    Number(b.sample_solar_url_signal) - Number(a.sample_solar_url_signal)
+    || Number(a.sample_rank) - Number(b.sample_rank)
     || a.sample_timestamp.localeCompare(b.sample_timestamp),
   )
   if (aggregate.samples.length > limit) aggregate.samples.length = limit
+}
+
+async function ensureCacheVersion(outputDir: string, batchDir: string) {
+  const versionFile = path.join(outputDir, 'employer-discovery-cache-version.txt')
+  let current = ''
+  try {
+    current = (await readFile(versionFile, 'utf8')).trim()
+  } catch {
+    // No cache marker yet.
+  }
+  if (current !== DISCOVERY_SCHEMA_VERSION) {
+    await rm(batchDir, { recursive: true, force: true })
+    await writeFile(versionFile, `${DISCOVERY_SCHEMA_VERSION}\n`, 'utf8')
+  }
+  await mkdir(batchDir, { recursive: true })
 }
 
 async function main() {
@@ -390,7 +434,8 @@ async function main() {
   const outputDir = path.resolve(options.outputDir)
   const batchDir = path.join(outputDir, 'employer-discovery-batches')
   const tempDir = path.join(outputDir, 'duckdb-tmp')
-  await mkdir(batchDir, { recursive: true })
+  await mkdir(outputDir, { recursive: true })
+  await ensureCacheVersion(outputDir, batchDir)
   await mkdir(tempDir, { recursive: true })
 
   const allParquet = await listParquetFiles(options.parquetDir)
@@ -412,23 +457,26 @@ async function main() {
 
   await writeFile(path.join(outputDir, 'employer-discovery-plan.json'), `${JSON.stringify({
     generatedAt: new Date().toISOString(),
+    schemaVersion: DISCOVERY_SCHEMA_VERSION,
     year: options.year,
     crawlIds: selectedCrawls,
     parquetFiles: parquetFiles.length,
     batches: batches.length,
     filesPerBatch: options.filesPerBatch,
     maxSamplesPerSource: options.maxSamplesPerSource,
-    scope: 'open ATS tenant discovery plus solar-signaled first-party job URLs; no employer registry filter',
+    samplingPolicy: '1 sample for <10 captures; 2 for 10-24; 3 for 25-99; maxSamples for >=100 or any solar URL hit',
+    scope: 'open ATS tenant discovery plus strict solar-signaled first-party job-detail leads; no employer registry filter',
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
   }, null, 2)}\n`, 'utf8')
 
-  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery | ${options.threads} threads | ${options.memoryLimit}`)
+  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery v2 | ${options.threads} threads | ${options.memoryLimit}`)
 
   const failures: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
 
   for (let index = 0; index < batches.length; index += 1) {
     const label = String(index + 1).padStart(4, '0')
     const batchOutput = path.join(batchDir, `batch-${label}.jsonl`)
+    const batchTempOutput = path.join(batchDir, `batch-${label}.jsonl.tmp`)
     const batchSql = path.join(batchDir, `batch-${label}.sql`)
 
     try {
@@ -439,9 +487,17 @@ async function main() {
       // Missing output: scan this batch.
     }
 
+    await rm(batchTempOutput, { force: true })
     await writeFile(
       batchSql,
-      buildBatchSql(batches[index], batchOutput, tempDir, options.threads, options.memoryLimit),
+      buildBatchSql(
+        batches[index],
+        batchTempOutput,
+        tempDir,
+        options.threads,
+        options.memoryLimit,
+        options.maxSamplesPerSource,
+      ),
       'utf8',
     )
     if (options.sqlOnly) {
@@ -452,7 +508,9 @@ async function main() {
     console.log(`[employer-discovery] batch ${index + 1}/${batches.length}: scanning ${batches[index].length} Parquet file(s)`)
     try {
       await runDuckDb(options.duckdb, batchSql)
+      await rename(batchTempOutput, batchOutput)
     } catch (error) {
+      await rm(batchTempOutput, { force: true })
       failures.push({ batch: index + 1, parquetFiles: batches[index], error: String(error) })
       console.warn(`[employer-discovery] batch ${index + 1}/${batches.length}: FAILED; continuing`)
     }
@@ -470,29 +528,50 @@ async function main() {
       continue
     }
 
+    const countedInBatch = new Set<string>()
     for (const line of body.split(/\r?\n/).filter(Boolean)) {
       const row = JSON.parse(line) as BatchSourceRow
-      const current = sources.get(row.source_key) ?? {
+      const key = `${row.provider}|${row.source_key}`
+      const current = sources.get(key) ?? {
         provider: row.provider,
         sourceKey: row.source_key,
-        sourcePattern: row.source_pattern,
-        host: row.host,
+        sourceScope: row.source_scope,
+        sourcePatterns: new Set<string>(),
+        hosts: new Set<string>(),
         captures: 0,
         solarUrlHits: 0,
         firstSeen: row.first_seen,
         lastSeen: row.last_seen,
         samples: [],
       }
-      current.captures += Number(row.captures) || 0
-      current.solarUrlHits += Number(row.solar_url_hits) || 0
+
+      current.sourcePatterns.add(row.source_pattern)
+      current.hosts.add(row.host)
+      if (!countedInBatch.has(key)) {
+        current.captures += Number(row.captures) || 0
+        current.solarUrlHits += Number(row.solar_url_hits) || 0
+        countedInBatch.add(key)
+      }
       if (row.first_seen < current.firstSeen) current.firstSeen = row.first_seen
       if (row.last_seen > current.lastSeen) current.lastSeen = row.last_seen
       addSample(current, row, options.maxSamplesPerSource)
-      sources.set(row.source_key, current)
+      sources.set(key, current)
     }
   }
 
-  const sourceRows = [...sources.values()].sort((a, b) =>
+  const sourceRows = [...sources.values()].map((source) => ({
+    provider: source.provider,
+    sourceKey: source.sourceKey,
+    sourceScope: source.sourceScope,
+    sourcePattern: [...source.sourcePatterns][0] ?? '',
+    sourcePatterns: [...source.sourcePatterns].sort(),
+    hosts: [...source.hosts].sort(),
+    captures: source.captures,
+    solarUrlHits: source.solarUrlHits,
+    firstSeen: source.firstSeen,
+    lastSeen: source.lastSeen,
+    samples: source.samples,
+  })).sort((a, b) =>
     Number(b.solarUrlHits > 0) - Number(a.solarUrlHits > 0)
     || b.solarUrlHits - a.solarUrlHits
     || b.captures - a.captures
@@ -503,8 +582,10 @@ async function main() {
     employerId: stableId(source.sourceKey),
     employerName: displayName(source.sourceKey),
     atsProvider: source.provider,
-    patterns: [source.sourcePattern],
-    notes: `Provisional employer/source discovered from Common Crawl URL Index. sourceKey=${source.sourceKey}; not validated as solar until content sampling.`,
+    patterns: source.sourcePatterns,
+    discoverySourceKey: source.sourceKey,
+    discoverySourceScope: source.sourceScope,
+    notes: `Provisional source discovered from Common Crawl URL Index. sourceKey=${source.sourceKey}; not validated as a solar employer until content sampling.`,
   }))
 
   const employerIdBySource = new Map(sourceRows.map((source) => [source.sourceKey, stableId(source.sourceKey)]))
@@ -529,26 +610,30 @@ async function main() {
       atsProvider: source.provider,
       pattern: source.sourcePattern,
       discoverySourceKey: source.sourceKey,
+      discoverySourceScope: source.sourceScope,
       discoverySolarUrlHits: source.solarUrlHits,
+      discoverySampleRank: sample.sample_rank,
+      discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
     })),
   )
 
   const reviewHeader = [
-    'source_key', 'provider', 'pattern', 'host', 'captures', 'solar_url_hits',
+    'source_key', 'provider', 'scope', 'patterns', 'hosts', 'captures', 'solar_url_hits',
     'first_seen', 'last_seen', 'sample_count', 'priority', 'validation_status', 'notes',
   ]
   const csv = (value: unknown) => `"${String(value ?? '').replaceAll('"', '""')}"`
   const reviewRows = sourceRows.map((source) => [
     source.sourceKey,
     source.provider,
-    source.sourcePattern,
-    source.host,
+    source.sourceScope,
+    source.sourcePatterns.join(' | '),
+    source.hosts.join(' | '),
     source.captures,
     source.solarUrlHits,
     source.firstSeen,
     source.lastSeen,
     source.samples.length,
-    source.solarUrlHits > 0 ? 'solar_url_signal' : 'content_sample_needed',
+    source.solarUrlHits > 0 ? 'solar_url_signal' : source.captures >= 25 ? 'high_volume_sample' : 'content_sample',
     '',
     '',
   ])
@@ -562,8 +647,15 @@ async function main() {
   ].join('\n') + '\n', 'utf8')
   await writeFile(path.join(outputDir, 'employer-discovery-failures.json'), `${JSON.stringify(failures, null, 2)}\n`, 'utf8')
 
+  const sampleCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
+    const key = String(source.samples.length)
+    acc[key] = (acc[key] ?? 0) + 1
+    return acc
+  }, {})
+
   const report = {
     generatedAt: new Date().toISOString(),
+    schemaVersion: DISCOVERY_SCHEMA_VERSION,
     year: options.year,
     crawlIds: selectedCrawls,
     parquetFiles: parquetFiles.length,
@@ -573,8 +665,13 @@ async function main() {
       provider,
       sourceRows.filter((source) => source.provider === provider).length,
     ])),
+    scopes: Object.fromEntries(['host_or_path', 'query_scoped', 'first_party_lead'].map((scope) => [
+      scope,
+      sourceRows.filter((source) => source.sourceScope === scope).length,
+    ])),
     sourcesWithSolarUrlSignals: sourceRows.filter((source) => source.solarUrlHits > 0).length,
     sampleCapturesPrepared: manifest.length,
+    sampleCountDistribution,
     maxSamplesPerSource: options.maxSamplesPerSource,
     registryFilterApplied: false,
   }
