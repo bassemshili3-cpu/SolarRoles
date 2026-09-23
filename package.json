@@ -84,6 +84,7 @@
     "backfill:job-canonical-slugs": "node --env-file=.env.local --experimental-strip-types scripts/backfill-job-canonical-slugs.ts",
     "historical:discover-employers": "cross-env NODE_OPTIONS=--max-old-space-size=2048 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-employers.ts",
     "historical:discover-sources": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-sources.ts",
+    "historical:recall-audit": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-employer-recall.ts",
     "historical:discovery-summary": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/summarize-employer-discovery.ts",
     "historical:deep-sample": "cross-env NODE_OPTIONS=--max-old-space-size=2048 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/prepare-deep-sample.ts",
     "historical:current-registry": "cross-env NODE_OPTIONS=--max-old-space-size=2048 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/build-current-employer-registry.ts",
