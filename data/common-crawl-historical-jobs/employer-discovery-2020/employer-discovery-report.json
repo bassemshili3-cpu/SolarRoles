@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-09-23T10:50:15.810Z",
+  "year": 2020,
+  "crawlIds": [
+    "CC-MAIN-2020-29"
+  ],
+  "parquetFiles": 300,
+  "failedBatches": 0,
+  "sourceCandidates": 8449,
+  "providers": {
+    "adp": 603,
+    "ashby": 1,
+    "bamboohr": 1,
+    "first_party_solar_signal": 1260,
+    "greenhouse": 825,
+    "icims": 1081,
+    "jobs2web": 2,
+    "jobvite": 389,
+    "lever": 822,
+    "oraclecloud": 19,
+    "paycom": 1,
+    "paylocity": 2,
+    "smartrecruiters": 1021,
+    "taleo": 826,
+    "ultipro": 982,
+    "workday": 614
+  },
+  "sourcesWithSolarUrlSignals": 1270,
+  "sampleCapturesPrepared": 8449,
+  "maxSamplesPerSource": 3,
+  "registryFilterApplied": false
+}
