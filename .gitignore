@@ -33,8 +33,10 @@ data/common-crawl-historical-jobs/**/index-records.parquet
 data/common-crawl-historical-jobs/**/discovery-raw.parquet
 data/common-crawl-historical-jobs/**/discovery-raw.jsonl
 data/common-crawl-historical-jobs/**/discovery-attributed.jsonl
+data/common-crawl-historical-jobs/**/candidate-captures.jsonl
 data/common-crawl-historical-jobs/**/discovery-batches/
 data/common-crawl-historical-jobs/**/employer-discovery-batches/
+data/common-crawl-historical-jobs/**/employer-discovery-batches-v2/
 data/common-crawl-historical-jobs/**/sample-reservoir.jsonl
 data/common-crawl-historical-jobs/**/duckdb-tmp/
 data/common-crawl-historical-jobs/url-index-smoke/
