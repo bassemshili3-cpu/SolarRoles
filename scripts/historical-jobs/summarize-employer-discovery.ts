@@ -5,6 +5,28 @@ import type {
   HistoricalJobClassification,
   ParsedHistoricalJob,
 } from '../../lib/historical-jobs/commonCrawl'
+import {
+  ADP_COMPANIES,
+  ASHBY_COMPANIES,
+  BREEZY_COMPANIES,
+  GREENHOUSE_COMPANIES,
+  HRMDIRECT_COMPANIES,
+  ICIMS_COMPANIES,
+  JAZZHR_COMPANIES,
+  JOBVITE_COMPANIES,
+  LEVER_COMPANIES,
+  ORACLE_CLOUD_COMPANIES,
+  PAYCOM_COMPANIES,
+  PAYLOCITY_COMPANIES,
+  PINPOINT_COMPANIES,
+  RIPPLING_COMPANIES,
+  SAASHR_COMPANIES,
+  SMARTRECRUITERS_COMPANIES,
+  SUCCESSFACTORS_COMPANIES,
+  UKG_COMPANIES,
+  WORKABLE_COMPANIES,
+  WORKDAY_COMPANIES,
+} from '../../lib/ats/company-seed'
 
 interface SourceCandidate {
   provider: string
@@ -37,6 +59,87 @@ const KNOWN_THIRD_PARTY_JOB_HOSTS = new Set([
   'ziprecruiter.com',
   'engineering.com',
 ])
+
+const CURRENT_SEED_GROUPS = [
+  ['jazzhr', JAZZHR_COMPANIES],
+  ['breezy', BREEZY_COMPANIES],
+  ['rippling', RIPPLING_COMPANIES],
+  ['successfactors', SUCCESSFACTORS_COMPANIES],
+  ['ashby', ASHBY_COMPANIES],
+  ['smartrecruiters', SMARTRECRUITERS_COMPANIES],
+  ['lever', LEVER_COMPANIES],
+  ['workable', WORKABLE_COMPANIES],
+  ['pinpoint', PINPOINT_COMPANIES],
+  ['jobvite', JOBVITE_COMPANIES],
+  ['oraclecloud', ORACLE_CLOUD_COMPANIES],
+  ['adp', ADP_COMPANIES],
+  ['paylocity', PAYLOCITY_COMPANIES],
+  ['paycom', PAYCOM_COMPANIES],
+  ['ukg', UKG_COMPANIES],
+  ['icims', ICIMS_COMPANIES],
+  ['workday', WORKDAY_COMPANIES],
+  ['greenhouse', GREENHOUSE_COMPANIES],
+  ['hrmdirect', HRMDIRECT_COMPANIES],
+  ['saashr', SAASHR_COMPANIES],
+] as const
+
+const GENERIC_HINTS = new Set([
+  'solar', 'energy', 'power', 'jobs', 'careers', 'career', 'company', 'group',
+  'unitedstates', 'usa', 'external', 'jobboard', 'careersurl', 'verified',
+])
+
+type CurrentEmployerHint = {
+  provider: string
+  name: string
+  aliases: string[]
+}
+
+function hintValues(seed: Record<string, unknown>) {
+  const values: string[] = []
+  for (const [key, value] of Object.entries(seed)) {
+    if (typeof value !== 'string') continue
+    if (['roleFilter', 'locale', 'categoryName'].includes(key)) continue
+    values.push(value)
+    try {
+      const url = new URL(value)
+      values.push(url.hostname)
+      values.push(...url.pathname.split('/').filter(Boolean))
+    } catch {
+      // Non-URL identifiers such as slug, tenant, CID or client key are useful aliases.
+    }
+  }
+  return values
+}
+
+function buildCurrentEmployerHints(): CurrentEmployerHint[] {
+  return CURRENT_SEED_GROUPS.flatMap(([provider, companies]) =>
+    (companies as readonly Record<string, unknown>[])
+      .filter((seed) => seed.verified !== false)
+      .map((seed) => {
+        const name = typeof seed.name === 'string' ? seed.name : ''
+        const aliases = dedupeStrings([name, ...hintValues(seed)])
+          .map(compact)
+          .filter((value) => value.length >= 4 && !GENERIC_HINTS.has(value))
+        return { provider, name, aliases }
+      })
+      .filter((hint) => hint.name && hint.aliases.length),
+  )
+}
+
+function currentEmployerMatches(source: SourceCandidate, hints: CurrentEmployerHint[]) {
+  const haystacks = [
+    source.sourceKey,
+    ...source.sourcePatterns,
+    ...source.hosts,
+  ].map(compact)
+  return hints
+    .filter((hint) =>
+      hint.provider === source.provider
+      && hint.aliases.some((alias) => haystacks.some((value) => value.includes(alias))),
+    )
+    .map((hint) => hint.name)
+    .filter((value, index, values) => values.indexOf(value) === index)
+}
 
 function arg(args: string[], flag: string, fallback = '') {
   const index = args.indexOf(flag)
@@ -112,6 +215,7 @@ async function main() {
   const provisional = JSON.parse(await readFile(path.join(root, 'provisional-employers.json'), 'utf8')) as HistoricalEmployer[]
   const jobs = await readJsonLines<ParsedHistoricalJob>(path.join(root, 'parsed-jobs.jsonl'))
   const classifications = await readJsonLines<HistoricalJobClassification>(path.join(root, 'job-classifications.jsonl'))
+  const currentEmployerHints = buildCurrentEmployerHints()
 
   const sourceByKey = new Map(sources.map((source) => [source.sourceKey, source]))
   const classificationByJob = new Map(classifications.map((row) => [row.historicalJobId, row]))
@@ -133,6 +237,7 @@ async function main() {
   const rows = provisional.map((employer) => {
     const sourceKey = employer.discoverySourceKey ?? ''
     const source = sourceByKey.get(sourceKey)
+    const knownCurrentEmployerMatches = source ? currentEmployerMatches(source, currentEmployerHints) : []
     const employerJobs = jobsByEmployer.get(employer.employerId) ?? []
     const classified = employerJobs.map((job) => ({
       job,
@@ -202,6 +307,7 @@ async function main() {
       && (
         solarUrlHits > 0
         || captures >= minDeepSampleCaptures
+        || knownCurrentEmployerMatches.length > 0
         || status === 'solar_us_source_ambiguous_identity'
       )
       && reservoirSampleCount > initialSampleCount
@@ -227,6 +333,7 @@ async function main() {
       thirdPartyHost,
       organizationHostMatch,
       ambiguousOrganizations,
+      knownCurrentEmployerMatches,
       status,
       needsDeepSample,
       recommendedDeepSampleCount: needsDeepSample ? recommendedDeepSample(source!) : initialSampleCount,
@@ -277,7 +384,7 @@ async function main() {
     'employer_id', 'provisional_name', 'inferred_name', 'provider', 'source_key', 'scope',
     'patterns', 'hosts', 'captures', 'solar_url_hits', 'initial_samples', 'reservoir_samples',
     'parsed_jobs', 'solar_jobs', 'us_jobs', 'solar_us_jobs', 'hiring_organizations',
-    'third_party_host', 'organization_host_match', 'ambiguous_organizations',
+    'third_party_host', 'organization_host_match', 'ambiguous_organizations', 'known_current_employer_matches',
     'status', 'needs_deep_sample', 'recommended_deep_sample_count',
     'sample_titles', 'solar_us_titles', 'manual_decision', 'notes',
   ]
@@ -302,6 +409,7 @@ async function main() {
     row.thirdPartyHost,
     row.organizationHostMatch,
     row.ambiguousOrganizations,
+    row.knownCurrentEmployerMatches.join(' | '),
     row.status,
     row.needsDeepSample,
     row.recommendedDeepSampleCount,
@@ -334,6 +442,8 @@ async function main() {
     solarEmployerLeadOnlySources: leadOnly.length,
     distinctEmployerLeadsFromHiringOrganization: employerLeads.length,
     deepSampleCandidates: deepSample.length,
+    currentSolarRolesSeedHints: currentEmployerHints.length,
+    sourcesMatchedToCurrentSolarRolesEmployers: rows.filter((row) => row.knownCurrentEmployerMatches.length > 0).length,
     deepSampleThresholdCaptures: minDeepSampleCaptures,
     statusCounts,
     note: 'First-party and third-party pages are not automatically treated as employer-owned sources. hiringOrganization creates employer leads; only validated direct or employer-specific ATS sources enter the direct-source registry. Query-scoped ATS sources remain separate until the full indexer can preserve their query key.',
