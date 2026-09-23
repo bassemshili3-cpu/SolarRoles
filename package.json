@@ -32,6 +32,8 @@
     "historical:fetch": "cross-env NODE_OPTIONS=--max-old-space-size=2048 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/fetch-captures.ts",
     "historical:parse": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/parse-jobs.ts",
     "historical:classify": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/classify-jobs.ts",
+    "historical:process-batched": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/process-sample-batched.ts",
+    "historical:recall-audit": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-employer-recall.ts",
     "historical:features": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/extract-features.ts",
     "historical:audit": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-dataset.ts",
     "historical:year": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/build-year.ts",
