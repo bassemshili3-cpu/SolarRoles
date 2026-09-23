@@ -64,18 +64,118 @@ Les dates `active_from` et `active_to` peuvent rester nulles tant qu’elles ne 
 
 ## Pipeline révisée du POC 2020
 
-Le crawl `CC-MAIN-2020-29` déjà téléchargé localement sert maintenant de laboratoire pour la discovery ouverte. L'ordre retenu est :
+Le crawl `CC-MAIN-2020-29` déjà téléchargé localement sert de laboratoire. La discovery n'est plus plafonnée par `employers.json`.
 
-1. `discover-employers.ts` scanne les 300 Parquet et construit l'inventaire des tenants ATS sans consulter `employers.json`.
-2. Il produit un manifeste de captures échantillons et un registre provisoire par source.
-3. `fetch-captures.ts`, `parse-jobs.ts` et `classify-jobs.ts` valident quelles sources contiennent effectivement des offres US solaires.
-4. `summarize-employer-discovery.ts` sépare les sources positives, les sources solaires hors-US/inconnues et les négatifs qui nécessitent un échantillonnage plus profond. Une absence de hit sur quelques pages n'est jamais traitée comme une preuve d'absence de solaire chez un employeur diversifié.
-5. Les sources positives sont consolidées en employeurs historiques candidats ; les sources négatives à forte activité ou possédant un signal solaire dans l'URL sont ré-échantillonnées afin de réduire les faux négatifs chez les employeurs diversifiés.
-6. `discover-sources.ts` est ensuite exécuté sur l'univers élargi afin de retrouver anciens ATS, anciens domaines et routes supplémentaires.
-7. Seulement après cette boucle de discovery, `query-common-crawl-url-index.ts` lance la collecte complète des offres des sources validées.
-8. Le Historical Employer Panel est construit **après collecte**, en fonction de la continuité réellement observée, jamais imposé avant la discovery.
+### A. Discovery ouverte
 
-Le POC 2020 à 37 employeurs reste un benchmark technique. Ses 30 offres ou ses taux de couverture ne doivent pas être interprétés comme la taille ou la représentativité du corpus 2020 final.
+`discover-employers.ts` balaie les 300 Parquet sans registre d'employeurs. Il reconnaît les sources emploi de Workday, Greenhouse, Lever, Jobvite, SmartRecruiters, Ashby, iCIMS, Taleo, Oracle Cloud, UKG/UltiPro, ADP, Paylocity, Paycom, Jobs2Web, JazzHR, Breezy, Rippling, Workable, Pinpoint et HRMDirect. Une voie séparée conserve aussi les pages first-party qui ont à la fois un signal solaire explicite dans l'URL et une forme de job-detail suffisamment stricte.
+
+Les sorties distinguent trois scopes :
+
+- `host_or_path` : tenant ATS adressable proprement par host ou préfixe ;
+- `query_scoped` : source dont l'identité dépend d'un paramètre comme ADP `cid` ou Paycom `clientKey` ;
+- `first_party_lead` : page job/career trouvée hors ATS reconnu et qui doit être validée par le contenu.
+
+Les pages de recherche, login, catégories et landing pages ne doivent pas être assimilées à des job details.
+
+### B. Échantillonnage initial + réservoir
+
+Le scan conserve un réservoir local allant jusqu'à 20 captures distinctes par source, mais ne télécharge pas tout immédiatement. Le premier manifeste WARC utilise jusqu'à 5 pages par source :
+
+- toutes les captures lorsque la source en a 5 ou moins ;
+- 3 pages pour les petites sources restantes ;
+- 4 pour 25–99 captures ;
+- 5 pour les sources de 100+ captures ou celles dont l'URL porte déjà un signal solaire.
+
+Le réservoir est écrit dans `sample-reservoir.jsonl` et reste hors Git. Cela évite de rescanner les 227 Go pour un deuxième échantillonnage.
+
+### C. Validation par contenu
+
+Les captures échantillons passent par :
+
+```text
+fetch-captures
+  -> parse-jobs
+  -> classify-jobs
+  -> summarize-employer-discovery
+```
+
+Le parseur conserve `hiringOrganization.name` lorsqu'il existe. La synthèse sépare ensuite :
+
+- source solaire US directe validée ;
+- source solaire US query-scoped ;
+- simple employer lead trouvé via une page tierce ;
+- identité ambiguë ;
+- source solaire non-US / géographie inconnue ;
+- source parsée sans hit solaire ;
+- page non parsable / non-job.
+
+Une page ZipRecruiter ou un job board sectoriel peut donc fournir un **lead d'employeur** via `hiringOrganization`, mais ne devient jamais automatiquement une source historique employer-owned.
+
+### D. Deep sample sans rescanner le URL Index
+
+Les négatifs à risque sont ré-échantillonnés depuis le réservoir local : grosses sources, sources avec signal solaire, identités ambiguës, et sources qui correspondent à un employeur actuel SolarRoles. `prepare-deep-sample.ts` étend `index-records.jsonl` avec les captures supplémentaires ; le fetch suivant réutilise les HTML déjà présents.
+
+### E. SolarRoles actuel = booster de rappel, jamais plafond
+
+`build-current-employer-registry.ts` transforme l'ensemble du company seed ATS actuel de SolarRoles en registre de source-discovery quand un host/path historique peut être exprimé sans ambiguïté. Les sources qui dépendent d'un identifiant de requête restent dans un fichier séparé et ne sont jamais converties en motif host-wide.
+
+La synthèse de discovery utilise également les centaines d'employeurs actuels comme **recall booster** : une source qui ressemble à un tenant SolarRoles connu reçoit un deep sample même si l'échantillon initial ne contient pas encore de job solaire.
+
+### F. Historical Employer Universe
+
+`build-employer-universe.ts` fusionne trois entrées :
+
+```text
+registre historique déjà connu
++ employeurs actuels SolarRoles avec patterns sûrs
++ employeurs validés par la discovery ouverte
+= historical-employer-universe-YYYY.json
+```
+
+Cet univers sert uniquement à rechercher d'anciens ATS/domaines avec `discover-sources.ts`. Il n'est ni le corpus final ni le panel longitudinal.
+
+### G. Source discovery puis collecte complète
+
+`discover-sources.ts` intervient seulement après la discovery ouverte et l'expansion de l'univers. Il cherche les anciens domaines, tenants et routes des employeurs désormais connus. Les patterns trouvés doivent être validés avant la collecte exhaustive.
+
+Le Historical Employer Panel est construit **après** la collecte et la QA, selon la continuité réellement observée. Les 37 employeurs du premier essai et les 30 jobs du benchmark restent uniquement un test technique.
+
+### Séquence 2020
+
+```bash
+# 1. Nouvelle discovery ouverte v3.
+npm run historical:discover -- --year 2020 --crawl CC-MAIN-2020-29 --threads 2 --memory-limit 3GB --files-per-batch 1
+
+# 2. Fetch du premier échantillon.
+npm run historical:fetch -- --input data/common-crawl-historical-jobs/employer-discovery-2020
+
+# 3. Parse avec le registre provisoire généré automatiquement.
+npm run historical:parse -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020 --registry data/common-crawl-historical-jobs/employer-discovery-2020/provisional-employers.json
+
+# 4. Classification et synthèse.
+npm run historical:classify -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020
+npm run historical:discovery-summary -- --input data/common-crawl-historical-jobs/employer-discovery-2020
+
+# 5. Ajouter les captures de deep sample à partir du réservoir local.
+npm run historical:deep-sample -- --input data/common-crawl-historical-jobs/employer-discovery-2020
+
+# 6. Rejouer fetch/parse/classify/summary. Les HTML existants sont réutilisés.
+npm run historical:fetch -- --input data/common-crawl-historical-jobs/employer-discovery-2020
+npm run historical:parse -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020 --registry data/common-crawl-historical-jobs/employer-discovery-2020/provisional-employers.json
+npm run historical:classify -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020
+npm run historical:discovery-summary -- --input data/common-crawl-historical-jobs/employer-discovery-2020
+
+# 7. Construire le booster depuis tout le company seed SolarRoles actuel.
+npm run historical:current-registry
+
+# 8. Fusionner historique connu + SolarRoles actuel + nouvelles sources validées.
+npm run historical:build-universe -- --year 2020
+
+# 9. Rechercher les anciens ATS/domaines de cet univers élargi.
+npm run historical:discover-sources -- --year 2020 --crawl CC-MAIN-2020-29 --registry data/common-crawl-historical-jobs/historical-employer-universe-2020.json --threads 2 --memory-limit 3GB --files-per-batch 1
+```
+
 
 ## 2. Une requête Parquet remplace des centaines d’appels CDX
 
