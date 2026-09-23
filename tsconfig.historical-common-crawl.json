@@ -13,6 +13,7 @@
     "lib/usStates.ts",
     "scripts/common-crawl-historical-jobs.ts",
     "scripts/query-common-crawl-url-index.ts",
+    "scripts/historical-jobs/discover-employers.ts",
     "scripts/historical-jobs/discover-sources.ts",
     "scripts/historical-jobs/fetch-captures.ts",
     "scripts/historical-jobs/parse-jobs.ts",
@@ -22,5 +23,7 @@
     "scripts/historical-jobs/build-year.ts",
     "tests/common-crawl-historical-jobs.test.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
