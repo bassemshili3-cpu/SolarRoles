@@ -120,15 +120,45 @@ async function main() {
 
   const completedResults = results.filter((row): row is Record<string, unknown> => Boolean(row))
   await writeFile(path.join(root, resultsName), completedResults.map((row) => `${JSON.stringify(row)}\n`).join(''))
+
+  const failedIndexes: IndexedCapture[] = []
+  const failureCounts = new Map<string, number>()
+  for (let index = 0; index < completedResults.length; index += 1) {
+    const row = completedResults[index]
+    if (row.status !== 'failed') continue
+    const capture = selected[index]
+    if (capture) failedIndexes.push(capture)
+    const raw = String(row.error ?? 'unknown_error')
+    const normalized =
+      raw.match(/\b(?:429|403|404|416|500|502|503|504)\b/)?.[0]
+      ?? raw.replace(/^Error:\s*/i, '').slice(0, 180)
+    failureCounts.set(normalized, (failureCounts.get(normalized) ?? 0) + 1)
+  }
+
+  const failedManifestName = manifestName === 'index-records.jsonl'
+    ? 'index-records-failed.jsonl'
+    : `${path.basename(manifestName, path.extname(manifestName))}-failed.jsonl`
+  await writeFile(
+    path.join(root, failedManifestName),
+    failedIndexes.map((row) => `${JSON.stringify(row)}\n`).join(''),
+  )
+
+  const topFailures = [...failureCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12)
+    .map(([error, count]) => ({ error, count }))
+
   console.log(JSON.stringify({
     captures: selected.length,
     concurrency,
     retries,
     manifest: manifestName,
     results: resultsName,
+    failedManifest: failedManifestName,
     downloaded: completedResults.filter((row) => row.status === 'downloaded').length,
     reusedHtml: completedResults.filter((row) => row.status === 'reused_html').length,
     failed: completedResults.filter((row) => row.status === 'failed').length,
+    topFailures,
   }, null, 2))
 }
 
