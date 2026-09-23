@@ -27,7 +27,7 @@ La pipeline corrigée sépare désormais deux problèmes différents :
 1. **Employer discovery** — découverte ouverte des tenants ATS et sources emploi visibles dans le crawl, sans filtre sur `employers.json`.
 2. **Source discovery** — une fois un employeur identifié, reconstruction de ses anciens domaines, ATS et routes historiques.
 
-Le premier passage de l'employer discovery balaie les écosystèmes ATS dont le tenant peut être déduit de l'URL ou du host : Workday, Greenhouse, Lever, Jobvite, SmartRecruiters, Ashby, iCIMS, Taleo, SuccessFactors générique, BambooHR, Dayforce, Oracle Cloud, UKG/UltiPro, Paylocity, ADP, Paycom et Jobs2Web. Il extrait des **sources candidates**, pas des employeurs solaires déjà validés.
+Le premier passage de l'employer discovery balaie les écosystèmes ATS dont le tenant peut être déduit de l'URL ou du host : Workday, Greenhouse, Lever, Jobvite, SmartRecruiters, Ashby, iCIMS, Taleo, SuccessFactors générique, BambooHR, Dayforce, Oracle Cloud, UKG/UltiPro, Paylocity, ADP, Paycom et Jobs2Web. Une seconde voie dans le même scan capture aussi les URLs first-party qui combinent un chemin d'emploi/career avec un signal solaire explicite dans l'URL. Il extrait des **sources candidates**, pas des employeurs solaires déjà validés.
 
 Aucun nom d'entreprise Solar Roles n'est nécessaire pour qu'une source ATS soit découverte. Le registre actuel sert ensuite de **booster de rappel et de mapping**, jamais de plafond.
 
@@ -69,10 +69,11 @@ Le crawl `CC-MAIN-2020-29` déjà téléchargé localement sert maintenant de la
 1. `discover-employers.ts` scanne les 300 Parquet et construit l'inventaire des tenants ATS sans consulter `employers.json`.
 2. Il produit un manifeste de captures échantillons et un registre provisoire par source.
 3. `fetch-captures.ts`, `parse-jobs.ts` et `classify-jobs.ts` valident quelles sources contiennent effectivement des offres US solaires.
-4. Les sources positives sont consolidées en employeurs historiques candidats ; les sources négatives à forte activité sont ré-échantillonnées afin de réduire les faux négatifs chez les employeurs diversifiés.
-5. `discover-sources.ts` est ensuite exécuté sur l'univers élargi afin de retrouver anciens ATS, anciens domaines et routes supplémentaires.
-6. Seulement après cette boucle de discovery, `query-common-crawl-url-index.ts` lance la collecte complète des offres des sources validées.
-7. Le Historical Employer Panel est construit **après collecte**, en fonction de la continuité réellement observée, jamais imposé avant la discovery.
+4. `summarize-employer-discovery.ts` sépare les sources positives, les sources solaires hors-US/inconnues et les négatifs qui nécessitent un échantillonnage plus profond. Une absence de hit sur quelques pages n'est jamais traitée comme une preuve d'absence de solaire chez un employeur diversifié.
+5. Les sources positives sont consolidées en employeurs historiques candidats ; les sources négatives à forte activité ou possédant un signal solaire dans l'URL sont ré-échantillonnées afin de réduire les faux négatifs chez les employeurs diversifiés.
+6. `discover-sources.ts` est ensuite exécuté sur l'univers élargi afin de retrouver anciens ATS, anciens domaines et routes supplémentaires.
+7. Seulement après cette boucle de discovery, `query-common-crawl-url-index.ts` lance la collecte complète des offres des sources validées.
+8. Le Historical Employer Panel est construit **après collecte**, en fonction de la continuité réellement observée, jamais imposé avant la discovery.
 
 Le POC 2020 à 37 employeurs reste un benchmark technique. Ses 30 offres ou ses taux de couverture ne doivent pas être interprétés comme la taille ou la représentativité du corpus 2020 final.
 
@@ -298,6 +299,9 @@ npm run historical:parse -- --input data/common-crawl-historical-jobs/employer-d
 
 # Classifier les échantillons US + solaire
 npm run historical:classify -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020
+
+# Résumer les sources validées et celles qui nécessitent un deep sample
+npm run historical:discovery-summary -- --input data/common-crawl-historical-jobs/employer-discovery-2020
 
 
 # Requête bulk sur un crawl explicite
