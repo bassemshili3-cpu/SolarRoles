@@ -266,10 +266,10 @@ function buildBatchSql(
   )`
 
   const desiredSamples = `CASE
+    WHEN stats.captures <= ${maxSamplesPerSource} THEN stats.captures
     WHEN stats.solar_url_hits > 0 OR stats.captures >= 100 THEN ${maxSamplesPerSource}
-    WHEN stats.captures >= 25 THEN least(${maxSamplesPerSource}, 3)
-    WHEN stats.captures >= 10 THEN least(${maxSamplesPerSource}, 2)
-    ELSE 1
+    WHEN stats.captures >= 25 THEN least(${maxSamplesPerSource}, 4)
+    ELSE least(${maxSamplesPerSource}, 3)
   END`
 
   return `SET preserve_insertion_order = false;
@@ -464,7 +464,7 @@ async function main() {
     batches: batches.length,
     filesPerBatch: options.filesPerBatch,
     maxSamplesPerSource: options.maxSamplesPerSource,
-    samplingPolicy: '1 sample for <10 captures; 2 for 10-24; 3 for 25-99; maxSamples for >=100 or any solar URL hit',
+    samplingPolicy: 'all captures when source size <= maxSamples; otherwise 3 for <25, 4 for 25-99, maxSamples for >=100 or any solar URL hit',
     scope: 'open ATS tenant discovery plus strict solar-signaled first-party job-detail leads; no employer registry filter',
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
   }, null, 2)}\n`, 'utf8')
