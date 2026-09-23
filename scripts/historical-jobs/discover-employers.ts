@@ -472,7 +472,7 @@ async function main() {
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
   }, null, 2)}\n`, 'utf8')
 
-  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery v2 | ${options.threads} threads | ${options.memoryLimit}`)
+  console.log(`[employer-discovery] ${selectedCrawls.join(', ')} | ${parquetFiles.length} Parquet files | ${batches.length} batch(es) | OPEN employer discovery v3 | ${options.threads} threads | ${options.memoryLimit}`)
 
   const failures: Array<{ batch: number; parquetFiles: string[]; error: string }> = []
 
