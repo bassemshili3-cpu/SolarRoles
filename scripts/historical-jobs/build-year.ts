@@ -27,8 +27,14 @@ async function main() {
   const parquetDir = arg(args, '--parquet-dir', 'data/common-crawl-historical-jobs/parquet')
   const crawl = arg(args, '--crawl', '')
 
-  if (stage === 'discovery') {
-    const discoveryArgs = ['--year', year, '--parquet-dir', parquetDir, '--output', path.join(root, 'discovery')]
+  if (stage === 'discovery' || stage === 'employer-discovery') {
+    const discoveryArgs = ['--year', year, '--parquet-dir', parquetDir, '--output', path.join(root, 'employer-discovery')]
+    if (crawl) discoveryArgs.push('--crawl', crawl)
+    await run('scripts/historical-jobs/discover-employers.ts', discoveryArgs)
+    return
+  }
+  if (stage === 'source-discovery') {
+    const discoveryArgs = ['--year', year, '--parquet-dir', parquetDir, '--output', path.join(root, 'source-discovery')]
     if (crawl) discoveryArgs.push('--crawl', crawl)
     await run('scripts/historical-jobs/discover-sources.ts', discoveryArgs)
     return
@@ -61,7 +67,7 @@ async function main() {
     return
   }
 
-  throw new Error(`Unknown --stage ${stage}. Use discovery, index, fetch, parse, classify, features, or audit.`)
+  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, source-discovery, index, fetch, parse, classify, features, or audit.`)
 }
 
 main().catch((error) => {
