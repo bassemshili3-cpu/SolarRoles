@@ -252,7 +252,11 @@ async function main() {
 
     const allOrganizations = dedupeStrings(employerJobs.map((job) => job.hiringOrganizationName).filter(Boolean))
     const solarUsOrganizations = dedupeStrings(solarUsJobs.map(({ job }) => job.hiringOrganizationName).filter(Boolean))
-    const inferredEmployerName = solarUsOrganizations[0] ?? allOrganizations[0] ?? employer.employerName
+    const inferredEmployerName =
+      solarUsOrganizations[0]
+      ?? allOrganizations[0]
+      ?? knownCurrentEmployerMatches[0]
+      ?? employer.employerName
 
     for (const { job } of solarUsJobs) {
       if (!job.hiringOrganizationName) continue
