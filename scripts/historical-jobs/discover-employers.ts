@@ -5,7 +5,7 @@ import path from 'node:path'
 
 const DEFAULT_PARQUET_DIR = 'data/common-crawl-historical-jobs/parquet'
 const DEFAULT_DUCKDB = path.join('.tools', 'duckdb', 'duckdb.exe')
-const DISCOVERY_SCHEMA_VERSION = 'open-employer-discovery-v4'
+const DISCOVERY_SCHEMA_VERSION = 'open-employer-discovery-v5'
 
 interface CliOptions {
   year: number
