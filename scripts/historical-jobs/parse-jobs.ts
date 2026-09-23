@@ -1,4 +1,7 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { createReadStream, createWriteStream } from 'node:fs'
+import { mkdir, readFile } from 'node:fs/promises'
+import { once } from 'node:events'
+import readline from 'node:readline'
 import path from 'node:path'
 import {
   HISTORICAL_PARSER_VERSION,
@@ -6,7 +9,6 @@ import {
   sha256,
   type CommonCrawlRecord,
   type HistoricalEmployer,
-  type ParsedHistoricalJob,
 } from '../../lib/historical-jobs/commonCrawl'
 
 interface IndexedCapture extends CommonCrawlRecord {
@@ -20,9 +22,13 @@ function arg(args: string[], flag: string, fallback = '') {
   return index < 0 ? fallback : args[index + 1]
 }
 
-async function readJsonLines<T>(filename: string) {
-  const body = await readFile(filename, 'utf8')
-  return body.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line) as T)
+async function writeJsonLine(stream: ReturnType<typeof createWriteStream>, value: unknown) {
+  if (!stream.write(`${JSON.stringify(value)}\n`)) await once(stream, 'drain')
+}
+
+async function finishStream(stream: ReturnType<typeof createWriteStream>) {
+  stream.end()
+  await once(stream, 'finish')
 }
 
 async function main() {
@@ -35,24 +41,39 @@ async function main() {
 
   const registry = JSON.parse(await readFile(registryPath, 'utf8')) as HistoricalEmployer[]
   const employers = new Map(registry.map((employer) => [employer.employerId, employer]))
-  const indexed = await readJsonLines<IndexedCapture>(path.join(root, manifestName))
 
-  const observations: Array<Record<string, unknown>> = []
-  const parseResults: Array<Record<string, unknown>> = []
-  const jobs = new Map<string, ParsedHistoricalJob>()
+  const observationsStream = createWriteStream(path.join(output, 'parsed-job-observations.jsonl'), { encoding: 'utf8' })
+  const jobsStream = createWriteStream(path.join(output, 'parsed-jobs.jsonl'), { encoding: 'utf8' })
+  const resultsStream = createWriteStream(path.join(output, 'parse-results.jsonl'), { encoding: 'utf8' })
 
-  for (const capture of indexed) {
+  const seenJobs = new Set<string>()
+  let indexedCaptures = 0
+  let parsedJobObservations = 0
+  let distinctParsedJobs = 0
+  let parseFailuresOrMissingHtml = 0
+
+  const input = createReadStream(path.join(root, manifestName), { encoding: 'utf8' })
+  const lines = readline.createInterface({ input, crlfDelay: Infinity })
+
+  for await (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line) continue
+    indexedCaptures += 1
+    const capture = JSON.parse(line) as IndexedCapture
     const employer = employers.get(capture.employerId)
     if (!employer) continue
+
     const captureId = sha256(`${capture.crawlId}|${capture.timestamp}|${capture.url}|${capture.digest}`)
     const htmlPath = path.join(root, 'html', `${captureId}.html`)
+
     try {
       const html = await readFile(htmlPath, 'utf8')
       const parsed = parseHistoricalJobHtmlDetailed(html, capture.url, employer)
       const job = parsed.job
+
       if (job) {
-        jobs.set(job.historicalJobId, job)
-        observations.push({
+        parsedJobObservations += 1
+        await writeJsonLine(observationsStream, {
           captureId,
           crawlId: capture.crawlId,
           captureTimestamp: capture.timestamp,
@@ -62,8 +83,15 @@ async function main() {
           warcLength: Number(capture.length),
           ...job,
         })
+
+        if (!seenJobs.has(job.historicalJobId)) {
+          seenJobs.add(job.historicalJobId)
+          distinctParsedJobs += 1
+          await writeJsonLine(jobsStream, job)
+        }
       }
-      parseResults.push({
+
+      await writeJsonLine(resultsStream, {
         captureId,
         crawlId: capture.crawlId,
         employerId: capture.employerId,
@@ -74,7 +102,8 @@ async function main() {
         parseStatus: job ? 'parsed_job' : 'not_job_page',
       })
     } catch (error) {
-      parseResults.push({
+      parseFailuresOrMissingHtml += 1
+      await writeJsonLine(resultsStream, {
         captureId,
         crawlId: capture.crawlId,
         employerId: capture.employerId,
@@ -86,21 +115,30 @@ async function main() {
         error: String(error),
       })
     }
+
+    if (indexedCaptures % 1000 === 0) {
+      console.log(`[parse] ${indexedCaptures} captures | ${parsedJobObservations} parsed observations | ${distinctParsedJobs} distinct jobs`)
+    }
   }
 
-  const distinctJobs = [...jobs.values()]
-  await writeFile(path.join(output, 'parsed-job-observations.jsonl'), observations.map((row) => `${JSON.stringify(row)}\n`).join(''))
-  await writeFile(path.join(output, 'parsed-jobs.jsonl'), distinctJobs.map((row) => `${JSON.stringify(row)}\n`).join(''))
-  await writeFile(path.join(output, 'parse-results.jsonl'), parseResults.map((row) => `${JSON.stringify(row)}\n`).join(''))
-  await writeFile(path.join(output, 'parse-report.json'), `${JSON.stringify({
+  await Promise.all([
+    finishStream(observationsStream),
+    finishStream(jobsStream),
+    finishStream(resultsStream),
+  ])
+
+  const report = {
     parserVersion: HISTORICAL_PARSER_VERSION,
     manifest: manifestName,
-    indexedCaptures: indexed.length,
-    parsedJobObservations: observations.length,
-    distinctParsedJobs: distinctJobs.length,
-    parseFailuresOrMissingHtml: parseResults.filter((row) => row.parseStatus === 'html_missing_or_parse_failed').length,
-  }, null, 2)}\n`)
-  console.log(JSON.stringify({ parsedJobObservations: observations.length, distinctParsedJobs: distinctJobs.length }, null, 2))
+    indexedCaptures,
+    parsedJobObservations,
+    distinctParsedJobs,
+    parseFailuresOrMissingHtml,
+  }
+  await import('node:fs/promises').then(({ writeFile }) =>
+    writeFile(path.join(output, 'parse-report.json'), `${JSON.stringify(report, null, 2)}\n`),
+  )
+  console.log(JSON.stringify(report, null, 2))
 }
 
 main().catch((error) => {
