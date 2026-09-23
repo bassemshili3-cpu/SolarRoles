@@ -192,17 +192,22 @@ async function main() {
     parseStats.set(employerId, stat)
   }
 
-  const classificationByJob = new Map<string, Pick<HistoricalJobClassification, 'isSolarRelated' | 'isUsJob'>>()
+  const classificationByJob = new Map<string, Pick<HistoricalJobClassification, 'isSolarRelated' | 'isUsJob' | 'solarCandidate' | 'usStatus'>>()
   for await (const row of streamJsonLines<HistoricalJobClassification>(path.join(root, 'job-classifications.jsonl'))) {
     classificationByJob.set(row.historicalJobId, {
       isSolarRelated: row.isSolarRelated,
       isUsJob: row.isUsJob,
+      solarCandidate: row.solarCandidate,
+      usStatus: row.usStatus,
     })
   }
 
   const jobStats = new Map<string, {
     parsedJobs: number
     solarJobs: number
+    solarCandidates: number
+    solarUsOrUnknownCandidates: number
+    solarUnknownLocationCandidates: number
     usJobs: number
     solarUsJobs: number
     solarUsTitles: string[]
@@ -211,6 +216,9 @@ async function main() {
     const stat = jobStats.get(job.employerId) ?? {
       parsedJobs: 0,
       solarJobs: 0,
+      solarCandidates: 0,
+      solarUsOrUnknownCandidates: 0,
+      solarUnknownLocationCandidates: 0,
       usJobs: 0,
       solarUsJobs: 0,
       solarUsTitles: [],
@@ -218,6 +226,9 @@ async function main() {
     stat.parsedJobs += 1
     const classification = classificationByJob.get(job.historicalJobId)
     if (classification?.isSolarRelated) stat.solarJobs += 1
+    if (classification?.solarCandidate) stat.solarCandidates += 1
+    if (classification?.solarCandidate && classification.usStatus !== 'foreign') stat.solarUsOrUnknownCandidates += 1
+    if (classification?.solarCandidate && classification.usStatus === 'unknown') stat.solarUnknownLocationCandidates += 1
     if (classification?.isUsJob) stat.usJobs += 1
     if (classification?.isSolarRelated && classification?.isUsJob) {
       stat.solarUsJobs += 1
@@ -244,6 +255,9 @@ async function main() {
     const parsedCaptures = employerIds.reduce((sum, employerId) => sum + (parseStats.get(employerId)?.parsedCaptures ?? 0), 0)
     const parsedJobs = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.parsedJobs ?? 0), 0)
     const solarJobs = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.solarJobs ?? 0), 0)
+    const solarCandidates = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.solarCandidates ?? 0), 0)
+    const solarUsOrUnknownCandidates = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.solarUsOrUnknownCandidates ?? 0), 0)
+    const solarUnknownLocationCandidates = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.solarUnknownLocationCandidates ?? 0), 0)
     const usJobs = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.usJobs ?? 0), 0)
     const solarUsJobs = employerIds.reduce((sum, employerId) => sum + (jobStats.get(employerId)?.solarUsJobs ?? 0), 0)
     const solarUsTitles = dedupe(employerIds.flatMap((employerId) => jobStats.get(employerId)?.solarUsTitles ?? [])).slice(0, 12)
@@ -253,8 +267,10 @@ async function main() {
     else if (matchType === 'loose_only') failureStage = 'source_match_loose_only'
     else if (!sampledCaptures) failureStage = 'source_found_not_sampled'
     else if (!parsedJobs) failureStage = 'sampled_no_parsed_job'
-    else if (!solarJobs) failureStage = 'parsed_no_solar_hit'
-    else if (!solarUsJobs) failureStage = 'solar_non_us_or_unknown'
+    else if (!solarCandidates) failureStage = 'parsed_no_solar_candidate'
+    else if (!solarUsOrUnknownCandidates) failureStage = 'solar_candidate_explicitly_foreign'
+    else if (!solarUsJobs && solarUnknownLocationCandidates > 0) failureStage = 'solar_candidate_us_unknown'
+    else if (!solarUsJobs) failureStage = 'solar_candidate_needs_review'
 
     return {
       employerName: hint.name,
@@ -268,6 +284,9 @@ async function main() {
       parsedJobs,
       usJobs,
       solarJobs,
+      solarCandidates,
+      solarUsOrUnknownCandidates,
+      solarUnknownLocationCandidates,
       solarUsJobs,
       failureStage,
       sourceKeys,
@@ -289,6 +308,8 @@ async function main() {
     unmatchedEmployers: rows.filter((row) => row.matchType === 'none').length,
     employersWithParsedJobs: rows.filter((row) => row.parsedJobs > 0).length,
     employersWithSolarJobs: rows.filter((row) => row.solarJobs > 0).length,
+    employersWithSolarCandidates: rows.filter((row) => row.solarCandidates > 0).length,
+    employersWithSolarUsOrUnknownCandidates: rows.filter((row) => row.solarUsOrUnknownCandidates > 0).length,
     employersWithSolarUsJobs: rows.filter((row) => row.solarUsJobs > 0).length,
     matchedSourceRows: new Set(rows.flatMap((row) => row.sourceKeys)).size,
     failureStageCounts,
@@ -297,7 +318,8 @@ async function main() {
   const header = [
     'employer_name', 'provider', 'match_type', 'matched_source_count', 'indexed_captures',
     'solar_url_hits', 'sampled_captures', 'parsed_captures', 'parsed_jobs', 'us_jobs',
-    'solar_jobs', 'solar_us_jobs', 'failure_stage', 'source_keys', 'solar_us_titles',
+    'solar_jobs', 'solar_candidates', 'solar_us_or_unknown_candidates', 'solar_unknown_location_candidates',
+    'solar_us_jobs', 'failure_stage', 'source_keys', 'solar_us_titles',
   ]
   const csvRows = rows.map((row) => [
     row.employerName,
@@ -311,6 +333,9 @@ async function main() {
     row.parsedJobs,
     row.usJobs,
     row.solarJobs,
+    row.solarCandidates,
+    row.solarUsOrUnknownCandidates,
+    row.solarUnknownLocationCandidates,
     row.solarUsJobs,
     row.failureStage,
     row.sourceKeys.join(' | '),
