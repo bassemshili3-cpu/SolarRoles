@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-09-22T23:18:56.262Z",
+  "year": 2020,
+  "crawlIds": [
+    "CC-MAIN-2020-29"
+  ],
+  "parquetFiles": 300,
+  "employers": 37,
+  "rawCandidateUrls": 18840,
+  "rawCandidateCaptures": 23131,
+  "attributedCandidateCaptures": 18840,
+  "sourceCandidates": 21040,
+  "newSourceCandidates": 21025,
+  "recommendedForReview": 39,
+  "ambiguousAttributedCaptures": 16450,
+  "employersWithRecommendedCandidates": 12,
+  "failedBatches": 0,
+  "failedParquetFiles": 0
+}
