@@ -61,6 +61,10 @@ async function main() {
     await run('scripts/historical-jobs/summarize-employer-discovery.ts', ['--input', path.join(root, 'employer-discovery')])
     return
   }
+  if (stage === 'discovery-deep-sample') {
+    await run('scripts/historical-jobs/prepare-deep-sample.ts', ['--input', path.join(root, 'employer-discovery')])
+    return
+  }
   if (stage === 'index') {
     const registry = arg(args, '--registry', 'data/common-crawl-historical-jobs/employers.json')
     const indexArgs = ['--years', year, '--parquet-dir', parquetDir, '--output', root, '--registry', registry]
@@ -89,7 +93,7 @@ async function main() {
     return
   }
 
-  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-summarize, source-discovery, index, fetch, parse, classify, features, or audit.`)
+  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-summarize, discovery-deep-sample, source-discovery, index, fetch, parse, classify, features, or audit.`)
 }
 
 main().catch((error) => {
