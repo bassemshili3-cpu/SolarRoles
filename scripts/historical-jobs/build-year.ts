@@ -66,6 +66,18 @@ async function main() {
     await run('scripts/historical-jobs/classify-jobs.ts', ['--input', discoveryRoot, '--output', discoveryRoot])
     return
   }
+  if (stage === 'discovery-process-batched') {
+    const discoveryRoot = path.join(root, 'employer-discovery')
+    const manifest = arg(args, '--manifest', 'index-records-expanded.jsonl')
+    const batchSize = arg(args, '--batch-size', '2500')
+    await run('scripts/historical-jobs/process-sample-batched.ts', [
+      '--input', discoveryRoot,
+      '--manifest', manifest,
+      '--registry', path.join(discoveryRoot, 'provisional-employers.json'),
+      '--batch-size', batchSize,
+    ])
+    return
+  }
   if (stage === 'discovery-summarize') {
     await run('scripts/historical-jobs/summarize-employer-discovery.ts', ['--input', path.join(root, 'employer-discovery')])
     return
@@ -102,7 +114,7 @@ async function main() {
     return
   }
 
-  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-summarize, discovery-deep-sample, current-registry, universe, source-discovery, index, fetch, parse, classify, features, or audit.`)
+  throw new Error(`Unknown --stage ${stage}. Use discovery, employer-discovery, discovery-fetch, discovery-parse, discovery-classify, discovery-process-batched, discovery-summarize, discovery-deep-sample, current-registry, universe, source-discovery, index, fetch, parse, classify, features, or audit.`)
 }
 
 main().catch((error) => {
