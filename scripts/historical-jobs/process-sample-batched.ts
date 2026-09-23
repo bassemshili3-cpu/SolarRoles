@@ -217,6 +217,7 @@ async function main() {
   const manifestName = arg(args, '--manifest', 'index-records-expanded.jsonl')
   const registry = path.resolve(arg(args, '--registry', path.join(root, 'provisional-employers.json')))
   const batchSize = intArg(args, '--batch-size', 2500)
+  const parserWorkerSize = intArg(args, '--parser-worker-size', 100)
   const reset = args.includes('--reset')
   const batchRoot = path.join(root, '.batched-processing', path.basename(manifestName, path.extname(manifestName)))
 
@@ -224,7 +225,7 @@ async function main() {
   await mkdir(batchRoot, { recursive: true })
 
   const plans = await buildBatchManifests(root, manifestName, batchRoot, batchSize)
-  console.log(`[batched] ${plans.reduce((sum, plan) => sum + plan.captures, 0)} captures | ${plans.length} batches | batchSize=${batchSize}`)
+  console.log(`[batched] ${plans.reduce((sum, plan) => sum + plan.captures, 0)} captures | ${plans.length} batches | batchSize=${batchSize} | parserWorkerSize=${parserWorkerSize}`)
 
   for (const plan of plans) {
     if (await batchIsComplete(plan)) {
@@ -241,6 +242,7 @@ async function main() {
       '--output', plan.outputDir,
       '--registry', registry,
       '--manifest', plan.relativeManifest,
+      '--batch-size', String(parserWorkerSize),
     ])
 
     console.log(`[batched] batch ${plan.index}/${plans.length}: classifying`)
@@ -285,6 +287,7 @@ async function main() {
     pipelineVersion: PIPELINE_VERSION,
     manifest: manifestName,
     batchSize,
+    parserWorkerSize,
     batches: plans.length,
     indexedCaptures: parseResults,
     parsedJobObservations,
