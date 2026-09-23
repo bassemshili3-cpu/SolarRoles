@@ -113,7 +113,7 @@ function hintValues(seed: Record<string, unknown>) {
 
 function buildCurrentEmployerHints(): CurrentEmployerHint[] {
   return CURRENT_SEED_GROUPS.flatMap(([provider, companies]) =>
-    (companies as readonly Record<string, unknown>[])
+    (companies as unknown as readonly Record<string, unknown>[])
       .filter((seed) => seed.verified !== false)
       .map((seed) => {
         const name = typeof seed.name === 'string' ? seed.name : ''
