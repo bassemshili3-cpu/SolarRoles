@@ -18,19 +18,35 @@ Le POC doit déterminer si Common Crawl permet de reconstruire un historique dé
 | Coût cible | Outils et données gratuits |
 | Extension 2015–2026 | Uniquement après validation de la qualité du POC |
 
-## 1. Partir d’employeurs identifiés
+## 1. Découvrir d’abord l’univers d’employeurs
 
-Une recherche globale du mot `solar` dans Common Crawl produirait trop de bruit. La collecte doit partir d’une liste contrôlée d’employeurs et de leurs domaines de recrutement connus.
+Le premier POC utilisait un registre fermé de 37 employeurs. Il a validé la mécanique Common Crawl, mais il ne constitue pas un vrai univers historique : le script `discover-sources.ts` ne pouvait retrouver que des domaines, ATS et routes liés à ces employeurs déjà connus.
 
-La liste de départ doit inclure :
+La pipeline corrigée sépare désormais deux problèmes différents :
 
-- les domaines carrière propriétaires ;
-- les sous-domaines et chemins Workday ;
-- les boards Greenhouse, Lever et Ashby ;
-- les autres ATS déjà identifiés par Solar Roles ;
-- les anciennes variantes de domaine ou de nom d’entreprise lorsqu’elles sont connues.
+1. **Employer discovery** — découverte ouverte des tenants ATS et sources emploi visibles dans le crawl, sans filtre sur `employers.json`.
+2. **Source discovery** — une fois un employeur identifié, reconstruction de ses anciens domaines, ATS et routes historiques.
 
-Chaque entrée du registre doit conserver au minimum :
+Le premier passage de l'employer discovery balaie les écosystèmes ATS dont le tenant peut être déduit de l'URL ou du host : Workday, Greenhouse, Lever, Jobvite, SmartRecruiters, Ashby, iCIMS, Taleo, SuccessFactors générique, BambooHR, Dayforce, Oracle Cloud, UKG/UltiPro, Paylocity, ADP, Paycom et Jobs2Web. Il extrait des **sources candidates**, pas des employeurs solaires déjà validés.
+
+Aucun nom d'entreprise Solar Roles n'est nécessaire pour qu'une source ATS soit découverte. Le registre actuel sert ensuite de **booster de rappel et de mapping**, jamais de plafond.
+
+Le URL Index ne contient toutefois pas le texte des annonces. Une source candidate ne devient donc un employeur solaire qu'après échantillonnage de records WARC et validation du contenu :
+
+```text
+Common Crawl URL Index
+  -> inventaire ouvert des tenants ATS
+  -> quelques captures WARC par source
+  -> parsing JobPosting / HTML
+  -> filtre US + solaire
+  -> employeurs candidats validés
+  -> source discovery historique pour ces employeurs
+  -> index/fetch complet des sources validées
+```
+
+Les sources first-party ou les ATS derrière des hosts entièrement personnalisés ne sont pas toutes détectables à partir du seul suffixe ATS. Elles sont récupérées dans une seconde passe à partir de trois apports : employeurs Solar Roles actuels, employeurs historiques déjà identifiés, et nouveaux employeurs trouvés par l'employer discovery. Le résultat final est donc l'union de la découverte ouverte et de l'expansion ciblée, pas un panel fermé au départ.
+
+Chaque employeur validé doit conserver au minimum :
 
 ```text
 employer_id
@@ -40,10 +56,25 @@ ats_provider
 known_url_patterns
 active_from
 active_to
+discovery_evidence
 notes
 ```
 
-Les dates `active_from` et `active_to` peuvent rester nulles tant qu’elles ne sont pas vérifiées. Elles serviront à éviter de chercher une URL Workday récente dans des crawls antérieurs à son adoption.
+Les dates `active_from` et `active_to` peuvent rester nulles tant qu’elles ne sont pas vérifiées.
+
+## Pipeline révisée du POC 2020
+
+Le crawl `CC-MAIN-2020-29` déjà téléchargé localement sert maintenant de laboratoire pour la discovery ouverte. L'ordre retenu est :
+
+1. `discover-employers.ts` scanne les 300 Parquet et construit l'inventaire des tenants ATS sans consulter `employers.json`.
+2. Il produit un manifeste de captures échantillons et un registre provisoire par source.
+3. `fetch-captures.ts`, `parse-jobs.ts` et `classify-jobs.ts` valident quelles sources contiennent effectivement des offres US solaires.
+4. Les sources positives sont consolidées en employeurs historiques candidats ; les sources négatives à forte activité sont ré-échantillonnées afin de réduire les faux négatifs chez les employeurs diversifiés.
+5. `discover-sources.ts` est ensuite exécuté sur l'univers élargi afin de retrouver anciens ATS, anciens domaines et routes supplémentaires.
+6. Seulement après cette boucle de discovery, `query-common-crawl-url-index.ts` lance la collecte complète des offres des sources validées.
+7. Le Historical Employer Panel est construit **après collecte**, en fonction de la continuité réellement observée, jamais imposé avant la discovery.
+
+Le POC 2020 à 37 employeurs reste un benchmark technique. Ses 30 offres ou ses taux de couverture ne doivent pas être interprétés comme la taille ou la représentativité du corpus 2020 final.
 
 ## 2. Une requête Parquet remplace des centaines d’appels CDX
 
@@ -248,11 +279,27 @@ Le runner principal se trouve dans `scripts/query-common-crawl-url-index.ts`. Il
 
 DuckDB est volontairement installé hors des dépendances de l’application, à l’emplacement local `.tools/duckdb/duckdb.exe`. Un autre exécutable peut être fourni avec `--duckdb`. Les fichiers Parquet Common Crawl restent distants ; seuls les blocs nécessaires à la requête sont transférés.
 
-Pour des scans répétés, le mode réellement local reste préférable : `cc-downloader` peut récupérer l’index complet, puis `--parquet-dir` fait lire cette copie à DuckDB. Un seul crawl représente toutefois environ 300 Go. Le 22 septembre 2026, le disque de travail ne disposait que de 9,6 Go libres ; aucun téléchargement complet n’a donc été lancé sur cette machine. Le mode HTTPS Range est adapté au POC sans espace disque, mais il reste nettement plus lent car les fichiers Parquet ne sont pas globalement ordonnés entre eux.
+Pour des scans répétés, le mode local est retenu. Le crawl `CC-MAIN-2020-29` a été téléchargé avec `cc-downloader` : 300 fichiers Parquet `subset=warc`, environ 227,1 Go au total. Les scans de discovery réutilisent cette copie locale et ne doivent pas la retélécharger.
 
 Commandes principales :
 
 ```bash
+# VRAIE discovery ouverte : aucun filtre employers.json
+npm run historical:discover -- --year 2020 --crawl CC-MAIN-2020-29 --threads 2 --memory-limit 3GB --files-per-batch 1
+
+# Ancienne discovery : enrichir les sources d'employeurs déjà connus
+npm run historical:discover-sources -- --year 2020 --crawl CC-MAIN-2020-29 --threads 2 --memory-limit 3GB --files-per-batch 1
+
+# Après la discovery ouverte : télécharger les captures échantillons
+npm run historical:fetch -- --input data/common-crawl-historical-jobs/employer-discovery-2020
+
+# Parser avec le registre provisoire produit par la discovery
+npm run historical:parse -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020 --registry data/common-crawl-historical-jobs/employer-discovery-2020/provisional-employers.json
+
+# Classifier les échantillons US + solaire
+npm run historical:classify -- --input data/common-crawl-historical-jobs/employer-discovery-2020 --output data/common-crawl-historical-jobs/employer-discovery-2020
+
+
 # Requête bulk sur un crawl explicite
 npm run historical:common-crawl
 
