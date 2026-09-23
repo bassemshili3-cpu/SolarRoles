@@ -34,6 +34,7 @@
     "historical:classify": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/classify-jobs.ts",
     "historical:process-batched": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/process-sample-batched.ts",
     "historical:recall-audit": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-employer-recall.ts",
+    "historical:solar-audit": "cross-env NODE_OPTIONS=--max-old-space-size=1024 node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-solar-detection.ts",
     "historical:features": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/extract-features.ts",
     "historical:audit": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-dataset.ts",
     "historical:year": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/build-year.ts",
