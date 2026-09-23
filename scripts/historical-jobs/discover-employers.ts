@@ -5,7 +5,7 @@ import path from 'node:path'
 
 const DEFAULT_PARQUET_DIR = 'data/common-crawl-historical-jobs/parquet'
 const DEFAULT_DUCKDB = path.join('.tools', 'duckdb', 'duckdb.exe')
-const DISCOVERY_SCHEMA_VERSION = 'open-employer-discovery-v2'
+const DISCOVERY_SCHEMA_VERSION = 'open-employer-discovery-v3'
 
 interface CliOptions {
   year: number
@@ -17,6 +17,7 @@ interface CliOptions {
   memoryLimit: string
   filesPerBatch: number
   maxSamplesPerSource: number
+  reservoirSamplesPerSource: number
   sqlOnly: boolean
 }
 
@@ -87,6 +88,7 @@ function parseOptions(args: string[]): CliOptions {
     memoryLimit: arg(args, '--memory-limit', '3GB'),
     filesPerBatch: intArg(args, '--files-per-batch', 1),
     maxSamplesPerSource: intArg(args, '--max-samples-per-source', 5),
+    reservoirSamplesPerSource: intArg(args, '--reservoir-samples-per-source', 20),
     sqlOnly: args.includes('--sql-only'),
   }
 }
@@ -142,7 +144,7 @@ function buildBatchSql(
   tempDir: string,
   threads: number,
   memoryLimit: string,
-  maxSamplesPerSource: number,
+  reservoirSamplesPerSource: number,
 ) {
   const atsPredicate = [
     "ends_with(host, '.myworkdayjobs.com')",
@@ -265,13 +267,6 @@ function buildBatchSql(
     OR ${firstPartyDetailPredicate}
   )`
 
-  const desiredSamples = `CASE
-    WHEN stats.captures <= ${maxSamplesPerSource} THEN stats.captures
-    WHEN stats.solar_url_hits > 0 OR stats.captures >= 100 THEN ${maxSamplesPerSource}
-    WHEN stats.captures >= 25 THEN least(${maxSamplesPerSource}, 4)
-    ELSE least(${maxSamplesPerSource}, 3)
-  END`
-
   return `SET preserve_insertion_order = false;
 SET enable_progress_bar = false;
 SET threads = ${threads};
@@ -382,7 +377,7 @@ COPY (
   FROM stats
   JOIN ranked
     USING (provider, source_key, source_pattern, source_scope, host)
-  WHERE ranked.sample_rank <= ${desiredSamples}
+  WHERE ranked.sample_rank <= least(stats.captures, ${reservoirSamplesPerSource})
 ) TO ${sqlPath(batchOutput)} (FORMAT JSON, ARRAY false);
 `
 }
@@ -412,6 +407,13 @@ function addSample(aggregate: SourceAggregate, row: BatchSourceRow, limit: numbe
     || a.sample_timestamp.localeCompare(b.sample_timestamp),
   )
   if (aggregate.samples.length > limit) aggregate.samples.length = limit
+}
+
+function initialSampleLimit(source: Pick<SourceAggregate, 'captures' | 'solarUrlHits'>, maxSamplesPerSource: number) {
+  if (source.captures <= maxSamplesPerSource) return source.captures
+  if (source.solarUrlHits > 0 || source.captures >= 100) return maxSamplesPerSource
+  if (source.captures >= 25) return Math.min(maxSamplesPerSource, 4)
+  return Math.min(maxSamplesPerSource, 3)
 }
 
 async function ensureCacheVersion(outputDir: string, batchDir: string) {
@@ -464,7 +466,8 @@ async function main() {
     batches: batches.length,
     filesPerBatch: options.filesPerBatch,
     maxSamplesPerSource: options.maxSamplesPerSource,
-    samplingPolicy: 'all captures when source size <= maxSamples; otherwise 3 for <25, 4 for 25-99, maxSamples for >=100 or any solar URL hit',
+    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
+    samplingPolicy: 'initial fetch: all when source size <= maxSamples; otherwise 3 for <25, 4 for 25-99, maxSamples for >=100 or any solar URL hit; retain a larger local reservoir for deep sampling',
     scope: 'open ATS tenant discovery plus strict solar-signaled first-party job-detail leads; no employer registry filter',
     duckdb: { threads: options.threads, memoryLimit: options.memoryLimit },
   }, null, 2)}\n`, 'utf8')
@@ -496,7 +499,7 @@ async function main() {
         tempDir,
         options.threads,
         options.memoryLimit,
-        options.maxSamplesPerSource,
+        options.reservoirSamplesPerSource,
       ),
       'utf8',
     )
@@ -554,7 +557,7 @@ async function main() {
       }
       if (row.first_seen < current.firstSeen) current.firstSeen = row.first_seen
       if (row.last_seen > current.lastSeen) current.lastSeen = row.last_seen
-      addSample(current, row, options.maxSamplesPerSource)
+      addSample(current, row, options.reservoirSamplesPerSource)
       sources.set(key, current)
     }
   }
@@ -589,37 +592,63 @@ async function main() {
   }))
 
   const employerIdBySource = new Map(sourceRows.map((source) => [source.sourceKey, stableId(source.sourceKey)]))
+  const sampleToManifest = (source: typeof sourceRows[number], sample: BatchSourceRow) => ({
+    urlkey: sample.sample_urlkey,
+    timestamp: sample.sample_timestamp,
+    url: sample.sample_url,
+    mime: sample.sample_mime,
+    'mime-detected': sample.sample_mime_detected,
+    status: sample.sample_status,
+    digest: sample.sample_digest,
+    length: sample.sample_length,
+    offset: sample.sample_offset,
+    filename: sample.sample_filename,
+    languages: sample.sample_languages,
+    encoding: sample.sample_encoding,
+    crawlId: sample.crawl,
+    year: options.year,
+    employerId: employerIdBySource.get(source.sourceKey),
+    employerName: displayName(source.sourceKey),
+    atsProvider: source.provider,
+    pattern: source.sourcePattern,
+    discoverySourceKey: source.sourceKey,
+    discoverySourceScope: source.sourceScope,
+    discoverySolarUrlHits: source.solarUrlHits,
+    discoverySampleRank: sample.sample_rank,
+    discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
+  })
+
   const manifest = sourceRows.flatMap((source) =>
+    source.samples
+      .slice(0, initialSampleLimit(source, options.maxSamplesPerSource))
+      .map((sample) => sampleToManifest(source, sample)),
+  )
+
+  const sampleReservoir = sourceRows.flatMap((source) =>
     source.samples.map((sample) => ({
-      urlkey: sample.sample_urlkey,
-      timestamp: sample.sample_timestamp,
-      url: sample.sample_url,
-      mime: sample.sample_mime,
-      'mime-detected': sample.sample_mime_detected,
-      status: sample.sample_status,
-      digest: sample.sample_digest,
-      length: sample.sample_length,
-      offset: sample.sample_offset,
-      filename: sample.sample_filename,
-      languages: sample.sample_languages,
-      encoding: sample.sample_encoding,
-      crawlId: sample.crawl,
-      year: options.year,
-      employerId: employerIdBySource.get(source.sourceKey),
-      employerName: displayName(source.sourceKey),
-      atsProvider: source.provider,
-      pattern: source.sourcePattern,
-      discoverySourceKey: source.sourceKey,
-      discoverySourceScope: source.sourceScope,
-      discoverySolarUrlHits: source.solarUrlHits,
-      discoverySampleRank: sample.sample_rank,
-      discoverySampleSolarUrlSignal: sample.sample_solar_url_signal,
+      ...sampleToManifest(source, sample),
+      discoverySourceCaptures: source.captures,
     })),
   )
 
+  const compactSourceRows = sourceRows.map((source) => ({
+    provider: source.provider,
+    sourceKey: source.sourceKey,
+    sourceScope: source.sourceScope,
+    sourcePattern: source.sourcePattern,
+    sourcePatterns: source.sourcePatterns,
+    hosts: source.hosts,
+    captures: source.captures,
+    solarUrlHits: source.solarUrlHits,
+    firstSeen: source.firstSeen,
+    lastSeen: source.lastSeen,
+    initialSampleCount: initialSampleLimit(source, options.maxSamplesPerSource),
+    reservoirSampleCount: source.samples.length,
+  }))
+
   const reviewHeader = [
     'source_key', 'provider', 'scope', 'patterns', 'hosts', 'captures', 'solar_url_hits',
-    'first_seen', 'last_seen', 'sample_count', 'priority', 'validation_status', 'notes',
+    'first_seen', 'last_seen', 'initial_sample_count', 'reservoir_sample_count', 'priority', 'validation_status', 'notes',
   ]
   const csv = (value: unknown) => `"${String(value ?? '').replaceAll('"', '""')}"`
   const reviewRows = sourceRows.map((source) => [
@@ -632,13 +661,15 @@ async function main() {
     source.solarUrlHits,
     source.firstSeen,
     source.lastSeen,
+    initialSampleLimit(source, options.maxSamplesPerSource),
     source.samples.length,
     source.solarUrlHits > 0 ? 'solar_url_signal' : source.captures >= 25 ? 'high_volume_sample' : 'content_sample',
     '',
     '',
   ])
 
-  await writeFile(path.join(outputDir, 'source-candidates.jsonl'), sourceRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
+  await writeFile(path.join(outputDir, 'source-candidates.jsonl'), compactSourceRows.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
+  await writeFile(path.join(outputDir, 'sample-reservoir.jsonl'), sampleReservoir.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
   await writeFile(path.join(outputDir, 'provisional-employers.json'), `${JSON.stringify(provisionalEmployers, null, 2)}\n`, 'utf8')
   await writeFile(path.join(outputDir, 'index-records.jsonl'), manifest.map((row) => `${JSON.stringify(row)}\n`).join(''), 'utf8')
   await writeFile(path.join(outputDir, 'employer-discovery-review.csv'), [
@@ -648,6 +679,11 @@ async function main() {
   await writeFile(path.join(outputDir, 'employer-discovery-failures.json'), `${JSON.stringify(failures, null, 2)}\n`, 'utf8')
 
   const sampleCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
+    const key = String(initialSampleLimit(source, options.maxSamplesPerSource))
+    acc[key] = (acc[key] ?? 0) + 1
+    return acc
+  }, {})
+  const reservoirCountDistribution = sourceRows.reduce<Record<string, number>>((acc, source) => {
     const key = String(source.samples.length)
     acc[key] = (acc[key] ?? 0) + 1
     return acc
@@ -671,8 +707,11 @@ async function main() {
     ])),
     sourcesWithSolarUrlSignals: sourceRows.filter((source) => source.solarUrlHits > 0).length,
     sampleCapturesPrepared: manifest.length,
+    reservoirCapturesPrepared: sampleReservoir.length,
     sampleCountDistribution,
+    reservoirCountDistribution,
     maxSamplesPerSource: options.maxSamplesPerSource,
+    reservoirSamplesPerSource: options.reservoirSamplesPerSource,
     registryFilterApplied: false,
   }
   await writeFile(path.join(outputDir, 'employer-discovery-report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8')
