@@ -360,6 +360,52 @@ async function main() {
   const leadOnly = rows.filter((row) => row.status === 'solar_employer_lead_only')
   const deepSample = rows.filter((row) => row.needsDeepSample)
 
+  type DiscoveryManifestRow = Record<string, unknown> & {
+    crawlId?: string
+    timestamp?: string
+    url?: string
+    digest?: string
+    discoverySourceKey?: string
+    discoverySampleRank?: number
+  }
+
+  const initialManifest = await readJsonLines<DiscoveryManifestRow>(path.join(root, 'index-records.jsonl'))
+  const reservoirManifest = await readJsonLines<DiscoveryManifestRow>(path.join(root, 'sample-reservoir.jsonl'))
+  const deepSampleTargetBySource = new Map(
+    deepSample.map((row) => [row.sourceKey, row.recommendedDeepSampleCount]),
+  )
+  const reservoirBySource = new Map<string, DiscoveryManifestRow[]>()
+  for (const capture of reservoirManifest) {
+    const sourceKey = String(capture.discoverySourceKey ?? '')
+    if (!sourceKey || !deepSampleTargetBySource.has(sourceKey)) continue
+    const list = reservoirBySource.get(sourceKey) ?? []
+    list.push(capture)
+    reservoirBySource.set(sourceKey, list)
+  }
+
+  const captureKey = (capture: DiscoveryManifestRow) =>
+    [capture.crawlId, capture.timestamp, capture.url, capture.digest].map((value) => String(value ?? '')).join('|')
+
+  const expandedManifestMap = new Map(initialManifest.map((capture) => [captureKey(capture), capture]))
+  const deepSampleAddedBySource: Record<string, number> = {}
+
+  for (const [sourceKey, targetCount] of deepSampleTargetBySource) {
+    const candidates = (reservoirBySource.get(sourceKey) ?? [])
+      .sort((a, b) => Number(a.discoverySampleRank ?? 9999) - Number(b.discoverySampleRank ?? 9999))
+      .slice(0, targetCount)
+    let added = 0
+    for (const capture of candidates) {
+      const key = captureKey(capture)
+      if (expandedManifestMap.has(key)) continue
+      expandedManifestMap.set(key, capture)
+      added += 1
+    }
+    deepSampleAddedBySource[sourceKey] = added
+  }
+
+  const expandedManifest = [...expandedManifestMap.values()]
+  const additionalDeepSampleCaptures = expandedManifest.length - initialManifest.length
+
   const discoveredEmployers = validatedDirect.map((row) => ({
     employerId: row.employerId,
     employerName: row.inferredEmployerName,
@@ -437,6 +483,20 @@ async function main() {
     ...csvRows.map((row) => row.map(csvCell).join(',')),
   ].join('\n') + '\n', 'utf8')
   await writeFile(path.join(root, 'deep-sample-candidates.json'), `${JSON.stringify(deepSample, null, 2)}\n`, 'utf8')
+  await writeFile(
+    path.join(root, 'index-records-expanded.jsonl'),
+    expandedManifest.map((row) => `${JSON.stringify(row)}\n`).join(''),
+    'utf8',
+  )
+  await writeFile(path.join(root, 'deep-sample-plan.json'), `${JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    initialCaptures: initialManifest.length,
+    expandedCaptures: expandedManifest.length,
+    additionalDeepSampleCaptures,
+    deepSampleSources: deepSample.length,
+    addedBySource: deepSampleAddedBySource,
+    note: 'Fetch and parse index-records-expanded.jsonl to run the second-pass sample. Existing HTML is reused, so only additional captures are downloaded.',
+  }, null, 2)}\n`, 'utf8')
 
   const statusCounts = rows.reduce<Record<string, number>>((acc, row) => {
     acc[row.status] = (acc[row.status] ?? 0) + 1
@@ -452,6 +512,8 @@ async function main() {
     solarEmployerLeadOnlySources: leadOnly.length,
     distinctEmployerLeadsFromHiringOrganization: employerLeads.length,
     deepSampleCandidates: deepSample.length,
+    additionalDeepSampleCaptures,
+    expandedSampleCaptures: expandedManifest.length,
     currentSolarRolesSeedHints: currentEmployerHints.length,
     sourcesMatchedToCurrentSolarRolesEmployers: rows.filter((row) => row.knownCurrentEmployerMatches.length > 0).length,
     deepSampleThresholdCaptures: minDeepSampleCaptures,
