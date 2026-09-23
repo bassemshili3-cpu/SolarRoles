@@ -1,4 +1,6 @@
+import { createReadStream } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
+import readline from 'node:readline'
 import path from 'node:path'
 import type {
   HistoricalEmployer,
@@ -154,6 +156,20 @@ async function readJsonLines<T>(filename: string) {
   return body.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line) as T)
 }
 
+async function* streamJsonLines<T>(filename: string): AsyncGenerator<T> {
+  const input = createReadStream(filename, { encoding: 'utf8' })
+  const lines = readline.createInterface({ input, crlfDelay: Infinity })
+  for await (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (line) yield JSON.parse(line) as T
+  }
+}
+
+type CompactJob = Pick<
+  ParsedHistoricalJob,
+  'historicalJobId' | 'employerId' | 'hiringOrganizationName' | 'sourceUrl' | 'title'
+>
+
 function csvCell(value: unknown) {
   return `"${String(value ?? '').replaceAll('"', '""')}"`
 }
@@ -219,16 +235,28 @@ async function main() {
 
   const sources = await readJsonLines<SourceCandidate>(path.join(root, 'source-candidates.jsonl'))
   const provisional = JSON.parse(await readFile(path.join(root, 'provisional-employers.json'), 'utf8')) as HistoricalEmployer[]
-  const jobs = await readJsonLines<ParsedHistoricalJob>(path.join(root, 'parsed-jobs.jsonl'))
-  const classifications = await readJsonLines<HistoricalJobClassification>(path.join(root, 'job-classifications.jsonl'))
   const currentEmployerHints = buildCurrentEmployerHints()
 
   const sourceByKey = new Map(sources.map((source) => [source.sourceKey, source]))
-  const classificationByJob = new Map(classifications.map((row) => [row.historicalJobId, row]))
-  const jobsByEmployer = new Map<string, ParsedHistoricalJob[]>()
-  for (const job of jobs) {
+  const classificationByJob = new Map<string, Pick<HistoricalJobClassification, 'isSolarRelated' | 'isUsJob'>>()
+  for await (const row of streamJsonLines<HistoricalJobClassification>(path.join(root, 'job-classifications.jsonl'))) {
+    classificationByJob.set(row.historicalJobId, {
+      isSolarRelated: row.isSolarRelated,
+      isUsJob: row.isUsJob,
+    })
+  }
+
+  const jobsByEmployer = new Map<string, CompactJob[]>()
+  for await (const job of streamJsonLines<ParsedHistoricalJob>(path.join(root, 'parsed-jobs.jsonl'))) {
+    const compactJob: CompactJob = {
+      historicalJobId: job.historicalJobId,
+      employerId: job.employerId,
+      hiringOrganizationName: job.hiringOrganizationName,
+      sourceUrl: job.sourceUrl,
+      title: job.title,
+    }
     const list = jobsByEmployer.get(job.employerId) ?? []
-    list.push(job)
+    list.push(compactJob)
     jobsByEmployer.set(job.employerId, list)
   }
 
@@ -370,12 +398,11 @@ async function main() {
   }
 
   const initialManifest = await readJsonLines<DiscoveryManifestRow>(path.join(root, 'index-records.jsonl'))
-  const reservoirManifest = await readJsonLines<DiscoveryManifestRow>(path.join(root, 'sample-reservoir.jsonl'))
   const deepSampleTargetBySource = new Map(
     deepSample.map((row) => [row.sourceKey, row.recommendedDeepSampleCount]),
   )
   const reservoirBySource = new Map<string, DiscoveryManifestRow[]>()
-  for (const capture of reservoirManifest) {
+  for await (const capture of streamJsonLines<DiscoveryManifestRow>(path.join(root, 'sample-reservoir.jsonl'))) {
     const sourceKey = String(capture.discoverySourceKey ?? '')
     if (!sourceKey || !deepSampleTargetBySource.has(sourceKey)) continue
     const list = reservoirBySource.get(sourceKey) ?? []
