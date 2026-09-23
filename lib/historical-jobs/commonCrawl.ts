@@ -174,7 +174,10 @@ export function repairCommonMojibake(value: string) {
 }
 
 function addressFromJsonLd(job: Record<string, unknown>) {
+  type ParsedLocation = { raw: string; city: string | null; state: string | null; country: string | null }
+  const parsed: ParsedLocation[] = []
   const locations = Array.isArray(job.jobLocation) ? job.jobLocation : [job.jobLocation]
+
   for (const location of locations) {
     if (!location || typeof location !== 'object') continue
     const addressValue = (location as Record<string, unknown>).address
@@ -182,10 +185,35 @@ function addressFromJsonLd(job: Record<string, unknown>) {
     const address = addressValue as Record<string, unknown>
     const city = textValue(address.addressLocality) || null
     const state = textValue(address.addressRegion) || null
-    const country = textValue(address.addressCountry) || null
+    const country = normalizeCountry(textValue(address.addressCountry) || null)
     const raw = [city, state, country].filter(Boolean).join(', ')
-    return { raw, city, state, country }
+    parsed.push({ raw, city, state, country })
   }
+
+  const explicitUs = parsed.find((location) =>
+    location.country === 'US'
+    || Boolean(location.state && (
+      US_STATE_CODES.has(location.state.toUpperCase())
+      || US_STATE_NAMES.has(location.state.toLowerCase())
+    )),
+  )
+  if (explicitUs) return explicitUs
+  if (parsed.length) return parsed[0]
+
+  const requirements = Array.isArray(job.applicantLocationRequirements)
+    ? job.applicantLocationRequirements
+    : [job.applicantLocationRequirements]
+  for (const requirement of requirements) {
+    const value = textValue(requirement)
+    if (!value) continue
+    if (/^(?:US|USA|United States(?: of America)?)$/i.test(value)) {
+      return { raw: 'United States', city: null, state: null, country: 'US' }
+    }
+    if (US_STATE_CODES.has(value.toUpperCase()) || US_STATE_NAMES.has(value.toLowerCase())) {
+      return { raw: value, city: null, state: value, country: 'US' }
+    }
+  }
+
   return { raw: '', city: null, state: null, country: null }
 }
 
