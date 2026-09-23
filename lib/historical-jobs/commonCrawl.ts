@@ -66,9 +66,13 @@ export interface HistoricalJobFeatures {
 export interface HistoricalJobClassification {
   historicalJobId: string
   isUsJob: boolean
+  usStatus: 'us' | 'foreign' | 'unknown'
   isSolarRelated: boolean
+  solarCandidate: boolean
+  solarConfidence: 'high' | 'medium' | 'none'
   usEvidence: string[]
   solarEvidence: string[]
+  solarCandidateEvidence: string[]
   rejectionReason: 'not_us_or_unknown' | 'not_solar_related' | null
   classifierVersion: string
 }
@@ -85,7 +89,7 @@ export interface HistoricalParseResult {
 }
 
 export const HISTORICAL_PARSER_VERSION = 'common-crawl-parser-v3'
-export const HISTORICAL_CLASSIFIER_VERSION = 'common-crawl-classifier-v2'
+export const HISTORICAL_CLASSIFIER_VERSION = 'common-crawl-classifier-v3'
 export const HISTORICAL_TAXONOMY_VERSION = 'common-crawl-taxonomy-v1'
 const US_STATE_CODES = new Set(Object.keys(STATE_CODE_TO_NAME))
 const US_STATE_NAMES = new Set(Object.values(STATE_CODE_TO_NAME).map((value) => value.toLowerCase()))
@@ -334,10 +338,51 @@ export function isHistoricalSolarRole(title: string, description: string) {
   return evaluateHistoricalSolarRole(title, description).isSolarRelated
 }
 
+export function evaluateHistoricalSolarCandidate(title: string, description: string) {
+  const strict = evaluateHistoricalSolarRole(title, description)
+  if (strict.isSolarRelated) {
+    return {
+      isCandidate: true,
+      confidence: 'high' as const,
+      evidence: [...strict.evidence],
+    }
+  }
+
+  const fullText = `${title}\n${description}`
+  const evidence: string[] = []
+
+  if (/\b(?:solar|photovoltaic)\b/i.test(title) || /\bPV\b/.test(title)) {
+    evidence.push('explicit_solar_term_in_title')
+  }
+
+  if (/\b(?:solar|photovoltaic)\b/i.test(description) || /\bPV\b/.test(description)) {
+    evidence.push('explicit_solar_term_in_full_description')
+  }
+
+  if (
+    /\b(?:bess|battery energy storage|battery storage|energy storage)\b/i.test(fullText)
+    && /\b(?:solar|photovoltaic|renewable|clean energy)\b/i.test(fullText)
+  ) {
+    evidence.push('storage_with_solar_or_renewable_context')
+  }
+
+  return {
+    isCandidate: evidence.length > 0,
+    confidence: evidence.length > 0 ? 'medium' as const : 'none' as const,
+    evidence,
+  }
+}
+
 function evaluateUsLocation(locationRaw: string, state: string | null, country: string | null, sourceUrl = '') {
   const evidence: string[] = []
   if (country === 'US') evidence.push('structured_country_us')
-  else if (country) return { isUsJob: false, evidence: [`structured_country_${country.toLowerCase()}`] }
+  else if (country) {
+    return {
+      isUsJob: false,
+      status: 'foreign' as const,
+      evidence: [`structured_country_${country.toLowerCase()}`],
+    }
+  }
 
   const normalizedState = state?.trim() ?? ''
   if (normalizedState && (US_STATE_CODES.has(normalizedState.toUpperCase()) || US_STATE_NAMES.has(normalizedState.toLowerCase()))) {
@@ -347,7 +392,11 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
   const explicitCountryCode = locationRaw.match(/,\s*([A-Z]{2})\s*,\s*[A-Z0-9 -]{2,10}\s*$/)?.[1]
     ?? locationRaw.match(/,\s*([A-Z]{2})\s*,\s*\d{4,6}(?:-\d{3,4})?\s*$/)?.[1]
   if (explicitCountryCode && explicitCountryCode !== 'US' && !US_STATE_CODES.has(explicitCountryCode)) {
-    return { isUsJob: false, evidence: [`location_country_code_${explicitCountryCode.toLowerCase()}`] }
+    return {
+      isUsJob: false,
+      status: 'foreign' as const,
+      evidence: [`location_country_code_${explicitCountryCode.toLowerCase()}`],
+    }
   }
 
   if (/\b(?:US|USA|United States(?: of America)?)\b/i.test(locationRaw)) evidence.push('location_text_us')
@@ -357,18 +406,28 @@ function evaluateUsLocation(locationRaw: string, state: string | null, country: 
   const urlStateZip = sourceUrl.match(/(?:^|[-/])([A-Z]{2})-(\d{5})(?:[-/]|$)/)
   if (urlStateZip && US_STATE_CODES.has(urlStateZip[1])) evidence.push('source_url_state_zip')
 
-  return { isUsJob: evidence.length > 0, evidence }
+  const isUsJob = evidence.length > 0
+  return {
+    isUsJob,
+    status: isUsJob ? 'us' as const : 'unknown' as const,
+    evidence,
+  }
 }
 
 export function classifyParsedHistoricalJob(job: ParsedHistoricalJob): HistoricalJobClassification {
   const us = evaluateUsLocation(job.locationRaw, job.state, job.country, job.sourceUrl)
   const solar = evaluateHistoricalSolarRole(job.title, job.descriptionText)
+  const candidate = evaluateHistoricalSolarCandidate(job.title, job.descriptionText)
   return {
     historicalJobId: job.historicalJobId,
     isUsJob: us.isUsJob,
+    usStatus: us.status,
     isSolarRelated: solar.isSolarRelated,
+    solarCandidate: candidate.isCandidate,
+    solarConfidence: candidate.confidence,
     usEvidence: us.evidence,
     solarEvidence: solar.evidence,
+    solarCandidateEvidence: candidate.evidence,
     rejectionReason: !us.isUsJob ? 'not_us_or_unknown' : !solar.isSolarRelated ? 'not_solar_related' : null,
     classifierVersion: HISTORICAL_CLASSIFIER_VERSION,
   }
@@ -386,7 +445,7 @@ export function buildHistoricalJobFeatures(job: ParsedHistoricalJob): Historical
 export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, employer: HistoricalEmployer): HistoricalParseResult {
   const $ = cheerio.load(html)
   const candidates: Record<string, unknown>[] = []
-  $('script[type="application/ld+json"]').each((_, element) => {
+  $('script[type*="ld+json"]').each((_, element) => {
     const raw = $(element).text().trim()
     if (!raw) return
     try {
@@ -399,10 +458,12 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
   const structuredJob = candidates[0] ?? null
   const extractionMethod: HistoricalParseResult['extractionMethod'] = structuredJob ? 'json_ld' : 'html_fallback'
   const title = textValue(structuredJob?.title)
-    || repairCommonMojibake($('[itemprop="title"], h1').first().text()).trim()
+    || repairCommonMojibake($('[itemprop="title"], [data-automation-id="jobPostingHeader"], .job-title, .jobTitle, .posting-headline h2, h1').first().text()).trim()
+    || repairCommonMojibake($('meta[property="og:title"]').attr('content') ?? '').trim()
     || repairCommonMojibake($('title').text().split('|')[0]).trim()
   const descriptionHtml = textValue(structuredJob?.description)
-    || $('[itemprop="description"], .job-description, .jobDescription, #job-description, #jobDescription').first().html()
+    || $('[itemprop="description"], [data-automation-id="jobPostingDescription"], .job-description, .jobDescription, #job-description, #jobDescription, .job-details__description, .job-details, .posting-page .content, .description').first().html()
+    || $('meta[name="description"]').attr('content')
     || ''
   const descriptionText = stripHtml(descriptionHtml)
   const isJobPage = Boolean(title && descriptionText.length >= 80)
@@ -423,7 +484,7 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
   const structuredAddress = structuredJob ? addressFromJsonLd(structuredJob) : { raw: '', city: null, state: null, country: null }
   const locationRaw = repairCommonMojibake(
     structuredAddress.raw
-      || $('[itemprop="jobLocation"], .job-location, .location').first().text(),
+      || $('[itemprop="jobLocation"], [data-automation-id="jobPostingLocation"], [data-automation-id="locations"], .job-location, .jobLocation, .location').first().text(),
   ).replace(/\s+/g, ' ').trim()
   const country = normalizeCountry(structuredAddress.country)
   const salary = structuredJob ? salaryFromJsonLd(structuredJob) : { min: null, max: null, currency: null, period: null }
