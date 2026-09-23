@@ -30,11 +30,12 @@ async function main() {
   const root = path.resolve(arg(args, '--input', 'data/common-crawl-historical-jobs/benchmark-2020-29'))
   const output = path.resolve(arg(args, '--output', root))
   const registryPath = arg(args, '--registry', 'data/common-crawl-historical-jobs/employers.json')
+  const manifestName = arg(args, '--manifest', 'index-records.jsonl')
   await mkdir(output, { recursive: true })
 
   const registry = JSON.parse(await readFile(registryPath, 'utf8')) as HistoricalEmployer[]
   const employers = new Map(registry.map((employer) => [employer.employerId, employer]))
-  const indexed = await readJsonLines<IndexedCapture>(path.join(root, 'index-records.jsonl'))
+  const indexed = await readJsonLines<IndexedCapture>(path.join(root, manifestName))
 
   const observations: Array<Record<string, unknown>> = []
   const parseResults: Array<Record<string, unknown>> = []
@@ -93,6 +94,7 @@ async function main() {
   await writeFile(path.join(output, 'parse-results.jsonl'), parseResults.map((row) => `${JSON.stringify(row)}\n`).join(''))
   await writeFile(path.join(output, 'parse-report.json'), `${JSON.stringify({
     parserVersion: HISTORICAL_PARSER_VERSION,
+    manifest: manifestName,
     indexedCaptures: indexed.length,
     parsedJobObservations: observations.length,
     distinctParsedJobs: distinctJobs.length,
