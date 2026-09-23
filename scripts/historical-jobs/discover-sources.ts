@@ -20,7 +20,7 @@ const SHARED_RECRUITING_ROOTS = new Set(['kochcareers.com'])
 
 const GENERIC_ALIAS_WORDS = new Set([
   'solar', 'energy', 'power', 'renewable', 'renewables', 'america', 'americas',
-  'north', 'company', 'companies', 'group', 'clean', 'resources', 'building',
+  'north', 'northamerica', 'company', 'companies', 'group', 'clean', 'resources', 'building',
   'technologies', 'technology', 'careers', 'career', 'jobs', 'job',
 ])
 
