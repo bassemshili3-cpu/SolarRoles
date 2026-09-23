@@ -35,6 +35,7 @@ export interface ParsedHistoricalJob {
   employerId: string
   employerName: string
   atsProvider: string
+  hiringOrganizationName: string | null
   title: string
   locationRaw: string
   city: string | null
@@ -439,6 +440,7 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
     employerId: employer.employerId,
     employerName: employer.employerName,
     atsProvider: employer.atsProvider,
+    hiringOrganizationName: textValue(structuredJob?.hiringOrganization) || null,
     title,
     locationRaw,
     city: structuredAddress.city,
