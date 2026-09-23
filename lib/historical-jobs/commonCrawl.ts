@@ -9,6 +9,8 @@ export interface HistoricalEmployer {
   employerName: string
   atsProvider: string
   patterns: string[]
+  discoverySourceKey?: string
+  discoverySourceScope?: 'host_or_path' | 'query_scoped' | 'first_party_lead'
   notes?: string
 }
 
