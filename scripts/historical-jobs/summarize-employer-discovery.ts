@@ -200,8 +200,11 @@ function dedupeStrings(values: Array<string | null | undefined>) {
 
 function recommendedDeepSample(source: SourceCandidate) {
   if (source.reservoirSampleCount <= source.initialSampleCount) return source.initialSampleCount
-  if (source.captures >= 100) return Math.min(source.reservoirSampleCount, 20)
-  if (source.solarUrlHits > 0) return Math.min(source.reservoirSampleCount, 15)
+  if (source.captures >= 500) return Math.min(source.reservoirSampleCount, 32)
+  if (source.captures >= 250) return Math.min(source.reservoirSampleCount, 28)
+  if (source.captures >= 100) return Math.min(source.reservoirSampleCount, 24)
+  if (source.solarUrlHits > 0) return Math.min(source.reservoirSampleCount, 20)
+  if (source.captures >= 50) return Math.min(source.reservoirSampleCount, 16)
   if (source.captures >= 25) return Math.min(source.reservoirSampleCount, 12)
   return Math.min(source.reservoirSampleCount, 8)
 }
