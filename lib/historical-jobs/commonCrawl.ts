@@ -88,7 +88,7 @@ export interface HistoricalParseResult {
   extractionMethod: 'json_ld' | 'html_fallback' | null
 }
 
-export const HISTORICAL_PARSER_VERSION = 'common-crawl-parser-v3'
+export const HISTORICAL_PARSER_VERSION = 'common-crawl-parser-v4-memory-safe'
 export const HISTORICAL_CLASSIFIER_VERSION = 'common-crawl-classifier-v3'
 export const HISTORICAL_TAXONOMY_VERSION = 'common-crawl-taxonomy-v1'
 const US_STATE_CODES = new Set(Object.keys(STATE_CODE_TO_NAME))
@@ -141,6 +141,23 @@ function flattenJsonLd(value: unknown): Record<string, unknown>[] {
 function isJobPosting(value: Record<string, unknown>) {
   const type = value['@type']
   return type === 'JobPosting' || (Array.isArray(type) && type.includes('JobPosting'))
+}
+
+function extractJobPostingJsonLd(html: string) {
+  const candidates: Record<string, unknown>[] = []
+  const scriptPattern = /<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi
+  for (const match of html.matchAll(scriptPattern)) {
+    const attributes = match[1] ?? ''
+    if (!/\btype\s*=\s*["'][^"']*ld\+json[^"']*["']/i.test(attributes)) continue
+    const raw = (match[2] ?? '').trim()
+    if (!raw) continue
+    try {
+      candidates.push(...flattenJsonLd(JSON.parse(raw)).filter(isJobPosting))
+    } catch {
+      // Invalid JSON-LD is common in historical captures; HTML fallback remains available.
+    }
+  }
+  return candidates[0] ?? null
 }
 
 function textValue(value: unknown): string {
@@ -471,27 +488,23 @@ export function buildHistoricalJobFeatures(job: ParsedHistoricalJob): Historical
 }
 
 export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, employer: HistoricalEmployer): HistoricalParseResult {
-  const $ = cheerio.load(html)
-  const candidates: Record<string, unknown>[] = []
-  $('script[type*="ld+json"]').each((_, element) => {
-    const raw = $(element).text().trim()
-    if (!raw) return
-    try {
-      candidates.push(...flattenJsonLd(JSON.parse(raw)).filter(isJobPosting))
-    } catch {
-      // Invalid JSON-LD is common in historical captures; HTML fallback remains available.
-    }
-  })
+  const structuredJob = extractJobPostingJsonLd(html)
+  let dom: ReturnType<typeof cheerio.load> | null = null
+  const $ = () => {
+    if (!dom) dom = cheerio.load(html)
+    return dom
+  }
 
-  const structuredJob = candidates[0] ?? null
   const extractionMethod: HistoricalParseResult['extractionMethod'] = structuredJob ? 'json_ld' : 'html_fallback'
   const title = textValue(structuredJob?.title)
-    || repairCommonMojibake($('[itemprop="title"], [data-automation-id="jobPostingHeader"], .job-title, .jobTitle, .posting-headline h2, h1').first().text()).trim()
-    || repairCommonMojibake($('meta[property="og:title"]').attr('content') ?? '').trim()
-    || repairCommonMojibake($('title').text().split('|')[0]).trim()
-  const descriptionHtml = textValue(structuredJob?.description)
-    || $('[itemprop="description"], [data-automation-id="jobPostingDescription"], .job-description, .jobDescription, #job-description, #jobDescription, .job-details__description, .job-details, .posting-page .content, .description').first().html()
-    || $('meta[name="description"]').attr('content')
+    || repairCommonMojibake($()('[itemprop="title"], [data-automation-id="jobPostingHeader"], .job-title, .jobTitle, .posting-headline h2, h1').first().text()).trim()
+    || repairCommonMojibake($()('meta[property="og:title"]').attr('content') ?? '').trim()
+    || repairCommonMojibake($()('title').text().split('|')[0]).trim()
+
+  const structuredDescription = textValue(structuredJob?.description)
+  const descriptionHtml = structuredDescription
+    || $()('[itemprop="description"], [data-automation-id="jobPostingDescription"], .job-description, .jobDescription, #job-description, #jobDescription, .job-details__description, .job-details, .posting-page .content, .description').first().html()
+    || $()('meta[name="description"]').attr('content')
     || ''
   const descriptionText = stripHtml(descriptionHtml)
   const isJobPage = Boolean(title && descriptionText.length >= 80)
@@ -510,10 +523,10 @@ export function parseHistoricalJobHtmlDetailed(html: string, sourceUrl: string, 
   }
 
   const structuredAddress = structuredJob ? addressFromJsonLd(structuredJob) : { raw: '', city: null, state: null, country: null }
-  const locationRaw = repairCommonMojibake(
-    structuredAddress.raw
-      || $('[itemprop="jobLocation"], [data-automation-id="jobPostingLocation"], [data-automation-id="locations"], .job-location, .jobLocation, .location').first().text(),
-  ).replace(/\s+/g, ' ').trim()
+  const fallbackLocation = structuredAddress.raw
+    ? ''
+    : $()('[itemprop="jobLocation"], [data-automation-id="jobPostingLocation"], [data-automation-id="locations"], .job-location, .jobLocation, .location').first().text()
+  const locationRaw = repairCommonMojibake(structuredAddress.raw || fallbackLocation).replace(/\s+/g, ' ').trim()
   const country = normalizeCountry(structuredAddress.country)
   const salary = structuredJob ? salaryFromJsonLd(structuredJob) : { min: null, max: null, currency: null, period: null }
   const canonicalUrl = canonicalizeHistoricalUrl(sourceUrl)
