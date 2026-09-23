@@ -36,7 +36,7 @@
     "historical:audit": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/audit-dataset.ts",
     "historical:year": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/build-year.ts",
     "test:historical-common-crawl": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx tests/common-crawl-historical-jobs.test.ts",
-    "typecheck:historical-common-crawl": "tsc -p tsconfig.historical-common-crawl.json --pretty false",
+    "typecheck:historical-common-crawl": "cross-env NODE_OPTIONS=--max-old-space-size=2048 tsc -p tsconfig.historical-common-crawl.json --pretty false",
     "repower:download": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/download-uspvdb.ts",
     "repower:batch": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/run-uspvdb-batch.ts",
     "repower:test": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx tests/repowering-core.test.ts",
