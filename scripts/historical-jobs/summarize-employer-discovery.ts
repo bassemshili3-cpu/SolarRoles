@@ -1,5 +1,5 @@
 import { createReadStream } from 'node:fs'
-import { readFile, writeFile } from 'node:fs/promises'
+import { access, readFile, writeFile } from 'node:fs/promises'
 import readline from 'node:readline'
 import path from 'node:path'
 import type {
@@ -510,8 +510,20 @@ async function main() {
     ...csvRows.map((row) => row.map(csvCell).join(',')),
   ].join('\n') + '\n', 'utf8')
   await writeFile(path.join(root, 'deep-sample-candidates.json'), `${JSON.stringify(deepSample, null, 2)}\n`, 'utf8')
+  const expandedManifestPath = path.join(root, 'index-records-expanded.jsonl')
+  let expandedManifestFrozen = false
+  try {
+    await access(expandedManifestPath)
+    expandedManifestFrozen = true
+  } catch {
+    // First summary for this discovery run: create the frozen second-pass manifest.
+  }
+
+  const proposedExpandedPath = expandedManifestFrozen
+    ? path.join(root, 'index-records-expanded-next.jsonl')
+    : expandedManifestPath
   await writeFile(
-    path.join(root, 'index-records-expanded.jsonl'),
+    proposedExpandedPath,
     expandedManifest.map((row) => `${JSON.stringify(row)}\n`).join(''),
     'utf8',
   )
@@ -541,6 +553,8 @@ async function main() {
     deepSampleCandidates: deepSample.length,
     additionalDeepSampleCaptures,
     expandedSampleCaptures: expandedManifest.length,
+    expandedManifestFrozen,
+    proposedExpandedManifest: path.basename(proposedExpandedPath),
     currentSolarRolesSeedHints: currentEmployerHints.length,
     sourcesMatchedToCurrentSolarRolesEmployers: rows.filter((row) => row.knownCurrentEmployerMatches.length > 0).length,
     deepSampleThresholdCaptures: minDeepSampleCaptures,
