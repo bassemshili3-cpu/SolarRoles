@@ -201,6 +201,11 @@ function buildBatchSql(
     ELSE host || '/*'
   END`
 
+  const solarUrlSignal = `regexp_matches(
+    lower(url),
+    '(?:^|[^a-z])(?:solar|photovoltaic|renewable|bess|battery[-_ ]?storage|energy[-_ ]?storage|clean[-_ ]?energy)(?:[^a-z]|$)'
+  )`
+
   const jobDetailPredicate = `(
     (ends_with(host, '.myworkdayjobs.com') AND regexp_matches(lower(url_path), '/job/'))
     OR (host IN ('boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io') AND regexp_matches(lower(url_path), '^/[^/]+/jobs?/[^/]+'))
@@ -224,11 +229,6 @@ function buildBatchSql(
       ${solarUrlSignal}
       AND regexp_matches(lower(url_path), '/(?:job|jobs|career|careers|requisition|requisitions|position|positions|vacancy|vacancies|employment|opportunit)(?:/|[-_?=&]|$)')
     )
-  )`
-
-  const solarUrlSignal = `regexp_matches(
-    lower(url),
-    '(?:^|[^a-z])(?:solar|photovoltaic|renewable|bess|battery[-_ ]?storage|energy[-_ ]?storage|clean[-_ ]?energy)(?:[^a-z]|$)'
   )`
 
   return `SET preserve_insertion_order = false;
