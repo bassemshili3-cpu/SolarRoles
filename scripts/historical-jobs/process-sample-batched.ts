@@ -6,7 +6,7 @@ import { spawn } from 'node:child_process'
 import readline from 'node:readline'
 import path from 'node:path'
 
-const PIPELINE_VERSION = 'historical-batched-processing-v1-classifier-v3'
+const PIPELINE_VERSION = 'historical-batched-processing-v2-memory-safe-classifier-v3'
 
 function arg(args: string[], flag: string, fallback = '') {
   const index = args.indexOf(flag)
