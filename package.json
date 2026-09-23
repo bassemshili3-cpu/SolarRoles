@@ -84,7 +84,8 @@
     "backfill:job-canonical-slugs": "node --env-file=.env.local --experimental-strip-types scripts/backfill-job-canonical-slugs.ts",
     "historical:discover-employers": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-employers.ts",
     "historical:discover-sources": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/discover-sources.ts",
-    "historical:discovery-summary": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/summarize-employer-discovery.ts"
+    "historical:discovery-summary": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/summarize-employer-discovery.ts",
+    "historical:deep-sample": "node --import \"data:text/javascript,if(!process.geteuid)process.geteuid=()=>0\" --import tsx scripts/historical-jobs/prepare-deep-sample.ts"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.27",
