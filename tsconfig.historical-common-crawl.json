@@ -15,6 +15,7 @@
     "scripts/query-common-crawl-url-index.ts",
     "scripts/historical-jobs/discover-employers.ts",
     "scripts/historical-jobs/summarize-employer-discovery.ts",
+    "scripts/historical-jobs/audit-employer-recall.ts",
     "scripts/historical-jobs/prepare-deep-sample.ts",
     "scripts/historical-jobs/discover-sources.ts",
     "scripts/historical-jobs/fetch-captures.ts",
