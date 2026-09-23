@@ -105,14 +105,17 @@ async function localParquetUrls(root: string, crawlIds: string[]) {
 
 async function runDuckDb(executable: string, sqlFile: string) {
   await access(executable)
+  const sql = await readFile(sqlFile, 'utf8')
   await new Promise<void>((resolve, reject) => {
-    const child = spawn(path.resolve(executable), ['-init', path.resolve(sqlFile), ':memory:'], {
+    const child = spawn(path.resolve(executable), [':memory:'], {
       cwd: process.cwd(),
-      stdio: 'inherit',
+      stdio: ['pipe', 'inherit', 'inherit'],
       windowsHide: true,
     })
     child.on('error', reject)
     child.on('exit', (code) => code === 0 ? resolve() : reject(new Error(`DuckDB exited with code ${code}`)))
+    child.stdin.on('error', reject)
+    child.stdin.end(sql)
   })
 }
 
