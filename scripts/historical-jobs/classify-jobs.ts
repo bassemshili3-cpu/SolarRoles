@@ -1,5 +1,5 @@
 import { createReadStream, createWriteStream } from 'node:fs'
-import { writeFile } from 'node:fs/promises'
+import { rename, rm, writeFile } from 'node:fs/promises'
 import { once } from 'node:events'
 import readline from 'node:readline'
 import path from 'node:path'
@@ -28,8 +28,14 @@ async function main() {
   const root = path.resolve(arg(args, '--input', 'data/common-crawl-historical-jobs/benchmark-2020-29'))
   const output = path.resolve(arg(args, '--output', root))
 
-  const classificationStream = createWriteStream(path.join(output, 'job-classifications.jsonl'), { encoding: 'utf8' })
-  const solarUsStream = createWriteStream(path.join(output, 'solar-us-jobs.jsonl'), { encoding: 'utf8' })
+  const classificationsPath = path.join(output, 'job-classifications.jsonl')
+  const solarUsPath = path.join(output, 'solar-us-jobs.jsonl')
+  const classificationsTemp = `${classificationsPath}.tmp`
+  const solarUsTemp = `${solarUsPath}.tmp`
+  await Promise.all([classificationsTemp, solarUsTemp].map((filename) => rm(filename, { force: true })))
+
+  const classificationStream = createWriteStream(classificationsTemp, { encoding: 'utf8' })
+  const solarUsStream = createWriteStream(solarUsTemp, { encoding: 'utf8' })
 
   let parsedJobs = 0
   let solarUsJobs = 0
@@ -64,6 +70,10 @@ async function main() {
   await Promise.all([
     finishStream(classificationStream),
     finishStream(solarUsStream),
+  ])
+  await Promise.all([
+    rename(classificationsTemp, classificationsPath),
+    rename(solarUsTemp, solarUsPath),
   ])
 
   const report = {
