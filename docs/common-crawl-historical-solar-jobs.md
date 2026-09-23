@@ -62,14 +62,14 @@ notes
 
 Les dates `active_from` et `active_to` peuvent rester nulles tant qu’elles ne sont pas vérifiées.
 
-## Open employer discovery v4
+## Open employer discovery v5
 
 La discovery ouverte conserve désormais deux niveaux d'échantillonnage :
 
 - un échantillon initial adaptatif par source : toutes les captures pour les très petites sources, puis 3 à 5 captures selon le volume et les signaux solaires ;
 - un réservoir local pouvant aller jusqu'à 32 captures par source pour le deep sampling, afin d'éviter de rescanner les 300 Parquet après le premier contrôle de contenu.
 
-Les sources de très gros volume ne sont pas rejetées après quelques pages négatives : le résumé peut demander jusqu'à 24, 28 ou 32 captures selon le volume. Les sources avec signal solaire URL, les matches avec les seeds SolarRoles actuels et les sources ambiguës sont également éligibles au deep sampling.
+Les sources de très gros volume ne sont pas rejetées après quelques pages négatives : le résumé peut demander jusqu'à 24, 28 ou 32 captures selon le volume. Le réservoir est choisi de façon déterministe par hash d'URL afin d'éviter qu'un seul segment/ordre de Parquet domine l'échantillon. Les sources avec signal solaire URL, les matches avec les seeds SolarRoles actuels et les sources ambiguës sont également éligibles au deep sampling.
 
 La discovery couvre aussi les familles ATS présentes dans le seed SolarRoles (notamment JazzHR, Breezy, Rippling, Workable, Pinpoint et HRMDirect en plus des ATS principaux). Les seeds actuels servent de booster de rappel et de mapping ; ils ne plafonnent jamais l'univers historique.
 
@@ -81,6 +81,8 @@ Le crawl `CC-MAIN-2020-29` déjà téléchargé localement sert de laboratoire. 
 
 `discover-employers.ts` balaie les 300 Parquet sans registre d'employeurs. Il reconnaît les sources emploi de Workday, Greenhouse, Lever, Jobvite, SmartRecruiters, Ashby, iCIMS, Taleo, Oracle Cloud, UKG/UltiPro, ADP, Paylocity, Paycom, Jobs2Web, JazzHR, Breezy, Rippling, Workable, Pinpoint et HRMDirect. Une voie séparée conserve aussi les pages first-party qui ont à la fois un signal solaire explicite dans l'URL et une forme de job-detail suffisamment stricte.
 
+La v5 corrige aussi les faux regroupements observés sur le premier run ouvert : UltiPro est séparé par tenant de chemin, Paylocity par identité/slug d'entreprise quand elle est présente dans l'URL, les pseudo-tenants SmartRecruiters comme `oneclick-ui` sont exclus, et les compteurs multi-host/path sont additionnés sans perdre des groupes secondaires.
+
 Les sorties distinguent trois scopes :
 
 - `host_or_path` : tenant ATS adressable proprement par host ou préfixe ;
@@ -91,7 +93,7 @@ Les pages de recherche, login, catégories et landing pages ne doivent pas être
 
 ### B. Échantillonnage initial + réservoir
 
-Le scan conserve un réservoir local allant jusqu'à 20 captures distinctes par source, mais ne télécharge pas tout immédiatement. Le premier manifeste WARC utilise jusqu'à 5 pages par source :
+Le scan conserve un réservoir local allant jusqu'à 32 captures distinctes par source, mais ne télécharge pas tout immédiatement. Le premier manifeste WARC utilise jusqu'à 5 pages par source :
 
 - toutes les captures lorsque la source en a 5 ou moins ;
 - 3 pages pour les petites sources restantes ;
@@ -155,7 +157,7 @@ Le Historical Employer Panel est construit **après** la collecte et la QA, selo
 ### Séquence 2020
 
 ```bash
-# 1. Nouvelle discovery ouverte v3.
+# 1. Nouvelle discovery ouverte v5.
 npm run historical:discover -- --year 2020 --crawl CC-MAIN-2020-29 --threads 2 --memory-limit 3GB --files-per-batch 1
 
 # 2. Fetch du premier échantillon.
