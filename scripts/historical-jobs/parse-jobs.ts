@@ -74,7 +74,7 @@ async function runWorker() {
   const manifestName = arg(args, '--manifest', 'index-records.jsonl')
   const chunkDir = path.resolve(arg(args, '--chunk-dir'))
   const start = intArg(args, '--start', 0)
-  const limit = intArg(args, '--limit', 2500)
+  const limit = intArg(args, '--limit', 100)
   const chunkId = arg(args, '--chunk-id', String(start).padStart(8, '0'))
 
   await mkdir(chunkDir, { recursive: true })
@@ -125,7 +125,19 @@ async function runWorker() {
     const captureId = sha256(`${capture.crawlId}|${capture.timestamp}|${capture.url}|${capture.digest}`)
     const htmlPath = path.join(root, 'html', `${captureId}.html`)
 
+    if (indexedCaptures === 1 || indexedCaptures % 25 === 0 || indexedCaptures === limit) {
+      const memory = process.memoryUsage()
+      const mb = (bytes: number) => Math.round(bytes / 1024 / 1024)
+      console.log(
+        `[parse-worker] progress=${indexedCaptures}/${limit} rss=${mb(memory.rss)}MB heap=${mb(memory.heapUsed)}MB external=${mb(memory.external)}MB`,
+      )
+    }
+
     try {
+      const htmlStat = await stat(htmlPath)
+      if (htmlStat.size >= 8 * 1024 * 1024) {
+        console.warn(`[parse-worker] large HTML ${Math.round(htmlStat.size / 1024 / 1024)}MB: ${capture.url}`)
+      }
       const html = await readFile(htmlPath, 'utf8')
       const parsed = parseHistoricalJobHtmlDetailed(html, capture.url, employer)
       const job = parsed.job
@@ -223,7 +235,7 @@ async function main() {
   const output = path.resolve(arg(args, '--output', root))
   const registryPath = path.resolve(arg(args, '--registry', 'data/common-crawl-historical-jobs/employers.json'))
   const manifestName = arg(args, '--manifest', 'index-records.jsonl')
-  const batchSize = Math.max(250, intArg(args, '--batch-size', 2500))
+  const batchSize = Math.max(25, intArg(args, '--batch-size', 100))
   await mkdir(output, { recursive: true })
 
   const manifestPath = path.join(root, manifestName)
