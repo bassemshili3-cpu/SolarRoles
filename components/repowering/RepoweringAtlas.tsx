@@ -4,8 +4,19 @@ import { useMemo, useRef, useState } from 'react'
 import { geoAlbersUsa } from 'd3-geo'
 import { Download, Map as MapIcon, RotateCcw, Table2 } from 'lucide-react'
 import { US_STATE_PATHS } from '@/lib/data/us-states-paths'
+import {
+  buildExpansionHeadroomPoints,
+  median,
+  type ExpansionHeadroomPoint,
+} from '@/lib/repowering/expansionChart'
+import {
+  estimatePpaRenewal,
+  PPA_RENEWAL_CALENDAR_2010_2014,
+  PPA_RENEWAL_PROFILE,
+} from '@/lib/repowering/ppaRenewal'
 import type {
   AtlasMetric,
+  EiaExpansionData,
   RepoweringAtlas,
   RepoweringPlant,
   RepoweringStateDetail,
@@ -80,7 +91,7 @@ function metricValue(state: RepoweringStateSummary, key: SortKey) {
   return Number(state[key] ?? Number.NEGATIVE_INFINITY)
 }
 
-export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }) {
+export default function RepoweringAtlasMap({ atlas, expansion }: { atlas: RepoweringAtlas; expansion: EiaExpansionData }) {
   const [metric, setMetric] = useState<AtlasMetric>('headroomPct')
   const [view, setView] = useState<ViewMode>('map')
   const [selectedCode, setSelectedCode] = useState<string | null>(null)
@@ -164,11 +175,11 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
             How much more solar could fit inside existing U.S. footprints?
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-            Every USPVDB facility that the model can process is included. Select a state to see its facilities, assumptions and results.
+            Every USPVDB facility that the model can process is included. The result is physical density headroom; fleet age and estimated PPA timing are shown separately to screen when that headroom could become commercially relevant.
           </p>
         </div>
         <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1" aria-label="Map metric">
-          {([['headroomPct', '% Headroom'], ['additionalGw', 'Additional GWdc']] as const).map(([value, label]) => (
+          {([['headroomPct', '% Density headroom'], ['additionalGw', 'Headroom GWdc']] as const).map(([value, label]) => (
             <button
               key={value}
               type="button"
@@ -185,9 +196,11 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Facilities modeled" value={national.modeledFacilities.toLocaleString('en-US')} detail={`${national.unableToModelFacilities.toLocaleString('en-US')} unable to model`} />
         <Stat label="Current capacity" value={`${format(national.currentDcGW)} GWdc`} />
-        <Stat label="Reference repowering" value={`${format(national.modeledDcGW)} GWdc`} />
-        <Stat label="Technical headroom" value={`${signed(national.additionalDcGW, ' GWdc')} · ${signed(national.headroomPct, '%')}`} accent />
+        <Stat label="Modern-density scenario" value={`${format(national.modeledDcGW)} GWdc`} detail="Physical fit, not a project pipeline" />
+        <Stat label="Total density headroom" value={`${signed(national.additionalDcGW, ' GWdc')} · ${signed(national.headroomPct, '%')}`} detail="All vintages, including recent plants" accent />
       </div>
+
+      <ExpansionHeadroomChart atlas={atlas} expansion={expansion} />
 
       <VintageAnalysis national={national} />
 
@@ -257,7 +270,7 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
                 {hovered.state.modeledFacilities > 0 ? (
                   <>
                     <p className="mt-1 text-slate-300">Current: {format(hovered.state.currentDcGW)} GWdc</p>
-                    <p className="text-slate-300">Reference repowering: {format(hovered.state.modeledDcGW)} GWdc</p>
+                    <p className="text-slate-300">Modern-density scenario: {format(hovered.state.modeledDcGW)} GWdc</p>
                     <p className="mt-1 font-bold text-emerald-300">{signed(hovered.state.additionalDcGW, ' GWdc')} · {signed(hovered.state.headroomPct, '%')}</p>
                     <p className="mt-1 text-slate-300">Based on {hovered.state.modeledFacilities} facilities</p>
                   </>
@@ -280,7 +293,7 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
                   <p className="mt-1 text-xs text-slate-500">Based on {selectedSummary.modeledFacilities} facilities. Sample size does not determine whether a state is shown.</p>
                   <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <Metric label="Current" value={`${format(selectedSummary.currentDcGW)} GWdc`} />
-                    <Metric label="Reference repowering" value={`${format(selectedSummary.modeledDcGW)} GWdc`} />
+                    <Metric label="Modern-density scenario" value={`${format(selectedSummary.modeledDcGW)} GWdc`} />
                     <Metric label="Additional" value={signed(selectedSummary.additionalDcGW, ' GWdc')} />
                     <Metric label="Headroom" value={signed(selectedSummary.headroomPct, '%')} />
                   </div>
@@ -339,10 +352,209 @@ export default function RepoweringAtlasMap({ atlas }: { atlas: RepoweringAtlas }
   )
 }
 
+function ExpansionHeadroomChart({ atlas, expansion }: { atlas: RepoweringAtlas; expansion: EiaExpansionData }) {
+  const points = useMemo(
+    () => buildExpansionHeadroomPoints(atlas.states, expansion),
+    [atlas.states, expansion],
+  )
+  const [activePoint, setActivePoint] = useState<ExpansionHeadroomPoint | null>(null)
+  const width = 860
+  const height = 500
+  const margin = { top: 28, right: 24, bottom: 78, left: 82 }
+  const plotWidth = width - margin.left - margin.right
+  const plotHeight = height - margin.top - margin.bottom
+  const xMin = -25
+  const xMax = 80
+  const xTicks = [-20, 0, 20, 40, 60, 80]
+  const yTicks = [0, 20, 40, 60, 80, 100]
+  const medianHeadroom = median(points.map((point) => point.headroomPct))
+  const medianExpansion = median(points.map((point) => point.shareBeyond5KmPct))
+  const upperRightCount = points.filter(
+    (point) => point.headroomPct >= medianHeadroom && point.shareBeyond5KmPct >= medianExpansion,
+  ).length
+  const fullCoveragePoints = [...points]
+    .filter((point) => point.matchedOutputCoveragePct >= 100)
+    .sort((a, b) => b.beyond5KmPipelineMW - a.beyond5KmPipelineMW)
+  const nextClosestPoints = [...points]
+    .filter((point) => point.matchedOutputCoveragePct >= 50 && point.matchedOutputCoveragePct < 100)
+    .sort((a, b) => b.matchedOutputCoveragePct - a.matchedOutputCoveragePct)
+  const nationalHeadroomAcMW = points.reduce((total, point) => total + point.headroomAcMW, 0)
+  const nationalBeyond5KmPipelineMW = points.reduce((total, point) => total + point.beyond5KmPipelineMW, 0)
+  const nationalMatchedOutputCoveragePct = nationalBeyond5KmPipelineMW > 0
+    ? nationalHeadroomAcMW / nationalBeyond5KmPipelineMW * 100
+    : 0
+  const maxPlannedMW = Math.max(...points.map((point) => point.plannedSolarMW), 1)
+  const x = (value: number) => margin.left + ((value - xMin) / (xMax - xMin)) * plotWidth
+  const y = (value: number) => margin.top + (1 - value / 100) * plotHeight
+  const radius = (value: number) => 4 + Math.sqrt(value / maxPlannedMW) * 12
+  const labels = new Set(['TX', 'CA', 'AZ', 'OR', 'GA', 'MI'])
+
+  return (
+    <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white" aria-labelledby="expansion-headroom-title">
+      <div className="border-b border-slate-200 px-5 py-6 sm:px-7">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-700">Planned-build geography</p>
+        <h3 id="expansion-headroom-title" className="mt-2 max-w-4xl text-2xl font-semibold tracking-tight text-slate-950">
+          77.7% of planned solar MW sits more than 5 km from existing solar
+        </h3>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+          Across {points.length} states with both measures, the planned fleet continues to spread beyond today&apos;s solar footprint even where the existing fleet retains modeled density headroom. The upper-right quadrant contains {upperRightCount} states above both state medians.
+        </p>
+      </div>
+
+      <div className="p-4 sm:p-6">
+        <div className="overflow-x-auto">
+          <svg viewBox={`0 0 ${width} ${height}`} className="min-w-[700px] w-full" role="img" aria-labelledby="expansion-headroom-svg-title expansion-headroom-svg-desc">
+            <title id="expansion-headroom-svg-title">Existing-site solar headroom compared with planned solar expansion by state</title>
+            <desc id="expansion-headroom-svg-desc">A scatter plot of 48 states. The horizontal axis shows modeled existing-site headroom. The vertical axis shows the share of planned solar megawatts more than five kilometers from existing solar. Circle size represents planned solar megawatts.</desc>
+
+            <rect
+              x={x(medianHeadroom)}
+              y={margin.top}
+              width={x(xMax) - x(medianHeadroom)}
+              height={y(medianExpansion) - margin.top}
+              fill="#fef3c7"
+              opacity="0.55"
+            />
+
+            {yTicks.map((tick) => (
+              <g key={`y-${tick}`}>
+                <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="#e2e8f0" />
+                <text x={margin.left - 12} y={y(tick) + 4} textAnchor="end" fontSize="12" fill="#64748b">{tick}%</text>
+              </g>
+            ))}
+            {xTicks.map((tick) => (
+              <g key={`x-${tick}`}>
+                <line x1={x(tick)} x2={x(tick)} y1={margin.top} y2={height - margin.bottom} stroke="#e2e8f0" />
+                <text x={x(tick)} y={height - margin.bottom + 24} textAnchor="middle" fontSize="12" fill="#64748b">{tick}%</text>
+              </g>
+            ))}
+
+            <line x1={x(medianHeadroom)} x2={x(medianHeadroom)} y1={margin.top} y2={height - margin.bottom} stroke="#475569" strokeDasharray="6 5" />
+            <line x1={margin.left} x2={width - margin.right} y1={y(medianExpansion)} y2={y(medianExpansion)} stroke="#475569" strokeDasharray="6 5" />
+            <text x={x(medianHeadroom) + 7} y={height - margin.bottom - 8} fontSize="11" fontWeight="600" fill="#475569">State median {format(medianHeadroom)}%</text>
+            <text x={margin.left + 7} y={y(medianExpansion) - 8} fontSize="11" fontWeight="600" fill="#475569">State median {format(medianExpansion)}%</text>
+            <text x={width - margin.right - 8} y={margin.top + 18} textAnchor="end" fontSize="11" fontWeight="700" fill="#92400e">High headroom · high geographic expansion</text>
+
+            {[...points].sort((a, b) => b.plannedSolarMW - a.plannedSolarMW).map((point) => {
+              const active = activePoint?.state === point.state
+              const highlighted = point.headroomPct >= medianHeadroom && point.shareBeyond5KmPct >= medianExpansion
+              return (
+                <g key={point.state}>
+                  <circle
+                    cx={x(point.headroomPct)}
+                    cy={y(point.shareBeyond5KmPct)}
+                    r={radius(point.plannedSolarMW)}
+                    fill={highlighted ? '#f59e0b' : '#0d9488'}
+                    fillOpacity={active ? 0.95 : 0.72}
+                    stroke={active ? '#0f172a' : '#ffffff'}
+                    strokeWidth={active ? 2.5 : 1.3}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`${stateName(point.state)}: ${format(point.headroomPct)} percent headroom; ${format(point.shareBeyond5KmPct)} percent of planned solar megawatts more than five kilometers from existing solar; ${format(point.plannedSolarMW, 0)} planned megawatts`}
+                    onMouseEnter={() => setActivePoint(point)}
+                    onMouseLeave={() => setActivePoint(null)}
+                    onFocus={() => setActivePoint(point)}
+                    onBlur={() => setActivePoint(null)}
+                    onClick={() => setActivePoint(point)}
+                    className="cursor-pointer outline-none transition-opacity hover:opacity-100"
+                  >
+                    <title>{stateName(point.state)}: {format(point.headroomPct)}% headroom, {format(point.shareBeyond5KmPct)}% beyond 5 km, {format(point.plannedSolarMW, 0)} MW planned</title>
+                  </circle>
+                  {labels.has(point.state) ? (
+                    <text x={x(point.headroomPct) + radius(point.plannedSolarMW) + 4} y={y(point.shareBeyond5KmPct) + 4} fontSize="11" fontWeight="700" fill="#334155">{point.state}</text>
+                  ) : null}
+                </g>
+              )
+            })}
+
+            <text x={margin.left + plotWidth / 2} y={height - 18} textAnchor="middle" fontSize="13" fontWeight="700" fill="#334155">Modeled existing-site headroom (%)</text>
+            <text transform={`translate(20 ${margin.top + plotHeight / 2}) rotate(-90)`} textAnchor="middle" fontSize="13" fontWeight="700" fill="#334155">Share of planned solar MW &gt;5 km from existing solar (%)</text>
+          </svg>
+        </div>
+
+        <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-600">
+            <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-teal-600" />Each circle is a state</span>
+            <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-amber-500" />Above both state medians</span>
+            <span>Circle area scales with planned solar MW</span>
+          </div>
+          <p className="text-xs font-semibold text-slate-700">{format(expansion.national.plannedSolarMW / 1000)} GW · {expansion.national.projects.toLocaleString('en-US')} planned projects</p>
+        </div>
+
+        <div className="mt-5 min-h-24 rounded-xl border border-slate-200 bg-slate-50 p-4" aria-live="polite">
+          {activePoint ? (
+            <div>
+              <p className="font-semibold text-slate-950">{stateName(activePoint.state)}</p>
+              <div className="mt-2 grid gap-2 text-sm text-slate-600 sm:grid-cols-4">
+                <p><strong className="text-slate-900">{format(activePoint.headroomPct)}%</strong><br />modeled headroom</p>
+                <p><strong className="text-slate-900">{format(activePoint.shareBeyond5KmPct)}%</strong><br />of planned MW beyond 5 km</p>
+                <p><strong className="text-slate-900">{format(activePoint.plannedSolarMW, 0)} MW</strong><br />across {activePoint.projects} planned projects</p>
+                <p><strong className="text-slate-900">{format(activePoint.matchedOutputCoveragePct)}%</strong><br />matched-output coverage</p>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm leading-6 text-slate-600">Hover, tap or focus a state to inspect its headroom, geographic expansion share and planned capacity.</p>
+          )}
+        </div>
+
+        <section className="mt-6 overflow-hidden rounded-xl border border-slate-200" aria-labelledby="matched-output-title">
+          <div className="bg-slate-950 px-5 py-5 text-white">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Equivalent annual-output screen</p>
+            <h4 id="matched-output-title" className="mt-2 text-xl font-semibold tracking-tight">
+              {fullCoveragePoints.length} states have enough modeled headroom to match their pipeline beyond 5 km
+            </h4>
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-300">
+              On a matched state-level solar-output basis, existing-site headroom equals {format(nationalMatchedOutputCoveragePct)}% of the pipeline located more than 5 km from existing solar across the 48-state sample.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-[680px] w-full border-collapse text-sm">
+              <thead className="bg-slate-50 text-left text-xs text-slate-600">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">State</th>
+                  <th className="px-3 py-3 text-right font-semibold">Headroom equivalent</th>
+                  <th className="px-3 py-3 text-right font-semibold">Pipeline &gt;5 km</th>
+                  <th className="px-4 py-3 text-right font-semibold">Coverage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fullCoveragePoints.map((point) => (
+                  <tr key={point.state} className="border-t border-slate-200">
+                    <th className="px-4 py-3 text-left font-semibold text-slate-950">{stateName(point.state)}</th>
+                    <td className="px-3 py-3 text-right text-slate-600">{format(point.headroomAcMW, 0)} MWac</td>
+                    <td className="px-3 py-3 text-right text-slate-600">{format(point.beyond5KmPipelineMW, 0)} MWac</td>
+                    <td className="px-4 py-3 text-right font-bold text-emerald-700">{format(point.matchedOutputCoveragePct)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="border-t border-slate-200 bg-slate-50 px-5 py-4 text-xs leading-5 text-slate-600">
+            <strong className="text-slate-900">Next closest:</strong>{' '}
+            {nextClosestPoints.map((point) => `${point.state} ${format(point.matchedOutputCoveragePct)}%`).join(' · ')}.
+          </p>
+        </section>
+      </div>
+
+      <div className="border-t border-slate-200 bg-slate-50 px-5 py-4 text-xs leading-5 text-slate-600 sm:px-7">
+        <strong className="text-slate-900">Calculation.</strong> Headroom GWdc × 1,000 ÷ 1.32 gives an equivalent MWac value. Pipeline MWac × share beyond 5 km gives the comparison capacity. Converting both to annual MWh with the same state-level capacity factor multiplies each by the same 8,760-hour and capacity-factor terms, so those terms cancel in the ratio. Negative modeled headroom is treated as zero. This is an equivalent-output siting screen—not proof that a project can move to an existing site. It does not test interconnection, land control, hourly generation, curtailment or project economics.
+        {' '}<a href="https://www.eia.gov/todayinenergy/detail.php?id=35372" target="_blank" rel="noreferrer" className="font-semibold text-teal-800 underline decoration-teal-300 underline-offset-2">EIA reports utility-scale PV capacity in AC</a>; its <a href="https://www.eia.gov/electricity/data/eia860m/" target="_blank" rel="noreferrer" className="font-semibold text-teal-800 underline decoration-teal-300 underline-offset-2">monthly generator inventory</a> is preliminary and does not represent a capacity commitment.
+      </div>
+    </section>
+  )
+}
+
 function VintageAnalysis({ national }: { national: RepoweringAtlas['national'] }) {
-  const olderFleet = national.vintageCohorts.filter((cohort) => cohort.label === 'Before 2010' || cohort.label === '2010–2014')
-  const olderCapacityShare = olderFleet.reduce((total, cohort) => total + cohort.currentCapacitySharePct, 0)
-  const olderHeadroomShare = olderFleet.reduce((total, cohort) => total + cohort.nationalHeadroomSharePct, 0)
+  const pre2010 = national.vintageCohorts.find((cohort) => cohort.label === 'Before 2010')
+  const nextWave = national.vintageCohorts.find((cohort) => cohort.label === '2010–2014')
+  const post2014Headroom = national.vintageCohorts
+    .filter((cohort) => cohort.label === '2015–2019' || cohort.label === '2020–2026')
+    .reduce((total, cohort) => total + cohort.additionalDcGW, 0)
+  const post2014HeadroomShare = national.additionalDcGW > 0
+    ? (post2014Headroom / national.additionalDcGW) * 100
+    : 0
   const highestRelative = national.vintageCohorts.reduce((highest, cohort) => (
     (cohort.headroomPct ?? Number.NEGATIVE_INFINITY) > (highest.headroomPct ?? Number.NEGATIVE_INFINITY) ? cohort : highest
   ))
@@ -351,9 +563,27 @@ function VintageAnalysis({ national }: { national: RepoweringAtlas['national'] }
     <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white" aria-labelledby="fleet-age-title">
       <div className="border-b border-slate-200 bg-slate-950 px-5 py-6 text-white sm:px-7">
         <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Fleet age analysis</p>
-        <h3 id="fleet-age-title" className="mt-2 text-2xl font-semibold tracking-tight">Is America&apos;s oldest solar fleet also its biggest repowering opportunity?</h3>
+        <h3 id="fleet-age-title" className="mt-2 text-2xl font-semibold tracking-tight">How much density headroom belongs to assets old enough to matter?</h3>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
-          Facilities built before 2015 represent <strong className="text-white">{format(olderCapacityShare)}% of current capacity</strong> but <strong className="text-white">{format(olderHeadroomShare)}% of modeled repowering headroom</strong>.
+          The national model finds {format(national.additionalDcGW)} GWdc of physical headroom, but {format(post2014HeadroomShare)}% sits in facilities commissioned since 2015. Fleet age changes the commercial reading of the headline number.
+        </p>
+      </div>
+
+      <div className="border-b border-slate-200 bg-slate-50 px-5 py-6 sm:px-7">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Density is not opportunity</p>
+        <h4 className="mt-2 text-xl font-semibold tracking-tight text-slate-950">
+          {format(national.additionalDcGW)} GW could physically fit; only a fraction belongs to the nearer review pool
+        </h4>
+        <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-700">
+          The model answers how much more PV could fit inside today&apos;s footprints. It does not say that every owner should replace modules now. A plant commissioned in 2023 can contribute density headroom while remaining years away from a plausible repowering decision.
+        </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <Stat label="Pre-2010 headroom" value={signed(pre2010?.additionalDcGW ?? null, ' GWdc')} detail="Oldest fleet; nearest current review pool" accent />
+          <Stat label="2010–2014 headroom" value={signed(nextWave?.additionalDcGW ?? null, ' GWdc')} detail="Next wave; estimated core PPA windows begin in 2030" />
+          <Stat label="Headroom since 2015" value={signed(post2014Headroom, ' GWdc')} detail="Longer-dated physical potential, not near-term opportunity" />
+        </div>
+        <p className="mt-4 max-w-4xl text-xs leading-5 text-slate-600">
+          These buckets are timing screens, not investable-pipeline estimates. Actual opportunity also depends on degradation, equipment condition, remaining contract term, incentives, interconnection, curtailment, redevelopment cost and owner strategy.
         </p>
       </div>
 
@@ -384,8 +614,60 @@ function VintageAnalysis({ national }: { national: RepoweringAtlas['national'] }
         </table>
       </div>
 
+      <div className="border-t border-slate-200 bg-amber-50/50 px-5 py-6 sm:px-7">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-amber-800">PPA renewal calendar</p>
+        <h4 className="mt-2 text-xl font-semibold tracking-tight text-slate-950">
+          The 2010–2014 fleet is approaching—not yet inside—the core PPA renewal window
+        </h4>
+        <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-700">
+          <strong>None of the {format(national.vintageCohorts.find((cohort) => cohort.label === '2010–2014')?.facilities ?? null)} modeled facilities is inside the estimated 20–25-year window in 2026.</strong> The first boundary is 2030, four years away, and it applies to just 63 facilities commissioned in 2010. The 2013–2014 vintages hold 71.7% of the cohort&apos;s current capacity, pushing most of the capacity-weighted wave toward 2033–2039.
+        </p>
+        <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-700">
+          The cohort with the strongest measured density headroom is also approaching the 20–25-year window observed most often in Berkeley Lab&apos;s PPA sample—a natural point for reviewing equipment and offtake options, not a forecast that repowering will occur. Some plants may have different contract terms, amended agreements, or merchant exposure rather than a PPA.
+        </p>
+        <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-700">
+          <strong>The period-matched result holds.</strong> Among {PPA_RENEWAL_PROFILE.cohortExecutionSampleSize} PPAs signed in {PPA_RENEWAL_PROFILE.cohortExecutionYears}, totaling {format(PPA_RENEWAL_PROFILE.cohortExecutionCapacityGWac, 3)} GWac, the median term is still {PPA_RENEWAL_PROFILE.cohortExecutionMedianTermYears} years and {PPA_RENEWAL_PROFILE.cohortExecutionCoreTermCount} contracts ({format(PPA_RENEWAL_PROFILE.cohortExecutionCoreTermSharePct)}%) run for 20–25 years. Annual medians are either 20 or 25 years, but the 2008 observation rests on only three contracts. The pooled signing-period subset, rather than the all-years median alone, anchors the estimated calendar below.
+        </p>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <Stat label="2010–2014 headroom" value={signed(national.vintageCohorts.find((cohort) => cohort.label === '2010–2014')?.headroomPct ?? null, '%')} detail="Technical same-footprint estimate" accent />
+          <Stat label="First estimated boundary" value="2030" detail="63 facilities from the 2010 vintage" />
+          <Stat label="Capacity-weighted wave" value="2033–2039" detail="71.7% of cohort capacity entered service in 2013–2014" />
+        </div>
+
+        <div className="mt-5 overflow-x-auto rounded-xl border border-amber-200 bg-white">
+          <table className="min-w-[720px] w-full border-collapse text-sm">
+            <thead className="bg-amber-100/60 text-left text-xs text-slate-700">
+              <tr>
+                <th className="px-4 py-3 font-semibold">Solar COD</th>
+                <th className="px-3 py-3 text-right font-semibold">Facilities</th>
+                <th className="px-3 py-3 text-right font-semibold">Current GWdc</th>
+                <th className="px-3 py-3 text-right font-semibold">Headroom</th>
+                <th className="px-4 py-3 text-right font-semibold">Estimated PPA window</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PPA_RENEWAL_CALENDAR_2010_2014.map((row) => (
+                <tr key={row.codYear} className="border-t border-amber-100">
+                  <th className="px-4 py-3 text-left font-semibold text-slate-950">{row.codYear}</th>
+                  <td className="px-3 py-3 text-right text-slate-600">{format(row.facilities)}</td>
+                  <td className="px-3 py-3 text-right text-slate-600">{format(row.currentDcGW, 3)}</td>
+                  <td className="px-3 py-3 text-right font-semibold text-slate-900">{signed(row.headroomPct, '%')}</td>
+                  <td className="px-4 py-3 text-right font-semibold text-amber-800">{row.coreWindowStart}–{row.coreWindowEnd}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p className="mt-4 max-w-4xl text-xs leading-5 text-slate-600">
+          Berkeley Lab&apos;s full 546-contract sample covers 41.6 GWac, but it is a documented-contract subset rather than the national universe: Berkeley Lab includes contracts only when key variables can be verified, excludes merchant plants and several other sales structures, and says corporate PPAs are not well represented. The {PPA_RENEWAL_PROFILE.cohortExecutionYears} subset inherits those limitations. Berkeley Lab also observes that original PPAs are usually signed {PPA_RENEWAL_PROFILE.typicalExecutionLeadMinYears}–{PPA_RENEWAL_PROFILE.typicalExecutionLeadMaxYears} years before COD; used only as directional context, an analogous lead time ahead of the earliest 2030 boundary would point to 2027–2028. The contract sample is not joined to USPVDB facilities, so every date here is a cohort estimate.{' '}
+          <a href={PPA_RENEWAL_PROFILE.sourceUrl} target="_blank" rel="noreferrer" className="font-semibold text-teal-800 underline decoration-teal-300 underline-offset-2">Review the Berkeley Lab source</a>.
+        </p>
+      </div>
+
       <div className="border-t border-slate-200 px-5 py-4 text-xs leading-5 text-slate-600 sm:px-7">
-        <strong className="text-slate-900">What the data says:</strong> {highestRelative.label} has the highest modeled headroom relative to its current capacity. Most absolute headroom can still come from newer cohorts because they contain far more installed capacity.
+        <strong className="text-slate-900">What the data says:</strong> {highestRelative.label} has the highest modeled density headroom relative to its current capacity. Most absolute headroom comes from newer cohorts because they contain far more installed capacity; that does not make it a near-term repowering pipeline.
         {national.facilitiesWithoutCohortYear > 0 ? ` ${national.facilitiesWithoutCohortYear} modeled facilities are omitted from the cohort table because their commissioning year is unavailable or outside 1985–2026.` : ' Every modeled facility has a commissioning year and is included in one of the four cohorts.'}
       </div>
     </section>
@@ -419,6 +701,7 @@ function CountList({ title, values, empty }: { title: string; values: Record<str
 
 function PlantCard({ plant, metadata, onClose }: { plant: RepoweringPlant; metadata: RepoweringAtlas['metadata']; onClose: () => void }) {
   const mounting = plant.axis === 'fixed' ? 'Fixed tilt' : plant.axis === 'tracker' ? 'Single-axis tracker' : 'Unknown axis (fixed-layout fallback)'
+  const ppaRenewal = plant.year ? estimatePpaRenewal(plant.year) : null
   return (
     <article className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/40 p-5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -428,7 +711,7 @@ function PlantCard({ plant, metadata, onClose }: { plant: RepoweringPlant; metad
       <dl className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
           ['Current', `${format(plant.currentDcMW)} MWdc`],
-          ['Reference repowering', `${format(plant.modeledDcMW)} MWdc`],
+          ['Modern-density scenario', `${format(plant.modeledDcMW)} MWdc`],
           ['Additional', signed(plant.additionalDcMW, ' MWdc')],
           ['Headroom', signed(plant.headroomPct, '%')],
           ['Footprint', `${format(plant.footprintAcres)} acres`],
@@ -436,8 +719,17 @@ function PlantCard({ plant, metadata, onClose }: { plant: RepoweringPlant; metad
           ['Packed GCR', `${format(plant.packedGcrPct)}%`],
           ['Row pitch', plant.rowPitchM === null ? '—' : `${format(plant.rowPitchM)} m`],
           ['Modules', plant.moduleCount.toLocaleString('en-US')],
+          ...(ppaRenewal ? [
+            ['Estimated PPA core window', `${ppaRenewal.coreWindowStart}–${ppaRenewal.coreWindowEnd}`],
+            ['Commercial timing', ppaRenewal.status],
+          ] : []),
         ].map(([label, value]) => <div key={label} className="rounded-lg border border-amber-100 bg-white p-3"><dt className="text-xs text-slate-500">{label}</dt><dd className="mt-1 text-sm font-semibold text-slate-900">{value}</dd></div>)}
       </dl>
+      {ppaRenewal ? (
+        <p className="mt-4 max-w-4xl text-xs leading-5 text-slate-600">
+          Commercial timing assumes an original PPA beginning near the reported COD and applies Berkeley Lab&apos;s 20–25-year core term range. Verify the actual offtake agreement, amendments and renewal rights before treating this as a project date.
+        </p>
+      ) : null}
       <a href={plantAuditHref(plant, metadata)} download={`repowering-${plant.id}.json`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-700 hover:text-teal-900"><Download className="h-4 w-4" /> Download auditable calculation record</a>
     </article>
   )
@@ -446,7 +738,7 @@ function PlantCard({ plant, metadata, onClose }: { plant: RepoweringPlant; metad
 const TABLE_COLUMNS: Array<{ key: SortKey; label: string }> = [
   { key: 'currentDcGW', label: 'Current GWdc' },
   { key: 'modeledDcGW', label: 'Reference GWdc' },
-  { key: 'additionalDcGW', label: 'Additional GWdc' },
+  { key: 'additionalDcGW', label: 'Density headroom GWdc' },
   { key: 'headroomPct', label: 'Headroom %' },
   { key: 'modeledFacilities', label: 'Facilities modeled' },
   { key: 'unableToModelFacilities', label: 'Unable to model' },

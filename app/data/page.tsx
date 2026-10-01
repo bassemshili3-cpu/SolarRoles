@@ -518,7 +518,16 @@ export default async function DataPage() {
             icon={<Factory className="h-5 w-5" />}
           />
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-3">
+            <MetricCard
+              label="Solar + storage profile"
+              metric={metricValue(metrics, 'solarStorageProfileRate')}
+              points={h('solarStorageProfileRate')}
+              comparisonMode="percentage-points"
+              currentDate={currentDate}
+              note="Share of all active openings that explicitly connect solar/PV and battery storage/BESS in the job title or role-specific responsibilities and qualifications."
+              denominatorLabel="active openings"
+            />
             <MetricCard
               label="Storage skill penetration"
               metric={metricValue(metrics, 'storageSkillsRate')}
@@ -541,7 +550,7 @@ export default async function DataPage() {
 
           {definitionBox(
             'Reporter read',
-            'Unlike the segment mix above, this block asks whether storage and grid capabilities are spreading across technical solar jobs — including roles that may not be classified primarily as BESS or utility-scale.'
+            'The solar + storage profile rate asks whether employers increasingly combine both domains in one posting. The broader storage-skills measure captures storage capabilities anywhere in technical solar work, while the grid/HV measure tracks adjacent power-system expertise.'
           )}
         </section>
 

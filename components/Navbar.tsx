@@ -34,7 +34,7 @@ export default function Navbar() {
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
     { href: '/resources',  label: 'Resources' },
-    { href: '/dashboard/post-a-job-free',  label: 'Post a Job' },
+    { href: '/dashboard/post-a-job',  label: 'Post a Job' },
   ]
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white md:static">

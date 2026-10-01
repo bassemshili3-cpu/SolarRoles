@@ -1,15 +1,13 @@
 // app/api/jobs-count/route.ts
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { buildJobWhere, parseJobWhereParams } from '@/lib/job-where'
+import { parseJobWhereParams } from '@/lib/job-where'
+import { getCachedLandingJobCount } from '@/lib/landingJobTitle'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
 
   try {
-    const count = await prisma.job.count({
-      where: buildJobWhere(parseJobWhereParams(searchParams)),
-    })
+    const count = await getCachedLandingJobCount(parseJobWhereParams(searchParams))
 
     return NextResponse.json({ count })
   } catch (err: any) {

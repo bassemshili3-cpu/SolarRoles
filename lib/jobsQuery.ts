@@ -3,6 +3,8 @@ import { unstable_cache } from 'next/cache'
 import type { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { buildJobWhere, type JobWhereParams } from '@/lib/job-where'
+import { resolveJobSalary } from '@/lib/resolveJobSalary'
+import { getCachedLandingJobCount } from '@/lib/landingJobTitle'
 
 export type JobsListResult = {
   results: any[]
@@ -12,7 +14,7 @@ export type JobsListResult = {
 const JOB_SELECT = {
   id: true, title: true, company: true, location: true, canonicalSlug: true,
   addressRegion: true, url: true, applyUrl: true,
-  salaryMin: true, salaryMax: true, salary: true,
+  salaryMin: true, salaryMax: true, salary: true, description: true,
   contractType: true, contractTime: true, source: true, postedAt: true,
   featured: true, featuredUntil: true,
 } as const
@@ -44,7 +46,7 @@ export async function fetchJobsPageUncached(
       skip: (page - 1) * resultsPerPage,
       take: resultsPerPage,
     }),
-    prisma.job.count({ where: whereClause }),
+    getCachedLandingJobCount(params),
   ])
 
   const results = dbJobs.map((job) => ({
@@ -58,6 +60,13 @@ export async function fetchJobsPageUncached(
     applyUrl: job.applyUrl,
     apply_url: job.applyUrl,
     salary: job.salary,
+    salary_display: resolveJobSalary({
+      title: job.title,
+      description: job.description,
+      salary: job.salary,
+      salary_min: job.salaryMin,
+      salary_max: job.salaryMax,
+    }).salary,
     salaryMin: job.salaryMin,
     salaryMax: job.salaryMax,
     salary_min: job.salaryMin,

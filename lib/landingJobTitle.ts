@@ -1,15 +1,32 @@
 import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { buildJobWhere, type JobWhereParams } from '@/lib/job-where'
 
 export const MIN_LANDING_JOB_COUNT = 20
 
-const getCachedLandingJobCount = unstable_cache(
-  async (params: JobWhereParams) =>
-    prisma.job.count({ where: buildJobWhere(params) }),
-  ['landing-job-count'],
+const readCachedJobCount = unstable_cache(
+  async (filterKey: string) =>
+    prisma.job.count({ where: buildJobWhere(JSON.parse(filterKey) as JobWhereParams) }),
+  ['landing-job-count-v2'],
   { revalidate: 60 },
 )
+
+// Use one primitive key so metadata and lists also share an in-flight count.
+// Empty/default filters and sorting do not change the matching jobs.
+const readJobCountForRequest = cache(readCachedJobCount)
+
+export function getCachedLandingJobCount(params: JobWhereParams): Promise<number> {
+  const filters = Object.fromEntries(
+    Object.entries(params)
+      .filter(([key, value]) =>
+        key !== 'sort' && value !== undefined && value !== '' && value !== false &&
+        !(Array.isArray(value) && value.length === 0),
+      )
+      .sort(([a], [b]) => a.localeCompare(b)),
+  )
+  return readJobCountForRequest(JSON.stringify(filters))
+}
 
 export async function getLandingJobCount(
   params: JobWhereParams,

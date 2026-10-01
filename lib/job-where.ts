@@ -11,7 +11,35 @@ import {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-export const ACTIVE_SOURCES = ['lever', 'adzuna', 'pinpoint', 'workable', 'employer', 'greenhouse', 'asby', 'workday', 'rippling', 'successfactors'] as const
+// Sources eligible for the shared /jobs list and role landing pages.
+// Keep this in sync with the providers that write Job.source, including direct career sites.
+export const ACTIVE_SOURCES = [
+  'adp',
+  'adzuna',
+  'ashby',
+  'breezy',
+  'custom-scrape',
+  'employer',
+  'first-party-careers',
+  'greenhouse',
+  'hrmdirect',
+  'icims',
+  'jazzhr',
+  'jobvite',
+  'lever',
+  'oraclecloud',
+  'paycom',
+  'paylocity',
+  'pinpoint',
+  'qcells',
+  'rippling',
+  'saashr',
+  'smartrecruiters',
+  'successfactors',
+  'ukg',
+  'workable',
+  'workday',
+] as const
 
 const STOPWORDS = new Set([
   'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
@@ -379,6 +407,8 @@ if (where) {
   // ── Base guards (active, not expired, known source) ─────────────────────────
   return {
     active:    true,
+    deletedAt: null,
+    pausedAt:  null,
     expiresAt: { gt: new Date() },
     source:    { in: [...ACTIVE_SOURCES] },
     ...(AND.length > 0 && { AND }),

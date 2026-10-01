@@ -1,6 +1,6 @@
 // lib/jobDetail.ts
 import { prisma } from '@/lib/prisma'
-import { extractSalaryFromText } from '@/lib/extractSalary'
+import { resolveJobSalary } from '@/lib/resolveJobSalary'
 import { cache } from 'react'
 
 export type JobDetail = {
@@ -70,24 +70,6 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
   }
 })
 export function getJobDetailWithSalary(job: JobDetail): JobDetail {
-  const hasRealSalary = job.salary_min && job.salary_max && job.salary_min !== job.salary_max
-
-  if (hasRealSalary) {
-    if (!job.salary) {
-      job.salary = `$${job.salary_min!.toLocaleString('en-US')} - $${job.salary_max!.toLocaleString('en-US')}/year`
-    }
-    return job
-  }
-
-  const extracted = extractSalaryFromText(job.title, job.description || '')
-  if (extracted) {
-    job.salary = extracted.display
-    job.salary_min = extracted.min
-    job.salary_max = extracted.max
-  } else if (job.salary_min && job.salary_min === job.salary_max) {
-    job.salary = `~$${job.salary_min.toLocaleString('en-US')}/year (est.)`
-  }
-
+  Object.assign(job, resolveJobSalary(job))
   return job
-
 }

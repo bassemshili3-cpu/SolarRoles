@@ -10,10 +10,9 @@ function getClientIp(request: NextRequest): string | null {
 }
 
 export async function GET(request: NextRequest) {
-  const publisher = process.env.WHATJOBS_PUBLISHER_ID
-  if (!publisher) {
-    return NextResponse.json({ error: 'WhatJobs is not configured.' }, { status: 503 })
-  }
+  // The publisher ID is public in the WhatJobs search forms. Keep the feed
+  // available when a deployment does not define the optional environment var.
+  const publisher = process.env.WHATJOBS_PUBLISHER_ID || '7186'
 
   const userIp = getClientIp(request)
   if (!userIp) {

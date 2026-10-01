@@ -7,6 +7,7 @@ import {
 } from '@/lib/authRedirect'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { accountConsentPath } from '@/lib/accountConsent'
 
 function authFailureRedirect(request: Request, redirectTo: string, reason: string) {
   const loginUrl = new URL('/auth/login', request.url)
@@ -44,5 +45,5 @@ export async function GET(request: Request) {
 
   cookieStore.delete(AUTH_REDIRECT_COOKIE)
   cookieStore.delete(AUTH_ACCOUNT_TYPE_COOKIE)
-  return NextResponse.redirect(new URL(redirectTo, request.url))
+  return NextResponse.redirect(new URL(accountConsentPath(redirectTo), request.url))
 }

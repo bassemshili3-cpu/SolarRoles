@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 
 import SearchHero from '@/components/SearchHero'
 
@@ -17,8 +18,6 @@ import {
   ShieldCheck,
 
   Award,
-
-  Globe,
 
   Users,
 
@@ -148,16 +147,31 @@ const featuredValueProps = [
 
 
 
-const credentialFeatures = [
-
-  { icon: Award, label: 'NABCEP-aligned assessments' },
-
-  { icon: Globe, label: 'Open credential standards' },
-
-  { icon: ShieldCheck, label: 'License & OSHA verification' },
-
-  { icon: Users, label: 'Portable across employers' },
-
+const workforceFeatures = [
+  {
+    icon: MapPin,
+    title: 'Compare demand by state',
+    body: 'See active openings and explicitly entry-level hiring across all 50 states.',
+    href: '/workforce-resources/solar-job-market-by-state',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Find where beginners are hired',
+    body: 'Review the employers, roles and locations currently open to new entrants.',
+    href: '/workforce-resources/entry-level-solar-jobs',
+  },
+  {
+    icon: Award,
+    title: 'Connect training to occupations',
+    body: 'Use current salary, skills, certification and career-pathway references.',
+    href: '/workforce-resources/solar-career-pathways',
+  },
+  {
+    icon: Briefcase,
+    title: 'Publish current solar openings',
+    body: 'Add a filtered jobs feed to a college or workforce-program website.',
+    href: '/workforce-resources/jobs-widget',
+  },
 ]
 
 
@@ -270,10 +284,57 @@ function timeAgo(date: Date | null) {
 
 }
 
+async function LatestJobsContent() {
+  const latestJobs = await getLatestJobs()
+  return latestJobs.length > 0 ? (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {latestJobs.map(job => (
+        <Link
+          key={job.id}
+          href={`/jobs/${job.id}`}
+          className="flex items-start gap-4 p-5 rounded-2xl border border-gray-200 hover:border-[#F5B819]/50 hover:shadow-sm transition-all bg-white"
+        >
+          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden">
+            <CompanyLogo company={job.company} size={40} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-semibold text-[#0B1A2E] text-sm leading-snug mb-1 truncate">{job.title}</h3>
+            <p className="text-sm text-gray-600 mb-2 truncate">
+              {job.company}{job.addressRegion ? ` \u00b7 ${job.addressRegion}` : ''}
+            </p>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">Full-time</span>
+              <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">On-site</span>
+              <span className="text-xs text-gray-500 ml-auto">{timeAgo(job.postedAt)}</span>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  ) : (
+    <p className="text-center text-gray-400 text-sm">No listings yet \u2014 check back soon.</p>
+  )
+}
 
-export default async function Home() {
+async function TopStatesContent() {
+  const topStates = await getTopStates()
+  return topStates.map(({ state, count }) => (
+    <Link
+      key={state}
+      href={`/data/states/${codeToSlug(state)}`}
+      className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-[#1E3A5F]/30 hover:shadow-sm transition-all"
+    >
+      <MapPin className="text-[#1E3A5F]" size={18} />
+      <span className="font-semibold text-[#0B1A2E] text-sm">
+        {STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}
+      </span>
+      <span className="text-xs text-gray-500">{count.toLocaleString()} jobs</span>
+    </Link>
+  ))
+}
 
-  const [latestJobs, topStates] = await Promise.all([getLatestJobs(), getTopStates()])
+
+export default function Home() {
 
   const badge = CATEGORY_BADGE_COLORS[FEATURED_ARTICLE.category] || { bg: '#FEF3C7', color: '#B45309' }
 
@@ -346,73 +407,9 @@ export default async function Home() {
 
           </div>
 
-          {latestJobs.length > 0 ? (
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-              {latestJobs.map(job => (
-
-                <Link
-
-                  key={job.id}
-
-                  href={`/jobs/${job.id}`}
-
-                  className="flex items-start gap-4 p-5 rounded-2xl border border-gray-200 hover:border-[#F5B819]/50 hover:shadow-sm transition-all bg-white"
-
-                >
-
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden">
-
-                    <CompanyLogo company={job.company} size={40} />
-
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-
-                    <h3 className="font-semibold text-[#0B1A2E] text-sm leading-snug mb-1 truncate">
-
-                      {job.title}
-
-                    </h3>
-
-                    <p className="text-sm text-gray-600 mb-2 truncate">
-
-                      {job.company}{job.addressRegion ? ` \u00b7 ${job.addressRegion}` : ''}
-
-                    </p>
-
-                    <div className="flex items-center gap-1.5 flex-wrap">
-
-                      <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
-
-                        Full-time
-
-                      </span>
-
-                      <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
-
-                        On-site
-
-                      </span>
-
-                      <span className="text-xs text-gray-500 ml-auto">{timeAgo(job.postedAt)}</span>
-
-                    </div>
-
-                  </div>
-
-                </Link>
-
-              ))}
-
-            </div>
-
-          ) : (
-
-            <p className="text-center text-gray-400 text-sm">No listings yet \u2014 check back soon.</p>
-
-          )}
+          <Suspense fallback={<div className="h-24" aria-hidden="true" />}>
+            <LatestJobsContent />
+          </Suspense>
 
         </div>
 
@@ -593,60 +590,50 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#0B1A2E] py-24 px-6">
-
+      <section className="bg-[#0B1A2E] py-24 px-6" aria-labelledby="workforce-resources-heading">
         <div className="max-w-5xl mx-auto">
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-14 lg:gap-16 items-start">
             <div>
-
-              <p className="text-xs font-bold tracking-widest text-[#F5B819] uppercase mb-4">Coming for job seekers</p>
-
-              <h2 className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
-
-                Skills you can show, not just list.
-
+              <p className="text-xs font-bold tracking-widest text-[#F5B819] uppercase mb-4">
+                For educators and workforce programs
+              </p>
+              <h2 id="workforce-resources-heading" className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
+                Eight public tools connect solar training to current hiring.
               </h2>
-
               <p className="text-gray-300 leading-relaxed mb-5">
-
-                A credential layer aligned with NABCEP and other open standards, so what you prove on Solar Roles follows you across employers.
-
+                Community colleges, workforce boards, apprenticeship programs and career counselors can compare local demand, explain occupational pathways and show students the requirements employers are publishing now.
               </p>
-
-              <p className="text-[#F5B819] text-sm font-medium">
-
-                Partnerships in progress.
-
+              <p className="text-sm leading-6 text-gray-400 mb-7">
+                The resource center brings state-level openings, entry-level trends, salaries, employers, licensing references and a live jobs widget into one place. Data refreshes daily.
               </p>
-
+              <Link
+                href="/workforce-resources"
+                className="inline-flex items-center gap-2 rounded-full bg-[#F5B819] px-6 py-3 text-sm font-bold text-[#0B1A2E] transition-colors hover:bg-[#FFD45C]"
+              >
+                Open workforce resources <ArrowRight size={14} />
+              </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-
-              {credentialFeatures.map(({ icon: Icon, label }) => (
-
-                <div key={label} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-3">
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {workforceFeatures.map(({ icon: Icon, title, body, href }) => (
+                <Link
+                  key={title}
+                  href={href}
+                  className="group rounded-2xl border border-white/10 bg-white/5 p-6 transition-colors hover:border-[#F5B819]/50 hover:bg-white/10"
+                >
                   <div className="w-10 h-10 rounded-xl bg-[#F5B819]/20 flex items-center justify-center">
-
                     <Icon className="text-[#F5B819]" size={20} />
-
                   </div>
-
-                  <p className="text-white text-sm font-semibold leading-snug">{label}</p>
-
-                </div>
-
+                  <h3 className="mt-4 text-sm font-semibold leading-snug text-white">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-400">{body}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#F5B819] transition-all group-hover:gap-2.5">
+                    Open tool <ArrowRight size={12} />
+                  </span>
+                </Link>
               ))}
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
 
@@ -704,7 +691,7 @@ export default async function Home() {
 
               <Link
 
-                href="/dashboard/post-a-job-free"
+                href="/dashboard/post-a-job"
 
                 className="text-[#B45309] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
 
@@ -798,31 +785,9 @@ export default async function Home() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
 
-            {topStates.map(({ state, count }) => (
-
-              <Link
-
-                key={state}
-
-                href={`/data/states/${codeToSlug(state)}`}
-
-                className="flex flex-col gap-2 p-5 rounded-2xl border border-gray-100 hover:border-[#1E3A5F]/30 hover:shadow-sm transition-all"
-
-              >
-
-                <MapPin className="text-[#1E3A5F]" size={18} />
-
-                <span className="font-semibold text-[#0B1A2E] text-sm">
-
-                  {STATE_CODE_TO_NAME[state.toUpperCase()] ?? state}
-
-                </span>
-
-                <span className="text-xs text-gray-500">{count.toLocaleString()} jobs</span>
-
-              </Link>
-
-            ))}
+            <Suspense fallback={<div className="col-span-full h-24" aria-hidden="true" />}>
+              <TopStatesContent />
+            </Suspense>
 
           </div>
 

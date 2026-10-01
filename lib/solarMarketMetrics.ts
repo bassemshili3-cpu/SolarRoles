@@ -70,6 +70,61 @@ function has(value: string, pattern: RegExp) {
   return pattern.test(value)
 }
 
+type SolarStorageProfileInput = Pick<ActiveJob, 'title' | 'description'>
+
+const SOLAR_PROFILE_SIGNAL = /\b(?:solar|photovoltaic|pv)\b/i
+const STORAGE_PROFILE_SIGNAL = /\b(?:bess|battery(?: energy)? storage|energy storage|storage systems?)\b/i
+const ROLE_SECTION_SIGNAL = /\b(?:about the role|position overview|job description|responsibilities|what you(?:'|’)ll do|essential duties|qualifications|requirements|position summary|job functions|key responsibilities)\b/i
+const PROFILE_REQUIREMENT_SIGNAL = /\b(?:experience|knowledge|familiarity|proficien\w*|skills?|required|responsibilit\w*|install\w*|maintain\w*|service|repair\w*|troubleshoot\w*|commission\w*|operat\w*|design\w*|engineer\w*|construct\w*|manage\w*|inspect\w*|test\w*|support\w*)\b/i
+
+function normalizedPostingText(value: string | null | undefined) {
+  return (value ?? '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(?:nbsp|amp);/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/**
+ * Conservative signal that a posting asks for a combined solar + storage
+ * profile. Company-boilerplate mentions before the role section do not count.
+ */
+export function requiresSolarStorageProfile(job: SolarStorageProfileInput) {
+  const structured = normalizedPostingText(job.title)
+
+  if (
+    SOLAR_PROFILE_SIGNAL.test(structured) &&
+    STORAGE_PROFILE_SIGNAL.test(structured)
+  ) {
+    return true
+  }
+
+  const description = normalizedPostingText(job.description)
+  const sectionStart = description.search(ROLE_SECTION_SIGNAL)
+  if (sectionStart < 0) return false
+
+  const roleText = description.slice(sectionStart)
+  const storagePattern = new RegExp(STORAGE_PROFILE_SIGNAL.source, 'gi')
+
+  for (const match of roleText.matchAll(storagePattern)) {
+    const index = match.index ?? 0
+    const context = roleText.slice(
+      Math.max(0, index - 280),
+      Math.min(roleText.length, index + match[0].length + 280)
+    )
+    const profileContext = `${structured} ${context}`
+
+    if (
+      SOLAR_PROFILE_SIGNAL.test(profileContext) &&
+      PROFILE_REQUIREMENT_SIGNAL.test(profileContext)
+    ) {
+      return true
+    }
+  }
+
+  return false
+}
+
 function percentile(values: number[], position: number): number | null {
   if (!values.length) return null
   const ordered = [...values].sort((a, b) => a - b)
@@ -355,6 +410,7 @@ export async function getSolarMarketData() {
   ).length
   const experienceRequirements = jobs.filter(requiresPriorExperience).length
   const entryLevelContradictions = entryLevelJobs.filter(requiresPriorExperience).length
+  const solarStorageProfiles = jobs.filter(requiresSolarStorageProfile).length
 
   const metrics: Record<string, MetricValue> = {
     totalJobs: countMetric(totalJobs),
@@ -395,6 +451,7 @@ export async function getSolarMarketData() {
     buildShareTechnical: rateMetric(buildJobs, technicalJobs.length),
     omShareTechnical: rateMetric(omJobs, technicalJobs.length),
     storageSkillsRate: rateMetric(storageSkills, technicalJobs.length),
+    solarStorageProfileRate: rateMetric(solarStorageProfiles, totalJobs),
     manufacturingShare: rateMetric(manufacturing, totalJobs),
     apprenticeshipRate: rateMetric(apprenticeships, technicalJobs.length),
     trainingGapRate: rateMetric(trainingGaps, entryAccessibleTechnicalJobs.length),

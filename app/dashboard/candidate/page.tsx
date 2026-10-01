@@ -5,6 +5,19 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
+const RESUME_MAX_BYTES = 5 * 1024 * 1024
+const RESUME_TYPES: Record<string, string> = {
+  pdf: 'application/pdf',
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+}
+
+interface ResumeFile {
+  name: string
+  url: string
+  isPdf: boolean
+}
+
 type Tab = 'overview' | 'saved' | 'alerts' | 'resume' | 'settings'
 
 interface SavedJob {
@@ -50,7 +63,9 @@ export default function CandidateDashboard() {
   const [loadingAlerts, setLoadingAlerts] = useState(false)
 
   const [uploading, setUploading] = useState(false)
-  const [resume, setResume] = useState<{ name: string; url: string } | null>(null)
+  const [resume, setResume] = useState<ResumeFile | null>(null)
+  const [resumeError, setResumeError] = useState('')
+  const [loadingResume, setLoadingResume] = useState(true)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -88,11 +103,49 @@ export default function CandidateDashboard() {
   }
 
   const loadResume = async (userId: string) => {
-    const { data } = await supabase.storage.from('resumes').list('public', { search: userId })
-    if (data && data.length > 0) {
-      const latest = data[data.length - 1]
-      const { data: urlData } = supabase.storage.from('resumes').getPublicUrl(`public/${latest.name}`)
-      setResume({ name: latest.name, url: urlData.publicUrl })
+    setLoadingResume(true)
+    setResumeError('')
+    try {
+      const storage = supabase.storage.from('resumes')
+      const { data, error } = await storage.list(userId, {
+        limit: 100,
+        sortBy: { column: 'created_at', order: 'desc' },
+      })
+      if (error) throw error
+      let latest = data?.find(file => file.name !== '.emptyFolderPlaceholder')
+      let path = latest ? `${userId}/${latest.name}` : ''
+      let displayName = latest?.name.replace(/^\d+-/, '') || ''
+
+      // Earlier uploads used public/<user id>-<timestamp>-<filename>.
+      if (!latest) {
+        const { data: legacy, error: legacyError } = await storage.list('public', {
+          search: `${userId}-`,
+          limit: 100,
+          sortBy: { column: 'created_at', order: 'desc' },
+        })
+        if (legacyError) throw legacyError
+        latest = legacy?.find(file => file.name.startsWith(`${userId}-`))
+        if (latest) {
+          path = `public/${latest.name}`
+          displayName = latest.name.slice(userId.length + 1).replace(/^\d+-/, '')
+        }
+      }
+
+      if (!latest) {
+        setResume(null)
+        return
+      }
+      const { data: signed, error: signError } = await storage.createSignedUrl(path, 3600)
+      if (signError || !signed) throw signError || new Error('Could not open resume')
+      setResume({
+        name: displayName,
+        url: signed.signedUrl,
+        isPdf: latest.name.toLowerCase().endsWith('.pdf'),
+      })
+    } catch {
+      setResumeError('Could not load your resume. Please try again later.')
+    } finally {
+      setLoadingResume(false)
     }
   }
 
@@ -108,15 +161,34 @@ export default function CandidateDashboard() {
 
   const uploadResume = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file || !user) return
-    setUploading(true)
-    const name = `${user.id}-${Date.now()}-${file.name}`
-    const { error } = await supabase.storage.from('resumes').upload(`public/${name}`, file, { upsert: true })
-    if (!error) {
-      const { data: urlData } = supabase.storage.from('resumes').getPublicUrl(`public/${name}`)
-      setResume({ name, url: urlData.publicUrl })
+    e.target.value = ''
+    if (!file || !user || uploading) return
+    setResumeError('')
+    const extension = file.name.split('.').pop()?.toLowerCase() || ''
+    const contentType = RESUME_TYPES[extension]
+    if (!contentType) {
+      setResumeError('Choose a PDF, DOC or DOCX file.')
+      return
     }
-    setUploading(false)
+    if (file.size > RESUME_MAX_BYTES) {
+      setResumeError('The file must be 5 MB or smaller.')
+      return
+    }
+    setUploading(true)
+    try {
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+      const name = `${Date.now()}-${safeName}`
+      const storage = supabase.storage.from('resumes')
+      const { error } = await storage.upload(`${user.id}/${name}`, file, { contentType, upsert: false })
+      if (error) throw error
+      const { data: signed, error: signError } = await storage.createSignedUrl(`${user.id}/${name}`, 3600)
+      if (signError || !signed) throw signError || new Error('Could not open resume')
+      setResume({ name: file.name, url: signed.signedUrl, isPdf: extension === 'pdf' })
+    } catch (error) {
+      setResumeError(error instanceof Error ? error.message : 'Could not upload your resume.')
+    } finally {
+      setUploading(false)
+    }
   }
 
   const signOut = async () => {
@@ -240,7 +312,7 @@ export default function CandidateDashboard() {
             </nav>
 
             <Link
-              href="/"
+              href="/jobs"
               className="block text-center text-xs font-medium bg-[#2B4ACB] text-white py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
             >
               Search jobs
@@ -275,7 +347,7 @@ export default function CandidateDashboard() {
               />
             )}
             {tab === 'resume' && (
-              <ResumeTab resume={resume} uploading={uploading} onUpload={uploadResume} />
+              <ResumeTab resume={resume} uploading={uploading} loading={loadingResume} error={resumeError} onUpload={uploadResume} />
             )}
             {tab === 'settings' && <SettingsTab user={user} onSignOut={signOut} />}
           </main>
@@ -402,7 +474,7 @@ function OverviewTab({
         <div className="bg-white border border-gray-200 rounded-lg p-10 text-center">
           <p className="text-gray-500 text-sm mb-4">Your dashboard is empty. Start by searching for jobs.</p>
           <Link
-            href="/"
+            href="/jobs"
             className="inline-block bg-[#2B4ACB] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
           >
             Search jobs
@@ -443,7 +515,7 @@ function SavedJobsTab({
             No saved jobs yet. Browse listings and bookmark the ones worth applying to.
           </p>
           <Link
-            href="/"
+            href="/jobs"
             className="inline-block bg-[#2B4ACB] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
           >
             Browse jobs
@@ -692,10 +764,14 @@ function AlertItem({ alert, onRemove }: { alert: AlertRow; onRemove: (id: string
 function ResumeTab({
   resume,
   uploading,
+  loading,
+  error,
   onUpload,
 }: {
-  resume: { name: string; url: string } | null
+  resume: ResumeFile | null
   uploading: boolean
+  loading: boolean
+  error: string
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) {
   return (
@@ -703,7 +779,9 @@ function ResumeTab({
       <h2 className="text-lg font-semibold text-gray-900">Resume</h2>
 
       <div className="bg-white border border-gray-200 rounded-lg p-5">
-        {resume ? (
+        {loading ? (
+          <p className="text-sm text-gray-500">Loading resume...</p>
+        ) : resume ? (
           <>
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
@@ -716,13 +794,22 @@ function ResumeTab({
                 rel="nofollow noopener noreferrer"
                 className="flex-shrink-0 text-xs font-medium border border-gray-200 rounded-md px-3 py-1.5 text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                Download
+                {resume.isPdf ? 'Open PDF' : 'Download'}
               </a>
             </div>
+            {resume.isPdf ? (
+              <iframe
+                src={resume.url}
+                title="Resume preview"
+                className="mb-4 h-[60vh] min-h-80 w-full rounded-md border border-gray-200"
+              />
+            ) : (
+              <p className="mb-4 text-xs text-gray-500">Preview is available for PDF files. Open or download this document to view it.</p>
+            )}
             <div className="pt-4 border-t border-gray-100">
               <p className="text-xs text-gray-500 mb-2">Replace with a new file</p>
-              <label className="cursor-pointer">
-                <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} className="hidden" />
+              <label className={`inline-block ${uploading ? 'cursor-wait opacity-60' : 'cursor-pointer'}`}>
+                <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} disabled={uploading} className="sr-only" />
                 <span className="inline-block text-xs font-medium border border-gray-200 rounded-md px-3 py-1.5 text-gray-600 hover:bg-gray-50 transition-colors">
                   {uploading ? 'Uploading...' : 'Choose file'}
                 </span>
@@ -743,14 +830,15 @@ function ResumeTab({
             </div>
             <p className="text-sm text-gray-700 mb-1">No resume uploaded yet</p>
             <p className="text-xs text-gray-400 mb-5">PDF, DOC or DOCX, max 5MB</p>
-            <label className="cursor-pointer">
-              <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} className="hidden" />
+            <label className={`inline-block ${uploading ? 'cursor-wait opacity-60' : 'cursor-pointer'}`}>
+              <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} disabled={uploading} className="sr-only" />
               <span className="inline-block text-sm font-medium bg-[#2B4ACB] text-white px-5 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors">
                 {uploading ? 'Uploading...' : 'Upload resume'}
               </span>
             </label>
           </div>
         )}
+        {error && <p role="alert" className="mt-4 text-sm text-red-600">{error}</p>}
       </div>
     </div>
   )

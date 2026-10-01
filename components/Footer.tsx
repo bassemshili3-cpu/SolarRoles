@@ -26,7 +26,7 @@ export default function Footer() {
     { href: '/resources/osha-safety-guide-solar-installers', label: 'OSHA Safety Guide' },
   ]
   return (
-    <footer className="border-t bg-muted/50 py-12">
+    <footer className="mt-12 border-t bg-muted/50 py-9 md:mt-16 md:py-10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
         <div>
           <div className="font-semibold mb-3">Company</div>
@@ -84,7 +84,7 @@ export default function Footer() {
             <li><Link href="/cookie-policy" className="hover:underline">Cookie Policy</Link></li>
           </ul>
           <div className="font-semibold mt-6 mb-2">For Employers</div>
-          <Link href="/dashboard/post-a-job-free" className="text-sm hover:underline">
+          <Link href="/dashboard/post-a-job" className="text-sm hover:underline">
             Post a Job
           </Link>
         </div>

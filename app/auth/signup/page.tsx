@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Link from 'next/link'
+import { accountConsentPath } from '@/lib/accountConsent'
 
 import {
 
@@ -145,7 +146,7 @@ export default function Signup() {
 
       if (data.session) {
 
-        router.push(redirectTo)
+        router.push(accountConsentPath(redirectTo))
 
         router.refresh()
 
@@ -339,6 +340,11 @@ export default function Signup() {
 
                 </div>
 
+                <p className="text-xs leading-5 text-gray-600">
+                  We use your email and, if you choose Google, your Google profile details to create your account.{' '}
+                  <Link href="/privacy" className="font-medium text-amber-700 underline">Read our Privacy Policy</Link> before continuing.
+                </p>
+
 
                 {error && (
 
@@ -486,7 +492,7 @@ export default function Signup() {
 
                   <p className="text-center text-xs text-gray-400">
 
-                    By continuing, you agree to our{' '}
+                    After sign-up, you will review our{' '}
 
                     <Link
 
@@ -514,7 +520,7 @@ export default function Signup() {
 
                     </Link>
 
-                    .
+                    {' '}and confirm your account choices.
 
                   </p>
 

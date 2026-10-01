@@ -48,17 +48,11 @@ export function CertificationsNavCta() {
       <Link href="/certifications">
         <Button
           size="sm"
-          className="relative overflow-hidden rounded-full px-3 h-7 text-xs max-[360px]:px-2 max-[360px]:text-[11px] sm:px-4 sm:h-9 sm:text-sm font-semibold text-black
-                     bg-gradient-to-r from-[#F5B819] via-[#FF6A3D] to-[#F5B819]
-                     bg-[length:200%_100%] animate-cert-cta-shimmer
-                     transition-transform hover:scale-[1.03] active:scale-[0.97]
-                     shadow-[0_0_20px_-4px_rgba(245,184,25,0.6)]"
+          className="h-7 rounded-full border border-[#E9DAB9] bg-[#FFF8E8] px-3 text-xs font-semibold text-[#563609] shadow-none transition-colors hover:border-[#D6BB81] hover:bg-[#FFF1D6] hover:text-[#3F270B] focus-visible:ring-[#D6BB81] max-[360px]:px-2 max-[360px]:text-[11px] sm:h-9 sm:px-4 sm:text-sm"
           aria-haspopup="true"
           aria-expanded={open}
         >
-          <span className="relative z-10 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
-            Certifications
-          </span>
+          Certifications
         </Button>
       </Link>
 

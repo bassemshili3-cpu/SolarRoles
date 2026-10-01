@@ -3,6 +3,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import JobCard from './JobCard'
+import { SavedJobCards } from './SavedJobCards'
 import WhatJobsFeed from './WhatJobsFeed'
 import { Button } from '@/components/ui/button'
 import { FilterDrawerTrigger } from '@/components/filter-drawer-trigger'
@@ -364,7 +365,7 @@ const canUseSSRInitialData =
     return res.json()
   }
 
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, isPlaceholderData, refetch } = useQuery({
     queryKey: jobsQueryKey(page),
     queryFn: () => fetchJobsPage(page),
     initialData: canUseSSRInitialData ? initialDataRef.current!.data : undefined,
@@ -375,10 +376,17 @@ const canUseSSRInitialData =
     staleTime: 30_000,
   })
 
+  const results = data?.results || []
   const totalPages = data?.count ? Math.ceil(data.count / 30) : 1
+  const firstJobNumber = results.length ? (page - 1) * 30 + 1 : 0
+  const lastJobNumber = results.length ? firstJobNumber + results.length - 1 : 0
+  const rangeLabel = isPlaceholderData
+    ? 'Loading…'
+    : results.length
+      ? `${firstJobNumber.toLocaleString('en-US')}–${lastJobNumber.toLocaleString('en-US')} / ${(data?.count ?? 0).toLocaleString('en-US')}`
+      : `0 / ${(data?.count ?? 0).toLocaleString('en-US')}`
   const jobType = searchLabel ?? (resolvedWhat ? `${resolvedWhat} ` : '')
   const whatJobsKeyword = resolvedWhat || searchLabel?.trim() || 'solar'
-  const results = data?.results || []
   const isNewestSort = searchParams.get('sort') === 'newest'
 
   // Keep offers that come directly from an ATS or an employer ahead of every
@@ -451,20 +459,13 @@ const canUseSSRInitialData =
 
   return (
     <div>
-      <div className="mb-4 flex min-h-10 items-center justify-between gap-3 md:min-h-0">
-        {/* Count dynamique — reflète toujours les filtres actuellement actifs */}
-        {typeof data?.count === 'number' && data.count > 0 ? (
-          <p className="text-sm text-gray-500">
-            <span className="font-semibold text-gray-800">{data.count.toLocaleString('en-US')}</span> positions available
-          </p>
-        ) : (
-          <span />
-        )}
+      <div className="mb-2 flex justify-end md:hidden">
         <FilterDrawerTrigger />
       </div>
 
-      <div className="-mx-1 mb-4 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex w-max gap-2 md:w-full md:flex-nowrap">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="-mx-1 min-w-0 max-w-full overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-1">
+          <div className="flex w-max gap-2">
           {popularFilterTags.map((tag) => {
             const isActive = isPopularTagActive(tag)
             return (
@@ -483,17 +484,24 @@ const canUseSSRInitialData =
               </button>
             )
           })}
+          </div>
         </div>
+        {typeof data?.count === 'number' && (
+          <p className="order-first self-end whitespace-nowrap text-sm leading-5 text-gray-500 sm:order-none sm:self-auto" aria-live="polite">
+            {rangeLabel}
+          </p>
+        )}
       </div>
 
       {/* All sources share one grid. Source order still controls priority, but
           CSS can fill each row instead of stretching a lone direct-job card
           or leaving holes between source groups. */}
       {(firstPartyJobs.length > 0 || otherPartnerJobs.length > 0 || adzunaJobs.length > 0 || (page === 1 && shouldShowWhatJobs)) && (
-        <div
-          className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6"
-          onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
-        >
+        <SavedJobCards>
+          <div
+            className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6"
+            onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
+          >
           {firstPartyJobs.map((job: any) => (
             <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
           ))}
@@ -512,11 +520,12 @@ const canUseSSRInitialData =
           {adzunaJobs.map((job: any) => (
             <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
           ))}
-        </div>
+          </div>
+        </SavedJobCards>
       )}
 
       {/* Pagination */}
-      <div className="flex items-center justify-center gap-4 mt-10">
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
         {landingPageSeo && page > 1 ? (
           <Button variant="outline" asChild>
             <Link href={buildPageHref(page - 1)} replace onClick={() => setPage(page - 1)}>
@@ -528,7 +537,7 @@ const canUseSSRInitialData =
             ← Previous
           </Button>
         )}
-        <span className="text-sm text-muted-foreground">Page {page}</span>
+        <span className="text-center text-sm text-muted-foreground">Page {page} of {totalPages}</span>
         {landingPageSeo && page < totalPages ? (
           <Button variant="outline" asChild>
             <Link href={buildPageHref(page + 1)} replace onClick={() => setPage(page + 1)}>

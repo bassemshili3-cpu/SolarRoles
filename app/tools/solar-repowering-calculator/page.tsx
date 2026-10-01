@@ -3,32 +3,33 @@ import Link from 'next/link';
 import RepoweringCalculator from '@/components/repowering/RepoweringCalculator';
 import RepoweringAtlasMap from '@/components/repowering/RepoweringAtlas';
 import atlasData from '@/public/data/repowering/atlas-reference.json';
-import type { RepoweringAtlas } from '@/lib/repowering/atlasTypes';
+import expansionData from '@/public/data/repowering/eia-expansion-by-state.json';
+import type { EiaExpansionData, RepoweringAtlas } from '@/lib/repowering/atlasTypes';
 
 const canonical = 'https://www.solarroles.com/tools/solar-repowering-calculator';
 
 export const metadata: Metadata = {
-  title: 'Solar Repowering Density Calculator | Solar Roles',
-  description: 'Estimate modern same-footprint solar capacity with transparent GCR assumptions or actual GeoJSON polygon packing.',
+  title: 'Solar Repowering Density & Timing Calculator | Solar Roles',
+  description: 'Separate technical same-footprint solar density headroom from the older-fleet capacity approaching plausible repowering and PPA review windows.',
   alternates: { canonical },
   openGraph: {
-    title: 'Solar Repowering Density Calculator',
-    description: 'Estimate modern DC nameplate capacity inside an existing solar array footprint.',
+    title: 'Solar Repowering Density & Timing Calculator',
+    description: 'Separate physical solar density headroom from the capacity approaching plausible repowering and PPA review windows.',
     url: canonical,
     siteName: 'Solar Roles',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'Solar Repowering Density Calculator',
-    description: 'Estimate modern DC nameplate capacity inside an existing solar array footprint.',
+    title: 'Solar Repowering Density & Timing Calculator',
+    description: 'Separate physical solar density headroom from the capacity approaching plausible repowering and PPA review windows.',
   },
 };
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'Solar Repowering Density Calculator',
+  name: 'Solar Repowering Density & Timing Calculator',
   url: canonical,
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
@@ -39,11 +40,12 @@ const jsonLd = {
     url: 'https://www.solarroles.com/',
   },
   description:
-    'A screening calculator for estimating modern DC nameplate capacity inside an existing solar array footprint.',
+    'A screening calculator that separates modern same-footprint DC density headroom from age- and PPA-based repowering timing.',
 };
 
 export default function SolarRepoweringCalculatorPage() {
   const atlas = atlasData as unknown as RepoweringAtlas;
+  const expansion = expansionData as EiaExpansionData;
 
   return (
     <main className="bg-white text-slate-950">
@@ -64,24 +66,24 @@ export default function SolarRepoweringCalculatorPage() {
         </nav>
 
         <header className="max-w-4xl pb-8 pt-8 sm:pb-10">
-          <p className="text-sm font-semibold text-teal-700">America&apos;s hidden solar GW</p>
+          <p className="text-sm font-semibold text-teal-700">Physical headroom, separated from market timing</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-            Solar Repowering Density Calculator
+            Solar Repowering Density &amp; Timing Calculator
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-            Estimate how much modern DC nameplate can physically fit inside an existing solar array footprint. Compare a transparent area-and-GCR model with row packing inside an actual GeoJSON boundary.
+            Measure how much modern DC nameplate could physically fit inside an existing solar footprint, then separate that density headroom from the older assets approaching plausible equipment and PPA review windows.
           </p>
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
             <span>No sign-up required</span>
             <span>Area and polygon methods</span>
-            <span>Results update in the browser</span>
+            <span>Berkeley Lab PPA timing screen</span>
           </div>
           <p className="mt-6 inline-flex rounded-full bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
-            Capacity-only screening · MWdc first · no claim of POI or export feasibility
+            Density and timing screen · not a forecast of economic or executable repowering
           </p>
         </header>
 
-        <RepoweringAtlasMap atlas={atlas} />
+        <RepoweringAtlasMap atlas={atlas} expansion={expansion} />
 
         <section id="calculator" className="mt-14 scroll-mt-24 border-t border-slate-200 pt-10">
           <p className="text-sm font-semibold text-teal-700">Site-level model</p>
@@ -131,7 +133,7 @@ export default function SolarRepoweringCalculatorPage() {
             <div>
               <h3 className="font-semibold text-slate-950">Outside the estimate</h3>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                The result does not establish interconnection headroom, inverter compatibility, energy yield, constructability, permitting, economics or financeability. Those questions require project-specific engineering and commercial review.
+                The result does not establish interconnection headroom, inverter compatibility, energy yield, constructability, permitting, economics, financeability or an actual contract expiration. Those questions require project-specific engineering, PPA documents and commercial review.
               </p>
             </div>
           </div>

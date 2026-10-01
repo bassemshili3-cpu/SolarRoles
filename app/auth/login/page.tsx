@@ -7,6 +7,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
+import { accountConsentPath } from '@/lib/accountConsent'
 
 function authErrorMessage(reason: string | null) {
   if (!reason) return ''
@@ -95,7 +96,7 @@ export default function Login() {
       setIsLoading(false)
     } else {
       await supabase.auth.updateUser({ data: { accountType: userType } })
-      router.push(redirectTo)
+      router.push(accountConsentPath(redirectTo))
       router.refresh()
     }
   }
@@ -204,6 +205,11 @@ export default function Login() {
             </div>
           )}
 
+          <p className="mb-4 text-xs leading-5 text-slate-600">
+            On a first Google sign-in, we use your email and Google profile details to create your account.{' '}
+            <Link href="/privacy" className="font-medium text-blue-700 underline">Read our Privacy Policy</Link> before continuing.
+          </p>
+
           <Button
             variant="outline"
             className="w-full flex items-center justify-center gap-3 h-14 text-base font-medium border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 rounded-xl mb-6"
@@ -306,11 +312,12 @@ export default function Login() {
             </Link>
           </p>
 
-          <p className="text-center text-xs text-slate-400 mt-6">
-            By signing in, you agree to our{' '}
+          <p className="text-center text-xs text-slate-500 mt-6">
+            If this is your first sign-in, you will review our{' '}
             <Link href="/terms" className="underline hover:text-slate-600">Terms</Link>
             {' '}and{' '}
             <Link href="/privacy" className="underline hover:text-slate-600">Privacy Policy</Link>
+            {' '}before using your account.
           </p>
         </div>
       </div>

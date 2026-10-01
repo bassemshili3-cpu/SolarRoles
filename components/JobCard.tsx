@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getCanonicalJobSlug } from '@/lib/slugify'
 import { usePathname } from 'next/navigation'  
 import { formatDistanceToNow } from 'date-fns'
+import { SaveJobCardButton } from './SavedJobCards'
 import { useState, useEffect } from 'react'  // probablement déjà importé
 
 interface JobCardProps {
@@ -19,6 +20,8 @@ interface JobCardProps {
     salary_min?: number
     salary_max?: number
     salary_period?: string
+    salary?: string | null
+    salary_display?: string | null
     category?: { label?: string }
     created?: string
     company_logo?: string
@@ -60,7 +63,7 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
     }
   }
 
-  const salary = formatSalary(job.salary_min, job.salary_max, job.salary_period)
+  const salary = job.salary_display || formatSalary(job.salary_min, job.salary_max, job.salary_period) || job.salary
   const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
   const externalApplyUrl = job.apply_url || job.url || '#'
   const jobLocation = typeof job.location === 'string' ? job.location : job.location?.display_name
@@ -92,8 +95,8 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
         )}
       </Link>
 
-      <div className="relative z-10 flex items-start gap-3 mb-3 pointer-events-none">
-        <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
+      <div className="pointer-events-none relative z-10 flex items-start gap-3 mb-3">
+        <div className="pointer-events-none w-10 h-10 md:w-12 md:h-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
           <img
             src={logoSrc}
             alt={job.company}
@@ -119,7 +122,7 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
           </div>
         </div>
 
-        <div className="flex-1 min-w-0">
+        <div className="pointer-events-none flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500 truncate">
               {job.company}
@@ -137,6 +140,9 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
             </svg>
             <span className="text-xs truncate">{locationLabel}</span>
           </div>
+        </div>
+        <div className="pointer-events-auto">
+          <SaveJobCardButton jobId={job.id} />
         </div>
       </div>
 

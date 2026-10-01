@@ -1,5 +1,6 @@
 // app/jobs/[id]/[slug]/page.tsx
 import ApplyToggle from '../apply-toggle'
+import { Suspense, type ReactNode } from 'react'
 
 
 import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBreadcrumbSchema'
@@ -59,6 +60,16 @@ import Breadcrumb from '@/components/Breadcrumb'
 
 
 export const revalidate = 3600
+
+async function Resolved<T>({
+  value,
+  children,
+}: {
+  value: Promise<T>
+  children: (result: T) => ReactNode
+}) {
+  return <>{children(await value)}</>
+}
 
 
 // ─── Employment type resolver ────────────────────────────────────────────────
@@ -611,41 +622,29 @@ const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
   const stateName = resolveStateName(job.addressRegion)
 
 
-  const [roleStats, similarJobs, roleDemand, employerProfile] = await Promise.all([
-
-    roleMatch && stateName
-
-      ? getRoleLocationStats(getRoleKeywords(roleMatch), stateName, !!roleMatch.matchInDescription)
-
-      : Promise.resolve(null),
-
-    roleMatch
-
-      ? getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
-
-      : Promise.resolve([]),
-
-    roleMatch
-
-      ? getRoleDemandByState(roleMatch.slug)
-
-      : Promise.resolve([]),
-
-    job.company
-
-      ? getEmployerProfile(job.company, job.id)
-
-      : Promise.resolve(null),
-
-
-  ])
-
-
-  const salaryComparison = roleStats
-
-    ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary)
-
-    : null
+  const roleStatsPromise = roleMatch && stateName
+    ? getRoleLocationStats(getRoleKeywords(roleMatch), stateName, !!roleMatch.matchInDescription)
+      .catch((error) => {
+        console.error('Job salary context unavailable:', error)
+        return null
+      })
+    : Promise.resolve(null)
+  const similarJobsPromise = roleMatch
+    ? getSimilarJobs(getRoleKeywords(roleMatch), job.addressRegion, job.id, 4)
+    : Promise.resolve([])
+  const roleDemandPromise = roleMatch
+    ? getRoleDemandByState(roleMatch.slug)
+    : Promise.resolve([])
+  const employerProfilePromise = job.company
+    ? getEmployerProfile(job.company, job.id)
+      .catch((error) => {
+        console.error('Job employer context unavailable:', error)
+        return null
+      })
+    : Promise.resolve(null)
+  const salaryComparisonPromise = roleStatsPromise.then((roleStats) =>
+    roleStats ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary) : null,
+  )
 
 
   const salaryReportSlug =
@@ -679,7 +678,6 @@ const schema = buildJobPostingSchema(job, {
   industry: taxonomy.specialty,   // ✅ remplace industry par specialty
   occupationalCategory: taxonomy.occupationalCategory,
   skills: taxonomy.skills,
-  companyDomain: employerProfile?.domain || undefined,
   companyWebsite,
 })
 
@@ -837,7 +835,9 @@ function safeJsonLd(data: unknown): string {
                   </div>
 
 
-                  {salaryComparison && (
+                  <Suspense fallback={null}>
+                    <Resolved value={salaryComparisonPromise}>
+                      {(salaryComparison) => salaryComparison && (
 
                     <span
 
@@ -895,7 +895,9 @@ function safeJsonLd(data: unknown): string {
 
                     </span>
 
-                  )}
+                      )}
+                    </Resolved>
+                  </Suspense>
 
               {job.contract_time && (
   <span className="bg-secondary px-3 py-1 rounded-full capitalize">
@@ -998,7 +1000,9 @@ function safeJsonLd(data: unknown): string {
                 
 
 
-                {roleStats && stateName && roleMatch && (
+                <Suspense fallback={null}>
+                  <Resolved value={roleStatsPromise}>
+                    {(roleStats) => roleStats && stateName && roleMatch && (
 
                   <div className="mt-10 rounded-xl border border-[#F5B819]/25 bg-[#FEF3C7] p-5 text-sm text-[#B45309]">
 
@@ -1052,10 +1056,13 @@ function safeJsonLd(data: unknown): string {
 
                   </div>
 
-                )}
+                    )}
+                  </Resolved>
+                </Suspense>
 
-
-                {employerProfile && (
+                <Suspense fallback={null}>
+                  <Resolved value={employerProfilePromise}>
+                    {(employerProfile) => employerProfile && (
 
                   <div className="mt-8 rounded-xl border p-5 text-sm">
 
@@ -1111,8 +1118,9 @@ function safeJsonLd(data: unknown): string {
 
                   </div>
 
-                )}
-
+                    )}
+                  </Resolved>
+                </Suspense>
 
                <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  {job.source === 'employer' ? (
@@ -1142,13 +1150,17 @@ function safeJsonLd(data: unknown): string {
 
 
                 {roleMatch && (
-
-                  <RoleDemandMap data={roleDemand} roleLabel={roleMatch.label} />
-
+                  <Suspense fallback={null}>
+                    <Resolved value={roleDemandPromise}>
+                      {(roleDemand) => <RoleDemandMap data={roleDemand} roleLabel={roleMatch.label} />}
+                    </Resolved>
+                  </Suspense>
                 )}
 
 
-                {similarJobs.length > 0 && (
+                <Suspense fallback={null}>
+                  <Resolved value={similarJobsPromise}>
+                    {(similarJobs) => similarJobs.length > 0 && (
 
                   <div className="mt-10">
 
@@ -1198,7 +1210,9 @@ function safeJsonLd(data: unknown): string {
 
                   </div>
 
-                )}
+                    )}
+                  </Resolved>
+                </Suspense>
 
               </div>
 

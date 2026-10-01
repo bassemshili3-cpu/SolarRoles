@@ -1,10 +1,10 @@
 // app/api/saved-jobs/route.ts
-import { createClient } from '@/lib/supabase'
+import { createServerSupabase } from '@/lib/supabase-server'
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
-export async function GET() {
-  const supabase = createClient()
+export async function GET(request: Request) {
+  const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -22,6 +22,10 @@ export async function GET() {
   }
 
   const jobIds = (savedRows || []).map((s: any) => s.job_id as string)
+
+  if (new URL(request.url).searchParams.get('idsOnly') === '1') {
+    return NextResponse.json({ jobIds })
+  }
 
   if (jobIds.length === 0) {
     return NextResponse.json({ jobs: [], savedAt: {} })
@@ -58,7 +62,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const supabase = createClient()
+  const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
   
   if (!user) {
@@ -66,6 +70,15 @@ export async function POST(request: Request) {
   }
 
   const { job_id } = await request.json()
+
+  if (typeof job_id !== 'string' || !job_id.trim()) {
+    return NextResponse.json({ error: 'Invalid job ID' }, { status: 400 })
+  }
+
+  const job = await prisma.job.findUnique({ where: { id: job_id }, select: { id: true } })
+  if (!job) {
+    return NextResponse.json({ error: 'Job not found' }, { status: 404 })
+  }
 
   const { error } = await supabase
     .from('saved_jobs')
@@ -79,7 +92,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const supabase = createClient()
+  const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
   
   if (!user) {
@@ -88,6 +101,10 @@ export async function DELETE(request: Request) {
 
   const { searchParams } = new URL(request.url)
   const job_id = searchParams.get('job_id')
+
+  if (!job_id) {
+    return NextResponse.json({ error: 'Invalid job ID' }, { status: 400 })
+  }
 
   const { error } = await supabase
     .from('saved_jobs')
