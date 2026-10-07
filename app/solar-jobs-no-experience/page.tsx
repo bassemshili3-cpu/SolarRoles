@@ -31,7 +31,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Solar Jobs No Experience Required',
       description: 'Find entry-level solar installer openings across the US. No prior experience required, training provided on the job.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-jobs-no-experience', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/solar-jobs-no-experience', params) },
   }
 }
 
@@ -40,7 +40,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Solar Jobs No Experience Required',
   description: 'Entry-level solar job listings across the United States that do not require prior installation experience, including helper, apprentice, and trainee roles.',
-  url: 'https://www.solarroles.com/solar-jobs-no-experience',
+  url: 'https://solarroles.com/solar-jobs-no-experience',
 }
 
 const entryRoles = [

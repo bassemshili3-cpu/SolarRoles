@@ -22,7 +22,7 @@ function buildEmbedCode(state: string, stateOnly: boolean, accent: string) {
   if (state && stateOnly) params.set('state_only', '1')
   if (accent) params.set('accent', accent)
   const query = params.size ? `?${params.toString()}` : ''
-  const fullCheckerUrl = `https://www.solarroles.com/tools/solar-apprenticeship-hours-checker${query}`
+  const fullCheckerUrl = `https://solarroles.com/tools/solar-apprenticeship-hours-checker${query}`
     .replaceAll('&', '&amp;')
 
   return `<div
@@ -44,7 +44,7 @@ function buildEmbedCode(state: string, stateOnly: boolean, accent: string) {
   </div>
   <iframe
     id="solarroles-hours-checker"
-    src="https://www.solarroles.com/embed/solar-apprenticeship-hours-checker${query}"
+    src="https://solarroles.com/embed/solar-apprenticeship-hours-checker${query}"
     title="Solar Apprenticeship Hours Checker from Solar Roles"
     width="100%"
     height="850"
@@ -57,7 +57,7 @@ function buildEmbedCode(state: string, stateOnly: boolean, accent: string) {
 </div>
 <p style="margin:8px 0 0;font:13px/1.5 system-ui,sans-serif;text-align:right">
   <a
-    href="https://www.solarroles.com/"
+    href="https://solarroles.com/"
     target="_blank"
     rel="noopener"
     style="color:#475569;text-decoration:none"
@@ -69,7 +69,7 @@ function buildEmbedCode(state: string, stateOnly: boolean, accent: string) {
     var wrapper = document.getElementById("solarroles-hours-checker-wrapper");
     var fallback = document.getElementById("solarroles-hours-checker-fallback");
     if (
-      event.origin !== "https://www.solarroles.com" ||
+      event.origin !== "https://solarroles.com" ||
       !frame ||
       !wrapper ||
       event.source !== frame.contentWindow ||
@@ -94,7 +94,7 @@ function buildBadgeCode(state: string, stateName: string, stateOnly: boolean, ac
   if (state && stateOnly) params.set('state_only', '1')
   if (accent) params.set('accent', accent)
   const query = params.size ? `?${params.toString()}` : ''
-  const href = `https://www.solarroles.com/tools/solar-apprenticeship-hours-checker${query}`
+  const href = `https://solarroles.com/tools/solar-apprenticeship-hours-checker${query}`
     .replaceAll('&', '&amp;')
   const headline = stateName
     ? `${stateName} solar workers: check if your hours count`

@@ -49,7 +49,7 @@ export async function generateMetadata(
     title: `${role.title} Salary by State 2026 | Average Pay Across the US`,
     description: `How much does a ${role.title} make in each state? Live salary data from real solar job listings. Compare average pay across all 50 states. Updated daily.`,
     keywords: `${role.title} salary, ${role.title} average pay, ${role.title} salary by state, how much does a ${role.title} make 2026, ${role.title} pay 2026`,
-    alternates: { canonical: `https://www.solarroles.com/data/salaries/${slug}` },
+    alternates: { canonical: `https://solarroles.com/data/salaries/${slug}` },
   }
 }
 
@@ -236,7 +236,7 @@ export default async function SalaryReportPage({
     '@type': 'WebPage',
     name: `${jobTitle} Salary by State 2026`,
     description: `Average ${jobTitle} salary across US states based on real solar job listings.`,
-    url: `https://www.solarroles.com/data/salaries/${slug}`,
+    url: `https://solarroles.com/data/salaries/${slug}`,
   }
 
   return (
@@ -374,11 +374,11 @@ export default async function SalaryReportPage({
                     rel="nofollow noopener sponsored"
                     className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
                   >
-                    Get certified on HeatSpring →
+                    {cert.heatspringCtaLabel} →
                   </a>
                 </div>
                 <p className="mt-2 text-xs text-[#B45309]/70">
-                  *We may earn a commission if you enroll through this link, at no extra cost to you.
+                  We use affiliate links and may earn a commission on a later paid purchase, at no extra cost to you.
                 </p>
               </div>
             )}

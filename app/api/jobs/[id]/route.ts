@@ -1,3 +1,4 @@
+import { getPublicJobLink } from '@/lib/job-url'
 // app/api/jobs/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
@@ -15,7 +16,8 @@ function formatJob(dbJob: NonNullable<Awaited<ReturnType<typeof prisma.job.findU
     salaryMax: dbJob.salaryMax,
     contractType: dbJob.contractType,
     contractTime: dbJob.contractTime,
-    url: dbJob.url,
+    canonicalSlug: dbJob.canonicalSlug,
+    url: getPublicJobLink(dbJob),
     applyUrl: dbJob.applyUrl,
     source: dbJob.source,
     externalApplyUrl: dbJob.applyUrl || dbJob.url || null,

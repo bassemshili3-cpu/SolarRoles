@@ -9,7 +9,7 @@ const sora = Sora({
   display: "swap",
 });
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/how-to-become-a-solar-installer";
 const PAGE_TITLE =
   "How to Become a Solar Installer in 2026: Timeline & Salary Expectations";

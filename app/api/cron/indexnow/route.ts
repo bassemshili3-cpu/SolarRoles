@@ -37,9 +37,7 @@ export async function GET(request: Request) {
   const startTime = Date.now();
 
   try {
-    // Aligné sur le fallback utilisé partout ailleurs (script + lib/indexnow.ts)
-    // pour éviter tout mismatch host/URL — www.solarroles.com est le domaine
-    // canonique réel (solarroles.com fait un 308 vers www).
+    // Submit canonical apex URLs, matching robots and the sitemap.
     const urlsToSubmit: string[] = [];
 
     // 2. Collect recent ATS job pages (contenu principal)
@@ -92,7 +90,7 @@ export async function GET(request: Request) {
 // ATTENTION : sans le header Authorization Bearer correct, un POST manuel
 // (ex: via curl ou Postman) sera aussi rejeté en 401 — c'est voulu.
 // Pour tester manuellement, envoie le header toi-même :
-//   curl -X POST https://www.solarroles.com/api/cron/indexnow \
+//   curl -X POST https://solarroles.com/api/cron/indexnow \
 //     -H "Authorization: Bearer TON_CRON_SECRET"
 export async function POST(request: Request) {
   return GET(request);

@@ -12,7 +12,7 @@ import {
 export const revalidate = 86400
 
 const CANONICAL_URL =
-  'https://www.solarroles.com/workforce-resources/solar-apprenticeship-licensing'
+  'https://solarroles.com/workforce-resources/solar-apprenticeship-licensing'
 
 // Maintenance: re-check every external URL and the wording below at least once per quarter.
 // Next planned manual review after this revision: December 2026.

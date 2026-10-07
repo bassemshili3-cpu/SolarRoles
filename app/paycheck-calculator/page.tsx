@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: 'Free paycheck calculator for all 50 states. Gross to net in seconds — made for solar industry professionals.',
   },
   alternates: {
-    canonical: 'https://www.solarroles.com/paycheck-calculator',
+    canonical: 'https://solarroles.com/paycheck-calculator',
   },
 }
 
@@ -25,7 +25,7 @@ const jsonLd = {
   '@type': 'WebApplication',
   name: 'Paycheck Calculator',
   description: 'Free paycheck calculator that estimates take-home pay after federal and state taxes, Social Security, and Medicare for all 50 US states.',
-  url: 'https://www.solarroles.com/paycheck-calculator',
+  url: 'https://solarroles.com/paycheck-calculator',
   applicationCategory: 'FinanceApplication',
   operatingSystem: 'Any',
   offers: {

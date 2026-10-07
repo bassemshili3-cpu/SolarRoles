@@ -1,3 +1,4 @@
+import { getCanonicalJobPath } from '@/lib/job-url'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
@@ -53,22 +54,22 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Solar Roles',
-  url: 'https://www.solarroles.com',
-  logo: 'https://www.solarroles.com/logo-square.svg', 
+  url: 'https://solarroles.com',
+  logo: 'https://solarroles.com/logo-square.svg',
 }
 
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Solar Roles',
-  url: 'https://www.solarroles.com',
+  url: 'https://solarroles.com',
   description:
     'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing.',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://www.solarroles.com/jobs?what={search_term_string}',
+      urlTemplate: 'https://solarroles.com/jobs?what={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -115,12 +116,12 @@ export const metadata: Metadata = {
   description:
     'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing. Independent guides on certifications, career paths, and how to land the right role.',
   keywords: 'solar jobs, solar installer jobs, solar career, solar electrician jobs, solar sales jobs, NABCEP jobs, solar industry careers',
-  alternates: { canonical: 'https://www.solarroles.com' },
+  alternates: { canonical: 'https://solarroles.com' },
   openGraph: {
     title: 'Solar Roles | Jobs & Career Paths in the US Solar Industry',
     description:
       'Solar industry jobs across the US — installer, electrician, service, and sales roles, with pay ranges on every listing.',
-    url: 'https://www.solarroles.com',
+    url: 'https://solarroles.com',
     siteName: 'Solar Roles',
     type: 'website',
   },
@@ -234,7 +235,7 @@ async function getLatestJobs() {
 
   const jobs = await prisma.job.findMany({
 
-    where: { source: { notIn: EXCLUDED_SOURCES } },
+    where: { active: true, expiresAt: { gt: new Date() }, source: { notIn: EXCLUDED_SOURCES } },
 
     orderBy: { postedAt: 'desc' },
 
@@ -245,6 +246,8 @@ async function getLatestJobs() {
       id: true,
 
       title: true,
+      canonicalSlug: true,
+      location: true,
 
       description: true,
 
@@ -291,7 +294,7 @@ async function LatestJobsContent() {
       {latestJobs.map(job => (
         <Link
           key={job.id}
-          href={`/jobs/${job.id}`}
+          href={getCanonicalJobPath(job)}
           className="flex items-start gap-4 p-5 rounded-2xl border border-gray-200 hover:border-[#F5B819]/50 hover:shadow-sm transition-all bg-white"
         >
           <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden">

@@ -46,7 +46,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Solar Sales Jobs',
       description: 'Find solar sales openings across the US. D2D, in-home, inside sales, and technical sales employers hiring now.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-sales-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/solar-sales-jobs', params) },
   }
 }
 
@@ -55,7 +55,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Solar Sales Jobs',
   description: 'Solar sales job listings across the United States, covering door-to-door, in-home, inside sales, and technical sales roles.',
-  url: 'https://www.solarroles.com/solar-sales-jobs',
+  url: 'https://solarroles.com/solar-sales-jobs',
 }
 
 const salesRoles = [

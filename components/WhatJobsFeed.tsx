@@ -29,9 +29,12 @@ function WhatJobsCard({ job }: { job: WhatJobsJob }) {
   }
 
   return (
-    <article className="group relative rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50 md:p-6">
+    <article data-whatjobs-surface="feed" data-whatjobs-impression="job" className="group relative rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50 md:p-6">
       <a
         href={job.url}
+        data-whatjobs-click
+        data-whatjobs-destination={job.url}
+        data-whatjobs-token={Boolean(trackingToken)}
         rel="nofollow sponsored"
         onMouseDown={trackMouseDown}
         className="absolute inset-0 z-0"

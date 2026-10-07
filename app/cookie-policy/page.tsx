@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Cookie Policy | Solar Roles',
   description: 'Learn how Solar Roles uses cookies and similar tracking technologies on our job search platform.',
   alternates: {
-    canonical: 'https://www.solarroles.com/cookie-policy',
+    canonical: 'https://solarroles.com/cookie-policy',
   },
 }
 
@@ -23,7 +23,7 @@ export default function CookiePolicyPage() {
           <p className="text-gray-700 leading-relaxed">
             This Cookie Policy explains how Solar Roles, Inc. ("<strong>Company</strong>", "<strong>we</strong>",
             "<strong>us</strong>") uses cookies and similar tracking technologies when you visit{' '}
-            <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+            <a href="https://solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               solarroles.com
             </a>{' '}
             (the "<strong>Site</strong>"). It should be read alongside our{' '}
@@ -278,9 +278,9 @@ export default function CookiePolicyPage() {
             </p>
             <p className="text-gray-700">
               Website:{' '}
-              <a href="https://www.solarroles.com"
+              <a href="https://solarroles.com"
                 className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                www.solarroles.com
+                solarroles.com
               </a>
             </p>
           </div>

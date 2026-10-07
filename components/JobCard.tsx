@@ -1,11 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { getCanonicalJobSlug } from '@/lib/slugify'
-import { usePathname } from 'next/navigation'  
+import { getCanonicalJobPath } from '@/lib/job-url'
 import { formatDistanceToNow } from 'date-fns'
 import { SaveJobCardButton } from './SavedJobCards'
-import { useState, useEffect } from 'react'  // probablement déjà importé
 
 interface JobCardProps {
   job: {
@@ -27,8 +25,6 @@ interface JobCardProps {
     company_logo?: string
     featured?: boolean
   }
-  backUrl?: string
-  useCanonicalDetailLink?: boolean
 }
 
 function getCompanyDomain(companyName: string): string {
@@ -38,7 +34,7 @@ function getCompanyDomain(companyName: string): string {
     + '.com'
 }
 
-export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }: JobCardProps) {
+export default function JobCard({ job }: JobCardProps) {
  
   const formatSalary = (min?: number, max?: number, period?: string) => {
     if (!min && !max) return null
@@ -67,16 +63,7 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
   const logoSrc = job.company_logo ?? `https://img.logo.dev/${getCompanyDomain(job.company)}?token=pk_d6CIF_WHQoevYfXGUe1nSQ`
   const externalApplyUrl = job.apply_url || job.url || '#'
   const jobLocation = typeof job.location === 'string' ? job.location : job.location?.display_name
-  const detailPath = useCanonicalDetailLink
-    ? `/jobs/${job.id}/${getCanonicalJobSlug({
-        canonicalSlug: job.canonicalSlug,
-        title: job.title,
-        location: jobLocation,
-      })}`
-    : `/jobs/${job.id}`
-  const detailHref = useCanonicalDetailLink
-    ? detailPath
-    : `${detailPath}?from=${encodeURIComponent(backUrl || '/jobs')}`
+  const detailHref = getCanonicalJobPath({ ...job, location: jobLocation })
 
   const locationLabel =
     typeof job.location === 'string'
@@ -90,9 +77,7 @@ export default function JobCard({ job, backUrl, useCanonicalDetailLink = false }
         className="absolute inset-0 z-0"
         aria-label={`View details for ${job.title} at ${job.company}`}
       >
-        {useCanonicalDetailLink && (
-          <span className="sr-only">{job.title} at {job.company}</span>
-        )}
+        <span className="sr-only">{job.title} at {job.company}</span>
       </Link>
 
       <div className="pointer-events-none relative z-10 flex items-start gap-3 mb-3">

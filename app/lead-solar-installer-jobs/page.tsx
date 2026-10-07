@@ -46,7 +46,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Lead Solar Installer Jobs',
       description: 'Find lead installer and foreman openings in solar across the US. Residential, commercial, and utility-scale employers hiring now.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/lead-solar-installer-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/lead-solar-installer-jobs', params) },
   }
 }
 
@@ -55,7 +55,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Lead Solar Installer Jobs',
   description: 'Lead solar installer and foreman job listings across the United States, covering residential, commercial, and utility-scale employers.',
-  url: 'https://www.solarroles.com/lead-solar-installer-jobs',
+  url: 'https://solarroles.com/lead-solar-installer-jobs',
 }
 
 const leadRoles = [

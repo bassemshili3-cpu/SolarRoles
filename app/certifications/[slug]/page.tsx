@@ -16,7 +16,7 @@ import {
   getCertificationBySlug,
 } from './certifications-data'
 
-const SITE_URL = 'https://www.solarroles.com'
+const SITE_URL = 'https://solarroles.com'
 
 interface PageProps {
   params: { slug: string }
@@ -80,7 +80,7 @@ function Section({
 }) {
   return (
     <section id={id} className="mb-12 scroll-mt-24">
-      <SectionTitle id={id}>{title}</SectionTitle>
+      <SectionTitle>{title}</SectionTitle>
       {children}
     </section>
   )
@@ -110,6 +110,13 @@ function BoxedSection({
 export default function CertificationPage({ params }: PageProps) {
   const cert = getCertificationBySlug(params.slug)
   if (!cert) notFound()
+  const isOutreach = cert.slug === 'osha-10' || cert.slug === 'osha-30'
+  const sectionLabel = (id: string, fallback: string) => {
+    if (id === 'what-it-is') return cert.overviewHeading
+    if (id === 'why-heatspring') return cert.heatspringHeading
+    if (id === 'exam-format' && isOutreach) return 'Course completion & assessments'
+    return fallback
+  }
 
   return (
     <article className="bg-white">
@@ -176,7 +183,7 @@ export default function CertificationPage({ params }: PageProps) {
                       href={`#${section.id}`}
                       className="block text-sm font-medium text-gray-600 hover:text-[#0B1A2E] hover:bg-white px-3 py-2 rounded transition-colors"
                     >
-                      {section.label}
+                      {sectionLabel(section.id, section.label)}
                     </a>
                   </li>
                 ))}
@@ -206,43 +213,18 @@ export default function CertificationPage({ params }: PageProps) {
           </BoxedSection>
 
           {/* ── WHAT IT IS ──────────────────────────────────── */}
-          <Section id="what-it-is" title="What it is">
+          <Section id="what-it-is" title={cert.overviewHeading}>
             <div className="border-l-4 border-[#F5B819] pl-5 space-y-3">
-              <p className="text-gray-700 leading-relaxed text-lg">
-                {cert.whatItIs}
-              </p>
+              {cert.whatItIs.split('\n\n').map(paragraph => (
+                <p key={paragraph} className="text-gray-700 leading-relaxed text-lg">
+                  {paragraph}
+                </p>
+              ))}
               <p className="text-gray-700 leading-relaxed text-lg">
                 {cert.whyItMatters}
               </p>
             </div>
           </Section>
-
-          {/* ── CAREER PATHS ────────────────────────────────── */}
-         <Section id="career-paths" title="Careers it unlocks">
-  <p className="text-gray-600 leading-relaxed mb-4">
-    In solar specifically, this credential is most relevant for:
-  </p>
-  <div className="flex flex-wrap gap-2">
-    {cert.careerPaths.map(role => (
-      role.href ? (
-        <Link
-          key={role.name}
-          href={role.href}
-          className="text-sm font-semibold px-4 py-2 rounded-full bg-[#0B1A2E] text-white hover:bg-[#0B1A2E]/80 transition-colors"
-        >
-          {role.name}
-        </Link>
-      ) : (
-        <span
-          key={role.name}
-          className="text-sm font-semibold px-4 py-2 rounded-full bg-[#0B1A2E] text-white"
-        >
-          {role.name}
-        </span>
-      )
-    ))}
-  </div>
-</Section>
 
           {/* ── REQUIREMENTS ────────────────────────────────── */}
           <Section id="requirements" title="Requirements">
@@ -263,11 +245,11 @@ export default function CertificationPage({ params }: PageProps) {
           </Section>
 
           {/* ── EXAM FORMAT ─────────────────────────────────── */}
-          <Section id="exam-format" title="Exam format & passing score">
+          <Section id="exam-format" title={isOutreach ? 'Course completion & assessments' : 'Exam format & passing score'}>
             <div className="grid sm:grid-cols-2 gap-4 mb-5">
               <div className="bg-gray-50 rounded-xl p-5">
                 <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">
-                  Questions
+                  {isOutreach ? 'Assessments' : 'Questions'}
                 </p>
                 <p className="text-base font-bold text-[#0B1A2E]">
                   {cert.examFormat.questionCount}
@@ -287,7 +269,7 @@ export default function CertificationPage({ params }: PageProps) {
             </p>
             <div className="rounded-xl border-2 border-[#F5B819] bg-[#FFFBEB] p-5">
               <p className="text-sm font-bold text-[#0B1A2E] mb-1.5">
-                Passing score : {cert.passingScore.scoreDescription}
+                {isOutreach ? 'Completion policy' : 'Passing score'} : {cert.passingScore.scoreDescription}
               </p>
               <p className="text-gray-700 text-sm leading-relaxed">
                 {cert.passingScore.detail}
@@ -312,9 +294,8 @@ export default function CertificationPage({ params }: PageProps) {
               {cert.difficulty.rationale}
             </p>
             <p className="text-xs text-gray-400 mt-3">
-              This score is our editorial estimate based on published pass-rate
-              data and requirement complexity — NABCEP and OSHA don't publish
-              an official per-exam difficulty rating.
+              This is an editorial estimate of the preparation involved, not a
+              measured pass rate or an official difficulty rating.
             </p>
           </Section>
 
@@ -396,7 +377,8 @@ export default function CertificationPage({ params }: PageProps) {
           <Section id="salary" title="What it pays">
             <p className="text-gray-700 leading-relaxed mb-4">
               Live salary data from current listings on Solar Roles for the
-              roles this credential unlocks:
+              related roles. These listings do not measure a pay increase caused
+              by this {isOutreach ? 'training' : 'credential'}:
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               {cert.relatedSalaryPages.map(page => (
@@ -417,10 +399,13 @@ export default function CertificationPage({ params }: PageProps) {
          {/* ── HEATSPRING CTA — simplified "Get started today" ─── */}
 <section id="why-heatspring" className="scroll-mt-24 mb-12">
   <h2 className="text-2xl font-bold text-[#0B1A2E] mb-4">
-    Get started today
+    {cert.heatspringHeading}
   </h2>
   <p className="text-gray-700 leading-relaxed mb-6">
     {cert.heatspringFitReason}
+  </p>
+  <p className="text-gray-700 text-sm leading-relaxed mb-6">
+    {cert.heatspringLimitation}
   </p>
   <div className="flex justify-center mt-8">
     
@@ -429,12 +414,12 @@ export default function CertificationPage({ params }: PageProps) {
       rel="nofollow sponsored noopener noreferrer"
       className="inline-flex items-center gap-2 bg-[#F5B819] hover:bg-[#E5A810] text-[#0B1A2E] px-6 py-3 rounded-full font-bold transition-colors shadow-sm"
     >
-      Get Started <ExternalLink size={14} />
+      {cert.heatspringCtaLabel} <ExternalLink size={14} />
     </a>
   </div>
   <p className="text-xs text-gray-500 mt-8 text-center">
-    *Solar Roles may earn a commission if you enroll through this link, at
-    no extra cost to you. See our full, unsponsored comparison of{' '}
+    Solar Roles uses affiliate links and may earn a commission on a later paid
+    purchase, at no extra cost to you. See our comparison of{' '}
     <Link
       href="/resources/nabcep-training-providers-compared"
       className="underline hover:text-gray-700"
@@ -444,6 +429,25 @@ export default function CertificationPage({ params }: PageProps) {
     if you'd like to weigh other options.
   </p>
 </section>
+          <Section id="renewal" title={isOutreach ? 'Card validity and jobsite requirements' : 'Validity and renewal'}>
+            <p className="text-gray-700 leading-relaxed mb-3">{cert.expirationRenewal.validityPeriod}</p>
+            <p className="text-gray-700 leading-relaxed">{cert.expirationRenewal.renewalRequirement}</p>
+          </Section>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            {isOutreach ? (
+              <a href="https://www.osha.gov/training/outreach/faq" className="underline" target="_blank" rel="noopener noreferrer">
+                OSHA Outreach program rules and course-completion cards
+              </a>
+            ) : (
+              <>
+                Check the current{' '}
+                <a href="https://www.nabcep.org/enroll-now/" className="underline" target="_blank" rel="noopener noreferrer">NABCEP eligibility requirements</a>,{' '}
+                <a href="https://www.nabcep.org/certifications/nabcep-fees/" className="underline" target="_blank" rel="noopener noreferrer">fee schedule</a>, and{' '}
+                <a href="https://www.nabcep.org/resources/" className="underline" target="_blank" rel="noopener noreferrer">handbooks and exam references</a>{' '}
+                before applying.
+              </>
+            )}
+          </p>
         </main>
       </div>
     </article>

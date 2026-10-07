@@ -65,7 +65,7 @@ export default function WhatJobsJobBox({ search, location }: { search: string; l
   if (!isDesktop) return null
 
   return (
-    <section className="w-full border border-slate-200 bg-white p-4 text-left" aria-label="Related jobs from WhatJobs">
+    <section data-whatjobs-surface="job_box" data-whatjobs-impression={state === 'ready' ? 'widget' : undefined} className="w-full border border-slate-200 bg-white p-4 text-left" aria-label="Related jobs from WhatJobs">
       {state === 'loading' ? (
         <div className="space-y-3 py-4">
           {[0, 1, 2, 3, 4, 5].map((index) => <div key={index} className="h-14 animate-pulse bg-slate-100" />)}
@@ -79,9 +79,12 @@ export default function WhatJobsJobBox({ search, location }: { search: string; l
               ? job.age_days === 0 ? 'Today' : `${job.age_days} ${job.age_days === 1 ? 'day' : 'days'} ago`
               : null)
             return (
-              <li key={job.url}>
+              <li key={job.url} data-whatjobs-impression="job">
                 <a
                   href={job.url}
+                  data-whatjobs-click
+                  data-whatjobs-destination={job.url}
+                  data-whatjobs-token={Boolean(trackingToken)}
                   rel="nofollow sponsored"
                   onMouseDown={(event) => {
                     const tracker = (window as Window & {
@@ -131,7 +134,7 @@ export default function WhatJobsJobBox({ search, location }: { search: string; l
         </p>
       )}
 
-      <form method="post" action="https://www.whatjobs.com/searchbox" target="_blank" className="mt-3 border-t border-slate-200 pt-3">
+      <form data-whatjobs-surface="job_search" data-whatjobs-impression="widget" data-whatjobs-search method="post" action="https://www.whatjobs.com/searchbox" target="_blank" className="mt-3 border-t border-slate-200 pt-3">
         <input type="hidden" name="keyword" value={selectedSearch.keyword} />
         <input type="hidden" name="location" value={selectedSearch.location} />
         <input type="hidden" name="utm_source" value="7186" />

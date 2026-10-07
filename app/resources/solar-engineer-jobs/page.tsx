@@ -5,7 +5,7 @@ import { articleCss } from "../_shared/article-styles";
 
 const sora = Sora({ subsets: ["latin"], weight: ["700", "800"], display: "swap" });
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/solar-engineer-jobs";
 const PAGE_TITLE = "All Types of Solar Engineer Jobs (2026 Guide)";
 const PAGE_DESCRIPTION =

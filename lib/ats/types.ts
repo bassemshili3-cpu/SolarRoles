@@ -9,6 +9,7 @@ export interface NormalizedJob {
   locationRegions?: string[];
   /** Fully remote role with an explicit US applicant-location restriction. */
   isRemote?: boolean;
+  workSetting?: 'REMOTE' | 'HYBRID' | 'ON_SITE';
   description: string;
   url: string;
   applyUrl: string;

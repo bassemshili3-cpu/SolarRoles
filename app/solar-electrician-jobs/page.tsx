@@ -53,7 +53,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Solar Electrician Jobs',
       description: 'Find solar electrician and PV electrical jobs across the US.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-electrician-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/solar-electrician-jobs', params) },
   }
 }
 
@@ -62,7 +62,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Solar Electrician Jobs',
   description: 'Solar electrician job listings across the United States, including installation, commissioning, service, and operations roles.',
-  url: 'https://www.solarroles.com/solar-electrician-jobs',
+  url: 'https://solarroles.com/solar-electrician-jobs',
 }
 
 const electricianRoles = [

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-pvis-vs-pvip";
 const PAGE_TITLE =
   "NABCEP PVIS vs PVIP (2026): An overview of the main differences";

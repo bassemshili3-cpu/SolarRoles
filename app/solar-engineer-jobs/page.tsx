@@ -45,7 +45,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Solar Engineer Jobs',
       description: 'Find solar engineer and PV design jobs across the US.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-engineer-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/solar-engineer-jobs', params) },
   }
 }
 
@@ -54,7 +54,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Solar Engineer Jobs',
   description: 'Solar engineer job listings across the United States, including PV design, systems engineering, project engineering, electrical, and BESS roles.',
-  url: 'https://www.solarroles.com/solar-engineer-jobs',
+  url: 'https://solarroles.com/solar-engineer-jobs',
 }
 
 const engineerRoles = [

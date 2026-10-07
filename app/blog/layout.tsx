@@ -14,17 +14,17 @@ export const metadata: Metadata = {
     'solar hiring trends',
     'solar industry 2026',
   ],
-  alternates: { canonical: 'https://www.solarroles.com/blog' },
+  alternates: { canonical: 'https://solarroles.com/blog' },
   openGraph: {
     title: 'Solar Career Advice — Get In, Know the Work, Move Up',
     description:
       'Practical career advice, salary data, interview tips, and solar job market trends for US solar PV installers and solar industry professionals.',
-    url: 'https://www.solarroles.com/blog',
+    url: 'https://solarroles.com/blog',
     siteName: 'Solar Roles',
     type: 'website',
     images: [
       {
-        url: 'https://www.solarroles.com/og-blog.png',
+        url: 'https://solarroles.com/og-blog.png',
         width: 1200,
         height: 630,
         alt: 'Solar Roles Blog — Career advice for solar PV installers',

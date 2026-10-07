@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Technical and privacy information for schools and workforce programs embedding the free Solar Roles jobs widget.',
   alternates: {
-    canonical: 'https://www.solarroles.com/workforce-resources/jobs-widget/privacy',
+    canonical: 'https://solarroles.com/workforce-resources/jobs-widget/privacy',
   },
 }
 

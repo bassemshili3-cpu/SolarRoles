@@ -1,3 +1,5 @@
+// Keep the former global loading boundary on auth pages only. Job decisions
+// must run without an ancestor loading boundary to retain HTTP 308/404.
 export default function Loading() {
   return (
     <div className="flex min-h-screen items-center justify-center">

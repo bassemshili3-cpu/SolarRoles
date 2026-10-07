@@ -1,3 +1,8 @@
+import { validateEmployerJob } from '@/lib/employerJobValidation'
+import { parseCompensation } from '@/lib/jobCompensation'
+import { getCanonicalJobSlug } from '@/lib/slugify'
+import { getCanonicalJobUrl } from '@/lib/job-url'
+import { hasAccountPermission } from '@/lib/accountPermission'
 // app/api/employer/jobs/[id]/route.ts
 import { NextResponse } from 'next/server'
 import { createServerSupabase } from '@/lib/supabase-server'
@@ -5,7 +10,6 @@ import { prisma } from '@/lib/prisma'
 import { hasPartnerAccess, PARTNER_ACTIVE_JOB_LIMIT } from '@/lib/employerBilling'
 import { getStripe } from '@/lib/stripe'
 
-const ALLOWED_EMPLOYMENT_TYPES = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
 
 const EMPLOYMENT_TYPE_MAP: Record<string, { contractType: string | null; contractTime: string | null }> = {
   'Full-time': { contractType: null, contractTime: 'full_time' },
@@ -15,9 +19,6 @@ const EMPLOYMENT_TYPE_MAP: Record<string, { contractType: string | null; contrac
   'Internship': { contractType: 'internship', contractTime: null },
 }
 
-function annualizedSalary(amount: number, period: 'year' | 'hour') {
-  return period === 'hour' ? Math.round(amount * 2080) : amount
-}
 
 async function getOwnedJob(id: string, userId: string) {
   const job = await prisma.job.findUnique({ where: { id } })
@@ -33,11 +34,13 @@ export async function PATCH(
   const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!(await hasAccountPermission(supabase, user.id, 'employer'))) return NextResponse.json({ error: 'An employer account is required.' }, { status: 403 })
 
   const job = await getOwnedJob(id, user.id)
   if (!job) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const body = await request.json()
+  const body = await request.json().catch(() => null)
+  if (!body || typeof body !== 'object') return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
 
   // Quick actions from the dashboard (pause / activate a listing)
   if (typeof body.action === 'string') {
@@ -80,49 +83,33 @@ export async function PATCH(
     salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
   } = body
 
-  if (typeof title !== 'string' || !title.trim()) {
-    return NextResponse.json({ error: 'A job title is required.' }, { status: 400 })
-  }
-  if (typeof company !== 'string' || !company.trim()) {
-    return NextResponse.json({ error: 'A company name is required.' }, { status: 400 })
-  }
-  if (!ALLOWED_EMPLOYMENT_TYPES.includes(employmentType)) {
-    return NextResponse.json({ error: 'Invalid employment type.' }, { status: 400 })
-  }
-  if (!remote && (!city?.trim() || !state?.trim())) {
-    return NextResponse.json({ error: 'A location is required for non-remote jobs.' }, { status: 400 })
-  }
-  if (!remote && (!zipCode?.trim() || !/^\d{5}(-\d{4})?$/.test(zipCode.trim()))) {
-    return NextResponse.json({ error: 'A valid ZIP code is required for non-remote jobs.' }, { status: 400 })
-  }
-  if (!Number.isFinite(salaryMin) || !Number.isFinite(salaryMax) || salaryMin > salaryMax) {
-    return NextResponse.json({ error: 'A valid salary range is required.' }, { status: 400 })
-  }
-  if (typeof description !== 'string' || description.trim().length < 50) {
-    return NextResponse.json({ error: 'A description of at least 50 characters is required.' }, { status: 400 })
-  }
-  if (typeof notificationEmail !== 'string' || !/^\S+@\S+\.\S+$/.test(notificationEmail.trim())) {
-    return NextResponse.json({ error: 'A valid notification email is required.' }, { status: 400 })
+  const validationError = validateEmployerJob(body)
+  if (validationError) return NextResponse.json({ error: validationError }, { status: 400 })
+  let compensation
+  try { compensation = parseCompensation(body) } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Invalid compensation.' }, { status: 400 })
   }
 
+
   const { contractType, contractTime } = EMPLOYMENT_TYPE_MAP[employmentType]
-  const salaryMinValue = Number(salaryMin)
-  const salaryMaxValue = Number(salaryMax)
+  // Freeze the existing URL even when a legacy employer offer has no stored slug.
+  const canonicalSlug = getCanonicalJobSlug(job)
+  const canonicalUrl = getCanonicalJobUrl({ ...job, canonicalSlug })
 
   const updated = await prisma.job.update({
     where: { id },
     data: {
+      canonicalSlug,
+      url: canonicalUrl,
       title: title.trim(),
       company: company.trim(),
       location: remote ? 'Remote' : `${city.trim()}, ${state.trim()}`,
+          workSetting: remote ? 'REMOTE' : 'ON_SITE',
       addressRegion: remote ? '' : state.trim(),
       postalCode: remote ? null : zipCode.trim(),
-      salaryPeriod,
       description: description.trim(),
       applyUrl: `mailto:${notificationEmail.trim()}`,
-      salaryMin: annualizedSalary(salaryMinValue, salaryPeriod),
-      salaryMax: annualizedSalary(salaryMaxValue, salaryPeriod),
-      salary: `$${salaryMinValue.toLocaleString()} - $${salaryMaxValue.toLocaleString()} ${salaryPeriod === 'hour' ? 'an hour' : 'a year'}`,
+          ...compensation,
       contractType,
       contractTime,
     },
@@ -139,6 +126,7 @@ export async function DELETE(
   const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!(await hasAccountPermission(supabase, user.id, 'employer'))) return NextResponse.json({ error: 'An employer account is required.' }, { status: 403 })
 
   const job = await getOwnedJob(id, user.id)
   if (!job) return NextResponse.json({ error: 'Not found' }, { status: 404 })

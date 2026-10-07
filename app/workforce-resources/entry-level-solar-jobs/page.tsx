@@ -19,7 +19,7 @@ const CONCENTRATION_SHARE_THRESHOLD = 60
 // null with its route (for example: '/data/solar-training-signals-by-role').
 const TRAINING_REPORT_HREF: string | null = null
 
-const CANONICAL_URL = 'https://www.solarroles.com/workforce-resources/entry-level-solar-jobs'
+const CANONICAL_URL = 'https://solarroles.com/workforce-resources/entry-level-solar-jobs'
 
 export const metadata: Metadata = {
   title: 'Entry-Level Solar Hiring Data by State and Role | Solar Roles',

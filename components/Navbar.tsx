@@ -24,8 +24,8 @@ export default function Navbar() {
 
   const signOut = async () => {
     await supabase.auth.signOut()
-    if (pathname?.startsWith('/dashboard')) {
-      router.push('/')
+    if (pathname?.startsWith('/dashboard') && pathname !== '/dashboard/post-a-job') {
+      router.replace('/jobs')
     } else {
       router.refresh()
     }
@@ -43,11 +43,11 @@ export default function Navbar() {
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-8">
           <Link
             href="/"
-            className="flex items-center shrink-0 gap-2"
+            className="flex items-center shrink-0 gap-2 max-[360px]:gap-1"
             aria-label="Solar Roles home"
           >
             <svg
-              className="h-6 w-auto shrink-0 sm:h-8"
+              className="h-6 w-auto shrink-0 max-[360px]:h-5 sm:h-8"
               viewBox="0 0 32 32"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ export default function Navbar() {
                 <line x1="23.1" y1="8.9"  x2="25.9" y2="6.1"  />
               </g>
             </svg>
-            <span className="inline whitespace-nowrap text-sm font-bold tracking-tight text-[#0B1A2E] sm:text-lg">
+            <span className="inline whitespace-nowrap text-sm max-[360px]:text-[13px] font-bold tracking-tight text-[#0B1A2E] sm:text-lg">
               Solar<span className="text-[#F5B819]">Roles</span>
             </span>
           </Link>
@@ -96,7 +96,7 @@ export default function Navbar() {
                 <Link
                   key={href}
                   href={href}
-                  className={`whitespace-nowrap text-[12px] max-[360px]:text-[11px] font-medium transition-colors ${
+                  className={`whitespace-nowrap text-[12px] max-[360px]:text-[10px] font-medium transition-colors ${
                     isActive ? 'text-[#0B1A2E]' : 'text-gray-600 hover:text-[#0B1A2E]'
                   }`}
                 >
@@ -108,13 +108,13 @@ export default function Navbar() {
         </div>
 
           <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-3">
-            <span className="inline-flex">
+            <span className="hidden md:inline-flex">
               <CertificationsNavCta />
             </span>
 
           {user ? (
             <>
-              <Link href="/dashboard" title="Dashboard" className="hidden sm:inline-flex">
+              <Link href="/dashboard" title="Dashboard" className="inline-flex">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -127,14 +127,24 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden sm:inline-flex px-2 sm:px-3 h-9 text-gray-600 hover:text-[#0B1A2E]"
+                className="inline-flex px-2 sm:px-3 h-9 text-xs sm:text-sm text-gray-600 hover:text-[#0B1A2E]"
                 onClick={signOut}
               >
                 Log out
               </Button>
             </>
           ) : (
-            <Link href="/auth/login" className="hidden sm:inline-flex">
+            <>
+            <div className="flex items-center gap-1.5 md:hidden">
+              <Link href="/auth/login" className="whitespace-nowrap text-xs max-[360px]:text-[11px] font-medium text-[#0B1A2E] hover:text-[#1E3A5F]">
+                Log in
+              </Link>
+              <span className="text-xs text-gray-400" aria-hidden="true">/</span>
+              <Link href="/auth/signup" className="whitespace-nowrap text-xs max-[360px]:text-[11px] font-medium text-[#0B1A2E] hover:text-[#1E3A5F]">
+                Sign up
+              </Link>
+            </div>
+            <Link href="/auth/login" className="hidden md:inline-flex">
               <Button
                 variant="ghost"
                 size="sm"
@@ -143,6 +153,7 @@ export default function Navbar() {
                 Log in
               </Button>
             </Link>
+            </>
           )}
           </div>
         </div>

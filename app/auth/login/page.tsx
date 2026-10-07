@@ -8,9 +8,12 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
 import { accountConsentPath } from '@/lib/accountConsent'
+import { safeAuthRedirect } from '@/lib/authRedirect'
+import { getAccountRole, roleDestination } from '@/lib/accountRole'
 
 function authErrorMessage(reason: string | null) {
   if (!reason) return ''
+  if (reason === 'verification_expired') return 'This verification link is invalid or has expired. If your email is already verified, log in below.'
   if (reason === 'missing_code') {
     return 'Google did not return an authorization code. Check the Supabase redirect URL configuration.'
   }
@@ -48,9 +51,10 @@ export default function Login() {
     setError('')
   }
 
-  const redirectTo = paramRedirect || (userType === 'employer' ? '/dashboard/employer' : '/dashboard')
+  const redirectTo = safeAuthRedirect(paramRedirect, '/dashboard')
 
   const loginWithGoogle = async () => {
+    if (isLoading) return
     if (!userType) {
       setError('Choose Job seeker or Employer before continuing.')
       return
@@ -58,6 +62,7 @@ export default function Login() {
     setIsLoading(true)
     setError('')
 
+    try {
     const redirectResponse = await fetch('/api/auth/redirect', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -77,9 +82,11 @@ export default function Login() {
       setError(error.message)
       setIsLoading(false)
     }
+    } catch { setError('Could not start Google sign-in. Please try again.'); setIsLoading(false) }
   }
 
   const loginWithEmail = async () => {
+    if (isLoading) return
     if (!userType) {
       setError('Choose Job seeker or Employer before continuing.')
       return
@@ -90,15 +97,17 @@ export default function Login() {
     }
     setIsLoading(true)
     setError('')
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
       setError(error.message)
       setIsLoading(false)
     } else {
-      await supabase.auth.updateUser({ data: { accountType: userType } })
-      router.push(accountConsentPath(redirectTo))
+      const role = await getAccountRole(supabase, data.user.id)
+      router.push(accountConsentPath(role ? roleDestination(role, redirectTo) : redirectTo))
       router.refresh()
     }
+    } catch { setError('Could not sign in. Please try again.') } finally { setIsLoading(false) }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -256,8 +265,8 @@ export default function Login() {
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <label className="text-sm font-semibold text-slate-700">Password</label>
-                <Link href="/contact" className="text-sm font-medium text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors">
-                  Help signing in? Contact us
+                <Link href="/auth/forgot-password" className="text-sm font-medium text-[#1E3A5F] hover:text-[#0B1A2E] transition-colors">
+                  Forgot password?
                 </Link>
               </div>
               <div className="relative">
@@ -276,7 +285,7 @@ export default function Login() {
                   onClick={() => setShowPassword((v) => !v)}
                   disabled={!userType}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  tabIndex={-1}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>

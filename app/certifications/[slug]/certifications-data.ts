@@ -1,14 +1,12 @@
 // certifications-data.ts
 //
-// Toutes les données factuelles (score de passage, durée d'examen, coûts,
-// renouvellement) ont été vérifiées via recherche web (NABCEP.org, HeatSpring,
-// USF OSHA Education Center, Meazure Learning) — pas inventées. Sources
-// principales : nabcep.org/certifications, nabcep.org/wp-content (fee
-// schedules), usfosha.com/faqs, heatspring.com/credentials.
+// Passe éditoriale vérifiée le 7 octobre 2026 : exigences et frais NABCEP,
+// règles OSHA Outreach, notions électriques DOE/OSHA et cours gratuits
+// HeatSpring. Le seuil ESIP non confirmé reste explicitement à vérifier.
+// Sources et preuves navigateur : docs/certifications-editorial-audit-20261007.md.
 //
 // Les notes de DIFFICULTÉ (score /10) sont une estimation éditoriale basée
-// sur les données de taux de réussite disponibles publiquement et la
-// complexité des prérequis — NABCEP ne publie pas de taux de réussite
+// sur le contenu à préparer et la complexité des prérequis — aucun taux de réussite
 // officiel détaillé par examen, donc traiter ces scores comme indicatifs,
 // pas comme une statistique NABCEP officielle.
 //
@@ -41,7 +39,7 @@ export interface PassingScoreInfo {
 }
 
 export interface DifficultyRating {
-  score: number // sur 10 — voir note éditoriale en tête de fichier
+  score: number // sur 10 — appréciation éditoriale, pas un taux de réussite
   rationale: string
 }
 
@@ -91,6 +89,10 @@ export interface CertificationEntry {
   reimbursement: Reimbursement
   expirationRenewal: ExpirationRenewal
   relatedSalaryPages: SalaryPageLink[]
+  overviewHeading: string
+  heatspringHeading: string
+  heatspringCtaLabel: string
+  heatspringLimitation: string
   heatspringFitReason: string
   // Champs legacy conservés pour compatibilité avec les composants existants
   // (CertificationBanner, cartes de listing, etc.) qui affichent un résumé
@@ -106,7 +108,6 @@ export interface CertificationEntry {
 
 export const TOC_SECTIONS: { id: string; label: string }[] = [
   { id: 'what-it-is', label: 'What Is It' },
-  { id: 'career-paths', label: 'Careers It Unlocks' },
   { id: 'requirements', label: 'Requirements' },
   { id: 'exam-format', label: 'Exam Format & Passing Score' },
   { id: 'difficulty', label: 'How Hard Is It' },
@@ -124,7 +125,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
     name: 'NABCEP PV Associate',
     shortLabel: 'PV Associate',
     acronymExpansion:
-      "NABCEP stands for the North American Board of Certified Energy Practitioners — the nonprofit body that sets the certification standard for the US solar industry. \"PV Associate\" (PVA) is their entry-level photovoltaic credential.",
+      "NABCEP is the North American Board of Certified Energy Practitioners. Its PV Associate (PVA) credential covers photovoltaic (PV) systems, which convert sunlight into electricity.",
     forRoles: [
       { name: 'PV Installer', href: '/solar-pv-installer-jobs' },
       { name: 'Solar Apprentice' },
@@ -135,9 +136,9 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       { name: 'Crew Member' },
     ],
     whatItIs:
-      "The entry-level credential from NABCEP, the most widely recognized certification body in US solar. It requires no field experience — just a training course and a passing exam score — which makes it the standard first certification for anyone breaking into the trade.",
+      "The PV Associate credential tests the fundamentals of solar electricity, system components, design, installation, and operation. You can qualify through an approved training course without prior solar work experience; an experience pathway is also available.\n\nSolar modules produce DC (direct current) electricity. An inverter converts that output to AC (alternating current) for most building circuits and the electrical grid. Knowing how these parts work together is part of the foundation the Associate exam assesses.",
     whyItMatters:
-      "Employers and hiring managers treat it as a baseline signal that you understand PV fundamentals before you've logged real installation hours. It also builds toward the higher NABCEP Installation Professional credential later, once you have documented field experience.",
+      "PVA gives a new installer or apprentice a way to demonstrate basic PV knowledge before taking responsibility for an installation. It is an Associate credential, not a professional installer certification or an electrical license. The higher-level PV Installation Professional certification adds advanced training and documented project experience.",
     requirements: [
       'Education Pathway (most common): complete an approved NABCEP Associate training course, then pass the exam. No prior solar experience needed.',
       'Experience Pathway (alternative): document at least 6 months of full-time-equivalent solar work experience and apply directly with NABCEP instead of taking a course.',
@@ -154,27 +155,24 @@ export const CERTIFICATIONS: CertificationEntry[] = [
         "NABCEP uses a scaled scoring model (0–99), not a straight percentage, to keep results comparable across different exam versions. There's no publicly reversible way to know the exact number of raw correct answers this requires — 65 is the threshold NABCEP reports directly.",
     },
     difficulty: {
-      score: 4,
-      rationale:
-        "No field-experience prerequisite and no minimum pass rate published by NABCEP for this specific exam, but training providers who publish their own numbers commonly report pass rates in the high 80s to low 90s (percent) among students who complete a structured prep course — this is a students'-pass-rate figure, not an official NABCEP statistic. Rated moderate-low: accessible for a motivated beginner with a prep course, harder if attempted cold.",
+      "score": 4,
+      "rationale": "The exam covers a broad set of fundamentals rather than advanced installation decisions. New entrants may need extra practice with electrical calculations and system diagrams; a practice score can help identify those gaps, but does not guarantee an exam result."
     },
     cost: {
-      trainingCost: '$400–900 depending on provider (HeatSpring\'s Boot Camp + Exam Prep bundle lists at $895)',
-      applicationFee: undefined,
-      examFee: '~$150 total for NABCEP application + exam fee, paid directly to NABCEP — separate from any training course cost',
-      totalEstimate: '$550–1,050 all-in for most first-time candidates',
-      notes:
-        'The exam fee itself is fixed and small relative to training. Most of what you pay goes to the prep course, and that\'s optional if you qualify via the Experience Pathway instead.',
+      "trainingCost": "Varies by provider; an approved course is required for the Education Pathway",
+      "applicationFee": "$25, paid to NABCEP",
+      "examFee": "$125, paid to NABCEP; a training provider may add administration charges",
+      "totalEstimate": "$150 in NABCEP fees, plus training and any provider charges",
+      "notes": "The Experience Pathway can avoid a required training-course purchase if your work history qualifies. The free practice exam below is a study aid; it does not qualify you through the Education Pathway."
     },
     reimbursement: {
-      available: true,
-      summary:
-        'Because this is the entry-level credential most job seekers pursue before landing their first solar role, it\'s one of the more commonly subsidized certifications in the industry — through public workforce funding, employer sponsorship after hire, or veterans benefits.',
-      sources: [
-        'State WIOA workforce funding — many training providers are listed on a state\'s Eligible Training Provider List (ETPL); check with your local American Job Center whether a given NABCEP prep course qualifies in your state before enrolling.',
-        'Employer sponsorship — many installation companies cover part or all of the cost once you\'re hired, sometimes as a condition of a raise after passing.',
-        'Veterans education benefits (GI Bill, VR&E) may apply depending on the training provider\'s approval status — confirm directly with the provider.',
-      ],
+      "available": true,
+      "summary": "An employer, workforce program, or veterans benefit may help pay for Associate training or exam fees. Confirm the specific course and expense are eligible before enrolling.",
+      "sources": [
+        "Workforce Innovation and Opportunity Act (WIOA) funding: ask your local American Job Center whether the course is on the state Eligible Training Provider List (ETPL).",
+        "Employer sponsorship: ask whether training and the NABCEP fees are included in onboarding or reimbursement.",
+        "Veterans benefits: check the provider’s approval status and whether course costs or exam fees can be reimbursed."
+      ]
     },
     expirationRenewal: {
       validityPeriod: '3 years from the date of issuance',
@@ -186,18 +184,21 @@ export const CERTIFICATIONS: CertificationEntry[] = [
     ],
     format: 'Online, self-paced',
     duration: '18–24 hours',
-    priceRange: '$550–1,050 all-in',
+    priceRange: "$150 in NABCEP fees, plus training",
     whyHeatSpring: [
-      "HeatSpring's course is built around Dr. Sean White's materials, the reference texts used across the industry.",
-      'A pass guarantee on this specific course: fail the exam after completing it, and the retake (course and exam) is covered.',
-      'Reported pass rate above 88% among students who complete the course, plus a full year of access to review materials.',
+      "A free 70-question practice exam focused on the PV Associate test.",
+      "Useful for reviewing your understanding of PV fundamentals; it is not an eligibility course."
     ],
     heatspringFitReason:
-      "For NABCEP PV Associate, we point people to HeatSpring because the course is built on Dr. Sean White's materials — the same reference texts used across the industry — and it comes with a pass guarantee: fail after completing it, and your retake is covered. Students who finish the course report a pass rate above 88%, well above what most beginners manage studying alone.",
+      "The free NABCEP PV Associate (PVA) Practice Exam on HeatSpring gives you 70 questions to work through before the real test. Use it to find the electrical and system-design topics that need another review, then return to your study materials.",
     heatspringUrl:
-      'https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq',
-    bannerHeadline: 'New to solar? Start with NABCEP Associate.',
-    bannerSubtext: "No field experience required — HeatSpring's self-paced course, pass guarantee included.",
+      "https://www.heatspring.com/courses/nabcep-pv-associate-pva-practice-exam?aff_id=9f_wlq",
+    bannerHeadline: "Review the PV Associate exam topics.",
+    bannerSubtext: "Try a free 70-question practice exam on HeatSpring. The official credential has separate eligibility and exam requirements.",
+    overviewHeading: "PV fundamentals before field experience",
+    heatspringHeading: "Check your PV Associate exam preparation",
+    heatspringLimitation: "Passing this practice exam does not earn the PVA credential or meet the Education Pathway training requirement. NABCEP still requires an approved eligibility pathway and its own exam.",
+    heatspringCtaLabel: "Take the free practice exam",
   },
   {
     slug: 'nabcep-pv-installation-professional',
@@ -205,7 +206,7 @@ export const CERTIFICATIONS: CertificationEntry[] = [
     name: 'NABCEP PV Installation Professional',
     shortLabel: 'PV Installer',
     acronymExpansion:
-      "NABCEP stands for the North American Board of Certified Energy Practitioners. \"PV Installation Professional\" (PVIP) is their full professional-level installer certification, formerly called NABCEP Solar PV Installer Certification.",
+      "NABCEP is the North American Board of Certified Energy Practitioners. PV Installation Professional (PVIP) is its board certification for professionals responsible for photovoltaic (PV) installations.",
     forRoles: [
       { name: 'Lead Installer' },
       { name: 'Foreman' },
@@ -217,15 +218,15 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       { name: 'Site Supervisor' },
     ],
     whatItIs:
-      "NABCEP's advanced installer credential. Unlike the Associate level, it requires documented field experience — a minimum number of PV installations — on top of passing the exam, which is why it's treated as proof of real installation competence, not just classroom knowledge.",
+      "PVIP combines advanced PV knowledge with evidence that you have made installation decisions on completed projects. Exam preparation and field experience serve different purposes: studying can prepare you to explain a design choice, but it cannot document work you have not performed.\n\nThat knowledge spans the DC (direct current) circuits from the modules and the AC (alternating current) side of the inverter, which converts solar output for the building or grid. Candidates also need to apply the NEC (National Electrical Code), including the requirements for wiring and equipment protection.",
     whyItMatters:
-      "It's the credential employers and utility incentive programs reference by name most often across the country. For a lead installer or someone aiming for a foreman role, it's usually the single certification that carries the most weight in hiring and pay decisions.",
+      "PVIP is relevant to lead installers, foremen, and solar electricians who take responsibility for installation quality. It demonstrates assessed knowledge and qualifying experience. It does not replace an electrical or contractor license, and an employer or incentive program may set additional requirements.",
     requirements: [
-      'Minimum 10 hours of OSHA Outreach Training (OSHA 10, or a provincial equivalent outside the US)',
-      'At least 58 hours of NABCEP-approved advanced PV training',
-      'A minimum of 6 Project Credits — documented solar installations you completed in a decision-making role, not just as a crew member',
-      'A passing score on the PVIP exam itself',
-      'Note: the "Board Eligible" pathway now lets you take the exam before finishing the experience requirement — you get 3 years after passing to complete your project credits.',
+      "At least 10 hours of Occupational Safety and Health Administration (OSHA) Construction Outreach training, or an accepted equivalent.",
+      "58 hours of prescribed PV training, including at least 40 hours of advanced training from a qualifying provider. Check the handbook for the remaining hours and documentation rules.",
+      "At least 6 project credits from qualifying installations in a decision-making role. Credits measure documented project experience, not classroom hours or simply time on a crew.",
+      "An accepted application, agreement to the NABCEP Code of Ethics, and a passing PVIP exam result; applicants must be at least 18.",
+      "The Board Eligible pathway allows the exam before all project experience is complete. Passing gives you up to 3 years to meet the outstanding experience requirements; Board Eligible status is not full PVIP certification."
     ],
     examFormat: {
       questionCount: '70 multiple-choice questions (60 scored, 10 unscored pilot questions)',
@@ -234,33 +235,28 @@ export const CERTIFICATIONS: CertificationEntry[] = [
         'Computer-based, with on-screen access to the 2017 NEC and a calculator, at a Meazure Learning test center or via live remote proctoring',
     },
     passingScore: {
-      scoreDescription: 'A scaled score of 70 out of 99',
-      detail:
-        'Same 0–99 scaled scoring model as the Associate exam, just a higher bar — and, unlike the Associate exam, you\'re expected to already have hands-on installation experience going in.',
+      "scoreDescription": "A scaled score of 70 out of 99",
+      "detail": "A scaled score accounts for differences between exam versions; 70 is not a raw percentage of correct answers. Passing the exam does not remove any outstanding experience requirements under the Board Eligible pathway."
     },
     difficulty: {
-      score: 7,
-      rationale:
-        "Third-party estimates put first-attempt pass rates in the 60–70% range, and most candidates report needing 100–150 hours of dedicated study on top of their field experience. Field installers commonly describe the exam as testing whether you can explain and justify an installation decision on paper, not just execute it — a different skill than the field work itself.",
+      "score": 7,
+      "rationale": "Field experience helps, but the exam also requires calculations and the ability to find and apply code provisions. Review the official exam outline alongside your own project records: doing an installation correctly and explaining why it complies are related skills."
     },
     cost: {
-      trainingCost:
-        "$1,795 list price for HeatSpring's full 58-hour prep bundle (often less if you already hold approved hours from other training)",
-      applicationFee: '$125, paid to NABCEP',
-      examFee: '$375 for NABCEP members / $475 for non-members (NABCEP membership itself is $70/year)',
-      totalEstimate: '~$1,800–2,300 all-in, including training, application, and exam fees',
-      notes:
-        'This is the most expensive NABCEP credential to pursue. Many candidates spread the cost over a year or more, and it\'s the certification most frequently subsidized by employers once someone has committed to a lead-installer track.',
+      "trainingCost": "Depends on how many qualifying training hours you still need and the provider you choose",
+      "applicationFee": "$125, paid to NABCEP",
+      "examFee": "$375, paid to NABCEP",
+      "totalEstimate": "$500 in NABCEP fees, plus required training",
+      "notes": "Budget for training separately from the application and exam. The published re-exam fee is $275. The free practice resource below does not supply the required training hours."
     },
     reimbursement: {
-      available: true,
-      summary:
-        'Public workforce funding (WIOA) is less consistently available for this professional-level course than for entry-level training, since it targets people already working in the field rather than job seekers. Employer sponsorship is the more common path at this level — it\'s common for companies to cover part or all of the cost once an employee is on a lead-installer track, especially after they pass.',
-      sources: [
-        'Employer sponsorship — the most common funding source at this level; ask before you self-fund.',
-        'State WIOA workforce funding may still apply in some states via a local Eligible Training Provider List — worth checking, less consistent than for entry-level courses.',
-        'NABCEP membership ($70/year) reduces your exam fee by $100 and pays for itself if you plan to recertify long-term.',
-      ],
+      "available": true,
+      "summary": "An employer may support PVIP training for installers taking on project responsibility. Ask which training, application, and exam expenses are covered, and whether reimbursement depends on passing.",
+      "sources": [
+        "Employer professional-development funding: obtain the reimbursement terms before buying training.",
+        "Workforce Innovation and Opportunity Act (WIOA) funding: check the state Eligible Training Provider List (ETPL) and your individual eligibility through an American Job Center.",
+        "Veterans exam-fee reimbursement: check current benefit eligibility and NABCEP’s veterans guidance."
+      ]
     },
     expirationRenewal: {
       validityPeriod: '3 years from the date of issuance',
@@ -273,26 +269,29 @@ export const CERTIFICATIONS: CertificationEntry[] = [
     ],
      format: 'Online prep course, exam requires documented field experience',
      duration: '58 hours of training (varies further by experience already logged)',
-     priceRange: '~$1,800–2,300 all-in',
+     priceRange: "$500 in NABCEP fees, plus training",
     whyHeatSpring: [
-      "Exam prep built specifically around the PVIP Job Task Analysis and the 58-hour advanced-training requirement, bundled into a single course.",
-      'Instructors with direct field installation background, not just classroom credentials.',
-      'One purchase satisfies the full advanced-hours requirement, instead of stitching together multiple shorter courses from different providers.',
+      "Free practice questions relevant to PVIP installation and design topics.",
+      "A self-serve review tool, separate from required training and field experience."
     ],
     heatspringFitReason:
-      "For PV Installation Professional, HeatSpring's prep is built specifically around the official PVIP Job Task Analysis and covers the full 58-hour advanced-training requirement in one course, taught by instructors with real field installation experience — instead of you stitching together several shorter courses just to qualify for the exam.",
+      "HeatSpring’s Free NABCEP PV Certification Practice Exam is a self-serve set of 70 questions for installation and design candidates. It is a useful supplement when you want to check your calculations and code knowledge before taking PVIP.",
     heatspringUrl:
-      'https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq',
-    bannerHeadline: 'Ready for NABCEP PV Installer?',
-    bannerSubtext: 'The credential employers ask for by name — HeatSpring\'s 58-hour prep, built around the real exam blueprint.',
+      "https://www.heatspring.com/courses/free-nabcep-pv-certification-practice-exam?aff_id=9f_wlq",
+    bannerHeadline: "Practice the PV installation and design questions.",
+    bannerSubtext: "Review with a free HeatSpring practice exam. PVIP training and project requirements still apply.",
+    overviewHeading: "Installation decisions and documented experience",
+    heatspringHeading: "Work through PV certification practice questions",
+    heatspringLimitation: "This practice exam offers no qualifying training hours or instructor support. It cannot replace the PVIP eligibility requirements, project documentation, or official exam.",
+    heatspringCtaLabel: "Take the free practice exam",
   },
   {
     slug: 'osha-10',
     bannerImageSrc: '/osha_10.png',
-    name: 'OSHA 10-Hour Construction',
+    name: "OSHA 10-Hour Construction training",
     shortLabel: 'OSHA 10',
     acronymExpansion:
-      "OSHA stands for the Occupational Safety and Health Administration, the federal agency (under the US Department of Labor) that sets and enforces workplace safety rules. The \"10\" refers to the 10 hours of training in this specific Outreach Training Program course — there's also a 30-hour version, below.",
+      "OSHA is the Occupational Safety and Health Administration, part of the U.S. Department of Labor (DOL). Its 10-hour Construction Outreach course introduces workers to common jobsite hazards.",
     forRoles: [
       { name: 'Every entry-level installer' },
       { name: 'Solar Apprentice' },
@@ -303,73 +302,71 @@ export const CERTIFICATIONS: CertificationEntry[] = [
       { name: 'Crew Member' },
     ],
     whatItIs:
-      'A 10-hour hazard-awareness course covering falls, electrical hazards, struck-by and caught-in/between risks — the four leading causes of injury in construction. It\'s run through OSHA\'s Outreach Training Program by DOL-authorized providers.',
+      "OSHA 10-Hour Construction training covers common hazards, workers’ rights, and employer responsibilities. For solar crews, falls, electrical contact, moving equipment, and caught-in or between hazards are relevant parts of that awareness. Successful completion through an authorized trainer or accepted online provider leads to a DOL course-completion card, not an OSHA certification or license.",
     whyItMatters:
-      "It's not federally mandated on its own, but nearly every installation company, EPC, and general contractor requires it before letting anyone on a jobsite, and a growing number of states require it by law for construction permits. In practice, it's the most common first credential a new installer earns — often before NABCEP.",
+      "A jobsite, employer, or jurisdiction may require the card before you start work. OSHA does not impose a general federal requirement to take Outreach training. The course also does not replace the employer’s duty to train you for the specific hazards and equipment you will encounter.",
     requirements: [
-      'None. It\'s open to anyone and is typically the very first credential a new installer completes, often before their first day on a jobsite.',
+      "No prior construction experience or OSHA course is required. Choose an OSHA-authorized trainer or an OSHA-accepted online provider for the Construction program if you need the DOL card."
     ],
     examFormat: {
-      questionCount: 'A short quiz (around 10 questions) after each module, plus a final exam of roughly 20–30 questions depending on the provider',
-      duration:
-        'The course itself takes a minimum of 10 hours, spread across at least 2 days since OSHA caps training at 7.5 hours/day. You have 180 days from enrollment to finish, including the final exam.',
-      format: 'Multiple choice / true-false, delivered entirely online through a DOL-authorized Outreach provider',
+      "questionCount": "Quizzes and any final assessment depend on the trainer or online provider",
+      "duration": "At least 10 instructional hours; confirm the schedule and completion deadline with your provider",
+      "format": "Available through authorized trainers and OSHA-accepted online providers. Verify that the course issues the Construction DOL card your jobsite requires."
     },
     passingScore: {
-      scoreDescription: '70% on each module quiz and on the final exam',
-      detail:
-        'You get up to 3 attempts per quiz and 3 attempts on the final exam under OSHA\'s Outreach Training Program rules. Fail all 3 attempts on any one of them and you have to re-purchase and restart the course.',
+      "scoreDescription": "Assessment rules depend on the provider",
+      "detail": "OSHA does not require an exam to earn an Outreach course-completion card. Providers may use quizzes or tests; a 70% score, attempt limit, or restart policy belongs to the provider that sets it."
     },
     difficulty: {
-      score: 2,
-      rationale:
-        "There's no field-experience prerequisite and no competency test in the traditional sense — this is a hazard-awareness course, not a technical exam. The 70% threshold combined with 3 attempts per quiz makes it very accessible to someone with zero jobsite background.",
+      "score": 2,
+      "rationale": "The course introduces hazard recognition and assumes no construction background. Completing all required instructional hours is essential. Review any provider-specific assessments before enrolling, especially if you need language or learning accommodations."
     },
     cost: {
-      trainingCost: '$50–90 for most online providers (HeatSpring\'s course lists at $59)',
-      examFee: 'None — the final exam is included in the course price; there\'s no separate fee paid to OSHA or the DOL.',
-      totalEstimate: '$50–90 total, one-time',
-      notes: 'This is the cheapest and fastest credential on this list, and usually the first one a new installer earns.',
+      "trainingCost": "Varies by authorized trainer or accepted online provider",
+      "examFee": "Any provider assessment is part of its enrollment terms; there is no separate OSHA certification exam",
+      "totalEstimate": "Confirm the full course price and card delivery charges with your provider",
+      "notes": "The free electrical-safety lesson below is separate from the 10-hour Outreach course and does not issue its card."
     },
     reimbursement: {
-      available: true,
-      summary:
-        "Because it's typically a condition of employment rather than a career-advancement credential, OSHA 10 is one of the training costs most likely to be covered outright by the hiring company — many installers get it paid for directly before their start date, or reimbursed on their first paycheck.",
-      sources: [
-        'Employer-paid onboarding — extremely common for this specific course.',
-        'WIOA / state workforce funding for job seekers going through a formal pre-hire training program.',
-        'Union apprenticeship programs frequently bundle it into first-year training.',
-      ],
+      "available": true,
+      "summary": "If a job requires the Construction card, ask whether the employer books and pays for the course. Check reimbursement and the accepted provider before paying yourself.",
+      "sources": [
+        "Employer-paid onboarding: confirm who selects the provider and pays the enrollment fee.",
+        "Workforce Innovation and Opportunity Act (WIOA) funding: ask your local workforce program whether Outreach training is included.",
+        "Union apprenticeship training: check whether the program includes the 10-hour Construction course."
+      ]
     },
     expirationRenewal: {
-      validityPeriod: 'The DOL wallet card itself does not expire under federal rules — there is no federally mandated renewal period.',
-      renewalRequirement:
-        "That said, some states (Connecticut, Nevada, among others) and individual employers or general contractors require retraining every 3–5 years as a matter of policy or state law, not federal OSHA rule. When that applies, you retake the full 10-hour course — OSHA doesn't offer a shorter refresher version for the Outreach 10-hour card.",
+      "validityPeriod": "Construction DOL course-completion cards have no federal expiration date.",
+      "renewalRequirement": "An employer or jurisdiction may require more recent training. Check the rule that applies to your jobsite rather than assuming a universal renewal interval."
     },
     relatedSalaryPages: [
       { label: 'Solar PV Installer salary', slug: 'solar-photovoltaic-installer' },
     ],
     format: 'Online, self-paced',
     duration: '10 hours',
-    priceRange: '$50–90',
+    priceRange: "Provider-set course fee",
     whyHeatSpring: [
-      'Delivered through a partnership with the OSHA Education Center and the University of South Florida, a DOL-authorized provider, so the card is valid nationwide.',
-      'Team/group pricing available if you\'re getting certified alongside a crew.',
-      'Available in Spanish as well as English.',
+      "A free introductory electrical-safety lesson relevant to solar installation work.",
+      "Separate from OSHA Outreach training; no OSHA 10 or 30 DOL card is issued."
     ],
     heatspringFitReason:
-      "For OSHA 10, HeatSpring runs the course through the OSHA Education Center at the University of South Florida, a DOL-authorized provider, so the card you earn is valid nationwide. It's offered in Spanish as well as English, with group pricing if you're getting certified alongside your crew.",
-    heatspringUrl: 'https://www.heatspring.com/courses/osha-10-hour-construction?aff_id=9f_wlq',
-    bannerHeadline: 'Most jobsites require OSHA 10.',
-    bannerSubtext: 'Get certified online, in a weekend, through an authorized provider on HeatSpring.',
+      "HeatSpring’s free Intro to Safety for Electricians is a one-hour preview lesson for apprentices and solar installers. It introduces electrical hazards and workplace safety concepts that help put the electrical portion of construction hazard awareness in context.",
+    heatspringUrl: "https://www.heatspring.com/courses/intro-to-safety-for-electricians-preview-lesson-nccer-level-1-apprenticeship?aff_id=9f_wlq",
+    bannerHeadline: "Start with electrical hazard awareness.",
+    bannerSubtext: "A free HeatSpring safety lesson for apprentices and installers. It does not issue an OSHA 10 or 30 DOL card.",
+    overviewHeading: "Ten hours of construction hazard awareness",
+    heatspringHeading: "An introduction to electrical safety on site",
+    heatspringLimitation: "This lesson does not issue an OSHA 10- or 30-hour DOL card. To obtain an OSHA 10 Construction card, complete the full Outreach course through an authorized trainer or accepted online provider.",
+    heatspringCtaLabel: "Start the free safety lesson",
   },
    {
      slug: 'osha-30',
      bannerImageSrc: '/osha_30.png',
-     name: 'OSHA 30-Hour Construction',
+     name: "OSHA 30-Hour Construction training",
      shortLabel: 'OSHA 30',
      acronymExpansion:
-       "Same OSHA — the Occupational Safety and Health Administration. The \"30\" refers to the 30 hours of training, aimed at whoever holds actual safety responsibility on a crew rather than an individual worker.",
+       "OSHA is the Occupational Safety and Health Administration, within the U.S. Department of Labor (DOL). The 30-hour Construction Outreach course is intended for supervisors and workers with safety responsibilities.",
      forRoles: [
        { name: 'Crew Lead' },
        { name: 'Foreman' },
@@ -381,97 +378,110 @@ export const CERTIFICATIONS: CertificationEntry[] = [
        { name: 'Site Supervisor' },
      ],
      whatItIs:
-       "The deeper counterpart to OSHA 10, covering the same core hazard categories in more depth plus jobsite safety program management. It's built for whoever holds actual safety responsibility on a crew, not just individual hazard awareness.",
+       "The 30-hour Construction course covers a wider range of jobsite hazards and gives them more instructional time than OSHA 10. It is intended for people such as foremen, crew leads, and workers who have some safety responsibility. Completion earns a DOL course-completion card; it does not certify you as a safety professional.",
      whyItMatters:
-       "If you're managing a crew or coordinating subcontractors, OSHA 30 is what most companies expect on top of (not instead of) OSHA 10. It's the standard credential for a site supervisor role in solar construction.",
+       "Supervising a crew means recognizing hazards across the work being coordinated, not only in your own task. An employer or jobsite may require OSHA 30 for that responsibility. OSHA 10 is not a prerequisite, and OSHA 30 does not have to be taken in addition to it; check which Construction card your employer actually requests.",
      requirements: [
-       'None formally required by OSHA, though most candidates already hold OSHA 10 and are moving into a supervisory or safety-responsible role.',
-     ],
+      "OSHA 10 is not required before OSHA 30. Use an authorized trainer or OSHA-accepted online provider and complete the full 30-hour Construction course to receive its DOL card."
+    ],
      examFormat: {
-       questionCount: 'Module quizzes throughout (roughly 10 questions each) plus a longer final exam covering all 30 hours of content',
-       duration:
-         'Minimum 30 hours of coursework, spread across at least 4 days under OSHA\'s 7.5-hour/day training cap; final exam completion falls within your course access window.',
-       format: 'Multiple choice / true-false, delivered entirely online through a DOL-authorized Outreach provider',
-     },
+      "questionCount": "Assessment format and question counts are set by the provider",
+      "duration": "At least 30 instructional hours; ask the provider for its schedule and access window",
+      "format": "Classroom training through authorized trainers or online study through OSHA-accepted providers. This is Outreach training, not a professional certification exam."
+    },
      passingScore: {
-       scoreDescription: '70% on each module quiz and on the final exam',
-       detail: 'Same 3-attempts-per-assessment rule as OSHA 10, just applied across more modules given the additional content.',
-     },
+      "scoreDescription": "Check the provider’s assessment policy",
+      "detail": "OSHA sets no universal passing percentage or three-attempt exam rule for Outreach classes. An online provider may impose those conditions; review its terms before starting."
+    },
      difficulty: {
-       score: 3,
-       rationale:
-         'Same 70% threshold and 3-attempt structure as OSHA 10 — still a hazard-awareness and safety-management course, not a technical competency exam — but with three times the content and more nuanced material on running a safety program, not just recognizing hazards individually.',
-     },
+      "score": 3,
+      "rationale": "The main difference from OSHA 10 is the greater breadth and time commitment. Supervisors should relate the hazard examples to how their crews work and how subcontractors interact. Any quizzes are governed by the provider’s policy."
+    },
      cost: {
-       trainingCost: '$90–190 for most online providers (HeatSpring\'s course lists at $159)',
-       examFee: 'None — included in the course price.',
-       totalEstimate: '$90–190 total, one-time',
-       notes: 'Often taken as part of a promotion into a foreman or supervisor role, rather than before hire.',
-     },
+      "trainingCost": "Set by the authorized trainer or accepted online provider",
+      "examFee": "No separate OSHA certification exam fee",
+      "totalEstimate": "Request the full 30-hour course price, including any card delivery charges",
+      "notes": "The free safety preview below is supplemental learning. Its completion cannot be exchanged for an OSHA 30 DOL card."
+    },
      reimbursement: {
-       available: true,
-       summary:
-         "Because it's usually tied to a promotion or an expanded safety responsibility rather than a condition of entry-level hire, OSHA 30 is frequently covered as part of an employer's leadership-development or tuition-assistance budget.",
-       sources: [
-         'Employer-paid, often bundled into a promotion to crew lead or site supervisor.',
-         'Union training funds commonly cover it for members moving into leadership roles.',
-         'WIOA / state workforce funding, less commonly used at this level than for entry-level OSHA 10.',
-       ],
-     },
+      "available": true,
+      "summary": "When a company requests OSHA 30 for a supervisory assignment, course funding may be part of that assignment. Confirm the payment arrangement and any deadline before enrolling.",
+      "sources": [
+        "Employer training budget: ask about enrollment and card delivery costs.",
+        "Union training funds: check the program’s eligibility and course schedule.",
+        "Workforce Innovation and Opportunity Act (WIOA) funding: verify whether a local program covers the requested course."
+      ]
+    },
      expirationRenewal: {
-       validityPeriod: 'The DOL wallet card itself does not expire under federal rules.',
-       renewalRequirement:
-         'As with OSHA 10, some states and employers require retraining every 3–5 years by policy rather than federal mandate — and there\'s no shorter refresher version, so renewal means retaking the full 30-hour course.',
-     },
+      "validityPeriod": "The Construction DOL course-completion card has no federal expiration date.",
+      "renewalRequirement": "Site owners, employers, or jurisdictions may require recent training. Confirm their requirements when changing jobs or projects."
+    },
      relatedSalaryPages: [
        { label: 'Lead Installer / Foreman salary', slug: 'lead-solar-installer' },
      ],
      format: 'Online, self-paced',
      duration: '30 hours',
-     priceRange: '$90–190',
+     priceRange: "Provider-set course fee",
      whyHeatSpring: [
-       'Same authorized-provider partnership as their OSHA 10 course, so the card is valid nationwide.',
-       'Group/team pricing for companies certifying multiple supervisors at once.',
-       'Available in Spanish as well as English.',
-     ],
+      "A short, free review of electrical hazards relevant to installation crews.",
+      "An introductory lesson, not OSHA 30 Outreach training or a DOL card course."
+    ],
      heatspringFitReason:
-       "For OSHA 30, HeatSpring uses the same authorized-provider partnership as their OSHA 10 course, so your card is valid nationwide. It's available in Spanish as well as English, with group pricing for companies certifying several supervisors at once.",
-     heatspringUrl: 'https://www.heatspring.com/courses/osha-30-hour-construction?aff_id=9f_wlq',
-     bannerHeadline: 'Leading a crew? You need OSHA 30.',
-     bannerSubtext: "HeatSpring's authorized 30-hour course, online and self-paced.",
-   },
+       "The free Intro to Safety for Electricians lesson covers electrical-safety fundamentals. A crew lead can use it as a short review of electrical hazards encountered by installers; it is an introductory lesson, not a course in managing a complete construction safety program.",
+     heatspringUrl: "https://www.heatspring.com/courses/intro-to-safety-for-electricians-preview-lesson-nccer-level-1-apprenticeship?aff_id=9f_wlq",
+     bannerHeadline: "Review electrical safety before coordinating the work.",
+     bannerSubtext: "Explore a free HeatSpring safety lesson. An OSHA 30 DOL card requires separate Outreach training.",
+     overviewHeading: "More depth for workers with safety responsibilities",
+    heatspringHeading: "Review electrical hazards your crew may encounter",
+    heatspringLimitation: "The HeatSpring lesson does not issue an OSHA 10- or 30-hour DOL card or replace the 30-hour Outreach course required by a jobsite.",
+    heatspringCtaLabel: "Explore the free safety lesson",
+  },
    {
      slug: 'nabcep-pv-installer-specialist',
      bannerImageSrc: '/nabcep_pvis.png',
      name: 'NABCEP PV Installer Specialist',
      shortLabel: 'PV Installer Specialist',
      acronymExpansion:
-       "NABCEP stands for the North American Board of Certified Energy Practitioners. \"PV Installer Specialist\" (PVIS) is a board certification for installers who demonstrate advanced competence in PV system installation, including conductors, raceways, grounding, equipment installation, and safety planning — positioned between the entry-level PV Associate and the full PV Installation Professional.",
+       "NABCEP is the North American Board of Certified Energy Practitioners. PV Installer Specialist (PVIS) is its board certification focused on photovoltaic (PV) installation work.",
      forRoles: [
-       { name: 'Experienced PV Installer' },
-       { name: 'Lead Installer' },
-       { name: 'BESS Technician' },
-     ],
+      {
+        "name": "Experienced PV Installer"
+      },
+      {
+        "name": "Lead Installer"
+      },
+      {
+        "name": "Battery storage technician"
+      }
+    ],
      careerPaths: [
-       { name: 'Lead Installer', href: '/lead-solar-installer-jobs' },
-       { name: 'BESS Technician', href: '/bess-technician-jobs' },
-       { name: 'Solar Electrician' },
-     ],
+      {
+        "name": "Lead Installer",
+        "href": "/lead-solar-installer-jobs"
+      },
+      {
+        "name": "Battery storage technician",
+        "href": "/bess-technician-jobs"
+      },
+      {
+        "name": "Solar Electrician"
+      }
+    ],
      whatItIs:
-       "NABCEP's mid-level installer certification focused on hands-on installation competence. Unlike the PV Associate which tests classroom knowledge, the PVIS exam is built around the actual tasks an installer performs on a jobsite — from reading plans and developing safety protocols to installing raceways, conductors, modules, and balance of systems. It's the credential for installers who are ready to prove they can execute complex installations independently.",
+       "PVIS focuses on installing equipment and wiring to the plans and applicable codes. Conductors are the wires that carry current; a raceway is the conduit or other enclosed channel that routes and protects them. The installation includes DC (direct current) wiring from the modules and AC (alternating current) wiring on the output side of the inverter.\n\nThe inverter converts the modules’ DC output into AC for the building or grid. Grounding connects designated parts of the system to earth; bonding connects conductive equipment parts together to maintain an effective fault-current path. Both require attention to the NEC (National Electrical Code), rather than treating all grounding connections as interchangeable.",
      whyItMatters:
-       "It fills the gap between the PV Associate and the PVIP: you don't need the full PVIP's 58-hour advanced training or extensive project-credit history, but you still get a nationally recognized credential that says you can lead installations, not just assist. Several large EPCs and developers now list PVIS as a preferred or required qualification for lead-installer positions, especially those working on commercial or utility-scale projects.",
+       "PVIS addresses installation tasks specifically, while PV Installation Professional covers a broader scope of project responsibility. Both require documented experience. PVIS is relevant to experienced installers and leads working for an EPC (engineering, procurement, and construction) contractor, but it is not a required stepping stone to PVIP or a substitute for a trade license.",
      requirements: [
-       'OSHA 10-Hour Construction Outreach (or provincial equivalent) — minimum 10 hours of formal safety training.',
-       'At least 24 hours of advanced PV training, structured as: 18 hours covering the PVIS Job Task Analysis (JTA) + 6 hours of National Electric Code (NEC). HeatSpring\'s PVIS prep bundle satisfies this requirement in a single course.',
-       'A minimum of 6 Project Credits — documented installations where you held a decision-making role. Credits are awarded per system based on size: 1–999 kW = 2 credits per system; 1 MW and up = 3 credits per system.',
-       'A passing score on the PVIS exam.',
-     ],
+      "At least 10 hours of Occupational Safety and Health Administration (OSHA) Construction Outreach training, or an accepted equivalent.",
+      "24 hours of advanced training from qualifying providers: 18 hours covering the PVIS Job Task Analysis (JTA), the outline of assessed work tasks, plus 6 hours on the NEC.",
+      "At least 6 project credits for qualifying installations in which you made decisions that materially affected the work. Systems of 1–999 kW (kilowatts) earn 2 credits; systems of 1 MW (megawatt, or 1,000 kW) and above earn 3.",
+      "A documented application, agreement to the NABCEP Code of Ethics, and a passing PVIS exam result; applicants must be at least 18."
+    ],
      examFormat: {
        questionCount: '70 multiple-choice questions (60 scored, 10 unscored pilot questions)',
        duration: 'Up to 4 hours',
        format:
-         'Computer-based at a MeAzure Learning test center or via live remote proctoring. On-screen access to the NEC and a calculator are provided.',
+         'Computer-based at a Meazure Learning test center or via live remote proctoring. On-screen access to the NEC and a calculator are provided.',
      },
      passingScore: {
        scoreDescription: 'A scaled score of 70 out of 99',
@@ -479,60 +489,58 @@ export const CERTIFICATIONS: CertificationEntry[] = [
          'NABCEP uses a 0–99 scaled scoring model, not raw percentage, to keep results comparable across exam versions. The 70 threshold is the published passing mark for PVIS.',
      },
      difficulty: {
-       score: 6,
-       rationale:
-         "More demanding than the PV Associate because it assumes hands-on experience and tests on real-world installation tasks rather than pure theory. Most candidates report needing 80–120 hours of combined field review and structured prep. The Project Credit requirement is the biggest barrier for installers who haven't kept documentation of their past work.",
-     },
+      "score": 6,
+      "rationale": "The test assumes you can connect installation procedures to electrical principles and code requirements. Review conductor sizing, wiring methods, grounding and bonding, and equipment installation. Keeping complete records of qualifying projects also matters when applying."
+    },
      cost: {
-       trainingCost:
-         "$1,795 for HeatSpring's PVIS Certification Prep bundle (covers the full 24-hour advanced-training requirement and exam prep); other providers offer shorter modules but may require stitching courses together to reach 24 hours.",
-       applicationFee: '$125, paid to NABCEP upon application submission',
-       examFee: '$375, paid to NABCEP after your application is accepted (total NABCEP fees: $500)',
-       totalEstimate: '~$2,295 all-in for most first-time candidates',
-       notes:
-         'NABCEP does not offer a membership discount on PVIS fees the way they do for PVIP (where membership saves you $100 on the exam). The re-exam fee if needed is $275.',
-     },
+      "trainingCost": "Varies with the provider and how many of the required 24 hours you already hold",
+      "applicationFee": "$125, paid to NABCEP",
+      "examFee": "$375, paid to NABCEP",
+      "totalEstimate": "$500 in NABCEP fees, plus required training",
+      "notes": "The published re-exam fee is $275. A free practice exam helps with review, but is separate from the required advanced training."
+    },
      reimbursement: {
-       available: true,
-       summary:
-         'Because PVIS targets working installers rather than career-changers, employer sponsorship is the most common funding path. Some state workforce funds may cover it through an Eligible Training Provider List if the training provider is registered, but it\'s less consistently subsidized than entry-level PV Associate training.',
-       sources: [
-         'Employer sponsorship — ask if your company has a professional-development or certification budget; many installation firms cover PVIS for lead-installer-track employees.',
-         'State WIOA / workforce funding — check whether your training provider is on your state\'s ETPL before enrolling.',
-         'No veterans or union-specific discounts are listed by NABCEP for this certification.',
-       ],
-     },
+      "available": true,
+      "summary": "For a working installer, the first funding question is whether the employer has a budget for the advanced training and exam. Public funding depends on the course listing and the applicant’s eligibility.",
+      "sources": [
+        "Employer sponsorship: ask which remaining training hours and exam costs the company will pay.",
+        "Workforce Innovation and Opportunity Act (WIOA) funding: verify the course’s place on the state Eligible Training Provider List (ETPL).",
+        "Veterans benefits: verify eligibility for course support or exam-fee reimbursement rather than assuming every cost is covered."
+      ]
+    },
      expirationRenewal: {
-       validityPeriod: '3 years from the date of issuance',
-       renewalRequirement:
-         '30 hours of continuing education every 3 years, broken down as: 6 NEC hours, 12 PVIS JTA hours, 2 Building/Fire Code hours, and 10 Renewable Energy elective hours. You must also submit an employer letter confirming active involvement in the industry.',
-     },
+      "validityPeriod": "3 years from the date of issuance",
+      "renewalRequirement": "30 hours of continuing education: 6 on the NEC, 12 covering the PVIS task outline, and 12 on renewable energy, including 2 on building or fire codes. Submit a signed letter documenting qualifying industry activity with your recertification application."
+    },
     relatedSalaryPages: [
       { label: 'Lead Installer / Foreman salary', slug: 'lead-solar-installer' },
       { label: 'Solar Technician salary', slug: 'solar-technician' },
     ],
      format: 'Online prep course, exam requires documented field experience',
      duration: '24 hours of advanced training (plus field experience)',
-     priceRange: '~$2,295 all-in',
+     priceRange: "$500 in NABCEP fees, plus training",
      whyHeatSpring: [
-       'The bundle covers the full 24-hour advanced requirement (18 JTA + 6 NEC) in one course instead of forcing you to piece together multiple shorter modules.',
-       'Includes a dedicated PVIS practice exam so you can test readiness before sitting for the real thing.',
-       'Taught by industry practitioners, not just classroom instructors.',
-     ],
+      "A free practice resource that HeatSpring identifies as relevant to PV installer specialists.",
+      "Supports review of installation topics without replacing PVIS-specific training."
+    ],
      heatspringFitReason:
-       "HeatSpring's PVIS prep bundle is one of the few that covers the full 24-hour advanced requirement — 18 hours on the PVIS Job Task Analysis plus 6 hours of NEC — in a single self-paced course, and it includes a practice exam. For working installers who can't piece together multiple shorter modules from different providers, that bundling is the main reason we recommend it.",
+       "The Free NABCEP PV Certification Practice Exam includes questions relevant to PVIS as well as installation and design certification. Work through it alongside the PVIS task outline, paying particular attention to the wiring and code topics you use less often on site.",
      heatspringUrl:
-       'https://www.heatspring.com/courses/nabcep-pv-installer-specialist-pvis-certification-prep?aff_id=9f_wlq',
-     bannerHeadline: 'Move beyond PV Associate.',
-     bannerSubtext: 'HeatSpring\'s all-in-one PVIS prep — 24 advanced hours, practice exam, and the exact JTA coverage you need.',
-   },
+       "https://www.heatspring.com/courses/free-nabcep-pv-certification-practice-exam?aff_id=9f_wlq",
+     bannerHeadline: "Review the installation topics you use less often.",
+     bannerSubtext: "Free PV certification practice questions on HeatSpring; PVIS eligibility and training remain separate.",
+     overviewHeading: "The wiring and equipment work PVIS assesses",
+    heatspringHeading: "Review installation topics with a free practice exam",
+    heatspringLimitation: "The questions are not a PVIS-only exam or a qualifying 24-hour course. You still need the required training, project credits, and a passing result on NABCEP’s PVIS exam.",
+    heatspringCtaLabel: "Take the free practice exam",
+  },
    {
      slug: 'nabcep-energy-storage-installation-professional',
      bannerImageSrc: '/nabcep_esip.png',
      name: 'NABCEP Energy Storage Installation Professional',
      shortLabel: 'ESIP',
      acronymExpansion:
-       "NABCEP stands for the North American Board of Certified Energy Practitioners. \"Energy Storage Installation Professional\" (ESIP) is their specialist certification for technicians who install and commission battery energy storage systems — the fastest-growing segment of residential and commercial solar.",
+       "NABCEP is the North American Board of Certified Energy Practitioners. Its Energy Storage Installation Professional (ESIP) certification covers the installation of energy storage systems (ESS), including battery energy storage systems (BESS).",
      forRoles: [
        { name: 'BESS Technician' },
        { name: 'Lead Installer' },
@@ -544,82 +552,78 @@ export const CERTIFICATIONS: CertificationEntry[] = [
        { name: 'Energy Storage Specialist' },
      ],
      whatItIs:
-       "The first NABCEP board certification focused exclusively on energy storage. It was developed with CREATE Energy Center and MREA to establish a standard for battery storage installation competence. Unlike the PVIP which covers general PV systems, the ESIP dives deep into battery chemistries, storage system sizing, NEC Article 480/706, fire and building codes specific to storage, and the commissioning and troubleshooting of ESS.",
+       "An ESS includes more than stored energy: its power-conversion equipment, controls, protection, and wiring determine how it can supply a building or connect to the grid. In a BESS, batteries store energy and deliver DC (direct current). An inverter converts it to AC (alternating current) for building circuits or grid export; charging equipment converts incoming power as needed for the batteries.\n\nSystem sizing separates power from energy. kW (kilowatts) describe the rate of charging or discharge; kWh (kilowatt-hours) describe an energy quantity. Larger systems use MW (megawatts) and MWh (megawatt-hours): 1 MW is 1,000 kW, while 1 MWh is 1,000 kWh.",
      whyItMatters:
-       "Battery storage is now mandated alongside solar in many California and local building codes, and utilities increasingly require certified technicians for storage interconnection. The ESIP is rapidly becoming the credential employers list when hiring storage-specific roles — it's still newer than PVIP, but demand is growing faster than the supply of certified technicians.",
+       "ESIP assesses work on the complete storage installation, including commissioning: checking settings, protection, controls, and operation before placing the system in service. That work requires the NEC (National Electrical Code), applicable fire and building codes, and the utility’s interconnection rules for connecting to its network. A photovoltaic (PV) installation background helps, but storage introduces operating modes and hazards that solar-only training may not cover.",
      requirements: [
-       'OSHA 30-Hour Construction Outreach (or provincial equivalent) — note that ESIP requires OSHA 30, not OSHA 10.',
-       'At least 58 hours of advanced energy storage training, covering the ESIP Job Task Analysis, NEC, and building/fire codes. HeatSpring\'s ESIP prep bundle provides these 58 hours through two combined courses (18-hour Energy Storage Associate Boot Camp + 40-hour Advanced ESIP Certification Training).',
-       'A minimum of 6 Project Credits — documented energy storage installations in a decision-making role. Credits scale by system size: 1–80 kWh = 1 credit; 81–999 kWh = 2 credits; 1 MWh and up = 3 credits.',
-       'A passing score on the ESIP exam.',
-       'Note: Active NABCEP PVIP certificants receive 18 non-accredited hours toward the 58-hour training requirement.',
-     ],
+      "Occupational Safety and Health Administration (OSHA) 30-Hour Construction Outreach training, or an accepted state or provincial equivalent. ESIP requires OSHA 30 rather than OSHA 10.",
+      "58 hours of advanced energy storage training covering the ESIP Job Task Analysis (JTA), the outline of assessed work tasks, and applicable codes. Retain the completion records needed for your application.",
+      "At least 6 project credits from qualifying energy storage installations completed within the previous 2 calendar years, with proof of your decision-making role. Credits depend on energy capacity: 1–80 kWh earns 1 credit; 81–999 kWh earns 2; 1 MWh and above earns 3.",
+      "An accepted application, agreement to the NABCEP Code of Ethics, and a passing ESIP exam result; applicants must be at least 18.",
+      "Active PV Installation Professional (PVIP) certificants receive 18 non-accredited hours toward the 58-hour training requirement."
+    ],
      examFormat: {
-       questionCount: 'Not explicitly published by NABCEP; follows the standard NABCEP multiple-choice format — expect around 70 questions (60 scored + pilot questions) based on the ESIP Job Task Analysis blueprint',
-       duration: 'Up to 4 hours (typical for NABCEP professional-level exams)',
-       format:
-         'Computer-based at a MeAzure Learning test center or via live remote proctoring; available in both English and Spanish.',
-     },
+      "questionCount": "70 multiple-choice questions: 60 scored and 10 unscored pilot questions",
+      "duration": "Up to 4 hours",
+      "format": "Computer-based at a Meazure Learning test center or through live remote proctoring. NABCEP offers ESIP in English and Spanish."
+    },
      passingScore: {
-       scoreDescription: 'Scaled score of 65 out of 99 (same 0–99 model used across NABCEP exams)',
-       detail:
-         'NABCEP does not publish separate passing thresholds per exam type in their public materials; the 65 figure follows the pattern of their other professional-level certifications. Treat this as an estimate based on NABCEP\'s documented scoring conventions — confirm with the current handbook before scheduling.',
-     },
+      "scoreDescription": "Confirm the ESIP threshold with NABCEP",
+      "detail": "NABCEP uses scaled scores rather than raw percentages. Its public passing-score FAQ does not list ESIP; thresholds for other credentials are not evidence of the ESIP passing mark."
+    },
      difficulty: {
-       score: 8,
-       rationale:
-         "The newest NABCEP certification and arguably the most technically demanding because it spans battery chemistry, high-voltage DC safety, specialized NEC articles, and commissioning protocols that even experienced PV installers don't touch daily. The 58-hour training requirement is longer than PVIS, and the Project Credit bar is high because storage-only projects are still less common than pure PV. Third-party prep providers estimate first-attempt pass rates in the 50–65% range among candidates who complete structured training.",
-     },
+      "score": 8,
+      "rationale": "Storage preparation spans battery behavior, electrical protection, controls, and commissioning. An experienced PV installer may still need substantial review of storage operating modes and fire-code requirements. This rating reflects that breadth, not a measured ESIP pass rate."
+    },
      cost: {
-       trainingCost:
-         "$1,795 for HeatSpring's ESIP Certification Prep bundle (58 hours, including the 18-hour Energy Storage Associate Boot Camp and the 40-hour Advanced ESIP course); other providers may charge separately for each component.",
-       applicationFee: '$125, paid to NABCEP',
-       examFee: '$375, paid to NABCEP after approval (total NABCEP fees: $500)',
-       totalEstimate: '~$2,295 all-in for most first-time candidates',
-       notes:
-         'Same NABCEP fee structure as PVIS. No membership discount applies. Re-exam fee if needed: $275.',
-     },
+      "trainingCost": "Depends on the storage training hours you still need and the provider you choose",
+      "applicationFee": "$125, paid to NABCEP",
+      "examFee": "$375, paid to NABCEP",
+      "totalEstimate": "$500 in NABCEP fees, plus advanced training and any required OSHA 30 course",
+      "notes": "The published re-exam fee is $275. Active PVIP holders can receive the training-hour credit described above; confirm your remaining hours before buying a training package."
+    },
      reimbursement: {
-       available: true,
-       summary:
-         'Energy storage training qualifies for many of the same workforce-development funds as solar, but the ESIP is still so new that fewer states have explicitly added it to their Eligible Training Provider Lists. Employer sponsorship is the most reliable path — storage budgets are growing and companies are actively sending technicians to get certified.',
-       sources: [
-         'Employer sponsorship — storage budgets are expanding rapidly; many BESS employers cover ESIP prep and exam costs.',
-         'State WIOA / workforce funding — worth checking but less consistently available than for general solar certifications.',
-         'Utility or grant-funded training programs — some regional utilities and workforce boards have begun subsidizing storage-specific credentials.',
-       ],
-     },
+      "available": true,
+      "summary": "Storage training may be covered by an employer’s technical-development budget or a local workforce program. Confirm the award applies to the training you need; funding for a general solar course does not establish eligibility for an ESIP course.",
+      "sources": [
+        "Employer sponsorship: ask about advanced storage training and required safety training as separate costs.",
+        "Workforce Innovation and Opportunity Act (WIOA) funding: check the specific course on the state Eligible Training Provider List (ETPL).",
+        "Utility or grant-funded training: confirm any available program’s course list and participant criteria."
+      ]
+    },
      expirationRenewal: {
-       validityPeriod: '3 years from the date of issuance',
-       renewalRequirement:
-         '30 hours of continuing education every 3 years, broken down as: 6 NEC hours, 12 ESIP JTA hours, 2 Building/Fire Code hours, and 10 Renewable Energy elective hours (with at least 2 of those elective hours focused on building or fire codes). You must also submit an employer letter confirming continued involvement in the industry.',
-     },
+      "validityPeriod": "3 years from the date of issuance",
+      "renewalRequirement": "30 hours of continuing education: 6 on electrical codes, 12 on the ESIP task outline, and 12 on renewable energy, including 2 on building or fire codes. Document qualifying industry activity as well as education when applying for recertification."
+    },
     relatedSalaryPages: [
       { label: 'Solar Technician salary', slug: 'solar-technician' },
       { label: 'Lead Installer / Foreman salary', slug: 'lead-solar-installer' },
     ],
      format: 'Online prep course, exam requires documented field experience with storage systems',
      duration: '58 hours of advanced training (plus field experience)',
-     priceRange: '~$2,295 all-in',
+     priceRange: "$500 in NABCEP fees, plus training",
      whyHeatSpring: [
-       'One of the few providers offering a bundled 58-hour ESIP prep that satisfies the full advanced-training requirement in a single purchase.',
-       'Combines the 18-hour Energy Storage Associate Boot Camp with the 40-hour Advanced ESIP course, so you don\'t need to hunt for separate JTA and NEC coverage.',
-       'Instructors with direct battery-storage field experience, not just PV backgrounds.',
-     ],
+      "A free introduction to battery types, system configurations, and customer loads.",
+      "Includes a load-profile exercise; it is separate from ESIP qualifying training."
+    ],
      heatspringFitReason:
-       "HeatSpring's ESIP prep bundle is structured around the official ESIP Job Task Analysis and bundles the full 58-hour advanced requirement (Associate Boot Camp + Advanced ESIP Training) into one self-paced program, which is unusual — most providers sell these as separate courses. For installers transitioning into storage who need the hours in one place, that bundling is the main draw.",
+       "Understanding Residential and Commercial Energy Storage introduces battery types, system configurations, and the loads a customer needs to supply. The free HeatSpring course includes a load-profile spreadsheet exercise, a useful starting point before ESIP-specific study.",
      heatspringUrl:
-       'https://www.heatspring.com/courses/nabcep-energy-storage-installation-professional-esip-certification-prep?aff_id=9f_wlq',
-     bannerHeadline: 'Storage is the new solar.',
-     bannerSubtext: 'HeatSpring\'s bundled 58-hour ESIP prep — Associate hours plus advanced storage training, in one course.',
-   },
+       "https://www.heatspring.com/courses/understanding-residential-and-commercial-energy-storage?aff_id=9f_wlq",
+     bannerHeadline: "Understand the complete storage system.",
+     bannerSubtext: "Explore a free residential and commercial storage course on HeatSpring before certification-specific study.",
+     overviewHeading: "A battery is one part of the storage installation",
+    heatspringHeading: "Start with residential and commercial storage",
+    heatspringLimitation: "This introductory course is not approved for NABCEP credit hours and does not earn ESIP certification. Advanced training, documented storage projects, and the official exam are still required.",
+    heatspringCtaLabel: "Start the free storage course",
+  },
    {
      slug: 'nabcep-pv-technical-sales',
      bannerImageSrc: '/nabcep_pvts.png',
      name: 'NABCEP PV Technical Sales',
      shortLabel: 'PV Technical Sales',
      acronymExpansion:
-       "NABCEP stands for the North American Board of Certified Energy Practitioners. \"PV Technical Sales\" (PVTS) is their certification for people who sell, market, or design residential and commercial PV systems from the proposal side — testing your ability to explain production estimates, shading analysis, economics, and code compliance to a customer, not just install hardware.",
+       "NABCEP is the North American Board of Certified Energy Practitioners. PV Technical Sales (PVTS) is its board certification for the sales and proposal work behind photovoltaic (PV) installations.",
      forRoles: [
        { name: 'Solar Sales Rep' },
        { name: 'Solar Consultant' },
@@ -631,73 +635,71 @@ export const CERTIFICATIONS: CertificationEntry[] = [
        { name: 'PV System Designer' },
      ],
      whatItIs:
-       "NABCEP's non-installation certification for the sales and technical-design side of the industry. The exam tests whether you can accurately assess a site, calculate production and financial returns, explain interconnection requirements, and communicate technical information to non-technical customers. It's the credential that separates professional solar salespeople from people who just run leads.",
+       "PVTS assesses whether you can turn a site assessment into an accurate solar proposal. Shading is the loss of sunlight from trees, buildings, or other obstructions. A production estimate uses those conditions, system orientation, equipment, and weather data to estimate the electricity a system will generate; it is not a guaranteed output.\n\nSizing means selecting system capacity for the site and customer’s electricity use. Modules produce DC (direct current), and the inverter converts it to AC (alternating current) for the building or grid. A proposal needs to distinguish those equipment ratings and explain interconnection, the utility’s approval and technical process for connecting the system to its network.",
      whyItMatters:
-       "In an industry with a long history of high-pressure, low-integrity sales tactics, the PVTS gives customers and employers a way to verify that a salesperson actually understands the systems they're selling. Some states (notably California and Washington) and several large solar companies now list it as preferred or required for design/sales positions, and it's increasingly showing up in utility program requirements for registered dealers.",
+       "A salesperson needs to explain the assumptions behind expected savings, not just quote a system price. PVTS covers technical assessment and customer communication as well as sales experience. The credential does not authorize electrical installation work or replace any licensing requirements for selling or contracting in your jurisdiction.",
      requirements: [
-       'No minimum field experience required — PVTS is open to anyone who can meet the training requirement, which makes it accessible to people coming from sales, marketing, or design backgrounds with no installation experience.',
-       'At least 58 hours of advanced PV training covering the PVTS Job Task Analysis (JTA) blueprint, including technical sales principles, NEC and code standards, and PV fundamentals. HeatSpring\'s PVTS prep bundle satisfies this requirement.',
-       'A passing score on the PVTS exam.',
-     ],
+      "Qualify through a documented sales-experience category. Category A requires 8 sales credits; Category B requires 4 plus a qualifying degree or license. Credits relate to PV proposals and system sales, not installation crew hours.",
+      "The qualifying projects must have been sold within the previous 2 years, with at least half sold and installed. Keep the proposals, contracts, and installation evidence required by NABCEP.",
+      "At least 10 hours of Occupational Safety and Health Administration (OSHA) Construction Outreach training, or an accepted equivalent.",
+      "58 hours of prescribed PV training, including 40 advanced hours from qualifying providers covering the PVTS Job Task Analysis (JTA), the outline of assessed sales tasks. This includes technical topics and applicable codes such as the NEC (National Electrical Code).",
+      "An accepted application, agreement to the NABCEP Code of Ethics, and a passing PVTS exam result; applicants must be at least 18. Installation experience is not the same as the required sales experience."
+    ],
      examFormat: {
-       questionCount: 'Standard NABCEP multiple-choice format; not explicitly published for PVTS, but aligned with the PVTS Job Task Analysis blueprint',
-       duration: 'Up to 4 hours (typical for NABCEP professional-level exams)',
-       format:
-         'Computer-based at a MeAzure Learning test center or via live remote proctoring, administered in English.',
-     },
+      "questionCount": "70 multiple-choice questions: 60 scored and 10 unscored pilot questions",
+      "duration": "Up to 4 hours",
+      "format": "Computer-based at a Meazure Learning test center or through live remote proctoring, administered in English."
+    },
      passingScore: {
-       scoreDescription: 'A scaled score of 75 out of 99',
-       detail:
-         'This is the highest published passing threshold among NABCEP\'s certifications — the PVTS exam is scored on the same 0–99 scaled model, but the bar is set at 75 rather than the 65–70 used for most other credentials. NABCEP confirmed this figure in their public FAQ materials.',
-     },
+      "scoreDescription": "A scaled score of 75 out of 99",
+      "detail": "NABCEP lists 75 as the PVTS passing threshold. It is a scaled score, not 75% correct, and cannot be used to calculate how many questions you may miss or to rank this exam against other certifications."
+    },
      difficulty: {
-       score: 7,
-       rationale:
-         "The 75 passing threshold makes it the hardest NABCEP exam to pass on a per-question basis, and the content spans technical PV knowledge, NEC code references, and sales-communication scenarios. Installers who are used to field exams often underestimate it because the questions look easier than PVIP — but the higher bar means fewer wrong answers are tolerated. Candidates who come from a sales or design background without deep PV knowledge typically need 100+ hours of structured prep.",
-     },
+      "score": 7,
+      "rationale": "The exam combines site assessment, system performance, financial assumptions, and customer communication. Sales experience alone may leave gaps in electrical or code knowledge; installation experience alone may leave gaps in proposals and financing. Prepare against the PVTS task outline rather than judging readiness by a different certification’s practice score."
+    },
      cost: {
-       trainingCost:
-         "$1,795 for HeatSpring's PVTS Certification Prep bundle (58 hours, including the Solar PV Boot Camp, 30-Hour Advanced PV Certification Training, PVTS Intensive Exam Prep, and PVTS Practice Exam); this is one of the few bundled options that covers the full 58-hour requirement without buying separate courses.",
-       applicationFee: '$125, paid to NABCEP upon application submission',
-       examFee: '$375, paid to NABCEP after approval (total NABCEP fees: $500)',
-       totalEstimate: '~$2,295 all-in for most first-time candidates',
-       notes:
-         'No NABCEP membership discount applies to PVTS fees. Re-exam fee if needed: $275.',
-     },
+      "trainingCost": "Varies by provider and the qualifying PV training you already hold",
+      "applicationFee": "$125, paid to NABCEP",
+      "examFee": "$375, paid to NABCEP",
+      "totalEstimate": "$500 in NABCEP fees, plus training and any required OSHA 10 course",
+      "notes": "The published re-exam fee is $275. Training purchases do not replace the documented sales-experience requirement."
+    },
      reimbursement: {
-       available: true,
-       summary:
-         'Because PVTS is accessible to non-installers and career-changers, it\'s occasionally covered by workforce-development programs aimed at getting people into the solar industry — but it\'s less commonly subsidized than PV Associate. Employer sponsorship is the most realistic path once you\'re in a sales or design role.',
-       sources: [
-         'Employer sponsorship — growing as companies recognize the credential\'s value for customer trust and utility program compliance.',
-         'State WIOA / workforce funding — possible if the training provider is on your state\'s ETPL, but less common than for PV Associate.',
-         'No veterans or union-specific discounts listed by NABCEP for this certification.',
-       ],
-     },
+      "available": true,
+      "summary": "Sales teams may fund technical training and the PVTS exam as professional development. A reimbursement agreement should distinguish training costs from the application and exam fees.",
+      "sources": [
+        "Employer sponsorship: ask whether the budget covers technical training, required safety training, and NABCEP fees.",
+        "Workforce Innovation and Opportunity Act (WIOA) funding: check the state Eligible Training Provider List (ETPL) and participant eligibility.",
+        "Veterans benefits: check current eligibility for training support or exam-fee reimbursement."
+      ]
+    },
      expirationRenewal: {
-       validityPeriod: '3 years from the date of issuance',
-       renewalRequirement:
-         '30 hours of continuing education every 3 years. NABCEP\'s public materials don\'t break out a PVTS-specific renewal formula the way they do for ESIP and PVIP, so follow the standard NABCEP recertification pathway: submit CEUs through your myNABCEP account and pay the $390 recertification fee.',
-     },
+      "validityPeriod": "3 years from the date of issuance",
+      "renewalRequirement": "30 hours of continuing education: 18 covering the PVTS task outline and 12 on renewable energy, including 2 on building or fire codes. You must also document qualifying industry activity. NABCEP currently lists a $390 recertification fee."
+    },
      relatedSalaryPages: [
        { label: 'Solar Sales Rep salary', slug: 'solar-sales' },
        { label: 'Solar PV Installer salary', slug: 'solar-photovoltaic-installer' },
      ],
-     format: 'Online prep course, no field experience required',
+     format: "Online preparation, with documented sales experience required",
      duration: '58 hours of training',
-     priceRange: '~$2,295 all-in',
+     priceRange: "$500 in NABCEP fees, plus training",
      whyHeatSpring: [
-       'Bundles the full 58-hour requirement (Boot Camp + Advanced PV + PVTS Intensive + Practice Exam) into a single purchase — rare among prep providers.',
-       'Codes-and-standards focus matches the PVTS blueprint\'s emphasis on NEC and IFC references.',
-       'Taught by Sean White, a long-time NABCEP committee contributor and IREC Certified Master Trainer.',
-     ],
+      "Free instruction on qualifying commercial solar prospects and projects.",
+      "A practical sales resource, distinct from a full PVTS exam-preparation course."
+    ],
      heatspringFitReason:
-       "HeatSpring's PVTS prep bundle is one of the few that packages the full 58-hour requirement — Boot Camp, Advanced PV Training, PVTS Intensive, and a dedicated PVTS Practice Exam — into one self-paced course. For people coming from sales or design backgrounds who don't have a PV installation network to draw on, that all-in-one structure removes the guesswork of piecing together separate courses to hit the 58-hour mark.",
+       "Qualifying Commercial Solar Leads & Projects focuses on deciding whether a commercial prospect is a workable solar opportunity. This free HeatSpring course is relevant to the early assessment and customer conversations behind a proposal, rather than a substitute for PVTS exam preparation.",
      heatspringUrl:
-       'https://www.heatspring.com/courses/nabcep-pv-technical-sales-pvts-certification-prep-codes-standards-focus?aff_id=9f_wlq',
-     bannerHeadline: 'Sell solar with real expertise.',
-     bannerSubtext: 'HeatSpring\'s 58-hour PVTS prep — codes, sales math, and a full practice exam, in one bundle.',
-   },
+       "https://www.heatspring.com/courses/qualifying-commercial-solar-leads-projects?aff_id=9f_wlq",
+     bannerHeadline: "Assess the opportunity before preparing the proposal.",
+     bannerSubtext: "Explore a free commercial solar qualification course on HeatSpring. PVTS has separate eligibility requirements.",
+     overviewHeading: "From site conditions to a defensible proposal",
+    heatspringHeading: "Qualify a commercial solar opportunity",
+    heatspringLimitation: "Completing the course does not earn PVTS certification or replace its training, sales-experience, and exam requirements.",
+    heatspringCtaLabel: "Explore the free sales course",
+  },
  ]
 
 export function getCertificationBySlug(slug: string) {

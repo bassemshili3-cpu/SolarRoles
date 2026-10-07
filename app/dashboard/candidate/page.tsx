@@ -193,7 +193,8 @@ export default function CandidateDashboard() {
 
   const signOut = async () => {
     await supabase.auth.signOut()
-    router.push('/')
+    router.replace('/jobs')
+    router.refresh()
   }
 
   if (loading) {

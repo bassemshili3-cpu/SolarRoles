@@ -10,7 +10,7 @@ interface Category {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-vs-eta-vs-state-licenses";
 const PAGE_TITLE =
   "NABCEP vs ETA vs State Licenses vs Manufacturer Certifications (2026)";

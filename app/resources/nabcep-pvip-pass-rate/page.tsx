@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
 import { EditorialInfographic } from '@/components/EditorialInfographic';
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-pvip-pass-rate";
 const PAGE_TITLE =
   "NABCEP PVIP Pass Rate, Retake Cost & Why It Feels So Hard (2026)";

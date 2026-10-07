@@ -1,3 +1,5 @@
+import { getCanonicalJobPath, getPublicJobLink } from './job-url'
+import { getCanonicalJobSlug } from './slugify'
 import { getCachedLensaJobs, LensaJobAdvert } from './lensa'
 import { extractStateFromLocation } from './usStates' 
 import { searchJobs as searchAdzuna, AdzunaJob } from './adzuna'
@@ -7,6 +9,7 @@ import { prisma } from './prisma'
 import { matchesFilters, hasAdvancedFilters, JobFilterParams, FilterableJob } from './job-filters'
 export interface UnifiedJob {
   id: string
+  canonicalSlug?: string | null
   title: string
   company: string
   location: string
@@ -42,7 +45,7 @@ export function normalizeLensa(job: LensaJobAdvert): UnifiedJob {
     location: `${job.city}, ${job.state}`,
     addressRegion: job.state || '',
     description: job.description_digest,
-    url: `/jobs/lensa-${job.unique_id}`,
+    url: getCanonicalJobPath({ id: `lensa-${job.unique_id}`, title: job.cleaned_job_title, location: `${job.city}, ${job.state}` }),
     apply_url: job.incoming_click_url,
     source: 'lensa',
     revenue_per_click: job.revenue_per_click,
@@ -59,7 +62,7 @@ export function normalizeAdzuna(job: AdzunaJob): UnifiedJob {
     company: job.company?.display_name || '',
     location: job.location?.display_name || '',
     description: job.description,
-    url: `/jobs/adzuna-${job.id}`,
+    url: getCanonicalJobPath({ id: `adzuna-${job.id}`, title: job.title, location: job.location?.display_name }),
     apply_url: job.redirect_url || '',
     source: 'adzuna',
     salary_min: job.salary_min,
@@ -97,7 +100,7 @@ const stableId = String(rawId).replace(/^-/, '')
     location: job.location || '',
     addressRegion: extractStateFromLocation(job.location) || '',
     description: job.snippet || '',
-    url: `/jobs/jooble-${stableId}`,
+    url: getCanonicalJobPath({ id: `jooble-${stableId}`, title: job.title, location: job.location }),
     apply_url: job.link || '',
     source: 'jooble',
     salary_min,
@@ -145,6 +148,7 @@ async function upsertJobsBackground(jobs: UnifiedJob[]) {
       },
       create: {
         id: job.id,
+        canonicalSlug: getCanonicalJobSlug(job),
         source: job.source,
         sourcePriority: SOURCE_PRIORITY[job.source] ?? 99,
         title: job.title,
@@ -315,11 +319,12 @@ export async function searchAllJobs(params: {
     careerjetJobs = careerjetResult.value.map((j) => ({
       id: j.id,
       title: j.title,
+      canonicalSlug: j.canonicalSlug,
       company: j.company,
       location: j.location,
       addressRegion: j.addressRegion || undefined,
       description: j.description,
-      url: j.url,
+      url: getPublicJobLink(j),
       apply_url: j.applyUrl,
       source: 'careerjet' as const,
       salary_min: j.salaryMin ?? undefined,
@@ -338,11 +343,12 @@ export async function searchAllJobs(params: {
     greenhouseJobs = greenhouseResult.value.map((j) => ({
       id: j.id,
       title: j.title,
+      canonicalSlug: j.canonicalSlug,
       company: j.company,
       location: j.location,
       addressRegion: j.addressRegion || undefined,
       description: j.description,
-      url: j.url,
+      url: getPublicJobLink(j),
       apply_url: j.applyUrl,
       source: 'greenhouse' as const,
       salary_min: j.salaryMin ?? undefined,
@@ -417,8 +423,19 @@ const whatFiltered = allResults.filter(job => {
   console.log("=== DEBUG END ===")
 
   upsertJobsBackground(allResults.filter((j) => j.source !== 'greenhouse' && j.source !== 'careerjet')).catch(console.error)
+  // Provider payloads do not carry our persisted slug. Hydrate it before these
+  // results can become card links, including jobs whose titles were rewritten.
+  const persisted = finalResults.length ? await prisma.job.findMany({
+    where: { id: { in: finalResults.map(job => job.id) } },
+    select: { id: true, title: true, location: true, canonicalSlug: true },
+  }) : []
+  const byId = new Map(persisted.map(job => [job.id, job]))
+  const canonicalResults = finalResults.map(job => {
+    const detail = byId.get(job.id) || job
+    return { ...job, canonicalSlug: getCanonicalJobSlug(detail), url: getCanonicalJobPath(detail) }
+  })
   return {
-    results: finalResults,
+    results: canonicalResults,
     count: Math.max(joobleCount, lensaCount, adzunaCount),
     lensa_count: lensaCount,
     adzuna_count: adzunaCount,

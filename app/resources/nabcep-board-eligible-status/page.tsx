@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-board-eligible-status";
 const PAGE_TITLE =
   "NABCEP Board Eligible Status: How To Pass NABCEP PVIP Without The Field Experience";

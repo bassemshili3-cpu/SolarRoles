@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { throttleRequest } from '@/lib/requestThrottle'
 
 const CONTACT_EMAIL = 'contact@solarroles.com'
 const MAX_NAME_LENGTH = 120
@@ -35,19 +35,23 @@ function escapeHtml(value: string) {
 
 export async function POST(req: Request) {
   try {
+    if (!throttleRequest(req, 'contact')) return NextResponse.json({ error: 'Please wait before sending another message.' }, { status: 429, headers: { 'Retry-After': '600' } })
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {
       console.error('[contact route] RESEND_API_KEY is not configured')
       return NextResponse.json({ error: 'Contact email is temporarily unavailable.' }, { status: 503 })
     }
 
+    if (Number(req.headers.get('content-length') || 0) > 50_000) return NextResponse.json({ error: 'Message is too large.' }, { status: 413 })
     const body = await req.json()
+    if (!body || typeof body !== 'object') return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
+    if (body.website) return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
     const name = readRequiredString(body.name, 'Name', MAX_NAME_LENGTH)
     const email = readRequiredString(body.email, 'Email', 254)
     const subject = readRequiredString(body.subject, 'Subject', MAX_SUBJECT_LENGTH)
     const message = readRequiredString(body.message, 'Message', MAX_MESSAGE_LENGTH)
 
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
+    if (!/^\S+@\S+\.\S+$/.test(email) || /[\r\n]/.test(email + subject)) {
       return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 })
     }
 
@@ -55,11 +59,10 @@ export async function POST(req: Request) {
     const safeEmail = escapeHtml(email)
     const safeSubject = escapeHtml(subject)
     const safeMessage = escapeHtml(message)
-    const resend = new Resend(apiKey)
-    const { error } = await resend.emails.send({
-      from: 'Solar Roles <noreply@oh-my-job.com>',
+    const response = await fetch('https://api.resend.com/emails', { method: 'POST', signal: AbortSignal.timeout(10_000), headers: { Authorization: 'Bearer ' + apiKey, 'Content-Type': 'application/json' }, body: JSON.stringify({
+      from: process.env.RESEND_FROM_EMAIL || 'SolarRoles <noreply@solarroles.com>',
       to: [CONTACT_EMAIL],
-      replyTo: email,
+      reply_to: email,
       subject: `[Contact] ${subject}`,
       text: `New contact message — Solar Roles\n\nFrom: ${name} <${email}>\nSubject: ${subject}\n\n${message}\n\nSent from the contact form at solarroles.com.`,
       html: `
@@ -86,13 +89,14 @@ export async function POST(req: Request) {
           </p>
         </div>
       `,
-    })
-
-    if (error) {
-      console.error('[contact route] Resend rejected the message', error)
+    }) })
+    const delivery = await response.json().catch(() => null)
+    if (!response.ok || !delivery?.id) {
+      console.error('[contact route] Resend rejected the message', { status: response.status, code: delivery?.name })
       return NextResponse.json({ error: 'Failed to send message. Please try again.' }, { status: 502 })
     }
 
+    console.info('[contact route] Message accepted', { id: delivery?.id })
     return NextResponse.json({ success: true })
   } catch (err) {
     if (err instanceof SyntaxError) {
@@ -103,7 +107,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: err.message }, { status: 400 })
     }
 
-    console.error('[contact route]', err)
+    console.error('[contact route]', { name: err instanceof Error ? err.name : 'unknown' })
     return NextResponse.json({ error: 'Failed to send message. Please try again.' }, { status: 500 })
   }
 }

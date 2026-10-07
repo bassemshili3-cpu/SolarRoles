@@ -1,3 +1,8 @@
+import { validateEmployerJob } from '@/lib/employerJobValidation'
+import { parseCompensation } from '@/lib/jobCompensation'
+import { buildJobSlug } from '@/lib/slugify'
+import { getCanonicalJobUrl } from '@/lib/job-url'
+import { hasAccountPermission } from '@/lib/accountPermission'
 // app/api/employer/jobs/route.ts
 import { NextResponse } from 'next/server'
 import { createServerSupabase } from '@/lib/supabase-server'
@@ -11,7 +16,6 @@ import {
 } from '@/lib/employerBilling'
 
 
-const ALLOWED_EMPLOYMENT_TYPES = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
 
 const EMPLOYMENT_TYPE_MAP: Record<string, { contractType: string | null; contractTime: string | null }> = {
   'Full-time': { contractType: null, contractTime: 'full_time' },
@@ -21,9 +25,6 @@ const EMPLOYMENT_TYPE_MAP: Record<string, { contractType: string | null; contrac
   'Internship': { contractType: 'internship', contractTime: null },
 }
 
-function annualizedSalary(amount: number, period: 'year' | 'hour') {
-  return period === 'hour' ? Math.round(amount * 2080) : amount
-}
 
 export async function POST(request: Request) {
   const supabase = await createServerSupabase()
@@ -32,8 +33,10 @@ export async function POST(request: Request) {
   if (authError || !user) {
     return NextResponse.json({ error: 'You must be signed in to post a job.' }, { status: 401 })
   }
+  if (!(await hasAccountPermission(supabase, user.id, 'employer'))) return NextResponse.json({ error: 'An employer account is required.' }, { status: 403 })
 
-  const body = await request.json()
+  const body = await request.json().catch(() => null)
+  if (!body || typeof body !== 'object') return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
   const {
     title, company, employmentType, remote, city, state, zipCode,
     salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
@@ -44,35 +47,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Choose a valid posting plan.' }, { status: 400 })
   }
 
-  if (typeof title !== 'string' || !title.trim()) {
-    return NextResponse.json({ error: 'A job title is required.' }, { status: 400 })
+  const validationError = validateEmployerJob(body)
+  if (validationError) return NextResponse.json({ error: validationError }, { status: 400 })
+  let compensation
+  try { compensation = parseCompensation(body) } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Invalid compensation.' }, { status: 400 })
   }
-  if (typeof company !== 'string' || !company.trim()) {
-    return NextResponse.json({ error: 'A company name is required.' }, { status: 400 })
-  }
-  if (!ALLOWED_EMPLOYMENT_TYPES.includes(employmentType)) {
-    return NextResponse.json({ error: 'Invalid employment type.' }, { status: 400 })
-  }
-  if (!remote && (!city?.trim() || !state?.trim())) {
-    return NextResponse.json({ error: 'A location is required for non-remote jobs.' }, { status: 400 })
-  }
-  if (!remote && (!zipCode?.trim() || !/^\d{5}(-\d{4})?$/.test(zipCode.trim()))) {
-    return NextResponse.json({ error: 'A valid ZIP code is required for non-remote jobs.' }, { status: 400 })
-  }
-  if (!Number.isFinite(salaryMin) || !Number.isFinite(salaryMax) || salaryMin > salaryMax) {
-    return NextResponse.json({ error: 'A valid salary range is required.' }, { status: 400 })
-  }
-  if (typeof description !== 'string' || description.trim().length < 50) {
-    return NextResponse.json({ error: 'A description of at least 50 characters is required.' }, { status: 400 })
-  }
-  if (typeof notificationEmail !== 'string' || !/^\S+@\S+\.\S+$/.test(notificationEmail.trim())) {
-    return NextResponse.json({ error: 'A valid notification email is required.' }, { status: 400 })
-  }
+
 
 const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)
   const { contractType, contractTime } = EMPLOYMENT_TYPE_MAP[employmentType]
-  const salaryMinValue = Number(salaryMin)
-  const salaryMaxValue = Number(salaryMax)
   const now = new Date()
   const subscription = await prisma.employerSubscription.findUnique({ where: { userId: user.id } })
   const partnerAccess = hasPartnerAccess(subscription)
@@ -109,6 +93,12 @@ const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)
 let job
   for (let attempt = 0; attempt < 3; attempt++) {
     const id = `employer-${nanoid()}`
+    const canonicalJob = {
+      id,
+      title: title.trim(),
+      location: remote ? 'Remote' : `${city.trim()}, ${state.trim()}`,
+    }
+    const canonicalSlug = buildJobSlug(canonicalJob)
     try {
       job = await prisma.job.create({
         data: {
@@ -117,15 +107,14 @@ let job
           title: title.trim(),
           company: company.trim(),
           location: remote ? 'Remote' : `${city.trim()}, ${state.trim()}`,
+          workSetting: remote ? 'REMOTE' : 'ON_SITE',
           addressRegion: remote ? '' : state.trim(),
           postalCode: remote ? null : zipCode.trim(),
-          salaryPeriod,
           description: description.trim(),
-          url: `https://www.solarroles.com/jobs/${id}`,
+          canonicalSlug,
+          url: getCanonicalJobUrl({ ...canonicalJob, canonicalSlug }),
           applyUrl: `mailto:${notificationEmail.trim()}`,
-          salaryMin: annualizedSalary(salaryMinValue, salaryPeriod),
-          salaryMax: annualizedSalary(salaryMaxValue, salaryPeriod),
-          salary: `$${salaryMinValue.toLocaleString()} - $${salaryMaxValue.toLocaleString()} ${salaryPeriod === 'hour' ? 'an hour' : 'a year'}`,
+          ...compensation,
           contractType,
           contractTime,
           postedAt: plan === 'partner' ? now : null,

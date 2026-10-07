@@ -42,6 +42,8 @@ model Job {
   locationRegions          String[] @default([])
   postalCode               String?
   salaryPeriod             String?
+  compensationType         String   @default("FIXED")
+  commissionDetails        String?
   description              String   @db.Text
   url                      String
   applyUrl                 String   @default("")
@@ -74,6 +76,7 @@ model Job {
    specialty            String?
   occupationalCategory String?
   skills               String[] @default([])
+  workSetting          String?
   experienceLevel      String?
   featured             Boolean  @default(false)
   featuredUntil        DateTime?
@@ -155,4 +158,22 @@ model MarketSnapshot {
   stateCounts    Json
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model WhatJobsMetric {
+  id           String   @id @db.Uuid
+  viewId       String   @db.Uuid
+  receivedAt   DateTime @default(now()) @db.Timestamptz(3)
+  surface      String
+  type         String
+  pagePath     String
+  jobId        String?
+  publisher    String?
+  device       String
+  activation   String?
+  pnpAvailable Boolean
+  tokenPresent Boolean
+  isTest       Boolean  @default(false)
+
+  @@index([receivedAt, surface, type])
 }

@@ -1,10 +1,24 @@
 import assert from 'node:assert/strict'
+import { tsImport } from 'tsx/esm/api'
+const { getCanonicalJobUrl } = await tsImport('../lib/job-url.ts', import.meta.url)
 import { createHash } from 'node:crypto'
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 
 const base = 'data/remote-travel'
 const snapshot = JSON.parse(readFileSync(`${base}/candidates.json`, 'utf8'))
 const reviewed = JSON.parse(readFileSync(`${base}/review.json`, 'utf8'))
+let jobLinks
+if (existsSync(`${base}/job-links.json`)) jobLinks = JSON.parse(readFileSync(`${base}/job-links.json`, 'utf8'))
+else {
+  const { prisma } = await tsImport('../lib/prisma.ts', import.meta.url)
+  try {
+    const jobs = await prisma.job.findMany({
+      where: { id: { in: reviewed.map(row => row.ids[0]) } },
+      select: { id: true, title: true, location: true, canonicalSlug: true },
+    })
+    jobLinks = Object.fromEntries(jobs.map(job => [job.id, job]))
+  } finally { await prisma.$disconnect() }
+}
 const excluded = JSON.parse(readFileSync(`${base}/exclusions.json`, 'utf8'))
 const candidates = new Map(snapshot.candidates.map(j => [j.id, j]))
 const covered = [...reviewed.flatMap(r => r.ids), ...excluded.map(r => r.id)]
@@ -20,6 +34,8 @@ const cleanUrl = value => {
 const rows = reviewed.map((r, index) => {
   assert.ok(r.reviewed && kinds.includes(r.travelKind), `Unreviewed group ${index}`)
   const jobs = r.ids.map(id => { assert.ok(candidates.has(id)); return candidates.get(id) })
+  const canonicalJob = jobLinks[jobs[0].id]
+  assert.ok(canonicalJob, `Refresh job-links.json from persisted job data for ${jobs[0].id}`)
   assert.ok(!jobs.some(j => /Remote Ontario|Remote Nova Scotia/.test(j.location)))
   if (r.travelKind !== 'not_stated' && r.travelKind !== 'incomplete') assert.ok(r.travelEvidence)
   assert.ok(!r.travelEvidence || jobs[0].text.includes(r.travelEvidence), `Evidence mismatch: ${r.company} / ${r.title}`)
@@ -30,7 +46,7 @@ const rows = reviewed.map((r, index) => {
     id: `role-${String(index + 1).padStart(2, '0')}`,
     listingCount: jobs.length,
     sourceUrl: cleanUrl(jobs[0].applyUrl || jobs[0].url),
-    jobUrl: `https://www.solarroles.com/jobs/${jobs[0].id}`,
+    jobUrl: getCanonicalJobUrl(canonicalJob),
     sources: jobs.map(j => ({ id: j.id, url: cleanUrl(j.applyUrl || j.url), location: j.location.replace(/\s+/g, ' ').trim(), source: j.source, fetchedAt: j.fetchedAt, textSha256: createHash('sha256').update(j.text).digest('hex') })),
   }
 })

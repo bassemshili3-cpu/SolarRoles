@@ -11,7 +11,7 @@ import {
 
 export const revalidate = 86400
 
-const CANONICAL_URL = 'https://www.solarroles.com/workforce-resources/solar-job-market-by-state'
+const CANONICAL_URL = 'https://solarroles.com/workforce-resources/solar-job-market-by-state'
 const MIN_STATE_DETAIL_JOBS = 20
 
 export const metadata: Metadata = {

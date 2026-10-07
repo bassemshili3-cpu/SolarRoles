@@ -1,3 +1,4 @@
+import { SITE_URL } from './site-url'
 // lib/indexnow.ts
 // IndexNow protocol implementation for Bing/Yandex/Cloud search engines
 // https://www.bing.com/indexnow
@@ -25,20 +26,7 @@ export function getIndexNowKey(): string {
  * Get site host from environment or default
  */
 export function getSiteHost(): string {
-  // Priority: INDEXNOW_HOST env var > NEXT_PUBLIC_SITE_URL host > default
-  if (process.env.INDEXNOW_HOST) {
-    return process.env.INDEXNOW_HOST;
-  }
-  
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
-  try {
-    const host = new URL(siteUrl).host;
-    // Remove www. prefix if present, as IndexNow key is often registered for the apex domain
-    return host.replace(/^www\./, '');
-  } catch (error) {
-    console.error('[IndexNow] Invalid NEXT_PUBLIC_SITE_URL:', siteUrl);
-    return 'solarroles.com';
-  }
+  return new URL(SITE_URL).hostname
 }
 
 /**

@@ -10,9 +10,11 @@ export const createServerSupabase = async () => {
       cookies: {
         getAll: () => cookieStore.getAll(),
         setAll: (cookiesToSet: any[]) => {
-          cookiesToSet.forEach(({ name, value, options }: any) =>
-            cookieStore.set(name, value, options)
-          )
+          try {
+            cookiesToSet.forEach(({ name, value, options }: any) => cookieStore.set(name, value, options))
+          } catch {
+            // Server Components cannot write cookies; middleware refreshes them.
+          }
         },
       },
     }

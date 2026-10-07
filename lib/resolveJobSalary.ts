@@ -1,6 +1,7 @@
 import { extractSalaryFromText } from './extractSalary'
 
 type SalaryJob = {
+  compensationType?: string
   title: string
   description?: string | null
   salary?: string | null
@@ -10,6 +11,8 @@ type SalaryJob = {
 
 export function resolveJobSalary(job: SalaryJob) {
   const { salary_min, salary_max } = job
+  if (job.compensationType === 'COMMISSION_ONLY' || /^commission only$/i.test(job.salary || '')) return { salary: 'Commission only', salary_min: undefined, salary_max: undefined }
+  if (job.compensationType === 'BASE_COMMISSION') return { salary: job.salary || 'Base + commission', salary_min: salary_min || undefined, salary_max: salary_max || undefined }
 
   if (salary_min && salary_max && salary_min !== salary_max) {
     return {

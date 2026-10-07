@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/data/solar-desk-job-illusion";
 const TITLE =
   "Solar Project Management Jobs Mention Travel 2.3× More Often Than Installer Jobs";

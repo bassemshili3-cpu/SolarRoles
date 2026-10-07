@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     'solar helper job',
   ],
   alternates: {
-    canonical: 'https://www.solarroles.com/blog/become-solar-installer-no-experience',
+    canonical: 'https://solarroles.com/blog/become-solar-installer-no-experience',
   },
   openGraph: {
     title: 'Can You Become a Solar Installer With No Experience? (2026 Guide)',
     description:
       'Most US solar contractors hire and train entry-level installers. Here\u2019s what they look for, what it pays in 2026, and how fast you can move up.',
-    url: 'https://www.solarroles.com/blog/become-solar-installer-no-experience',
+    url: 'https://solarroles.com/blog/become-solar-installer-no-experience',
     siteName: 'Solar Roles',
     type: 'article',
     publishedTime: '2026-07-29T00:00:00.000Z',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     authors: ['Solar Roles'],
     images: [
       {
-        url: 'https://www.solarroles.com/og-blog.png',
+        url: 'https://solarroles.com/og-blog.png',
         width: 1200,
         height: 630,
         alt: 'Can you become a solar installer with no experience?',
@@ -54,19 +54,19 @@ const articleJsonLd = {
   author: {
     '@type': 'Organization',
     name: 'Solar Roles',
-    url: 'https://www.solarroles.com',
+    url: 'https://solarroles.com',
   },
   publisher: {
     '@type': 'Organization',
     name: 'Solar Roles',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://www.solarroles.com/logo.png',
+      url: 'https://solarroles.com/logo.png',
     },
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': 'https://www.solarroles.com/blog/become-solar-installer-no-experience',
+    '@id': 'https://solarroles.com/blog/become-solar-installer-no-experience',
   },
 }
 

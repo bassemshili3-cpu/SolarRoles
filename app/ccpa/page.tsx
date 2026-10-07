@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'California Privacy Rights (CCPA/CPRA) | Solar Roles',
   description: 'California Consumer Privacy Act notice for Solar Roles. Learn about your privacy rights as a California resident.',
   alternates: {
-    canonical: 'https://www.solarroles.com/ccpa',
+    canonical: 'https://solarroles.com/ccpa',
   },
 }
 
@@ -39,7 +39,7 @@ export default function CCPAPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-3">1. Who We Are</h2>
           <p className="text-gray-700 leading-relaxed">
             Solar Roles, Inc. ("<strong>Company</strong>", "<strong>we</strong>", "<strong>us</strong>") operates{' '}
-            <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+            <a href="https://solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
               solarroles.com
             </a>
             , an online job search platform that aggregates employment listings across the United States.
@@ -221,8 +221,8 @@ export default function CCPAPage() {
               </a>
             </p>
             <p className="text-gray-700">Website:{' '}
-              <a href="https://www.solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
-                www.solarroles.com
+              <a href="https://solarroles.com" className="text-indigo-600 underline underline-offset-2 hover:text-indigo-800">
+                solarroles.com
               </a>
             </p>
           </div>

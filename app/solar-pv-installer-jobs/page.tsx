@@ -51,7 +51,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Solar PV Installer Jobs',
       description: 'Find solar photovoltaic installer openings across the US. Residential, commercial, and utility-scale employers hiring now.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-pv-installer-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/solar-pv-installer-jobs', params) },
   }
 }
 
@@ -60,7 +60,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Solar PV Installer Jobs',
   description: 'Solar photovoltaic installer job listings across the United States, covering residential, commercial, and utility-scale employers.',
-  url: 'https://www.solarroles.com/solar-pv-installer-jobs',
+  url: 'https://solarroles.com/solar-pv-installer-jobs',
 }
 
 const installerRoles = [

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Compare current listed pay across solar roles and open Solar Roles salary reports by state for installers, electricians, technicians, sales and engineers.',
   alternates: {
     canonical:
-      'https://www.solarroles.com/workforce-resources/solar-salary-explorer',
+      'https://solarroles.com/workforce-resources/solar-salary-explorer',
   },
 }
 

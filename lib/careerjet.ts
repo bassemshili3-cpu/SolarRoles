@@ -1,3 +1,4 @@
+import { getCanonicalJobPath } from './job-url'
 // lib/careerjet.ts
 // ─── CareerJet Partner API v4 ─────────────────────────────────────────────
 // Endpoint : https://search.api.careerjet.net/v4/query
@@ -90,7 +91,7 @@ export async function searchCareerjetJobs(params: SearchParams): Promise<Careerj
     headers: {
       Authorization: getAuthHeader(),
       Accept: 'application/json',
-      Referer: process.env.NEXT_PUBLIC_APP_URL || 'https://www.solarroles.com',
+      Referer: process.env.NEXT_PUBLIC_APP_URL || 'https://solarroles.com',
     },
     ...(params.noCache ? { cache: 'no-store' } : { next: { revalidate: 3600 } }),
   })
@@ -154,7 +155,7 @@ export function normalizeCareerjet(job: CareerjetJob) {
     salary: job.salary || undefined,
     salaryMin,
     salaryMax,
-    url: `/jobs/${stableId}`,
+    url: getCanonicalJobPath({ id: stableId, title: job.title, location: job.locations }),
     applyUrl: job.url,
     source: 'careerjet' as const,
     sourcePriority: 20,

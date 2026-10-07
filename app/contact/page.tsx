@@ -39,6 +39,7 @@ const SUBJECT_ICONS: Record<string, typeof Sun> = {
 type Status = 'idle' | 'sending' | 'success' | 'error'
 
 export default function ContactPage() {
+  const [website, setWebsite] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
@@ -48,6 +49,7 @@ export default function ContactPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if (status === 'sending') return
     setStatus('sending')
     setErrorMsg('')
 
@@ -55,7 +57,7 @@ export default function ContactPage() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, subject, message }),
+        body: JSON.stringify({ name, email, subject, message, website }),
       })
       if (!res.ok) {
         const data = await res.json()
@@ -198,7 +200,7 @@ export default function ContactPage() {
               <form
                 onSubmit={handleSubmit}
                 className="rounded-2xl border border-[#F2A93B]/20 bg-white overflow-hidden"
-              >
+              ><label className="hidden" aria-hidden="true">Website<input tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} /></label>
                 {/* Header "solar panel" - dark gradient + grid pattern + send icon */}
                 <div className="relative bg-gradient-to-br from-[#1C2126] to-[#2A323B] px-6 py-5 overflow-hidden">
                   <div className="absolute inset-0 opacity-20" style={SOLAR_GRID_STYLE} />

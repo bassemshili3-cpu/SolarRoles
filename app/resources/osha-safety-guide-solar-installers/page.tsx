@@ -8,7 +8,7 @@ interface OutreachRow {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/osha-safety-guide-solar-installers";
 const PAGE_TITLE =
   "OSHA Safety Guide for Solar Installers: OSHA 10 vs 30, Fall Protection, Electrical Hazards";

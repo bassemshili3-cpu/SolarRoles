@@ -59,7 +59,7 @@ const JOB_TYPES = [
   'Full-time', 'Part-time', 'Contract', 'Apprenticeship', 'Temporary',
 ]
 
-const ARRANGEMENTS = ['Field / On-site', 'Remote']
+const ARRANGEMENTS = ['Field / On-site', 'Remote', 'Hybrid']
 
 const EXPERIENCE_LEVELS = [
   { label: 'Apprentice / Trainee',  value: 'apprentice' },
@@ -80,6 +80,7 @@ const CERTIFICATIONS = [
 ]
 
 const BENEFITS = [
+  'Commission pay',
   'Health insurance',
   '401(k) match',
   'Per diem / travel pay',
@@ -107,6 +108,7 @@ function Section({
     <div className="border-t border-black/[0.08] pt-4">
       <button
         type="button"
+        aria-expanded={open}
         onClick={() => setOpen(o => !o)}
         className="flex items-center justify-between w-full mb-3 group"
       >
@@ -148,67 +150,12 @@ function RadioOption({
   checked: boolean
   onChange: () => void
 }) {
-  // Un <input type="radio"> natif ne declenche jamais onChange si on clique
-  // dessus alors qu'il est deja checked - c'est un comportement du navigateur,
-  // pas une question de logique React. Pour permettre le "clic pour deselectionner",
-  // le gestionnaire de clic est donc place sur le <label> (qui recoit le clic
-  // a chaque fois, meme quand le radio est deja coche), et l'input devient
-  // purement visuel/accessible, sans son propre onChange actif sur le clic.
-  return (
-    <label
-      onClick={(e) => {
-        e.preventDefault()
-        onChange()
-      }}
-      className={
-        checked
-          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors bg-[#F2A93B] text-[#1C2126] font-medium'
-          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors hover:bg-white/[0.06] text-white/80'
-      }
-    >
-      <span
-        className={
-          checked
-            ? 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-[#1C2126] bg-white'
-            : 'w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center border-white/30 bg-transparent'
-        }
-      >
-        {checked && <span className="w-2 h-2 rounded-full bg-[#1C2126]" />}
-      </span>
-      {label}
-      <input type="radio" className="sr-only" checked={checked} readOnly />
-    </label>
-  )
+  return <button type="button" aria-pressed={checked} onClick={onChange} className={checked
+    ? 'flex w-full items-center gap-2.5 rounded-md border border-amber-200 bg-[#F2A93B] px-2.5 py-2 text-left text-sm font-semibold text-[#1C2126] focus-visible:outline focus-visible:outline-2 focus-visible:outline-white'
+    : 'flex w-full items-center gap-2.5 rounded-md border border-transparent px-2.5 py-2 text-left text-sm text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300'}><span aria-hidden="true" className="w-4">{checked ? '\u2713' : '\u25cb'}</span>{label}</button>
 }
-
-function CheckOption({ label, checked, onChange }: {
-  label: string; checked: boolean; onChange: () => void
-}) {
-  return (
-    <div
-      onClick={onChange}
-      className={
-        checked
-          ? 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none bg-[#F2A93B] text-[#1C2126] font-medium'
-          : 'flex items-center gap-2.5 px-2.5 py-1.5 rounded-[6px] cursor-pointer text-sm transition-colors select-none hover:bg-white/[0.06] text-white/80'
-      }
-    >
-      <div
-        className={
-          checked
-            ? 'w-[18px] h-[18px] rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-[#1C2126] border-[#1C2126]'
-            : 'w-[18px] h-[18px] rounded-[3px] border flex items-center justify-center flex-shrink-0 transition-colors bg-transparent border-white/30'
-        }
-      >
-        {checked && (
-          <svg className="w-3 h-3 text-[#F2A93B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        )}
-      </div>
-      <span>{label}</span>
-    </div>
-  )
+function CheckOption(props: { label: string; checked: boolean; onChange: () => void }) {
+ return <RadioOption {...props} />
 }
 
 // Main Component
@@ -439,13 +386,13 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
             )}
           </div>
 
-          <Button
+          {!sectionsExpanded && <Button
             onClick={applyFilters}
             className="mx-auto block py-2 px-6 text-sm font-semibold bg-[#F2A93B] hover:bg-[#E0A030] text-[#1C2126] active:scale-[0.97] transition-all"
           >
             <Search className="h-3.5 w-3.5 mr-2 inline" />
             Search Jobs
-          </Button>
+          </Button>}
         </div>
 
 
@@ -455,6 +402,7 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
               d'autres modules peuvent alors s'afficher juste en dessous) */}
           <button
             type="button"
+            aria-expanded={sectionsExpanded}
             onClick={() => setSectionsExpanded(v => !v)}
             className="w-full flex items-center justify-center gap-1.5 mt-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-white/70 hover:text-white transition-colors"
           >
@@ -564,13 +512,13 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
           </Section>
 
           {/* Certification */}
-          <Section icon={<Award className="h-3.5 w-3.5" />} title="Certification" defaultOpen={false}>
+          <Section icon={<Award className="h-3.5 w-3.5" />} title="Certifications (any selected)" defaultOpen={false}>
             {CERTIFICATIONS.filter((opt) => !isPromotedDrawerValue(pathname, 'certification', opt.value)).map(opt => (
               <RadioOption
                 key={opt.value}
                 label={opt.label}
-                checked={certification === opt.value}
-                onChange={() => setCertification(p => (p === opt.value ? '' : opt.value))}
+                checked={splitParam(certification).includes(opt.value)}
+                onChange={() => setCertification(p => splitParam(p).includes(opt.value) ? splitParam(p).filter(v => v !== opt.value).join(',') : [...splitParam(p), opt.value].join(','))}
               />
             ))}
           </Section>
@@ -595,10 +543,11 @@ const [sectionsExpanded, setSectionsExpanded] = useState(false)
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="w-full text-sm border-white/[0.15] text-white hover:bg-white/[0.06] active:scale-[0.97] transition-all"
+            className="w-full text-sm border-transparent bg-transparent text-white/70 hover:bg-white/[0.06] hover:text-white"
           >
             {activeCount > 0 ? `Clear ${activeCount} filter${activeCount > 1 ? 's' : ''}` : 'Clear All Filters'}
           </Button>
+          {sectionsExpanded && <Button onClick={applyFilters} className="mt-3 w-full bg-[#F2A93B] text-[#1C2126] font-bold hover:bg-amber-300"><Search className="mr-2 h-4 w-4" />Search Jobs</Button>}
         </div>
 
       </div>

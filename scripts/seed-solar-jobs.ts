@@ -144,6 +144,8 @@ function selectSourceProviders(
 }
 
 
+import { normalizeWorkSetting } from '../lib/workSetting';
+
 async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'created' | 'updated'> {
   const existing = await prisma.job.findFirst({
     where: { url: job.url, source: job.source },
@@ -156,6 +158,7 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
     specialty: taxonomy.specialty,
     occupationalCategory: taxonomy.occupationalCategory,
     skills: taxonomy.skills,
+    workSetting: normalizeWorkSetting(job),
     experienceLevel: taxonomy.experienceLevel,
   };
 

@@ -1,3 +1,4 @@
+import { getPublicJobLink } from './job-url'
 // lib/jobsQuery.ts
 import { unstable_cache } from 'next/cache'
 import type { Prisma } from '@prisma/client'
@@ -14,7 +15,7 @@ export type JobsListResult = {
 const JOB_SELECT = {
   id: true, title: true, company: true, location: true, canonicalSlug: true,
   addressRegion: true, url: true, applyUrl: true,
-  salaryMin: true, salaryMax: true, salary: true, description: true,
+  salaryMin: true, salaryMax: true, salary: true, compensationType: true, description: true,
   contractType: true, contractTime: true, source: true, postedAt: true,
   featured: true, featuredUntil: true,
 } as const
@@ -56,11 +57,12 @@ export async function fetchJobsPageUncached(
     location: job.location,
     canonicalSlug: job.canonicalSlug,
     addressRegion: job.addressRegion,
-    url: job.url,
+    url: getPublicJobLink(job),
     applyUrl: job.applyUrl,
     apply_url: job.applyUrl,
     salary: job.salary,
     salary_display: resolveJobSalary({
+      compensationType: job.compensationType,
       title: job.title,
       description: job.description,
       salary: job.salary,

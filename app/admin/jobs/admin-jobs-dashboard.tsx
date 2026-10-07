@@ -4,12 +4,13 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Search, Pencil, Pause, Play, Trash2, Copy, Check, ShieldAlert, ShieldCheck } from 'lucide-react'
-import { buildJobSlug } from '@/lib/slugify'
+import { getCanonicalJobUrl } from '@/lib/job-url'
 
 type JobStatus = 'active' | 'paused' | 'expired' | 'flagged'
 
 interface AdminJob {
   id: string
+  canonicalSlug: string | null
   title: string
   company: string
   location: string
@@ -68,7 +69,7 @@ export default function AdminJobsDashboard({ initialJobs }: { initialJobs: Admin
   const flaggedCount = jobs.filter((j) => j.status === 'flagged').length
 
   function jobUrl(job: AdminJob) {
-    return `https://www.oh-my-job.com/jobs/${job.id}/${buildJobSlug(job)}`
+    return getCanonicalJobUrl(job)
   }
 
   async function copyUrl(job: AdminJob) {

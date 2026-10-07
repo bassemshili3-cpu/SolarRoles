@@ -6,7 +6,7 @@
 //
 // Adzuna paused: only Jooble, Lensa, and Careerjet are active.
 import { prisma } from './prisma'
-import { getCanonicalJobSlug } from './slugify'
+import { getCanonicalJobUrl } from './job-url'
 
 const ACTIVE_SOURCES = ['jooble', 'lensa', 'careerjet']
 const MIN_DESCRIPTION_LENGTH = 80
@@ -48,7 +48,7 @@ export async function searchJobsFromDb(params: {
   const skip = (page - 1) * limit
 
   const where: any = {
-    active: true,
+    active: true, expiresAt: { gt: new Date() },
     source: { in: ACTIVE_SOURCES },
   }
 
@@ -142,7 +142,7 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
     prisma.job.findMany({
 
-      where: { active: true, source: 'jooble' },
+      where: { active: true, expiresAt: { gt: new Date() }, source: 'jooble' },
 
       select: JOB_SELECT,
 
@@ -154,7 +154,7 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
     prisma.job.findMany({
 
-      where: { active: true, source: 'lensa' },
+      where: { active: true, expiresAt: { gt: new Date() }, source: 'lensa' },
 
       select: JOB_SELECT,
 
@@ -166,7 +166,7 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
     prisma.job.findMany({
 
-      where: { active: true, source: 'careerjet' },
+      where: { active: true, expiresAt: { gt: new Date() }, source: 'careerjet' },
 
       select: JOB_SELECT,
 
@@ -196,7 +196,7 @@ export async function getActiveJobUrls(limit: number = 200): Promise<string[]> {
 
   // ✅ Construit l'URL COMPLÈTE avec le slug canonique
 
-  return all.map((j) => `https://www.solarroles.com/jobs/${j.id}/${getCanonicalJobSlug(j)}`)
+  return all.map((j) => getCanonicalJobUrl(j))
 
 }
 
@@ -236,7 +236,7 @@ export type GoogleIndexingCandidate = { id: string; url: string }
 
 export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]> {
   const jobs = await prisma.job.findMany({
-    where: { active: true, source: { in: ATS_SOURCES } },
+    where: { active: true, expiresAt: { gt: new Date() }, source: { in: ATS_SOURCES } },
     select: JOB_SELECT_ATS,
     orderBy: { fetchedAt: 'desc' },
     // Overfetch pour compenser le filtre description ci-dessous.
@@ -249,7 +249,7 @@ export async function getActiveAtsJobUrls(limit: number = 200): Promise<string[]
   const filtered = jobs.filter(hasEnoughContent).slice(0, limit)
 
   // ✅ Construit l'URL COMPLÈTE avec le slug canonique
-  return filtered.map((j) => `https://www.solarroles.com/jobs/${j.id}/${getCanonicalJobSlug(j)}`)
+  return filtered.map((j) => getCanonicalJobUrl(j))
 }
 
 /** URLs indexables (ATS + custom-scrape) publiées au cours des derniers jours. */
@@ -261,7 +261,7 @@ export async function getRecentIndexableJobUrls(
   const postedAfter = new Date();
   postedAfter.setDate(postedAfter.getDate() - maxAgeDays);
 
-  const baseWhere = { active: true, postedAt: { gte: postedAfter } };
+  const baseWhere = { active: true, expiresAt: { gt: new Date() }, postedAt: { gte: postedAfter } };
   const queryOptions = {
     select: JOB_SELECT_ATS,
     orderBy: { postedAt: 'desc' as const },
@@ -284,7 +284,7 @@ export async function getRecentIndexableJobUrls(
   return jobs
     .filter(hasEnoughContent)
     .slice(0, limit)
-    .map((j) => `https://www.solarroles.com/jobs/${j.id}/${getCanonicalJobSlug(j)}`);
+    .map((j) => getCanonicalJobUrl(j));
 }
 
 /**
@@ -303,7 +303,7 @@ export async function getGoogleIndexingCandidates(
     orderBy: { postedAt: 'desc' as const },
     take: limit * 24,
   };
-  const baseWhere = { active: true, postedAt: { gte: postedAfter } };
+  const baseWhere = { active: true, expiresAt: { gt: new Date() }, postedAt: { gte: postedAfter } };
   const [customJobs, atsJobs] = await Promise.all([
     prisma.job.findMany({ where: { ...baseWhere, source: 'custom-scrape' }, ...queryOptions }),
     prisma.job.findMany({ where: { ...baseWhere, source: { in: ATS_SOURCES } }, ...queryOptions }),
@@ -321,7 +321,7 @@ export async function getGoogleIndexingCandidates(
 
   return [...custom.fresh, ...ats.fresh, ...custom.previouslySubmitted, ...ats.previouslySubmitted]
     .slice(0, limit)
-    .map((job) => ({ id: job.id, url: `https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}` }));
+    .map((job) => ({ id: job.id, url: getCanonicalJobUrl(job) }));
 }
 
 export async function markGoogleIndexingSubmitted(jobId: string): Promise<void> {
@@ -335,7 +335,7 @@ export async function getJobStats() {
     prisma.job.count({ where: { source: 'jooble' } }),
     prisma.job.count({ where: { source: 'lensa' } }),
     prisma.job.count({ where: { source: 'careerjet' } }),
-    prisma.job.count({ where: { active: true, source: { in: ACTIVE_SOURCES } } }),
+    prisma.job.count({ where: { active: true, expiresAt: { gt: new Date() }, source: { in: ACTIVE_SOURCES } } }),
   ])
 
   return { total, jooble, lensa, careerjet, active, expired: total - active }

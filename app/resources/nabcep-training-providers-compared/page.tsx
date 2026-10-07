@@ -11,7 +11,7 @@ interface Provider {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-training-providers-compared";
 const PAGE_TITLE = "HeatSpring vs Everblue vs SEI (NABCEP Training Providers Comparison)";
 const PAGE_DESCRIPTION =

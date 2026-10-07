@@ -160,7 +160,7 @@ export default function Terms() {
               </p>
               <p>
                 By accessing or using our website located at{' '}
-                <a href="https://www.solarroles.com">www.solarroles.com</a>{' '}
+                <a href="https://solarroles.com">solarroles.com</a>{' '}
                 (the "<strong>Platform</strong>" or "<strong>Service</strong>"), you agree to be bound by these Terms.
                 If you do not agree to these Terms, you may not access or use the Platform.
               </p>
@@ -357,7 +357,7 @@ export default function Terms() {
               <h3>Premium Services</h3>
               <p>
                 We offer premium subscription plans and add-on services for both job seekers and employers. Current pricing and features are available on our{' '}
-                <a href="https://www.solarroles.com/pricing">Pricing Page</a>.
+                <a href="https://solarroles.com/pricing">Pricing Page</a>.
               </p>
 
               <h3>Payment Terms</h3>

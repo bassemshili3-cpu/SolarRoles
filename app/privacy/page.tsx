@@ -163,7 +163,7 @@ export default function Privacy() {
               <h2>1. Introduction</h2>
               <p>
                 Solar Roles ("<strong>Solar Roles</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>"), operated by <strong>Bassem SHILI</strong> as a French sole proprietorship (<em>auto-entrepreneur</em>), SIRET No. <strong>884 808 205 00022</strong>, operates the website located at{' '}
-                <a href="https://www.solarroles.com">www.solarroles.com</a>{' '}
+                <a href="https://solarroles.com">solarroles.com</a>{' '}
                 (the "<strong>Service</strong>"). We are committed to protecting your privacy and ensuring you understand how we collect, use, disclose, and safeguard your personal information.
               </p>
               <p>

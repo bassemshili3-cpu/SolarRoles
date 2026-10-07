@@ -11,7 +11,7 @@ import {
 export const revalidate = 86400
 
 const CANONICAL_URL =
-  'https://www.solarroles.com/workforce-resources/solar-career-pathways'
+  'https://solarroles.com/workforce-resources/solar-career-pathways'
 
 // Add these links when the corresponding Solar Roles resources are published.
 const PROJECT_MANAGER_GUIDE_HREF: string | null = null

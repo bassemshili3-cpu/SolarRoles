@@ -8,13 +8,14 @@ import { Input } from '@/components/ui/input'
 import {
   Search, Pencil, Pause, Play, Trash2, Briefcase, ArrowRight,
 } from 'lucide-react'
-import { buildJobSlug } from '@/lib/slugify'
+import { getCanonicalJobUrl } from '@/lib/job-url'
 import { useSearchParams, useRouter } from 'next/navigation'
 
 type JobStatus = 'active' | 'paused' | 'expired' | 'draft'
 
 interface EmployerJob {
   id: string
+  canonicalSlug: string | null
   title: string
   location: string
   postedAt: Date
@@ -436,7 +437,7 @@ export default function EmployerDashboard({
                       <span className="truncate text-[15px] font-medium text-[#1a2340]">{job.title}</span>
                     ) : (
                       <Link
-                        href={`https://www.solarroles.com/jobs/${job.id}/${buildJobSlug(job)}`}
+                        href={getCanonicalJobUrl(job)}
                         target="_blank"
                         rel="nofollow noopener noreferrer"
                         className="truncate text-[15px] font-medium text-[#1a2340] hover:underline underline-offset-2 decoration-slate-300"

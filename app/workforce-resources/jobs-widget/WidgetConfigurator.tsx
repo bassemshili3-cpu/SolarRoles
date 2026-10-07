@@ -72,7 +72,7 @@ export default function WidgetConfigurator({
     return params.toString()
   }, [state, limit, entryOnly, title])
 
-  const src = `https://www.solarroles.com/embed/solar-jobs?${query}`
+  const src = `https://solarroles.com/embed/solar-jobs?${query}`
 
   const previewSrc = `/embed/solar-jobs?${query}`
 
@@ -83,7 +83,7 @@ export default function WidgetConfigurator({
   const browseLocation = selectedState?.name ?? state
   const selectedTitle = getWidgetJobRole(title)
   const browsePath = selectedTitle?.jobsPath ?? '/jobs'
-  const browseUrl = `https://www.solarroles.com${browsePath}`
+  const browseUrl = `https://solarroles.com${browsePath}`
   const browseLabel = selectedTitle
     ? `Browse ${selectedTitle.heading.toLowerCase()}`
     : 'Browse solar jobs'

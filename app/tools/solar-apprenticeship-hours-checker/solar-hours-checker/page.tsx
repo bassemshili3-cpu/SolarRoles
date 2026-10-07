@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SolarHoursChecker from "./SolarHoursChecker";
 import EmbedCode from "../EmbedCode";
 
-const canonical = "https://www.solarroles.com/tools/solar-apprenticeship-hours-checker";
+const canonical = "https://solarroles.com/tools/solar-apprenticeship-hours-checker";
 
 export const metadata: Metadata = {
   title: "Do Solar Work Hours Count Toward an Electrician License? | Solar Roles",
@@ -30,7 +30,7 @@ const jsonLd = {
   provider: {
     "@type": "Organization",
     name: "Solar Roles",
-    url: "https://www.solarroles.com/",
+    url: "https://solarroles.com/",
   },
   description:
     "An informational screening tool that compares reported solar work experience with selected electrician licensing and apprenticeship rules published by state agencies.",

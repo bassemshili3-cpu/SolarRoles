@@ -1,3 +1,4 @@
+import JobForm from '../employer/job-form'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
@@ -66,7 +67,7 @@ const plans = [
     price: '$39',
     cadence: '/ 30 days',
     description: 'For one priority opening.',
-    href: '/dashboard/employer/new?plan=featured',
+    href: '#create-job',
     cta: 'Post a featured job',
     featured: false,
     features: [
@@ -83,7 +84,7 @@ const plans = [
     price: '$99',
     cadence: '/ month',
     description: 'For companies with ongoing hiring.',
-    href: '/dashboard/employer/new?plan=partner',
+    href: '/dashboard/post-a-job?plan=partner#create-job',
     cta: 'Start Hiring Partner',
     featured: true,
     features: [
@@ -295,7 +296,7 @@ function PlanCard({ plan }: { plan: (typeof plans)[number] }) {
   )
 }
 
-export default function EmployerPage() {
+export default function EmployerPage({ searchParams }: { searchParams: { plan?: string } }) {
   return (
     <div>
       <script
@@ -420,7 +421,7 @@ export default function EmployerPage() {
               Hiring Partner is for employers whose openings change throughout the month. Solar Roles can use your ATS or careers page as the source instead of requiring every role to be recreated manually.
             </p>
             <Button asChild className="mt-7 bg-white text-[#0B1A2E] hover:bg-slate-100">
-              <Link href="/dashboard/employer/new?plan=partner">
+              <Link href="/dashboard/post-a-job?plan=partner#create-job">
                 Start Hiring Partner
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -590,14 +591,15 @@ export default function EmployerPage() {
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row md:mt-0">
             <Button asChild variant="outline" className="border-[#0B1A2E] text-[#0B1A2E] hover:bg-slate-50">
-              <Link href="/dashboard/employer/new?plan=featured">Featured Job — $39</Link>
+              <Link href="#create-job">Featured Job — $39</Link>
             </Button>
             <Button asChild className="bg-[#0B1A2E] text-white hover:bg-[#1E3A5F]">
-              <Link href="/dashboard/employer/new?plan=partner">Hiring Partner — $99/mo</Link>
+              <Link href="/dashboard/post-a-job?plan=partner#create-job">Hiring Partner — $99/mo</Link>
             </Button>
           </div>
         </div>
       </section>
+      <div id="create-job" className="scroll-mt-20"><JobForm mode="create" plan={searchParams.plan === 'partner' ? 'partner' : 'featured'} /></div>
     </div>
   )
 }

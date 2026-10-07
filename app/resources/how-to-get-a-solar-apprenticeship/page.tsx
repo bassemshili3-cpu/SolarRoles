@@ -8,7 +8,7 @@ interface StepRow {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/how-to-get-a-solar-apprenticeship";
 const PAGE_TITLE =
   "How to Land a Solar Installer Apprenticeship: 2026 Edition";

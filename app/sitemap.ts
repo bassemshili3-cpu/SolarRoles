@@ -1,24 +1,15 @@
 // app/sitemap.ts
 
 import type { MetadataRoute } from "next";
-import { getCanonicalJobSlug } from "@/lib/slugify";
+import { getCanonicalJobUrl } from "@/lib/job-url";
+import { SITE_URL } from "@/lib/site-url";
+import { NON_INDEXABLE_JOB_SOURCES } from "@/lib/job-indexing";
 import { prisma } from "@/lib/prisma"; // adapte à ton import habituel
-import { JobDetail } from "@/lib/jobDetail";
 import { CERTIFICATIONS } from "@/app/certifications/[slug]/certifications-data"
 
-const BASE_URL = 'https://www.solarroles.com'
+const BASE_URL = SITE_URL
+export const revalidate = 60
 
-
-const ATS_SOURCES = [
-  'ashby',
-  'smartrecruiters',
-  'lever',
-  'workable',
-  'pinpoint',
-  'jobvite',
-  'greenhouse',
-  'workday',
-]
 
 // ── Landing pages SEO prioritaires ──────────────────────────
 const priorityLandingPages: string[] = [
@@ -39,9 +30,8 @@ const certificationPages: string[] = CERTIFICATIONS.map(
 // ── Data Center pages ────────────────────────────────────────
 const dataPages: string[] = [
   '/data',
-  '/data/solar-sales-jobs-business-expenses',
+  '/data/solar-desk-job-illusion',
   '/data/remote-solar-jobs-travel-requirements',
-  '/data/solar-installer-salary-rent-report',
   '/data/battery-storage-leads-segment-specific-solar-hiring',
 ]
 
@@ -93,13 +83,8 @@ const blogPosts: string[] = [
 ]
 
 // ── Config par section : priorité, fréquence, date ─────────
-// IMPORTANT : ne mets ici QUE des pages à forte valeur ajoutée.
-// Les pages job listing agrégées (/jobs/{source}-{id}...),
-// CareerJet/Jooble/Lensa/Adzuna, ne doivent PAS apparaître dans
-// ce sitemap : elles sont en noindex + bloquées au crawl (voir
-// robots.ts) tant que le domaine récupère la confiance de Google.
-// Les jobs "own" (postés par les employeurs, isOwn: true) sont
-// injectés dynamiquement plus bas, eux sont indexables.
+// Job-detail URLs below must be available, recent and indexable.
+// Aggregator exclusions are shared with job metadata.
 const sections: {
   routes: string[]
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]
@@ -135,26 +120,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // State data pages are intentionally excluded from the sitemap.
 
-  // ── Jobs "own" (indexables) ──────────────────────────────
-const oneMonthAgo = new Date(Date.now() - 30 * 86_400_000)
+  // Available, recent jobs from every indexable source.
+const now = new Date()
+const oneMonthAgo = new Date(now.getTime() - 30 * 86_400_000)
 
-const ownJobs = await prisma.job.findMany({
+const indexableJobs = await prisma.job.findMany({
   where: {
     active: true,
-    AND: [
-      {
-        OR: [
-          { postedByUserId: { not: null } },
-          { source: { in: ATS_SOURCES } },
-          { source: 'custom-scrape' },
-        ],
-      },
-      {
-        OR: [
-          { postedAt: { gte: oneMonthAgo } },
-          { postedAt: null, fetchedAt: { gte: oneMonthAgo } },
-        ],
-      },
+    expiresAt: { gt: now },
+    source: { notIn: NON_INDEXABLE_JOB_SOURCES },
+    OR: [
+      { postedAt: { gte: oneMonthAgo } },
+      { postedAt: null, fetchedAt: { gte: oneMonthAgo } },
     ],
   },
   select: {
@@ -168,9 +145,9 @@ const ownJobs = await prisma.job.findMany({
   },
 })
 
-  for (const job of ownJobs) {
+  for (const job of indexableJobs) {
     entries.push({
-      url: `${BASE_URL}/jobs/${job.id}/${getCanonicalJobSlug(job)}`,
+      url: getCanonicalJobUrl(job),
       lastModified: job.updatedAt,
       changeFrequency: "daily",
       priority: 0.7,

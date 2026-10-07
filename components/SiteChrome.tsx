@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { Analytics } from '@vercel/analytics/next'
+import WhatJobsTracking from './WhatJobsTracking'
 
 export default function SiteChrome({
   children,
@@ -20,9 +21,10 @@ export default function SiteChrome({
   return (
     <>
       {header}
-      {children}
+      <div className="min-h-[calc(100vh-4rem)]">{children}</div>
       {footer}
       <Analytics />
+      <WhatJobsTracking />
     </>
   )
 }

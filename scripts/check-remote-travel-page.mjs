@@ -11,7 +11,7 @@ assert.equal(response.status, 200)
 const $ = load(await response.text())
 assert.equal($('h1').length, 1)
 assert.match($('title').text(), /Remote Solar Jobs Can Still Require 90% Travel/)
-assert.equal($('link[rel=canonical]').attr('href'), `https://www.solarroles.com${path}`)
+assert.equal($('link[rel=canonical]').attr('href'), `https://solarroles.com${path}`)
 assert.ok($('meta[name=description]').attr('content').includes(`${report.travelCount} of ${report.groups}`))
 const graph = JSON.parse($('script[type="application/ld+json"]').toArray().map(el => $(el).html()).find(text => text.includes('"@type":"Report"')))['@graph']
 assert.ok(graph.some(node => node['@type'] === 'Dataset'))

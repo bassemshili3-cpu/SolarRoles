@@ -12,7 +12,8 @@ import { createClient } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Link from 'next/link'
-import { accountConsentPath } from '@/lib/accountConsent'
+import { safeAuthRedirect } from '@/lib/authRedirect'
+import AccountConsentFields, { emptyConsent, hasRequiredConsent } from '@/components/AccountConsentFields'
 
 import {
 
@@ -47,9 +48,11 @@ export default function Signup() {
 
   const paramRedirect = searchParams.get('redirectTo')
 
-  const redirectTo = paramRedirect || '/dashboard'
+  const redirectTo = safeAuthRedirect(paramRedirect)
 
-  const accountType = redirectTo.startsWith('/dashboard/employer') ? 'employer' : 'candidate'
+  const [accountType, setAccountType] = useState<'candidate' | 'employer'>(redirectTo.startsWith('/dashboard/employer') ? 'employer' : 'candidate')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [consent, setConsent] = useState(emptyConsent)
 
 
   const [email, setEmail] = useState('')
@@ -66,39 +69,49 @@ export default function Signup() {
 
 
   const signupWithGoogle = async () => {
+    if (isSubmitting) return
+    if (!hasRequiredConsent(consent)) return setError('Confirm the account requirements before continuing.')
+    setIsSubmitting(true)
 
+    try {
     const redirectResponse = await fetch('/api/auth/redirect', {
 
       method: 'POST',
 
       headers: { 'Content-Type': 'application/json' },
 
-      body: JSON.stringify({ redirectTo, accountType }),
+      body: JSON.stringify({ redirectTo, accountType, consent }),
 
     })
 
     if (!redirectResponse.ok) {
 
+      setIsSubmitting(false)
       setError('Could not prepare Google sign-in. Please try again.')
 
       return
 
     }
 
-    await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
 
       provider: 'google',
 
       options: { redirectTo: `${window.location.origin}/auth/callback` },
 
     })
+    if (oauthError) { setError(oauthError.message); setIsSubmitting(false) }
 
+    } catch { setError('Could not start Google sign-up. Please try again.'); setIsSubmitting(false) }
   }
 
 
   async function handleEmailSignup(e: React.FormEvent) {
 
     e.preventDefault()
+    if (isSubmitting) return
+    if (password !== confirmPassword) return setError('Passwords do not match.')
+    if (!hasRequiredConsent(consent)) return setError('Confirm the account requirements before continuing.')
 
     setError('')
 
@@ -120,33 +133,13 @@ export default function Signup() {
 
     try {
 
-      const { data, error: signUpError } = await supabase.auth.signUp({
+      const response = await fetch('/api/auth/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password, confirmPassword, accountType, redirectTo, consent }) })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error)
 
-        email: email.trim(),
+      if (data.authenticated) {
 
-        password,
-
-        options: {
-
-          data: { accountType },
-
-          emailRedirectTo: `${window.location.origin}/auth/callback?redirectTo=${redirectTo}`,
-
-        },
-
-      })
-
-
-      if (signUpError) {
-
-        throw new Error(signUpError.message)
-
-      }
-
-
-      if (data.session) {
-
-        router.push(accountConsentPath(redirectTo))
+        router.push(redirectTo === '/dashboard' ? '/dashboard/' + accountType : redirectTo)
 
         router.refresh()
 
@@ -350,15 +343,16 @@ export default function Signup() {
 
                   <div className="px-4 py-3 border border-red-200 rounded-xl bg-red-50">
 
-                    <p className="text-sm text-red-700">{error}</p>
+                    <p role="alert" className="text-sm text-red-700">{error}</p>
 
                   </div>
 
                 )}
 
 
-                <Button
-
+                <fieldset className="flex gap-4 text-sm"><legend className="mb-2 font-semibold">Account type</legend>{(['candidate', 'employer'] as const).map(role => <label key={role} className="flex gap-2"><input type="radio" name="accountType" checked={accountType === role} onChange={() => setAccountType(role)} />{role === 'candidate' ? 'Job seeker' : 'Employer'}</label>)}</fieldset>
+                <AccountConsentFields value={consent} onChange={setConsent} />
+                <Button disabled={isSubmitting}
                   onClick={signupWithGoogle}
 
                   variant="outline"
@@ -403,7 +397,7 @@ export default function Signup() {
 
                     onChange={(e) => setEmail(e.target.value)}
 
-                    placeholder="you@example.com"
+                    aria-label="Email" required placeholder="you@example.com"
 
                     autoComplete="email"
 
@@ -421,7 +415,7 @@ export default function Signup() {
 
                       onChange={(e) => setPassword(e.target.value)}
 
-                      placeholder="Create a password"
+                      name="password" aria-label="Password" required placeholder="Create a password"
 
                       autoComplete="new-password"
 
@@ -437,7 +431,7 @@ export default function Signup() {
 
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
 
-                      tabIndex={-1}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
 
                     >
 
@@ -447,6 +441,7 @@ export default function Signup() {
 
                   </div>
 
+                  <label htmlFor="confirm-password" className="block text-sm">Confirm password</label><Input id="confirm-password" name="confirmPassword" aria-label="Confirm password" type={showPassword ? 'text' : 'password'} autoComplete="new-password" required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="h-12 rounded-xl" />
                   <p className="text-xs text-gray-400">At least 8 characters.</p>
 
 
@@ -492,7 +487,7 @@ export default function Signup() {
 
                   <p className="text-center text-xs text-gray-400">
 
-                    After sign-up, you will review our{' '}
+                    Your account follows our{' '}
 
                     <Link
 
@@ -520,7 +515,7 @@ export default function Signup() {
 
                     </Link>
 
-                    {' '}and confirm your account choices.
+                    .
 
                   </p>
 

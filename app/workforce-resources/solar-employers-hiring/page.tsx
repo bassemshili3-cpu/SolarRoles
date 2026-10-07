@@ -11,7 +11,7 @@ import {
 export const revalidate = 86400
 
 const CANONICAL_URL =
-  'https://www.solarroles.com/workforce-resources/solar-employers-hiring'
+  'https://solarroles.com/workforce-resources/solar-employers-hiring'
 
 export const metadata: Metadata = {
   title: 'Solar Employers Hiring Now: U.S. Employer Tracker | Solar Roles',

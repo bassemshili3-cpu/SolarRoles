@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import Link from 'next/link'
+import AccountConsentFields from '@/components/AccountConsentFields'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
@@ -20,11 +20,9 @@ export default function AccountConsentForm({
   const [ageConfirmed, setAgeConfirmed] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false)
+  const [accountType, setAccountType] = useState<'candidate' | 'employer'>(redirectTo.startsWith('/dashboard/employer') ? 'employer' : 'candidate')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  const policyDate = (value: string) => new Intl.DateTimeFormat('en-US', {
-    month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
-  }).format(new Date(`${value}T12:00:00Z`))
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -35,7 +33,7 @@ export default function AccountConsentForm({
       const response = await fetch('/api/account-consent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ageConfirmed, termsAccepted, privacyAcknowledged }),
+        body: JSON.stringify({ ageConfirmed, termsAccepted, privacyAcknowledged, accountType }),
       })
       if (!response.ok) {
         const result = await response.json().catch(() => ({}))
@@ -66,22 +64,10 @@ export default function AccountConsentForm({
         </p>
 
         <form onSubmit={submit} className="mt-6 space-y-4">
-          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm text-slate-800">
-            <input type="checkbox" checked={ageConfirmed} onChange={event => setAgeConfirmed(event.target.checked)} className="mt-1 h-4 w-4 accent-amber-600" />
-            <span>I am at least 18 years old and meet the eligibility requirements for an account.</span>
-          </label>
-          <div className="flex items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm text-slate-800">
-            <input id="consent-terms" type="checkbox" checked={termsAccepted} onChange={event => setTermsAccepted(event.target.checked)} className="mt-1 h-4 w-4 accent-amber-600" />
-            <div><label htmlFor="consent-terms" className="cursor-pointer">I agree to the Terms of Service</label> (<Link href="/terms" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline">read terms</Link>, updated {policyDate(termsVersion)}).</div>
-          </div>
-          <div className="flex items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm text-slate-800">
-            <input id="consent-privacy" type="checkbox" checked={privacyAcknowledged} onChange={event => setPrivacyAcknowledged(event.target.checked)} className="mt-1 h-4 w-4 accent-amber-600" />
-            <div><label htmlFor="consent-privacy" className="cursor-pointer">I have read the Privacy Policy and understand how my account information is used</label> (<Link href="/privacy" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline">read policy</Link>, updated {policyDate(privacyVersion)}).</div>
-          </div>
-
-          <p className="text-xs leading-5 text-slate-500">
-            These confirmations do not subscribe you to promotional emails or job alerts. You can choose those separately.
-          </p>
+          <label className="block text-sm">Account type<select className="ml-3 rounded border p-2" value={accountType} onChange={e => setAccountType(e.target.value as 'candidate' | 'employer')}><option value="candidate">Job seeker</option><option value="employer">Employer</option></select></label>
+          <AccountConsentFields value={{ ageConfirmed, termsAccepted, privacyAcknowledged }} onChange={value => {
+            setAgeConfirmed(value.ageConfirmed); setTermsAccepted(value.termsAccepted); setPrivacyAcknowledged(value.privacyAcknowledged)
+          }} />
           {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
           <button type="submit" disabled={!ageConfirmed || !termsAccepted || !privacyAcknowledged || saving} className="w-full rounded-lg bg-amber-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50">

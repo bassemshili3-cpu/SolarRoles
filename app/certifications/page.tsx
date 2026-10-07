@@ -6,10 +6,10 @@ import { CERTIFICATIONS } from './[slug]/certifications-data'
 export const metadata: Metadata = {
   title: 'Solar Certifications | Solar Roles',
   alternates: {
-    canonical: 'https://www.solarroles.com/certifications',
+    canonical: 'https://solarroles.com/certifications',
   },
   description:
-    'NABCEP, OSHA, and the other certifications that matter for solar jobs — how to get nabcep certified, what they are, who needs them, and where to get them.',
+    'Compare NABCEP solar credentials and OSHA Construction training: eligibility, course-completion cards, exams, costs, and free study resources.',
 }
 
 // The featured certs shown as the "bouquin" diploma visuals.
@@ -74,8 +74,14 @@ export default function CertificationsIndex() {
             Solar Certifications
           </span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-5">
-            Get the most valued solar certifications
+            Solar certifications and safety training
           </h1>
+          <p className="text-white/80 text-lg leading-relaxed max-w-2xl mx-auto">
+            NABCEP credentials assess solar knowledge and, for board certifications,
+            qualifying experience. OSHA 10- and 30-hour Construction courses issue
+            course-completion cards. Choose the guide that matches your work and
+            the requirements of your employer or jobsite.
+          </p>
         
         </div>
       </section>
@@ -89,7 +95,7 @@ export default function CertificationsIndex() {
                 Getting Started
               </p>
               <h2 className="text-3xl md:text-2xl font-bold text-[#0B1A2E] mb-3">
-                Click on one of the certifications below to learn everything you have to know before starting your solar career.
+                Compare requirements, costs, and preparation for each path.
               </h2>
              
             </div>
@@ -141,7 +147,7 @@ function FeaturedDiploma({ cert }: { cert: Cert }) {
 
       <div className="relative h-full flex flex-col items-center justify-center px-6 py-8 text-center">
         <p className="text-[10px] font-bold tracking-[0.3em] text-[#F5B819] uppercase mb-2">
-          Certificate of
+          {cert.slug.startsWith('osha-') ? 'Construction safety training' : 'Solar credential'}
         </p>
 
         <div className="mb-1 flex items-center gap-2 text-[10px] text-[#F5B819]/70">

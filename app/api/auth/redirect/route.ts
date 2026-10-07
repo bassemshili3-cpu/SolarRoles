@@ -2,13 +2,14 @@ import { NextResponse } from 'next/server'
 
 import {
   AUTH_ACCOUNT_TYPE_COOKIE,
+  AUTH_CONSENT_COOKIE,
   AUTH_REDIRECT_COOKIE,
   safeAuthAccountType,
   safeAuthRedirect,
 } from '@/lib/authRedirect'
 
 export async function POST(request: Request) {
-  let body: { redirectTo?: string; accountType?: string }
+  let body: { redirectTo?: string; accountType?: string; consent?: { ageConfirmed?: boolean; termsAccepted?: boolean; privacyAcknowledged?: boolean } }
   try {
     body = await request.json()
   } catch {
@@ -21,6 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Choose an account type.' }, { status: 400 })
   }
 
+  if (body.consent && (body.consent.ageConfirmed !== true || body.consent.termsAccepted !== true || body.consent.privacyAcknowledged !== true)) return NextResponse.json({ error: 'Confirm the account requirements.' }, { status: 400 })
   const response = NextResponse.json({ ok: true })
   response.cookies.set(AUTH_REDIRECT_COOKIE, redirectTo, {
     httpOnly: true,
@@ -36,5 +38,7 @@ export async function POST(request: Request) {
     path: '/',
     maxAge: 10 * 60,
   })
+  const c = body.consent
+  response.cookies.set(AUTH_CONSENT_COOKIE, c?.ageConfirmed === true && c?.termsAccepted === true && c?.privacyAcknowledged === true ? 'accepted' : '', { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/', maxAge: 600 })
   return response
 }

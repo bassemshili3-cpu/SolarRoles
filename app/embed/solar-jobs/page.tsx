@@ -1,3 +1,4 @@
+import { getCanonicalJobPath } from '@/lib/job-url'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -77,10 +78,11 @@ export default async function SolarJobsEmbedPage({ searchParams }: { searchParam
   }
 
   const jobs = await prisma.job.findMany({
-    where: { active: true, ...(and.length ? { AND: and } : {}) },
+    where: { active: true, expiresAt: { gt: new Date() }, ...(and.length ? { AND: and } : {}) },
     select: {
       id: true,
       title: true,
+      canonicalSlug: true,
       company: true,
       location: true,
       salaryMin: true,
@@ -119,7 +121,7 @@ export default async function SolarJobsEmbedPage({ searchParams }: { searchParam
 
         <div className="divide-y divide-gray-100">
           {jobs.length ? jobs.map((job) => (
-            <Link key={job.id} href={`/jobs/${job.id}`} target="_blank" className="block px-5 py-4 hover:bg-blue-50/50">
+            <Link key={job.id} href={getCanonicalJobPath(job)} target="_blank" className="block px-5 py-4 hover:bg-blue-50/50">
               <h2 className="line-clamp-2 text-sm font-semibold text-gray-950">{job.title}</h2>
               <p className="mt-1 text-xs text-gray-500">{cleanCompanyName(job.company)} · {job.location || stateName || 'US'}</p>
               <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">

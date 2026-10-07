@@ -10,7 +10,7 @@ interface RoleRow {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/solar-certifications-by-job-role";
 const PAGE_TITLE =
   "Solar Certifications by Job Role: Which Credential for Which Position";

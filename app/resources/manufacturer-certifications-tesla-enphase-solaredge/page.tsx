@@ -10,7 +10,7 @@ interface MfrRow {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/manufacturer-certifications-tesla-enphase-solaredge";
 const PAGE_TITLE =
   "Solar Manufacturer Certifications: How to make the right choice";

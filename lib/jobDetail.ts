@@ -2,6 +2,7 @@
 import { prisma } from '@/lib/prisma'
 import { resolveJobSalary } from '@/lib/resolveJobSalary'
 import { cache } from 'react'
+import { isJobAvailable } from './job-availability'
 
 export type JobDetail = {
   id: string
@@ -12,6 +13,8 @@ export type JobDetail = {
   addressRegion?: string
   locationRegions?: string[]
   postalCode?: string
+  compensationType?: string
+  commissionDetails?: string | null
   salary?: string
   salaryPeriod?: string
   salary_min?: number
@@ -35,7 +38,7 @@ export type JobDetail = {
 export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> => {
   try {
     const dbJob = await prisma.job.findUnique({ where: { id } })
-    if (!dbJob || !dbJob.active) return null
+    if (!dbJob || !isJobAvailable(dbJob)) return null
 
     return {
       id: dbJob.id,
@@ -51,6 +54,8 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       salary_min: dbJob.salaryMin || undefined,
       salary_max: dbJob.salaryMax || undefined,
       salary: dbJob.salary || undefined,
+      compensationType: dbJob.compensationType,
+      commissionDetails: dbJob.commissionDetails,
       salaryPeriod: dbJob.salaryPeriod || undefined,
       created: dbJob.postedAt?.toISOString(),
       postedAt: (dbJob.postedAt ?? dbJob.fetchedAt).toISOString(),
@@ -66,7 +71,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
     }
   } catch (error: any) {
     console.error('DB error:', error.message)
-    return null
+    throw error
   }
 })
 export function getJobDetailWithSalary(job: JobDetail): JobDetail {

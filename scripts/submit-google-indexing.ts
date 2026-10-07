@@ -16,7 +16,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PrismaClient } from '@prisma/client';
-import { getCanonicalJobSlug } from '../lib/slugify';
+import { getCanonicalJobUrl } from '../lib/job-url';
 import { isGoogleIndexingConfigured, notifyGoogleIndexing } from '../lib/googleIndexing';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -62,7 +62,7 @@ async function main() {
   }
 
   const jobs = await prisma.job.findMany({
-    where: { active: true, source: { in: ATS_SOURCES } },
+    where: { active: true, expiresAt: { gt: new Date() }, source: { in: ATS_SOURCES } },
     select: { id: true, title: true, location: true, canonicalSlug: true },
     orderBy: { fetchedAt: 'desc' },
     take: MAX_URLS,
@@ -75,7 +75,7 @@ async function main() {
   let failed = 0;
 
   for (const job of jobs) {
-    const url = `https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}`;
+    const url = getCanonicalJobUrl(job);
     const result = await notifyGoogleIndexing(url, 'URL_UPDATED');
 
     if (result.success) {

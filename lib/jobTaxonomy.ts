@@ -211,7 +211,7 @@ const MAX_SKILLS = 10
 
 function detectExperienceLevel(title: string, description?: string): ExperienceLevel | undefined {
   const t = `${title} ${description || ''}`.toLowerCase()
-  if (/\b(lead|senior|sr\.?|foreman|crew\s*lead|principal|supervisor|superintendent|manager)\b/.test(t)) {
+  if (/\b(lead|senior|sr\.?|foreman|crew\s*lead|principal|supervisor|superintendent|manager|director)\b/i.test(title)) {
     return 'SENIOR_LEVEL'
   }
   if (/\b(junior|jr\.?|entry[- ]level|apprentice|trainee|helper|intern|internship)\b/.test(t)) {

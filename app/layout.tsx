@@ -10,7 +10,7 @@ import SiteChrome from '@/components/SiteChrome'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const SITE_URL = 'https://www.solarroles.com'
+import { SITE_URL } from '@/lib/site-url'
 
 export const metadata = {
   title: 'Solar Roles - Solar installers Jobs USA',

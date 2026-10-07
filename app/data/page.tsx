@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     'Daily US solar hiring indicators for reporters and researchers: hiring volume, employer participation, segment momentum, build-to-operate shifts, industrial skills, training gaps, pay transparency, employer concentration and entry barriers.',
   keywords:
     'US solar hiring data, solar workforce data, solar jobs data, solar hiring trends, solar labor market, solar workforce trends, solar salary transparency, battery storage jobs, utility solar jobs',
-  alternates: { canonical: 'https://www.solarroles.com/data' },
+  alternates: { canonical: 'https://solarroles.com/data' },
   openGraph: {
     title: 'US Solar Hiring Indicators & Workforce Data | Solar Roles',
     description:
       'A daily, reporter-focused view of the structural signals moving the US solar hiring market.',
     type: 'website',
-    url: 'https://www.solarroles.com/data',
+    url: 'https://solarroles.com/data',
   },
 }
 
@@ -49,11 +49,11 @@ const jsonLd = {
   name: 'Solar Roles US Solar Hiring Indicators',
   description:
     'Daily indicators derived from active US solar job postings, covering hiring volume, employer participation, market segments, workforce skills, training signals, pay transparency, hiring concentration and entry barriers.',
-  url: 'https://www.solarroles.com/data',
+  url: 'https://solarroles.com/data',
   creator: {
     '@type': 'Organization',
     name: 'Solar Roles',
-    url: 'https://www.solarroles.com',
+    url: 'https://solarroles.com',
   },
   spatialCoverage: 'United States',
   temporalCoverage: '2026/..',

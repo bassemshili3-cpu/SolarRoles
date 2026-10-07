@@ -3,11 +3,11 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Contact Solar Roles — Listings, Partnerships and Support',
   description: 'Get in touch with the Solar Roles team. Questions about job listings, partnerships, or anything else',
-  alternates: { canonical: 'https://www.solarroles.com/contact' },
+  alternates: { canonical: 'https://solarroles.com/contact' },
   openGraph: {
     title: 'Contact Solar Roles — Listings, Partnerships and Support',
     description: 'Get in touch with the Solar Roles team.',
-    url: 'https://www.solarroles.com/contact',
+    url: 'https://solarroles.com/contact',
     type: 'website',
   },
 }

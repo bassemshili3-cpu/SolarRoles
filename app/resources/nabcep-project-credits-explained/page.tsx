@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AffiliateLink } from '@/components/click_affiliate_link';
 import { EditorialInfographic } from '@/components/EditorialInfographic';
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-project-credits-explained";
 const PAGE_TITLE =
   "NABCEP Project Credits Explained: How to Get Decision-Making Experience Without Already Having the Job (2026)";

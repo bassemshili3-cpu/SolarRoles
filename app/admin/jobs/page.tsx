@@ -18,6 +18,7 @@ export default async function AdminJobsPage() {
   const jobs = dbJobs.map((job) => ({
     id: job.id,
     title: job.title,
+    canonicalSlug: job.canonicalSlug,
     company: job.company,
     location: job.location,
     postedAt: job.postedAt ?? job.fetchedAt,

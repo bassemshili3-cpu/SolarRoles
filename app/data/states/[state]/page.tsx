@@ -79,7 +79,7 @@ export async function generateMetadata(
     title: `${stateName} Solar Installer Jobs & Salaries 2026 | Job Market Data`,
     description: `How much do Solar Photovoltaic Installers and Lead Solar Installers earn in ${stateName}? Live salary data, top hiring companies, and open listings. Updated daily.`,
     keywords: `${stateName} solar installer salary, ${stateName} solar jobs, solar photovoltaic installer ${stateName}, lead solar installer ${stateName}, ${stateName} solar job market 2026`,
-    alternates: { canonical: `https://www.solarroles.com/data/states/${slug}` },
+    alternates: { canonical: `https://solarroles.com/data/states/${slug}` },
     robots: { index: false, follow: false },
   }
 }
@@ -304,7 +304,7 @@ export default async function StateDataPage({
     '@type': 'WebPage',
     name: `${stateName} Solar Installer Jobs & Salaries`,
     description: `Live job market statistics for ${stateName} including solar installer salary data and top employers.`,
-    url: `https://www.solarroles.com/data/states/${slug}`,
+    url: `https://solarroles.com/data/states/${slug}`,
   }
 
   return (
@@ -440,11 +440,11 @@ export default async function StateDataPage({
                     rel="nofollow noopener sponsored"
                     className="shrink-0 text-sm font-semibold text-[#C9991F] underline hover:text-[#3D1654]"
                   >
-                    Get certified on HeatSpring →
+                    {cert.heatspringCtaLabel} →
                   </a>
                 </div>
                 <p className="mt-2 text-xs text-[#C9991F]/70">
-                  *We may earn a commission if you enroll through this link, at no extra cost to you.
+                  We use affiliate links and may earn a commission on a later paid purchase, at no extra cost to you.
                 </p>
               </div>
             )}

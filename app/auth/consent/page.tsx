@@ -1,3 +1,4 @@
+import { getAccountRole, roleDestination } from '@/lib/accountRole'
 import { redirect } from 'next/navigation'
 import { createServerSupabase } from '@/lib/supabase-server'
 import { safeAuthRedirect } from '@/lib/authRedirect'
@@ -25,7 +26,8 @@ export default async function AccountConsentPage({
     .maybeSingle()
 
   if (error) throw new Error('Could not check account consent.')
-  if (consent) redirect(redirectTo)
+  const role = await getAccountRole(supabase, user.id)
+  if (consent && role) redirect(roleDestination(role, redirectTo))
 
   return (
     <AccountConsentForm

@@ -25,21 +25,21 @@ const reportJsonLd = {
       headline: 'Battery Storage Leads the Solar Jobs That Name a Market Segment',
       description:
         'Battery storage accounted for 47% of 370 unique US solar openings that named a market segment in the title.',
-      url: 'https://www.solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring',
+      url: 'https://solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring',
       datePublished: '2026-09-04',
       dateModified: '2026-09-10',
       author: {
         '@type': 'Organization',
         name: 'Solar Roles Research',
-        url: 'https://www.solarroles.com',
+        url: 'https://solarroles.com',
       },
       mainEntity: {
-        '@id': 'https://www.solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring#market-segments-dataset',
+        '@id': 'https://solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring#market-segments-dataset',
       },
     },
     {
       '@type': 'Dataset',
-      '@id': 'https://www.solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring#market-segments-dataset',
+      '@id': 'https://solarroles.com/data/battery-storage-leads-segment-specific-solar-hiring#market-segments-dataset',
       name: 'Segment-explicit US solar job postings, September 2026',
       description:
         'Counts of unique active US solar job postings that explicitly name battery storage, utility-scale, commercial or residential work in the job title.',
@@ -50,7 +50,7 @@ const reportJsonLd = {
       distribution: {
         '@type': 'DataDownload',
         encodingFormat: 'text/csv',
-        contentUrl: `https://www.solarroles.com${DOWNLOAD_URL}`,
+        contentUrl: `https://solarroles.com${DOWNLOAD_URL}`,
       },
     },
   ],

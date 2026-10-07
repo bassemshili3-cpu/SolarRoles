@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Live job-posting evidence on solar credentials and technical skills for curriculum planning and career advising.',
   alternates: {
     canonical:
-      'https://www.solarroles.com/workforce-resources/solar-skills-certifications',
+      'https://solarroles.com/workforce-resources/solar-skills-certifications',
   },
 }
 

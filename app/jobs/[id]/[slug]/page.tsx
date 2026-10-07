@@ -33,6 +33,7 @@ import WhatJobsJobBox from '@/components/WhatJobsJobBox'
 import WhatJobsMobileSearch from '@/components/WhatJobsMobileSearch'
 
 
+import SaveJobButton from '@/components/SaveJobButton'
 import { formatJobDescription, sanitizeStructuredHtml } from '@/lib/formatJobDescription'
 
 import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
@@ -48,6 +49,8 @@ import { compareSalaryToMarket } from '@/lib/salaryComparison'
 import { getJobDetail, getJobDetailWithSalary, type JobDetail } from '@/lib/jobDetail'
 
 import { getCanonicalJobSlug } from '@/lib/slugify'
+import { getCanonicalJobPath, getCanonicalJobUrl } from '@/lib/job-url'
+import { isJobSourceIndexable } from '@/lib/job-indexing'
 
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
@@ -369,7 +372,7 @@ function buildJobPostingSchema(
 
     jobLocation: jobLocations.length === 1 ? jobLocations[0] : jobLocations,
 
-    url: `https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}`,
+    url: getCanonicalJobUrl(job),
 
   datePosted: new Date(job.postedAt).toISOString().split('T')[0],
 validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
@@ -413,7 +416,7 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
   // ── baseSalary ──
 
-  if (job.salary_min && job.salary_max) {
+  if (job.compensationType !== 'COMMISSION_ONLY' && job.salary_min && job.salary_max) {
 
     schema.baseSalary = {
 
@@ -425,9 +428,9 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
         '@type': 'QuantitativeValue',
 
-        minValue: job.salary_min,
+        minValue: job.source === 'employer' && salaryUnitText === 'HOUR' ? job.salary_min / 2080 : job.salary_min,
 
-        maxValue: job.salary_max,
+        maxValue: job.source === 'employer' && salaryUnitText === 'HOUR' ? job.salary_max / 2080 : job.salary_max,
 
         unitText: salaryUnitText,
 
@@ -495,26 +498,31 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
 export async function generateMetadata(
 
-  { params }: { params: Promise<{ id: string; slug: string }> }
+  { params, searchParams }: {
+    params: Promise<{ id: string; slug: string }>
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+  }
 
 ): Promise<Metadata> {
 
-  const { id } = await params
+  const { id, slug } = await params
 
   const raw = await getJobDetail(id)
 
   if (!raw) {
-    return {
-      title: 'Job not found | Solar Roles',
-      description: 'This job posting is no longer available on Solar Roles.',
-      robots: { index: false, follow: true },
-    }
+    notFound()
   }
 
   const job = getJobDetailWithSalary(raw)
+  // Next 14 resolves metadata before flushing the document. Resolve both
+  // redirects and 404s here, outside the page's loading/Suspense boundaries.
+  const query = await searchParams
+  if (slug !== getCanonicalJobSlug(job) || query.from !== undefined) {
+    permanentRedirect(getCanonicalJobPath(job))
+  }
 
 
-  const canonicalUrl = `https://www.solarroles.com/jobs/${id}/${getCanonicalJobSlug(job)}`
+  const canonicalUrl = getCanonicalJobUrl(job)
 
 
   const salaryStr =
@@ -525,8 +533,7 @@ export async function generateMetadata(
 
       : ''
 
-      const NON_INDEXABLE_SOURCES = ['adzuna', 'jooble', 'careerjet', 'lensa', 'whatjobs']
-const isIndexable = !NON_INDEXABLE_SOURCES.includes(job.source)
+  const isIndexable = isJobSourceIndexable(job.source)
 
   return {
 
@@ -565,23 +572,15 @@ export default async function JobDetailPage({
 
   params,
 
-  searchParams,
 
 }: {
 
   params: Promise<{ id: string; slug: string }>
 
-  searchParams: Promise<{ from?: string }>
 
 }) {
 
   const { id, slug } = await params
-
-  const { from } = await searchParams
-
-  const decoded = from ? decodeURIComponent(from) : null
-
-  const backUrl = decoded && decoded.startsWith('/') ? decoded : '/jobs'
 
 
   const raw = await getJobDetail(id)
@@ -593,7 +592,7 @@ export default async function JobDetailPage({
 
   const canonicalSlug = getCanonicalJobSlug(job)
   if (slug !== canonicalSlug) {
-    permanentRedirect(`/jobs/${id}/${canonicalSlug}`)
+    permanentRedirect(getCanonicalJobPath(job))
   }
 
 // Requirement details are often present in the source posting but omitted by a
@@ -760,6 +759,7 @@ function safeJsonLd(data: unknown): string {
             </div>
 
 <Breadcrumb segments={breadcrumbSegments} />
+{job.commissionDetails && <p className="my-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-slate-800"><strong>Commission terms: </strong>{job.commissionDetails}</p>}
 
             <WhatJobsMobileSearch
               keyword={job.title || 'solar'}
@@ -919,7 +919,7 @@ function safeJsonLd(data: unknown): string {
           </p>
           <p className="text-sm text-[#B45309]">
             {certRequirement?.required
-              ? `Review the training path for ${cert.shortLabel} before you apply.`
+              ? `The free resource below supports study; it does not earn ${cert.shortLabel}.`
               : cert.bannerSubtext}
           </p>
         </div>
@@ -931,11 +931,11 @@ function safeJsonLd(data: unknown): string {
         rel="noopener sponsored"
         className="self-start text-sm font-semibold text-[#B45309] underline hover:text-[#92400E] sm:shrink-0 sm:self-auto"
       >
-        Get certified on HeatSpring →
+        {cert.heatspringCtaLabel} →
       </a>
     </div>
     <p className="mt-2 text-xs text-[#B45309]/70">
-      Solar Roles is affiliated with HeatSpring and may earn a commission if you enroll through this link, at no extra cost to you.
+      Solar Roles uses affiliate links and may earn a commission on a later paid purchase, at no extra cost to you.
     </p>
   </div>
 )}
@@ -1123,13 +1123,14 @@ function safeJsonLd(data: unknown): string {
                 </Suspense>
 
                <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
- {job.source === 'employer' ? (
+ <SaveJobButton jobId={job.id} />
+{job.source === 'employer' ? (
   <div className="w-full">
     <ApplyToggle jobId={job.id} jobTitle={job.title} />
   </div>
 ) : applyUrl ? (
     <Button asChild size="lg" className={`w-full sm:w-auto ${apply.className}`}>
-      <a href={`/jobs/${job.id}/go`} target="_blank" rel="noopener noreferrer">
+      <a href={`/jobs/${job.id}/go`} target="_blank" rel="nofollow noopener noreferrer">
         {apply.label} <ExternalLink className="w-4 h-4 ml-2" />
       </a>
     </Button>
@@ -1142,7 +1143,7 @@ function safeJsonLd(data: unknown): string {
    {job.source === 'employer'}
 
   <ShareBar
-    url={`https://www.solarroles.com/jobs/${job.id}/${getCanonicalJobSlug(job)}`}
+    url={getCanonicalJobUrl(job)}
     title={job.title}
     company={job.company || ''}
   />
@@ -1174,7 +1175,7 @@ function safeJsonLd(data: unknown): string {
 
                           <Link
 
-                            href={`/jobs/${sj.id}/${getCanonicalJobSlug(sj)}`}
+                            href={getCanonicalJobPath(sj)}
 
                             className="group flex items-center gap-3 rounded-lg border p-3 hover:border-primary/50 hover:bg-secondary/40 transition-colors"
 

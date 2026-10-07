@@ -1,3 +1,4 @@
+import { normalizeWorkSetting, workSettingValues } from './workSetting'
 // lib/job-filters.ts
 
 import { ENTRY_LEVEL_INCLUDE_KEYWORDS, matchesEntryLevelJob } from './entry-level-filter'
@@ -24,9 +25,12 @@ export const EXPERIENCE_KEYWORDS: Record<string, string[]> = {
   senior:     ['senior', 'sr.', 'lead', '5+ year', '5-8 year', '7+ year'],
   manager:    ['project manager', 'construction manager', 'program manager'],
   director:   ['director', 'vp of', 'vice president'],
-  executive:  ['chief', 'cto', 'cfo', 'coo', 'ceo', 'executive', 'president', 'c-suite'],
+  executive:  ['director', 'chief', 'cto', 'cfo', 'coo', 'ceo', 'executive', 'president', 'c-suite'],
 }
 
+export const EXPERIENCE_STRUCTURED_VALUES: Record<string, string[]> = {
+ entry: ['ENTRY_LEVEL','entry level','entry-level'], mid: ['MID_LEVEL','mid level','mid-level'], experienced: ['MID_LEVEL','mid level','mid-level'], senior: ['SENIOR_LEVEL','senior level','senior-level'],
+}
 export const EDUCATION_KEYWORDS: Record<string, string[]> = {
   high_school: ['high school diploma', 'ged', 'high school'],
   associate:   ["associate's degree", "associate degree", 'a.a.', 'a.s.'],
@@ -44,6 +48,7 @@ export const ARRANGEMENT_KEYWORDS: Record<string, string[]> = {
 }
 
 export const BENEFIT_KEYWORDS: Record<string, string[]> = {
+  'Commission pay': ['commission-only', 'commission only', 'base + commission', 'base plus commission', 'commission-based', 'commission based', 'sales commission', 'uncapped commission', 'commission structure', 'commission pay'],
   'Health insurance':      ['health insurance', 'medical insurance', 'medical benefits', 'healthcare'],
   'Dental & Vision':       ['dental', 'vision insurance', 'dental and vision'],
   '401(k) match':          ['401k', '401(k)', 'retirement match', 'employer match'],
@@ -68,8 +73,8 @@ export const CERTIFICATION_KEYWORDS: Record<string, string[]> = {
   journeyman: ['journeyman electrician', 'journeyman license', 'journeyman electrical license'],
 }
 
-const TITLE_ONLY_EXPERIENCE_LEVELS = new Set([
-  'lead', 'superintendent', 'manager', 'executive',
+export const TITLE_ONLY_EXPERIENCE_LEVELS = new Set([
+  'lead', 'superintendent', 'manager', 'director', 'executive',
 ])
 
 export const COMPANY_SIZE_KEYWORDS: Record<string, string[]> = {
@@ -94,6 +99,10 @@ export interface JobFilterParams {
 }
 
 export interface FilterableJob {
+  workSetting?: string | null
+  isRemote?: boolean
+  experienceLevel?: string | null
+  compensationType?: string
   title: string
   company: string
   location: string
@@ -135,12 +144,15 @@ export function matchesFilters(job: FilterableJob, f: JobFilterParams): boolean 
   }
 
   if (f.arrangements?.length) {
-    const kws = f.arrangements.flatMap(a => ARRANGEMENT_KEYWORDS[a] || [])
-    if (kws.length && !textMatches(job, kws)) return false
+    const setting = normalizeWorkSetting(job)
+    if (!setting || !workSettingValues(f.arrangements).includes(setting)) return false
   }
 
   if (f.experience && EXPERIENCE_KEYWORDS[f.experience]) {
-    const matches = f.experience === 'entry'
+    const structured = EXPERIENCE_STRUCTURED_VALUES[f.experience]
+    const normalized = job.experienceLevel?.toUpperCase().replace(/[ -]/g, '_')
+    const authoritative = structured && ['ENTRY_LEVEL','MID_LEVEL','SENIOR_LEVEL'].includes(normalized || '')
+    const matches = authoritative ? structured.includes(normalized!) : f.experience === 'entry'
       ? matchesEntryLevelJob(job.title, job.description)
       : TITLE_ONLY_EXPERIENCE_LEVELS.has(f.experience)
         ? EXPERIENCE_KEYWORDS[f.experience].some((keyword) =>
@@ -150,8 +162,9 @@ export function matchesFilters(job: FilterableJob, f: JobFilterParams): boolean 
     if (!matches) return false
   }
 
-  if (f.certification && CERTIFICATION_KEYWORDS[f.certification]) {
-    if (!textMatches(job, CERTIFICATION_KEYWORDS[f.certification])) return false
+  if (f.certification) {
+    const keywords = [...new Set(f.certification.split(','))].flatMap(key => CERTIFICATION_KEYWORDS[key] || [])
+    if (keywords.length && !textMatches(job, keywords)) return false
   }
 
   if (f.education && EDUCATION_KEYWORDS[f.education]) {
@@ -166,6 +179,7 @@ export function matchesFilters(job: FilterableJob, f: JobFilterParams): boolean 
   // Chaque benefit sélectionné doit matcher (logique ET, comme dans merged-search.ts)
   if (f.benefits?.length) {
     for (const b of f.benefits) {
+      if (b === 'Commission pay' && ['COMMISSION_ONLY','BASE_COMMISSION'].includes(job.compensationType || '')) continue
       const kws = BENEFIT_KEYWORDS[b] || []
       if (kws.length && !textMatches(job, kws)) return false
     }

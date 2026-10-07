@@ -8,7 +8,7 @@ import WidgetConfigurator from './WidgetConfigurator'
 export const metadata: Metadata = {
   title: 'Free Solar Jobs Widget for Schools & Workforce Programs | Solar Roles',
   description: 'Embed a live state-level feed of Solar Roles job openings on a college, training-provider or workforce-program website.',
-  alternates: { canonical: 'https://www.solarroles.com/workforce-resources/jobs-widget' },
+  alternates: { canonical: 'https://solarroles.com/workforce-resources/jobs-widget' },
 }
 
 export default function JobsWidgetPage() {
@@ -88,7 +88,7 @@ export default function JobsWidgetPage() {
           <article className="rounded-2xl border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-950">What if our site uses a strict CSP?</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Ask your administrator to allow <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-800">https://www.solarroles.com</code> in the site&apos;s <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-800">frame-src</code> policy. If that is not possible, use the Solar Roles jobs link included below the iframe.
+              Ask your administrator to allow <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-800">https://solarroles.com</code> in the site&apos;s <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-800">frame-src</code> policy. If that is not possible, use the Solar Roles jobs link included below the iframe.
             </p>
           </article>
           <article className="rounded-2xl border border-gray-200 p-5">

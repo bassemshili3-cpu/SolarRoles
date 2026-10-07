@@ -51,6 +51,8 @@ export default async function EditJobPage({
     : STATE_CODE_TO_NAME[job.addressRegion.toUpperCase()] || ''
 
   const initialData: JobFormInitialData = {
+    compensationType: job.compensationType as JobFormInitialData['compensationType'],
+    commissionDetails: job.commissionDetails ?? '',
     title: job.title,
     company: job.company,
     employmentType: resolveEmploymentType(job.contractType, job.contractTime),

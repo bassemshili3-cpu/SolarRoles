@@ -10,7 +10,7 @@ import { ResourceLibrary, type ResourceItem } from "@/components/ResourceLibrary
 // SEO metadata (keep your existing structure exactly)
 // ----------------------------------------------------------------------------
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources";
 const PAGE_TITLE = "Solar Career Resources | Solar Roles";
 const PAGE_DESCRIPTION =

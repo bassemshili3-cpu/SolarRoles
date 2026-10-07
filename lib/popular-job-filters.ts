@@ -30,7 +30,7 @@ const TAGS: Record<ContextualJobFilterTagId, PopularJobFilterTag> = {
   'full-time': { id: 'full-time', label: 'Full-time', param: 'job_type', value: 'Full-time', multiValue: true },
   'company-vehicle': { id: 'company-vehicle', label: 'Company vehicle', param: 'benefits', value: 'Company vehicle', multiValue: true },
   apprenticeship: { id: 'apprenticeship', label: 'Apprenticeship', param: 'job_type', value: 'Apprenticeship', multiValue: true },
-  'osha-10': { id: 'osha-10', label: 'OSHA 10', param: 'certification', value: 'osha10' },
+  'osha-10': { id: 'osha-10', label: 'OSHA 10', param: 'certification', value: 'osha10', multiValue: true },
   remote: { id: 'remote', label: 'Remote', param: 'arrangement', value: 'Remote', multiValue: true },
 }
 

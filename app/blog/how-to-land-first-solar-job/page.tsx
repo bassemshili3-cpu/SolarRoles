@@ -18,20 +18,20 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Solar Roles Editorial Team' }],
   alternates: {
-    canonical: 'https://www.solarroles.com/blog/14-day-plan-first-solar-job',
+    canonical: 'https://solarroles.com/blog/how-to-land-first-solar-job',
   },
   openGraph: {
     title: 'The 14-Day Plan to Land Your First Solar Job in 2026',
     description:
       'All you need to know to land your first solar job in 2026, with a practical 14-day plan and tailored advice for helpers, installers, sales reps, technicians, crew leads, and project managers.',
-    url: 'https://www.solarroles.com/blog/14-day-plan-first-solar-job',
+    url: 'https://solarroles.com/blog/how-to-land-first-solar-job',
     siteName: 'Solar Roles',
     type: 'article',
     publishedTime: '2026-08-06',
     authors: ['Solar Roles Editorial Team'],
     images: [
       {
-        url: 'https://www.solarroles.com/solar-featured.jpg',
+        url: 'https://solarroles.com/solar-featured.jpg',
         width: 1200,
         height: 630,
         alt: 'The 14-Day Plan to Land Your First Solar Job in 2026',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: 'The 14-Day Plan to Land Your First Solar Job in 2026',
     description:
       'A practical 14-day plan for landing a first solar job, with a route for installers, sales, technicians, crew leads, and project management.',
-    images: ['https://www.solarroles.com/solar-featured.jpg'],
+    images: ['https://solarroles.com/solar-featured.jpg'],
   },
 }
 

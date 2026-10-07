@@ -6,7 +6,7 @@ import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const sora = Sora({ subsets: ["latin"], weight: ["700", "800"], display: "swap" });
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/solar-installer-vs-electrician-texas";
 const PAGE_TITLE =
   "Solar Installer or Electrician? Texas Law Requirements";

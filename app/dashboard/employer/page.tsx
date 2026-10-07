@@ -172,6 +172,7 @@ export default async function EmployerDashboardPage({
   const mappedJobs = jobs.map((job) => ({
     id: job.id,
     title: job.title,
+    canonicalSlug: job.canonicalSlug,
     location: job.location,
     postedAt: job.postedAt ?? job.fetchedAt,
     status: deriveStatus(job),

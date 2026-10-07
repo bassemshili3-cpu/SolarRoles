@@ -1,11 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-// Remplace <STORE_HOST> par l'URL publique réelle de ton store Blob
-// (Vercel Dashboard → Storage → ton store → clique un fichier existant pour voir son domaine —
-// ce n'est PAS la même valeur que BLOB_STORE_ID).
-const BLOB_PUBLIC_HOST = 'https://ovj48egcxlaw9gic.public.blob.vercel-storage.com'
-
 const nextConfig = {
+  // Allow isolated local verification without disturbing an existing dev server.
+  distDir: process.env.SOLARROLES_BUILD_DIR || '.next',
+  typescript: { tsconfigPath: process.env.SOLARROLES_TYPECHECK_CONFIG || 'tsconfig.json' },
   images: {
     remotePatterns: [
       { hostname: 'adzuna.com' },
@@ -31,18 +29,6 @@ const nextConfig = {
         has: [{ type: 'host', value: 'oh-my-job.com' }],
         destination: 'https://www.oh-my-job.com/:path*',
         permanent: true,
-      },
-    ]
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/sitemap-index.xml',
-        destination: `${BLOB_PUBLIC_HOST}/sitemaps/index.xml`,
-      },
-      {
-        source: '/sitemap/:id.xml',
-        destination: `${BLOB_PUBLIC_HOST}/sitemaps/:id.xml`,
       },
     ]
   },

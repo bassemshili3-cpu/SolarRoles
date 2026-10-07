@@ -6,7 +6,7 @@ import atlasData from '@/public/data/repowering/atlas-reference.json';
 import expansionData from '@/public/data/repowering/eia-expansion-by-state.json';
 import type { EiaExpansionData, RepoweringAtlas } from '@/lib/repowering/atlasTypes';
 
-const canonical = 'https://www.solarroles.com/tools/solar-repowering-calculator';
+const canonical = 'https://solarroles.com/tools/solar-repowering-calculator';
 
 export const metadata: Metadata = {
   title: 'Solar Repowering Density & Timing Calculator | Solar Roles',
@@ -37,7 +37,7 @@ const jsonLd = {
   provider: {
     '@type': 'Organization',
     name: 'Solar Roles',
-    url: 'https://www.solarroles.com/',
+    url: 'https://solarroles.com/',
   },
   description:
     'A screening calculator that separates modern same-footprint DC density headroom from age- and PPA-based repowering timing.',

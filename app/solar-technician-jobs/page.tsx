@@ -45,7 +45,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title: 'Solar Technician Jobs',
       description: 'Find solar technician, field service, and solar repair technician openings across the US.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/solar-technician-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/solar-technician-jobs', params) },
   }
 }
 
@@ -54,7 +54,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'Solar Technician Jobs',
   description: 'Solar technician job listings across the United States, covering solar service technician, solar field technician, and solar panel repair technician roles for residential, commercial, and utility-scale employers.',
-  url: 'https://www.solarroles.com/solar-technician-jobs',
+  url: 'https://solarroles.com/solar-technician-jobs',
 }
 
 const technicianRoles = [

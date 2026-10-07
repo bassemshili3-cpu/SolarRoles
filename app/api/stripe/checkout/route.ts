@@ -1,3 +1,4 @@
+import { hasAccountPermission } from '@/lib/accountPermission'
 import { NextResponse } from 'next/server'
 
 import { hasPartnerAccess } from '@/lib/employerBilling'
@@ -15,6 +16,7 @@ export async function POST(request: Request) {
   if (authError || !user) {
     return NextResponse.json({ error: 'You must be signed in to continue.' }, { status: 401 })
   }
+  if (!(await hasAccountPermission(supabase, user.id, 'employer'))) return NextResponse.json({ error: 'An employer account is required.' }, { status: 403 })
 
   let body: { plan?: CheckoutPlan; jobId?: string }
   try {

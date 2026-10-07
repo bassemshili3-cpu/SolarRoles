@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/site-url'
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
@@ -18,6 +19,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/',
       },
     ],
-    sitemap: ['https://www.solarroles.com/sitemap.xml'],
+    sitemap: [`${SITE_URL}/sitemap.xml`],
   }
 }

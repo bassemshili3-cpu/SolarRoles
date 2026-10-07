@@ -41,6 +41,7 @@ export async function getSimilarJobs(
       ? await prisma.job.findMany({
           where: {
             active: true,
+        expiresAt: { gt: new Date() },
             addressRegion,
             id: { not: excludeId },
             OR: titleOr,
@@ -58,6 +59,7 @@ export async function getSimilarJobs(
     const rest = await prisma.job.findMany({
       where: {
         active: true,
+        expiresAt: { gt: new Date() },
         id: { notIn: excludeIds },
         OR: titleOr,
       },

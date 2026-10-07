@@ -5,7 +5,7 @@ import { articleCss } from "../_shared/article-styles";
 
 const sora = Sora({ subsets: ["latin"], weight: ["700", "800"], display: "swap" });
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/solar-dc-safety-for-electricians";
 const PAGE_TITLE = "Why Solar DC Safety Is Different for Electricians";
 const PAGE_DESCRIPTION =

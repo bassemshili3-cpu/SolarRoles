@@ -12,6 +12,9 @@ export default function WhatJobsMobileSearch({ keyword, location }: WhatJobsMobi
   return (
     <section className="mb-4 border border-[#ddd] bg-white p-1.5 lg:hidden" aria-label="Search more jobs with WhatJobs">
       <form
+        data-whatjobs-surface="job_search"
+        data-whatjobs-impression="widget"
+        data-whatjobs-search
         method="post"
         action="https://www.whatjobs.com/searchbox"
         className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-1"

@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     'solar installer skills',
   ],
   alternates: {
-    canonical: 'https://www.solarroles.com/blog/what-does-a-solar-installer-do',
+    canonical: 'https://solarroles.com/blog/what-does-a-solar-installer-do',
   },
   openGraph: {
     title: 'What Does a Solar Installer Do? (Job Description & Daily Tasks)',
     description:
       'A solar installer mounts racking, sets panels, and wires the system on the roof or ground. Here’s what the job looks like day to day in 2026.',
-    url: 'https://www.solarroles.com/blog/what-does-a-solar-installer-do',
+    url: 'https://solarroles.com/blog/what-does-a-solar-installer-do',
     siteName: 'Solar Roles',
     type: 'article',
     publishedTime: '2026-07-29T00:00:00.000Z',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     authors: ['Solar Roles'],
     images: [
       {
-        url: 'https://www.solarroles.com/og-blog.png',
+        url: 'https://solarroles.com/og-blog.png',
         width: 1200,
         height: 630,
         alt: 'What does a solar installer do?',
@@ -66,19 +66,19 @@ const articleJsonLd = {
   author: {
     '@type': 'Organization',
     name: 'Solar Roles',
-    url: 'https://www.solarroles.com',
+    url: 'https://solarroles.com',
   },
   publisher: {
     '@type': 'Organization',
     name: 'Solar Roles',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://www.solarroles.com/logo.png',
+      url: 'https://solarroles.com/logo.png',
     },
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': 'https://www.solarroles.com/blog/what-does-a-solar-installer-do',
+    '@id': 'https://solarroles.com/blog/what-does-a-solar-installer-do',
   },
 };
 
@@ -428,7 +428,7 @@ export default function Page() {
             <p>
               Generic boards mix installation with sales and consulting. A
               specialist board such as{' '}
-              <a href="https://www.solarroles.com">Solar Roles</a> keeps the
+              <a href="https://solarroles.com">Solar Roles</a> keeps the
               search focused on PV installer, electrician and O&amp;M openings.
             </p>
             <p className="!mt-12 !text-base !text-gray-600">

@@ -1,3 +1,4 @@
+import { getCanonicalJobPath } from './job-url'
 // lib/greenhouse.ts
 // ─── Greenhouse Job Board API ──────────────────────────────────────────────
 // API publique (pas de clé requise pour GET)
@@ -44,7 +45,7 @@ export async function fetchGreenhouseJobs(boardToken: string): Promise<Greenhous
 
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Solar Roles/1.0 (+https://www.solarroles.com)',
+      'User-Agent': 'Solar Roles/1.0 (+https://solarroles.com)',
       Accept: 'application/json',
     },
     next: { revalidate: 3600 },
@@ -78,7 +79,7 @@ export function normalizeGreenhouse(job: GreenhouseJob, companyName: string) {
     company: companyName,
     location: job.location?.name || '',
     description,
-    url: `/jobs/${id}`,
+    url: getCanonicalJobPath({ id, title: job.title, location: job.location?.name }),
     applyUrl: job.absolute_url,
     source: 'greenhouse' as const,
     postedAt: job.updated_at ? new Date(job.updated_at) : null,

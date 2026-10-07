@@ -15,7 +15,7 @@ import { getWorkforceSnapshot } from './_lib/workforceData'
 
 export const revalidate = 86400
 
-const CANONICAL_URL = 'https://www.solarroles.com/workforce-resources'
+const CANONICAL_URL = 'https://solarroles.com/workforce-resources'
 
 export const metadata: Metadata = {
   title:

@@ -10,7 +10,7 @@ interface ProgramRow {
 }
 
 // Swap this for your real domain once, everything below reads from it.
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/solar-installer-apprenticeship-programs";
 const PAGE_TITLE =
   "How Registered Apprenticeship Programs for Solar Installers Work";

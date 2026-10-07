@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import SolarMarketSegmentsReport from '@/components/data/SolarMarketSegmentsReport'
 
-const SITE_URL = 'https://www.solarroles.com'
+const SITE_URL = 'https://solarroles.com'
 const PAGE_PATH = '/data/battery-storage-leads-segment-specific-solar-hiring'
 const TITLE = 'Battery Storage Leads Segment-Specific Solar Hiring'
 const DESCRIPTION =

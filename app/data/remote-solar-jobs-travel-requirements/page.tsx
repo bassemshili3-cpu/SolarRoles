@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { ArrowLeft, Download } from 'lucide-react'
 import RemoteTravelTable from '@/components/data/RemoteTravelTable'
 import report from '@/data/remote-travel/report.json'
+import { prisma } from '@/lib/prisma'
+import { getCanonicalJobUrl } from '@/lib/job-url'
 
-const URL = 'https://www.solarroles.com/data/remote-solar-jobs-travel-requirements'
+const URL = 'https://solarroles.com/data/remote-solar-jobs-travel-requirements'
 const TITLE = 'Remote Solar Jobs Can Still Require 90% Travel'
 const DESCRIPTION = `${report.travelCount} of ${report.groups} remote-advertised roles reviewed by Solar Roles mentioned travel or site visits. See the requirements, source excerpts and methodology.`
 const CSV = `/data/remote-solar-travel-${report.date}.csv`
@@ -22,11 +24,11 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org', '@graph': [
     { '@type': 'Report', '@id': `${URL}#report`, headline: TITLE, description: DESCRIPTION, url: URL, image, datePublished: report.extractedAt, dateModified: report.extractedAt,
-      author: { '@type': 'Organization', name: 'Solar Roles Research', url: 'https://www.solarroles.com/data' }, publisher: { '@type': 'Organization', name: 'Solar Roles', url: 'https://www.solarroles.com' }, mainEntity: { '@id': `${URL}#dataset` } },
+      author: { '@type': 'Organization', name: 'Solar Roles Research', url: 'https://solarroles.com/data' }, publisher: { '@type': 'Organization', name: 'Solar Roles', url: 'https://solarroles.com' }, mainEntity: { '@id': `${URL}#dataset` } },
     { '@type': 'Dataset', '@id': `${URL}#dataset`, name: 'Travel disclosures in remote-advertised solar and storage roles, September 2026', description: `A reviewed snapshot of ${report.groups} employer-role combinations from ${report.recordCount} US-listed Solar Roles records. Includes remote evidence, travel wording, percentage qualifiers and source links. Not a representative estimate of US employment.`,
       url: URL, creator: { '@type': 'Organization', name: 'Solar Roles Research' }, dateModified: report.extractedAt, temporalCoverage: report.date, spatialCoverage: 'United States-listed roles',
       measurementTechnique: 'Keyword screening of stored job descriptions followed by contextual review and employer-role grouping. Stated percentages, ranges and ceilings are kept separate.',
-      distribution: { '@type': 'DataDownload', encodingFormat: 'text/csv', contentUrl: `https://www.solarroles.com${CSV}` } },
+      distribution: { '@type': 'DataDownload', encodingFormat: 'text/csv', contentUrl: `https://solarroles.com${CSV}` } },
   ],
 }
 
@@ -40,7 +42,19 @@ const categories = [
 ] as const
 const examples = ['Cypress Creek Renewables', 'Hanwha Convergence USA', 'RES', 'ENGIE'].map(company => report.rows.find(row => row.company === company && row.travelKind === 'quantified')!)
 
-export default function RemoteSolarTravelReportPage() {
+export const revalidate = 3600
+
+export default async function RemoteSolarTravelReportPage() {
+  const jobId = (url: string) => new globalThis.URL(url).pathname.split('/')[2]
+  const jobs = await prisma.job.findMany({
+    where: { id: { in: report.rows.map(row => jobId(row.jobUrl)) } },
+    select: { id: true, title: true, location: true, canonicalSlug: true },
+  })
+  const jobUrls = new Map(jobs.map(job => [job.id, getCanonicalJobUrl(job)]))
+  const rows = report.rows.map(row => ({
+    ...row,
+    jobUrl: jobUrls.get(jobId(row.jobUrl)) || row.jobUrl.replace('https://www.solarroles.com', 'https://solarroles.com'),
+  }))
   return <main className="min-h-screen bg-[#F7F7F4] px-5 py-10 text-[#1C2126] sm:px-8 md:py-14">
     <div className="mx-auto max-w-5xl">
       <Link href="/data" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#744600] hover:underline"><ArrowLeft className="h-4 w-4" aria-hidden="true" />All solar market data</Link>
@@ -87,7 +101,7 @@ export default function RemoteSolarTravelReportPage() {
             <p className="mt-4 leading-8 text-gray-700">A remote label does not establish that an employer promised zero travel. Labels can also come from a recruiting platform or the way a listing was imported. This review measures the wording available on Solar Roles; it does not determine whether an employer misled applicants.</p>
           </section>
 
-          <section id="role-comparison" className="mt-12 scroll-mt-24" aria-labelledby="roles-title"><h2 id="roles-title" className="text-2xl font-bold tracking-tight">Check the requirement behind each remote offer</h2><p className="mt-4 leading-8 text-gray-700">{report.recordCount} listing records were grouped into the {report.groups} combinations below. Open a row to read its remote signal and travel evidence. Source pages may change or close after the snapshot date.</p><RemoteTravelTable rows={report.rows.map(({id,company,title,travelKind,travelLabel,remoteEvidence,remoteSource,travelEvidence,notes,listingCount,sourceUrl,jobUrl}) => ({id,company,title,travelKind,travelLabel,remoteEvidence,remoteSource,travelEvidence,notes,listingCount,sourceUrl,jobUrl}))} /></section>
+          <section id="role-comparison" className="mt-12 scroll-mt-24" aria-labelledby="roles-title"><h2 id="roles-title" className="text-2xl font-bold tracking-tight">Check the requirement behind each remote offer</h2><p className="mt-4 leading-8 text-gray-700">{report.recordCount} listing records were grouped into the {report.groups} combinations below. Open a row to read its remote signal and travel evidence. Source pages may change or close after the snapshot date.</p><RemoteTravelTable rows={rows.map(({id,company,title,travelKind,travelLabel,remoteEvidence,remoteSource,travelEvidence,notes,listingCount,sourceUrl,jobUrl}) => ({id,company,title,travelKind,travelLabel,remoteEvidence,remoteSource,travelEvidence,notes,listingCount,sourceUrl,jobUrl}))} /></section>
 
           <section className="mt-12" aria-labelledby="candidate-title"><h2 id="candidate-title" className="text-2xl font-bold tracking-tight">Ask about nights away before accepting an interview</h2><p className="mt-4 leading-8 text-gray-700">{report.categoryCounts.not_stated} reviewed roles had no explicit travel or attendance requirement we could identify. Silence is not a no-travel guarantee. A useful follow-up is: “How many overnight trips did the person in this role take last quarter, and how long did each trip last?” Ask separately about local site visits, office days and peak construction periods.</p></section>
 

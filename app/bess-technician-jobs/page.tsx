@@ -45,7 +45,7 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
       title,
       description: 'Find Battery Energy Storage System technician openings across the US. Residential, commercial, and utility scale employers hiring now.',
     },
-    alternates: { canonical: getLandingCanonical('https://www.solarroles.com/bess-technician-jobs', params) },
+    alternates: { canonical: getLandingCanonical('https://solarroles.com/bess-technician-jobs', params) },
   }
 }
 
@@ -54,7 +54,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: 'BESS Technician Jobs',
   description: 'Battery Energy Storage System technician job listings across the United States, covering residential, commercial, and utility scale employers.',
-  url: 'https://www.solarroles.com/bess-technician-jobs',
+  url: 'https://solarroles.com/bess-technician-jobs',
 }
 
 const bessRoles = [

@@ -271,17 +271,6 @@ const canUseSSRInitialData =
   initialDataRef.current !== null
  
 
- // Build back URL preserving all current filters + current page
-  const backUrl = useMemo(() => {
-    const params = new URLSearchParams(searchParams.toString())
-    if (page > 1) {
-      params.set('page', page.toString())
-    } else {
-      params.delete('page')
-    }
-    const qs = params.toString()
-    return qs ? `/jobs?${qs}` : '/jobs'
-  }, [searchParams, page])
 
   // ── AJOUT ────────────────────────────────────────────────
   const router = useRouter()
@@ -459,7 +448,8 @@ const canUseSSRInitialData =
 
   return (
     <div>
-      <div className="mb-2 flex justify-end md:hidden">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p aria-live="polite" className="text-sm font-semibold text-slate-800">{isPlaceholderData ? 'Loading...' : (data?.count ?? 0).toLocaleString('en-US') + ((data?.count ?? 0) === 1 ? ' job' : ' jobs')}</p>
         <FilterDrawerTrigger />
       </div>
 
@@ -476,11 +466,11 @@ const canUseSSRInitialData =
                 onClick={() => togglePopularTag(tag)}
                 className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-white transition-[background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B1A2E] focus-visible:ring-offset-2 ${
                   isActive
-                    ? 'bg-[#F2A93B] shadow-[0_5px_14px_-6px_rgba(180,110,0,0.85)]'
-                    : 'bg-[#F2A93B]/60 hover:bg-[#F2A93B]/80'
+                    ? 'bg-[#0B1A2E] text-white ring-2 ring-[#F2A93B] ring-offset-1 shadow-sm'
+                    : 'bg-amber-100 !text-slate-900 hover:bg-amber-200'
                 }`}
               >
-                {tag.label}
+                {isActive && <span aria-hidden="true" className="mr-1.5">{'\u2713'}</span>}{tag.label}
               </button>
             )
           })}
@@ -503,7 +493,7 @@ const canUseSSRInitialData =
             onClick={() => sessionStorage.setItem('jobs:scrollY', String(window.scrollY))}
           >
           {firstPartyJobs.map((job: any) => (
-            <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
+            <JobCard key={job.id} job={job} />
           ))}
           {page === 1 && shouldShowWhatJobs && (
             <WhatJobsFeed
@@ -515,10 +505,10 @@ const canUseSSRInitialData =
             />
           )}
           {otherPartnerJobs.map((job: any) => (
-            <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
+            <JobCard key={job.id} job={job} />
           ))}
           {adzunaJobs.map((job: any) => (
-            <JobCard key={job.id} job={job} backUrl={backUrl} useCanonicalDetailLink={landingPageSeo} />
+            <JobCard key={job.id} job={job} />
           ))}
           </div>
         </SavedJobCards>

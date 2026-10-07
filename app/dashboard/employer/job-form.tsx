@@ -1,5 +1,7 @@
 // app/dashboard/employer/job-form.tsx
 'use client'
+import { POSTING_DESCRIPTION_MIN } from '@/lib/employerJobValidation'
+import { type CompensationType } from '@/lib/jobCompensation'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -14,7 +16,7 @@ type SalaryPeriod = 'year' | 'hour'
 
 const employmentTypes = ['Full-time', 'Part-time', 'Contract', 'Temporary', 'Internship']
 const stateOptions = Object.entries(STATES).sort(([a], [b]) => a.localeCompare(b))
-const MIN_DESCRIPTION_LENGTH = 1000
+const MIN_DESCRIPTION_LENGTH = POSTING_DESCRIPTION_MIN
 const DRAFT_KEY = 'ohMyJob_jobDraft'
 
 const fieldClass =
@@ -24,6 +26,8 @@ const inputClass =
   'h-11 text-base rounded-md border-slate-300 focus-visible:ring-[#1a2340] focus-visible:ring-offset-1'
 
 export type JobFormInitialData = {
+  compensationType?: CompensationType
+  commissionDetails?: string
   title: string
   company: string
   employmentType: string
@@ -60,6 +64,8 @@ export default function JobForm({
   const router = useRouter()
   const supabase = createClient()
 
+  const [compensationType, setCompensationType] = useState<CompensationType>(initialData?.compensationType ?? 'FIXED')
+  const [commissionDetails, setCommissionDetails] = useState(initialData?.commissionDetails ?? '')
   const [title, setTitle] = useState(initialData?.title ?? '')
   const [company, setCompany] = useState(initialData?.company ?? '')
   const [employmentType, setEmploymentType] = useState(initialData?.employmentType ?? employmentTypes[0])
@@ -74,7 +80,6 @@ export default function JobForm({
   const [notificationEmail, setNotificationEmail] = useState(initialData?.notificationEmail ?? '')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [autoSubmitting, setAutoSubmitting] = useState(false)
   const [postingPlan, setPostingPlan] = useState<PostingPlan>(plan)
   const [featureWithPartner, setFeatureWithPartner] = useState(false)
 
@@ -114,6 +119,7 @@ export default function JobForm({
 
   async function finishSubmission(payload: Record<string, unknown>) {
     const result = await submitPayload(payload)
+    if (mode === 'create') sessionStorage.removeItem(DRAFT_KEY)
     if (mode === 'create' && result.requiresCheckout) {
       await startFeaturedCheckout(result.id)
       return
@@ -145,8 +151,9 @@ export default function JobForm({
       city: values.remote ? null : values.city.trim(),
       state: resolvedStateCode,
       zipCode: values.remote ? null : values.zipCode.trim(),
-      salaryMin: Number(values.salaryMin),
-      salaryMax: Number(values.salaryMax),
+      compensationType, commissionDetails,
+      salaryMin: compensationType === 'COMMISSION_ONLY' ? null : Number(values.salaryMin),
+      salaryMax: compensationType === 'COMMISSION_ONLY' ? null : Number(values.salaryMax),
       salaryPeriod: values.salaryPeriod,
       description: values.description.trim(),
       notificationEmail: values.notificationEmail.trim(),
@@ -175,8 +182,9 @@ export default function JobForm({
     if (!values.remote && !values.zipCode.trim()) return 'Add a ZIP code.'
     if (!values.remote && !/^\d{5}(-\d{4})?$/.test(values.zipCode.trim()))
       return 'Enter a valid US ZIP code (e.g. 90210 or 90210-1234).'
-    if (!values.salaryMin || !values.salaryMax) return 'Add a salary range. It is required on every listing.'
-    if (Number(values.salaryMin) > Number(values.salaryMax))
+    if (compensationType !== 'FIXED' && !commissionDetails.trim()) return 'Describe the commission terms.'
+    if (compensationType !== 'COMMISSION_ONLY' && (!values.salaryMin || !values.salaryMax || Number(values.salaryMin) <= 0 || Number(values.salaryMax) <= 0)) return 'Add a positive base salary range.'
+    if (compensationType !== 'COMMISSION_ONLY' && Number(values.salaryMin) > Number(values.salaryMax))
       return 'Minimum salary cannot be higher than the maximum.'
     if (!values.description.trim() || values.description.trim().length < MIN_DESCRIPTION_LENGTH)
       return `Add a description of at least ${MIN_DESCRIPTION_LENGTH.toLocaleString()} characters.`
@@ -196,14 +204,14 @@ export default function JobForm({
   function saveDraft() {
     const draft: DraftPayload = {
       title, company, employmentType, remote, city, stateName, zipCode,
-      salaryMin, salaryMax, salaryPeriod, description, notificationEmail,
+      salaryMin, salaryMax, salaryPeriod, description, notificationEmail, compensationType, commissionDetails,
       plan: postingPlan, featureWithPartner,
     }
-    sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ ...draft, expiresAt: Date.now() + 24 * 60 * 60 * 1000 }))
   }
 
-  // Restore a draft saved before being sent to login, and auto-submit it —
-  // the user already clicked "Post job" once before being redirected to auth.
+  // Restore a draft saved before being sent to login for review before submission. —
+  // Drafts expire after 24 hours and never trigger publication automatically.
   useEffect(() => {
     if (mode !== 'create') return
     const raw = sessionStorage.getItem(DRAFT_KEY)
@@ -212,13 +220,12 @@ export default function JobForm({
     let draft: DraftPayload
     try {
       draft = JSON.parse(raw)
+      if (!Number.isFinite((draft as any).expiresAt) || (draft as any).expiresAt < Date.now()) throw new Error('Expired draft')
     } catch {
       sessionStorage.removeItem(DRAFT_KEY)
       return
     }
-    sessionStorage.removeItem(DRAFT_KEY)
-
-    // Prefill fields in case auto-submit fails and the user needs to retry manually.
+    // Restore fields for review and an explicit submit after authentication.
     setTitle(draft.title)
     setCompany(draft.company)
     setEmploymentType(draft.employmentType)
@@ -226,6 +233,8 @@ export default function JobForm({
     setCity(draft.city)
     setStateName(draft.stateName)
     setZipCode(draft.zipCode)
+    setCompensationType(draft.compensationType ?? 'FIXED')
+    setCommissionDetails(draft.commissionDetails ?? '')
     setSalaryMin(draft.salaryMin)
     setSalaryMax(draft.salaryMax)
     setSalaryPeriod(draft.salaryPeriod)
@@ -234,27 +243,6 @@ export default function JobForm({
     setPostingPlan(draft.plan)
     setFeatureWithPartner(draft.featureWithPartner)
 
-    const validationError = validateValues(draft)
-    if (validationError) {
-      setError(validationError)
-      return
-    }
-
-    setAutoSubmitting(true)
-    setIsSubmitting(true)
-    setPostingPlan(draft.plan)
-    setFeatureWithPartner(draft.featureWithPartner)
-    const payload = {
-      ...buildPayload(draft),
-      plan: draft.plan,
-      featureWithPartner: draft.plan === 'partner' && draft.featureWithPartner,
-    }
-    finishSubmission(payload)
-      .catch((err) => {
-        setAutoSubmitting(false)
-        setIsSubmitting(false)
-        setError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
-      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode])
 
@@ -264,6 +252,7 @@ export default function JobForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (isSubmitting) return
     setError('')
 
     const validationError = validate()
@@ -271,6 +260,7 @@ export default function JobForm({
 
     setIsSubmitting(true)
 
+    try {
     if (mode === 'create') {
       const {
         data: { user },
@@ -278,12 +268,12 @@ export default function JobForm({
 
       if (!user) {
         saveDraft()
-        router.push('/auth/login?redirectTo=/dashboard/employer/new')
+        setIsSubmitting(false)
+        router.push('/auth/login?redirectTo=' + encodeURIComponent('/dashboard/employer/new?plan=' + postingPlan))
         return
       }
     }
 
-    try {
       await finishSubmission(
         buildPayload({
           title, company, employmentType, remote, city, stateName, zipCode,
@@ -296,13 +286,6 @@ export default function JobForm({
     }
   }
 
-  if (autoSubmitting) {
-    return (
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-        <p className="text-slate-500">Preparing your listing...</p>
-      </div>
-    )
-  }
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-10 md:py-14">
@@ -344,11 +327,11 @@ export default function JobForm({
           <div className="space-y-5">
             <div>
               <FieldLabel required>Job title</FieldLabel>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Warehouse Associate" className={inputClass} />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} placeholder="e.g. Solar Sales Representative" className={inputClass} />
             </div>
             <div>
               <FieldLabel required>Company name</FieldLabel>
-              <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Acme Logistics" className={inputClass} />
+              <Input value={company} onChange={(e) => setCompany(e.target.value)} maxLength={200} placeholder="e.g. SunGrid Energy" className={inputClass} />
             </div>
             <div>
               <FieldLabel required>Employment type</FieldLabel>
@@ -422,9 +405,12 @@ export default function JobForm({
 
         <section>
           <SectionHeader number="03" title="Compensation" />
+          <label className="block mb-4 text-sm font-medium">Pay structure<select value={compensationType} onChange={e => setCompensationType(e.target.value as CompensationType)} className={fieldClass}><option value="FIXED">Fixed / base salary</option><option value="COMMISSION_ONLY">Commission only</option><option value="BASE_COMMISSION">Base + commission</option></select></label>
+          {compensationType !== 'FIXED' && <label className="block mb-4 text-sm font-medium">Commission terms<textarea maxLength={2000} value={commissionDetails} onChange={e => setCommissionDetails(e.target.value)} className="mt-2 w-full rounded border border-slate-300 p-3" placeholder="Explain rates, payment timing and any conditions. Separate estimates from guaranteed pay." /></label>}
           <div className="space-y-4">
+            {compensationType !== 'COMMISSION_ONLY' && <>
             <div className="flex items-center justify-between gap-4 flex-wrap">
-              <FieldLabel required className="mb-0">Salary range</FieldLabel>
+              <FieldLabel required className="mb-0">Base salary range</FieldLabel>
               <div className="flex gap-0.5 bg-slate-100 rounded-md p-0.5">
                 {(['year', 'hour'] as SalaryPeriod[]).map((period) => (
                   <button
@@ -443,15 +429,16 @@ export default function JobForm({
             <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-center">
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">$</span>
-                <Input type="number" value={salaryMin} onChange={(e) => setSalaryMin(e.target.value)} placeholder="Min" className={`${inputClass} pl-8`} />
+                <Input type="number" aria-label="Minimum base salary" min="1" value={salaryMin} onChange={(e) => setSalaryMin(e.target.value)} placeholder="Min" className={`${inputClass} pl-8`} />
               </div>
               <ArrowRight size={14} className="text-slate-300" />
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">$</span>
-                <Input type="number" value={salaryMax} onChange={(e) => setSalaryMax(e.target.value)} placeholder="Max" className={`${inputClass} pl-8`} />
+                <Input type="number" aria-label="Maximum base salary" min="1" value={salaryMax} onChange={(e) => setSalaryMax(e.target.value)} placeholder="Max" className={`${inputClass} pl-8`} />
               </div>
             </div>
-            <p className="text-sm text-slate-400">Required on every listing. Show candidates what you actually pay.</p>
+            <p className="text-sm text-slate-400">Show the guaranteed base pay. Commission is described separately.</p>
+            </>}
           </div>
         </section>
 
@@ -462,7 +449,7 @@ export default function JobForm({
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell candidates about the role, what a typical day looks like, who they'd work with, and what makes this a great opportunity..."
+              maxLength={50000} placeholder="Tell candidates about the role, what a typical day looks like, who they'd work with, and what makes this a great opportunity..."
               className="w-full bg-white border border-slate-300 rounded-md text-base text-[#1a2340] placeholder:text-slate-500 focus:border-[#1a2340] focus:ring-0 outline-none transition-colors px-3.5 min-h-[320px] py-3 leading-relaxed resize-y"
             />
             <div className="mt-2.5 flex items-center justify-between gap-4 flex-wrap">

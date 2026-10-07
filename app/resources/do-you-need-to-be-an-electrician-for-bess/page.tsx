@@ -6,7 +6,7 @@ import { articleCss } from "../_shared/article-styles";
 
 const sora = Sora({ subsets: ["latin"], weight: ["700", "800"], display: "swap" });
 
-const SITE_URL = "https://www.solarroles.com";
+const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/do-you-need-to-be-an-electrician-for-bess";
 const PAGE_TITLE =
   "Do You Need to Be an Electrician First? BESS Technician Entry Paths (2026)";

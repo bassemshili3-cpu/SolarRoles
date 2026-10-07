@@ -1,3 +1,5 @@
+import { getPublicJobLink } from '@/lib/job-url'
+import { hasAccountPermission } from '@/lib/accountPermission'
 // app/api/saved-jobs/route.ts
 import { createServerSupabase } from '@/lib/supabase-server'
 import { prisma } from '@/lib/prisma'
@@ -10,6 +12,7 @@ export async function GET(request: Request) {
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  if (!(await hasAccountPermission(supabase, user.id, 'candidate'))) return NextResponse.json({ error: 'Saved jobs require a candidate account.' }, { status: 403 })
 
   const { data: savedRows, error } = await supabase
     .from('saved_jobs')
@@ -36,6 +39,8 @@ export async function GET(request: Request) {
     select: {
       id: true,
       title: true,
+      canonicalSlug: true,
+      source: true,
       company: true,
       location: true,
       salary: true,
@@ -58,7 +63,7 @@ export async function GET(request: Request) {
     .map((id: string) => jobs.find(j => j.id === id))
     .filter(Boolean)
 
-  return NextResponse.json({ jobs: sorted, savedAt })
+  return NextResponse.json({ jobs: sorted.map(job => job ? { ...job, url: getPublicJobLink(job) } : job), savedAt })
 }
 
 export async function POST(request: Request) {
@@ -68,8 +73,10 @@ export async function POST(request: Request) {
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  if (!(await hasAccountPermission(supabase, user.id, 'candidate'))) return NextResponse.json({ error: 'Saved jobs require a candidate account.' }, { status: 403 })
 
-  const { job_id } = await request.json()
+  const body = await request.json().catch(() => null)
+  const job_id = body?.job_id
 
   if (typeof job_id !== 'string' || !job_id.trim()) {
     return NextResponse.json({ error: 'Invalid job ID' }, { status: 400 })
@@ -84,8 +91,8 @@ export async function POST(request: Request) {
     .from('saved_jobs')
     .insert({ user_id: user.id, job_id })
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error && error.code !== '23505') {
+    return NextResponse.json({ error: 'Could not update saved jobs.' }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
@@ -98,6 +105,7 @@ export async function DELETE(request: Request) {
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  if (!(await hasAccountPermission(supabase, user.id, 'candidate'))) return NextResponse.json({ error: 'Saved jobs require a candidate account.' }, { status: 403 })
 
   const { searchParams } = new URL(request.url)
   const job_id = searchParams.get('job_id')
@@ -112,8 +120,8 @@ export async function DELETE(request: Request) {
     .eq('user_id', user.id)
     .eq('job_id', job_id)
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error && error.code !== '23505') {
+    return NextResponse.json({ error: 'Could not update saved jobs.' }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })

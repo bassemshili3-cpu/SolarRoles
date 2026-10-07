@@ -30,7 +30,8 @@ import { CERTIFICATIONS } from '../app/certifications/[slug]/certifications-data
 import { submitUrls, getIndexNowKey, getSiteHost, isIndexNowConfigured } from '../lib/indexnow';
 import { getActiveAtsJobUrls } from '../lib/job-db';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solarroles.com';
+import { SITE_URL } from '../lib/site-url';
+const BASE_URL = SITE_URL;
 
 async function main() {
   console.log('🚀 Starting one-shot IndexNow submission...\n');
