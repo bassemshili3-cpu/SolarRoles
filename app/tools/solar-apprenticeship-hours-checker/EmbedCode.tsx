@@ -40,7 +40,7 @@ function buildEmbedCode(state: string, stateOnly: boolean, accent: string) {
       target="_blank"
       rel="noopener"
       style="color:${accent || DEFAULT_ACCENT};font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:3px"
-    >Open the full checker &rarr;</a>
+    >Open the full checker</a>
   </div>
   <iframe
     id="solarroles-hours-checker"
@@ -108,7 +108,7 @@ function buildBadgeCode(state: string, stateName: string, stateOnly: boolean, ac
 >
   <span style="display:block;margin-bottom:6px;color:${accent || DEFAULT_ACCENT};font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Free tool from Solar Roles</span>
   <strong style="display:block;font-size:16px;line-height:1.4">${headline}</strong>
-  <span style="display:block;margin-top:9px;color:${accent || DEFAULT_ACCENT};font-size:13px;font-weight:700">Open the checker &rarr;</span>
+  <span style="display:block;margin-top:9px;color:${accent || DEFAULT_ACCENT};font-size:13px;font-weight:700">Open the checker</span>
 </a>`
 }
 
@@ -344,7 +344,7 @@ export default function EmbedCode() {
                     : 'Solar workers: check if your hours count'}
                 </strong>
                 <span className="mt-2 block text-[13px] font-bold" style={{ color: effectiveAccent }}>
-                  Open the checker <span aria-hidden="true">→</span>
+                  Open the checker
                 </span>
               </a>
             </div>

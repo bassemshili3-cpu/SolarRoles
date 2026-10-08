@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AffiliateLink } from '@/components/click_affiliate_link';
 
 const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-pvis-vs-pvip";
@@ -37,7 +36,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-08",
+      dateModified: "2026-10-08",
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
     {
@@ -315,20 +314,9 @@ const css = `
   text-align: center;
 }
 .sr2-dual-cta-card .t { font-size: 13.5px; font-weight: 800; color: var(--navy-900); margin-bottom: 10px; }
-.sr2-article a.sr2-heatspring-btn {
-  display: inline-block;
-  padding: 10px 18px;
-  background: var(--gold-500);
-  color: #121010 !important;
-  font-weight: 800;
-  font-size: 13.5px;
-  border-radius: 6px;
-  text-decoration: none;
-  border-bottom: none;
-  transition: background .15s;
-}
-.sr2-article a.sr2-heatspring-btn:hover { background: var(--gold-600); color: #fff !important; border-bottom: none; }
-.sr2-heatspring-disclosure { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-400); text-align: center; }
+
+
+
 /* ── SIDEBAR ──────────────────────────────────────────────────────── */
 .sr2-sidebar { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 18px; }
 .sr2-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
@@ -384,9 +372,7 @@ export default function NabcepPvisVsPvip() {
         <p className="sub">{PAGE_DESCRIPTION}</p>
       </div>
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 8 August, 2026</span>
-        <span className="dot" />
-        <span className="changes">This page contains affiliate links. We may earn a commission at no additional cost to you</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
       </div>
 
       <div className="sr2-shell">
@@ -413,12 +399,7 @@ export default function NabcepPvisVsPvip() {
         <article className="sr2-article">
           <h2 id="confusion" className="sr2-first"><span className="n">01</span>Why the Confusion Exists</h2>
           <p>
-            Installers and training providers often struggle to explain the
-            difference between PV Installer Specialist and PV Installation
-            Professional. NABCEP does not publish a direct comparison on its
-            website. Instead, each credential has a separate page with its own
-            requirements and Job Task Analysis. Neither page explains which
-            credential fits a particular career goal.
+            PVIS concentrates on installation; PVIP covers a wider set of PV responsibilities. Both are professional certifications with experience requirements. Someone applying for a first helper or trainee job will usually need supervised work and site training before either credential becomes a practical target.
           </p>
           <p>
             <strong>PVIP is the broader credential and includes the PVIS
@@ -514,48 +495,21 @@ export default function NabcepPvisVsPvip() {
             built for installation work.
           </p>
           <p>
-            Industry materials often call PVIP the &quot;gold standard.&quot; Of
-            these two credentials, it is the one that covers the full scope
-            employers associate with a lead role.
+            An electrician or experienced technician may already have relevant safety and technical education, but still needs to match it to NABCEP&apos;s categories. Neither credential replaces the electrical license or supervision required where the work takes place.
           </p>
 
           <h2 id="choose"><span className="n">05</span>Which One to Choose</h2>
           <ul>
             <li>Your job is purely installation: running conductors, racking, and mounting. You do not design systems or sign off on commissioning. Choose <strong>PVIS</strong>.</li>
             <li>You want to move toward lead installer, foreman, or eventually run your own crew or business → <strong>PVIP</strong>.</li>
-            <li>You&apos;re not sure yet which direction your role is heading → PVIP is the safer target, since it already includes what PVIS tests for.</li>
-            <li>You want the faster, cheaper credential to add now and can pursue PVIP later → PVIS at 24 training hours is quicker to complete than PVIP&apos;s 58.</li>
+            <li>If your next role is undecided, compare its responsibilities and named credential requirements before committing to either application.</li>
+            <li>PVIS has fewer qualifying training hours, but that alone does not establish a lower total cost or a shorter route to certification.</li>
           </ul>
 
           <p>
-            HeatSpring runs NABCEP-approved prep for both certifications,
-            built against each credential&apos;s current Job Task Analysis.
+            The <a href="https://www.nabcep.org/certifications/nabcep-fees/" target="_blank" rel="noopener noreferrer">NABCEP fee schedule</a> lists the same application and exam charges for PVIS and PVIP: $125 and $375 respectively. Coursework is separate. An employer seeking a particular credential may reimburse those costs; confirm whether that includes the exam and any retake. Once eligibility is clear, use the credential&apos;s Job Task Analysis for self-study and choose additional instruction for the subjects you need to learn.
           </p>
-          <div className="sr2-dual-cta">
-            <div className="sr2-dual-cta-card">
-              <div className="t">PVIS Prep Course</div>
-              <AffiliateLink
-                href="https://www.heatspring.com/courses/nabcep-pv-installer-specialist-pvis-certification-prep?aff_id=9f_wlq"
-                offerName="nabcep_pvis"
-                className="sr2-heatspring-btn"
-              >
-                See PVIS Course
-              </AffiliateLink>
-            </div>
-            <div className="sr2-dual-cta-card">
-              <div className="t">PVIP Prep Course</div>
-              <AffiliateLink
-                href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
-                offerName="nabcep_pvip"
-                className="sr2-heatspring-btn"
-              >
-                See PVIP Course
-              </AffiliateLink>
-            </div>
-          </div>
-          <p className="sr2-heatspring-disclosure">
-            * We may earn a commission if you enroll through these links, at no extra cost to you.
-          </p>
+
 
           <h2 id="mistakes"><span className="n">06</span>Common Mistakes</h2>
           <ul className="sr2-downsides">
@@ -577,7 +531,7 @@ export default function NabcepPvisVsPvip() {
               Board Eligible status guide
             </Link>
             {" "}explains how to take the exam before completing your field
-            hours. Once certified, browse current{" "}
+            hours. Browse current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
             </Link>{" "}

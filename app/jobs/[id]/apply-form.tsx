@@ -5,11 +5,12 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CheckCircle2 } from 'lucide-react'
+import ApplicationResumePicker, { type ApplicationResume } from '@/components/ApplicationResumePicker'
 
 export default function ApplyForm({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [resumeUrl, setResumeUrl] = useState('')
+  const [resume, setResume] = useState<ApplicationResume>({ mode: 'link', url: '' })
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -21,22 +22,23 @@ export default function ApplyForm({ jobId, jobTitle }: { jobId: string; jobTitle
 
     if (!name.trim()) return setError('Add your name.')
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError('Enter a valid email address.')
-    if (!resumeUrl.trim()) return setError('Add a link to your resume.')
-    if (!/^https?:\/\//.test(resumeUrl.trim())) {
+    if (resume.mode === 'link' && !resume.url.trim()) return setError('Attach a resume or add a resume link.')
+    if (resume.mode === 'link' && !/^https?:\/\//.test(resume.url.trim())) {
       return setError('The resume link must start with http:// or https://')
     }
 
     setIsSubmitting(true)
     try {
-      const res = await fetch(`/api/jobs/${jobId}/apply`, {
+      const body = new FormData()
+      body.set('name', name.trim())
+      body.set('email', email.trim())
+      body.set('message', message.trim())
+      if (resume.mode === 'file') body.set('resumeFile', resume.file)
+      else if (resume.mode === 'saved') body.set('resumePath', resume.path)
+      else body.set('resumeUrl', resume.url.trim())
+      const res = await fetch(`/api/jobs/${encodeURIComponent(jobId)}/apply`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          resumeUrl: resumeUrl.trim(),
-          message: message.trim() || undefined,
-        }),
+        body,
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
@@ -93,19 +95,7 @@ export default function ApplyForm({ jobId, jobTitle }: { jobId: string; jobTitle
         />
       </div>
 
-      <div>
-        <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Resume link</label>
-        <Input
-          type="url"
-          value={resumeUrl}
-          onChange={(e) => setResumeUrl(e.target.value)}
-          placeholder="https://drive.google.com/..."
-          className="h-11 rounded-xl"
-        />
-        <p className="text-xs text-gray-400 mt-1">
-          Link to your resume (Google Drive, Dropbox, LinkedIn, etc.)
-        </p>
-      </div>
+      <ApplicationResumePicker value={resume} onChange={setResume} disabled={isSubmitting} />
 
       <div>
         <label className="text-sm font-semibold text-gray-700 mb-1.5 block">

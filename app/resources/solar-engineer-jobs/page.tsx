@@ -32,7 +32,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-12",
+      dateModified: "2026-10-08",
       author: [{ "@type": "Organization", name: "Solar Roles" }],
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
@@ -122,7 +122,7 @@ export default function SolarEngineerJobs() {
       </div>
 
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 12 August, 2026</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
       </div>
 
       <div className="sr2-shell">
@@ -161,7 +161,7 @@ export default function SolarEngineerJobs() {
           </p>
 
           <h2 id="mapping"><span className="n">02</span>Job Title Mapping Table</h2>
-         
+
           <table style={{ width: "100%", borderCollapse: "collapse", margin: "20px 0 28px", fontSize: "14px" }}>
             <thead>
               <tr style={{ background: "#0B1A2E", color: "#fff" }}>
@@ -212,8 +212,8 @@ export default function SolarEngineerJobs() {
           </p>
           <p><strong>Day-to-day:</strong> Build the system layout, then produce a permit-ready drawing set. Residential teams often combine this work with sales engineering.</p>
           <p><strong>Software commonly required:</strong> PVsyst is common for production modeling. Aurora or Helioscope usually covers layout work.</p>
-          <p><strong>Certifications commonly requested:</strong> NABCEP PV Installation Professional (PVIP) appears on some postings. EIT is usually a plus rather than a requirement at this level.</p>
-          <p><strong>Degree requirement:</strong> Many residential and small-commercial roles accept an associate degree with software and field experience. Utility-scale employers are more likely to require a bachelor's degree in electrical or mechanical engineering.</p>
+          <p><strong>Certifications commonly requested:</strong> NABCEP may be preferred as evidence of PV knowledge; it does not replace engineering licensure. EIT is an early licensure milestone, not authority to seal drawings. A designer working under review may not need a PE, while the person responsible for a required engineering seal does.</p>
+          <p><strong>Degree requirement:</strong> Residential design-technician openings may accept an associate degree, drafting experience or an installer/electrician background with demonstrable CAD skills. A sample plan set or production model can show those skills. Engineering roles with broader design responsibility more often ask for a relevant bachelor&apos;s degree; the posting should distinguish a required degree from preferred education.</p>
           <p><strong>Salary range:</strong> Job postings place residential design around $60,000–$85,000. Commercial and utility design runs about $80,000–$110,000. Senior or PE-licensed roles can reach $110,000–$140,000.</p>
           <p><strong>Scope skew:</strong> Residential and small-commercial, with utility-scale roles at larger EPCs.</p>
 
@@ -226,7 +226,7 @@ export default function SolarEngineerJobs() {
           <p><strong>Day-to-day:</strong> Own the system architecture and review designs produced by others. The central question is whether the project will work and meet code.</p>
           <p><strong>Software commonly required:</strong> PVsyst and AutoCAD are common. Utility-scale roles may also use PVCase or PlantPredict.</p>
           <p><strong>Certifications commonly requested:</strong> NABCEP PVIP is frequently listed. EIT/PE track is more common here than in residential design. Some postings explicitly say "PE preferred" or "EIT required."</p>
-          <p><strong>Degree requirement:</strong> A bachelor's degree in electrical engineering is the most common requirement. Structural-heavy roles may accept mechanical engineering. Equivalent experience appears less often than in residential design.</p>
+          <p><strong>Degree requirement:</strong> Electrical engineering is a common background for system architecture; mechanical or civil/structural expertise fits other parts of the design. Technician experience can support a move into the team, but does not automatically satisfy a degree or PE requirement explicitly attached to the position.</p>
           <p><strong>Salary range:</strong> Postings show $80,000–$120,000 for mid-level roles. Senior or PE-licensed positions reach $110,000–$150,000+. Large utility EPCs sit near the top.</p>
           <p><strong>Scope skew:</strong> Commercial and utility-scale.</p>
 
@@ -237,7 +237,7 @@ export default function SolarEngineerJobs() {
           <p><strong>Day-to-day:</strong> Resolve site questions and coordinate changes once construction starts. Smaller companies may combine this role with design work.</p>
           <p><strong>Software commonly required:</strong> AutoCAD and a construction-management platform such as Procore are common. Design software matters less here.</p>
           <p><strong>Certifications commonly requested:</strong> NABCEP PVIP is a plus. OSHA 30 is frequently required for site work. EIT/PE is less common unless the role includes stamping responsibility.</p>
-          <p><strong>Degree requirement:</strong> Civil, mechanical or electrical engineering is the usual degree path. Some postings accept construction management or equivalent field experience.</p>
+          <p><strong>Degree requirement:</strong> Civil, mechanical or electrical engineering and construction management are common routes. An experienced electrician or site technician may qualify where the employer accepts equivalent field experience and the job centers on coordination, drawings and RFIs. That route does not confer authority to perform regulated engineering independently.</p>
           <p><strong>Salary range:</strong> Mid-level postings run about $70,000–$100,000. Senior project engineers at utility-scale EPCs reach $95,000–$130,000.</p>
           <p><strong>Scope skew:</strong> Commercial and utility-scale, with some large residential builders hiring project engineers for multi-site rollouts.</p>
 
@@ -248,7 +248,7 @@ export default function SolarEngineerJobs() {
           <p><strong>Day-to-day:</strong> Design the electrical side of the project and prepare utility interconnection work. Utility-scale roles can include substation coordination.</p>
           <p><strong>Software commonly required:</strong> AutoCAD Electrical and ETAP are common. PVsyst appears less often in this electrical-engineering track.</p>
           <p><strong>Certifications commonly requested:</strong> EIT is frequent. Stamping roles often prefer or require a PE. NABCEP PVIP remains secondary to those electrical credentials.</p>
-          <p><strong>Degree requirement:</strong> A BS in electrical engineering from an ABET-accredited program is the standard requirement. This is the one solar engineering category where the degree is genuinely hard to bypass — PE-track roles require it by definition.</p>
+          <p><strong>Degree requirement:</strong> Employers commonly seek a BS in electrical engineering, often from an ABET-accredited program. Licensure requirements are set by the jurisdiction, including any alternative education route; a PE track does not have one universal degree rule.</p>
           <p><strong>Salary range:</strong> EIT-level postings run about $80,000–$115,000. PE-licensed roles reach $110,000–$150,000+. Large EPCs and utilities sit near the top.</p>
           <p><strong>Scope skew:</strong> Commercial and utility-scale, with some residential companies hiring electrical engineers for interconnection-heavy markets.</p>
 
@@ -264,7 +264,7 @@ export default function SolarEngineerJobs() {
             and plumbing design than PV electrical design.
           </p>
           <p>
-            If you're interested in thermal, the best advice is to pursue a mechanical engineering background and look for companies with a thermal product line.
+            Mechanical-engineering study fits thermal-system design. HVAC, plumbing or engineering-technology experience may lead to technician and drafting work, with engineering review where required. PV software proficiency alone does not demonstrate competence in fluid flow or heat-transfer calculations.
           </p>
 
           <h2 id="bess"><span className="n">08</span>BESS Engineer</h2>
@@ -274,7 +274,7 @@ export default function SolarEngineerJobs() {
             commercial and utility-scale generation.
           </p>
           <p>
-            A BESS Engineer designs the storage side of a project: battery sizing and the controls that dispatch it. Utility-scale roles can also include medium-voltage integration.
+            A BESS Engineer sizes storage and designs its electrical integration or control strategy. Electrical, controls and power-systems engineering are relevant backgrounds. A technician may enter through testing or commissioning support, but a role owning protection studies or sealed design documents may require an engineering degree and the appropriate professional license.
           </p>
           <p>
             Our guide explains <Link href="/resources/do-you-need-to-be-an-electrician-for-bess">BESS technician requirements</Link>.
@@ -319,9 +319,9 @@ export default function SolarEngineerJobs() {
             traditional tracks. Four paths appear regularly:
           </p>
           <ul>
-            <li><strong>Technician → Junior Design Engineer → Design Engineer → Senior Design Engineer:</strong> The most common non-degree path. Field experience plus software proficiency (PVsyst, Aurora, Helioscope) plus NABCEP certification can substitute for a degree at many residential and small-commercial companies.</li>
+            <li><strong>Technician → Junior Design Engineer → Design Engineer → Senior Design Engineer:</strong> The most common non-degree path. Some residential design roles accept field experience and demonstrated software skills without a specialized degree. NABCEP may be useful where requested; it is not a substitute for a legally required PE license.</li>
             <li><strong>Design Engineer → Project Engineer → Project Manager:</strong> A lateral move that trades design depth for construction coordination. Project Engineers who can read drawings, manage RFIs, and keep schedules on track often move into project management within 2–4 years.</li>
-            <li><strong>Design Engineer → Systems Engineer → PE-licensed Senior Engineer:</strong> The degree-required track. Systems engineering roles at EPCs and utilities lead toward PE licensure and the highest salaries in the field.</li>
+            <li><strong>Design Engineer → Systems Engineer → PE-licensed Senior Engineer:</strong> A common engineering-degree route. PE eligibility still depends on the education, examinations and experience accepted by the relevant state board.</li>
             <li><strong>Electrical Engineer → Solar Electrical Engineer → Utility Interconnection / Grid Engineer:</strong> Electrical engineers can specialize into interconnection and grid integration, which is one of the most in-demand niches as solar penetration grows.</li>
           </ul>
           <p>
@@ -331,25 +331,15 @@ export default function SolarEngineerJobs() {
           </p>
 
           <h2 id="degree"><span className="n">11</span>Do You Need an Engineering Degree?</h2>
+
           <p>
-            <strong>It really depends on the role.</strong>
+            A candidate without a specialized degree can look for drafting, design-technician or project-support openings that explicitly accept equivalent experience. Demonstrate the tools named in the posting through relevant work samples. Buying a software course or NABCEP prep package does not remove a degree requirement from another role.
           </p>
           <p>
-            Many residential and small-commercial postings accept a technician
-            background with software skills and NABCEP certification. Without a
-            four-year degree, candidates need evidence of PVsyst or Aurora
-            proficiency. Field experience and knowledge of string sizing and
-            NEC basics also matter.
+            Systems and electrical-engineering roles commonly seek engineering graduates. <a href="https://ncees.org/licensure/" target="_blank" rel="noopener noreferrer">NCEES&apos;s licensure overview</a> points applicants to the state or territory board, which decides the education and experience required for a PE. Check that route before assuming an associate degree either qualifies or permanently excludes you.
           </p>
           <p>
-            For systems engineering and utility-scale roles, a BS in electrical or mechanical engineering is the standard requirement. PE-track roles require an ABET-accredited degree by definition.
-          </p>
-          <p>
-            An associate degree in engineering technology can open residential
-            design when paired with NABCEP and software skills. Experience can
-            then lead to commercial work. Without a bachelor's degree, the
-            practical ceiling often arrives around senior design engineer,
-            before the PE-track systems roles.
+            An associate degree in engineering technology can support entry into drafting, testing and design support. Later responsibilities depend on the employer, further education and any licensing requirements. There is no single career ceiling attached to the degree across every state and solar company.
           </p>
 
           <h2 id="faq"><span className="n">12</span>FAQ</h2>
@@ -440,7 +430,7 @@ export default function SolarEngineerJobs() {
             <ul className="sr2-badges">
               <li className="sr2-badge">Real job title mapping</li>
               <li className="sr2-badge">Salary ranges from postings</li>
-             
+
             </ul>
           </div>
         </aside>

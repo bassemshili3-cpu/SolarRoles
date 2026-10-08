@@ -931,7 +931,7 @@ function safeJsonLd(data: unknown): string {
         rel="noopener sponsored"
         className="self-start text-sm font-semibold text-[#B45309] underline hover:text-[#92400E] sm:shrink-0 sm:self-auto"
       >
-        {cert.heatspringCtaLabel} →
+        {cert.heatspringCtaLabel}
       </a>
     </div>
     <p className="mt-2 text-xs text-[#B45309]/70">
@@ -1032,7 +1032,7 @@ function safeJsonLd(data: unknown): string {
 
                       >
 
-                        See the full {stateName} job market report →
+                        See the full {stateName} job market report
 
                       </Link>
 
@@ -1046,7 +1046,7 @@ function safeJsonLd(data: unknown): string {
 
                         >
 
-                          {roleMatch.label} salaries by state →
+                          {roleMatch.label} salaries by state
 
                         </Link>
 

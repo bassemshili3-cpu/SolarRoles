@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, MapPinned } from 'lucide-react'
+import { MapPinned } from 'lucide-react'
 import { getWorkforceSnapshot } from '../_lib/workforceData'
 import {
   MethodologyNote,
@@ -111,7 +111,7 @@ export default async function SolarJobMarketByStatePage() {
                 <div className="min-w-0">
                   <Link href={href} className="group inline-flex items-center gap-2 font-medium text-gray-950 hover:text-blue-700">
                     <span>{state.name}</span>
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-gray-300 transition group-hover:translate-x-0.5 group-hover:text-blue-700" />
+
                   </Link>
                   <p className="mt-0.5 text-xs text-gray-400">
                     {state.code} · {hasDetailedPage ? 'Detailed state data' : 'Live jobs search'}
@@ -160,7 +160,7 @@ export default async function SolarJobMarketByStatePage() {
           Detailed state pages report leading employers, advertised titles, posted pay and employment types. The career-pathway reference supplies an occupational framework for interpreting those titles. A normalized state-level role-family distribution is not currently published.
         </p>
         <Link href="/workforce-resources/solar-career-pathways" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-300 hover:text-blue-200">
-          Open the career-pathways map <ArrowRight className="h-4 w-4" />
+          Open the career-pathways map
         </Link>
       </section>
 

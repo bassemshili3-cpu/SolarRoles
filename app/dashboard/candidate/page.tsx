@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import ProfileAvatar from '@/components/ProfileAvatar'
 
 const RESUME_MAX_BYTES = 5 * 1024 * 1024
 const RESUME_TYPES: Record<string, string> = {
@@ -65,6 +66,9 @@ export default function CandidateDashboard() {
   const [uploading, setUploading] = useState(false)
   const [resume, setResume] = useState<ResumeFile | null>(null)
   const [resumeError, setResumeError] = useState('')
+  const [pendingResume, setPendingResume] = useState<File | null>(null)
+  const [resumeSaved, setResumeSaved] = useState(false)
+  const [removingResume, setRemovingResume] = useState(false)
   const [loadingResume, setLoadingResume] = useState(true)
 
   useEffect(() => {
@@ -112,7 +116,7 @@ export default function CandidateDashboard() {
         sortBy: { column: 'created_at', order: 'desc' },
       })
       if (error) throw error
-      let latest = data?.find(file => file.name !== '.emptyFolderPlaceholder')
+      let latest = data?.find(file => file.id && file.name !== '.emptyFolderPlaceholder')
       let path = latest ? `${userId}/${latest.name}` : ''
       let displayName = latest?.name.replace(/^\d+-/, '') || ''
 
@@ -124,7 +128,7 @@ export default function CandidateDashboard() {
           sortBy: { column: 'created_at', order: 'desc' },
         })
         if (legacyError) throw legacyError
-        latest = legacy?.find(file => file.name.startsWith(`${userId}-`))
+        latest = legacy?.find(file => file.id && file.name.startsWith(`${userId}-`))
         if (latest) {
           path = `public/${latest.name}`
           displayName = latest.name.slice(userId.length + 1).replace(/^\d+-/, '')
@@ -159,11 +163,13 @@ export default function CandidateDashboard() {
     setAlerts(prev => prev.filter(a => a.id !== id))
   }
 
-  const uploadResume = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const selectResume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     e.target.value = ''
-    if (!file || !user || uploading) return
+    if (!file || !user || uploading || removingResume) return
     setResumeError('')
+    setResumeSaved(false)
+    setPendingResume(null)
     const extension = file.name.split('.').pop()?.toLowerCase() || ''
     const contentType = RESUME_TYPES[extension]
     if (!contentType) {
@@ -174,6 +180,15 @@ export default function CandidateDashboard() {
       setResumeError('The file must be 5 MB or smaller.')
       return
     }
+    setPendingResume(file)
+  }
+
+  const uploadResume = async () => {
+    const file = pendingResume
+    if (!file || !user || uploading || removingResume) return
+    const extension = file.name.split('.').pop()?.toLowerCase() || ''
+    const contentType = RESUME_TYPES[extension]
+    setResumeError('')
     setUploading(true)
     try {
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
@@ -184,10 +199,53 @@ export default function CandidateDashboard() {
       const { data: signed, error: signError } = await storage.createSignedUrl(`${user.id}/${name}`, 3600)
       if (signError || !signed) throw signError || new Error('Could not open resume')
       setResume({ name: file.name, url: signed.signedUrl, isPdf: extension === 'pdf' })
+      setPendingResume(null)
+      setResumeSaved(true)
     } catch (error) {
       setResumeError(error instanceof Error ? error.message : 'Could not upload your resume.')
     } finally {
       setUploading(false)
+    }
+  }
+
+  const removeResume = async () => {
+    if (!user || uploading || removingResume) return
+    setRemovingResume(true)
+    setResumeError('')
+    setResumeSaved(false)
+    try {
+      const storage = supabase.storage.from('resumes')
+      const paths: string[] = []
+      for (const folder of [user.id, 'public']) {
+        for (let offset = 0; ; offset += 100) {
+          const { data, error } = await storage.list(folder, {
+            limit: 100,
+            offset,
+            sortBy: { column: 'name', order: 'asc' },
+            ...(folder === 'public' ? { search: `${user.id}-` } : {}),
+          })
+          if (error) throw error
+          for (const file of data || []) {
+            if (!file.id || file.name === '.emptyFolderPlaceholder') continue
+            if (folder === 'public' && !file.name.startsWith(`${user.id}-`)) continue
+            paths.push(`${folder}/${file.name}`)
+          }
+          if (!data || data.length < 100) break
+        }
+      }
+      for (let start = 0; start < paths.length; start += 100) {
+        const batch = paths.slice(start, start + 100)
+        const { data, error } = await storage.remove(batch)
+        if (error) throw error
+        if (data?.length !== batch.length) throw new Error('Some resume files could not be removed. Please try again.')
+      }
+      setResume(null)
+      setPendingResume(null)
+    } catch (error) {
+      await loadResume(user.id)
+      setResumeError(error instanceof Error ? error.message : 'Could not remove your resume. Please try again.')
+    } finally {
+      setRemovingResume(false)
     }
   }
 
@@ -201,7 +259,7 @@ export default function CandidateDashboard() {
     return (
       <div className="min-h-screen bg-[#f6f7f9] flex items-center justify-center">
         <div className="flex items-center gap-2 text-gray-400 text-sm">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-[#2B4ACB] rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-gray-200 border-t-[#92400E] rounded-full animate-spin" />
           Loading...
         </div>
       </div>
@@ -212,12 +270,6 @@ export default function CandidateDashboard() {
 
   const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'You'
   const firstName = displayName.split(' ')[0]
-  const initials = displayName
-    .split(' ')
-    .map((n: string) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
   const memberSince = new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   const activeAlerts = alerts.filter(a => a.active)
@@ -232,21 +284,6 @@ export default function CandidateDashboard() {
 
   return (
     <div className="min-h-screen bg-[#f6f7f9]">
-      {/* Top bar */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="font-bold text-[#1a2340]">
-            Solar <span className="text-[#2B4ACB]">Roles</span>
-          </Link>
-          <div className="flex items-center gap-5">
-            <span className="text-sm text-gray-500 hidden sm:block">{user.email}</span>
-            <button onClick={signOut} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-              Sign out
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Mobile tab bar */}
       <div className="md:hidden bg-white border-b border-gray-200 overflow-x-auto">
         <div className="flex min-w-max px-2">
@@ -256,7 +293,7 @@ export default function CandidateDashboard() {
               onClick={() => setTab(item.id)}
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 tab === item.id
-                  ? 'border-[#2B4ACB] text-[#2B4ACB]'
+                  ? 'border-[#B45309] bg-gradient-to-r from-amber-100 to-orange-100 text-[#92400E]'
                   : 'border-transparent text-gray-500 hover:text-gray-800'
               }`}
             >
@@ -276,9 +313,7 @@ export default function CandidateDashboard() {
           {/* Desktop sidebar */}
           <aside className="hidden md:flex flex-col w-52 flex-shrink-0 gap-3">
             <div className="bg-white border border-gray-200 rounded-lg p-4">
-              <div className="w-10 h-10 rounded-full bg-[#1a2340] text-white text-sm font-bold flex items-center justify-center mb-3">
-                {initials}
-              </div>
+              <ProfileAvatar user={user} className="w-10 h-10 mb-3" />
               <p className="font-semibold text-gray-900 text-sm truncate">{displayName}</p>
               <p className="text-xs text-gray-400 mt-0.5">Since {memberSince}</p>
             </div>
@@ -292,7 +327,7 @@ export default function CandidateDashboard() {
                     i < navItems.length - 1 ? 'border-b border-gray-100' : ''
                   } ${
                     tab === item.id
-                      ? 'bg-[#eef2ff] text-[#2B4ACB] font-medium'
+                      ? 'bg-gradient-to-r from-amber-100 to-orange-100 text-[#92400E] font-medium'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -301,7 +336,7 @@ export default function CandidateDashboard() {
                     <span
                       className={`text-xs px-1.5 py-0.5 rounded-full tabular-nums ${
                         tab === item.id
-                          ? 'bg-[#2B4ACB]/10 text-[#2B4ACB]'
+                          ? 'bg-amber-200/60 text-[#92400E]'
                           : 'bg-gray-100 text-gray-500'
                       }`}
                     >
@@ -314,7 +349,7 @@ export default function CandidateDashboard() {
 
             <Link
               href="/jobs"
-              className="block text-center text-xs font-medium bg-[#2B4ACB] text-white py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
+              className="block text-center text-xs font-medium bg-gradient-to-r from-[#92400E] to-[#9A3412] text-white py-2 rounded-lg hover:from-[#78350F] hover:to-[#7C2D12] transition-colors"
             >
               Search jobs
             </Link>
@@ -324,8 +359,10 @@ export default function CandidateDashboard() {
           <main className="flex-1 min-w-0">
             {tab === 'overview' && (
               <OverviewTab
+                user={user}
                 firstName={firstName}
                 savedJobs={savedJobs}
+                savedAt={savedAt}
                 alerts={alerts}
                 resume={resume}
                 onTabChange={setTab}
@@ -348,7 +385,7 @@ export default function CandidateDashboard() {
               />
             )}
             {tab === 'resume' && (
-              <ResumeTab resume={resume} uploading={uploading} loading={loadingResume} error={resumeError} onUpload={uploadResume} />
+              <ResumeTab resume={resume} uploading={uploading} loading={loadingResume} error={resumeError} onUpload={selectResume} pendingName={pendingResume?.name} saved={resumeSaved} onSave={uploadResume} removing={removingResume} onRemove={removeResume} />
             )}
             {tab === 'settings' && <SettingsTab user={user} onSignOut={signOut} />}
           </main>
@@ -360,15 +397,31 @@ export default function CandidateDashboard() {
 
 // ── Overview ──────────────────────────────────────────────────────────────────
 
+function SavedJobTimestamp({ value }: { value?: string }) {
+  if (!value) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  return (
+    <time dateTime={date.toISOString()} title={date.toLocaleString()} className="shrink-0 text-right text-xs leading-5 text-gray-500 tabular-nums">
+      <span className="block">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+      <span className="block">{date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</span>
+    </time>
+  )
+}
+
 function OverviewTab({
+  user,
   firstName,
   savedJobs,
+  savedAt,
   alerts,
   resume,
   onTabChange,
 }: {
+  user: { user_metadata?: Record<string, unknown>; email?: string }
   firstName: string
   savedJobs: SavedJob[]
+  savedAt: Record<string, string>
   alerts: AlertRow[]
   resume: { name: string; url: string } | null
   onTabChange: (tab: Tab) => void
@@ -377,9 +430,12 @@ function OverviewTab({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900">Welcome back, {firstName}</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Here's where your job search stands.</p>
+      <div className="flex items-center gap-3">
+        <ProfileAvatar user={user} className="h-10 w-10 md:hidden" />
+        <div className="min-w-0">
+          <h1 className="text-xl font-semibold text-gray-900">Welcome back, {firstName}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Here's where your job search stands.</p>
+        </div>
       </div>
 
       {/* Stats */}
@@ -414,28 +470,26 @@ function OverviewTab({
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
           <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900">Recent saved jobs</h2>
-            <button onClick={() => onTabChange('saved')} className="text-xs text-[#2B4ACB] hover:underline">
+            <button onClick={() => onTabChange('saved')} className="text-xs text-[#92400E] hover:underline">
               View all
             </button>
           </div>
           <div className="divide-y divide-gray-50">
             {savedJobs.slice(0, 5).map(job => (
               <div key={job.id} className="px-5 py-3 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{job.title}</p>
+                <div className="min-w-0 flex-1">
+                  <a
+                    href={job.url}
+                    className="block text-sm font-medium text-[#92400E] truncate hover:text-[#78350F] hover:underline focus-visible:underline"
+                  >
+                    {job.title}
+                  </a>
                   <p className="text-xs text-gray-500 truncate">
                     {job.company}
                     {job.location ? ` · ${job.location}` : ''}
                   </p>
                 </div>
-                <a
-                  href={job.applyUrl || job.url}
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                  className="flex-shrink-0 text-xs font-medium text-[#2B4ACB] hover:underline"
-                >
-                  Apply
-                </a>
+                <SavedJobTimestamp value={savedAt[job.id]} />
               </div>
             ))}
           </div>
@@ -447,7 +501,7 @@ function OverviewTab({
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
           <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900">Active alerts</h2>
-            <button onClick={() => onTabChange('alerts')} className="text-xs text-[#2B4ACB] hover:underline">
+            <button onClick={() => onTabChange('alerts')} className="text-xs text-[#92400E] hover:underline">
               Manage
             </button>
           </div>
@@ -476,7 +530,7 @@ function OverviewTab({
           <p className="text-gray-500 text-sm mb-4">Your dashboard is empty. Start by searching for jobs.</p>
           <Link
             href="/jobs"
-            className="inline-block bg-[#2B4ACB] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
+            className="inline-block bg-gradient-to-r from-[#92400E] to-[#9A3412] text-white text-sm font-medium px-5 py-2 rounded-lg hover:from-[#78350F] hover:to-[#7C2D12] transition-colors"
           >
             Search jobs
           </Link>
@@ -517,7 +571,7 @@ function SavedJobsTab({
           </p>
           <Link
             href="/jobs"
-            className="inline-block bg-[#2B4ACB] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
+            className="inline-block bg-gradient-to-r from-[#92400E] to-[#9A3412] text-white text-sm font-medium px-5 py-2 rounded-lg hover:from-[#78350F] hover:to-[#7C2D12] transition-colors"
           >
             Browse jobs
           </Link>
@@ -538,7 +592,12 @@ function SavedJobsTab({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 flex-wrap">
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 text-sm leading-snug">{job.title}</p>
+                        <a
+                          href={job.url}
+                          className="block font-medium text-[#92400E] text-sm leading-snug hover:text-[#78350F] hover:underline focus-visible:underline"
+                        >
+                          {job.title}
+                        </a>
                         <p className="text-sm text-gray-500 mt-0.5">{job.company}</p>
                       </div>
                       {saved && (
@@ -556,14 +615,6 @@ function SavedJobsTab({
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0 pt-0.5">
-                    <a
-                      href={job.applyUrl || job.url}
-                      target="_blank"
-                      rel="nofollow noopener noreferrer"
-                      className="text-xs font-medium bg-[#2B4ACB] text-white px-3 py-1.5 rounded-md hover:bg-[#1f3ba0] transition-colors"
-                    >
-                      Apply
-                    </a>
                     <button
                       onClick={() => onRemove(job.id)}
                       className="text-xs text-gray-400 hover:text-red-500 px-2 py-1.5 transition-colors"
@@ -634,7 +685,7 @@ function AlertsTab({
         <h2 className="text-lg font-semibold text-gray-900">Job alerts</h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="text-sm font-medium bg-[#2B4ACB] text-white px-4 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors"
+          className="text-sm font-medium bg-gradient-to-r from-[#92400E] to-[#9A3412] text-white px-4 py-2 rounded-lg hover:from-[#78350F] hover:to-[#7C2D12] transition-colors"
         >
           {showForm ? 'Cancel' : '+ New alert'}
         </button>
@@ -652,7 +703,7 @@ function AlertsTab({
                   value={what}
                   onChange={e => setWhat(e.target.value)}
                   placeholder="e.g. Software Engineer"
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2B4ACB] focus:ring-1 focus:ring-[#2B4ACB]/20 transition-colors"
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#92400E] focus:ring-1 focus:ring-[#92400E]/20 transition-colors"
                 />
               </div>
               <div>
@@ -662,7 +713,7 @@ function AlertsTab({
                   value={where}
                   onChange={e => setWhere(e.target.value)}
                   placeholder="e.g. New York, NY"
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#2B4ACB] focus:ring-1 focus:ring-[#2B4ACB]/20 transition-colors"
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-[#92400E] focus:ring-1 focus:ring-[#92400E]/20 transition-colors"
                 />
               </div>
             </div>
@@ -677,7 +728,7 @@ function AlertsTab({
                       value={f}
                       checked={frequency === f}
                       onChange={() => setFrequency(f)}
-                      className="accent-[#2B4ACB]"
+                      className="accent-[#92400E]"
                     />
                     <span className="text-sm text-gray-700">
                       {f === 'weekly' ? 'Weekly' : 'Twice a week'}
@@ -690,7 +741,7 @@ function AlertsTab({
             <button
               type="submit"
               disabled={submitting}
-              className="bg-[#2B4ACB] text-white text-sm font-medium px-5 py-2 rounded-md hover:bg-[#1f3ba0] transition-colors disabled:opacity-60"
+              className="bg-gradient-to-r from-[#92400E] to-[#9A3412] text-white text-sm font-medium px-5 py-2 rounded-md hover:from-[#78350F] hover:to-[#7C2D12] transition-colors disabled:opacity-60"
             >
               {submitting ? 'Creating...' : 'Create alert'}
             </button>
@@ -768,12 +819,22 @@ function ResumeTab({
   loading,
   error,
   onUpload,
+  pendingName,
+  saved,
+  onSave,
+  removing,
+  onRemove,
 }: {
   resume: ResumeFile | null
   uploading: boolean
   loading: boolean
   error: string
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
+  pendingName?: string
+  saved: boolean
+  onSave: () => Promise<void>
+  removing: boolean
+  onRemove: () => Promise<void>
 }) {
   return (
     <div className="space-y-4">
@@ -789,6 +850,10 @@ function ResumeTab({
                 <p className="text-sm font-medium text-gray-900">Current resume</p>
                 <p className="text-xs text-gray-400 mt-1 font-mono break-all leading-relaxed">{resume.name}</p>
               </div>
+              <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+              <button type="button" onClick={onRemove} disabled={uploading || removing || loading} className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-60">
+                {removing ? 'Removing...' : 'Remove resume'}
+              </button>
               <a
                 href={resume.url}
                 target="_blank"
@@ -797,6 +862,7 @@ function ResumeTab({
               >
                 {resume.isPdf ? 'Open PDF' : 'Download'}
               </a>
+              </div>
             </div>
             {resume.isPdf ? (
               <iframe
@@ -810,7 +876,7 @@ function ResumeTab({
             <div className="pt-4 border-t border-gray-100">
               <p className="text-xs text-gray-500 mb-2">Replace with a new file</p>
               <label className={`inline-block ${uploading ? 'cursor-wait opacity-60' : 'cursor-pointer'}`}>
-                <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} disabled={uploading} className="sr-only" />
+                <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} disabled={uploading || removing} className="sr-only" />
                 <span className="inline-block text-xs font-medium border border-gray-200 rounded-md px-3 py-1.5 text-gray-600 hover:bg-gray-50 transition-colors">
                   {uploading ? 'Uploading...' : 'Choose file'}
                 </span>
@@ -832,13 +898,25 @@ function ResumeTab({
             <p className="text-sm text-gray-700 mb-1">No resume uploaded yet</p>
             <p className="text-xs text-gray-400 mb-5">PDF, DOC or DOCX, max 5MB</p>
             <label className={`inline-block ${uploading ? 'cursor-wait opacity-60' : 'cursor-pointer'}`}>
-              <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} disabled={uploading} className="sr-only" />
-              <span className="inline-block text-sm font-medium bg-[#2B4ACB] text-white px-5 py-2 rounded-lg hover:bg-[#1f3ba0] transition-colors">
-                {uploading ? 'Uploading...' : 'Upload resume'}
+              <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} disabled={uploading || removing} className="sr-only" />
+              <span className="inline-block text-sm font-medium bg-gradient-to-r from-[#92400E] to-[#9A3412] text-white px-5 py-2 rounded-lg hover:from-[#78350F] hover:to-[#7C2D12] transition-colors">
+                {uploading ? 'Uploading...' : 'Choose file'}
               </span>
             </label>
           </div>
         )}
+        {pendingName && (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+            <div className="min-w-0 flex-1">
+              <p className="break-all text-sm font-medium text-gray-900">{pendingName}</p>
+              <p className="mt-1 text-xs text-gray-600">Click Save resume to add this file to your dashboard.</p>
+            </div>
+            <button type="button" onClick={onSave} disabled={uploading || removing} className="shrink-0 rounded-lg bg-gradient-to-r from-[#92400E] to-[#9A3412] px-4 py-2 text-sm font-medium text-white hover:from-[#78350F] hover:to-[#7C2D12] disabled:opacity-60">
+              {uploading ? 'Saving...' : 'Save resume'}
+            </button>
+          </div>
+        )}
+        {saved && <p role="status" className="mt-4 text-sm font-medium text-emerald-800">Resume saved to your dashboard.</p>}
         {error && <p role="alert" className="mt-4 text-sm text-red-600">{error}</p>}
       </div>
     </div>

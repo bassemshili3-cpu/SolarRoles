@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, ArrowRight } from 'lucide-react'
+import { Award } from 'lucide-react'
 import { getWorkforceSnapshot } from '../_lib/workforceData'
 import {
   MethodologyNote,
@@ -150,7 +150,7 @@ export default async function SolarSkillsCertificationsPage() {
                         className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:text-blue-900"
                       >
                         Related Solar Roles resource
-                        <ArrowRight className="h-3 w-3" />
+
                       </Link>
                     </div>
 

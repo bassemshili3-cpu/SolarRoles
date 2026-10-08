@@ -2,9 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import Link from 'next/link'
-import {
-  Sun, Mail, Clock, MessageCircle, Send, ArrowRight, Check,
-} from 'lucide-react'
+import { Sun, Mail, Clock, MessageCircle, Send, Check } from 'lucide-react'
 
 // ----------------------------------------------------------------------------
 // Solar grid pattern - meme style que la page resources
@@ -89,7 +87,7 @@ export default function ContactPage() {
   Contact{' '}
   <span className="text-[#F2A93B]">form</span>
 </h1>
-          
+
         </div>
       </section>
 
@@ -115,7 +113,7 @@ export default function ContactPage() {
                 className="inline-flex items-center gap-1.5 text-[#F2A93B] font-semibold text-sm hover:gap-2 transition-all"
               >
                 <span>contact@solarroles.com</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+
               </a>
             </div>
 
@@ -191,7 +189,7 @@ export default function ContactPage() {
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F2A93B] hover:gap-2.5 transition-all"
                   >
                     Send another message
-                    <ArrowRight className="h-3.5 w-3.5" />
+
                   </button>
                 </div>
               </div>
@@ -319,7 +317,7 @@ export default function ContactPage() {
                     ) : (
                       <>
                         Send message
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+
                       </>
                     )}
                   </button>

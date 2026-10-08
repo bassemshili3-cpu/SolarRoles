@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, DollarSign } from 'lucide-react'
+import { DollarSign } from 'lucide-react'
 import { formatMoney, getWorkforceSnapshot } from '../_lib/workforceData'
 import { MethodologyNote, ResourceHeader } from '../_components/ResourceShell'
 
@@ -286,7 +286,7 @@ export default async function SolarSalaryExplorerPage() {
           className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
         >
           Open the full Solar Roles data hub
-          <ArrowRight className="h-4 w-4" />
+
         </Link>
       </section>
     </main>

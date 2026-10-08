@@ -144,7 +144,7 @@ export default async function SolarJobsEmbedPage({ searchParams }: { searchParam
         </div>
 
         <div className="border-t border-gray-100 px-5 py-4">
-          <Link href={browseHref} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-blue-700 hover:text-blue-900">{browseLabel} →</Link>
+          <Link href={browseHref} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-blue-700 hover:text-blue-900">{browseLabel}</Link>
         </div>
       </div>
     </main>

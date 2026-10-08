@@ -171,7 +171,7 @@ export default function JobCard({ job }: JobCardProps) {
   target="_blank"
   rel="nofollow noopener noreferrer"
   onClick={(e) => e.stopPropagation()}
- className="inline-flex items-center px-3 py-1 rounded-md bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
+ className="inline-flex items-center px-[10.2px] py-[3.4px] rounded-[5px] bg-amber-500 hover:bg-amber-600 text-white text-[10.2px] leading-[13.6px] font-semibold transition-colors"
 >
   Apply 
 </a>

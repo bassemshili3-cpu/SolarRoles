@@ -14,7 +14,7 @@ type ContextualJobFilterTagId = Exclude<PopularJobFilterTagId, 'new' | 'salary'>
 export type PopularJobFilterTag = {
   id: PopularJobFilterTagId
   label: string
-  param: 'sort' | 'salary_min' | 'experience' | 'benefits' | 'job_type' | 'certification' | 'arrangement'
+  param: 'sort' | 'posted_within' | 'salary_min' | 'experience' | 'benefits' | 'job_type' | 'certification' | 'arrangement'
   value: string
   multiValue?: boolean
 }
@@ -61,7 +61,7 @@ export function getPopularJobFilterTags(pathname: string | null): PopularJobFilt
   const salaryLabel = `$${Math.round(config.salaryMin / 1000)}k+`
 
   return [
-    { id: 'new', label: 'New', param: 'sort', value: 'newest' },
+    { id: 'new', label: 'New', param: 'posted_within', value: '7' },
     { id: 'salary', label: salaryLabel, param: 'salary_min', value: String(config.salaryMin) },
     ...config.contextualTags.map((tagId) => TAGS[tagId]),
   ]
@@ -94,6 +94,18 @@ export function togglePopularJobFilter(
 ): URLSearchParams {
   const params = new URLSearchParams(searchParams.toString())
   const isActive = isPopularJobFilterActive(params, tag)
+
+  if (tag.id === 'new') {
+    if (isActive) {
+      params.delete('posted_within')
+      if (params.get('sort') === 'newest') params.delete('sort')
+    } else {
+      params.set('posted_within', tag.value)
+      params.set('sort', 'newest')
+    }
+    params.delete('page')
+    return params
+  }
 
   if (tag.multiValue) {
     const values = splitParam(params.get(tag.param))

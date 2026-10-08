@@ -1,16 +1,5 @@
 import { Metadata } from 'next';
-import {
-  Wrench,
-  Zap,
-  ShieldCheck,
-  Activity,
-  Users,
-  Sun,
-  Home,
-  Building2,
-  Factory,
-  ArrowRight,
-} from 'lucide-react';
+import { Wrench, Zap, ShieldCheck, Activity, Users, Sun, Home, Building2, Factory } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'What Does a Solar Installer Do? (Job Description & Daily Tasks)',
@@ -462,7 +451,7 @@ export default function Page() {
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm font-semibold text-gray-900 transition hover:bg-amber-300"
               >
                 Browse open roles
-                <ArrowRight className="h-4 w-4" />
+
               </a>
             </div>
           </div>

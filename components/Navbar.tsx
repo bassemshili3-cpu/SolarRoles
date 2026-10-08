@@ -4,13 +4,12 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { User } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import ProfileAvatar from '@/components/ProfileAvatar'
 import { CertificationsNavCta } from '@/components/CertificationsNavCta'
 
 export default function Navbar() {
   const supabase = createClient()
-  const router = useRouter()
   const pathname = usePathname()
   const [user, setUser] = useState<any>(null)
 
@@ -21,15 +20,6 @@ export default function Navbar() {
     })
     return () => subscription.unsubscribe()
   }, [])
-
-  const signOut = async () => {
-    await supabase.auth.signOut()
-    if (pathname?.startsWith('/dashboard') && pathname !== '/dashboard/post-a-job') {
-      router.replace('/jobs')
-    } else {
-      router.refresh()
-    }
-  }
 
   const navLinks = [
     { href: '/jobs',       label: 'Find Jobs' },
@@ -65,7 +55,7 @@ export default function Navbar() {
                 <line x1="23.1" y1="8.9"  x2="25.9" y2="6.1"  />
               </g>
             </svg>
-            <span className="inline whitespace-nowrap text-sm max-[360px]:text-[13px] font-bold tracking-tight text-[#0B1A2E] sm:text-lg">
+            <span className="inline whitespace-nowrap text-[16.1px] max-[360px]:text-[15px] font-bold tracking-tight text-[#0B1A2E] sm:text-lg">
               Solar<span className="text-[#F5B819]">Roles</span>
             </span>
           </Link>
@@ -89,7 +79,7 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="ml-1 flex min-w-0 items-center gap-3.5 max-[360px]:ml-0 max-[360px]:gap-2 lg:hidden">
+          <div className="ml-[16px] flex min-w-0 items-center gap-3.5 max-[360px]:ml-[11px] max-[360px]:gap-2 lg:hidden">
             {navLinks.slice(0, 2).map(({ href, label }) => {
               const isActive = pathname === href || pathname?.startsWith(href + '/')
               return (
@@ -113,35 +103,15 @@ export default function Navbar() {
             </span>
 
           {user ? (
-            <>
-              <Link href="/dashboard" title="Dashboard" className="inline-flex">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="px-2 sm:px-3 h-9 text-[#0B1A2E] hover:text-[#1E3A5F]"
-                >
-                  <User className="w-4 h-4 sm:mr-1.5" />
-                  <span className="hidden sm:inline">Dashboard</span>
-                </Button>
-              </Link>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="inline-flex px-2 sm:px-3 h-9 text-xs sm:text-sm text-gray-600 hover:text-[#0B1A2E]"
-                onClick={signOut}
-              >
-                Log out
-              </Button>
-            </>
+            <Link href="/dashboard" title="Dashboard" aria-label="Open dashboard" className="inline-flex shrink-0 items-center gap-2 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700">
+              <ProfileAvatar user={user} className="h-[27px] w-[27px] sm:h-8 sm:w-8" />
+              <span className="hidden sm:inline text-sm font-medium text-[#0B1A2E]">Dashboard</span>
+            </Link>
           ) : (
             <>
             <div className="flex items-center gap-1.5 md:hidden">
               <Link href="/auth/login" className="whitespace-nowrap text-xs max-[360px]:text-[11px] font-medium text-[#0B1A2E] hover:text-[#1E3A5F]">
                 Log in
-              </Link>
-              <span className="text-xs text-gray-400" aria-hidden="true">/</span>
-              <Link href="/auth/signup" className="whitespace-nowrap text-xs max-[360px]:text-[11px] font-medium text-[#0B1A2E] hover:text-[#1E3A5F]">
-                Sign up
               </Link>
             </div>
             <Link href="/auth/login" className="hidden md:inline-flex">

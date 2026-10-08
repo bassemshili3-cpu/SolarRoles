@@ -40,57 +40,47 @@ export const metadata: Metadata = {
 const PROVIDERS: Provider[] = [
   {
     name: "HeatSpring",
-    format: "Online, self-paced",
-    hours: "18–24 hrs",
-    price: "$400–600",
-    examFee: "Usually included",
-    body: `HeatSpring built its reputation on Dr. Sean White's books and courses. Both are widely used as industry references. Most students complete the Solar PV Boot Camp and NABCEP PV Associate Exam Prep in 18 to 24 hours. The course is self-paced and online, with access to materials for one year.
+    format: "Online; self-paced with instructor support on the paid course",
+    hours: "18–24 hours listed for the PV Associate boot camp",
+    price: "Paid; confirm the current course price",
+    examFee: "Separate from boot-camp tuition",
+    body: `The PV Associate boot camp combines PV fundamentals with exam preparation. Its course page explicitly excludes the official exam fee from tuition. Check the package details for the application process and any optional materials.
 
-The pass guarantee is the key distinction. A student who completes the course and fails may retake the course and exam at no extra cost. HeatSpring reports a pass rate above 88 percent. The companion textbook costs another 25 to 35 dollars, while checkout typically includes the exam fee.
-
-Best fit: people who already have some electrical or construction background and want the fastest, cheapest route to the PV Associate credential without cutting real corners.`,
+HeatSpring also hosts free practice exams. Those exercises are separate from its qualifying courses: completing a practice test does not establish exam eligibility.`,
     link: "https://www.heatspring.com",
   },
   {
     name: "Everblue",
-    format: "Online, self-paced",
-    hours: "40 hrs",
-    price: "$700–900",
-    examFee: "Included",
-    body: `Everblue operates as a full-service training partner. Beyond the entry-level PV Associate package, it sells bundles for PV Installation Professional, PV Design Specialist and PV System Inspector. Each combines the required training hours with application paperwork filed by Everblue.
+    format: "Online; live training is a separate option",
+    hours: "40 hours for PV101",
+    price: "Paid; compare course and credential-package quotes",
+    examFee: "Check the selected package inclusions",
+    body: `Everblue lists a 40-hour PV101 course and a separate PV Associate credential package. A course listing and a package quote may therefore cover different items. Compare the training, exam administration and live instruction included in the offer.
 
-Pricing is higher than HeatSpring. The Associate package generally costs 700 to 900 dollars after the frequently offered discount. Advanced tracks run closer to 1,600 to 2,000 dollars. The entry package contains 40 hours across 24 sections.
-
-Best fit: people who want a single predictable price that already includes the exam fee, a practice exam, and the eligibility paperwork, without assembling the steps themselves.`,
-    link: "https://everbluetraining.com",
+For the Associate Education Pathway, Everblue verifies completion of its approved program and helps arrange the exam. Advanced Board Certification still has experience requirements that a training purchase cannot supply.`,
+    link: "https://everbluetraining.com/all-courses/category/solar/",
   },
   {
     name: "Solar Energy International (SEI)",
-    format: "Online, plus in-person labs",
-    hours: "60 hrs for PVOL101 alone",
-    price: "$995 for PVOL101",
-    examFee: "Paid to NABCEP directly",
-    body: `SEI is a nonprofit that has trained solar professionals since 1991. Its curriculum is a sequence rather than a single boot camp. Courses such as PVOL101, PVOL202 and PVOL203 map to specific NABCEP requirements.
+    format: "Scheduled online courses, in-person theory and separate labs",
+    hours: "Course-specific; online theory courses generally 40–60 contact hours",
+    price: "Paid; tuition depends on course sequence and lab selection",
+    examFee: "Confirm whether the selected package includes testing",
+    body: `SEI organizes its curriculum as a sequence of courses. PV101 and PVOL101 are classroom and online routes into its foundational PV material; later courses and labs address different skills. A single-course price cannot be compared directly with a multi-course certification package.
 
-The foundational PVOL101 course runs for 60 hours online and costs 995 dollars. That is already more than a complete Associate package from some competitors. Students pay the NABCEP exam fee separately after completing their training hours.
-
-SEI offers several ways to reduce the upfront burden. Students can use a payment plan, apply for scholarships or earn tuition through a work-trade program. No other provider in this comparison offers the last option. In-person labs add practical experience to the online courses. Colorado residents may also qualify for state workforce funding.
-
-Best fit: people planning a career beyond the entry credential. It also suits students who need alternatives to paying the full cost upfront.`,
-    link: "https://www.solarenergy.org",
+SEI publishes tuition-payment and funding options, including scholarships and workforce funding for eligible applicants. Availability and eligibility need to be confirmed with the school and funding agency before enrolling.`,
+    link: "https://www.solarenergy.org/support/training-program/",
   },
   {
-    name: "NC Clean Tech Center (FSPV)",
-    format: "In-person, 5 days",
-    hours: "40 hrs",
-    price: "$1,500–1,725",
-    examFee: "Included",
-    body: `NC State's Clean Technology Center offers a five-day Fundamentals of Solar PV Design and Installation course. It suits students who learn better in person. Tuition ranges from 1,500 to 1,725 dollars based on registration timing. A reduced student rate is about 350 dollars.
+    name: "NC Clean Energy Technology Center (FSPV)",
+    format: "Instructor-led; confirm the scheduled session and practical component",
+    hours: "40-hour Fundamentals of Solar PV curriculum",
+    price: "Session-specific; request current registration terms",
+    examFee: "Confirm with the session organizer",
+    body: `NC State's center offers a Fundamentals of Solar PV Design and Installation curriculum covering material for the Associate exam. Its instructor-led format should be compared with the actual scheduled session, including equipment access and practical work.
 
-Four days cover classroom theory; the fifth is spent physically installing a grid-tied residential PV system. The NABCEP PV Associate exam fee is included in registration.
-
-Best fit: people who want hands-on experience before entering a real jobsite and can commit a full week. Regional nonprofits such as the Midwest Renewable Energy Association run smaller in-person sessions. Their shorter online modules are better suited to recertification hours than a first Associate credential.`,
-    link: "https://nccleantech.ncsu.edu",
+Travel, lodging and time away from work can change the total cost. Ask which exam charges and materials the registration includes rather than assuming that every session has the same package.`,
+    link: "https://nccleantech.ncsu.edu/our-work/training/customized-clean-energy-trainings/",
   },
 ];
 
@@ -102,7 +92,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-07-01",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -136,12 +126,11 @@ export default function NabcepTrainingComparison() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <h1>NABCEP Training Providers Compared</h1>
-      <p className="resource-intro">
-        Compare HeatSpring, Everblue, SEI and in-person alternatives side by
-        side. Prices change often. Confirm the current amount with each
-        provider before enrolling.
-      </p>
+      <p>
+            HeatSpring, Everblue, SEI and NC State&apos;s clean-energy center offer different combinations of instruction and exam preparation. An employer&apos;s reimbursement policy, a community-college course or an apprenticeship may cover education you would otherwise fund yourself. For public funding, check <a href="https://www.careeronestop.org/LocalHelp/EmploymentAndTraining/find-WIOA-training-programs.aspx" target="_blank" rel="noopener noreferrer">WIOA-eligible programs</a> with the local workforce office; scholarships also have their own eligibility and intake dates.
+          </p>
 
+      <p>This comparison uses published course descriptions, listed training hours and stated exam-fee inclusions, checked on October 8, 2026. It does not rank teaching quality or pass rates: comparable cohort results are not available here. Current tuition could not be established consistently across all four offers, so the table does not reproduce older price ranges. Contact hours, estimated completion time and hands-on lab time are also different measures.</p>
       <div className="resource-table-scroll">
         <table>
           <thead>
@@ -174,41 +163,20 @@ export default function NabcepTrainingComparison() {
             <p key={i}>{para}</p>
           ))}
           <a href={p.link} target="_blank" rel="noopener noreferrer">
-            Visit {p.name}
+            {p.name} program information
           </a>
         </section>
       ))}
 
       <section className="resource-provider">
-        <h2>How to choose</h2>
-        <p>
-          HeatSpring suits independent learners who prioritize price and speed.
-          Its retake guarantee also reduces the cost of a failed first attempt.
-        </p>
-        <p>
-          Everblue suits candidates who want the exam fee and paperwork handled
-          in one purchase.
-        </p>
-        <p>
-          SEI offers more depth for a longer career. Its payment plan and
-          work-trade program can also make the higher price manageable.
-        </p>
-        <p>
-          An in-person intensive suits hands-on learners who can spare a week.
-          NC State's course provides equipment experience that an online
-          course cannot reproduce.
-        </p>
-        <p>
-          No course guarantees a passing score or a job offer. Each covers the
-          material NABCEP expects. The result still depends on preparation.
-        </p>
+        <h2>Compare the education you still need</h2>
+        <p>The <a href="https://coursecatalog.nabcep.org/" target="_blank" rel="noopener noreferrer">NABCEP course catalog</a> identifies approved credit categories. Match those to the credential&apos;s requirements before comparing tuition: a beginner&apos;s course, advanced qualifying education and a question bank do different jobs.</p>
+        <p>Self-study using the <a href="https://www.nabcep.org/resources/" target="_blank" rel="noopener noreferrer">NABCEP handbooks and exam references</a> can target gaps in exam knowledge. Free questions and manufacturer lessons may help with revision, but do not automatically supply qualifying hours.</p>
+        <p>Request an itemized quote with tuition, testing and required materials shown separately. For classroom study, add travel and missed work. <a href="https://www.solarenergy.org/support/tuition-payments/" target="_blank" rel="noopener noreferrer">SEI&apos;s tuition-payment information</a> gives examples of funding arrangements to investigate; an award or reimbursement should be confirmed before committing to a course.</p>
       </section>
-
-      <p className="resource-fine-print">
-        Prices, course lengths and program details reflect information
-        available in mid-2026. Confirm current pricing and availability with
-        each provider before enrolling.
-      </p>
+      <p>
+            Provider links are non-affiliate references presented on the same basis. Paid courses are described for comparison, not as requirements for every applicant. No comparable pass-rate or total-price ranking is asserted.
+          </p>
     </article>
   );
 }

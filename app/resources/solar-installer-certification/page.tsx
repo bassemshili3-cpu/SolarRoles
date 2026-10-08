@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AffiliateLink } from '@/components/click_affiliate_link';
-import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const SITE_URL = "https://solarroles.com";
 
@@ -9,11 +7,11 @@ const PAGE_PATH = "/resources/solar-installer-certification";
 
 const PAGE_TITLE =
 
-  "Solar Installer Certifications: What to Get & Which Course Fits Your Path";
+  "Solar Installer Certifications: Requirements, Timing and Costs";
 
 const PAGE_DESCRIPTION =
 
-  "Every solar installer credential and the specifics of each course & training program.";
+  "OSHA cards, NABCEP credentials and electrical licenses: which requirements affect a first installer job, and which belong later in a career.";
 
 
 export const metadata: Metadata = {
@@ -71,7 +69,7 @@ const jsonLd = {
 
       url: `${SITE_URL}${PAGE_PATH}`,
 
-      dateModified: "2026-08-04",
+      dateModified: "2026-10-08",
 
       publisher: { "@type": "Organization", name: "Solar Roles" },
 
@@ -639,7 +637,7 @@ const css = `
   border-left: 3px solid var(--amber-700);
   padding-left: 13px !important;
 }
-  
+
 
 .sr2-cert-row.sr2-pva-row .sr2-cert-name {
 
@@ -952,7 +950,7 @@ export default function SolarInstallerCertification() {
 
         <h1>
 
-          Solar Installer <span className="accent">Certifications</span>: What to Get & Which Course and Training Program Fits Your Path
+          Solar Installer <span className="accent">Certifications</span>: Requirements, Timing and Costs
 
         </h1>
 
@@ -967,7 +965,7 @@ export default function SolarInstallerCertification() {
 
             <div>
 
-              
+
 
               <div className="nm">Solar<span className="mark">Roles</span></div>
 
@@ -977,11 +975,11 @@ export default function SolarInstallerCertification() {
 
           <div className="sr2-bylines-meta">
 
-            <span><strong>Last reviewed:</strong> 4 August, 2026</span>
+            <span><strong>Last reviewed:</strong> 8 October, 2026</span>
 
             <span className="sep" />
 
-            <span className="changes">Updated with Q3 2026 requirements &amp; pay data</span>
+            <span className="changes">Credential requirements and training routes</span>
 
           </div>
 
@@ -995,13 +993,7 @@ export default function SolarInstallerCertification() {
         <article className="sr2-article">
 
           <h2 id="table" className="sr2-first"><span className="n">01</span>The cheat sheet</h2>
-<p className="sr2-table-note">
-  *Pay ranges reflect BLS OEWS May 2024 (SOC 47-2231) plus current
-  industry surveys — see sources at the bottom of the page.
-<br></br>
-  *This table contains affiliate links. We may earn a commission if
-  you enroll through them, at no extra cost to you.
-</p>
+<p>A helper or trainee opening may accept applicants without a NABCEP credential. Read the actual hiring requirements: the employer may arrange safety orientation and equipment training after hiring, while electrical work can require an apprentice license before you start. Ask who pays for any required Outreach course or exam.</p>
 
 
 <div className="sr2-cert-table">
@@ -1010,32 +1002,26 @@ export default function SolarInstallerCertification() {
     <span>Status</span>
     <span>Who needs it</span>
     <span>Training hours</span>
-    <span>Exam cost</span>
+    <span>Exam / application</span>
     <span>Training cost</span>
     <span>Recognition</span>
-    <span>Get started</span>
+    <span>Official details</span>
   </div>
 
   <div className="sr2-cert-row">
    <div className="sr2-cert-name" data-label="Credential">
   <Link href="/certifications/osha-10">OSHA 10</Link>
 </div>
-    <div data-label="Status">Employer-required</div>
-    <div data-label="Who">Anyone starting on a roof crew</div>
+    <div data-label="Status">Depends on employer / site</div>
+    <div data-label="Who">Workers needing hazard-awareness training</div>
     <div data-label="Training hours">10 hrs, no prerequisite</div>
-   <div data-label="Exam cost">$59</div>   
-<div data-label="Training cost">Often bundled with exam</div>
+   <div data-label="Exam / application">No separate federal exam fee</div>
+<div data-label="Training cost">Provider tuition varies; ask employer</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
-    <div data-label="Get started" className="sr2-cta">
-      <AffiliateLink
-        href="https://www.heatspring.com/courses/osha-10-hour-construction?aff_id=9f_wlq"
-        offerName="osha_10"
-        className="sr2-cta-btn"
-      >
-        Start Today
-      </AffiliateLink>
+    <div data-label="Official details" className="sr2-cta">
+      <a href="https://www.osha.gov/training/outreach/training-providers" target="_blank" rel="noopener noreferrer">OSHA-authorized online providers</a>
     </div>
   </div>
 
@@ -1043,22 +1029,16 @@ export default function SolarInstallerCertification() {
    <div className="sr2-cert-name" data-label="Credential">
   <Link href="/certifications/osha-30">OSHA 30</Link>
 </div>
-    <div data-label="Status">Recommended</div>
+    <div data-label="Status">Depends on safety responsibilities</div>
     <div data-label="Who">Crew leads &amp; supervisors</div>
     <div data-label="Training hours">30 hrs, deeper safety scope</div>
-    <div data-label="Exam cost">$159</div>
-<div data-label="Training cost">Often bundled with exam</div>
+    <div data-label="Exam / application">No separate federal exam fee</div>
+<div data-label="Training cost">Provider tuition varies; ask employer</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Federal DOL card (OSHA)</span>
     </div>
-    <div data-label="Get started" className="sr2-cta">
-      <AffiliateLink
-        href="https://www.heatspring.com/courses/osha-30-hour-construction?aff_id=9f_wlq"
-        offerName="osha_30"
-        className="sr2-cta-btn"
-      >
-        Start Today
-      </AffiliateLink>
+    <div data-label="Official details" className="sr2-cta">
+      <a href="https://www.osha.gov/training/outreach/training-providers" target="_blank" rel="noopener noreferrer">OSHA-authorized online providers</a>
     </div>
   </div>
 
@@ -1066,17 +1046,17 @@ export default function SolarInstallerCertification() {
     <div className="sr2-cert-name" data-label="Credential">
       State electrical license
     </div>
-    <div data-label="Status">Legally required*</div>
+    <div data-label="Status">Required for covered work</div>
     <div data-label="Who">Anyone doing licensed wiring work</div>
-    <div data-label="Training hours">Varies by state</div> 
-    <div data-label="Exam cost">$50 – $150</div>
+    <div data-label="Training hours">Varies by state</div>
+    <div data-label="Exam / application">Set by licensing jurisdiction</div>
 <div data-label="Training cost">Varies by state program</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Required by state</span>
     </div>
-    <div data-label="Get started" className="sr2-cta">
+    <div data-label="Official details" className="sr2-cta">
       <a href="https://www.nascla.org" target="_blank" rel="nofollow noopener noreferrer" className="sr2-cta-btn">
-        Start Today
+        Licensing information
       </a>
     </div>
   </div>
@@ -1086,25 +1066,19 @@ export default function SolarInstallerCertification() {
       <Link href="/certifications/nabcep-pv-associate">NABCEP PV Associate</Link>
       <span className="sub">Entry-level credential</span>
     </div>
-    <div data-label="Status">Recommended</div>
-    <div data-label="Who">Installers a few months in</div>
-    <div data-label="Training hours">18 hours</div>
-    <div data-label="Exam cost">$150</div> 
-<div data-label="Training cost">$895 prep course</div>
+    <div data-label="Status">Optional / employer-dependent</div>
+    <div data-label="Who">Candidates building foundational PV knowledge</div>
+    <div data-label="Training hours">Registered education or qualifying experience</div>
+    <div data-label="Exam / application">$25 application + $125 exam*</div>
+<div data-label="Training cost">Depends on education route</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">
-  Recognized stepping stone to PVIP
+  Foundational PV knowledge
 </span>
-      
+
     </div>
-    <div data-label="Get started" className="sr2-cta">
-      <AffiliateLink
-        href="https://www.heatspring.com/courses/solar-pv-boot-camp-nabcep-pv-associate-exam-prep?aff_id=9f_wlq"
-        offerName="nabcep_pv_associate"
-        className="sr2-cta-btn"
-      >
-        Start Today
-      </AffiliateLink>
+    <div data-label="Official details" className="sr2-cta">
+      <a href="https://www.nabcep.org/certifications/associate-program/" target="_blank" rel="noopener noreferrer">Associate requirements</a>
     </div>
   </div>
 
@@ -1112,26 +1086,20 @@ export default function SolarInstallerCertification() {
     <div className="sr2-cert-name" data-label="Credential">
        <Link href="/certifications/nabcep-pv-installation-professional">NABCEP PVIP</Link>
     </div>
-    <div data-label="Status">Expected for lead roles</div>
+    <div data-label="Status">Role-dependent</div>
     <div data-label="Who">Lead installer, commercial bids</div>
     <div data-label="Training hours">58 documented training hours</div>
-    <div data-label="Exam cost">$500</div> 
-    <div data-label="Training cost">$1,795 prep course</div>
+    <div data-label="Exam / application">$125 application + $375 exam</div>
+    <div data-label="Training cost">Qualifying coursework varies</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition sr2-recognition--highlight">
-  Only US solar installer credential accredited to ISO/IEC 17024 (ANSI)
+  Accredited professional certification
   <span className="sr2-recognition-source">Source: NABCEP / ANAB</span>
 </span>
-      
+
     </div>
-    <div data-label="Get started" className="sr2-cta">
-      <AffiliateLink
-        href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
-        offerName="nabcep_pvip"
-        className="sr2-cta-btn"
-      >
-        Start Today
-      </AffiliateLink>
+    <div data-label="Official details" className="sr2-cta">
+      <a href="https://www.nabcep.org/certifications/" target="_blank" rel="noopener noreferrer">PVIP requirements</a>
     </div>
   </div>
 
@@ -1140,126 +1108,32 @@ export default function SolarInstallerCertification() {
       Manufacturer certs
       <span className="sub">Tesla, Enphase, SolarEdge</span>
     </div>
-    <div data-label="Status">Optional</div>
+    <div data-label="Status">Product / employer-dependent</div>
     <div data-label="Who">Installers specializing in that equipment</div>
-    <div data-label="Training hours">Enphase: ~5 hrs SolarEdge: 2-12 hrs Tesla: weeks-to-months</div>
-    <div data-label="Exam cost">Free – $150</div>
-    <div data-label="Training cost">Usually included</div>
+    <div data-label="Training hours">Varies by product and learning path</div>
+    <div data-label="Exam / application">Check manufacturer requirements</div>
+    <div data-label="Training cost">Free online Enphase / SolarEdge learning</div>
     <div data-label="Recognition" className="sr2-recognition">
       <span className="sr2-recognition">Manufacturer-specific recognition only</span>
     </div>
-    <div data-label="Get started" className="sr2-cta">
-      <a href="https://www.tesla.com/support/energy/tesla-certified-installer" target="_blank" rel="nofollow noopener noreferrer" className="sr2-cta-btn">
-        Start Today
-      </a>
+    <div data-label="Official details" className="sr2-cta">
+      <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">Manufacturer pathways</Link>
     </div>
   </div>
 </div>
 
-<div className="sr2-why-callout">
-  <span className="heading"></span>
-  HeatSpring reports an 88 percent first-attempt pass rate for its NABCEP PV
-  Associate course. The exam uses a scaled passing score of 65 out of 99.
-  Students who complete the course and fail their first attempt receive a free
-  retake. That guarantee is the main reason we recommend the program. You can
-  compare it with other options in our{" "}
-  <Link href="/resources/nabcep-training-providers-compared">
-    full breakdown of NABCEP training providers
-  </Link>.
-</div>
+<p>*The <a href="https://www.nabcep.org/certifications/nabcep-fees/" target="_blank" rel="noopener noreferrer">NABCEP fee schedule</a> lists these charges separately from tuition. Associate Education Pathway providers may charge $125–$180 for the first test. A prep-course price is neither an exam fee nor a universal cost of becoming an installer.</p>
 
-          <h2 id="bottom"><span className="n">02</span>The bottom line</h2>
-          <EditorialInfographic kind="installer-certifications" />
-
-
-          <div className="sr2-facts">
-
-            <div className="sr2-fact">
-
-              <div className="v green">+$11k/yr</div>
-
-              <div className="l">
-Average pay bump reported for NABCEP-certified installers, based on third-party salary data analysis
- (PayScale/SimplyHired).</div>
-
-            </div>
-
-            <div className="sr2-fact">
-
-              <div className="v">75%</div>
-
-              <div className="l">
-Of NABCEP PV Installation Professional holders on Indeed say earning the credential helped them land a job.</div>
-
-            </div>
-
-            <div className="sr2-fact">
-
-              <div className="v">88%</div>
-
-              <div className="l">88% pass rate among students of HeatSpring's PVA prep course (HeatSpring, self-reported)</div>
-
-            </div>
-
-          </div>
-
-
-
-          <h2 id="law"><span className="n">03</span>Requirements by law</h2>
-
-          <p>
-
-           No federal law requires a professional certification to install
-           solar panels. State and local rules determine the legal
-           requirements. Depending on the work, those may include:
-          </p>
-          <ul>
-            <li>a state electrical license for certain wiring tasks; and</li>
-            <li>OSHA safety training, which most employers treat as mandatory even where it is not technically required.</li>
-          </ul>
-
-          <p>
-
-           NABCEP is a professional credential rather than a license.
-           Employers use it as a hiring filter. Insurers and utilities also
-           reference it on commercial projects. It often separates a $45k
-           installer from a $60k lead. A state license grants legal authority
-           for covered wiring work. NABCEP gives an employer evidence for
-           promotion beyond entry level.
-
-          </p>
-
-
-          <h2 id="payoff"><span className="n">04</span>Pay jump</h2>
-
-          <p>
-
-            The clearest early pay jump sits between OSHA 10 alone and NABCEP
-            PV Associate. Entry-level installers without PVA generally top out
-            around $42k. The PVA has no field-experience prerequisite. Adding
-            it can move the same installer into the $45–55k band during the
-            first year.
-
-          </p>
-
-          <p>
-
-            The move from PVA to PVIP separates many crew and lead-installer
-            pay bands. PVIP holders typically earn $60–75k. BLS data places
-            the top quarter of solar PV installers above $60k a year. The top
-            ten percent clear $80k. See the breakdown in our{" "}
-
-            <Link href="/data/salaries/lead-solar-installer">
-
-              Lead Solar Installer salary page
-
-            </Link>
-
-            .
-
-          </p>
-
-
+          <h2 id="bottom"><span className="n">02</span>OSHA 10 and OSHA 30 serve different jobs</h2>
+          <p>OSHA 10 covers common hazards for workers; OSHA 30 gives supervisors and workers with safety responsibilities more time on hazard recognition and prevention. A new installer does not need to buy both. The <a href="https://www.osha.gov/training/outreach" target="_blank" rel="noopener noreferrer">OSHA Outreach guidance</a> explains the intended audiences. For online study, check the provider and the exact course category against OSHA&apos;s authorized list.</p>
+          <p>Construction Outreach usually matches installation work. General Industry may fit a manufacturing or other operations role; the employer should specify the track. These are course-completion cards. Neither replaces instruction on the actual roof, electrical equipment or emergency procedures at the worksite.</p>
+          <h2 id="law"><span className="n">03</span>Electrical authority comes from the jurisdiction</h2>
+          <p>State and local rules determine who may install or connect a PV system and under whose supervision. A beginner may enter through an electrical apprenticeship rather than qualify immediately as a journeyman. NASCLA provides licensing information and examinations used by participating jurisdictions; it is not a national solar-installation license.</p>
+          <p>Equipment training addresses a different requirement. <a href="https://university.enphase.com/" target="_blank" rel="noopener noreferrer">Enphase University</a> and <a href="https://www.solaredge.com/us/installers/training" target="_blank" rel="noopener noreferrer">SolarEdge training</a> offer free online learning through individual accounts, with access conditions for particular products or installer tools. An employer can arrange the relevant learning path once the equipment is known. Tesla&apos;s installer-network process also involves the business. Completing any manufacturer course leaves local licensing obligations in place.</p>
+          <h2 id="payoff"><span className="n">04</span>NABCEP becomes useful at different career stages</h2>
+          <p>PV Associate can demonstrate foundational knowledge during training or early employment. It is not a prerequisite for every installer opening or for PVIP. Its education route uses a registered provider; candidates with qualifying experience can use the separate experience route.</p>
+          <p>PVIP addresses experienced workers with documented responsibility for projects. Qualifying education and an exam are only part of its requirements. If an employer wants the credential for a lead position, discuss course reimbursement, exam fees and paid study time before choosing a provider. Self-study can support exam preparation but does not replace required education or project evidence.</p>
+          <p>A credential alone does not establish a salary increase. Compare the responsibilities and compensation in actual <Link href="/data/salaries/lead-solar-installer">lead installer roles</Link>, including supervision, travel and overtime.</p>
           <div className="sr2-next-step">
   <span className="label">Next step</span>
   <p>
@@ -1275,16 +1149,7 @@ Of NABCEP PV Installation Professional holders on Indeed say earning the credent
 </div>
 
 
-          <p className="sr2-fine">
-
-            <strong>*Sources:</strong> BLS Occupational Employment and Wage
-            Statistics for May 2024, SOC 47-2231; the 2024 BLS Occupational
-            Outlook Handbook; the NABCEP 2024 Industry Survey; and the ANAB
-            ISO/IEC 17024 personnel-certification directory. Pay varies by
-            state, employer and overtime. Licensing and certification rules
-            also change. This page is not legal advice.
-
-          </p>
+          <p className="sr2-fine">Sources: <a href="https://www.nabcep.org/resources/" target="_blank" rel="noopener noreferrer">NABCEP handbooks and exam references</a>, <a href="https://www.nabcep.org/certifications/nabcep-fees/" target="_blank" rel="noopener noreferrer">NABCEP fee schedule</a> and <a href="https://www.osha.gov/training/outreach" target="_blank" rel="noopener noreferrer">OSHA Outreach guidance</a>. Licensing requirements depend on the work and jurisdiction.</p>
 
         </article>
 

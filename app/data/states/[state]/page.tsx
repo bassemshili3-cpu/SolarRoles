@@ -420,7 +420,7 @@ export default async function StateDataPage({
                     {role.avgSalary != null ? `$${fmt(role.avgSalary)}` : '—'}
                   </p>
                   <p className="text-xs text-gray-400 mt-1">
-                    {role.count} listing{role.count > 1 ? 's' : ''} in {stateName} · see salary by state →
+                    {role.count} listing{role.count > 1 ? 's' : ''} in {stateName} · see salary by state
                   </p>
                 </Link>
               ))}
@@ -440,7 +440,7 @@ export default async function StateDataPage({
                     rel="nofollow noopener sponsored"
                     className="shrink-0 text-sm font-semibold text-[#C9991F] underline hover:text-[#3D1654]"
                   >
-                    {cert.heatspringCtaLabel} →
+                    {cert.heatspringCtaLabel}
                   </a>
                 </div>
                 <p className="mt-2 text-xs text-[#C9991F]/70">

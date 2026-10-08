@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AffiliateLink } from '@/components/click_affiliate_link';
 import { EditorialInfographic } from '@/components/EditorialInfographic';
 
 const SITE_URL = "https://solarroles.com";
@@ -38,7 +37,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-08",
+      dateModified: "2026-10-08",
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
     {
@@ -333,21 +332,10 @@ const css = `
   background-size: 11px 11px; background-repeat: no-repeat; background-position: center;
 }
 /* ── HEATSPRING INLINE CTA ───────────────────────────────────────── */
-.sr2-heatspring-cta { text-align: center; margin: 20px 0; }
-.sr2-article a.sr2-heatspring-btn {
-  display: inline-block;
-  padding: 12px 22px;
-  background: var(--gold-500);
-  color: #121010 !important;
-  font-weight: 800;
-  font-size: 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  border-bottom: none;
-  transition: background .15s;
-}
-.sr2-article a.sr2-heatspring-btn:hover { background: var(--gold-600); color: #fff !important; border-bottom: none; }
-.sr2-heatspring-disclosure { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-400); text-align: center; }
+
+
+
+
 /* ── SIDEBAR ──────────────────────────────────────────────────────── */
 .sr2-sidebar { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 18px; }
 .sr2-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
@@ -403,9 +391,7 @@ export default function NabcepProjectCreditsExplained() {
         <p className="sub">{PAGE_DESCRIPTION}</p>
       </div>
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 1 August, 2026</span>
-        <span className="dot" />
-        <span className="changes">This page contains affiliate links. We may earn a commission at no additional cost to you</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
       </div>
 
       <div className="sr2-shell">
@@ -440,9 +426,7 @@ export default function NabcepProjectCreditsExplained() {
             some employers reserve that responsibility for certified workers.
           </p>
           <p>
-            This guide explains what counts and how the credit math works. It
-            also covers ways to document qualifying responsibility before
-            landing a formal lead position.
+            Create one record per project: site address or identifier, rated DC capacity, completion and inspection dates, your employer and the person who can confirm your decisions. Match it to the <a href="https://www.nabcep.org/resource/certification-handbook/" target="_blank" rel="noopener noreferrer">current Certification Handbook</a> when preparing the application; ordinary crew hours do not establish the required responsibility.
           </p>
 
           <h2 id="what-counts"><span className="n">02</span>What Actually Counts as a Credit</h2>
@@ -471,8 +455,7 @@ export default function NabcepProjectCreditsExplained() {
           <p>
             The first bracket covers almost every residential system and most
             commercial rooftops. A standard 8kW home installation earns the
-            same two credits as a 900kW array. A project only needs to exceed
-            1kW and carry the required documentation.
+            same two credits as a 900kW array. The size bracket is only one condition; the project, dates and your role must also qualify.
           </p>
 
 
@@ -489,11 +472,7 @@ export default function NabcepProjectCreditsExplained() {
             <li>A commissioning or quality assurance report identifying you as responsible for that commissioning or QA process</li>
           </ul>
           <p>
-            <strong>Several people can qualify through the same system.</strong>{" "}
-            NABCEP recognizes distinct decision-making roles on one project.
-            The lead installer, designer and commissioning owner may each
-            document separate responsibility. Another person being named as
-            contractor does not automatically disqualify a crew member.
+            An 8 kW rooftop project might have a crew lead responsible for installation and a separate designer responsible for the plans. Each applicant needs evidence of their own qualifying decisions. Keep the approved permit and final inspection record with the relevant drawings, commissioning report or signed role confirmation; photos alone do not explain who held responsibility.
           </p>
 
           <h2 id="how-many"><span className="n">04</span>How Many Installs You Actually Need</h2>
@@ -546,9 +525,7 @@ export default function NabcepProjectCreditsExplained() {
             <li>
               <div className="t">Registered apprenticeship programs</div>
               <div className="d">
-                Structured apprenticeships are built to produce documented,
-                verifiable experience over time, which maps naturally onto
-                what NABCEP asks for. See our{" "}
+                An apprenticeship can help preserve work records, but a program timesheet is not automatically proof of NABCEP project responsibility. Ask which assignments and supporting documents can establish your own qualifying role. See our{" "}
                 <Link href="/resources/how-to-get-a-solar-apprenticeship">
                   guide to solar apprenticeship programs
                 </Link>{" "}
@@ -581,23 +558,9 @@ export default function NabcepProjectCreditsExplained() {
             </li>
           </ul>
 
-          <p>
-            If you&apos;re working toward the training-hour side of PVIP
-            while you sort out project credits, HeatSpring&apos;s prep
-            bundle covers the full 58-hour requirement.
-          </p>
-          <div className="sr2-heatspring-cta">
-            <AffiliateLink
-              href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
-              offerName="nabcep_pvip"
-              className="sr2-heatspring-btn"
-            >
-              See the PVIP Prep Course
-            </AffiliateLink>
-          </div>
-          <p className="sr2-heatspring-disclosure">
-            * We may earn a commission if you enroll through this link, at no extra cost to you.
-          </p>
+
+
+
 
           <h2 id="timing"><span className="n">06</span>Timing Rules to Know</h2>
           <ul className="sr2-checklist">
@@ -606,9 +569,7 @@ export default function NabcepProjectCreditsExplained() {
             <li>Each installation needs a permit and a final approved inspection submitted as part of your documentation — plans or unpermitted work don&apos;t qualify</li>
           </ul>
           <p>
-            Document your role as each job closes. Asking for a letter two
-            years later is harder when the project team no longer remembers
-            the details.
+            Request the signed role confirmation while the supervisor still has the job file open. Keep an employer-approved copy of the application evidence and a current verifier contact, rather than relying on access to a company drive after you leave. A simple project index makes it possible to check which installations remain within the applicable submission window.
           </p>
 
           <h2 id="mistakes"><span className="n">07</span>Common Mistakes</h2>

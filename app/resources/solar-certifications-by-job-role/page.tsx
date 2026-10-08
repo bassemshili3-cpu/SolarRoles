@@ -44,7 +44,7 @@ const HEADER_COLORS = ["#F5B819", "#F0A012", "#EA850E", "#E36A12"];
 const ROLE_ROWS: RoleRow[] = [
   {
     role: "PV Installer (entry-level)",
-    required: "OSHA 10 (employer-expected, not federally mandated)",
+    required: "Task-specific safety training; apprentice / trade license where required",
     recommended: "NABCEP PV Associate",
     optional: "—",
     learnMore: {
@@ -54,9 +54,9 @@ const ROLE_ROWS: RoleRow[] = [
   },
   {
     role: "Solar Apprentice",
-    required: "Program-specific minimum requirements (age, diploma/GED)",
+    required: "Program admission criteria; apprentice registration where required",
     recommended: "OSHA 10 during or before the program",
-    optional: "NABCEP Associate, often earned using apprenticeship hours",
+    optional: "NABCEP Associate if its education or experience criteria are met",
     learnMore: {
       label: "Apprenticeship programs",
       href: "/resources/solar-installer-apprenticeship-programs",
@@ -64,7 +64,7 @@ const ROLE_ROWS: RoleRow[] = [
   },
   {
     role: "Lead Installer / Foreman",
-    required: "OSHA 10, state electrical license where applicable",
+    required: "Safety training and electrical licensing / supervision as applicable",
     recommended: "NABCEP PV Installation Professional",
     optional: "OSHA 30",
     learnMore: {
@@ -74,7 +74,7 @@ const ROLE_ROWS: RoleRow[] = [
   },
   {
     role: "Solar Electrician",
-    required: "State journeyman or master electrician license",
+    required: "Appropriate electrical license under state / local rules",
     recommended: "NABCEP PV Installation Professional",
     optional: "ETA International credential",
     learnMore: {
@@ -112,7 +112,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-01",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -147,13 +147,9 @@ export default function SolarCertificationsByJobRole() {
       />
 
       <h1>Solar Certifications by Job Role</h1>
-      <p className="resource-intro">
-        Solar credentials come from several sources. OSHA provides federal
-        safety training. States issue trade licenses. NABCEP and ETA offer
-        voluntary industry credentials. Manufacturers run product-specific
-        programs. The table shows which ones apply to each job before you pay
-        for training.
-      </p>
+      <p>
+            An electrical license governs the work a person may legally perform. A NABCEP credential demonstrates knowledge and, for Board Certification, qualifying experience. OSHA Outreach cards and manufacturer training serve other purposes.
+          </p>
 
       <div className="certs-hub-table-wrap">
         <div className="certs-hub-title">
@@ -177,7 +173,7 @@ export default function SolarCertificationsByJobRole() {
                   verticalAlign: "top",
                 }}
               >
-                Legally required
+                Legal / program requirements
               </th>
               <th
                 style={{
@@ -219,7 +215,7 @@ export default function SolarCertificationsByJobRole() {
                   {row.role}
                 </th>
                 <td
-                  data-label="Legally required"
+                  data-label="Legal / program requirements"
                   style={{ verticalAlign: "top" }}
                 >
                   {row.required}
@@ -242,7 +238,7 @@ export default function SolarCertificationsByJobRole() {
                 >
                   {row.learnMore ? (
                     <Link href={row.learnMore.href}>
-                      {row.learnMore.label} →
+                      {row.learnMore.label}
                     </Link>
                   ) : (
                     "—"
@@ -257,7 +253,7 @@ export default function SolarCertificationsByJobRole() {
       <section className="resource-section">
         <h2>How to read this table</h2>
         <p>
-          "Legally required" covers safety training, state licenses and
+          "Legal / program requirements" covers program admission, safety training, state licenses and
           permitting rules that apply in a jurisdiction. "Most valued" covers
           voluntary credentials sought by employers or incentive programs.
           "Optional / manufacturer" refers to narrower qualifications tied to
@@ -274,49 +270,24 @@ export default function SolarCertificationsByJobRole() {
       </section>
 
       <section className="resource-section">
-        <h2>The baseline that applies almost everywhere</h2>
+        <h2>Safety training follows the assignment</h2>
         <p>
-          OSHA training underpins almost every row in the table. The card
-          rarely secures a job by itself. It often determines whether a worker
-          can enter the site. Our{" "}
-          <Link href="/resources/osha-safety-guide-solar-installers">
-            OSHA safety guide for solar installers
-          </Link>{" "}
-          explains the difference between OSHA 10 and OSHA 30. It also covers
-          fall protection and PV electrical hazards.
-        </p>
+            An employer must provide the safety training required for the assigned work. OSHA Outreach is a separate general-awareness program; a site or jurisdiction may require its card. Ask the employer which course it accepts and whether it arranges the training. Our <Link href="/resources/osha-safety-guide-solar-installers">OSHA safety guide</Link> explains the different audiences for the 10-hour and 30-hour courses.
+          </p>
       </section>
 
       <section className="resource-section">
-        <h2>Two ways to reach the same row</h2>
+        <h2>Who pays depends on the hiring route</h2>
         <p>
-          Lead installers and solar electricians can reach the required
-          qualifications by different routes. A paid NABCEP prep course may be
-          fastest for someone with savings and relevant experience. Our{" "}
-          <Link href="/resources/nabcep-training-providers-compared">
-            comparison of NABCEP training providers
-          </Link>
-          {" "}compares the main options. A{" "}
-          <Link href="/resources/solar-installer-apprenticeship-programs">
-            Registered Apprenticeship
-          </Link>{" "}
-          pays you while you build documented experience. The tradeoff is a
-          longer and more structured timeline.
-        </p>
+            An apprentice earns wages while building skills; the program&apos;s classroom instruction may also satisfy some credential requirements if the provider and content qualify. A new hire may receive equipment training through the employer. For an experienced worker seeking PVIP, reimbursement can cover a class or exam, but it should be agreed before enrollment. Self-study supports preparation; it cannot replace required education or documented projects. Candidates who fund their own training can compare course scope in our <Link href="/resources/nabcep-training-providers-compared">provider comparison</Link>.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>Where manufacturer certifications fit</h2>
         <p>
-          Tesla, Enphase and SolarEdge credentials appear in the optional
-          column because they do not replace NABCEP or a state license. Some
-          can be completed independently. Others require an approved employer.
-          Our{" "}
-          <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">
-            guide to Tesla, Enphase, and SolarEdge certifications
-          </Link>
-          .
-        </p>
+            Enphase and SolarEdge offer free online learning, while Tesla&apos;s installer pathway involves an approved business. Product courses are often most useful after the employer identifies the equipment you will use, and some are required for particular installation or commissioning tasks. Our <Link href="/resources/manufacturer-certifications-tesla-enphase-solaredge">manufacturer training guide</Link> links to the official routes and explains the access conditions.
+          </p>
       </section>
 
       <p className="resource-fine-print">

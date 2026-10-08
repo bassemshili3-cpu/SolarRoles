@@ -8,7 +8,7 @@ const PAGE_PATH = "/resources/nabcep-pvip-pass-rate";
 const PAGE_TITLE =
   "NABCEP PVIP Pass Rate, Retake Cost & Why It Feels So Hard (2026)";
 const PAGE_DESCRIPTION =
-  "The real PVIP pass rate, what the $275 retake costs you, and why the exam feels harder than the material — plus how to prepare so you don't need a second attempt.";
+  "What NABCEP publishes about the PVIP exam, why provider pass rates cannot establish a national rate, and how to prepare or budget for a retake.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -38,7 +38,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-08",
+      dateModified: "2026-10-08",
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
     {
@@ -292,21 +292,10 @@ const css = `
   background-size: 11px 11px; background-repeat: no-repeat; background-position: center;
 }
 /* ── HEATSPRING INLINE CTA ───────────────────────────────────────── */
-.sr2-heatspring-cta { text-align: center; margin: 20px 0; }
-.sr2-article a.sr2-heatspring-btn {
-  display: inline-block;
-  padding: 12px 22px;
-  background: var(--gold-500);
-  color: #121010 !important;
-  font-weight: 800;
-  font-size: 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  border-bottom: none;
-  transition: background .15s;
-}
-.sr2-article a.sr2-heatspring-btn:hover { background: var(--gold-600); color: #fff !important; border-bottom: none; }
-.sr2-heatspring-disclosure { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-400); text-align: center; }
+
+
+
+
 /* ── SIDEBAR ──────────────────────────────────────────────────────── */
 .sr2-sidebar { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 18px; }
 .sr2-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
@@ -362,7 +351,7 @@ export default function NabcepPvipPassRate() {
         <p className="sub">{PAGE_DESCRIPTION}</p>
       </div>
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 8 August, 2026</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
         <span className="dot" />
         <span className="changes">This page contains affiliate links. We may earn a commission at no additional cost to you</span>
       </div>
@@ -398,20 +387,11 @@ export default function NabcepPvipPassRate() {
             unfamiliar commissioning scenario. That result does not erase
             years of trade knowledge.
           </p>
-          <div className="sr2-reassure">
-            <strong>The short version:</strong> a large share of the field
-            fails on the first attempt. That&apos;s a statement about how the
-            exam is built: broad, code-heavy, and scenario-based.
-          </div>
+
 
           <h2 id="passrate"><span className="n">02</span>What the Pass Rate Actually Means</h2>
           <p>
-            NABCEP does not publish an official first-attempt pass rate.
-            Training providers and industry guides most often cite a range of
-            <strong> 60–70% on the first try</strong>. That would leave three
-            or four candidates in ten needing a retake. Structured preparation
-            against NABCEP&apos;s Job Task Analysis is a common feature among
-            first-time passes.
+            NABCEP&apos;s public exam materials do not provide an official first-attempt PVIP pass rate that supports the often-repeated 60–70% estimate. We do not use that estimate as &quot;the PVIP pass rate.&quot; A provider&apos;s reported result describes its own students, if the cohort and method are disclosed; it cannot establish the result for all candidates.
           </p>
           <p>
             Field experience teaches correct installation. The exam asks
@@ -436,7 +416,7 @@ export default function NabcepPvipPassRate() {
           </div>
           <p>
             A scaled score of 70 does not mean 70 percent of answers were
-            correct. NABCEP weights and scales the scored questions. Two
+            correct. The reported score uses NABCEP&apos;s scaled scoring system. Two
             candidates with similar impressions can therefore finish on
             opposite sides of the passing line. The way the exam felt is not a
             reliable estimate of the final score.
@@ -457,30 +437,14 @@ export default function NabcepPvipPassRate() {
             <li>If you don&apos;t pass within the year, your application eligibility lapses and you&apos;ll need to reapply</li>
           </ul>
           <p>
-            Some prep providers include the retake fee in their guarantee.
-            HeatSpring covers one retake after a student completes its PVIP
-            course and fails the first attempt. Include that protection when
-            comparing the total cost of each option.
+            The <a href="https://www.nabcep.org/certifications/nabcep-fees/" target="_blank" rel="noopener noreferrer">NABCEP fee schedule</a> lists $275 for a PVIP re-examination. Course guarantees, where offered, have separate conditions and do not change NABCEP&apos;s fee. Check an employer&apos;s reimbursement rules as well: coverage for the first sitting may not include another attempt.
           </p>
-          <div className="sr2-heatspring-cta">
-            <AffiliateLink
-              href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
-              offerName="nabcep_pvip"
-              className="sr2-heatspring-btn"
-            >
-              See the PVIP Prep Course
-            </AffiliateLink>
-          </div>
-          <p className="sr2-heatspring-disclosure">
-            * We may earn a commission if you enroll through this link, at no extra cost to you.
-          </p>
+
+
 
           <h2 id="prepare"><span className="n">05</span>How to Avoid Needing a Retake</h2>
           <p>
-            Sources commonly suggest 100–150 hours of focused study for
-            candidates without a structured course. Spread that work across
-            several weeks. Four practices appear consistently in advice for
-            first-time candidates:
+            The <a href="https://www.nabcep.org/resources/" target="_blank" rel="noopener noreferrer">NABCEP handbooks and exam references</a> provide the Job Task Analysis and reference list for planning revision. Compare them with the tasks you actually perform: installation experience may leave gaps in design calculations or commissioning. There is no verified study-hour total that predicts a pass.
           </p>
           <ul>
             <li>Studying directly against NABCEP&apos;s published PVIP Job Task Analysis</li>
@@ -489,12 +453,13 @@ export default function NabcepPvipPassRate() {
             <li>Treating commissioning and troubleshooting scenarios as their own study category, even if that&apos;s not the part of the job you do day to day</li>
           </ul>
 
+          <p>HeatSpring&apos;s <AffiliateLink href="https://www.heatspring.com/courses/free-nabcep-pv-certification-practice-exam?aff_id=9f_wlq" offerName="nabcep_pv_certification_free_practice">free PV certification practice exam</AffiliateLink> contains 70 questions by Sean White and is listed for PVIP, PVDS and PVIS preparation. It is not an official NABCEP exam or a PVIP-only question set. Access requires a free account, with no credit card; the optional completion certificate is a paid-membership feature. This exercise provides neither NABCEP certification nor qualifying education credit, and its score does not predict your official result.</p>
           <h2 id="mistakes"><span className="n">06</span>Common Mistakes</h2>
           <ul className="sr2-downsides">
             <li>Assuming years of field experience alone is enough prep — it builds the wrong kind of exam readiness for a scenario-based, code-referenced test.</li>
             <li>Studying the current NEC cycle instead of the 2017 edition the exam is still built on.</li>
             <li>Skipping timed practice exams and only reviewing material passively.</li>
-            <li>Waiting until after a first failed attempt to invest in structured prep, instead of budgeting for it up front.</li>
+            <li>Choosing practice questions without checking their relevance to the current exam references.</li>
           </ul>
 
           <h2 id="next"><span className="n">07</span>Next Steps</h2>
@@ -508,7 +473,7 @@ export default function NabcepPvipPassRate() {
             <Link href="/resources/nabcep-board-eligible-status">
               Board Eligible pathway
             </Link>{" "}
-            lets you sit the exam first. Once certified, browse
+            lets you sit the exam first. Browse
             current{" "}
             <Link href="/jobs?what=Solar%20Installer">
               Solar Installer openings
@@ -516,12 +481,8 @@ export default function NabcepPvipPassRate() {
             on Solar Roles.
           </p>
 
-          <p className="sr2-fine">
-            NABCEP is an independent certification body with no affiliation to
-            Solar Roles. The pass-rate range reflects figures reported by
-            training providers and industry publications. NABCEP sets exam
-            fees, retake costs and format details. Confirm current information
-            at nabcep.org before scheduling an exam.
+          <p>
+            NABCEP sets the official exam requirements and fees. No national first-attempt pass-rate figure is asserted here. Check its current exam references before scheduling, particularly the NEC edition used for your examination.
           </p>
         </article>
 

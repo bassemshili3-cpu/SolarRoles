@@ -501,6 +501,18 @@
     }
   }
 }
+  @keyframes save-sun-celebrate {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    30% { transform: translateY(-3px) rotate(-18deg) scale(1.12); }
+    65% { transform: translateY(0) rotate(18deg) scale(1.06); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .save-sun-celebrate {
+      animation: save-sun-celebrate 550ms ease-in-out;
+    }
+  }
+
    /* Hero tagline "Your time to Shine." — curseur machine a ecrire */
   @keyframes hero-tagline-caret-blink {
     0%, 49% { opacity: 1; }

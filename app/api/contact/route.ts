@@ -92,7 +92,13 @@ export async function POST(req: Request) {
     }) })
     const delivery = await response.json().catch(() => null)
     if (!response.ok || !delivery?.id) {
-      console.error('[contact route] Resend rejected the message', { status: response.status, code: delivery?.name })
+      console.error('[contact route] Resend rejected the message', {
+        status: response.status,
+        code: delivery?.name,
+        message: typeof delivery?.message === 'string'
+          ? delivery.message.replaceAll(apiKey, '[redacted]').replaceAll(email, '[visitor email]').slice(0, 500)
+          : undefined,
+      })
       return NextResponse.json({ error: 'Failed to send message. Please try again.' }, { status: 502 })
     }
 

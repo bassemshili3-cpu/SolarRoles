@@ -72,7 +72,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-07-01",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -182,53 +182,36 @@ export default function NabcepVsEtaVsStateLicenses() {
       <section className="resource-section">
         <h2>NABCEP vs ETA International</h2>
         <p>
-          Both credentials come from legitimate nonprofit certification
-          bodies. They are often presented as competitors. In practice, they
-          suit different stages and styles of training.
+            NABCEP and ETA publish different credential requirements. Compare the named credential, not just the organization: NABCEP&apos;s Associate route is different from its professional Board Certifications, while <a href="https://www.etai.org/renewable_energy.html" target="_blank" rel="noopener noreferrer">ETA&apos;s renewable-energy programs</a> specify their own training and assessment steps.
+          </p>
+        <p>
+            NABCEP PVIP combines qualifying education, an exam and project responsibility. The Board Eligible option changes the order by allowing the exam before the experience is complete. Neither route means a beginner must earn PVIP before applying for a supervised installation job.
+          </p>
+        <p>
+          ETA&apos;s Photovoltaic Installer Level 1 (PVI1) requires hands-on
+          training from an approved school. Its more advanced PV2 credential
+          has additional conditions, including field experience, approved
+          training, OSHA 10 or an equivalent, and Customer Service Specialist
+          certification. The requirements for one level should not be read
+          as requirements for every ETA applicant.
         </p>
         <p>
-          NABCEP's certification track generally assumes you already have
-          field experience. To sit for the PV Installation Professional
-          exam, candidates need training hours and documented involvement in
-          a minimum number of installations. The pathway relies heavily on
-          exams. It is also widely recognized by employers and government
-          incentive programs across the country.
-        </p>
+            Compare application, exam and renewal fees separately from school tuition. A provider may package some of those charges together. Employer reimbursement or an eligible training program can change what the candidate pays, without changing the credential requirements.
+          </p>
         <p>
-          ETA leans further into hands-on assessment. Its entry-level
-          certification is designed for people who are newer to the field.
-          Practical instruction from an ETA-approved school is part of the
-          process. ETA also pairs its technical credential with a Customer
-          Service Specialist certification. NABCEP does not include that
-          requirement in its core pathway.
-        </p>
+            If an employer or project specifies NABCEP, ask which credential it means. An ETA certificate will not automatically satisfy a requirement naming PVIP, and a preferred qualification is different from a mandatory condition of employment.
+          </p>
         <p>
-          Cost is one of the clearest differences. Initial certification and
-          renewal through NABCEP tend to cost several times more than the
-          comparable ETA level. Higher exam and application fees account for
-          much of that gap.
-        </p>
-        <p>
-          Price does not settle the choice. NABCEP has stronger recognition
-          among employers and utility incentive programs. That can carry real
-          value over a career.
-        </p>
-        <p>
-          Many installers hold both credentials. Neither replaces field
-          experience. Neither substitutes for a state license where the law
-          requires one.
+          Neither organization&apos;s credential substitutes for a state
+          license where the law requires one.
         </p>
       </section>
 
       <section className="resource-section">
-        <h2>State contractor licenses: the one that isn't optional</h2>
+        <h2>Licensing follows the work and jurisdiction</h2>
         <p>
-          Twelve states and Puerto Rico require a solar-specific contractor
-          license according to the most recent tally. That credential is
-          separate from a general electrical or plumbing license. Most other
-          states still require an electrical contractor license to connect a
-          PV system to the grid.
-        </p>
+            A contractor license can govern who offers the work or pulls permits; an individual electrical license can govern who performs it. States and local authorities use different categories and exemptions. Check both the company&apos;s authority and the worker&apos;s permitted duties in the jurisdiction where the project is located.
+          </p>
         <p>
           In some states, an unlicensed worker can perform the work under the
           supervision of a license holder. Local rules determine the scope.
@@ -239,12 +222,8 @@ export default function NabcepVsEtaVsStateLicenses() {
           in a few places.
         </p>
         <p>
-          Utah requires NABCEP certification before a professional can qualify
-          for its state solar contractor license.
-          California, Delaware and Massachusetts also favor NABCEP-certified
-          professionals in some rebate and incentive programs. They do not
-          make the credential a statewide legal requirement.
-        </p>
+            Some licensing or incentive programs recognize industry credentials, but their conditions are specific to that jurisdiction or program. A national certificate does not establish that you meet every local prerequisite.
+          </p>
         <p>
           Check your state's licensing rules before taking responsibility for
           a job. A national certification is portable across state lines. A
@@ -261,17 +240,11 @@ export default function NabcepVsEtaVsStateLicenses() {
           microinverters and SolarEdge power optimizers.
         </p>
         <p>
-          The value goes beyond training. A program may offer better product
-          pricing, priority technical support or marketing assistance.
-          Enphase also uses partner tiers that affect access to new product
-          allocations.
-        </p>
+            Manufacturers distinguish technician learning from commercial partner benefits. Product pricing and referrals may belong to the company&apos;s partner program rather than to a worker who completes an online course.
+          </p>
         <p>
-          These programs do not replace NABCEP, ETA or a state license. A
-          manufacturer credential proves that you can install one company's
-          equipment correctly. It does not validate broader knowledge of PV
-          design or electrical codes. Permitting offices give it no legal
-          weight.
+          These programs do not replace NABCEP, ETA or a state license. A manufacturer course documents completion of its stated learning requirements. It does not validate broader knowledge of PV
+          design or electrical codes, or grant an electrical license.
         </p>
         <p>
           Product-specific training can still decide who gets specialized
@@ -289,47 +262,14 @@ export default function NabcepVsEtaVsStateLicenses() {
           you want to perform.
         </p>
         <ul className="!mb-6 !ml-0 list-none space-y-4 !pl-0">
-          <SunBullet>
-            <strong>Start with the legal requirement.</strong> Work toward a
-            state contractor license when your state requires one. Until you
-            qualify, accumulate supervised hours under a licensed contractor.
-          </SunBullet>
-          <SunBullet>
-            <strong>Add NABCEP PV Associate early.</strong> It requires no
-            field experience and demonstrates foundational knowledge while
-            you build installation hours.
-          </SunBullet>
-          <SunBullet>
-            <strong>Pursue NABCEP PV Installation Professional next.</strong>{" "}
-            Apply once you have the documented field experience. The
-            credential remains widely recognized by employers and incentive
-            programs nationwide.
-          </SunBullet>
-          <SunBullet>
-            <strong>Choose manufacturer programs selectively.</strong> Focus
-            on one or two brands used by your employer or in your region.
-            Those credentials can open access to specialized installation
-            work.
-          </SunBullet>
-          <SunBullet>
-            <strong>Consider ETA for a hands-on pathway.</strong> It can be
-            valuable when practical assessment fits your training style or a
-            local employer requests it. It does not match NABCEP's broader
-            name recognition.
-          </SunBullet>
+          <SunBullet><strong>First installation job:</strong> Look for trainee or helper duties and the training the employer provides. Where electrical work requires registration, an apprentice license may be the entry route. A beginner does not normally apply for a contractor license simply to join a crew.</SunBullet>
+          <SunBullet><strong>Covered electrical work:</strong> Follow the jurisdiction&apos;s licensing and supervision rules. Keep the records needed for progression; the rules for a journeyman, master and contractor are not interchangeable.</SunBullet>
+          <SunBullet><strong>Advanced project responsibility:</strong> Check whether PVIP, PVIS or another named credential fits the role. Review eligibility and employer support before committing to coursework.</SunBullet>
+          <SunBullet><strong>Equipment-specific assignment:</strong> Complete the manufacturer learning path the employer needs. Enphase and SolarEdge offer free online learning; company approval and tool access are separate conditions.</SunBullet>
         </ul>
       </section>
 
-      <section className="resource-section">
-        <h2>The main thing to remember</h2>
-        <p>
-          A national certification does not substitute for a legally required
-          state license. That rule applies to NABCEP, ETA and manufacturer
-          programs. A state license also does not remove an employer's
-          certification requirements. Check your state's rules first. Build
-          the rest of your credential stack from there.
-        </p>
-      </section>
+
 
       <p className="resource-fine-print">
         The licensing rules, certification costs and manufacturer program

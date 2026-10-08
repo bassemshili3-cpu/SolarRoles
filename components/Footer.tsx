@@ -41,7 +41,7 @@ export default function Footer() {
           <div className="font-semibold mb-3">Jobs by Role</div>
           <ul className="space-y-2 text-sm">
             {jobs.map((j) => (
-              <li key={j.href}><Link href={j.href} className="hover:underline">{j.label} Jobs</Link></li>
+              <li key={j.href}><Link href={j.href} className="hover:underline">{j.label}</Link></li>
             ))}
           </ul>
         </div>

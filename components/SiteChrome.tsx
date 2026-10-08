@@ -18,11 +18,15 @@ export default function SiteChrome({
 
   if (pathname?.startsWith('/embed/')) return children
 
+  const hideFooter = ['/dashboard/candidate', '/dashboard/employer'].some(
+    (route) => pathname === route || pathname?.startsWith(`${route}/`),
+  )
+
   return (
     <>
       {header}
       <div className="min-h-[calc(100vh-4rem)]">{children}</div>
-      {footer}
+      {!hideFooter && footer}
       <Analytics />
       <WhatJobsTracking />
     </>

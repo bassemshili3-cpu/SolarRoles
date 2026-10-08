@@ -1,17 +1,7 @@
 import JobForm from '../employer/job-form'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import {
-  ArrowRight,
-  BarChart3,
-  BriefcaseBusiness,
-  Building2,
-  Check,
-  CircleDollarSign,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-} from 'lucide-react'
+import { BarChart3, BriefcaseBusiness, Building2, Check, CircleDollarSign, RefreshCw, Search, ShieldCheck } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -277,7 +267,7 @@ function PlanCard({ plan }: { plan: (typeof plans)[number] }) {
       >
         <Link href={plan.href}>
           {plan.cta}
-          <ArrowRight className="ml-2 h-4 w-4" />
+
         </Link>
       </Button>
 
@@ -423,7 +413,7 @@ export default function EmployerPage({ searchParams }: { searchParams: { plan?: 
             <Button asChild className="mt-7 bg-white text-[#0B1A2E] hover:bg-slate-100">
               <Link href="/dashboard/post-a-job?plan=partner#create-job">
                 Start Hiring Partner
-                <ArrowRight className="ml-2 h-4 w-4" />
+
               </Link>
             </Button>
           </div>

@@ -34,7 +34,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-10",
+      dateModified: "2026-10-08",
       author: [{ "@type": "Person", name: "Bassem SHILI" }],
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
@@ -63,7 +63,7 @@ export default function SolarInstallerVsElectricianTexas() {
       </div>
 
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 10 August, 2026</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
       </div>
 
       <div className="sr2-shell">
@@ -100,14 +100,10 @@ export default function SolarInstallerVsElectricianTexas() {
             connections.
           </p>
           <p>
-            Every task receives the same answer. A licensed electrician must
-            perform the work through a licensed Electrical Contractor.
+            TDLR says non-exempt electrical work must be performed by licensed people through a licensed Electrical Contractor. Its <a href="https://www.tdlr.texas.gov/electricians/index.htm" target="_blank" rel="noopener noreferrer">Electricians program</a> is the starting point for checking the applicable license; an apprentice license is an entry route within that system.
           </p>
           <p>
-            Transporting panels to the jobsite is the one task on that list
-            that doesn&apos;t require a license (a driver&apos;s license
-            covers it). Everything involving the system itself is treated the
-            same, DC or AC.
+            Delivery and logistics should be distinguished from installing equipment as part of the PV system. A job title such as &quot;panel handler&quot; does not settle the licensing question; ask the contractor which tasks you will actually perform.
           </p>
 
           <h2 id="myth"><span className="n">03</span>The DC-Side</h2>
@@ -137,24 +133,18 @@ export default function SolarInstallerVsElectricianTexas() {
 
           <h2 id="apprentice"><span className="n">04</span>The Legal Entry Point</h2>
           <p>
-            Texas does have a route in without a full journeyman or master
-            license: the <Link href="/resources/how-to-get-a-solar-apprenticeship">Electrical Apprentice license</Link>.
-            An apprentice may perform DC and AC electrical work under on-site
-            supervision. The supervisor must be a Master Electrician,
-            Journeyman Electrician or Residential Wireman. That person reviews
-            and inspects the apprentice&apos;s work. The apprentice must still
-            obtain the license before starting.
+            The <a href="https://www.tdlr.texas.gov/electricians/apply/individuals/apprentice-electrician.htm" target="_blank" rel="noopener noreferrer">TDLR Electrical Apprentice application</a> has no prior-experience or examination requirement. The license must be renewed annually. Apply before performing covered work and confirm the supervision arrangement with the licensed contractor; registration does not authorize independent contracting.
           </p>
 
+          <p>TDLR identifies Master Electricians, Journeyman Electricians and Residential Wiremen as apprentice supervisors, within the scope of their licenses. For the eventual <a href="https://www.tdlr.texas.gov/electricians/apply/individuals/journeyman-electrician.htm" target="_blank" rel="noopener noreferrer">Journeyman Electrician application</a>, the agency requires 8,000 hours under a Texas-licensed Master Electrician; 7,000 verified hours allow an applicant to seek exam approval earlier. Obtain an Experience Verification Form from each supervising Master Electrician as you move between employers.</p>
           <h2 id="hunting"><span className="n">05</span>What This Means If You&apos;re Job Hunting</h2>
           <p>
-            A few practical takeaways if you&apos;re looking at solar roles
-            in Texas specifically:
+            A Texas job interview should establish who employs and supervises the apprentice:
           </p>
           <ul>
             <li>Ask directly whether the role requires (or sponsors) a TDLR Electrical Apprentice license.</li>
             <li>Confirm the employer holds a Texas Electrical Contractor license and has a Master Electrician on staff.</li>
-            <li>Physical labor roles that never touch wiring — module handling, site prep, logistics, sit outside licensing requirements entirely and are a legitimate way in without any license.</li>
+            <li>Ask which duties count as electrical work and which experience the supervising Master Electrician can verify. Do not assume that avoiding AC wiring creates an exemption.</li>
           </ul>
 
           <h2 id="next"><span className="n">06</span>What is next</h2>

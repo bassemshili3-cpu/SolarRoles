@@ -10,6 +10,7 @@ export async function sendApplicationNotification(params: {
   candidateEmail: string
   resumeUrl?: string | null
   message?: string | null
+  resumeAttachment?: { filename: string; content: Buffer }
 }) {
   const { employerEmail, jobTitle, candidateName, candidateEmail, resumeUrl, message } = params
 
@@ -18,6 +19,7 @@ export async function sendApplicationNotification(params: {
       from: 'Solar Roles <applications@solarroles.com>',
       to: employerEmail,
       subject: `New application: ${jobTitle}`,
+      ...(params.resumeAttachment ? { attachments: [params.resumeAttachment] } : {}),
       text: [
         `${candidateName} applied to "${jobTitle}" on Solar Roles.`,
         ``,

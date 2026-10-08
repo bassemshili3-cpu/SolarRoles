@@ -53,8 +53,8 @@ const OUTREACH_ROWS: OutreachRow[] = [
   },
   {
     aspect: "Federal requirement",
-    osha10: "Voluntary, but expected by most GCs and installers",
-    osha30: "Voluntary, but standard for site supervisors",
+    osha10: "Not federally mandated; employer / local rules may require it",
+    osha30: "Not federally mandated; employer / local rules may require it",
   },
   {
     aspect: "Card expiration",
@@ -71,7 +71,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-07-31",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -106,12 +106,9 @@ export default function OshaSafetyGuideForSolarInstallers() {
       />
 
       <h1>OSHA Safety Guide for Solar Installers</h1>
-      <p className="resource-intro">
-        OSHA training is often the first credential a new installer earns.
-        It is frequently required before someone can work on a commercial
-        roof. The course covers the hazards that most often injure solar
-        workers, including falls and live DC circuits.
-      </p>
+      <p>
+            OSHA 10 and OSHA 30 are Outreach course-completion cards. Construction employers or local rules may require one, but neither card qualifies a worker for every hazard on a solar site. The employer still needs to train workers for the equipment and tasks they will encounter.
+          </p>
 
       <div className="resource-table-scroll">
         <table>
@@ -146,43 +143,30 @@ export default function OshaSafetyGuideForSolarInstallers() {
           crew, a safety plan or subcontractor compliance.
         </p>
         <p>
-          Federal OSHA does not require either card. Most solar employers still
-          expect OSHA 10 before a worker enters a jobsite. Some states and
-          municipalities also make Outreach training a condition of
-          construction work. In those jurisdictions, the local rule controls.
-        </p>
+            The <a href="https://www.osha.gov/training/outreach" target="_blank" rel="noopener noreferrer">OSHA Outreach guidance</a> distinguishes general hazard awareness from training required under specific standards. A state, municipality, project owner or employer can require an Outreach card even though federal OSHA does not mandate it.
+          </p>
         <p>
-          OSHA 10 is not a prerequisite for OSHA 30. A new hire preparing to
-          lead a crew can take the 30-hour course directly. Your role and local
-          rules determine which card you need.
-        </p>
+            OSHA 30 is intended for supervisors and workers with safety responsibilities, not automatically for every beginner. OSHA 10 is not its prerequisite. Match the course to the assignment: Construction for installation work, or General Industry where appropriate to manufacturing or operations. Confirm the track with the employer.
+          </p>
       </section>
 
       <section className="resource-section">
+        <p>For online courses, compare the actual training provider and course category with the <a href="https://www.osha.gov/training/outreach/training-providers" target="_blank" rel="noopener noreferrer">OSHA-authorized online providers</a>. A reseller&apos;s logo alone is not proof of authorization. For a classroom course, use <a href="https://www.osha.gov/training/outreach/find-a-trainer" target="_blank" rel="noopener noreferrer">OSHA&apos;s trainer guidance</a> and check the trainer&apos;s current authorization for the relevant industry. Ask the employer whether it already provides an accepted course.</p>
         <h2>Fall protection: the rule that governs every roof job</h2>
         <p>
-          Falls are the leading cause of serious injury in solar installation.
-          The rule is more specific than "wear a harness." Construction
-          standards require protection when panel installers face a fall of
-          six feet or more. That protection may be a guardrail or personal
-          fall-arrest system.
-        </p>
+            OSHA&apos;s <a href="https://www.osha.gov/green-jobs/solar/falls" target="_blank" rel="noopener noreferrer">solar fall-hazard guidance</a> describes protection for construction exposures of six feet or more. Roof edges, openings and access routes need to be assessed together; a harness is useful only as part of an appropriate protection system.
+          </p>
         <p>
-          Maintenance on an existing system falls under general-industry
-          rules. There, the threshold is four feet and a standard railing is
-          the default protection.
-        </p>
+            General-industry walking-working-surface rules commonly use a four-foot threshold. The employer must determine which standard governs the task; calling all work on an existing array &quot;maintenance&quot; does not settle whether construction rules apply.
+          </p>
         <p>
           The construction-versus-maintenance distinction changes the rulebook.
           Two workers on the same roof may face different requirements if one
           is installing and the other is repairing.
         </p>
         <p>
-          States with their own OSHA plans can set different thresholds.
-          California uses seven and a half feet for this work. Other state
-          plans add heat or fall protections. Follow the stricter rule when
-          standards overlap.
-        </p>
+            State-plan requirements may differ from federal rules. Check the applicable plan and the specific activity rather than applying a single state height threshold to every solar roof job.
+          </p>
         <p>
           Roof edges are not the only fall exposure. Skylights and hatches can
           blend into a metal roof and are easy to overlook. OSHA requires
@@ -195,16 +179,11 @@ export default function OshaSafetyGuideForSolarInstallers() {
       <section className="resource-section">
         <h2>Electrical hazards specific to PV</h2>
         <p>
-          A PV module produces current as soon as light reaches it. Opening a
-          downstream breaker or disconnect does not stop generation at the
-          module. Lockout/tagout procedures under 29 CFR 1910.147 still apply
-          during installation and maintenance.
-        </p>
+            A PV module generates electricity in light even when a downstream disconnect is open. <a href="https://www.osha.gov/green-jobs/solar/electrical" target="_blank" rel="noopener noreferrer">OSHA&apos;s solar electrical guidance</a> identifies the shock and arc hazards. The employer&apos;s energy-control procedures must cover the actual installation and applicable electrical standards; one general lockout rule does not cover every construction and maintenance task.
+          </p>
         <p>
-          LOTO cannot remove daylight from the source. Crews may cover panels
-          or work before sunrise because downstream switching does not
-          de-energize the array itself.
-        </p>
+            Opening a switch, covering modules or working at night must not be treated as proof that conductors are safe. Qualified personnel must follow the equipment-specific isolation and verification procedures.
+          </p>
         <p>
           DC arc behavior also differs from AC. A DC arc does not
           self-extinguish at a zero-crossing. Solar-focused safety training
@@ -252,9 +231,7 @@ export default function OshaSafetyGuideForSolarInstallers() {
           OSHA 30 Construction fits people who lead crews, manage jobsite
           safety plans or coordinate subcontractors. For installers, that
           usually means a <Link href="/lead-solar-installer-jobs">lead installer or
-          foreman role</Link>. Taking it earlier is still useful. Its
-          program-management material becomes most relevant once you are
-          responsible for other workers.
+          foreman role</Link>. Its program-management content becomes relevant when those duties are part of the job. There is no need to buy it solely because 30 sounds better than 10.
         </p>
         <p>
           Either card should be treated as a floor. It proves

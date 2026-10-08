@@ -2,14 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CertificationBanner } from '@/components/CertificationBanner'
-import {
-  ArrowRight,
-  CheckCircle2,
-  ExternalLink,
-  DollarSign,
-  Award,
-  ChevronRight,
-} from 'lucide-react'
+import { CheckCircle2, ExternalLink, DollarSign, Award, ChevronRight } from 'lucide-react'
 import {
   CERTIFICATIONS,
   TOC_SECTIONS,
@@ -369,7 +362,7 @@ export default function CertificationPage({ params }: PageProps) {
                 ))}
               </ul>
             </Section>
-            
+
           )}
 
 
@@ -390,7 +383,7 @@ export default function CertificationPage({ params }: PageProps) {
                   <span className="text-sm font-bold text-[#0B1A2E]">
                     {page.label}
                   </span>
-                  <ArrowRight size={14} className="text-[#F5B819]" />
+
                 </Link>
               ))}
             </div>
@@ -408,7 +401,7 @@ export default function CertificationPage({ params }: PageProps) {
     {cert.heatspringLimitation}
   </p>
   <div className="flex justify-center mt-8">
-    
+
      <a href={cert.heatspringUrl}
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"

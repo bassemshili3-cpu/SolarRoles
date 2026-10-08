@@ -309,7 +309,7 @@ export default function SolarDeskJobIllusionReport() {
                 </blockquote>
 
                 <div className="mt-4 text-xs font-semibold text-slate-500 group-hover:text-slate-800">
-                  Open source listing ↗
+                  Open source listing
                 </div>
               </a>
             ))}
@@ -724,7 +724,7 @@ export default function SolarDeskJobIllusionReport() {
             href="/data"
             className="mt-6 inline-flex text-sm font-semibold text-slate-800 transition hover:text-slate-950"
           >
-            Explore more Solar Roles data →
+            Explore more Solar Roles data
           </a>
         </footer>
       </article>

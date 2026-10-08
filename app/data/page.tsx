@@ -1,20 +1,6 @@
 ﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import {
-  Activity,
-  ArrowRight,
-  BarChart3,
-  Building2,
-  CircleDollarSign,
-  Factory,
-  Gauge,
-  HardHat,
-  Newspaper,
-  ShieldCheck,
-  TrendingUp,
-  UsersRound,
-  Wrench,
-} from 'lucide-react'
+import { Activity, BarChart3, Building2, CircleDollarSign, Factory, Gauge, HardHat, Newspaper, ShieldCheck, TrendingUp, UsersRound, Wrench } from 'lucide-react'
 
 import {
   HistoryPeriodSelector,
@@ -870,7 +856,7 @@ export default async function DataPage() {
                 <h3 className="mt-3 font-bold leading-6 text-slate-950">{report.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{report.description}</p>
                 <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-amber-800">
-                  Read report <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Read report
                 </div>
               </Link>
             ))}

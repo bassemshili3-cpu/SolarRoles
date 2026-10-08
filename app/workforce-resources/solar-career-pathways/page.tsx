@@ -327,7 +327,7 @@ export default async function SolarCareerPathwaysPage() {
                         className="flex items-center justify-between gap-4 text-sm font-medium text-gray-900 hover:text-blue-700"
                       >
                         <span>{label}</span>
-                        <ArrowRight className="h-4 w-4 shrink-0" />
+
                       </Link>
                     ))}
                   </div>
@@ -364,7 +364,7 @@ export default async function SolarCareerPathwaysPage() {
           className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-800 hover:text-blue-950"
         >
           Open the full career resources library{' '}
-          <ArrowRight className="h-4 w-4" />
+
         </Link>
       </section>
 

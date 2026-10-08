@@ -5,9 +5,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Search, Pencil, Pause, Play, Trash2, Briefcase, ArrowRight,
-} from 'lucide-react'
+import { Search, Pencil, Pause, Play, Trash2, Briefcase } from 'lucide-react'
 import { getCanonicalJobUrl } from '@/lib/job-url'
 import { useSearchParams, useRouter } from 'next/navigation'
 
@@ -298,7 +296,7 @@ export default function EmployerDashboard({
           <Button asChild>
             <Link href={`/dashboard/employer/new?plan=${billing.partnerAccess ? 'partner' : 'featured'}`}>
               Post a job
-              <ArrowRight size={16} className="ml-2" />
+
             </Link>
           </Button>
         </div>
@@ -360,7 +358,7 @@ export default function EmployerDashboard({
           <Button asChild>
             <Link href={`/dashboard/employer/new?plan=${billing.partnerAccess ? 'partner' : 'featured'}`}>
               Post your first job
-             
+
             </Link>
           </Button>
         </div>

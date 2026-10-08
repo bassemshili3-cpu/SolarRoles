@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  ArrowLeft, ArrowRight, Play,
-  BookOpen, HardHat, FileCheck, Award, Shield, Briefcase,
-} from "lucide-react";
+import { ArrowLeft, Play, BookOpen, HardHat, FileCheck, Award, Shield, Briefcase } from 'lucide-react'
 
 const ICON_MAP = {
   BookOpen, HardHat, FileCheck, Award, Shield, Briefcase,
@@ -63,7 +60,7 @@ function SolarCard({ title, description, href, icon, type = "guide" }: ResourceI
         <p className="text-sm text-[#1C2126]/65 leading-relaxed line-clamp-2">{description}</p>
         <div className="mt-4 inline-flex items-center text-sm font-semibold text-[#F2A93B] transition-all group-hover:gap-2.5">
           <span>Read guide</span>
-          <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+
         </div>
       </div>
     </Link>

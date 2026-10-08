@@ -1,16 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import {
-  ArrowRight,
-  BadgeDollarSign,
-  BookOpenCheck,
-  Building2,
-  GraduationCap,
-  MapPinned,
-  Route,
-  ShieldCheck,
-  Wrench,
-} from 'lucide-react'
+import { BadgeDollarSign, BookOpenCheck, Building2, GraduationCap, MapPinned, Route, ShieldCheck, Wrench } from 'lucide-react'
 import { getWorkforceSnapshot } from './_lib/workforceData'
 
 export const revalidate = 86400
@@ -171,7 +161,7 @@ export default async function WorkforceResourcesPage() {
                     className="inline-flex items-center gap-2 rounded-lg border border-[#DCAA35] bg-[#F2CA62] px-5 py-3 text-sm font-semibold text-[#55451E] transition hover:bg-[#EFC04A]"
                   >
                     Explore the current market
-                    <ArrowRight className="h-4 w-4" />
+
                   </Link>
 
                   <Link
@@ -338,7 +328,7 @@ export default async function WorkforceResourcesPage() {
                     </span>
 
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#B66A25] shadow-[0_1px_3px_rgba(60,55,40,0.05)] transition-transform group-hover:translate-x-1">
-                      <ArrowRight className="h-4 w-4" />
+
                     </span>
                   </div>
                 </Link>
@@ -385,7 +375,7 @@ export default async function WorkforceResourcesPage() {
                     className="inline-flex items-center gap-2 rounded-lg border border-[#D6A93A] bg-[#F0C85E] px-5 py-3 text-sm font-semibold text-[#56461F] transition hover:bg-[#EABC49]"
                   >
                     Configure the widget
-                    <ArrowRight className="h-4 w-4" />
+
                   </Link>
 
                   <Link
@@ -448,7 +438,7 @@ export default async function WorkforceResourcesPage() {
                   className="inline-flex items-center gap-2 rounded-lg border border-[#DCD7CB] px-4 py-3 text-sm font-semibold text-[#626D73] transition hover:border-[#D5AD4C] hover:bg-[#FFFDF6]"
                 >
                   Review the methodology
-                  <ArrowRight className="h-4 w-4" />
+
                 </Link>
 
                 <Link
@@ -456,7 +446,7 @@ export default async function WorkforceResourcesPage() {
                   className="inline-flex items-center gap-2 rounded-lg border border-[#DCD7CB] px-4 py-3 text-sm font-semibold text-[#626D73] transition hover:border-[#D5AD4C] hover:bg-[#FFFDF6]"
                 >
                   Discuss a workforce partnership
-                  <ArrowRight className="h-4 w-4" />
+
                 </Link>
               </div>
             </div>
@@ -513,7 +503,7 @@ export default async function WorkforceResourcesPage() {
                 className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#B5672C]"
               >
                 Full data notes
-                <ArrowRight className="h-4 w-4" />
+
               </Link>
             </aside>
           </div>

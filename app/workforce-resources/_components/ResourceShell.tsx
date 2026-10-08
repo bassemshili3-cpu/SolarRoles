@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, ExternalLink, Mail } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Mail } from 'lucide-react'
 
 export function ResourceHeader({
   eyebrow,
@@ -49,7 +49,7 @@ export function ResourceLink({
           <h3 className="font-semibold text-gray-950">{title}</h3>
           <p className="mt-1 text-sm leading-6 text-gray-600">{description}</p>
         </div>
-        <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-gray-400 transition group-hover:translate-x-1 group-hover:text-blue-700" />
+
       </div>
     </Link>
   )

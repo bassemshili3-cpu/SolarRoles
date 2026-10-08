@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  GraduationCap, Route, Award, Shield, Briefcase, HelpCircle,
-  ArrowRight, Wrench, HardHat, Users, Zap, Sun,
-} from "lucide-react";
+import { GraduationCap, Award, Shield, Briefcase, HelpCircle, Sun } from 'lucide-react'
 import { ResourceLibrary, type ResourceItem } from "@/components/ResourceLibrary";
 
 // ----------------------------------------------------------------------------
@@ -32,7 +29,7 @@ export const metadata: Metadata = {
 };
 
 // ----------------------------------------------------------------------------
-// Data: categories (top of page), unified resource library, and career path.
+// Data: categories (top of page), unified resource library.
 // ----------------------------------------------------------------------------
 //
 // NOTE: `ALL_RESOURCES` is passed as a prop from this Server Component down
@@ -51,12 +48,6 @@ const CATEGORIES = [
     desc: "100% Online",
     icon: GraduationCap,
     href: "/resources#courses",
-  },
-  {
-    label: "Career Paths",
-    desc: "From tech to lead",
-    icon: Route,
-    href: "/resources#career-path",
   },
   {
     label: "Certifications",
@@ -274,51 +265,8 @@ const ALL_RESOURCES: ResourceItem[] = [
     type: "guide",
     category: "Career",
   },
-  
- 
-];
 
-// Career path nodes - structured like a solar panel wiring diagram.
-// 5 stops, each links to the most relevant resource on your site.
-// These icons stay as component references because CareerPathStep is
-// rendered here, in the Server Component — they never cross into a
-// Client Component as props.
-const CAREER_PATH = [
-  {
-    label: "Helper",
-    salary: "$30-40K",
-    time: "0-6 mo",
-    icon: Wrench,
-    href: "/resources/how-to-get-a-solar-apprenticeship",
-  },
-  {
-    label: "Installer",
-    salary: "$50-60K",
-    time: "6-18 mo",
-    icon: HardHat,
-    href: "/resources/solar-certifications-by-job-role",
-  },
-  {
-    label: "Lead / Foreman",
-    salary: "$65-85K",
-    time: "2-4 yr",
-    icon: Users,
-    href: "/resources/solar-installer-apprenticeship-programs",
-  },
-  {
-    label: "Superintendent",
-    salary: "$85-110K",
-    time: "4-7 yr",
-    icon: Briefcase,
-    href: "/resources/nabcep-training-providers-compared",
-  },
-  {
-    label: "Director / VP",
-    salary: "$130K+",
-    time: "7+ yr",
-    icon: Zap,
-    href: "/resources/nabcep-vs-eta-vs-state-licenses",
-  },
+
 ];
 
 // ----------------------------------------------------------------------------
@@ -385,43 +333,6 @@ function CategoryPill({
   );
 }
 
-// Career path step - a "node" in the wiring diagram
-function CareerPathStep({
-  label,
-  salary,
-  time,
-  icon: Icon,
-  href,
-}: {
-  label: string;
-  salary: string;
-  time: string;
-  icon: React.ComponentType<{ className?: string }>;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group relative flex-1 flex flex-col items-center text-center min-w-0"
-    >
-      <div className="relative w-14 h-14 md:w-20 md:h-20 rounded-full bg-white border-2 border-[#F2A93B]/25 flex items-center justify-center transition-all duration-300 group-hover:border-[#F2A93B] group-hover:scale-110 group-hover:shadow-[0_8px_24px_-4px_rgba(242,169,59,0.4)] z-10">
-        <div
-          className="absolute inset-1 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500"
-          style={SOLAR_GRID_STYLE}
-        />
-        <Icon className="relative h-6 w-6 md:h-8 md:w-8 text-[#1C2126] group-hover:text-[#D88A1E] transition-colors" />
-      </div>
-      <div className="mt-3 text-[11px] md:text-sm font-bold text-[#1C2126] uppercase tracking-wide group-hover:text-[#D88A1E] transition-colors">
-        {label}
-      </div>
-      <div className="mt-1 text-[10px] md:text-xs text-[#F2A93B] font-mono font-semibold">
-        {salary}
-      </div>
-      <div className="text-[10px] text-[#1C2126]/40 mt-0.5">{time}</div>
-    </Link>
-  );
-}
-
 // ----------------------------------------------------------------------------
 // Page
 // ----------------------------------------------------------------------------
@@ -474,7 +385,7 @@ export default function ResourcesHub() {
           </div>
           <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-blue-800">
             Explore workforce resources
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+
           </span>
         </Link>
       </section>
@@ -490,44 +401,6 @@ export default function ResourcesHub() {
           </h2>
         </div>
         <ResourceLibrary items={ALL_RESOURCES} />
-      </section>
-
-      {/* CAREER PATH FLOW (Resources for your role equivalent) */}
-      <section id="career-path" className="bg-gradient-to-b from-[#FEF7EB] to-[#FAFAFA] py-16 md:py-20 my-8 border-y border-[#F2A93B]/10">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#F2A93B] mb-2">
-              Resources for your stage
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1C2126] tracking-tight mb-3">
-              Your solar career path
-            </h2>
-            <p className="text-[#1C2126]/70">
-              From your first day on a crew to running your own operations.
-              Click any stage to see the credentials and resources that get you there.
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* Connecting "wiring" line behind the nodes */}
-            <div className="absolute top-7 md:top-10 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#F2A93B]/20 via-[#F2A93B] to-[#F2A93B]/20 -z-0" />
-            <div className="relative flex items-start justify-between gap-2 md:gap-4 max-w-5xl mx-auto">
-              {CAREER_PATH.map((step) => (
-                <CareerPathStep key={step.label} {...step} />
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-10 text-center">
-            <Link
-              href="/resources#career-path"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#F2A93B] text-[#1C2126] rounded-full font-semibold hover:bg-[#E0A030] hover:shadow-[0_8px_24px_-4px_rgba(242,169,59,0.4)] transition-all"
-            >
-              See the full career path
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* EXPLORE MORE — jobs, salary data, and certifications */}
@@ -555,7 +428,7 @@ export default function ResourcesHub() {
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-[#1C2126]/80 hover:text-[#D88A1E] font-medium inline-flex items-center gap-1.5">
-                    <ArrowRight className="h-3.5 w-3.5 text-[#F2A93B]" />
+
                     {l.label} jobs
                   </Link>
                 </li>
@@ -580,14 +453,14 @@ export default function ResourcesHub() {
                 ].map((l) => (
                   <li key={l.href}>
                     <Link href={l.href} className="text-[#1C2126]/80 hover:text-[#D88A1E] font-medium inline-flex items-center gap-1.5">
-                      <ArrowRight className="h-3.5 w-3.5 text-[#F2A93B]" />
+
                       {l.label} salary by state
                     </Link>
                   </li>
                 ))}
               </ul>
               <Link href="/data" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#D88A1E] hover:gap-2.5 transition-all">
-                See the full data center <ArrowRight className="h-4 w-4" />
+                See the full data center
               </Link>
             </div>
             <div className="bg-white rounded-3xl border border-[#F2A93B]/15 p-7">
@@ -636,7 +509,7 @@ export default function ResourcesHub() {
               className="group inline-flex items-center gap-2 px-7 py-3.5 bg-[#F2A93B] text-[#1C2126] rounded-full font-semibold hover:bg-[#E0A030] hover:shadow-[0_8px_32px_-4px_rgba(242,169,59,0.5)] active:scale-[0.97] transition-all whitespace-nowrap"
             >
               Ask a question
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+
             </Link>
           </div>
         </div>

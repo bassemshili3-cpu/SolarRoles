@@ -49,7 +49,7 @@ const STEP_ROWS: StepRow[] = [
   {
     step: "Testing",
     electricalTrack: "Formal aptitude test: algebra + reading comprehension",
-    employerOrState: "Rarely a formal test; sometimes a basic skills check",
+    employerOrState: "Testing or skills checks depend on the sponsor",
   },
   {
     step: "Interview",
@@ -59,12 +59,12 @@ const STEP_ROWS: StepRow[] = [
   {
     step: "Outcome",
     electricalTrack: "Ranked on an eligibility list, offers by rank order",
-    employerOrState: "Direct hire/reject, no ranked waitlist",
+    employerOrState: "Employer / sponsor selection; waiting lists may apply",
   },
   {
     step: "Typical wait",
     electricalTrack: "Weeks to several months, sometimes longer",
-    employerOrState: "Days to a few weeks",
+    employerOrState: "Depends on hiring and program intake",
   },
 ];
 
@@ -76,7 +76,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-07-31",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -144,42 +144,28 @@ export default function HowToGetASolarApprenticeship() {
           If your solar apprenticeship route runs through an electrical
           license, like Oregon's Limited Renewable Energy Technician track,
           you're applying through a Joint Apprenticeship Training Committee
-          structure shared with the broader electrical trades. 
+          structure shared with the broader electrical trades.
         </p>
         <p>
-          Employer-run and state-registered programs usually skip formal tests
-          and ranked eligibility lists. ReVision Energy and Florida's state
-          pathway follow this model. Candidates apply much as they would for a
-          job. The employer reviews a resume and interview for a paid position
-          with structured training.
-        </p>
+            Employer-run programs may begin with an ordinary job application, while a JATC may use a separate admission process. The sponsor&apos;s current notice controls. Look for diploma or GED requirements, transcripts showing any required algebra credit, and a driver&apos;s license if the role involves driving. Submit a resume describing tools, safety training and related work; these requirements are not universal across programs.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>The JATC aptitude test</h2>
         <p>
-          Programs that use the standard electrical apprenticeship test
-          battery is often called by its former name: the NJATC test. The
-          Electrical Training Alliance now administers it. Candidates complete
-          algebra and reading-comprehension sections in about two and a half
-          hours. Most locals require a minimum score before the interview.
-          Four out of nine is a common threshold.
-        </p>
+            Electrical apprenticeship aptitude testing commonly covers algebra and reading comprehension. The sponsor sets its testing arrangements, minimum score and any exceptions. Obtain those details from the local program rather than relying on a national preparation site&apos;s claimed cutoff.
+          </p>
         <p>
-          The material is manageable even if you have not studied algebra
-          since high school. Electric Prep and SkillsPrep offer free tools for
-          this test. Several JATC websites refer applicants to them directly.
-        </p>
+            The <a href="https://www.electricaltrainingalliance.org/SamplePage/PreparingfortheTest" target="_blank" rel="noopener noreferrer">electrical training ALLIANCE&apos;s free sample questions</a> show the algebra and reading tasks used in its test battery. Work through them before deciding whether you need additional preparation. For missing algebra foundations, <a href="https://www.khanacademy.org/math/algebra" target="_blank" rel="noopener noreferrer">Khan Academy&apos;s algebra lessons</a> are free; neither resource guarantees a qualifying score.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>The ranking system nobody explains upfront</h2>
         <p>
-          This is the part that trips up first-time applicants the most.
-          Passing the test and interview does not guarantee immediate entry.
-          The committee scores candidates and places them on an eligibility
-          list. Some lists remain valid for up to two years.
-        </p>
+            Passing a test and interview may place you on an eligibility list rather than produce an immediate offer. Ask when the list expires and what the program permits if you want to re-interview or update your work experience.
+          </p>
         <p>
           Offers go out in rank order as positions open. A strong score
           improves your place. It does not provide a start date.
@@ -195,12 +181,8 @@ export default function HowToGetASolarApprenticeship() {
       <section className="resource-section">
         <h2>What moves your ranking up</h2>
         <p>
-          Documented work experience carries real weight. Several JATC locals
-          waive the minimum test score for applicants with roughly 2,000 to
-          4,000 hours of related electrical construction experience. Those
-          candidates still sit for the test so the committee has a score on
-          file.
-        </p>
+            Related work can matter in selection, but only the sponsor can confirm how it affects testing or ranking. Keep dates, hours and supervisor contacts for electrical or construction jobs. Ask which records the committee accepts rather than assuming a particular number of hours guarantees an exemption.
+          </p>
         <p>
           A recognized pre-apprenticeship can also strengthen an application.
           Several JATCs explicitly credit that training. Documented veteran
@@ -209,23 +191,15 @@ export default function HowToGetASolarApprenticeship() {
           before the test and interview.
         </p>
         <p>
-          An <Link href="/certifications/osha-10">OSHA 10 card</Link> or{" "}
-          <Link href="/certifications/nabcep-pv-associate">NABCEP Associate credential</Link>{" "}
-          rarely appears as a formal scoring item. It still shows that you
-          prepared before applying. A strong interview answer sends the same
-          signal.
-        </p>
+            An existing OSHA card or solar course belongs on the resume, but buying another credential is not a substitute for missing admission documents. Prioritize the sponsor&apos;s stated requirements and prepare examples of reliable attendance, safe work and learning a new task.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>Where to apply</h2>
         <p>
-          Apprenticeship.gov's Job Finder is the closest thing to a
-          national search tool. Use it as a starting point, then check your
-          state apprenticeship agency and local IBEW halls. Direct outreach
-          to regional employers can uncover openings that never reach a
-          national search.
-        </p>
+            Search <a href="https://www.apprenticeship.gov/apprenticeship-job-finder" target="_blank" rel="noopener noreferrer">Apprenticeship.gov&apos;s Job Finder</a>, then follow the employer or sponsor&apos;s application link. Check the <a href="https://www.apprenticeship.gov/contact-us" target="_blank" rel="noopener noreferrer">state apprenticeship office</a> and local JATC for programs not currently advertising there. Direct applications to regional contractors are also useful, provided you verify that the position is part of a registered program if that is the route you want.
+          </p>
         <p>
           Eligibility lists are local and program availability varies by state.
           Applying to several programs at once is the most direct way to
@@ -235,7 +209,7 @@ export default function HowToGetASolarApprenticeship() {
 
       <p className="resource-fine-print">
         Application steps, test formats and ranking criteria vary by program.
-        These details reflect information available in mid-2026. Confirm the
+        Confirm the
         current requirements with the JATC, employer or state apprenticeship
         agency before applying.
       </p>

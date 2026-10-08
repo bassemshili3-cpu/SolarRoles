@@ -311,7 +311,7 @@ export default async function SalaryReportPage({
               href={`/data/salaries/${careerPath.slug}`}
               className="text-sm font-semibold text-[#B45309] hover:underline"
             >
-              See {careerPath.title} salary by state →
+              See {careerPath.title} salary by state
             </Link>
           </section>
         )}
@@ -374,7 +374,7 @@ export default async function SalaryReportPage({
                     rel="nofollow noopener sponsored"
                     className="shrink-0 text-sm font-semibold text-[#B45309] underline hover:text-[#92400E]"
                   >
-                    {cert.heatspringCtaLabel} →
+                    {cert.heatspringCtaLabel}
                   </a>
                 </div>
                 <p className="mt-2 text-xs text-[#B45309]/70">

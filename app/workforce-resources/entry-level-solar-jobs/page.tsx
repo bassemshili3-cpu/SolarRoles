@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, GraduationCap } from 'lucide-react'
+import { GraduationCap } from 'lucide-react'
 import { getWorkforceSnapshot } from '../_lib/workforceData'
 import {
   MethodologyNote,
@@ -191,7 +191,7 @@ export default async function EntryLevelSolarJobsPage() {
                       href={role.jobsHref}
                       className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-blue-700 hover:text-blue-900"
                     >
-                      Browse matching jobs <ArrowRight className="h-3.5 w-3.5" />
+                      Browse matching jobs
                     </Link>
                   )}
                 </div>

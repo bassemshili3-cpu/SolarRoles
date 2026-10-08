@@ -31,17 +31,21 @@ export interface RewritableJob {
   description: string;
 }
 
-export async function rewriteJobDescriptionForSeo(job: RewritableJob): Promise<string> {
+export async function rewriteJobDescriptionForSeo(job: RewritableJob, options: { maxCharacters?: number; attempt?: number } = {}): Promise<string> {
   if (!process.env.XAI_API_KEY) {
     throw new Error('XAI_API_KEY is required to rewrite job descriptions with Grok');
   }
 
-  const { text } = await generateText({
+  const { text, finishReason } = await generateText({
     model: xai(MODEL),
     maxOutputTokens: 2000,
-    system: SYSTEM_PROMPT,
+    system: SYSTEM_PROMPT + (options.maxCharacters ? `\n- Hard length limit: the entire HTML output, including tags, spaces and punctuation, must contain no more than ${options.maxCharacters} characters. Aim for ${Math.floor(options.maxCharacters * (options.attempt ? 0.8 : 0.9))}. Use concise sentences and compact list items. Combine related facts without deleting objective details. Do not truncate sentences or HTML. ${options.attempt ? 'The previous attempt was too long or invalid; make this version more concise.' : ''}` : ''),
+    maxRetries: options.maxCharacters ? 0 : 2,
+    abortSignal: AbortSignal.timeout(120_000),
     prompt: `Job title: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\n\nOriginal description:\n${job.description}`,
   });
+
+  if (finishReason === 'length') throw new Error('Grok output was truncated; description was not saved');
 
   if (!text.trim()) {
     throw new Error('Grok returned no text content for this job description');

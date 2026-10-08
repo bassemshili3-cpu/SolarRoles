@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 type SavedJobsContextValue = {
@@ -53,13 +53,20 @@ export function SavedJobCards({ children }: { children: ReactNode }) {
 }
 export function SaveJobCardButton({ jobId, showLabel = false }: { jobId: string; showLabel?: boolean }) {
  const context = useContext(SavedJobsContext)
+ const tooltipId = useId()
  if (!context || !context.allowed) return null
  const saved = context.savedIds.has(jobId), busy = context.busyId === jobId
  const feedback = context.feedback?.jobId === jobId ? context.feedback : null
- return <span className="relative z-20 inline-flex shrink-0 items-center">
-  <button type="button" aria-label={saved ? 'Remove job from saved jobs' : 'Save job'} aria-pressed={saved} disabled={context.checking || Boolean(context.busyId)} onClick={() => context.toggle(jobId)} className={('flex min-h-9 items-center justify-center gap-2 rounded-md px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 disabled:opacity-60 ') + (saved ? 'text-amber-700' : 'text-slate-600 hover:text-amber-700')}>
-   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={'h-5 w-5 ' + (busy ? 'animate-pulse' : '')} aria-hidden="true"><circle cx="12" cy="12" r="5.25" fill={saved ? 'currentColor' : 'none'} /><path d="M12 2.5v1.75m0 15.5v1.75M4.58 4.58l1.24 1.24m12.36 12.36 1.24 1.24M2.5 12h1.75m15.5 0h1.75M4.58 19.42l1.24-1.24M18.18 5.82l1.24-1.24" /></svg>{showLabel && (context.checking ? 'Loading...' : saved ? 'Saved' : 'Save')}
+ return <span className="group/save relative z-20 inline-flex shrink-0 items-center">
+  <button type="button" aria-describedby={!feedback && !busy ? tooltipId : undefined} aria-label={saved ? 'Remove job from saved jobs' : 'Save job'} aria-pressed={saved} disabled={context.checking || Boolean(context.busyId)} onClick={() => context.toggle(jobId)} className={('flex min-h-9 items-center justify-center gap-2 rounded-md px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 disabled:opacity-60 ') + (saved ? 'text-amber-700' : 'text-slate-600 hover:text-amber-700')}>
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={'h-[22px] w-[22px] ' + (busy ? 'motion-safe:animate-pulse' : feedback && !feedback.error && saved ? 'save-sun-celebrate' : '')} aria-hidden="true"><circle cx="12" cy="12" r="5.25" fill={saved ? 'currentColor' : 'none'} /><path d="M12 2.5v1.75m0 15.5v1.75M4.58 4.58l1.24 1.24m12.36 12.36 1.24 1.24M2.5 12h1.75m15.5 0h1.75M4.58 19.42l1.24-1.24M18.18 5.82l1.24-1.24" /></svg>{showLabel && (context.checking ? 'Loading...' : saved ? 'Saved' : 'Save')}
   </button>
-  {feedback && <span role={feedback.error ? 'alert' : 'status'} className={('absolute w-max max-w-[min(16rem,70vw)] whitespace-normal rounded-md border px-3 py-2 text-xs shadow-sm ' + (showLabel ? 'left-0 bottom-full mb-1 ' : 'right-0 top-full mt-1 ')) + (feedback.error ? 'border-red-200 bg-red-50 text-red-800' : 'border-emerald-200 bg-emerald-50 text-emerald-900')}>{feedback.message}</span>}
+  {!feedback && !busy && <span id={tooltipId} role="tooltip" className={'pointer-events-none invisible absolute bottom-full z-30 mb-2 w-max max-w-[min(15rem,70vw)] rounded-md border border-amber-200 !bg-amber-50 px-2.5 py-1.5 text-xs font-medium text-amber-900 opacity-0 shadow-sm transition-opacity group-hover/save:visible group-hover/save:opacity-100 group-focus-within/save:visible group-focus-within/save:opacity-100 ' + (showLabel ? 'left-0' : 'right-0')}>
+    {saved ? 'Remove saved job' : 'Save this job'}
+  </span>}
+  {feedback && <span role={feedback.error ? 'alert' : 'status'} className={'pointer-events-none absolute bottom-full z-30 mb-2 w-max max-w-[min(15rem,70vw)] whitespace-normal rounded-lg border px-3 py-2 text-xs font-medium shadow-md ' + (showLabel ? 'left-0 ' : 'right-0 ') + (feedback.error ? 'border-red-300 !bg-red-50 text-red-900' : 'border-amber-300 !bg-amber-50 text-amber-900')}>
+    {feedback.message}
+    <span aria-hidden="true" className={'absolute -bottom-[5px] h-2 w-2 rotate-45 border-b border-r ' + (showLabel ? 'left-[15px] ' : 'right-[15px] ') + (feedback.error ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50')} />
+  </span>}
  </span>
 }

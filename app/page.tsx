@@ -10,33 +10,7 @@ import { prisma } from '@/lib/prisma'
 
 import Link from 'next/link'
 
-import {
-
-  DollarSign,
-
-  Search,
-
-  ShieldCheck,
-
-  Award,
-
-  Users,
-
-  Briefcase,
-
-  MapPin,
-
-  HardHat,
-
-  TrendingUp,
-
-  ArrowRight,
-
-  Eye,
-
-  Zap,
-
-} from 'lucide-react'
+import { DollarSign, Search, ShieldCheck, Award, Users, Briefcase, MapPin, HardHat, TrendingUp, Eye, Zap } from 'lucide-react'
 
 import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
 
@@ -350,7 +324,7 @@ export default function Home() {
 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
 
      <section className="relative bg-[#0B1A2E] text-white pt-24 pb-40 overflow-hidden">
-      
+
   {/* Vidéo de fond en boucle, zoomée pour créer de la marge horizontale,
       sujet cadré plus à droite */}
   <div className="absolute inset-0 overflow-hidden">
@@ -404,7 +378,7 @@ export default function Home() {
 
             >
 
-              View all jobs <ArrowRight size={14} />
+              View all jobs
 
             </Link>
 
@@ -493,7 +467,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
 
      <section className="bg-gray-50 py-24 px-6">
         <div className="max-w-5xl mx-auto">
@@ -539,7 +513,7 @@ export default function Home() {
                 recommended, and optional.
               </p>
               <span className="text-[#1E3A5F] text-sm font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                See the table <ArrowRight size={13} />
+                See the table
               </span>
             </Link>
 
@@ -558,7 +532,7 @@ export default function Home() {
                 specific to PV work.
               </p>
               <span className="text-[#1E3A5F] text-sm font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                Read the guide <ArrowRight size={13} />
+                Read the guide
               </span>
             </Link>
 
@@ -577,7 +551,7 @@ export default function Home() {
                 actually get into one.
               </p>
               <span className="text-[#1E3A5F] text-sm font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                Learn more <ArrowRight size={13} />
+                Learn more
               </span>
             </Link>
           </div>
@@ -587,7 +561,7 @@ export default function Home() {
               href="/resources"
               className="inline-flex items-center gap-2 bg-[#0B1A2E] text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
             >
-              Browse all resources <ArrowRight size={14} />
+              Browse all resources
             </Link>
           </div>
         </div>
@@ -613,7 +587,7 @@ export default function Home() {
                 href="/workforce-resources"
                 className="inline-flex items-center gap-2 rounded-full bg-[#F5B819] px-6 py-3 text-sm font-bold text-[#0B1A2E] transition-colors hover:bg-[#FFD45C]"
               >
-                Open workforce resources <ArrowRight size={14} />
+                Open workforce resources
               </Link>
             </div>
 
@@ -630,7 +604,7 @@ export default function Home() {
                   <h3 className="mt-4 text-sm font-semibold leading-snug text-white">{title}</h3>
                   <p className="mt-2 text-sm leading-6 text-gray-400">{body}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#F5B819] transition-all group-hover:gap-2.5">
-                    Open tool <ArrowRight size={12} />
+                    Open tool
                   </span>
                 </Link>
               ))}
@@ -670,7 +644,7 @@ export default function Home() {
 
               >
 
-                Browse jobs <ArrowRight size={14} />
+                Browse jobs
 
               </Link>
 
@@ -700,7 +674,7 @@ export default function Home() {
 
               >
 
-                Post a job <ArrowRight size={14} />
+                Post a job
 
               </Link>
 
@@ -804,7 +778,7 @@ export default function Home() {
 
             >
 
-              See full job market data <ArrowRight size={14} />
+              See full job market data
 
             </Link>
 
@@ -837,7 +811,7 @@ export default function Home() {
 
             >
 
-              All articles <ArrowRight size={14} />
+              All articles
 
             </Link>
 
@@ -947,4 +921,3 @@ export default function Home() {
   )
 
 }
-

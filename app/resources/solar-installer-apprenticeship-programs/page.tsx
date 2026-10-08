@@ -76,7 +76,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-07-31",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -111,12 +111,9 @@ export default function SolarInstallerApprenticeshipPrograms() {
       />
 
       <h1>How Solar Installer Apprenticeships Work</h1>
-      <p className="resource-intro">
-        A Registered Apprenticeship pays you while you train. That matters when
-        a <Link href="/resources/nabcep-training-providers-compared">NABCEP-approved course</Link>{" "}
-        costing several hundred dollars is out of reach. Here is how the
-        programs work and why their paperwork can be confusing.
-      </p>
+      <p>
+            A Registered Apprenticeship combines a paid job with instruction and supervised skill development. Sponsors recruit for particular occupations, locations and intake dates. A program&apos;s registration is not evidence that it has an opening today.
+          </p>
 
       <div className="resource-table-scroll">
         <table>
@@ -144,15 +141,10 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </div>
 
       <section className="resource-section">
-        <h2>Solar installer isn't "apprenticeable"</h2>
+        <h2>The registered occupation may have a different name</h2>
         <p>
-          To register an apprenticeship with the Department of Labor, the
-          occupation has to be formally recognized as apprenticeable. As of
-          this writing, "solar installer" still isn't one of those
-          occupations. Programs instead register apprentices under an existing
-          DOL category. Construction Craft Laborer is the most common. The
-          sponsor then adds solar-specific tasks to that framework.
-        </p>
+            A solar employer may train apprentices under an electrical or Construction Craft Laborer occupation, depending on its approved program. Search both the employer and occupation in the <a href="https://www.apprenticeship.gov/partner-finder" target="_blank" rel="noopener noreferrer">registered sponsor directory</a>; limiting a search to &quot;solar installer&quot; can miss relevant programs.
+          </p>
         <p>
           IREC and SEIA secured national guidelines for this model. The
           template lets employers build a solar apprenticeship without a
@@ -166,18 +158,10 @@ export default function SolarInstallerApprenticeshipPrograms() {
       <section className="resource-section">
         <h2>The IRA apprenticeship requirement</h2>
         <p>
-          Solar apprenticeships existed before the Inflation Reduction Act,
-          but availability was uneven. The law's labor provisions changed the
-          calculation for employers. Solar and storage projects above 1
-          megawatt must assign a minimum share of construction hours to
-          registered apprentices to receive the full federal tax credit. The
-          threshold began at 12.5 percent and rose to 15 percent.
-        </p>
-        <p>
-          For utility-scale EPC contractors, an apprenticeship pipeline now
-          affects the value of the credit they can claim.
-        </p>
-      
+            Federal clean-energy tax incentives can attach apprenticeship conditions to qualifying construction work. The <a href="https://www.apprenticeship.gov/inflation-reduction-act-apprenticeship-resources" target="_blank" rel="noopener noreferrer">Department of Labor&apos;s apprenticeship guidance</a> explains the registered-program requirements and exceptions. A candidate still applies to a sponsor or employer; a project&apos;s tax-credit status does not guarantee an apprentice vacancy.
+          </p>
+
+
       </section>
 
       <section className="resource-section">
@@ -195,49 +179,32 @@ export default function SolarInstallerApprenticeshipPrograms() {
           different licensing framework.
         </p>
         <p>
-          Pay typically starts below a fully qualified installer's wage and
-          steps up on a schedule as hours and competencies accumulate. 
-         
-        </p>
+            Registered Apprenticeship includes wage progression as skills develop. Ask for the sponsor&apos;s starting rate and increase schedule, including whether each increase depends on hours, competencies or classroom progress. Also check charges for books, tools or related instruction; paid work does not necessarily mean every expense is covered.
+          </p>
       </section>
 
       <section className="resource-section">
-        <h2>Apprenticeship vs. paying for NABCEP training up front</h2>
+        <h2>Apprenticeship records and NABCEP eligibility</h2>
         <p>
-          These routes can lead to the same place. An apprenticeship provides
-          paid and supervised field hours from the first day. That experience
-          can support NABCEP's Experience Pathway. Many apprentices later sit
-          for a NABCEP Associate or Installation Professional exam. Their work
-          hours and classroom instruction replace a separate prep course.
-        </p>
+            An apprenticeship produces work and education records that may support a later NABCEP application. The credential has its own rules: a course must supply the required training category, and project experience must demonstrate the specified responsibility. Completing the apprenticeship does not automatically confer NABCEP certification.
+          </p>
         <p>
-          The tradeoff is speed and flexibility. Apprenticeships follow a fixed
-          structure and can last for years. They also tie you to a sponsor and
-          location. A worker with relevant experience and enough savings may
-          complete a paid NABCEP prep course in weeks. Without those
-          advantages, paid and supervised training is often the stronger route.
-        </p>
+            Ask the sponsor which course certificates and project records apprentices receive. For electrical licensure, confirm who verifies your work and whether the hours count in the state where you intend to qualify. A shorter exam-prep course cannot supply the supervised trade experience an apprenticeship provides.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>Where these programs exist</h2>
         <p>
-          Start with your state apprenticeship agency or an IBEW local if you
-          want the electrical track. Employer-run programs offer another route.
-          SEIA and IREC also publish resources for sponsors. Those directories
-          can reveal which regional employers currently run registered
-          programs.
-        </p>
+            Use <a href="https://www.apprenticeship.gov/apprenticeship-job-finder" target="_blank" rel="noopener noreferrer">Apprenticeship.gov&apos;s Job Finder</a> to locate advertised positions, then check intake dates with the sponsor. The <a href="https://www.apprenticeship.gov/contact-us" target="_blank" rel="noopener noreferrer">state apprenticeship office</a> can identify registered programs in your area. For an electrical route, contact the local IBEW/NECA Joint Apprenticeship and Training Committee through the <a href="https://www.electricaltrainingalliance.org/locateaTrainingCenter" target="_blank" rel="noopener noreferrer">electrical training ALLIANCE directory</a>. Solar contractors also recruit apprentices directly on their careers pages. Ask about paid work, classroom attendance and the licensing outcome before applying.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>What's next</h2>
         <p>
-          Knowing how to get into one of these programs can seem confusing.
-          This is why we have created a specific resource: a
-          practical guide to finding open solar apprenticeship slots and
-          what selection committees are screening for.
-        </p>
+            Application documents and selection steps differ between programs. Our application guide covers transcripts, aptitude preparation and interviews.
+          </p>
         <p>
           <Link href="/resources/how-to-get-a-solar-apprenticeship">
             Read the full guide: How to Land a Solar Installer Apprenticeship
@@ -246,11 +213,9 @@ export default function SolarInstallerApprenticeshipPrograms() {
       </section>
 
       <p className="resource-fine-print">
-        Program structures, required hours and federal tax-credit thresholds
-        reflect information available in mid-2026. New registrations and
-        legislation can change those details. Confirm the current terms with
-        the program sponsor or your state apprenticeship agency before
-        applying.
+        Program structures and required hours can change. Confirm the current
+        terms and intake dates with the program sponsor or your state
+        apprenticeship agency before applying.
       </p>
     </article>
   );

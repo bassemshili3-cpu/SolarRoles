@@ -15,27 +15,7 @@ import Link from 'next/link'
 import { safeAuthRedirect } from '@/lib/authRedirect'
 import AccountConsentFields, { emptyConsent, hasRequiredConsent } from '@/components/AccountConsentFields'
 
-import {
-
-  Sun,
-
-  DollarSign,
-
-  ShieldCheck,
-
-  ArrowRight,
-
-  Check,
-
-  Mail,
-
-  Eye,
-
-  EyeOff,
-
-  MapPin,
-
-} from 'lucide-react'
+import { Sun, DollarSign, ShieldCheck, Check, Mail, Eye, EyeOff, MapPin } from 'lucide-react'
 
 
 export default function Signup() {
@@ -367,7 +347,7 @@ export default function Signup() {
 
                   Sign up with Google
 
-                  <ArrowRight className="w-4 h-4 ml-2 text-gray-400 group-hover:text-[#F59E0B] group-hover:translate-x-1 transition-all duration-200" />
+
 
                 </Button>
 
@@ -606,4 +586,3 @@ function GoogleIcon({ className = '' }: { className?: string }) {
   )
 
 }
-

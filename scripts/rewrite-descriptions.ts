@@ -16,6 +16,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import { rewriteJobDescriptionForSeo, SEO_REWRITE_VERSION } from '../lib/seo/rewrite-description';
+import { rewriteLongAtsDescriptions } from '../lib/seo/rewrite-long-ats';
 
 const prisma = new PrismaClient();
 
@@ -27,6 +28,11 @@ function sleep(ms: number) {
 }
 
 async function main() {
+  if (process.argv.includes('--ats-over-3000')) {
+    await rewriteLongAtsDescriptions(prisma, process.argv.slice(2));
+    await prisma.$disconnect();
+    return;
+  }
   const jobs = await prisma.job.findMany({
     where: {
       active: true,

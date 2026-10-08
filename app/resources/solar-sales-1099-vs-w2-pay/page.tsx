@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { EditorialInfographic } from '@/components/EditorialInfographic'
 
 // If Space Grotesk / Inter / IBM Plex Mono are already loaded in
 // app/layout.tsx or app/resources/layout.tsx, remove this block and reuse
@@ -41,6 +40,7 @@ export default function SolarSales1099VsW2Page() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    dateModified: '2026-10-08',
     headline: 'Solar Sales: 1099 vs W2, Which Pays More',
     author: { '@type': 'Person', name: 'Bassem Shili', url: 'https://solarroles.com/about/bassem-shili' },
     publisher: { '@type': 'Organization', name: 'Solar Roles', url: 'https://solarroles.com' },
@@ -85,18 +85,13 @@ export default function SolarSales1099VsW2Page() {
             className="text-2xl font-medium tracking-tight text-[#0B1A2E] mb-4"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            The short answer
+            The commission rate is only part of the offer
           </h2>
           <p>
-            At the same sales volume, a rep on pure 1099 commission will
-            almost always earn more than a rep on a W2 base-plus-commission
-            plan. The company saves money on payroll tax, benefits and
-            guaranteed pay. Much of that saving returns to the rep through a
-            higher commission rate.
+            A higher commission percentage does not establish higher take-home pay. The result also depends on which deals qualify, cancellations, lead charges and the expenses the rep pays. Compare written compensation plans at the same completed-sales volume, including any guaranteed base and benefits.
           </p>
-          <p className="mt-4">
-            The harder question is whether you can support yourself during the
-            months it takes to make that higher rate matter.
+          <p>
+            A signed customer contract may not produce an immediately payable commission. The plan should distinguish when commission is earned from when payment is due, whether at financing approval, installation, permission to operate or another defined milestone.
           </p>
         </section>
 
@@ -131,10 +126,10 @@ export default function SolarSales1099VsW2Page() {
                 </p>
                 <ul className="space-y-2 text-base text-[#5B6472]">
                   <li>No base pay</li>
-                  <li>Higher commission per deal</li>
+                  <li>Commission rate and calculation depend on the agreement</li>
                   <li>You cover taxes and expenses</li>
                   <li>No benefits, no employer match</li>
-                  <li>Income tracks output directly</li>
+                  <li>Payment depends on eligible deals and contract milestones</li>
                 </ul>
               </div>
               <div className="p-6">
@@ -146,17 +141,17 @@ export default function SolarSales1099VsW2Page() {
                 </p>
                 <ul className="space-y-2 text-base text-[#5B6472]">
                   <li>Guaranteed base pay</li>
-                  <li>Lower commission per deal</li>
+                  <li>Commission terms vary; employee status does not set the rate</li>
                   <li>Taxes withheld automatically</li>
                   <li>Often includes benefits</li>
-                  <li>Income floor, capped upside</li>
+                  <li>Check whether the plan has a cap or a recoverable draw</li>
                 </ul>
               </div>
             </div>
           </div>
         </section>
 
-        <EditorialInfographic kind="sales-pay" />
+        <p>W-2 and 1099 describe employment-tax reporting, not universal pay plans. A W-2 sales job can be commission-based; an advertised &quot;base&quot; may instead be a draw recoverable from future commissions. The <a href="https://www.irs.gov/taxtopics/tc762" target="_blank" rel="noopener noreferrer">IRS classification guidance</a> considers control and the working relationship, not the label on the contract alone. State labor-law tests can differ.</p>
 
         {/* The real risk */}
         <section>
@@ -169,15 +164,11 @@ export default function SolarSales1099VsW2Page() {
           <p>
             Closing solar deals can be difficult in the first month. Most reps need time to learn the pitch and handle objections. They also need to understand permitting quirks in their territory and establish their own close rate. On a pure 1099 plan, that ramp period pays close to nothing.
           </p>
-          <p className="mt-4">
-            The $100k&ndash;$200k+ figure is attainable for reps who complete
-            the ramp. It does not reveal how many new hires run out of savings
-            first. Nor does it show how much financial runway they needed.
+          <p>
+            An advertised earnings range does not disclose how many new reps reached it or how long payment took. Ask for the elapsed time from a qualifying sale to actual commission payment, not just the time to the first signed deal.
           </p>
-          <p className="mt-4 text-[#0B1A2E] font-medium">
-            Before accepting a commission-only role, ask: &ldquo;How many months
-            can I manage without a reliable paycheck while I learn this
-            job?&rdquo;
+          <p>
+            Cancellations can erase an unpaid commission or trigger a chargeback of money already advanced. Read the clawback window, triggers and collection method, including what happens if the customer cancels for reasons outside the rep&apos;s control or the rep leaves the company. Ask for a worked example showing the original payment and any later deduction.
           </p>
         </section>
 
@@ -190,13 +181,10 @@ export default function SolarSales1099VsW2Page() {
             A simple way to think about it
           </h2>
           <p>
-            Set the headline numbers aside. Calculate your monthly expenses
-            and the number of months your savings can cover. A higher ceiling
-            will not help if the first meaningful 1099 commission arrives
-            after your savings are gone.
+            Calculate monthly living costs and add work expenses the company does not reimburse. Separately identify purchased leads, appointments supplied by the company, and time spent generating your own prospects. Lead-purchase charges can reduce a commission even when the prospect never becomes a completed installation.
           </p>
-          <p className="mt-4">
-            A W2 base does the opposite job. It is there to buy you the time to become good enough at the job that the commission side starts to matter.
+          <p>
+            Mileage, phone service, software, travel and insurance can also reduce the value of an offer. For self-employment, the <a href="https://www.irs.gov/businesses/small-businesses-self-employed/self-employed-individuals-tax-center" target="_blank" rel="noopener noreferrer">IRS tax guidance</a> explains income tax, self-employment tax and estimated payments. Gross 1099 receipts are not the same as spendable income; the amount to reserve depends on the individual&apos;s tax situation.
           </p>
         </section>
 
@@ -211,18 +199,15 @@ export default function SolarSales1099VsW2Page() {
           <div className="space-y-6">
             <div>
               <h3 className="font-medium text-[#0B1A2E] mb-1">1099 tends to make sense if</h3>
-              <p className="text-base text-[#5B6472]">
-                You have several months of expenses saved and previous sales
-                experience. You also have a realistic sense of your close
-                rate. In return for carrying the financial risk, you keep more
-                of the upside.
-              </p>
+              <p>
+            An established contractor who generates business independently may accept variable compensation if the net margin and payment terms work. That judgment needs actual lead costs and cancellation experience, not only an advertised commission rate.
+          </p>
             </div>
             <div>
               <h3 className="font-medium text-[#0B1A2E] mb-1">W2 tends to make sense if</h3>
-              <p className="text-base text-[#5B6472]">
-                This route is usually a better fit if you are new to sales, new to solar, or short on savings. It also suits people who need predictable income while they learn. The lower ceiling is the cost of a floor that keeps you in the job long enough to get good at it.
-              </p>
+              <p>
+            A genuine base salary can help a new rep manage the learning period. Check benefits eligibility, reimbursement and the commission plan as well. W-2 status alone does not promise a base, and it does not impose a ceiling on commissions.
+          </p>
             </div>
           </div>
         </section>
@@ -239,8 +224,8 @@ export default function SolarSales1099VsW2Page() {
             <li>What is the average time to a rep&rsquo;s first closed deal on this team</li>
             <li>What percentage of reps hired in the last year are still there after six months</li>
             <li>Is there a draw against commission, and how does it get paid back</li>
-            <li>What exactly does the commission rate apply to, gross deal size or net after cancellations</li>
-            <li>On W2 offers, how often does the base pay get reviewed or reduced as commissions grow</li>
+            <li>What amount is the commission calculated on, when is it earned and payable, and which cancellations can trigger a clawback</li>
+            <li>Which lead charges and work expenses are deducted or reimbursed, and what happens to earned commissions when employment ends</li>
           </ul>
           <p className="mt-6 text-sm text-[#5B6472]">
             This is not tax advice. Self-employment tax and quarterly payments

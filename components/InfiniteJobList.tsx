@@ -295,7 +295,7 @@ const canUseSSRInitialData =
     else params.delete('page')
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     setPage(newPage)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }
 
   // Construit l'URL ET les query params /api/jobs-all pour une page donnée.
@@ -448,14 +448,21 @@ const canUseSSRInitialData =
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between gap-3">
+      <div className="mb-3 flex items-center justify-between gap-3 pt-2 md:pt-0">
         <p aria-live="polite" className="text-sm font-semibold text-slate-800">{isPlaceholderData ? 'Loading...' : (data?.count ?? 0).toLocaleString('en-US') + ((data?.count ?? 0) === 1 ? ' job' : ' jobs')}</p>
-        <FilterDrawerTrigger />
+        <div className="flex shrink-0 items-center gap-2">
+        {typeof data?.count === 'number' && (
+          <p className="whitespace-nowrap text-sm leading-5 text-gray-500 sm:hidden" aria-live="polite">
+            {rangeLabel}
+          </p>
+        )}
+          <FilterDrawerTrigger />
+        </div>
       </div>
 
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="-mx-1 min-w-0 max-w-full overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-1">
-          <div className="flex w-max gap-2">
+          <div className="flex w-max gap-1.5 sm:gap-2">
           {popularFilterTags.map((tag) => {
             const isActive = isPopularTagActive(tag)
             return (
@@ -464,20 +471,20 @@ const canUseSSRInitialData =
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => togglePopularTag(tag)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-white transition-[background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B1A2E] focus-visible:ring-offset-2 ${
+                className={`shrink-0 rounded-full px-3 py-2 text-xs sm:px-4 sm:text-sm font-semibold text-white transition-[background-color,box-shadow] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#9A570F] focus-visible:outline-offset-[-3px] ${
                   isActive
-                    ? 'bg-[#0B1A2E] text-white ring-2 ring-[#F2A93B] ring-offset-1 shadow-sm'
-                    : 'bg-amber-100 !text-slate-900 hover:bg-amber-200'
+                    ? 'bg-[#F2A93B] shadow-[inset_0_0_0_1px_rgba(154,87,15,0.55)]'
+                    : 'bg-[#F2A93B]/60 hover:bg-[#F2A93B]/80'
                 }`}
               >
-                {isActive && <span aria-hidden="true" className="mr-1.5">{'\u2713'}</span>}{tag.label}
+                {tag.label}
               </button>
             )
           })}
           </div>
         </div>
         {typeof data?.count === 'number' && (
-          <p className="order-first self-end whitespace-nowrap text-sm leading-5 text-gray-500 sm:order-none sm:self-auto" aria-live="polite">
+          <p className="hidden whitespace-nowrap text-sm leading-5 text-gray-500 sm:block" aria-live="polite">
             {rangeLabel}
           </p>
         )}
@@ -518,25 +525,25 @@ const canUseSSRInitialData =
       <div className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
         {landingPageSeo && page > 1 ? (
           <Button variant="outline" asChild>
-            <Link href={buildPageHref(page - 1)} replace onClick={() => setPage(page - 1)}>
-              ← Previous
+            <Link href={buildPageHref(page - 1)} replace scroll={false} onClick={() => { setPage(page - 1); window.scrollTo({ top: 0, behavior: 'instant' }) }}>
+              Previous
             </Link>
           </Button>
         ) : (
           <Button variant="outline" onClick={() => goToPage(Math.max(1, page - 1))} disabled={page === 1}>
-            ← Previous
+            Previous
           </Button>
         )}
         <span className="text-center text-sm text-muted-foreground">Page {page} of {totalPages}</span>
         {landingPageSeo && page < totalPages ? (
           <Button variant="outline" asChild>
-            <Link href={buildPageHref(page + 1)} replace onClick={() => setPage(page + 1)}>
-              Next →
+            <Link href={buildPageHref(page + 1)} replace scroll={false} onClick={() => { setPage(page + 1); window.scrollTo({ top: 0, behavior: 'instant' }) }}>
+              Next
             </Link>
           </Button>
         ) : (
           <Button variant="outline" onClick={() => goToPage(page + 1)} disabled={page >= totalPages}>
-            Next →
+            Next
           </Button>
         )}
 

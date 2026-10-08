@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AffiliateLink } from "@/components/click_affiliate_link";
 import { Sora } from "next/font/google";
 import { articleCss } from "../_shared/article-styles";
 
@@ -32,7 +33,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-10",
+      dateModified: "2026-10-08",
       author: [{ "@type": "Organization", name: "Solar Roles" }],
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
@@ -61,7 +62,9 @@ export default function SolarDcSafetyForElectricians() {
       </div>
 
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 27 August, 2026</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
+        <span className="dot" />
+        <span className="changes">This page contains affiliate links. We may earn a commission at no additional cost to you.</span>
       </div>
 
       <div className="sr2-shell">
@@ -113,9 +116,7 @@ export default function SolarDcSafetyForElectricians() {
             section that remains energized in daylight.
           </p>
           <p>
-            OSHA identifies shock and arc-flash hazards for solar workers. It
-            also notes that sunlight energizes PV circuits. General electrical
-            experience therefore needs a layer of solar-specific training.
+            OSHA&apos;s <a href="https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.332" target="_blank" rel="noopener noreferrer">electrical training requirements</a> address the skills needed for covered work on or near exposed energized parts. Electrical education is a foundation; qualification depends on the equipment and task. An OSHA Outreach card alone does not establish that competence.
           </p>
 
           <h2 id="scale"><span className="n">03</span>Voltage and Available Energy Change the Job</h2>
@@ -136,10 +137,7 @@ export default function SolarDcSafetyForElectricians() {
 
           <h2 id="retraining"><span className="n">04</span>What an AC Electrician Must Relearn</h2>
           <p>
-            AC experience remains useful. Before taking responsibility for
-            DC-side work, add competence in string and combiner architecture.
-            Learn DC-rated disconnects and rapid-shutdown design. Understand
-            the limits of lockout/tagout and the site's arc-flash assessment.
+            An electrician moving into PV needs training on the array&apos;s DC sources and isolation points. Manufacturer instruction covers the specific inverter, disconnect and rapid-shutdown equipment. The employer must connect those instructions to site procedures and confirm that the worker can perform the assigned task safely. HeatSpring&apos;s <AffiliateLink href="https://www.heatspring.com/courses/rapid-shutdown-devices-and-safety-risks?aff_id=9f_wlq" offerName="rapid_shutdown_safety_free">free lesson on rapid-shutdown devices</AffiliateLink> examines failures on commercial rooftops and the devices&apos; safety function. Viewing requires an account but no credit card; only the optional completion certificate requires paid membership.
           </p>
           <p>
             Labels, one-line diagrams and equipment instructions are working
@@ -154,6 +152,7 @@ export default function SolarDcSafetyForElectricians() {
             <Link href="/resources/solar-installer-vs-electrician-texas">solar installer versus electrician requirements</Link>.
           </p>
 
+          <p>NFPA 70E addresses electrical safe-work practices, including shock and arc-flash risk. A course based on it can support the employer&apos;s safety program; a completion certificate alone does not make a person qualified for every electrical task. NABCEP evaluates a different body of PV knowledge and experience. Neither a course-completion certificate nor NABCEP certification overrides local licensing rules or grants permission to perform energized work.</p>
           <h2 id="employers"><span className="n">05</span>What Employers Should Look For</h2>
           <p>
             A license and years of AC experience do not complete a solar

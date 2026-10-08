@@ -38,8 +38,8 @@ export default function JobsPageClient({
     aiFilters?.minSalary !== undefined ? aiFilters.minSalary : initialSalaryMin
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <div className="flex flex-col lg:flex-row gap-10">
+    <div className="max-w-7xl mx-auto px-6 pt-6 pb-12 md:pt-12">
+      <div className="flex flex-col lg:flex-row gap-0 md:gap-10">
         <aside className="lg:w-80">
           <JobFilters />
         </aside>

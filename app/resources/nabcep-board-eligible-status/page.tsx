@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AffiliateLink } from '@/components/click_affiliate_link';
 
 const SITE_URL = "https://solarroles.com";
 const PAGE_PATH = "/resources/nabcep-board-eligible-status";
@@ -37,7 +36,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-08",
+      dateModified: "2026-10-08",
       publisher: { "@type": "Organization", name: "Solar Roles" },
     },
     {
@@ -323,21 +322,10 @@ const css = `
   background: #DC2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.15);
 }
 /* ── HEATSPRING INLINE CTA ───────────────────────────────────────── */
-.sr2-heatspring-cta { text-align: center; margin: 20px 0; }
-.sr2-article a.sr2-heatspring-btn {
-  display: inline-block;
-  padding: 12px 22px;
-  background: var(--gold-500);
-  color: #121010 !important;
-  font-weight: 800;
-  font-size: 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  border-bottom: none;
-  transition: background .15s;
-}
-.sr2-article a.sr2-heatspring-btn:hover { background: var(--gold-600); color: #fff !important; border-bottom: none; }
-.sr2-heatspring-disclosure { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-400); text-align: center; }
+
+
+
+
 /* ── SIDEBAR ──────────────────────────────────────────────────────── */
 .sr2-sidebar { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 18px; }
 .sr2-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
@@ -393,9 +381,7 @@ export default function NabcepBoardEligibleStatus() {
         <p className="sub">{PAGE_DESCRIPTION}</p>
       </div>
       <div className="sr2-meta-strip flex justify-center items-center gap-2">
-        <span><strong>Last reviewed:</strong> 8 August, 2026</span>
-        <span className="dot" />
-        <span className="changes">This page contains affiliate links. We may earn a commission at no additional cost to you</span>
+        <span><strong>Last reviewed:</strong> 8 October, 2026</span>
       </div>
 
       <div className="sr2-shell">
@@ -422,18 +408,10 @@ export default function NabcepBoardEligibleStatus() {
         <article className="sr2-article">
           <h2 id="problem" className="sr2-first"><span className="n">01</span>The Problem It Solves</h2>
           <p>
-            The traditional PVIP route created a circular requirement.
-            Employers often wanted the credential before assigning
-            decision-making responsibility. NABCEP required documented
-            decision-making experience before a candidate could sit the exam.
-            Career changers, recent graduates and capable crew members could
-            get stuck between those two conditions.
+            PVIP normally combines an exam with documented project responsibility. <a href="https://www.nabcep.org/certifications/board-eligible-pv-installation-professional/" target="_blank" rel="noopener noreferrer">NABCEP&apos;s Board Eligible pathway</a> lets candidates complete the exam first, after meeting its training requirements. It can suit a worker whose technical preparation is ahead of their qualifying project experience.
           </p>
           <p>
-            <strong>Board Eligible status is NABCEP&apos;s answer.</strong>{" "}
-            It separates the exam from the experience requirement. Candidates
-            can complete their training and pass the PVIP exam first. They then
-            have up to three years to build the required field experience.
+            Passing gives the candidate a temporary status, with up to three years to complete the experience requirement. Full Board Certification still depends on NABCEP accepting that evidence.
           </p>
 
           <h2 id="how"><span className="n">02</span>How Board Eligible Works</h2>
@@ -465,10 +443,10 @@ export default function NabcepBoardEligibleStatus() {
             </div>
           </div>
 
+          <p>On a resume or LinkedIn profile, identify the status precisely: &quot;NABCEP PVIP Board Eligible, exam passed [month/year]; experience requirements pending.&quot; Use that wording only while the status is current and keep NABCEP&apos;s confirmation. An employer can request that confirmation and your deadline. The public Professional Directory and certification badge are for full certification, so a Board Eligible candidate should not claim either.</p>
           <h2 id="requirements"><span className="n">03</span>Requirements to Apply</h2>
           <p>
-            Board Eligible uses the same training and exam requirements as the
-            standard PVIP route. Only the order changes.
+            The 58-hour requirement can be assembled from eligible courses rather than purchased as one bundle. Check the <a href="https://coursecatalog.nabcep.org/" target="_blank" rel="noopener noreferrer">NABCEP course catalog</a> for the approved hours and categories, including which hours require an accredited provider. Employer-funded classes, eligible college instruction and other accepted courses may contribute; independent reading and an unapproved webinar do not automatically count.
           </p>
           <ul className="sr2-checklist">
             <li>10 hours of OSHA Outreach Training for the Construction Industry (OSHA 10 or equivalent)</li>
@@ -495,7 +473,7 @@ export default function NabcepBoardEligibleStatus() {
               <tr>
                 <th scope="row">Sit the PVIP exam</th>
                 <td>1 year, or 4 attempts, after course end-date</td>
-                <td>Enrollment lapses; training hours may need to be retaken depending on provider policy</td>
+                <td>Confirm reapplication and training validity directly with NABCEP</td>
               </tr>
               <tr>
                 <th scope="row">Pass the exam</th>
@@ -520,23 +498,9 @@ export default function NabcepBoardEligibleStatus() {
             credits therefore does not always require six separate jobs.
           </p>
 
-          <p>
-            HeatSpring builds its PVIP prep bundle against NABCEP&apos;s current
-            Job Task Analysis. One package covers the 58-hour advanced training
-            requirement.
-          </p>
-          <div className="sr2-heatspring-cta">
-            <AffiliateLink
-              href="https://www.heatspring.com/courses/nabcep-pv-installation-professional-pvip-certification-prep?aff_id=9f_wlq"
-              offerName="nabcep_pvip"
-              className="sr2-heatspring-btn"
-            >
-              See the PVIP Prep Course
-            </AffiliateLink>
-          </div>
-          <p className="sr2-heatspring-disclosure">
-            * We may earn a commission if you enroll through this link, at no extra cost to you.
-          </p>
+
+
+
 
           <h2 id="who"><span className="n">05</span>Who This Is For</h2>
           <p>
@@ -545,8 +509,8 @@ export default function NabcepBoardEligibleStatus() {
           </p>
           <ul>
             <li>Career changers moving into solar from electrical, roofing, or general construction, who can pass a knowledge-based exam faster than they can accumulate decision-making field hours</li>
-            <li>Installers already on a crew who are ready technically but whose current role doesn&apos;t put their name on the permit or inspection</li>
-            <li>Recent graduates of solar training programs who want a credential to show employers while they build the experience side</li>
+            <li>Installers whose technical preparation is complete but who still need qualifying project responsibility; not being named on a permit alone does not rule out acceptable experience</li>
+            <li>Training graduates who can meet the advanced education requirement and have a realistic route to the remaining project experience</li>
           </ul>
           <p>
             Experienced decision-makers gain less from this route. The

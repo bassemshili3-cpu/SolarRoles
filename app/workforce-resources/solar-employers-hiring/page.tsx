@@ -213,7 +213,7 @@ export default async function SolarEmployersHiringPage() {
           href="/workforce-resources/entry-level-solar-jobs"
           className="mt-5 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
         >
-          See explicit entry-level hiring signals →
+          See explicit entry-level hiring signals
         </Link>
       </section>
 

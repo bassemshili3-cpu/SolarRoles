@@ -42,8 +42,8 @@ const MFR_ROWS: MfrRow[] = [
     program: "Tesla Certified Installer",
     whoEnrolls: "Company (business becomes a certified partner)",
     format: "Employer-sponsored training for its technicians",
-    cost: "No direct cost to the individual technician",
-    unlocks: "Eligibility to install/service Powerwall and Solar Roof",
+    cost: "Arranged through the business; confirm employment terms",
+    unlocks: "Product-specific eligibility; confirm installation vs service scope",
   },
   {
     program: "Enphase Installer Certification",
@@ -53,11 +53,11 @@ const MFR_ROWS: MfrRow[] = [
     unlocks: "Personal certificate; company-level tiers layer on top",
   },
   {
-    program: "SolarEdge University Certification",
+    program: "SolarEdge EDGE Academy",
     whoEnrolls: "Individual, via SolarEdge's online training platform",
     format: "Free online coursework, self-paced",
     cost: "Free",
-    unlocks: "Personal certificate; separate Preferred/Elite partner tiers for companies",
+    unlocks: "Course completion; company partner status is separate",
   },
 ];
 
@@ -69,7 +69,7 @@ const jsonLd = {
       headline: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
       url: `${SITE_URL}${PAGE_PATH}`,
-      dateModified: "2026-08-01",
+      dateModified: "2026-10-08",
       publisher: {
         "@type": "Organization",
         name: "Solar Roles",
@@ -137,46 +137,26 @@ export default function ManufacturerCertifications() {
       </div>
 
       <section className="resource-section">
-        <h2>The distinction that explains most of the confusion</h2>
+        <h2>A trained technician and a partner company are different</h2>
         <p>
-          Search for "how to become Tesla certified" and the answers appear to
-          conflict. Some pages describe eligibility for individuals. Others
-          say that only companies can qualify. The confusion comes from a
-          basic difference between Tesla's model and the programs run by
-          Enphase or SolarEdge.
-        </p>
+            An individual course record belongs to the technician. A manufacturer partnership belongs to the business and may carry separate commercial, insurance or licensing conditions. Passing an online module does not enroll a company in an installer network.
+          </p>
         <p>
-          Tesla certifies installation companies as partners. A business
-          applies and meets Tesla's requirements. Once approved, the employer
-          trains its technicians to install and service Powerwall and Solar
-          Roof. An individual outside a Tesla partner generally cannot enroll
-          directly. Access runs through the employer.
-        </p>
+            Tesla&apos;s <a href="https://www.tesla.com/partner-with-tesla" target="_blank" rel="noopener noreferrer">Certified Installer application</a> is aimed at installation businesses. Its <a href="https://energylibrary.tesla.com/docs/Public/Directory/en-us/GUID-FE8456DA-DF78-42F2-BF19-EA8BD7F5728E.html" target="_blank" rel="noopener noreferrer">energy training directory</a> separates product courses. A job seeker should ask a prospective employer which training and account access it provides rather than assume that a public document grants installer status.
+          </p>
         <p>
-          Enphase and SolarEdge separate individual training from company
-          partnerships. Both operate partner programs for businesses. Enphase
-          uses visible platinum, gold and silver tiers. The two manufacturers
-          also offer self-paced individual courses through their online
-          universities. A technician can complete that training without
-          employer sponsorship.
-        </p>
+            <a href="https://university.enphase.com/" target="_blank" rel="noopener noreferrer">Enphase University</a> records training through an individual account. The portal asks for the learner&apos;s role; installer and product-specific activities may require a company-linked account or other access approval. <a href="https://www.solaredge.com/us/installers/training" target="_blank" rel="noopener noreferrer">SolarEdge training</a> leads to EDGE Academy&apos;s online courses and technical material, with account registration for the learning platform. Neither course record establishes company partner status.
+          </p>
       </section>
 
       <section className="resource-section">
         <h2>What this means if you're job hunting</h2>
         <p>
-          An Enphase Install and Battery credential can be earned before you
-          apply for a job. The course is free on Enphase's own platform.
-          SolarEdge University works in much the same way. Completing either
-          program turns a preferred qualification into a line on your resume.
-          Few other industry credentials are both free and available on
-          demand.
-        </p>
+            The free online material can help you learn the equipment named in a vacancy. On a resume, give the exact completed course or learning path and product generation. Enphase&apos;s <a href="https://enphase.com/installers/training/videos" target="_blank" rel="noopener noreferrer">public installation training videos</a> can also be used with the product documentation.
+          </p>
         <p>
-          Tesla certification comes later. You first need a job with an
-          approved Tesla partner. The employer then provides the training
-          internally.
-        </p>
+            For Tesla roles, confirm that the business is in the relevant installer program and ask how technicians receive product training. Installation approval and service authorization may differ. A certificate from an unrelated course does not resolve either requirement.
+          </p>
       </section>
 
       <section className="resource-section">
@@ -187,22 +167,8 @@ export default function ManufacturerCertifications() {
           you understand one company's equipment.
         </p>
         <p>
-          Our{" "}
-          <Link href="/resources/solar-certifications-by-job-role">
-            certifications-by-job-role reference table
-          </Link>
-          {" "}shows where they fit in the broader certification picture. If
-          you are still deciding which credentials your target role needs,
-          consult the{" "}
-          <Link href="/resources/nabcep-training-providers-compared">
-            NABCEP training provider comparison
-          </Link>{" "}
-          and{" "}
-          <Link href="/resources/osha-safety-guide-solar-installers">
-            OSHA safety guide
-          </Link>.
-          Both explain the credentials with broader value.
-        </p>
+            Our <Link href="/resources/solar-certifications-by-job-role">certifications-by-job-role table</Link> distinguishes product learning from trade licensing and professional credentials. The <Link href="/resources/osha-safety-guide-solar-installers">OSHA guide</Link> covers the separate safety-training obligations.
+          </p>
         <p>
           Manufacturer training can still be worth pursuing. Battery storage
           work increasingly asks for credentials tied to Powerwall or Enphase
@@ -214,7 +180,7 @@ export default function ManufacturerCertifications() {
 
       <p className="resource-fine-print">
         Program structures, enrollment rules and partner tiers reflect
-        information available in mid-2026. Manufacturers update these programs
+        the official enrollment and training pages. Manufacturers update these programs
         regularly. Confirm the current pathway directly with Tesla, Enphase or
         SolarEdge before enrolling.
       </p>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, ArrowRight } from 'lucide-react'
+import { Award } from 'lucide-react'
 import { CERTIFICATIONS } from './[slug]/certifications-data'
 
 export const metadata: Metadata = {
@@ -82,7 +82,7 @@ export default function CertificationsIndex() {
             course-completion cards. Choose the guide that matches your work and
             the requirements of your employer or jobsite.
           </p>
-        
+
         </div>
       </section>
 
@@ -97,7 +97,7 @@ export default function CertificationsIndex() {
               <h2 className="text-3xl md:text-2xl font-bold text-[#0B1A2E] mb-3">
                 Compare requirements, costs, and preparation for each path.
               </h2>
-             
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -160,7 +160,7 @@ function FeaturedDiploma({ cert }: { cert: Cert }) {
           {cert.name}
         </h3>
 
-       
+
         {/* Official seal */}
         <div className="relative mb-3 mt-5">
           <div className="absolute inset-0 rounded-full bg-[#F5B819]/40 blur-lg group-hover:bg-[#F5B819]/60 transition-colors" />
@@ -170,7 +170,7 @@ function FeaturedDiploma({ cert }: { cert: Cert }) {
         </div>
 
         <span className="text-xs font-bold text-[#0B1A2E] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-          Read the guide <ArrowRight size={12} />
+          Read the guide
         </span>
       </div>
 

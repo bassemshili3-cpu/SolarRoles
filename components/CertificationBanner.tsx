@@ -13,7 +13,7 @@ export function CertificationBanner({ cert }: { cert: CertificationEntry }) {
         <p className="font-bold leading-snug mb-3">{cert.bannerHeadline}</p>
         <p className="text-sm text-white/80 leading-relaxed">{cert.bannerSubtext}</p>
         <span className="inline-block mt-5 text-sm font-bold text-[#F5B819]">
-          {cert.heatspringCtaLabel} <span aria-hidden="true">→</span>
+          {cert.heatspringCtaLabel}
         </span>
       </div>
     </a>
