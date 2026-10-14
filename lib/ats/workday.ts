@@ -32,7 +32,8 @@
  * `closeWorkdayBrowser()` une fois le run terminé (fin de cron/script).
  */
 
-import { chromium, type Browser, type BrowserContext, type Page } from 'playwright';
+import type { Browser, BrowserContext, Page } from 'playwright';
+import { launchAtsBrowser } from './browser';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './types';
@@ -324,7 +325,7 @@ let browserPromise: Promise<Browser> | null = null;
 
 async function getBrowser(): Promise<Browser> {
   if (!browserPromise) {
-    browserPromise = chromium.launch({
+    browserPromise = launchAtsBrowser({
       headless: true,
       args: [
         // réduit les signaux d'automatisation les plus grossiers détectés

@@ -4,6 +4,16 @@
   functions = "netlify/functions"
   publish = ".next"
 
+[functions.sync-ats]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client", "playwright", "@sparticuz/chromium"]
+  included_files = ["node_modules/.prisma/client/**", "node_modules/@sparticuz/chromium/bin/**"]
+
+[functions.sync-ats-background]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client", "playwright", "@sparticuz/chromium"]
+  included_files = ["node_modules/.prisma/client/**", "node_modules/@sparticuz/chromium/bin/**"]
+
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
   #[[redirects]]

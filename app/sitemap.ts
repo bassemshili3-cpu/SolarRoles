@@ -122,17 +122,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Available, recent jobs from every indexable source.
 const now = new Date()
-const oneMonthAgo = new Date(now.getTime() - 30 * 86_400_000)
+const sevenDaysAgo = new Date(now.getTime() - 7 * 86_400_000)
 
 const indexableJobs = await prisma.job.findMany({
   where: {
     active: true,
     expiresAt: { gt: now },
     source: { notIn: NON_INDEXABLE_JOB_SOURCES },
-    OR: [
-      { postedAt: { gte: oneMonthAgo } },
-      { postedAt: null, fetchedAt: { gte: oneMonthAgo } },
-    ],
+    postedAt: { gte: sevenDaysAgo, lte: now },
   },
   select: {
     id: true,

@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { chromium } from 'playwright';
+import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
@@ -39,7 +39,7 @@ export async function fetchPaycomJobs(company: PaycomCompanySeed): Promise<Norma
   if (!company.verified) return [];
 
   const baseUrl = `https://www.paycomonline.net/v4/ats/web.php/portal/${company.clientKey}`;
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchAtsBrowser({ headless: true });
   const context = await browser.newContext({ userAgent: USER_AGENT, locale: 'en-US' });
   const listingPage = await context.newPage();
 

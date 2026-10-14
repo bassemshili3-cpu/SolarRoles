@@ -14,6 +14,7 @@
  * Custom scrape only: npx tsx -r dotenv/config scripts/seed-solar-jobs.ts custom-scrape
  */ 
 import { PrismaClient } from '@prisma/client';
+import { isJobTooOld, sourcePostedAt } from '../lib/jobRetention';
 import { fetchGreenhouseJobs } from '../lib/ats/greenhouse';
 import {
   LEVER_COMPANIES, GREENHOUSE_COMPANIES,
@@ -47,7 +48,7 @@ import { fetchPinpointJobs } from '../lib/ats/pinpoint';
 import { fetchAshbyJobs } from '../lib/ats/ashby';
 import { fetchSmartRecruitersJobs } from '../lib/ats/smartrecruiters';
 import { fetchJobviteJobs } from '../lib/ats/jobvite';
-import { fetchWorkdayJobs } from '../lib/ats/workday';
+import { fetchWorkdayJobs, closeWorkdayBrowser } from '../lib/ats/workday';
 import { fetchCustomScrapeJobs } from '../lib/ats/custom-scrape';
 import { fetchRipplingJobs } from '../lib/ats/rippling';
 import { fetchSuccessFactorsJobs } from '../lib/ats/successfactors';
@@ -65,8 +66,8 @@ import { fetchSaaShrJobs } from '../lib/ats/saashr';
 import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 import { buildJobSlug } from '../lib/slugify';
+import { pathToFileURL } from 'node:url';
 
-const prisma = new PrismaClient();
 
 const EXPIRES_IN_DAYS = 45;
 const CUSTOM_SCRAPE_EXPIRES_IN_DAYS = 7;
@@ -114,8 +115,11 @@ const PROVIDERS: AtsProvider<any>[] = [
  
 ];
 
-const requestedProvider = process.argv[2];
-const dryRun = process.argv.includes('--dry-run');
+export function getAtsSyncTasks() {
+  return PROVIDERS.filter((item) => item.name !== 'custom-scrape').flatMap((item) =>
+    item.companies.map((_, companyIndex) => ({ providerName: item.name, companyIndex })),
+  );
+}
 
 function selectSourceProviders(
   sourceKeysByProvider: Readonly<Record<string, readonly string[]>>,
@@ -146,10 +150,24 @@ function selectSourceProviders(
 
 import { normalizeWorkSetting } from '../lib/workSetting';
 
-async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'created' | 'updated'> {
+async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: JobTaxonomy, newOnly: boolean): Promise<'created' | 'updated' | 'skipped' | 'existing'> {
+  // Serialize check/create for a URL across background retries and overlapping
+  // invocations. No schema migration or modification of known offers is needed.
+  if (newOnly) {
+    return prisma.$transaction(async (tx) => {
+      const key = JSON.stringify([job.source, job.url]);
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${key}, 0))::text`;
+      const existing = await tx.job.findFirst({ where: { url: job.url, source: job.source }, select: { id: true } });
+      if (existing) return 'existing';
+      // Reuse the creation path with this transaction's client.
+      return upsertJob(tx as unknown as PrismaClient, job, taxonomy, false);
+    }, { timeout: 30000 });
+  }
   const existing = await prisma.job.findFirst({
     where: { url: job.url, source: job.source },
   });
+  const postedAt = sourcePostedAt(job);
+  if (isJobTooOld(postedAt) || (!postedAt && isJobTooOld(existing?.postedAt))) return 'skipped';
 
   const expiresInDays = job.source === 'custom-scrape' ? CUSTOM_SCRAPE_EXPIRES_IN_DAYS : EXPIRES_IN_DAYS;
   const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000);
@@ -184,10 +202,9 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
         description: job.description,
         applyUrl: job.applyUrl,
         contractType: job.contractType,
-        // Do not renew the apparent publication date at every custom scrape
-        // when it was inferred from first discovery. A genuine source date can
-        // still replace that fallback if it becomes available later.
-        postedAt: job.postedAtEstimated ? (existing.postedAt ?? job.postedAt) : job.postedAt,
+        // First discovery is not publication. Leave estimates undated and
+        // retain a known source date only when the source omits it this time.
+        postedAt: job.postedAtEstimated ? null : (postedAt ?? existing.postedAt),
         salary: job.salary,
         salaryMin: job.salaryMin,
         salaryMax: job.salaryMax,
@@ -217,7 +234,7 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
       url: job.url,
       applyUrl: job.applyUrl,
       contractType: job.contractType,
-      postedAt: job.postedAt,
+      postedAt,
       salary: job.salary,
       salaryMin: job.salaryMin,
       salaryMax: job.salaryMax,
@@ -239,11 +256,19 @@ async function upsertJob(job: NormalizedJob, taxonomy: JobTaxonomy): Promise<'cr
   return 'created';
 }
 
-async function main() {
+export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean } = {}) {
+  const requestedProvider = options.providerName;
+  const dryRun = options.dryRun ?? false;
+  const newOnly = options.newOnly ?? false;
+  const prisma = new PrismaClient();
+  try {
   let created = 0;
   let updated = 0;
   let matched = 0;
   let skippedNonUS = 0;
+  let skippedOld = 0;
+  let skippedExisting = 0;
+  let failedCompanies = 0;
 
   const providers = requestedProvider === 'new-sources'
     ? selectSourceProviders(NEW_SOURCE_KEYS_BY_PROVIDER, 'New-source')
@@ -263,13 +288,40 @@ async function main() {
     throw new Error(`Unknown provider "${requestedProvider}". Available providers: new-sources, new-30-sources, new-34-sources, new-98-sources, new-ats-2026-09-19, ${PROVIDERS.map((provider) => provider.name).join(', ')}`);
   }
 
+  if (options.companyIndex !== undefined) {
+    if (providers.length !== 1 || !Number.isInteger(options.companyIndex) || options.companyIndex < 0 || options.companyIndex >= providers[0].companies.length) {
+      throw new Error('Invalid ATS company index');
+    }
+    providers[0] = { ...providers[0], companies: [providers[0].companies[options.companyIndex]] };
+  }
+
+  const jobKey = (job: { source: string; url: string }) => JSON.stringify([job.source, job.url]);
+  const knownJobs = new Set<string>();
+  if (newOnly) {
+    const existingJobs = await prisma.job.findMany({
+      where: { source: { in: providers.map((item) => item.name) } },
+      select: { source: true, url: true },
+    });
+    for (const job of existingJobs) knownJobs.add(jobKey(job));
+  }
+
   for (const provider of providers) {
     for (const company of provider.companies) {
       const label = provider.label(company);
       console.log(`[${provider.name}] fetching ${label}...`);
-      const jobs = await provider.fetch(company);
+      let jobs: NormalizedJob[];
+      try {
+        jobs = await provider.fetch(company);
+      } catch (error) {
+        if (!newOnly) throw error;
+        failedCompanies++;
+        console.error(`[${provider.name}] ${label}: fetch failed`, error);
+        continue;
+      }
       console.log(`[${provider.name}] ${label}: ${jobs.length} solar installer role(s) matched`);
       for (const job of jobs) {
+        if (newOnly && knownJobs.has(jobKey(job))) { skippedExisting++; continue; }
+        if (isJobTooOld(sourcePostedAt(job))) { skippedOld++; continue; }
         // A custom-scrape job is marked isRemote only after its detail page
         // contains both a remote signal and US eligibility. For that bounded
         // case, a bare "Remote" location is safe to retain; ATS jobs keep the
@@ -283,21 +335,39 @@ async function main() {
         if (job.experienceLevel) taxonomy.experienceLevel = job.experienceLevel;
         matched++;
         if (dryRun) {
+          if (newOnly) knownJobs.add(jobKey(job));
           console.log(`  ↳ dry-run: ${job.title} — ${job.location}`);
           continue;
         }
-        const result = await upsertJob(job, taxonomy);
-        result === 'created' ? created++ : updated++;
+        const result = await upsertJob(prisma, job, taxonomy, newOnly);
+        if (result === 'created') created++;
+        else if (result === 'updated') updated++;
+        else if (result === 'existing') skippedExisting++;
+        else skippedOld++;
+        if (newOnly && (result === 'created' || result === 'existing')) knownJobs.add(jobKey(job));
       }
     }
   }
 
-  console.log(`\nDone${dryRun ? ' (dry-run)' : ''}. Matched: ${matched}, Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}`);
-  await prisma.$disconnect();
+  console.log(`\nDone${dryRun ? ' (dry-run)' : ''}. Matched: ${matched}, Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}, Skipped (older than two months): ${skippedOld}`);
+  console.log(JSON.stringify({ newOnly, skippedExisting, failedCompanies }));
+  if (failedCompanies > 0) throw new Error(`${failedCompanies} ATS employer fetch(es) failed`);
+  } finally {
+    try {
+      await closeWorkdayBrowser();
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
 }
 
-main().catch(async (err) => {
-  console.error(err);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  runAtsSeed({
+    providerName: process.argv.slice(2).find((arg) => !arg.startsWith('--')),
+    dryRun: process.argv.includes('--dry-run'),
+    newOnly: process.argv.includes('--new-only'),
+  }).catch((err) => {
+    console.error(err);
+    process.exitCode = 1;
+  });
+}

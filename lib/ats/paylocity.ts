@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { chromium } from 'playwright';
+import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
@@ -55,7 +55,7 @@ export async function fetchPaylocityJobs(company: PaylocityCompanySeed): Promise
   if (!company.verified) return [];
 
   try {
-    const browser = await chromium.launch({ headless: true });
+    const browser = await launchAtsBrowser({ headless: true });
     const page = await browser.newPage({ userAgent: USER_AGENT });
     let links: string[];
     try {

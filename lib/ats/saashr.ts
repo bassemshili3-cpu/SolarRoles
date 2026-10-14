@@ -1,4 +1,4 @@
-import { chromium } from 'playwright';
+import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
@@ -22,7 +22,7 @@ function cleanText(value: string): string {
 export async function fetchSaaShrJobs(company: SaaShrCompanySeed): Promise<NormalizedJob[]> {
   if (!company.verified) return [];
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchAtsBrowser({ headless: true });
   const context = await browser.newContext({ userAgent: USER_AGENT, locale: 'en-US' });
   const page = await context.newPage();
 

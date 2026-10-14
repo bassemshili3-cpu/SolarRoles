@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { chromium } from 'playwright';
+import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
@@ -68,7 +68,7 @@ function validDate(raw: string | undefined): Date | undefined {
 }
 
 export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Promise<NormalizedJob[]> {
-  const browser = await chromium.launch({ headless: true });
+    const browser = await launchAtsBrowser({ headless: true });
   const context = await browser.newContext({ userAgent: USER_AGENT, locale: 'en-US' });
   const page = await context.newPage();
   const baseUrl = company.baseUrl.replace(/\/$/, '');
