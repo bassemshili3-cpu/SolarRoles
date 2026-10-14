@@ -7,7 +7,6 @@ import { buildBreadcrumbSegments, buildBreadcrumbSchema } from '@/lib/buildBread
 
 import { getSimilarJobs } from '@/lib/similarJobs'
 
-import { getEmployerProfile } from '@/lib/employerProfile'
 
 import { matchRoleCategory, getRoleKeywords, KNOWN_SALARY_REPORT_SLUGS } from '@/lib/roleCategories'
 
@@ -55,6 +54,8 @@ import { isJobSourceIndexable } from '@/lib/job-indexing'
 import { extractSolarJobTaxonomy } from "@/lib/jobTaxonomy"
 
 import { detectCertificationRequirements } from '@/lib/certification-detector'
+import { getJobTraining } from '@/lib/jobTraining'
+import JobTrainingRecommendation from '@/components/JobTrainingRecommendation'
 
 import { extractRequirementSignals } from '@/lib/requirement-signals'
 
@@ -141,7 +142,7 @@ function formatPostedDate(date: Date | null): string {
 
   } catch {
 
-    return 'Recently posted'
+    return ''
 
   }
 
@@ -599,10 +600,8 @@ export default async function JobDetailPage({
 // shorter SEO rewrite, so scan both versions rather than choosing one.
 const jobText = [job.description, job.seoDescription].filter(Boolean).join('\n')
 const certificationRequirements = detectCertificationRequirements(`${job.title} ${jobText}`)
-const matchedCerts = certificationRequirements.map(({ cert }) => cert)
 const requiredCerts = certificationRequirements.filter(({ required }) => required).map(({ cert }) => cert)
-const certRequirement = certificationRequirements[0]
-const cert = matchedCerts[0] // undefined si aucune certif détectée
+const training = getJobTraining({ ...job, displayDescription: job.seoDescription })
 
 const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
 
@@ -634,13 +633,6 @@ const requirementSignals = extractRequirementSignals(`${job.title} ${jobText}`)
   const roleDemandPromise = roleMatch
     ? getRoleDemandByState(roleMatch.slug)
     : Promise.resolve([])
-  const employerProfilePromise = job.company
-    ? getEmployerProfile(job.company, job.id)
-      .catch((error) => {
-        console.error('Job employer context unavailable:', error)
-        return null
-      })
-    : Promise.resolve(null)
   const salaryComparisonPromise = roleStatsPromise.then((roleStats) =>
     roleStats ? compareSalaryToMarket(job.salary_min, job.salary_max, roleStats.avgSalary) : null,
   )
@@ -728,7 +720,7 @@ function safeJsonLd(data: unknown): string {
 
       <div className="mx-auto max-w-6xl px-3 py-6 sm:px-6 sm:py-12">
 
-        <div className="flex gap-6 items-start">
+        <div className="flex gap-6 items-start lg:[&:not(:has(aside>section))]:justify-center lg:[&:not(:has(aside>section))>aside]:hidden lg:[&:not(:has(aside>section))>div]:flex-none lg:[&:not(:has(aside>section))>div]:w-[calc(100%-344px)]">
 
           <aside className="sticky top-6 hidden w-80 shrink-0 self-start lg:block">
             <WhatJobsJobBox search={job.title || 'solar'} location={job.location || job.addressRegion || ''} />
@@ -906,40 +898,6 @@ function safeJsonLd(data: unknown): string {
 )}
 </div>
 
-{cert && (
-  <div className="mt-6 rounded-xl border border-[#F5B819]/30 bg-[#FFFBEB] px-4 py-4 sm:px-5">
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-      <div className="flex min-w-0 items-start gap-3">
-        {certRequirement?.required && (
-          <AlertTriangle aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
-        )}
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-[#92400E]">
-            {certRequirement?.required ? `This job requires ${cert.shortLabel}` : cert.bannerHeadline}
-          </p>
-          <p className="text-sm text-[#B45309]">
-            {certRequirement?.required
-              ? `The free resource below supports study; it does not earn ${cert.shortLabel}.`
-              : cert.bannerSubtext}
-          </p>
-        </div>
-      </div>
-      
-      <a
-        href={cert.heatspringUrl}
-        target="_blank"
-        rel="noopener sponsored"
-        className="self-start text-sm font-semibold text-[#B45309] underline hover:text-[#92400E] sm:shrink-0 sm:self-auto"
-      >
-        {cert.heatspringCtaLabel}
-      </a>
-    </div>
-    <p className="mt-2 text-xs text-[#B45309]/70">
-      Solar Roles uses affiliate links and may earn a commission on a later paid purchase, at no extra cost to you.
-    </p>
-  </div>
-)}
-
 {(requiredCerts.length > 0 || requirementSignals.length > 0) && (
   <div className="mt-6 rounded-xl border border-black/[0.08] bg-secondary/30 px-4 py-4 sm:px-5">
     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
@@ -999,6 +957,8 @@ function safeJsonLd(data: unknown): string {
 
                 
 
+
+                {training && <JobTrainingRecommendation key={job.id} recommendation={training} />}
 
                 <Suspense fallback={null}>
                   <Resolved value={roleStatsPromise}>
@@ -1060,67 +1020,7 @@ function safeJsonLd(data: unknown): string {
                   </Resolved>
                 </Suspense>
 
-                <Suspense fallback={null}>
-                  <Resolved value={employerProfilePromise}>
-                    {(employerProfile) => employerProfile && (
 
-                  <div className="mt-8 rounded-xl border p-5 text-sm">
-
-                    <p className="font-semibold text-foreground mb-2">
-
-                      {job.company} on Solar Roles
-
-                    </p>
-
-                    <p className="text-muted-foreground">
-
-                      {employerProfile.totalOpenings.toLocaleString('en-US')} open position
-
-                      {employerProfile.totalOpenings > 1 ? 's' : ''} right now
-
-                      {employerProfile.singleState ? (
-
-                        <>, all of them in {resolveStateName(employerProfile.singleState) || employerProfile.singleState}</>
-
-                      ) : (
-
-                        employerProfile.states[0] && (
-
-                          <>
-
-                            , including {employerProfile.states[0].count} in{' '}
-
-                            {resolveStateName(employerProfile.states[0].state) || employerProfile.states[0].state}
-
-                          </>
-
-                        )
-
-                      )}
-
-                      .
-
-                      {employerProfile.avgSalaryMin && employerProfile.avgSalaryMax && (
-
-                        <>
-
-                          {' '}Average salary across all roles: $
-
-                          {employerProfile.avgSalaryMin.toLocaleString('en-US')}–$
-
-                          {employerProfile.avgSalaryMax.toLocaleString('en-US')}.
-
-                        </>
-
-                      )}
-
-                    </p>
-
-                  </div>
-
-                    )}
-                  </Resolved>
-                </Suspense>
 
                <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  <SaveJobButton jobId={job.id} />

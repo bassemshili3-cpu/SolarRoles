@@ -94,7 +94,7 @@ const sections: {
   { routes: certificationPages, changeFrequency: "monthly", priority: 0.8 },
   { routes: dataPages, changeFrequency: "weekly", priority: 0.9 },
   { routes: dataSalaryPages, changeFrequency: "weekly", priority: 0.8 },
-  { routes: resourcePages, changeFrequency: "monthly", priority: 0.7 },
+  { routes: ['/free-training', ...resourcePages], changeFrequency: "monthly", priority: 0.7 },
   { routes: workforceResourcePages, changeFrequency: "weekly", priority: 0.8 },
   { routes: blogPosts, changeFrequency: "monthly", priority: 0.6 },
 ]

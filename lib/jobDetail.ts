@@ -20,6 +20,7 @@ export type JobDetail = {
   salary_min?: number
   salary_max?: number
   description?: string
+  experienceLevel?: string | null
    seoDescription?: string | null
   created?: string
   postedAt: string
@@ -50,6 +51,7 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       locationRegions: dbJob.locationRegions,
       postalCode: dbJob.postalCode || undefined,
       description: dbJob.description,
+      experienceLevel: dbJob.experienceLevel,
       seoDescription: dbJob.seoDescription || null, // ← priorité au rewrite
       salary_min: dbJob.salaryMin || undefined,
       salary_max: dbJob.salaryMax || undefined,

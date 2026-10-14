@@ -62,7 +62,7 @@ export default function WhatJobsJobBox({ search, location }: { search: string; l
     return () => controller.abort()
   }, [isDesktop, location, search])
 
-  if (!isDesktop) return null
+  if (!isDesktop || state === 'empty' || state === 'error') return null
 
   return (
     <section data-whatjobs-surface="job_box" data-whatjobs-impression={state === 'ready' ? 'widget' : undefined} className="w-full border border-slate-200 bg-white p-4 text-left" aria-label="Related jobs from WhatJobs">

@@ -73,6 +73,14 @@ const CATEGORIES = [
 // entre l'ancien "Featured" et l'ancien "All resources by group".
 const ALL_RESOURCES: ResourceItem[] = [
   {
+    title: "Free Solar Training for Beginners",
+    description: "Free introductory courses for installation, battery storage and commercial solar sales, with access conditions and credential limits.",
+    href: "/free-training",
+    icon: "BookOpen",
+    type: "guide",
+    category: "Start here",
+  },
+  {
     title: "Types of Solar Engineer Jobs",
     description:
       "Every solar engineer job title mapped to what it actually does, what it pays, and what you need — from PV design to BESS.",
