@@ -121,40 +121,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // State data pages are intentionally excluded from the sitemap.
 
   // Available, recent jobs from every indexable source.
-const now = new Date()
-const sevenDaysAgo = new Date(now.getTime() - 7 * 86_400_000)
+  const now = new Date()
+  const fourteenDaysAgo = new Date(now.getTime() - 14 * 86_400_000)
 
-const indexableJobs = await prisma.job.findMany({
-  where: {
-    active: true,
-    expiresAt: { gt: now },
-    source: { notIn: NON_INDEXABLE_JOB_SOURCES },
-    postedAt: { gte: sevenDaysAgo, lte: now },
-  },
-  select: {
-    id: true,
-    title: true,
-    canonicalSlug: true,
-    location: true,
-    postedAt: true,
-    fetchedAt: true,
-    updatedAt: true,
-  },
-})
+  const indexableJobs = await prisma.job.findMany({
+    where: {
+      active: true,
+      expiresAt: { gt: now },
+      source: { notIn: NON_INDEXABLE_JOB_SOURCES },
+      postedAt: { gt: fourteenDaysAgo, lte: now },
+    },
+    // Newest first: under seven days, then seven to fourteen days.
+    orderBy: [{ postedAt: 'desc' }, { id: 'asc' }],
+    select: {
+      id: true,
+      title: true,
+      canonicalSlug: true,
+      location: true,
+      postedAt: true,
+      fetchedAt: true,
+      updatedAt: true,
+    },
+  })
 
-  for (const job of indexableJobs) {
-    entries.push({
-      url: getCanonicalJobUrl(job),
-      lastModified: job.updatedAt,
-      changeFrequency: "daily",
-      priority: 0.7,
-    })
-  }
+  const jobEntries: MetadataRoute.Sitemap = indexableJobs.map((job) => ({
+    url: getCanonicalJobUrl(job),
+    lastModified: job.updatedAt,
+    changeFrequency: "daily",
+    priority: 0.7,
+  }))
 
   // Sécurité anti-doublons si jamais une route apparaît dans
   // deux tableaux/sources par erreur
   const seen = new Set<string>()
-  return entries.filter((entry) => {
+  return [...jobEntries, ...entries].filter((entry) => {
     if (seen.has(entry.url)) return false
     seen.add(entry.url)
     return true

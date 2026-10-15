@@ -14,11 +14,14 @@ function load(file: string, require: (id: string) => any, globals = {}) {
   return exports;
 }
 
-function seedHarness({ known = false, raced = false, dryRun = false } = {}) {
+const SYNC_NOW = new Date('2026-10-15T12:00:00Z');
+class SyncDate extends Date { constructor(value: number = SYNC_NOW.getTime()) { super(value); } }
+
+function seedHarness({ known = false, raced = false, dryRun = false, postedAt = SYNC_NOW as Date | null, postedAtEstimated = false, newOnly = true } = {}) {
   const writes: string[] = [];
   let locks = 0;
   let disconnected = false;
-  const offer = { source: 'lever', url: 'https://jobs.lever.co/solar/123', title: 'Solar Installer', company: 'Solar', location: 'Austin, TX', description: 'Install solar panels.', postedAt: new Date(), applyUrl: 'https://example.com/apply' };
+  const offer = { source: 'lever', url: 'https://jobs.lever.co/solar/123', title: 'Solar Installer', company: 'Solar', location: 'Austin, TX', description: 'Install solar panels.', postedAt, postedAtEstimated, applyUrl: 'https://example.com/apply' };
   const tx = {
     $queryRaw: async () => { locks++; return []; },
     job: {
@@ -28,7 +31,7 @@ function seedHarness({ known = false, raced = false, dryRun = false } = {}) {
     },
   };
   class PrismaClient {
-    job = { findMany: async () => known ? [offer] : [] };
+    job = { findMany: async () => known ? [offer] : [], ...tx.job };
     $transaction = async (fn: any) => fn(tx);
     $disconnect = async () => { disconnected = true; };
   }
@@ -44,9 +47,35 @@ function seedHarness({ known = false, raced = false, dryRun = false } = {}) {
     if (id.endsWith('workSetting')) return { normalizeWorkSetting: () => null };
     if (id === 'node:url') return {};
     return new Proxy({}, { get: () => async () => [offer, offer] });
-  });
-  return { run: () => api.runAtsSeed({ providerName: 'lever', companyIndex: 0, newOnly: true, dryRun }), writes, locks: () => locks, disconnected: () => disconnected };
+  }, { Date: SyncDate });
+  return { run: () => api.runAtsSeed({ providerName: 'lever', companyIndex: 0, newOnly, dryRun }), writes, locks: () => locks, disconnected: () => disconnected };
 }
+
+test('incremental discovery accepts only real publication dates under fourteen days old', async () => {
+  for (const [postedAt, accepted] of [
+    [SYNC_NOW, true],
+    [new Date('2026-10-08T12:00:00Z'), true],
+    [new Date('2026-10-01T12:00:00.001Z'), true],
+    [new Date('2026-10-01T12:00:00Z'), false],
+    [new Date('2026-09-25T12:00:00Z'), false],
+    [new Date('2026-10-15T12:00:00.001Z'), false],
+    [new Date('invalid'), false],
+    [null, false],
+  ] as const) {
+    const h = seedHarness({ postedAt });
+    await h.run();
+    assert.deepEqual(h.writes, accepted ? ['create', 'slug'] : [], String(postedAt));
+  }
+  const estimated = seedHarness({ postedAtEstimated: true });
+  await estimated.run();
+  assert.deepEqual(estimated.writes, []);
+});
+
+test('manual seed still accepts a publication older than fourteen days', async () => {
+  const h = seedHarness({ postedAt: new Date(Date.now() - 20 * 86400000), newOnly: false });
+  await h.run();
+  assert.ok(h.writes.includes('create'));
+});
 
 test('incremental sync leaves known offers untouched, including expiry and publication date', async () => {
   const h = seedHarness({ known: true });
@@ -77,19 +106,26 @@ test('incremental dry-run does not acquire write locks or insert offers', async 
   assert.equal(h.locks(), 0);
 });
 
-test('sitemap requires a genuine publication date within seven days and excludes future dates', async () => {
+test('sitemap includes fourteen days and puts jobs newest first before static pages', async () => {
   let where: any;
+  let orderBy: any;
+  const jobs = [{ id: 'recent', updatedAt: SYNC_NOW }, { id: 'older', updatedAt: SYNC_NOW }];
   const api = load('app/sitemap.ts', (id) => {
-    if (id.endsWith('/prisma')) return { prisma: { job: { findMany: async (query: any) => { where = query.where; return []; } } } };
+    if (id.endsWith('/prisma')) return { prisma: { job: { findMany: async (query: any) => { where = query.where; orderBy = query.orderBy; return jobs; } } } };
     if (id.endsWith('certifications-data')) return { CERTIFICATIONS: [] };
     if (id.endsWith('site-url')) return { SITE_URL: 'https://solarroles.com' };
     if (id.endsWith('job-indexing')) return { NON_INDEXABLE_JOB_SOURCES: ['adzuna'] };
-    return { getCanonicalJobUrl: () => '' };
+    return { getCanonicalJobUrl: (job: any) => `https://solarroles.com/jobs/${job.id}` };
   });
-  await api.default();
+  const entries = await api.default();
   assert.equal(where.active, true);
-  assert.equal(where.postedAt.lte.getTime() - where.postedAt.gte.getTime(), 7 * 86400000);
+  assert.equal(where.postedAt.lte.getTime() - where.postedAt.gt.getTime(), 14 * 86400000);
   assert.equal(where.expiresAt.gt.getTime(), where.postedAt.lte.getTime());
+  assert.equal(JSON.stringify(orderBy), JSON.stringify([{ postedAt: 'desc' }, { id: 'asc' }]));
+  assert.equal(JSON.stringify(where.source.notIn), JSON.stringify(['adzuna']));
+  assert.equal(entries[0].url, 'https://solarroles.com/jobs/recent');
+  assert.equal(entries[1].url, 'https://solarroles.com/jobs/older');
+  assert.equal(entries[2].url, 'https://solarroles.com');
   assert.equal(where.OR, undefined);
 });
 

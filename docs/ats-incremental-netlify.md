@@ -13,11 +13,19 @@ PostgreSQL protège les nouvelles insertions contre les tâches ATS incrémental
 concurrentes et les reprises Netlify. Le seed manuel traditionnel conserve son
 mode de mise à jour ; ne pas le lancer simultanément avec le cron.
 
-Le sitemap conserve les pages statiques et les exclusions de sources existantes.
-Ses offres doivent être actives, non expirées et avoir un `postedAt` compris
-entre maintenant moins sept jours et maintenant, bornes incluses. Une date
-absente ou estimée ne devient pas une date de publication grâce à la collecte.
-Le sitemap est déjà configuré avec une revalidation de 60 secondes.
+Le cron insère uniquement les offres absentes de la base dont le `postedAt`
+réel est strictement postérieur à maintenant moins 14 jours et inférieur ou égal
+à maintenant. Les dates absentes, estimées ou futures sont exclues de cette
+collecte incrémentale. `skippedPublicationWindow` compte ces exclusions dans
+le résumé du worker.
+
+Le sitemap inclut les offres actives, non expirées et issues de sources indexables
+sur cette même fenêtre de 14 jours, quelle que soit leur méthode d'insertion
+(seed manuel ou cron). Les URL d'offres apparaissent en premier, par `postedAt`
+décroissant : moins de 7 jours, puis de 7 jours inclus à moins de 14 jours.
+Les pages statiques suivent. Une date de collecte ne remplace pas `postedAt`.
+La revalidation du sitemap est de 60 secondes ; aucune écriture XML par le cron
+n'est nécessaire. Sortir du sitemap ne supprime pas l'offre de la base.
 
 ## Activation
 
@@ -42,11 +50,6 @@ les fetchers qui renvoient un tableau vide lors d'une erreur HTTP gardent leur
 comportement actuel et leurs avertissements.
 
 Commande locale équivalente : `npm run seed:ats-new`. Ajouter `-- --dry-run`
-pour consulter et classifier sans écrire en base. Le seed conserve les filtres
-US, métiers et rétention de deux mois ; la limite de sept jours concerne le
-sitemap, pas l'ensemble des insertions.
-
-Références :
-- https://docs.netlify.com/build/functions/scheduled-functions/
-- https://docs.netlify.com/build/functions/background-functions/
-- https://docs.netlify.com/build/functions/configuration/
+pour consulter et classifier sans écrire en base. Ce mode applique la même
+fenêtre de 14 jours que le cron et conserve les filtres US et métiers. Le seed
+manuel sans `--new-only` conserve sa politique de rétention de deux mois.

@@ -260,6 +260,8 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
   const requestedProvider = options.providerName;
   const dryRun = options.dryRun ?? false;
   const newOnly = options.newOnly ?? false;
+  const syncNow = new Date();
+  const syncCutoff = new Date(syncNow.getTime() - 14 * 86_400_000);
   const prisma = new PrismaClient();
   try {
   let created = 0;
@@ -268,6 +270,7 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
   let skippedNonUS = 0;
   let skippedOld = 0;
   let skippedExisting = 0;
+  let skippedPublicationWindow = 0;
   let failedCompanies = 0;
 
   const providers = requestedProvider === 'new-sources'
@@ -321,6 +324,13 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
       console.log(`[${provider.name}] ${label}: ${jobs.length} solar installer role(s) matched`);
       for (const job of jobs) {
         if (newOnly && knownJobs.has(jobKey(job))) { skippedExisting++; continue; }
+        // Incremental discovery requires a genuine publication under 14 days old.
+        // The manual update mode keeps its existing two-month retention policy.
+        const postedAt = sourcePostedAt(job);
+        if (newOnly && (!postedAt || postedAt <= syncCutoff || postedAt > syncNow)) {
+          skippedPublicationWindow++;
+          continue;
+        }
         if (isJobTooOld(sourcePostedAt(job))) { skippedOld++; continue; }
         // A custom-scrape job is marked isRemote only after its detail page
         // contains both a remote signal and US eligibility. For that bounded
@@ -350,7 +360,7 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
   }
 
   console.log(`\nDone${dryRun ? ' (dry-run)' : ''}. Matched: ${matched}, Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}, Skipped (older than two months): ${skippedOld}`);
-  console.log(JSON.stringify({ newOnly, skippedExisting, failedCompanies }));
+  console.log(JSON.stringify({ newOnly, skippedExisting, skippedPublicationWindow, failedCompanies }));
   if (failedCompanies > 0) throw new Error(`${failedCompanies} ATS employer fetch(es) failed`);
   } finally {
     try {
