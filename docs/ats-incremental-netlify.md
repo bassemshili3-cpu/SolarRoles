@@ -128,3 +128,8 @@ Codes de sortie de la commande : 0 pour `ok` ou `in_progress`, 2 pour les
 anomalies à examiner, 3 pour `unknown`, 1 pour un échec de consultation.
 Ces changements doivent être déployés ensemble : dispatcher, worker, endpoint
 de statut, modules de suivi et nouvelle valeur de retour de `runAtsSeed`.
+
+Les trois fonctions de suivi utilisent le format natif Functions v2. Le worker
+conserve `config.background: true` et le suffixe `-background`. Le pont Lambda
+`connectLambda` supprime les informations d'endpoint non mis en cache nécessaires
+aux lectures fortes avec cette version du SDK : il ne doit pas être réintroduit.

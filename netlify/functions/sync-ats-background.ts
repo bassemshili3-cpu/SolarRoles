@@ -4,19 +4,21 @@ import { createManifest, runPrefix, saveManifest, saveAttempt, safeDiagnostic, t
 import { captureAtsDiagnostics } from '../../lib/ats/sync-diagnostics';
 import { atsSyncStore } from '../lib/ats-sync-store';
 
-// The -background suffix enables Netlify's asynchronous execution (15 minutes).
-export async function handler(event: { httpMethod: string; headers: Record<string, string | undefined>; body: string | null; blobs?: string }) {
+// Native Functions v2 retains the complete Blobs environment, including the
+// uncached endpoint required for strong reads. Do not bridge through connectLambda.
+export const config = { background: true };
+export default async function syncAtsBackground(request: Request) {
   const secret = process.env.CRON_SECRET;
-  if (!secret || event.headers.authorization !== `Bearer ${secret}`) {
+  if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
     throw new Error('Unauthorized ATS sync');
   }
-  if (event.httpMethod !== 'POST') throw new Error('ATS sync requires POST');
-  const input = JSON.parse(event.body || '{}') as { providerName?: unknown; companyIndex?: unknown; runId?: unknown };
+  if (request.method !== 'POST') throw new Error('ATS sync requires POST');
+  const input = await request.json() as { providerName?: unknown; companyIndex?: unknown; runId?: unknown };
   const task = getAtsSyncTasks().find(t => t.providerName === input.providerName && t.companyIndex === input.companyIndex);
   if (!task) {
     throw new Error('Invalid ATS sync task');
   }
-  const store = atsSyncStore(event);
+  const store = atsSyncStore();
   let manifest: SyncManifest;
   if (input.runId !== undefined) {
     if (typeof input.runId !== 'string') throw new Error('Invalid ATS run id');

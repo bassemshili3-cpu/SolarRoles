@@ -187,10 +187,16 @@ test('background worker rejects unauthorized calls and forces insert-only ATS in
     setInterval, clearInterval,
   });
   const event = { httpMethod: 'POST', headers: { authorization: 'Bearer test' }, body: JSON.stringify({ providerName: 'lever', companyIndex: 3 }) };
-  await assert.rejects(api.handler({ ...event, headers: {} }), /Unauthorized/);
-  await assert.rejects(api.handler({ ...event, body: JSON.stringify({ providerName: 'custom-scrape', companyIndex: 0 }) }), /Invalid/);
+  const invoke = (event: { httpMethod: string; headers: Record<string, string>; body: string }) => api.default(new Request('https://solarroles.com/.netlify/functions/sync-ats-background', {
+    method: event.httpMethod, headers: event.headers, body: event.httpMethod === 'POST' ? event.body : undefined,
+  }));
+  assert.equal(api.config.background, true);
+  assert.equal(api.handler, undefined, 'use the native Request entrypoint without the legacy Lambda bridge');
+  await assert.rejects(invoke({ ...event, headers: {} }), /Unauthorized/);
+  await assert.rejects(invoke({ ...event, httpMethod: 'GET' }), /requires POST/);
+  await assert.rejects(invoke({ ...event, body: JSON.stringify({ providerName: 'custom-scrape', companyIndex: 0 }) }), /Invalid/);
   assert.equal(calls.length, 0);
-  await api.handler(event);
+  await invoke(event);
   assert.equal(calls[0].providerName, 'lever');
   assert.equal(calls[0].companyIndex, 3);
   assert.equal(calls[0].newOnly, true);
@@ -198,11 +204,11 @@ test('background worker rejects unauthorized calls and forces insert-only ATS in
   assert.equal(attempt.state, 'completed');
   assert.equal(attempt.progress.created, 1);
   seedFails = true;
-  await assert.rejects(api.handler(event), /Database write failed/);
+  await assert.rejects(invoke(event), /Database write failed/);
   const failed = [...records.values()].find(v => v.state === 'failed');
   assert.equal(failed.error, 'Database write failed'); assert.equal(failed.progress.created, 1);
   storageDown = true; const before = calls.length;
-  await assert.rejects(api.handler(event), /Storage unavailable/);
+  await assert.rejects(invoke(event), /Storage unavailable/);
   assert.equal(calls.length, before, 'never start ingestion when the audit store cannot record the worker');
 });
 
