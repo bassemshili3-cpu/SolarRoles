@@ -67,6 +67,7 @@ import { isUSJob } from '../lib/ats/geo';
 import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 import { buildJobSlug } from '../lib/slugify';
 import { pathToFileURL } from 'node:url';
+import type { AtsSeedSummary } from '../lib/ats/sync-summary';
 
 
 const EXPIRES_IN_DAYS = 45;
@@ -117,7 +118,7 @@ const PROVIDERS: AtsProvider<any>[] = [
 
 export function getAtsSyncTasks() {
   return PROVIDERS.filter((item) => item.name !== 'custom-scrape').flatMap((item) =>
-    item.companies.map((_, companyIndex) => ({ providerName: item.name, companyIndex })),
+    item.companies.map((company, companyIndex) => ({ providerName: item.name, companyIndex, label: item.label(company) })),
   );
 }
 
@@ -256,14 +257,13 @@ async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: Job
   return 'created';
 }
 
-export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean } = {}) {
+export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean; onProgress?: (summary: AtsSeedSummary) => void } = {}): Promise<AtsSeedSummary> {
   const requestedProvider = options.providerName;
   const dryRun = options.dryRun ?? false;
   const newOnly = options.newOnly ?? false;
   const syncNow = new Date();
   const syncCutoff = new Date(syncNow.getTime() - 14 * 86_400_000);
   const prisma = new PrismaClient();
-  try {
   let created = 0;
   let updated = 0;
   let matched = 0;
@@ -271,7 +271,19 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
   let skippedOld = 0;
   let skippedExisting = 0;
   let skippedPublicationWindow = 0;
+  let skippedMissingPublication = 0;
+  let skippedOutsidePublicationWindow = 0;
   let failedCompanies = 0;
+  let companiesAttempted = 0;
+  let companiesCompleted = 0;
+  let received = 0;
+  let phase: AtsSeedSummary['phase'] = 'loading_existing';
+  const snapshot = (): AtsSeedSummary => ({ newOnly, providerName: requestedProvider, phase, companiesAttempted,
+    companiesCompleted, received, matched, created, updated, skippedNonUS, skippedOld, skippedExisting,
+    skippedPublicationWindow, skippedMissingPublication, skippedOutsidePublicationWindow, failedCompanies });
+  const progress = () => options.onProgress?.(snapshot());
+  try {
+  progress();
 
   const providers = requestedProvider === 'new-sources'
     ? selectSourceProviders(NEW_SOURCE_KEYS_BY_PROVIDER, 'New-source')
@@ -311,6 +323,8 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
   for (const provider of providers) {
     for (const company of provider.companies) {
       const label = provider.label(company);
+      companiesAttempted++;
+      phase = 'fetching'; progress();
       console.log(`[${provider.name}] fetching ${label}...`);
       let jobs: NormalizedJob[];
       try {
@@ -322,13 +336,18 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
         continue;
       }
       console.log(`[${provider.name}] ${label}: ${jobs.length} solar installer role(s) matched`);
+      received += jobs.length;
+      phase = 'processing'; progress();
       for (const job of jobs) {
+        progress();
         if (newOnly && knownJobs.has(jobKey(job))) { skippedExisting++; continue; }
         // Incremental discovery requires a genuine publication under 14 days old.
         // The manual update mode keeps its existing two-month retention policy.
         const postedAt = sourcePostedAt(job);
         if (newOnly && (!postedAt || postedAt <= syncCutoff || postedAt > syncNow)) {
           skippedPublicationWindow++;
+          if (!postedAt) skippedMissingPublication++;
+          else skippedOutsidePublicationWindow++;
           continue;
         }
         if (isJobTooOld(sourcePostedAt(job))) { skippedOld++; continue; }
@@ -356,13 +375,17 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
         else skippedOld++;
         if (newOnly && (result === 'created' || result === 'existing')) knownJobs.add(jobKey(job));
       }
+      companiesCompleted++; progress();
     }
   }
 
   console.log(`\nDone${dryRun ? ' (dry-run)' : ''}. Matched: ${matched}, Created: ${created}, Updated: ${updated}, Skipped (non-US): ${skippedNonUS}, Skipped (older than two months): ${skippedOld}`);
-  console.log(JSON.stringify({ newOnly, skippedExisting, skippedPublicationWindow, failedCompanies }));
+  console.log(JSON.stringify(snapshot()));
   if (failedCompanies > 0) throw new Error(`${failedCompanies} ATS employer fetch(es) failed`);
+  phase = 'complete'; progress();
+  return snapshot();
   } finally {
+    progress();
     try {
       await closeWorkdayBrowser();
     } finally {

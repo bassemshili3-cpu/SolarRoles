@@ -1,4 +1,6 @@
 import { getAtsSyncTasks } from '../../scripts/seed-solar-jobs';
+import { createManifest, saveManifest, saveDispatch, taskKey, safeDiagnostic, type DispatchOutcome } from '../../lib/ats/sync-monitor';
+import { atsSyncStore } from '../lib/ats-sync-store';
 
 // Six hourly slots cover every configured ATS employer once per six hours.
 export const config = { schedule: '17 * * * *' };
@@ -11,6 +13,11 @@ export default async function syncAts() {
   const slot = new Date().getUTCHours() % 6;
   const tasks = getAtsSyncTasks().filter((_, index) => index % 6 === slot);
   const failures: string[] = [];
+  const outcomes: DispatchOutcome[] = [];
+  const store = atsSyncStore();
+  const manifest = createManifest(tasks);
+  // Persist expected employers before sending anything: missing workers stay visible.
+  await saveManifest(store, manifest);
   const queue = [...tasks];
   const signal = AbortSignal.timeout(22000);
 
@@ -21,16 +28,20 @@ export default async function syncAts() {
         const response = await fetch(new URL('/.netlify/functions/sync-ats-background', origin), {
           method: 'POST',
           headers: { authorization: `Bearer ${secret}`, 'content-type': 'application/json' },
-          body: JSON.stringify(task),
+          body: JSON.stringify({ ...task, runId: manifest.runId }),
           signal,
         });
         if (response.status !== 202) throw new Error(`HTTP ${response.status}`);
+        outcomes.push({ taskKey: taskKey(task), accepted: true });
       } catch (error) {
-        failures.push(`${task.providerName}[${task.companyIndex}]: ${String(error)}`);
+        const message = safeDiagnostic(error);
+        outcomes.push({ taskKey: taskKey(task), accepted: false, error: message });
+        failures.push(`${task.providerName}[${task.companyIndex}]: ${message}`);
       }
     }
   }));
 
-  console.log(JSON.stringify({ slot, dispatched: tasks.length - failures.length, failures }));
+  await saveDispatch(store, manifest, { finishedAt: new Date().toISOString(), outcomes });
+  console.log(JSON.stringify({ runId: manifest.runId, slot, dispatched: tasks.length - failures.length, failures }));
   if (failures.length > 0) throw new Error(`${failures.length} ATS background dispatch(es) failed`);
 }

@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import { isJobTooOld, sourcePostedAt } from '../lib/jobRetention';
+import * as monitor from '../lib/ats/sync-monitor';
 
 function load(file: string, require: (id: string) => any, globals = {}) {
   // Exercise the exported serverless entry point without invoking the CLI.
@@ -85,6 +86,17 @@ test('incremental sync leaves known offers untouched, including expiry and publi
   assert.equal(h.disconnected(), true);
 });
 
+test('seed returns auditable totals without confusing known or undated jobs with creations', async () => {
+  const known = await seedHarness({ known: true }).run();
+  assert.equal(known.phase, 'complete'); assert.equal(known.received, 2);
+  assert.equal(known.created, 0); assert.equal(known.skippedExisting, 2);
+  assert.equal(known.companiesAttempted, 1); assert.equal(known.companiesCompleted, 1);
+  const missing = await seedHarness({ postedAt: null }).run();
+  assert.equal(missing.created, 0); assert.equal(missing.skippedMissingPublication, 2);
+  const fresh = await seedHarness().run();
+  assert.equal(fresh.created, 1); assert.equal(fresh.skippedExisting, 1);
+});
+
 test('a new offer is created once with a canonical slug despite duplicate feed entries', async () => {
   const h = seedHarness();
   await h.run();
@@ -131,9 +143,12 @@ test('sitemap includes fourteen days and puts jobs newest first before static pa
 
 test('hourly Netlify dispatcher launches only its slot and authenticates background requests', async () => {
   const calls: any[] = [];
-  const tasks = Array.from({ length: 12 }, (_, companyIndex) => ({ providerName: 'lever', companyIndex }));
+  const tasks = Array.from({ length: 12 }, (_, companyIndex) => ({ providerName: 'lever', companyIndex, label: 'solar-' + companyIndex }));
+  const stored = new Map();
+  let storageDown = false;
+  const store = { setJSON: async (key: string, data: unknown) => { if (storageDown) throw Error('Storage unavailable'); stored.set(key, data); } };
   class SlotDate extends Date { getUTCHours() { return 8; } }
-  const api = load('netlify/functions/sync-ats.ts', () => ({ getAtsSyncTasks: () => tasks }), {
+  const api = load('netlify/functions/sync-ats.ts', (id) => id.endsWith('sync-monitor') ? monitor : id.endsWith('ats-sync-store') ? { atsSyncStore: () => store } : ({ getAtsSyncTasks: () => tasks }), {
     process: { env: { CRON_SECRET: 'test', URL: 'https://solarroles.netlify.app' } },
     Date: SlotDate, URL, AbortSignal,
     fetch: async (url: URL, options: any) => { calls.push({ url, options }); return { status: 202 }; },
@@ -143,13 +158,33 @@ test('hourly Netlify dispatcher launches only its slot and authenticates backgro
   for (const call of calls) {
     assert.equal(call.url.pathname, '/.netlify/functions/sync-ats-background');
     assert.equal(call.options.headers.authorization, 'Bearer test');
+    assert.ok(JSON.parse(call.options.body).runId);
   }
+  assert.equal([...stored.keys()].filter(k => k.endsWith('/manifest')).length, 1);
+  assert.equal([...stored.values()].find(v => v.outcomes)?.outcomes.length, 2);
+  storageDown = true; calls.length = 0;
+  await assert.rejects(api.default(), /Storage unavailable/);
+  assert.equal(calls.length, 0, 'never dispatch tasks without an expected-employer manifest');
 });
 
 test('background worker rejects unauthorized calls and forces insert-only ATS ingestion', async () => {
   const calls: any[] = [];
-  const api = load('netlify/functions/sync-ats-background.ts', () => ({ runAtsSeed: async (options: any) => { calls.push(options); } }), {
+  const records = new Map();
+  let seedFails = false, storageDown = false;
+  const store = { setJSON: async (key: string, data: unknown) => { if (storageDown) throw Error('Storage unavailable'); records.set(key, JSON.parse(JSON.stringify(data))); } };
+  const api = load('netlify/functions/sync-ats-background.ts', (id) => {
+    if (id === 'node:crypto') return { randomUUID: () => 'attempt' };
+    if (id.endsWith('sync-monitor')) return monitor;
+    if (id.endsWith('ats-sync-store')) return { atsSyncStore: () => store };
+    if (id.endsWith('sync-diagnostics')) return { captureAtsDiagnostics: (work: any) => work({ warnings: 0, errors: 0, samples: [] }) };
+    return { getAtsSyncTasks: () => [{ providerName: 'lever', companyIndex: 3, label: 'solar' }], runAtsSeed: async (options: any) => {
+      calls.push(options);
+      if (seedFails) { options.onProgress({ received: 5, created: 1 }); throw Error('Database write failed'); }
+      return { received: 1, created: 1 };
+    } };
+  }, {
     process: { env: { CRON_SECRET: 'test' } },
+    setInterval, clearInterval,
   });
   const event = { httpMethod: 'POST', headers: { authorization: 'Bearer test' }, body: JSON.stringify({ providerName: 'lever', companyIndex: 3 }) };
   await assert.rejects(api.handler({ ...event, headers: {} }), /Unauthorized/);
@@ -159,6 +194,16 @@ test('background worker rejects unauthorized calls and forces insert-only ATS in
   assert.equal(calls[0].providerName, 'lever');
   assert.equal(calls[0].companyIndex, 3);
   assert.equal(calls[0].newOnly, true);
+  const attempt = [...records.values()].find(v => v.attemptId);
+  assert.equal(attempt.state, 'completed');
+  assert.equal(attempt.progress.created, 1);
+  seedFails = true;
+  await assert.rejects(api.handler(event), /Database write failed/);
+  const failed = [...records.values()].find(v => v.state === 'failed');
+  assert.equal(failed.error, 'Database write failed'); assert.equal(failed.progress.created, 1);
+  storageDown = true; const before = calls.length;
+  await assert.rejects(api.handler(event), /Storage unavailable/);
+  assert.equal(calls.length, before, 'never start ingestion when the audit store cannot record the worker');
 });
 
 test('browser launch keeps local options and supplies a packaged executable on Netlify', async () => {
