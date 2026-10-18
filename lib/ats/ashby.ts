@@ -1,6 +1,10 @@
 import { isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { AtsCompanySeed } from './company-seed';
+import { ashbySalary } from './salaryFields';
+import { sourcePublicationDate } from './publicationDate';
+export type { NormalizedJob } from './types';
+import type { NormalizedJob } from './types';
 
 interface AshbyJob {
   id: string;
@@ -14,6 +18,7 @@ interface AshbyJob {
   employmentType?: string;
   compensation?: {
     compensationTierSummary?: string;
+    summaryComponents?: Array<{ compensationType?: string; interval?: string; currencyCode?: string; minValue?: number; maxValue?: number }>;
   };
 }
 
@@ -21,20 +26,6 @@ interface AshbyBoardResponse {
   jobs: AshbyJob[];
 }
 
-export interface NormalizedJob {
-  source: string;
-  externalId: string;
-  title: string;
-  company: string;
-  location: string;
-  addressRegion?: string;
-  description: string;
-  url: string;
-  applyUrl: string;
-  contractType?: string;
-  postedAt?: Date;
-  salary?: string;
-}
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -65,7 +56,8 @@ export async function fetchAshbyJobs(company: AtsCompanySeed): Promise<Normalize
     url: j.jobUrl ?? `https://jobs.ashbyhq.com/${company.slug}/${j.id}`,
     applyUrl: j.applyUrl ?? j.jobUrl ?? '',
     contractType: j.employmentType,
-    postedAt: j.publishedAt ? new Date(j.publishedAt) : undefined,
+    postedAt: sourcePublicationDate(j, 'ashby'),
     salary: j.compensation?.compensationTierSummary,
+    ...ashbySalary(j.compensation),
   }));
 }

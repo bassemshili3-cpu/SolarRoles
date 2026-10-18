@@ -68,6 +68,7 @@ import { extractSolarJobTaxonomy, type JobTaxonomy } from '../lib/jobTaxonomy';
 import { buildJobSlug } from '../lib/slugify';
 import { pathToFileURL } from 'node:url';
 import type { AtsSeedSummary } from '../lib/ats/sync-summary';
+import type { AtsCheckpoints, AtsFetchContext } from '../lib/ats/fetch-context';
 
 
 const EXPIRES_IN_DAYS = 45;
@@ -78,14 +79,14 @@ const SOURCE_PRIORITY = 0;
 type AtsProvider<T> = {
   name: string;
   companies: T[];
-  fetch: (company: T) => Promise<NormalizedJob[]>;
+  fetch: (company: T, context?: AtsFetchContext) => Promise<NormalizedJob[]>;
   label: (company: T) => string;
 };
 
 function provider<T>(
   name: string,
   companies: T[],
-  fetch: (company: T) => Promise<NormalizedJob[]>,
+  fetch: (company: T, context?: AtsFetchContext) => Promise<NormalizedJob[]>,
   label: (company: T) => string,
 ): AtsProvider<T> {
   return { name, companies, fetch, label };
@@ -117,6 +118,7 @@ const PROVIDERS: AtsProvider<any>[] = [
 ];
 
 export function getAtsSyncTasks() {
+  // Legacy verified flags are informational. Observe every configured ATS source.
   return PROVIDERS.filter((item) => item.name !== 'custom-scrape').flatMap((item) =>
     item.companies.map((company, companyIndex) => ({ providerName: item.name, companyIndex, label: item.label(company) })),
   );
@@ -150,6 +152,7 @@ function selectSourceProviders(
 
 
 import { normalizeWorkSetting } from '../lib/workSetting';
+import { normalizeSourceFields } from '../lib/ats/normalizeSourceFields';
 
 async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: JobTaxonomy, newOnly: boolean): Promise<'created' | 'updated' | 'skipped' | 'existing'> {
   // Serialize check/create for a URL across background retries and overlapping
@@ -257,7 +260,7 @@ async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: Job
   return 'created';
 }
 
-export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean; onProgress?: (summary: AtsSeedSummary) => void } = {}): Promise<AtsSeedSummary> {
+export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean; checkpoints?: AtsCheckpoints; onProgress?: (summary: AtsSeedSummary) => void } = {}): Promise<AtsSeedSummary> {
   const requestedProvider = options.providerName;
   const dryRun = options.dryRun ?? false;
   const newOnly = options.newOnly ?? false;
@@ -327,8 +330,16 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
       phase = 'fetching'; progress();
       console.log(`[${provider.name}] fetching ${label}...`);
       let jobs: NormalizedJob[];
+      const checkpointKey = `${provider.name}/${encodeURIComponent(label + (company.host ? `@${company.host}` : ''))}`;
+      let stagedCursor: unknown;
       try {
-        jobs = await provider.fetch(company);
+        const fetchContext: AtsFetchContext | undefined = options.checkpoints ? {
+          deadline: Date.now() + 8 * 60_000,
+          cursor: await options.checkpoints.load(checkpointKey),
+          isKnown: (source, url) => newOnly && knownJobs.has(jobKey({ source, url })),
+          checkpoint: cursor => { stagedCursor = cursor; },
+        } : undefined;
+        jobs = await provider.fetch(company, fetchContext);
       } catch (error) {
         if (!newOnly) throw error;
         failedCompanies++;
@@ -338,9 +349,10 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
       console.log(`[${provider.name}] ${label}: ${jobs.length} solar installer role(s) matched`);
       received += jobs.length;
       phase = 'processing'; progress();
-      for (const job of jobs) {
+      for (const rawJob of jobs) {
         progress();
-        if (newOnly && knownJobs.has(jobKey(job))) { skippedExisting++; continue; }
+        if (newOnly && knownJobs.has(jobKey(rawJob))) { skippedExisting++; continue; }
+        const job = normalizeSourceFields(rawJob);
         // Incremental discovery requires a genuine publication under 14 days old.
         // The manual update mode keeps its existing two-month retention policy.
         const postedAt = sourcePostedAt(job);
@@ -375,6 +387,8 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
         else skippedOld++;
         if (newOnly && (result === 'created' || result === 'existing')) knownJobs.add(jobKey(job));
       }
+      // A failed insert never advances the source cursor. Replaying is insert-only.
+      if (!dryRun && stagedCursor !== undefined) await options.checkpoints!.save(checkpointKey, stagedCursor);
       companiesCompleted++; progress();
     }
   }

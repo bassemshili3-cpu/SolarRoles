@@ -118,7 +118,6 @@ async function fetchPage(url: string): Promise<{ html: string; url: string }> {
 }
 
 export async function fetchHostedJobs(source: HostedBoard, company: AtsCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
   const jobs: NormalizedJob[] = [];
   try {
     const listing = await fetchPage(boardUrl(source, company.slug));

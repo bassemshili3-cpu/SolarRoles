@@ -1,5 +1,7 @@
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { AtsCompanySeed } from './company-seed';
+import { sourcePublicationDate } from './publicationDate';
+import { textBaseSalary } from './salaryFields';
 import type { NormalizedJob } from './ashby';
 
 // NOTE: field names below are based on Pinpoint's documented public
@@ -50,7 +52,8 @@ export async function fetchPinpointJobs(company: AtsCompanySeed): Promise<Normal
     url: p.url ?? `https://${company.slug}.pinpointhq.com/postings/${p.id}`,
     applyUrl: p.apply_url ?? p.url ?? '',
     contractType: p.employment_type,
-    postedAt: p.published_at ? new Date(p.published_at) : undefined,
+    postedAt: sourcePublicationDate(p, 'pinpoint'),
     salary: p.salary,
+    ...textBaseSalary(p.salary || '', true),
   }));
 }

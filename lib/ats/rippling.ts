@@ -2,6 +2,8 @@ import * as cheerio from 'cheerio';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { sourcePublicationDate } from './publicationDate';
+import { textBaseSalary } from './salaryFields';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -133,7 +135,8 @@ export async function fetchRipplingJobs(company: RipplingCompanySeed): Promise<N
       url: detail.url || detailUrl,
       applyUrl: detail.url || detailUrl,
       contractType: detail.employmentType?.id || detail.employmentType?.label,
-      postedAt: detail.createdOn ? new Date(detail.createdOn) : undefined,
+      postedAt: sourcePublicationDate(detail, 'rippling'),
+      ...textBaseSalary(description),
     });
   }
   return results;

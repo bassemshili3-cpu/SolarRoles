@@ -2,7 +2,8 @@ import { isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { AtsCompanySeed } from './company-seed';
 import type { NormalizedJob } from './types';
-import { verifyLeverCompany } from './verify-company';
+import { leverSalary } from './salaryFields';
+import { sourcePublicationDate } from './publicationDate';
 
 export type { NormalizedJob };
 
@@ -23,6 +24,7 @@ interface LeverPosting {
     min?: number;
     max?: number;
     currency?: string;
+    interval?: string;
   };
 }
 
@@ -30,16 +32,6 @@ const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com
 
 
 export async function fetchLeverJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) {
-    const { ok, foundTitle } = await verifyLeverCompany(company.slug, company.name, USER_AGENT);
-    if (!ok) {
-      console.warn(
-        `[lever] ${company.slug}: mismatch or unreachable (title found: "${foundTitle ?? 'n/a'}"), skipping — vérifie manuellement avant de passer verified:true`
-      );
-      return [];
-    }
-  }
-
   const endpoint = `https://api.lever.co/v0/postings/${company.slug}?mode=json`;
 
   const res = await fetch(endpoint, { headers: { 'User-Agent': USER_AGENT } });
@@ -67,11 +59,12 @@ export async function fetchLeverJobs(company: AtsCompanySeed): Promise<Normalize
       url: p.hostedUrl ?? `https://jobs.lever.co/${company.slug}/${p.id}`,
       applyUrl: p.applyUrl ?? p.hostedUrl ?? '',
       contractType: p.categories?.commitment,
-      postedAt: p.createdAt ? new Date(p.createdAt) : undefined,
+      postedAt: sourcePublicationDate(p, 'lever'),
       salary:
         p.salaryRange?.min && p.salaryRange?.max
           ? `${p.salaryRange.currency ?? 'USD'} ${p.salaryRange.min.toLocaleString()}–${p.salaryRange.max.toLocaleString()}`
           : undefined,
+      ...leverSalary(p.salaryRange),
     };
   });
 }

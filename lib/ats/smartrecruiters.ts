@@ -9,6 +9,8 @@ import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy'
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './ashby';
 import type { AtsCompanySeed } from './company-seed';
+import { sourcePublicationDate } from './publicationDate';
+import { textBaseSalary } from './salaryFields';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -96,8 +98,9 @@ export async function fetchSmartRecruitersJobs(company: AtsCompanySeed): Promise
       url: p.applyUrl ?? p.url ?? `${listUrl}#${p.id}`,
       applyUrl: p.applyUrl ?? p.url ?? '',
       contractType: p.typeOfEmployment?.label,
-      postedAt: p.releasedDate ? new Date(p.releasedDate) : undefined,
+      postedAt: sourcePublicationDate(p, 'smartrecruiters'),
       salary: detail?.compensation?.summary,
+      ...(textBaseSalary(description) ?? textBaseSalary(detail?.compensation?.summary || '', true)),
     }];
   });
 }

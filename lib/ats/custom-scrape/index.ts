@@ -192,11 +192,6 @@ export async function runCustomScrape(seed: CustomScrapeSeed, options: { allowUn
     outcomes.skipped_unverified++;
     return { jobs, outcomes, googleJobs, diagnostics };
   }
-  if (!seed.verified && !options.allowUnverified) {
-    console.warn(`[custom-scrape] ${seed.domain}: unverified seed; run the dry-run before publishing`);
-    outcomes.skipped_unverified++;
-    return { jobs, outcomes, googleJobs, diagnostics };
-  }
   if (!(await permitted(seed, seed.careersUrl))) {
     outcomes.skipped_robots++;
     return { jobs, outcomes, googleJobs, diagnostics };
@@ -283,7 +278,7 @@ export async function runCustomScrape(seed: CustomScrapeSeed, options: { allowUn
   return { jobs, outcomes, googleJobs, diagnostics };
 }
 
-/** Production entrypoint: only active, manually verified seeds yield jobs. */
+/** Production entrypoint: active seeds yield jobs regardless of legacy verified flags. */
 export async function fetchCustomScrapeJobs(seed: CustomScrapeSeed): Promise<NormalizedJob[]> {
   return (await runCustomScrape(seed)).jobs;
 }

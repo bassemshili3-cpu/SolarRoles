@@ -61,9 +61,10 @@ async function main() {
     return new Response(String(input).includes('/p/') ? html : listing);
   };
   try {
-    assert.equal((await fetchBreezyJobs(company)).length, 1);
+    assert.equal((await fetchBreezyJobs({ ...company, verified: false })).length, 1);
     assert.equal(requests, 2);
     assert.deepEqual(await fetchJazzHrJobs({ ...company, verified: false }), []);
+    assert.equal(requests, 3, 'JazzHR also attempts the source regardless of verified');
   } finally { globalThis.fetch = originalFetch; }
   // Optional real HTML captured read-only, outside the repository.
   if (process.argv.includes('--captured')) {

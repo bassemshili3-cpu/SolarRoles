@@ -133,7 +133,6 @@ async function fetchRenderedListings(company: FirstPartyCareerSeed): Promise<Nor
 }
 
 export async function fetchFirstPartyCareerJobs(company: FirstPartyCareerSeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
   try {
     if (company.kind === 'solar-optimum') return fetchSolarOptimum(company);
     if (company.kind === 'gamechange') return fetchGameChange(company);

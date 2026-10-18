@@ -698,7 +698,7 @@ export const ICIMS_COMPANIES: IcimsCompanySeed[] = [
   {
     baseUrl: 'https://careers2-quanta.icims.com',
     name: 'Quanta Power Solutions',
-    categoryName: 'Quanta Power Solutions',
+    employerName: 'Quanta Power Solutions',
     verified: true,
   },
   {

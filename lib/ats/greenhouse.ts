@@ -8,6 +8,8 @@ import { isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './ashby';
 import type { AtsCompanySeed } from './company-seed';
+import { greenhousePublicationDate } from './publicationDate';
+import { textBaseSalary } from './salaryFields';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -20,7 +22,8 @@ interface GreenhouseJob {
   offices?: Array<{ name?: string }>;
   metadata?: Array<{ name: string; value: string | null }>;
   updated_at: string;
-  created_at: string;
+  created_at?: string;
+  first_published?: string;
   absolute_url: string;
 }
 
@@ -131,8 +134,9 @@ export async function fetchGreenhouseJobs(company: AtsCompanySeed): Promise<Norm
       url: j.absolute_url,
       applyUrl: j.absolute_url,
       contractType: undefined,
-      postedAt: j.created_at ? new Date(j.created_at) : undefined,
+      postedAt: greenhousePublicationDate(j),
       salary: getSalary(j),
+      ...textBaseSalary(j.content ?? ''),
     };
   }));
 }

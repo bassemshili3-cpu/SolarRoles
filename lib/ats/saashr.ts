@@ -2,6 +2,8 @@ import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { htmlPublicationDate } from './publicationDate';
+import { htmlBaseSalary, textBaseSalary } from './salaryFields';
 
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
@@ -20,7 +22,6 @@ function cleanText(value: string): string {
 }
 
 export async function fetchSaaShrJobs(company: SaaShrCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
 
   const browser = await launchAtsBrowser({ headless: true });
   const context = await browser.newContext({ userAgent: USER_AGENT, locale: 'en-US' });
@@ -56,6 +57,7 @@ export async function fetchSaaShrJobs(company: SaaShrCompanySeed): Promise<Norma
         if (!description || !isSolarInstallerRole(listing.title, description)) continue;
 
         const url = `${company.careersUrl}#${listing.externalId}`;
+        const detailHtml = await page.content();
         jobs.push({
           source: 'saashr',
           externalId: listing.externalId,
@@ -66,6 +68,8 @@ export async function fetchSaaShrJobs(company: SaaShrCompanySeed): Promise<Norma
           description,
           url,
           applyUrl: company.careersUrl,
+          postedAt: htmlPublicationDate(detailHtml, { url, title: listing.title }),
+          ...(htmlBaseSalary(detailHtml, { url, title: listing.title }) ?? textBaseSalary(bodyText)),
         });
       } catch (error) {
         console.warn(

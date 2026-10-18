@@ -2,6 +2,8 @@ import * as cheerio from 'cheerio';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { htmlPublicationDate } from './publicationDate';
+import { htmlBaseSalary, textBaseSalary } from './salaryFields';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -76,11 +78,12 @@ export function parseHrmDirectDetail(
     description,
     url: listing.url,
     applyUrl: listing.url,
+    postedAt: htmlPublicationDate(html, { url: listing.url, title }),
+    ...(htmlBaseSalary(html, { url: listing.url, title }) ?? textBaseSalary(description)),
   };
 }
 
 export async function fetchHrmDirectJobs(company: HrmDirectCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
 
   const listUrl = `https://${company.subdomain}.hrmdirect.com/employment/job-openings.php?search=true`;
   const response = await fetch(listUrl, { headers: { 'User-Agent': USER_AGENT } });

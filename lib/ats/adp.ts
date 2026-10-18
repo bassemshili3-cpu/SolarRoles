@@ -2,6 +2,8 @@ import * as cheerio from 'cheerio';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { sourcePublicationDate } from './publicationDate';
+import { numericSalary, textBaseSalary } from './salaryFields';
 
 const BASE_URL = 'https://workforcenow.adp.com/mascsr/default/careercenter/public/events/staffing/v1/job-requisitions';
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
@@ -45,11 +47,6 @@ function textFromHtml(html: string): string {
   return cheerio.load(html).text().replace(/\s+/g, ' ').trim();
 }
 
-function validDate(raw: string | undefined): Date | undefined {
-  if (!raw) return undefined;
-  const date = new Date(raw);
-  return Number.isNaN(date.getTime()) ? undefined : date;
-}
 
 function customValue(job: AdpJob, key: string): string | undefined {
   return job.customFieldGroup?.stringFields?.find((field) => field.nameCode?.codeValue === key)?.stringValue;
@@ -77,7 +74,6 @@ async function requestJson<T>(url: URL): Promise<T> {
 }
 
 export async function fetchAdpJobs(company: AdpCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
 
   try {
     const summaries: AdpJob[] = [];
@@ -129,13 +125,11 @@ export async function fetchAdpJobs(company: AdpCompanySeed): Promise<NormalizedJ
         url: publicUrl.toString(),
         applyUrl: publicUrl.toString(),
         contractType: detail.workLevelCode?.shortName,
-        postedAt: validDate(detail.postDate),
+        postedAt: sourcePublicationDate(detail, 'adp'),
         salary: minimum !== undefined || maximum !== undefined
           ? `${minimum ?? maximum}${minimum !== undefined && maximum !== undefined && minimum !== maximum ? `–${maximum}` : ''}${currency ? ` ${currency}` : ''}${period ? `/${period.toLowerCase()}` : ''}`
           : undefined,
-        salaryMin: minimum,
-        salaryMax: maximum,
-        salaryPeriod: period,
+        ...(numericSalary(minimum, maximum, currency, period) ?? textBaseSalary(description)),
       });
     }
 

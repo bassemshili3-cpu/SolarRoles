@@ -39,9 +39,13 @@ Support project finance models and transactions for a growing portfolio of utili
 
 const job = parseWorkableDetail(detailMarkdown, company, indexJob)!;
 assert.equal(job.source, 'workable');
-assert.equal(job.salaryMin, 125000);
-assert.equal(job.salaryMax, 135000);
-assert.equal(job.salaryPeriod, 'YEAR');
+assert.equal(job.salaryMin, undefined, 'An amount without an explicit period stays display-only');
+assert.equal(job.salaryMax, undefined);
+assert.equal(job.salaryPeriod, undefined);
+const hourlyJob = parseWorkableDetail(detailMarkdown, company, { ...indexJob, salary: 'USD 25 - 35 per hour' })!;
+assert.equal(hourlyJob.salaryMin, 52000);
+assert.equal(hourlyJob.salaryMax, 72800);
+assert.equal(hourlyJob.salaryPeriod, 'HOUR');
 assert.equal(job.isRemote, true);
 assert.equal(isUSJob(job, { allowBareRemote: false }), true);
 assert.equal(job.applyUrl, 'https://apply.workable.com/example-solar/j/8F3E48B733/apply');

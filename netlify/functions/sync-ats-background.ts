@@ -42,6 +42,10 @@ export default async function syncAtsBackground(request: Request) {
     }, 60000);
     try {
       const summary = await runAtsSeed({ providerName: task.providerName, companyIndex: task.companyIndex, newOnly: true,
+        checkpoints: {
+          load: key => store.get(`checkpoints/${key}`, { type: 'json' }),
+          save: async (key, cursor) => { await store.setJSON(`checkpoints/${key}`, cursor); },
+        },
         onProgress: progress => { attempt.progress = progress; } });
       attempt = { ...attempt, state: 'completed', progress: summary, finishedAt: new Date().toISOString() };
     } catch (error) {

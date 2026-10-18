@@ -3,6 +3,8 @@ import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { sourcePublicationDate } from './publicationDate';
+import { structuredSalary, textBaseSalary } from './salaryFields';
 
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
@@ -29,14 +31,8 @@ function textFromHtml(html: string): string {
   return cheerio.load(html).text().replace(/\s+/g, ' ').trim();
 }
 
-function validDate(raw: unknown): Date | undefined {
-  if (typeof raw !== 'string') return undefined;
-  const date = new Date(raw);
-  return Number.isNaN(date.getTime()) ? undefined : date;
-}
 
 export async function fetchPaycomJobs(company: PaycomCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
 
   const baseUrl = `https://www.paycomonline.net/v4/ats/web.php/portal/${company.clientKey}`;
   const browser = await launchAtsBrowser({ headless: true });
@@ -85,9 +81,9 @@ export async function fetchPaycomJobs(company: PaycomCompanySeed): Promise<Norma
         const description = textFromHtml([posting.description, posting.qualifications].filter(Boolean).join('\n'));
         if (!isSolarInstallerRole(posting.jobTitle, description)) continue;
 
-        let schema: { datePosted?: string } = {};
+        let schema: { datePosted?: string; baseSalary?: unknown } = {};
         try {
-          schema = JSON.parse(posting.googleJobJson ?? '{}') as { datePosted?: string };
+          schema = JSON.parse(posting.googleJobJson ?? '{}') as { datePosted?: string; baseSalary?: unknown };
         } catch {
           // The source date is optional; never substitute the crawl date.
         }
@@ -103,8 +99,9 @@ export async function fetchPaycomJobs(company: PaycomCompanySeed): Promise<Norma
           url,
           applyUrl: url,
           contractType: posting.positionType,
-          postedAt: validDate(schema.datePosted),
+          postedAt: sourcePublicationDate(schema, 'paycom'),
           salary: posting.salaryRange || undefined,
+          ...(structuredSalary(schema.baseSalary) ?? textBaseSalary(description) ?? textBaseSalary(posting.salaryRange || '', true)),
         });
       } catch (error) {
         console.warn(`[paycom] ${company.name}: détail ignoré (${id}) — ${error instanceof Error ? error.message : String(error)}`);

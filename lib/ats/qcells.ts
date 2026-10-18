@@ -3,6 +3,8 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { htmlPublicationDate } from './publicationDate';
+import { htmlBaseSalary, textBaseSalary } from './salaryFields';
 
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
@@ -23,7 +25,6 @@ function cleanText(value: string): string {
 }
 
 export async function fetchQcellsJobs(company: QcellsCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ userAgent: USER_AGENT, locale: 'en-US' });
@@ -71,6 +72,8 @@ export async function fetchQcellsJobs(company: QcellsCompanySeed): Promise<Norma
           .trim();
         const description = cleanText(bodyText.replace(/^[\s\S]*?Description\s*/i, ''));
         if (!description || !isSolarInstallerRole(title || listing.title, description)) continue;
+        const detailHtml = await page.content();
+        const identity = { url: listing.url, title: title || listing.title };
 
         jobs.push({
           source: 'qcells',
@@ -83,6 +86,8 @@ export async function fetchQcellsJobs(company: QcellsCompanySeed): Promise<Norma
           description,
           url: listing.url,
           applyUrl: listing.url,
+          postedAt: htmlPublicationDate(detailHtml, identity),
+          ...(htmlBaseSalary(detailHtml, identity) ?? textBaseSalary(bodyText)),
         });
       } catch (error) {
         console.warn(

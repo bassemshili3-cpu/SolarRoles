@@ -2,6 +2,8 @@ import * as cheerio from 'cheerio';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { sourcePublicationDate } from './publicationDate';
+import { textBaseSalary } from './salaryFields';
 
 export interface UkgCompanySeed {
   baseUrl: string;
@@ -89,11 +91,6 @@ function normalizedLocations(locations: UkgLocation[] | undefined) {
   return { location, regions };
 }
 
-function validDate(raw: string | undefined): Date | undefined {
-  if (!raw) return undefined;
-  const date = new Date(raw);
-  return Number.isNaN(date.getTime()) ? undefined : date;
-}
 
 export async function fetchUkgJobs(company: UkgCompanySeed): Promise<NormalizedJob[]> {
   const baseUrl = company.baseUrl.replace(/\/$/, '');
@@ -150,7 +147,8 @@ export async function fetchUkgJobs(company: UkgCompanySeed): Promise<NormalizedJ
         url,
         applyUrl: url,
         contractType: detail.FullTime === true ? 'Full-Time' : detail.FullTime === false ? 'Part-Time' : undefined,
-        postedAt: validDate(candidate.PostedDate ?? detail.PostedDate),
+        postedAt: sourcePublicationDate(detail, 'ukg') ?? sourcePublicationDate(candidate, 'ukg'),
+        ...textBaseSalary(description),
       });
     } catch (error) {
       console.warn(`[ukg] ${company.name}: détail ignoré (${candidate.Id}) — ${(error as Error).message}`);

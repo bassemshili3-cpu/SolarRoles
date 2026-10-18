@@ -3,6 +3,8 @@ import { isSolarInstallerRole, isGenericInstallerTitle } from './solar-taxonomy'
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './types'; // adapte si ton fichier partagé s'appelle autrement
 import type { AtsCompanySeed } from './company-seed';
+import { jobvitePublicationDate } from './publicationDate';
+import { htmlBaseSalary, textBaseSalary, type SalaryFields } from './salaryFields';
 
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
@@ -19,6 +21,8 @@ interface ScrapedJobRow {
 interface JobDetail {
   description: string;
   location: string;
+  postedAt?: Date;
+  salaryFields?: SalaryFields;
 }
 
 // Conteneurs de ligne possibles, du plus spécifique au plus générique.
@@ -189,7 +193,11 @@ function extractIdFromHref(href: string): string {
 // à la page liste dont le markup varie trop d'une entreprise à l'autre.
 async function fetchJobDetail(href: string): Promise<JobDetail> {
   try {
-    const html = await fetchHtml(href);
+    // Fetch the actual ATS detail rather than an employer wrapper with an iframe.
+    const detailUrl = new URL(href);
+    detailUrl.searchParams.set('nl', '1');
+    detailUrl.searchParams.set('fr', 'false');
+    const html = await fetchHtml(detailUrl.href);
     const $ = cheerio.load(html);
 
     const descContainer = $('.jv-job-detail-description, .jv-page-body, main').first();
@@ -207,7 +215,7 @@ async function fetchJobDetail(href: string): Promise<JobDetail> {
       }
     }
 
-    return { description, location };
+    return { description, location, postedAt: jobvitePublicationDate(html, href), salaryFields: htmlBaseSalary(html, { url: href }) ?? textBaseSalary(description) };
   } catch (err) {
     console.warn(`[jobvite] échec récupération détail ${href}: ${(err as Error).message}`);
     return { description: '', location: '' };
@@ -216,16 +224,18 @@ async function fetchJobDetail(href: string): Promise<JobDetail> {
 
 export async function fetchJobviteJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
   let rows: ScrapedJobRow[];
+  let explicitlyEmpty = false;
 
   try {
     const html = await fetchHtml(LIST_URL(company.slug));
     rows = parseJobRows(html);
+    explicitlyEmpty = /there are currently no open jobs|there are no (?:open|current) (?:jobs|positions)/i.test(cheerio.load(html).text());
   } catch (err) {
     console.warn(`[jobvite] ${company.slug}: fetch/parse échoué, skipping — ${(err as Error).message}`);
     return [];
   }
 
-  if (rows.length === 0) {
+  if (rows.length === 0 && !explicitlyEmpty) {
     console.warn(
       `[jobvite] ${company.slug}: 0 ligne trouvée — soit pas d'offres, soit le rendu nécessite du JS (à vérifier manuellement).`
     );
@@ -242,14 +252,14 @@ export async function fetchJobviteJobs(company: AtsCompanySeed): Promise<Normali
     // cas, pour la description ET pour une location fiable.
     if (!isSolarInstallerRole(r.title) && !isGenericInstallerTitle(r.title)) continue;
 
-    const { description, location: detailLocation } = await fetchJobDetail(r.href);
+    const { description, location: detailLocation, postedAt, salaryFields } = await fetchJobDetail(r.href);
 
     if (!isSolarInstallerRole(r.title, description)) continue;
 
     const location = detailLocation || r.location;
     if (!location) emptyLocationCount++;
 
-    results.push(normalize(r, company, description, location));
+    results.push(normalize(r, company, description, location, postedAt, salaryFields));
   }
 
   if (emptyLocationCount > 0) {
@@ -261,7 +271,7 @@ export async function fetchJobviteJobs(company: AtsCompanySeed): Promise<Normali
   return results;
 }
 
-function normalize(r: ScrapedJobRow, company: AtsCompanySeed, description: string, location: string): NormalizedJob {
+function normalize(r: ScrapedJobRow, company: AtsCompanySeed, description: string, location: string, postedAt?: Date, salaryFields?: SalaryFields): NormalizedJob {
   const id = extractIdFromHref(r.href);
   return {
     source: 'jobvite',
@@ -274,7 +284,8 @@ function normalize(r: ScrapedJobRow, company: AtsCompanySeed, description: strin
     url: r.href,
     applyUrl: r.href,
     contractType: undefined,
-    postedAt: undefined,
+    postedAt,
     salary: undefined,
+    ...salaryFields,
   };
 }

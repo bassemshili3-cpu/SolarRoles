@@ -34,9 +34,12 @@
 
 import type { Browser, BrowserContext, Page } from 'playwright';
 import { launchAtsBrowser } from './browser';
+import { sourcePublicationDate } from './publicationDate';
+import { textBaseSalary, type SalaryFields } from './salaryFields';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { NormalizedJob } from './types';
+import type { AtsFetchContext } from './fetch-context';
 import { STATE_CODE_TO_NAME } from '@/lib/usStates';
 
 const FULL_STATE_NAMES = new Set(
@@ -519,6 +522,7 @@ async function fetchInPage<T>(
   return page.evaluate(
     async ({ url, method, body }) => {
       const res = await fetch(url, {
+        signal: AbortSignal.timeout(20_000),
         method: method ?? 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -664,7 +668,7 @@ async function fetchJobDetail(
   page: Page,
   externalPath: string,
   expectedOrigin: string,
-): Promise<{ description: string; location?: string; isUnitedStates?: boolean }> {
+): Promise<{ description: string; location?: string; isUnitedStates?: boolean; postedAt?: Date; salaryFields?: SalaryFields }> {
   if (!externalPath) {
     console.warn(`[workday] ${company.tenant}/${company.site}: externalPath manquant, poste ignoré`);
     return { description: '' };
@@ -680,20 +684,26 @@ async function fetchJobDetail(
       page,
       `${cxsBaseUrl(company)}/job${path}`
     );
-    if (!result.ok) return { description: '' };
+    if (!result.ok) {
+      if (result.status === 404 || result.status === 410) return { description: '' };
+      throw new Error(`HTTP ${result.status} for ${externalPath}`);
+    }
     const info = result.data.jobPostingInfo;
+    if (!info?.jobDescription) throw new Error(`Missing jobPostingInfo for ${externalPath}`);
     const detailLocation = resolveDetailLocation(info);
     return {
       description: stripHtml(info?.jobDescription ?? ''),
+      postedAt: sourcePublicationDate(info, 'workday'),
+      salaryFields: textBaseSalary(info?.jobDescription ?? ''),
       ...detailLocation,
     };
   } catch (err) {
     console.warn(`[workday] échec récupération description ${externalPath}: ${(err as Error).message}`);
-    return { description: '' };
+    throw err;
   }
 }
 
-export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<NormalizedJob[]> {
+export async function fetchWorkdayJobs(company: WorkdayCompanySeed, run?: AtsFetchContext): Promise<NormalizedJob[]> {
   const context = await createCompanyContext();
   const expectedOrigin = new URL(careerPageUrl(company)).origin;
   let page: Page;
@@ -704,6 +714,14 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
     console.warn(`[workday] ${company.tenant}/${company.site}: navigation échouée — ${(err as Error).message}`);
     await context.close();
     return [];
+  }
+
+  if (run) {
+    try {
+      return await fetchWorkdayBatch(company, page, expectedOrigin, run);
+    } finally {
+      await context.close();
+    }
   }
 
   let postings: WorkdayJobPosting[];
@@ -721,17 +739,84 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed): Promise<Nor
 
   try {
     for (const p of postings) {
-      const detail = await fetchJobDetail(company, page, p.externalPath, expectedOrigin);
+      let detail: Awaited<ReturnType<typeof fetchJobDetail>>;
+      try { detail = await fetchJobDetail(company, page, p.externalPath, expectedOrigin); }
+      catch { continue; }
       await randomDelay(REQUEST_DELAY_MIN_MS, REQUEST_DELAY_MAX_MS);
 
       if (isSolarInstallerRole(p.title, detail.description)) {
-        results.push(normalize(company, p, detail.description, detail.location, detail.isUnitedStates));
+        results.push(normalize(company, p, detail.description, detail.location, detail.isUnitedStates, detail.postedAt, detail.salaryFields));
       }
     }
   } finally {
     await context.close();
   }
 
+  return results;
+}
+
+export interface WorkdayCursor { version: 1; offset: number; completed: string[] }
+export function workdayCursor(value: unknown): WorkdayCursor {
+  const cursor = value as Partial<WorkdayCursor> | null;
+  if (cursor?.version !== 1 || !Number.isSafeInteger(cursor.offset) || cursor.offset! < 0
+    || !Array.isArray(cursor.completed) || !cursor.completed.every(path => typeof path === 'string')) {
+    return { version: 1, offset: 0, completed: [] };
+  }
+  return { version: 1, offset: cursor.offset!, completed: [...cursor.completed] };
+}
+
+/** Resume a bounded scan instead of losing a large board at the function timeout. */
+export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page, origin: string, run: AtsFetchContext, headOnly = false) {
+  let cursor = workdayCursor(run.cursor);
+  const results: NormalizedJob[] = [];
+  if (cursor.offset > 0 && !headOnly) {
+    // Recheck the first page for new postings while the durable full scan moves
+    // through a large catalogue. Reserve the rest of the budget for continuation.
+    results.push(...await fetchWorkdayBatch(company, page, origin, {
+      ...run, cursor: undefined, deadline: Math.min(run.deadline, Date.now() + 150_000), checkpoint: () => {},
+    }, true));
+  }
+  // Leave room for one bounded request (3 x 20s), processing and audit persistence.
+  const hasTime = () => Date.now() + 75_000 < run.deadline;
+  try {
+    while (hasTime()) {
+      assertOnExpectedOrigin(company, page, origin);
+      const response = await fetchInPageWithRetry<WorkdayJobsResponse>(company, page, `${cxsBaseUrl(company)}/jobs`, {
+        method: 'POST', body: { appliedFacets: {}, limit: PAGE_SIZE, offset: cursor.offset, searchText: '' },
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status} at offset ${cursor.offset}`);
+      if (!Array.isArray(response.data.jobPostings)) throw new Error('Missing Workday jobPostings array');
+      const postings = response.data.jobPostings;
+      if (!postings.length) { cursor = { version: 1, offset: 0, completed: [] }; break; }
+      const completed = new Set(cursor.completed);
+      for (const posting of postings) {
+        if (!posting.externalPath) throw new Error('Workday posting missing externalPath');
+        if (completed.has(posting.externalPath)) continue;
+        if (!hasTime()) { run.checkpoint(cursor); return results; }
+        const url = `${careerPageUrl(company)}${posting.externalPath}`;
+        if (!run.isKnown('workday', url)) {
+          const detail = await fetchJobDetail(company, page, posting.externalPath, origin);
+          if (isSolarInstallerRole(posting.title, detail.description)) {
+            results.push(normalize(company, posting, detail.description, detail.location, detail.isUnitedStates, detail.postedAt, detail.salaryFields));
+          }
+          await randomDelay(REQUEST_DELAY_MIN_MS, REQUEST_DELAY_MAX_MS);
+        }
+        completed.add(posting.externalPath);
+        cursor.completed = [...completed];
+      }
+      cursor = { version: 1, offset: cursor.offset + postings.length, completed: [] };
+      if (response.data.total !== undefined && cursor.offset >= response.data.total) {
+        cursor.offset = 0; break;
+      }
+      if (headOnly) break;
+      console.log(`[workday] ${company.tenant}/${company.site}: next offset ${cursor.offset}, ${results.length} matches`);
+    }
+  } catch (error) {
+    // Retain the failed page and already processed IDs for the next scheduled scan.
+    console.warn(`[workday] ${company.tenant}/${company.site}: scan paused at ${cursor.offset}: ${(error as Error).message}`);
+  }
+  run.checkpoint(cursor);
+  console.log(`[workday] ${company.tenant}/${company.site}: batch returned ${results.length}, next offset ${cursor.offset}`);
   return results;
 }
 
@@ -742,6 +827,8 @@ function normalize(
   description: string,
   detailLocation?: string,
   detailIsUnitedStates = false,
+  postedAt?: Date,
+  salaryFields?: SalaryFields,
 ): NormalizedJob {
   const location = resolveLocation(p, detailLocation, detailIsUnitedStates);
   const url = `https://${company.tenant}.${company.host}.myworkdayjobs.com/${company.site}${p.externalPath}`;
@@ -756,7 +843,8 @@ function normalize(
     url,
     applyUrl: url,
     contractType: undefined,
-    postedAt: undefined, // postedOn est du texte relatif ("Posted 3 Days Ago"), pas une vraie date exploitable
+    postedAt,
     salary: undefined,
+    ...salaryFields,
   };
 }

@@ -2,6 +2,8 @@ import * as cheerio from 'cheerio';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { absolutePublicationDate } from './publicationDate';
+import { textBaseSalary } from './salaryFields';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -41,8 +43,10 @@ function externalIdFromUrl(url: string): string | undefined {
 
 function validDate(value: string): Date | undefined {
   if (!value) return undefined;
+  // RSS pubDate is RFC 822 with an explicit timezone, unlike ambiguous dates.
+  if (!/^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s+\d{1,2}\s+[A-Z][a-z]{2}\s+\d{4}\s+\d{2}:\d{2}(?::\d{2})?\s+(?:GMT|UTC|[+-]\d{4})$/.test(value)) return absolutePublicationDate(value);
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? undefined : date;
+  return absolutePublicationDate(date);
 }
 
 export function parseSuccessFactorsRss(
@@ -73,6 +77,7 @@ export function parseSuccessFactorsRss(
       url,
       applyUrl: url,
       postedAt: validDate(item.find('pubDate').text().trim()),
+      ...textBaseSalary(description),
     });
   });
 
@@ -82,11 +87,6 @@ export function parseSuccessFactorsRss(
 export async function fetchSuccessFactorsJobs(
   company: SuccessFactorsCompanySeed,
 ): Promise<NormalizedJob[]> {
-  if (!company.verified) {
-    console.warn(`[successfactors] ${company.name}: unverified seed, skipping`);
-    return [];
-  }
-
   const jobs = new Map<string, NormalizedJob>();
   for (const keyword of company.keywords) {
     const feedUrl = new URL('/services/rss/job/', company.baseUrl);

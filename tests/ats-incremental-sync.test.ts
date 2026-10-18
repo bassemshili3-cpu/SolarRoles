@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import { isJobTooOld, sourcePostedAt } from '../lib/jobRetention';
+import { normalizeSourceFields } from '../lib/ats/normalizeSourceFields';
 import * as monitor from '../lib/ats/sync-monitor';
 
 function load(file: string, require: (id: string) => any, globals = {}) {
@@ -18,7 +19,7 @@ function load(file: string, require: (id: string) => any, globals = {}) {
 const SYNC_NOW = new Date('2026-10-15T12:00:00Z');
 class SyncDate extends Date { constructor(value: number = SYNC_NOW.getTime()) { super(value); } }
 
-function seedHarness({ known = false, raced = false, dryRun = false, postedAt = SYNC_NOW as Date | null, postedAtEstimated = false, newOnly = true } = {}) {
+function seedHarness({ known = false, raced = false, dryRun = false, postedAt = SYNC_NOW as Date | null, postedAtEstimated = false, newOnly = true, verified = true, checkpoint = false, insertFails = false } = {}) {
   const writes: string[] = [];
   let locks = 0;
   let disconnected = false;
@@ -27,7 +28,7 @@ function seedHarness({ known = false, raced = false, dryRun = false, postedAt = 
     $queryRaw: async () => { locks++; return []; },
     job: {
       findFirst: async () => raced ? { id: 'known' } : null,
-      create: async ({ data }: any) => { writes.push('create'); return { id: 'new', ...data }; },
+      create: async ({ data }: any) => { if (insertFails) throw Error('insert failed'); writes.push('create'); return { id: 'new', ...data }; },
       update: async () => { writes.push('slug'); },
     },
   };
@@ -36,20 +37,25 @@ function seedHarness({ known = false, raced = false, dryRun = false, postedAt = 
     $transaction = async (fn: any) => fn(tx);
     $disconnect = async () => { disconnected = true; };
   }
-  const registry = new Proxy({}, { get: (_, key) => String(key).endsWith('_COMPANIES') ? [{ slug: 'solar', tenant: 'solar', site: 'jobs' }] : {} });
+  const registry = new Proxy({}, { get: (_, key) => String(key).endsWith('_COMPANIES') ? [{ slug: 'solar', tenant: 'solar', site: 'jobs', verified }] : {} });
   const api = load('scripts/seed-solar-jobs.ts', (id) => {
     if (id === '@prisma/client') return { PrismaClient };
     if (id.endsWith('company-seed')) return registry;
     if (id.endsWith('custom-scrape/config')) return { CUSTOM_SCRAPE_COMPANIES: [] };
     if (id.endsWith('jobRetention')) return { isJobTooOld, sourcePostedAt };
+    if (id.endsWith('normalizeSourceFields')) return { normalizeSourceFields };
     if (id.endsWith('/geo')) return { isUSJob: () => true };
     if (id.endsWith('jobTaxonomy')) return { extractSolarJobTaxonomy: () => ({ skills: [] }) };
     if (id.endsWith('slugify')) return { buildJobSlug: () => 'solar-installer-austin' };
     if (id.endsWith('workSetting')) return { normalizeWorkSetting: () => null };
     if (id === 'node:url') return {};
-    return new Proxy({}, { get: () => async () => [offer, offer] });
+    return new Proxy({}, { get: () => async (_company: any, context: any) => {
+      if (checkpoint && context) context.checkpoint({ offset: 20 });
+      return [offer, offer];
+    } });
   }, { Date: SyncDate });
-  return { run: () => api.runAtsSeed({ providerName: 'lever', companyIndex: 0, newOnly, dryRun }), writes, locks: () => locks, disconnected: () => disconnected };
+  return { run: () => api.runAtsSeed({ providerName: 'lever', companyIndex: 0, newOnly, dryRun,
+    checkpoints: checkpoint ? { load: async () => null, save: async () => { writes.push('checkpoint'); } } : undefined }), writes, locks: () => locks, disconnected: () => disconnected };
 }
 
 test('incremental discovery accepts only real publication dates under fourteen days old', async () => {
@@ -70,6 +76,24 @@ test('incremental discovery accepts only real publication dates under fourteen d
   const estimated = seedHarness({ postedAtEstimated: true });
   await estimated.run();
   assert.deepEqual(estimated.writes, []);
+});
+
+test('legacy verified flags do not exclude sources from ingestion', async () => {
+  const h = seedHarness({ verified: false });
+  const summary = await h.run();
+  assert.equal(summary.companiesAttempted, 1);
+  assert.equal(summary.created, 1);
+});
+
+test('source cursor commits after inserts and never advances on an insert failure or dry-run', async () => {
+  const good = seedHarness({ checkpoint: true });
+  await good.run();
+  assert.deepEqual(good.writes, ['create', 'slug', 'checkpoint']);
+  const failed = seedHarness({ checkpoint: true, insertFails: true });
+  await assert.rejects(failed.run(), /insert failed/);
+  assert.deepEqual(failed.writes, []);
+  const preview = seedHarness({ checkpoint: true, dryRun: true });
+  await preview.run(); assert.deepEqual(preview.writes, []);
 });
 
 test('manual seed still accepts a publication older than fourteen days', async () => {

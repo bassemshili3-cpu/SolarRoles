@@ -2,6 +2,8 @@ import { extractStateFromLocation } from '@/lib/parseLocation';
 import type { AtsCompanySeed } from './company-seed';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { textBaseSalary } from './salaryFields';
+import { absolutePublicationDate } from './publicationDate';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -58,7 +60,7 @@ export function parseWorkableIndex(markdown: string): WorkableIndexJob[] {
     const detailUrl = cells[6].match(/\((https:\/\/apply\.workable\.com\/[^)]+\/jobs\/view\/([A-Za-z0-9]+)\.md)\)/i);
     if (!detailUrl) continue;
 
-    const postedAt = /^\d{4}-\d{2}-\d{2}$/.test(cells[5]) ? new Date(`${cells[5]}T00:00:00.000Z`) : undefined;
+    const postedAt = absolutePublicationDate(cells[5]);
     jobs.push({
       id: detailUrl[2],
       title: cells[0],
@@ -74,26 +76,7 @@ export function parseWorkableIndex(markdown: string): WorkableIndexJob[] {
 }
 
 function salaryFields(salary?: string) {
-  if (!salary) return {};
-  const amounts = [...salary.matchAll(/\d[\d,.]*/g)]
-    .map((match) => Number(match[0].replace(/,/g, '')))
-    .filter(Number.isFinite);
-  const salaryPeriod = /(?:\/\s*hr|hour(?:ly)?)/i.test(salary)
-    ? 'HOUR'
-    : /month(?:ly)?/i.test(salary)
-      ? 'MONTH'
-      : /week(?:ly)?/i.test(salary)
-        ? 'WEEK'
-        : amounts.some((amount) => amount >= 10_000)
-          ? 'YEAR'
-          : undefined;
-
-  return {
-    salary,
-    salaryMin: amounts[0],
-    salaryMax: amounts[1] ?? amounts[0],
-    salaryPeriod,
-  };
+  return { salary, ...textBaseSalary(salary || '', true) };
 }
 
 export function parseWorkableDetail(
@@ -141,7 +124,6 @@ async function fetchText(url: string): Promise<string> {
 }
 
 export async function fetchWorkableJobs(company: AtsCompanySeed): Promise<NormalizedJob[]> {
-  if (!company.verified) return [];
   const jobs: NormalizedJob[] = [];
 
   try {

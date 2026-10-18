@@ -3,6 +3,8 @@ import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
 import { isGenericInstallerTitle, isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
+import { sourcePublicationDate } from './publicationDate';
+import { structuredSalary, textBaseSalary } from './salaryFields';
 
 export interface OracleCloudCompanySeed {
   baseUrl: string;
@@ -20,6 +22,7 @@ interface OracleJobPosting {
   '@type'?: string;
   title?: string;
   datePosted?: string;
+  baseSalary?: unknown;
   employmentType?: string | string[];
   description?: string;
   url?: string;
@@ -61,11 +64,6 @@ function normalizeLocation(job: OracleJobPosting): string {
     .join(', ');
 }
 
-function validDate(raw: string | undefined): Date | undefined {
-  if (!raw) return undefined;
-  const date = new Date(raw);
-  return Number.isNaN(date.getTime()) ? undefined : date;
-}
 
 export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Promise<NormalizedJob[]> {
     const browser = await launchAtsBrowser({ headless: true });
@@ -76,7 +74,7 @@ export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Pro
 
   try {
     await page.goto(`${baseUrl}/jobs`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-    await page.waitForTimeout(2_000);
+    await page.locator('a[href*="/job/"], .no-results').first().waitFor({ state: 'attached', timeout: 20_000 }).catch(() => {});
 
     let stableRounds = 0;
     let previousSize = -1;
@@ -84,7 +82,12 @@ export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Pro
       const currentLinks = await page.locator('a[href*="/job/"]').evaluateAll((anchors) =>
         anchors.map((anchor) => ({
           url: (anchor as HTMLAnchorElement).href,
-          title: anchor.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+          // Current Oracle boards use an empty overlay anchor. Its accessible
+          // label points to a sibling containing the visible job title.
+          title: (anchor.textContent?.trim()
+            || anchor.getAttribute('aria-labelledby')?.split(/\s+/).map(id => document.getElementById(id)?.querySelector('.job-tile__title')?.textContent).filter(Boolean).join(' ')
+            || anchor.parentElement?.querySelector('.job-tile__title')?.textContent
+            || '').replace(/\s+/g, ' ').trim(),
         })),
       );
       for (const link of currentLinks) {
@@ -100,6 +103,9 @@ export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Pro
     }
 
     console.log(`[oraclecloud] ${company.name}: ${links.size} postes bruts découverts`);
+    if (links.size === 0 && !/no (?:open |matching )?(?:jobs|results)|0 open jobs/i.test(await page.locator('body').innerText())) {
+      console.warn(`[oraclecloud] ${company.name}: listing not recognized, cannot confirm an empty board`);
+    }
 
     const results: NormalizedJob[] = [];
     for (const [url, listingTitle] of links) {
@@ -133,7 +139,8 @@ export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Pro
           contractType: Array.isArray(posting.employmentType)
             ? posting.employmentType.join(', ')
             : posting.employmentType,
-          postedAt: validDate(posting.datePosted),
+          postedAt: sourcePublicationDate(posting, 'oraclecloud'),
+          ...(structuredSalary(posting.baseSalary) ?? textBaseSalary(description)),
         });
       } catch (error) {
         console.warn(`[oraclecloud] ${company.name}: détail ignoré (${url}) — ${(error as Error).message}`);
