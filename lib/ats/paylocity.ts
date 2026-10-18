@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import { launchAtsBrowser } from './browser';
 import { extractStateFromLocation } from '@/lib/parseLocation';
+import { STATE_CODE_TO_NAME } from '@/lib/usStates';
 import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
 import { sourcePublicationDate, htmlPublicationDate } from './publicationDate';
@@ -29,6 +30,14 @@ type JobPosting = {
 };
 
 export class PaylocityRateLimit extends Error {}
+
+export function paylocityState(location: string): string | undefined {
+  const direct = extractStateFromLocation(location);
+  if (direct) return direct;
+  // The visible location separates the work arrangement from the state.
+  const place = location.split(/[•·]/).at(-1)?.trim() ?? '';
+  return STATE_CODE_TO_NAME[place.toUpperCase()] ? place.toUpperCase() : extractStateFromLocation(place);
+}
 
 type BoardDate = { title: string; origin: string; publishedAt: Date };
 const normalizedTitle = (title: string) => title.replace(/\s+/g, ' ').trim().toLowerCase();
@@ -204,7 +213,7 @@ export async function fetchPaylocityJobs(company: PaylocityCompanySeed, run?: At
           title: posting.title,
           company: company.name,
           location,
-          addressRegion: extractStateFromLocation(location),
+          addressRegion: paylocityState(location),
           description,
           url,
           applyUrl: url.replace(/\/Details\//i, '/Apply/'),

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parsePaylocityBoardDates, paylocityPublicationDate } from '../lib/ats/paylocity';
+import { parsePaylocityBoardDates, paylocityPublicationDate, paylocityState } from '../lib/ats/paylocity';
+import { isUSJob } from '../lib/ats/geo';
 
 const origin = 'https://recruiting.paylocity.com';
 const board = origin + '/Recruiting/Jobs/All/company';
@@ -38,4 +39,17 @@ test('JSON containing braces and quotes is parsed without evaluating board JavaS
   assert.equal(dates.size, 1);
   const executable = `<a href="${url(123)}">${title}</a><script>window.pageData = { Jobs: [dangerousCall()] };</script>`;
   assert.equal(parsePaylocityBoardDates(executable, board).size, 0);
+});
+
+test('hybrid arrangement prefixes do not hide an explicit US state', () => {
+  for (const [location, state] of [['Hybrid Remote • Pennsylvania', 'PA'], ['Hybrid Remote • NY', 'NY'], ['Fully Remote • West Virginia', 'WV']]) {
+    const addressRegion = paylocityState(location);
+    assert.equal(addressRegion, state);
+    assert.equal(isUSJob({ location, addressRegion }, { allowBareRemote: false }), true);
+  }
+  for (const location of ['Hybrid Remote', 'Fully Remote • Ontario', 'Remote Worker - N/A']) {
+    const addressRegion = paylocityState(location);
+    assert.equal(addressRegion, undefined);
+    assert.equal(isUSJob({ location, addressRegion }, { allowBareRemote: false }), false);
+  }
 });
