@@ -30,6 +30,67 @@ type JobPosting = {
 
 export class PaylocityRateLimit extends Error {}
 
+type BoardDate = { title: string; origin: string; publishedAt: Date };
+const normalizedTitle = (title: string) => title.replace(/\s+/g, ' ').trim().toLowerCase();
+
+/** Read JSON, never execute the board's script. Dates belong to exact JobIds. */
+export function parsePaylocityBoardDates(html: string, boardUrl: string): Map<string, BoardDate> {
+  const $ = cheerio.load(html), dates = new Map<string, BoardDate>(), conflicts = new Set<string>();
+  const origin = new URL(boardUrl).origin;
+  const titles = new Map<string, string>();
+  $('a[href]').each((_, anchor) => {
+    try {
+      const url = new URL($(anchor).attr('href')!, boardUrl);
+      const id = url.pathname.match(/^\/recruiting\/jobs\/details\/(\d+)\/?$/i)?.[1];
+      if (url.origin === origin && id) titles.set(id, normalizedTitle($(anchor).text()));
+    } catch { /* Ignore malformed navigation links. */ }
+  });
+  $('script').each((_, script) => {
+    const source = $(script).text(), assignment = /\bwindow\.pageData\s*=\s*(?=\{)/.exec(source);
+    if (!assignment) return;
+    const start = assignment.index + assignment[0].length;
+    let depth = 0, quoted = false, escaped = false;
+    for (let end = start; end < source.length; end++) {
+      const char = source[end];
+      if (quoted) {
+        if (escaped) escaped = false;
+        else if (char === '\\') escaped = true;
+        else if (char === '"') quoted = false;
+        continue;
+      }
+      if (char === '"') { quoted = true; continue; }
+      if (char === '{') depth++;
+      if (char !== '}' || --depth !== 0) continue;
+      try {
+        const data = JSON.parse(source.slice(start, end + 1));
+        if (!Array.isArray(data.Jobs)) return;
+        for (const job of data.Jobs) {
+          if (!job || !/^\d+$/.test(String(job.JobId)) || typeof job.JobTitle !== 'string') continue;
+          const id = String(job.JobId), title = normalizedTitle(job.JobTitle);
+          if (!title || titles.get(id) !== title || conflicts.has(id)) continue;
+          const publishedAt = sourcePublicationDate({ PublishedDate: job.PublishedDate }, 'paylocity');
+          if (!publishedAt) continue;
+          const previous = dates.get(id);
+          if (previous && previous.publishedAt.getTime() !== publishedAt.getTime()) {
+            dates.delete(id); conflicts.add(id);
+          } else dates.set(id, { title, origin, publishedAt });
+        }
+      } catch { /* A non-JSON assignment is not a date source. */ }
+      return;
+    }
+  });
+  return dates;
+}
+
+export function paylocityPublicationDate(posting: JobPosting, url: string, dates: Map<string, BoardDate>): Date | undefined {
+  const detailDate = sourcePublicationDate(posting, 'paylocity');
+  if (detailDate) return detailDate;
+  const parsed = new URL(url);
+  const id = parsed.pathname.match(/^\/recruiting\/jobs\/details\/(\d+)\/?$/i)?.[1];
+  const board = id ? dates.get(id) : undefined;
+  return board && parsed.origin === board.origin && normalizedTitle(posting.title ?? '') === board.title ? board.publishedAt : undefined;
+}
+
 export function retryAfterMs(value: string | undefined, now = Date.now()): number {
   if (!value) return 30_000;
   const seconds = Number(value);
@@ -99,6 +160,7 @@ export async function fetchPaylocityJobs(company: PaylocityCompanySeed, run?: At
     const context = await browser.newContext({ userAgent: USER_AGENT });
     const page = await context.newPage();
     let links: string[];
+    let boardDates = new Map<string, BoardDate>();
     try {
       const response = await page.goto(company.boardUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
       if (response && !response.ok()) throw new Error(`HTTP ${response.status()} for board`);
@@ -109,6 +171,7 @@ export async function fetchPaylocityJobs(company: PaylocityCompanySeed, run?: At
           .map((anchor) => (anchor as HTMLAnchorElement).href)
           .filter((href) => /\/recruiting\/jobs\/details\/\d+/i.test(href)),
       ))];
+      boardDates = parsePaylocityBoardDates(await page.content(), company.boardUrl);
     } finally {
       await page.close();
     }
@@ -146,7 +209,7 @@ export async function fetchPaylocityJobs(company: PaylocityCompanySeed, run?: At
           url,
           applyUrl: url.replace(/\/Details\//i, '/Apply/'),
           contractType: Array.isArray(posting.employmentType) ? posting.employmentType.join(', ') : posting.employmentType,
-          postedAt: sourcePublicationDate(posting, 'paylocity'),
+          postedAt: paylocityPublicationDate(posting, url, boardDates),
           ...(structuredSalary(posting.baseSalary) ?? textBaseSalary(description)),
         });
       } catch (error) {
