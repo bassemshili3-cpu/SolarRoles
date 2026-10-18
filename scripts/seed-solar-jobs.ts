@@ -69,6 +69,7 @@ import { buildJobSlug } from '../lib/slugify';
 import { pathToFileURL } from 'node:url';
 import type { AtsSeedSummary } from '../lib/ats/sync-summary';
 import type { AtsCheckpoints, AtsFetchContext } from '../lib/ats/fetch-context';
+import { enqueueSeedRewrite } from '../lib/seo/enqueue-seed-rewrite';
 
 
 const EXPIRES_IN_DAYS = 45;
@@ -154,9 +155,9 @@ function selectSourceProviders(
 import { normalizeWorkSetting } from '../lib/workSetting';
 import { normalizeSourceFields } from '../lib/ats/normalizeSourceFields';
 
-async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: JobTaxonomy, newOnly: boolean): Promise<'created' | 'updated' | 'skipped' | 'existing'> {
+async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: JobTaxonomy, newOnly: boolean, enqueueRewrite = false): Promise<'created' | 'updated' | 'skipped' | 'existing'> {
   // Serialize check/create for a URL across background retries and overlapping
-  // invocations. No schema migration or modification of known offers is needed.
+  // invocations. Known offers remain unchanged; new offers may enqueue an SEO task.
   if (newOnly) {
     return prisma.$transaction(async (tx) => {
       const key = JSON.stringify([job.source, job.url]);
@@ -164,7 +165,7 @@ async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: Job
       const existing = await tx.job.findFirst({ where: { url: job.url, source: job.source }, select: { id: true } });
       if (existing) return 'existing';
       // Reuse the creation path with this transaction's client.
-      return upsertJob(tx as unknown as PrismaClient, job, taxonomy, false);
+      return upsertJob(tx as unknown as PrismaClient, job, taxonomy, false, enqueueRewrite);
     }, { timeout: 30000 });
   }
   const existing = await prisma.job.findFirst({
@@ -257,10 +258,11 @@ async function upsertJob(prisma: PrismaClient, job: NormalizedJob, taxonomy: Job
     where: { id: createdJob.id },
     data: { canonicalSlug: buildJobSlug(createdJob) },
   });
+  if (enqueueRewrite) await enqueueSeedRewrite(prisma, createdJob.id);
   return 'created';
 }
 
-export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean; checkpoints?: AtsCheckpoints; onProgress?: (summary: AtsSeedSummary) => void } = {}): Promise<AtsSeedSummary> {
+export async function runAtsSeed(options: { providerName?: string; companyIndex?: number; newOnly?: boolean; dryRun?: boolean; enqueueSeoRewrite?: boolean; checkpoints?: AtsCheckpoints; onProgress?: (summary: AtsSeedSummary) => void } = {}): Promise<AtsSeedSummary> {
   const requestedProvider = options.providerName;
   const dryRun = options.dryRun ?? false;
   const newOnly = options.newOnly ?? false;
@@ -380,7 +382,7 @@ export async function runAtsSeed(options: { providerName?: string; companyIndex?
           console.log(`  ↳ dry-run: ${job.title} — ${job.location}`);
           continue;
         }
-        const result = await upsertJob(prisma, job, taxonomy, newOnly);
+        const result = await upsertJob(prisma, job, taxonomy, newOnly, newOnly && options.enqueueSeoRewrite === true);
         if (result === 'created') created++;
         else if (result === 'updated') updated++;
         else if (result === 'existing') skippedExisting++;

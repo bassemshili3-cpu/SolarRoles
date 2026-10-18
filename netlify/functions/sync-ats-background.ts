@@ -41,7 +41,7 @@ export default async function syncAtsBackground(request: Request) {
       pending = pending.then(persist).catch(error => { console.error('ATS monitor heartbeat failed:', safeDiagnostic(error)); });
     }, 60000);
     try {
-      const summary = await runAtsSeed({ providerName: task.providerName, companyIndex: task.companyIndex, newOnly: true,
+      const summary = await runAtsSeed({ providerName: task.providerName, companyIndex: task.companyIndex, newOnly: true, enqueueSeoRewrite: true,
         checkpoints: {
           load: key => store.get(`checkpoints/${key}`, { type: 'json' }),
           save: async (key, cursor) => { await store.setJSON(`checkpoints/${key}`, cursor); },

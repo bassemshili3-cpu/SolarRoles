@@ -6,6 +6,7 @@ import ts from 'typescript';
 import { isJobTooOld, sourcePostedAt } from '../lib/jobRetention';
 import { normalizeSourceFields } from '../lib/ats/normalizeSourceFields';
 import * as monitor from '../lib/ats/sync-monitor';
+import { enqueueSeedRewrite } from '../lib/seo/enqueue-seed-rewrite';
 
 function load(file: string, require: (id: string) => any, globals = {}) {
   // Exercise the exported serverless entry point without invoking the CLI.
@@ -19,12 +20,13 @@ function load(file: string, require: (id: string) => any, globals = {}) {
 const SYNC_NOW = new Date('2026-10-15T12:00:00Z');
 class SyncDate extends Date { constructor(value: number = SYNC_NOW.getTime()) { super(value); } }
 
-function seedHarness({ known = false, raced = false, dryRun = false, postedAt = SYNC_NOW as Date | null, postedAtEstimated = false, newOnly = true, verified = true, checkpoint = false, insertFails = false } = {}) {
+function seedHarness({ known = false, raced = false, dryRun = false, postedAt = SYNC_NOW as Date | null, postedAtEstimated = false, newOnly = true, verified = true, checkpoint = false, insertFails = false, enqueueSeoRewrite = false } = {}) {
   const writes: string[] = [];
   let locks = 0;
   let disconnected = false;
   const offer = { source: 'lever', url: 'https://jobs.lever.co/solar/123', title: 'Solar Installer', company: 'Solar', location: 'Austin, TX', description: 'Install solar panels.', postedAt, postedAtEstimated, applyUrl: 'https://example.com/apply' };
   const tx = {
+    $executeRaw: async () => { writes.push('queue'); return 1; },
     $queryRaw: async () => { locks++; return []; },
     job: {
       findFirst: async () => raced ? { id: 'known' } : null,
@@ -41,6 +43,7 @@ function seedHarness({ known = false, raced = false, dryRun = false, postedAt = 
   const api = load('scripts/seed-solar-jobs.ts', (id) => {
     if (id === '@prisma/client') return { PrismaClient };
     if (id.endsWith('company-seed')) return registry;
+    if (id.endsWith('enqueue-seed-rewrite')) return { enqueueSeedRewrite };
     if (id.endsWith('custom-scrape/config')) return { CUSTOM_SCRAPE_COMPANIES: [] };
     if (id.endsWith('jobRetention')) return { isJobTooOld, sourcePostedAt };
     if (id.endsWith('normalizeSourceFields')) return { normalizeSourceFields };
@@ -54,9 +57,20 @@ function seedHarness({ known = false, raced = false, dryRun = false, postedAt = 
       return [offer, offer];
     } });
   }, { Date: SyncDate });
-  return { run: () => api.runAtsSeed({ providerName: 'lever', companyIndex: 0, newOnly, dryRun,
+  return { run: () => api.runAtsSeed({ providerName: 'lever', companyIndex: 0, newOnly, dryRun, enqueueSeoRewrite,
     checkpoints: checkpoint ? { load: async () => null, save: async () => { writes.push('checkpoint'); } } : undefined }), writes, locks: () => locks, disconnected: () => disconnected };
 }
+
+test('only newly inserted cron jobs enqueue an SEO task inside their insertion transaction', async () => {
+  const inserted = seedHarness({ enqueueSeoRewrite: true });
+  await inserted.run();
+  assert.deepEqual(inserted.writes, ['create', 'slug', 'queue']);
+  for (const options of [{ known: true }, { raced: true }, { dryRun: true }]) {
+    const skipped = seedHarness({ ...options, enqueueSeoRewrite: true });
+    await skipped.run();
+    assert.ok(!skipped.writes.includes('queue'));
+  }
+});
 
 test('incremental discovery accepts only real publication dates under fourteen days old', async () => {
   for (const [postedAt, accepted] of [

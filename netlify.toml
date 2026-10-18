@@ -14,6 +14,16 @@
   external_node_modules = ["@prisma/client", "playwright", "@sparticuz/chromium", "jsdom"]
   included_files = ["node_modules/.prisma/client/**", "node_modules/@sparticuz/chromium/bin/**"]
 
+[functions.rewrite-seed-descriptions-background]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client"]
+  included_files = ["node_modules/.prisma/client/**"]
+
+[functions.seed-rewrite-status]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client"]
+  included_files = ["node_modules/.prisma/client/**"]
+
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
   #[[redirects]]

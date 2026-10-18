@@ -1,24 +1,10 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 import fs from 'node:fs'
 import path from 'node:path'
-import { load } from 'cheerio'
+import { validateBoundedRewrite } from './rewrite-validation'
+export { validateBoundedRewrite } from './rewrite-validation'
 import { ATS_JOB_SOURCES } from '../ats-sources'
-import { rewriteJobDescriptionForSeo, SEO_REWRITE_VERSION } from './rewrite-description'
-
-export function validateBoundedRewrite(html: string, maxCharacters = 3000) {
-  const length = Array.from(html).length
-  if (!html.trim() || length > maxCharacters) throw new Error(`Rewritten HTML has ${length} characters (maximum ${maxCharacters})`)
-  const $ = load(html, null, false)
-  if ($('*').toArray().some(element => !('tagName' in element) || !('attribs' in element) || !['p', 'h3', 'ul', 'li', 'strong', 'em', 'br'].includes(element.tagName) || Object.keys(element.attribs || {}).length)) throw new Error('Unsupported HTML tags or attributes')
-  if (!$('p').length || !$('li').length) throw new Error('Missing introduction or factual bullet lists')
-  if (/(?:more than (?:just )?a (?:job|role)|not just|isn.t just|rockstar|ninja|world.class)/i.test($.text())) throw new Error('Banned wording in output')
-  for (const heading of $('h3').toArray()) {
-    const label = $(heading).text().trim()
-    if (!['Responsibilities', 'Requirements', 'Benefits'].includes(label)) throw new Error('Unexpected section heading')
-    if (label !== 'Benefits' && $(heading).next().prop('tagName') !== 'UL') throw new Error(`${label} must use a bullet list`)
-  }
-  return length
-}
+import { rewriteJobDescriptionForSeo, SEO_REWRITE_VERSION, RewriteApiError } from './rewrite-description'
 
 type JobSnapshot = { id: string; title: string; company: string; location: string; source: string; description: string; seoDescription: string | null; seoDescriptionVersion: number }
 
@@ -72,6 +58,8 @@ export async function rewriteLongAtsDescriptions(prisma: PrismaClient, args: str
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unknown rewrite error'
           append({ id: job.id, status: 'attempt-failed', attempt, message })
+          // Explicit backfills stop at provider cooldowns; --resume retains progress.
+          if (error instanceof RewriteApiError && [401, 403, 429].includes(error.status)) throw error
           if (/credits|spending limit|unauthorized|forbidden|invalid api key/i.test(message) || (error as { statusCode?: number }).statusCode === 403 || (error as { statusCode?: number }).statusCode === 401) throw error
           if ((error as { statusCode?: number }).statusCode === 429) await new Promise(resolve => setTimeout(resolve, 30_000))
           else await new Promise(resolve => setTimeout(resolve, 500))

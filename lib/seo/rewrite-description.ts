@@ -1,14 +1,14 @@
-import { xai } from '@ai-sdk/xai';
-import { generateText } from 'ai';
+import { validateBoundedRewrite } from './rewrite-validation';
 
-// The xAI provider reads XAI_API_KEY from the environment.
+// Mistral Chat Completions; no paid-provider fallback.
 // Keep the model configurable for cost/quality tuning without a code change.
-const MODEL = process.env.SEO_REWRITE_MODEL ?? 'grok-4.3';
+export const SEO_REWRITE_MODEL = process.env.SEO_REWRITE_MISTRAL_MODEL ?? 'mistral-small-latest';
+const MAX_OUTPUT_TOKENS = 2000;
 
 // Bump this whenever the prompt/logic below changes meaningfully — any job
-// with a stamped version below this constant gets reprocessed on the next
-// run of scripts/rewrite-descriptions.ts.
-export const SEO_REWRITE_VERSION = 5
+// with an older version can be explicitly queued for reprocessing. The cron
+// processes only tasks queued by newly inserted seed jobs.
+export const SEO_REWRITE_VERSION = 7;
 
 const SYSTEM_PROMPT = `You rewrite solar job postings for solarroles.com, a niche US job board for solar photovoltaic installers, lead installers, solar sales representative, solar engineer, solar electrician, o&m technician, solar project manager, solar estimator, o&m technician , remote solar jobs .
 
@@ -31,24 +31,47 @@ export interface RewritableJob {
   description: string;
 }
 
+const rewritePrompt = (job: RewritableJob) => `Job title: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\n\nOriginal description:\n${job.description}`;
+
+/** Conservative UTF-8 byte bound, including output/reasoning and chat framing. */
+export function rewriteTokenReservation(job: RewritableJob): number {
+  return Buffer.byteLength(SYSTEM_PROMPT + rewritePrompt(job), 'utf8') + MAX_OUTPUT_TOKENS + 2048;
+}
+
 export async function rewriteJobDescriptionForSeo(job: RewritableJob, options: { maxCharacters?: number; attempt?: number } = {}): Promise<string> {
-  if (!process.env.XAI_API_KEY) {
-    throw new Error('XAI_API_KEY is required to rewrite job descriptions with Grok');
+  if (!process.env.MISTRAL_API_KEY) {
+    throw new Error('MISTRAL_API_KEY is required to rewrite job descriptions');
   }
+  const maxCharacters = Math.min(options.maxCharacters ?? 3000, 3000);
+  if (!Number.isInteger(maxCharacters) || maxCharacters < 1) throw new Error('maxCharacters must be a positive integer');
 
-  const { text, finishReason } = await generateText({
-    model: xai(MODEL),
-    maxOutputTokens: 2000,
-    system: SYSTEM_PROMPT + (options.maxCharacters ? `\n- Hard length limit: the entire HTML output, including tags, spaces and punctuation, must contain no more than ${options.maxCharacters} characters. Aim for ${Math.floor(options.maxCharacters * (options.attempt ? 0.8 : 0.9))}. Use concise sentences and compact list items. Combine related facts without deleting objective details. Do not truncate sentences or HTML. ${options.attempt ? 'The previous attempt was too long or invalid; make this version more concise.' : ''}` : ''),
-    maxRetries: options.maxCharacters ? 0 : 2,
-    abortSignal: AbortSignal.timeout(120_000),
-    prompt: `Job title: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\n\nOriginal description:\n${job.description}`,
+  const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${process.env.MISTRAL_API_KEY}`, 'content-type': 'application/json' },
+    signal: AbortSignal.timeout(120_000),
+    body: JSON.stringify({
+      model: SEO_REWRITE_MODEL,
+      max_tokens: MAX_OUTPUT_TOKENS,
+      temperature: 0.2,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT + `\n- Hard length limit: the entire HTML output, including tags, spaces and punctuation, must contain no more than ${maxCharacters} characters. Aim for ${Math.floor(maxCharacters * (options.attempt ? 0.8 : 0.9))}. Use concise sentences and compact list items. Combine related facts without deleting objective details. Do not truncate sentences or HTML. ${options.attempt ? 'The previous attempt was too long or invalid; make this version more concise.' : ''}` },
+        { role: 'user', content: rewritePrompt(job) },
+      ],
+    }),
   });
+  if (!response.ok) {
+    await response.body?.cancel();
+    throw new RewriteApiError(response.status, response.headers.get('retry-after'));
+  }
+  const result = await response.json() as { choices?: { message?: { content?: unknown }; finish_reason?: string }[] };
+  const choice = result.choices?.[0];
+  const text = typeof choice?.message?.content === 'string' ? choice.message.content : '';
+  const finishReason = choice?.finish_reason;
 
-  if (finishReason === 'length') throw new Error('Grok output was truncated; description was not saved');
+  if (finishReason === 'length') throw new Error('Mistral output was truncated; description was not saved');
 
   if (!text.trim()) {
-    throw new Error('Grok returned no text content for this job description');
+    throw new Error('Mistral returned no text content for this job description');
   }
 
   const cleaned = text
@@ -57,5 +80,17 @@ export async function rewriteJobDescriptionForSeo(job: RewritableJob, options: {
     .replace(/\n?```\s*$/i, '')
     .trim();
 
+  if (cleaned.length > maxCharacters) {
+    throw new Error(`Mistral output exceeds ${maxCharacters} characters; description was not saved`);
+  }
+  validateBoundedRewrite(cleaned, maxCharacters);
   return cleaned;
+}
+
+// No provider bodies or source content are exposed to operational logs.
+export class RewriteApiError extends Error {
+  constructor(public readonly status: number, public readonly retryAfter: string | null) {
+    super(`Mistral HTTP ${status}`);
+    this.name = 'RewriteApiError';
+  }
 }

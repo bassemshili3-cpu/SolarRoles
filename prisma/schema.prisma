@@ -32,6 +32,7 @@ model NewsletterSubscriber {
 }
 
 model Job {
+  seoRewriteTask SeoRewriteTask?
   id                       String   @id @default(cuid())
   source                   String
   title                    String
@@ -99,6 +100,29 @@ model Job {
   @@index([active, lastGoogleIndexingSubmittedAt])
   @@index([needsHeaderImage, headerImage])
   @@index([active, featured, expiresAt, postedAt(sort: Desc)])
+}
+
+model SeoRewriteTask {
+  jobId         String   @id
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  status        String   @default("pending")
+  attempts      Int      @default(0)
+  nextAttemptAt DateTime @default(now())
+  lastError     String?
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([status, nextAttemptAt, createdAt])
+}
+
+model SeoRewriteControl {
+  id             String    @id
+  leaseOwner     String?
+  leaseUntil     DateTime?
+  nextRequestAt  DateTime   @default(now())
+  budgetDay      String    @default("")
+  reservedTokens Int       @default(0)
+  requestCount   Int       @default(0)
 }
 
 model JobApplication {
