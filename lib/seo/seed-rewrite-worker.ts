@@ -1,8 +1,10 @@
 ﻿import { randomUUID } from 'node:crypto';
 import type { Prisma, PrismaClient } from '@prisma/client';
-import { rewriteJobDescriptionForSeo, rewriteTokenReservation, RewriteApiError, SEO_REWRITE_VERSION } from './rewrite-description';
+import { rewriteJobDescriptionForSeo, rewriteTokenReservation, RewriteApiError, SEO_REWRITE_VERSION, SEO_REWRITE_MODEL } from './rewrite-description';
 import { validateBoundedRewrite } from './rewrite-validation';
 type Tx = Prisma.TransactionClient;
+// Keep the existing global lock identity across provider changes, including
+// during a rolling deployment. Old Mistral accounting is repaired separately.
 const CONTROL = 'seed-mistral';
 const LEASE_MS = 300_000;
 const setting = (key: string, fallback: number) => {
@@ -21,7 +23,7 @@ export function retryPolicy(error: unknown, attempts: number, now = Date.now(), 
     refund: quota || configuration, stop: quota || configuration,
     status: !quota && !configuration && attempts >= 4 ? 'failed' : 'pending',
     nextAttemptAt: new Date(Math.max(now + delay, Number.isFinite(parsed) ? parsed : 0)),
-    error: api ? api.message : error instanceof Error && error.message.startsWith('Mistral output') ? error.message.slice(0, 150) : 'Rewrite failed validation or request; retry scheduled',
+    error: api ? api.message : error instanceof Error && error.message.startsWith('Gemini output') ? error.message.slice(0, 150) : 'Rewrite failed validation or request; retry scheduled',
   };
 }
 async function fence(tx: Tx, owner: string) {
@@ -31,7 +33,7 @@ async function fence(tx: Tx, owner: string) {
 }
 /** One API call per invocation, with persistent reservation and fenced saving. */
 export async function runSeedRewrites(db: PrismaClient, rewrite = rewriteJobDescriptionForSeo) {
-  if (!process.env.MISTRAL_API_KEY) throw new Error('MISTRAL_API_KEY is required');
+  if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is required');
   const budget = setting('SEO_REWRITE_DAILY_TOKEN_BUDGET', 180_000);
   const spacing = setting('SEO_REWRITE_INTERVAL_MS', 65_000);
   const owner = randomUUID();
@@ -121,5 +123,5 @@ export async function seedRewriteStatus(db: PrismaClient) {
   const counts = await db.$queryRaw<{ status: string; count: number }[]>`SELECT status, COUNT(*)::int AS count FROM "SeoRewriteTask" GROUP BY status`;
   const controls = await db.$queryRaw`SELECT id, "leaseUntil", "nextRequestAt", "budgetDay", "reservedTokens", "requestCount", "consecutiveRateLimits", "lastProviderError" FROM "SeoRewriteControl" WHERE id = ${CONTROL}`;
   const failures = await db.$queryRaw`SELECT "jobId", attempts, "lastError", "nextAttemptAt" FROM "SeoRewriteTask" WHERE status = 'failed' ORDER BY "createdAt" DESC LIMIT 10`;
-  return { checkedAt: new Date().toISOString(), counts, controls, failures };
+  return { checkedAt: new Date().toISOString(), provider: 'gemini', model: SEO_REWRITE_MODEL, version: SEO_REWRITE_VERSION, counts, controls, failures };
 }

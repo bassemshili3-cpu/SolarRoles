@@ -8,10 +8,14 @@ const html = '<p>A solar PV installation role.</p><h3>Responsibilities</h3><ul><
 const enabled = process.env.TEST_SEED_REWRITE_DB === '1';
 // These checks use temporary queue tables and roll back all Job changes.
 async function scenario(check: (db: any, tx: any, job: any) => Promise<void>) {
-  const p = new PrismaClient();
+  // Temporary tables must not reuse pooled prepared plans for the real tables.
+  const url = new URL(process.env.DATABASE_URL!);
+  url.searchParams.set('pgbouncer', 'true');
+  url.searchParams.set('statement_cache_size', '0');
+  const p = new PrismaClient({ datasources: { db: { url: url.href } } });
   const rollback = new Error('test rollback');
-  const beforeKey = process.env.MISTRAL_API_KEY;
-  process.env.MISTRAL_API_KEY = 'test-only';
+  const beforeKey = process.env.GEMINI_API_KEY;
+  process.env.GEMINI_API_KEY = 'test-only';
   try {
     await assert.rejects(p.$transaction(async tx => {
       await tx.$executeRawUnsafe('CREATE TEMP TABLE "SeoRewriteTask" ("jobId" TEXT PRIMARY KEY, status TEXT DEFAULT \'pending\', attempts INT DEFAULT 0, "nextAttemptAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "lastError" TEXT, "completedAt" TIMESTAMP, "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ON COMMIT DROP');
@@ -25,7 +29,7 @@ async function scenario(check: (db: any, tx: any, job: any) => Promise<void>) {
       await check(db, tx, job);
       throw rollback;
     }, { timeout: 30000 }), error => error === rollback);
-  } finally { if (beforeKey === undefined) delete process.env.MISTRAL_API_KEY; else process.env.MISTRAL_API_KEY = beforeKey; await p.$disconnect(); }
+  } finally { if (beforeKey === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = beforeKey; await p.$disconnect(); }
 }
 test('database: deduplicated queue, atomic SEO save, raw description preserved', { skip: !enabled }, async () => {
   await scenario(async (db, tx, job) => {

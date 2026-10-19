@@ -15,5 +15,5 @@ export async function main(args = process.argv.slice(2)) {
   } finally { await prisma.$disconnect(); }
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch(() => { console.error('Seed rewrite failed; check database connectivity and MISTRAL_API_KEY'); process.exitCode = 1; });
+  main().catch(() => { console.error('Seed rewrite failed; check database connectivity and GEMINI_API_KEY'); process.exitCode = 1; });
 }
