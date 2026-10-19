@@ -62,3 +62,8 @@ test('Jobvite retries the real search endpoint after the old list is unavailable
   };
   try{assert.equal((await fetchJobviteJobs({slug:'employer',name:'Employer',verified:false})).length,1);}finally{globalThis.fetch=originalFetch;}
 });
+
+test('Oracle recovers separate summary and objective sections when the main description is empty', async () => {
+  globalThis.fetch=async()=>Response.json({items:[{Id:'123',Title:'Solar Engineer',ExternalDescriptionStr:'',ShortDescriptionStr:'Design PV arrays.',ExternalResponsibilitiesStr:'Produce electrical drawings.',ExternalQualificationsStr:'PE license required.'}]});
+  try{const job=await fetchOracleNativePosting('https://employer.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/123');assert.ok(job);assert.match(job.description!,/PV arrays/);assert.match(job.description!,/electrical drawings/);assert.match(job.description!,/PE license/);}finally{globalThis.fetch=originalFetch;}
+});

@@ -60,10 +60,13 @@ export async function fetchOracleNativePosting(url: string): Promise<OracleJobPo
   if (!response.ok) { await response.body?.cancel(); return; }
   const data = await response.json();
   const item = data.items?.find((entry: any) => String(entry.Id) === id);
-  if (!item?.Title || !item.ExternalDescriptionStr) return;
+  if (!item?.Title) return;
+  const description = [...new Set([item.ExternalDescriptionStr, item.ShortDescriptionStr, item.ExternalResponsibilitiesStr, item.ExternalQualificationsStr]
+    .filter((value): value is string => typeof value === 'string' && Boolean(value.trim())))].join('\n');
+  if (!description) return;
   return {
     '@type': 'JobPosting', title: item.Title, datePosted: item.ExternalPostedStartDate,
-    description: [...new Set([item.ExternalDescriptionStr, item.ExternalResponsibilitiesStr, item.ExternalQualificationsStr].filter((value): value is string => typeof value === 'string' && Boolean(value.trim())))].join('\n'),
+    description,
     employmentType: item.JobSchedule || undefined, url,
     jobLocation: { address: { addressLocality: item.PrimaryLocation, addressCountry: item.PrimaryLocationCountry } },
   };
