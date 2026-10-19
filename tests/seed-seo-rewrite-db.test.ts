@@ -15,7 +15,7 @@ async function scenario(check: (db: any, tx: any, job: any) => Promise<void>) {
   try {
     await assert.rejects(p.$transaction(async tx => {
       await tx.$executeRawUnsafe('CREATE TEMP TABLE "SeoRewriteTask" ("jobId" TEXT PRIMARY KEY, status TEXT DEFAULT \'pending\', attempts INT DEFAULT 0, "nextAttemptAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "lastError" TEXT, "completedAt" TIMESTAMP, "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ON COMMIT DROP');
-      await tx.$executeRawUnsafe('CREATE TEMP TABLE "SeoRewriteControl" (id TEXT PRIMARY KEY, "leaseOwner" TEXT, "leaseUntil" TIMESTAMP, "nextRequestAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "budgetDay" TEXT DEFAULT \'\', "reservedTokens" INT DEFAULT 0, "requestCount" INT DEFAULT 0) ON COMMIT DROP');
+      await tx.$executeRawUnsafe('CREATE TEMP TABLE "SeoRewriteControl" (id TEXT PRIMARY KEY, "leaseOwner" TEXT, "leaseUntil" TIMESTAMP, "nextRequestAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "budgetDay" TEXT DEFAULT \'\', "reservedTokens" INT DEFAULT 0, "requestCount" INT DEFAULT 0, "consecutiveRateLimits" INT DEFAULT 0, "lastProviderError" TEXT) ON COMMIT DROP');
       const job = await tx.job.findFirst({ where: { active: true, deletedAt: null, expiresAt: { gt: new Date() }, source: { not: 'adzuna' } } });
       assert.ok(job);
       await tx.job.update({ where: { id: job.id }, data: { seoDescriptionVersion: 0 } });
@@ -44,6 +44,9 @@ test('database: 429 keeps task pending, refunds attempt, and persists cooldown',
     assert.equal((await runSeedRewrites(db, async () => { throw new RewriteApiError(429, '900'); })).decision, 'retry');
     const [task] = await tx.$queryRaw`SELECT * FROM "SeoRewriteTask"`;
     assert.equal(task.attempts, 0); assert.equal(task.status, 'pending');
+    const [control] = await tx.$queryRaw`SELECT "reservedTokens", "requestCount", "consecutiveRateLimits" FROM "SeoRewriteControl"`;
+    assert.equal(control.reservedTokens, 0); assert.equal(control.requestCount, 1);
+    assert.equal(control.consecutiveRateLimits, 1);
     assert.equal((await runSeedRewrites(db, async () => { throw Error('must not call'); })).decision, 'cooldown');
   });
 });
@@ -84,4 +87,27 @@ test('database: oversized reservation cannot bypass the daily cap', { skip: !ena
       assert.equal((await runSeedRewrites(db, async () => { throw Error('must not call'); })).decision, 'input_budget_exceeded');
     });
   } finally { if (previous === undefined) delete process.env.SEO_REWRITE_DAILY_TOKEN_BUDGET; else process.env.SEO_REWRITE_DAILY_TOKEN_BUDGET = previous; }
+});
+
+test('database: repeated 429 increases durable cooldown without burning tokens', { skip: !enabled }, async () => {
+  await scenario(async (db, tx) => {
+    await runSeedRewrites(db, async () => { throw new RewriteApiError(429, null); });
+    await tx.$executeRaw`UPDATE "SeoRewriteControl" SET "nextRequestAt" = CURRENT_TIMESTAMP`;
+    await tx.$executeRaw`UPDATE "SeoRewriteTask" SET "nextAttemptAt" = CURRENT_TIMESTAMP`;
+    const now = Date.now();
+    const result = await runSeedRewrites(db, async () => { throw new RewriteApiError(429, null); });
+    assert.ok('resumeAt' in result && new Date(result.resumeAt!).getTime() >= now + 600000);
+    const [control] = await tx.$queryRaw`SELECT "reservedTokens", "requestCount", "consecutiveRateLimits" FROM "SeoRewriteControl"`;
+    assert.equal(control.reservedTokens, 0); assert.equal(control.requestCount, 2);
+    assert.equal(control.consecutiveRateLimits, 2);
+  });
+});
+test('database: timeout reservation is retained because provider outcome is unknown', { skip: !enabled }, async () => {
+  await scenario(async (db, tx) => {
+    await runSeedRewrites(db, async () => { throw new Error('Timeout'); });
+    const [control] = await tx.$queryRaw`SELECT "reservedTokens", "requestCount", "consecutiveRateLimits" FROM "SeoRewriteControl"`;
+    assert.ok(control.reservedTokens > 0);
+    const [task] = await tx.$queryRaw`SELECT * FROM "SeoRewriteTask"`;
+    assert.equal(task.attempts, 1);
+  });
 });

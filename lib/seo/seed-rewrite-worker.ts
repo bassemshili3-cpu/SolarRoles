@@ -10,13 +10,13 @@ const setting = (key: string, fallback: number) => {
   if (!Number.isSafeInteger(value) || value < 1) throw new Error(`Invalid ${key}`);
   return value;
 };
-export function retryPolicy(error: unknown, attempts: number, now = Date.now()) {
+export function retryPolicy(error: unknown, attempts: number, now = Date.now(), rateLimitStreak = 0) {
   const api = error instanceof RewriteApiError ? error : null;
   const quota = api?.status === 429;
   const configuration = api?.status === 401 || api?.status === 403;
   const header = api?.retryAfter;
   const parsed = header ? (/^\d+(?:\.\d+)?$/.test(header) ? now + Number(header) * 1000 : Date.parse(header)) : NaN;
-  const delay = quota ? 300_000 : configuration ? 3_600_000 : Math.min(3_600_000, 60_000 * 2 ** Math.min(attempts, 6));
+  const delay = quota ? Math.min(21_600_000, 300_000 * 2 ** Math.min(rateLimitStreak, 7)) : configuration ? 3_600_000 : Math.min(3_600_000, 60_000 * 2 ** Math.min(attempts, 6));
   return {
     refund: quota || configuration, stop: quota || configuration,
     status: !quota && !configuration && attempts >= 4 ? 'failed' : 'pending',
@@ -42,7 +42,7 @@ export async function runSeedRewrites(db: PrismaClient, rewrite = rewriteJobDesc
   try {
     const reservation = await db.$transaction(async tx => {
       await fence(tx, owner);
-      const [control] = await tx.$queryRaw<{ nextRequestAt: Date; budgetDay: string; reservedTokens: number }[]>`SELECT * FROM "SeoRewriteControl" WHERE id = ${CONTROL}`;
+      const [control] = await tx.$queryRaw<{ nextRequestAt: Date; budgetDay: string; reservedTokens: number }[]>`SELECT "nextRequestAt", "budgetDay", "reservedTokens" FROM "SeoRewriteControl" WHERE id = ${CONTROL}`;
       const now = new Date();
       if (control.nextRequestAt > now) return { decision: 'cooldown' as const, resumeAt: control.nextRequestAt };
       const tasks = await tx.$queryRaw<{ jobId: string; attempts: number }[]>`SELECT "jobId", attempts FROM "SeoRewriteTask"
@@ -71,7 +71,7 @@ export async function runSeedRewrites(db: PrismaClient, rewrite = rewriteJobDesc
         "nextRequestAt" = ${new Date(now.getTime() + spacing)} WHERE id = ${CONTROL}`;
       await tx.$executeRaw`UPDATE "SeoRewriteTask" SET attempts = attempts + 1,
         "nextAttemptAt" = ${new Date(now.getTime() + LEASE_MS)} WHERE "jobId" = ${task.jobId}`;
-      return { decision: 'reserved' as const, task, job };
+      return { decision: 'reserved' as const, task, job, tokens, day };
     });
     if (reservation.decision !== 'reserved') return reservation;
     const { task, job } = reservation;
@@ -80,17 +80,26 @@ export async function runSeedRewrites(db: PrismaClient, rewrite = rewriteJobDesc
       output = await rewrite(job, { maxCharacters: 3000, attempt: task.attempts });
       validateBoundedRewrite(output);
     } catch (error) {
-      const policy = retryPolicy(error, task.attempts + 1);
-      await db.$transaction(async tx => {
+      const policy = await db.$transaction(async tx => {
         await fence(tx, owner);
+        const [control] = await tx.$queryRaw<{ consecutiveRateLimits: number }[]>`SELECT "consecutiveRateLimits" FROM "SeoRewriteControl" WHERE id = ${CONTROL}`;
+        const policy = retryPolicy(error, task.attempts + 1, Date.now(), control.consecutiveRateLimits);
+        // Only an explicit provider rejection refunds tokens. Unknown outcomes
+        // (timeouts/crashes/5xx) retain their conservative reservation.
+        if (policy.refund) await tx.$executeRaw`UPDATE "SeoRewriteControl" SET "reservedTokens" = GREATEST(0, "reservedTokens" - ${reservation.tokens})
+          WHERE id = ${CONTROL} AND "budgetDay" = ${reservation.day}`;
+        const quota = error instanceof RewriteApiError && error.status === 429;
+        await tx.$executeRaw`UPDATE "SeoRewriteControl" SET "consecutiveRateLimits" = ${quota ? control.consecutiveRateLimits + 1 : 0}, "lastProviderError" = ${policy.error} WHERE id = ${CONTROL}`;
         await tx.$executeRaw`UPDATE "SeoRewriteTask" SET status = ${policy.status}, "lastError" = ${policy.error},
           attempts = attempts - ${policy.refund ? 1 : 0}, "nextAttemptAt" = ${policy.nextAttemptAt} WHERE "jobId" = ${task.jobId}`;
         if (policy.stop) await tx.$executeRaw`UPDATE "SeoRewriteControl" SET "nextRequestAt" = ${policy.nextAttemptAt} WHERE id = ${CONTROL}`;
+        return policy;
       });
       return { decision: policy.status === 'failed' ? 'failed' : 'retry', jobId: job.id, resumeAt: policy.nextAttemptAt, error: policy.error };
     }
     return await db.$transaction(async tx => {
       await fence(tx, owner);
+      await tx.$executeRaw`UPDATE "SeoRewriteControl" SET "consecutiveRateLimits" = 0, "lastProviderError" = NULL WHERE id = ${CONTROL}`;
       const saved = await tx.job.updateMany({
         where: { id: job.id, active: true, deletedAt: null, expiresAt: { gt: new Date() },
           description: job.description, title: job.title, company: job.company, location: job.location,
@@ -110,7 +119,7 @@ export async function runSeedRewrites(db: PrismaClient, rewrite = rewriteJobDesc
 }
 export async function seedRewriteStatus(db: PrismaClient) {
   const counts = await db.$queryRaw<{ status: string; count: number }[]>`SELECT status, COUNT(*)::int AS count FROM "SeoRewriteTask" GROUP BY status`;
-  const controls = await db.$queryRaw`SELECT id, "leaseUntil", "nextRequestAt", "budgetDay", "reservedTokens", "requestCount" FROM "SeoRewriteControl" WHERE id = ${CONTROL}`;
+  const controls = await db.$queryRaw`SELECT id, "leaseUntil", "nextRequestAt", "budgetDay", "reservedTokens", "requestCount", "consecutiveRateLimits", "lastProviderError" FROM "SeoRewriteControl" WHERE id = ${CONTROL}`;
   const failures = await db.$queryRaw`SELECT "jobId", attempts, "lastError", "nextAttemptAt" FROM "SeoRewriteTask" WHERE status = 'failed' ORDER BY "createdAt" DESC LIMIT 10`;
   return { checkedAt: new Date().toISOString(), counts, controls, failures };
 }

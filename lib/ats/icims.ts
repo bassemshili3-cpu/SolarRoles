@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import { extractStateFromLocation } from '@/lib/parseLocation';
-import { isSolarInstallerRole } from './solar-taxonomy';
+import { isSolarInstallerRole, isGenericInstallerTitle } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
 import { absolutePublicationDate, htmlPublicationDate } from './publicationDate';
 import { htmlBaseSalary, textBaseSalary } from './salaryFields';
@@ -11,6 +11,8 @@ export interface IcimsCompanySeed {
   /** Optional category when only one division of a shared iCIMS tenant is in scope. */
   categoryName?: string;
   employerName?: string;
+  searchKeyword?: string;
+  employerAliases?: string[];
   verified: boolean;
 }
 
@@ -18,6 +20,7 @@ interface IcimsListJob {
   id: string;
   title: string;
   url: string;
+  checkEmployer?: boolean;
 }
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
@@ -46,14 +49,25 @@ function parsePostedDate(lines: string[]): Date | undefined {
 
 export function parseIcimsDetail(html: string, fallbackTitle: string, url?: string) {
   const $ = cheerio.load(html);
+  let posting: any;
+  $('script[type="application/ld+json"]').each((_, element) => {
+    try {
+      const data = JSON.parse($(element).text());
+      const entries = Array.isArray(data) ? data : [data, ...(data['@graph'] || [])];
+      posting ??= entries.find(entry => [entry?.['@type']].flat().includes('JobPosting') && (!url || !entry.url || new URL(entry.url, url).pathname === new URL(url).pathname));
+    } catch { /* Fall back to the visible job page. */ }
+  });
+  $('script, style, nav, footer').remove();
   const lines = $('body').text().split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
   const title = cleanTitle($('h1').first().text() || fallbackTitle);
   const locationLabel = lines.findIndex((line) => line === 'Job Locations');
   const location = normalizeIcimsLocation(locationLabel >= 0 ? lines[locationLabel + 1] ?? '' : '');
   const descriptionStart = lines.findIndex((line) => line === 'Overview');
-  const description = (descriptionStart >= 0 ? lines.slice(descriptionStart + 1) : lines).join(' ');
+  const description = posting?.description ? cheerio.load(posting.description).text().replace(/\s+/g, ' ').trim() : (descriptionStart >= 0 ? lines.slice(descriptionStart + 1) : lines).join(' ');
+  const address = (Array.isArray(posting?.jobLocation) ? posting.jobLocation[0] : posting?.jobLocation)?.address;
+  const structuredLocation = address ? [address.addressLocality, address.addressRegion, typeof address.addressCountry === 'string' ? address.addressCountry : address.addressCountry?.name].filter(Boolean).join(', ') : '';
   const identity = url ? { url, title } : undefined;
-  return { title, location, description,
+  return { title, location: structuredLocation || location, description,
     postedAt: (identity ? htmlPublicationDate(html, identity) : undefined) ?? parsePostedDate(lines),
     salaryFields: (identity ? htmlBaseSalary(html, identity) : undefined) ?? textBaseSalary(description),
   };
@@ -76,9 +90,12 @@ export async function fetchIcimsJobs(company: IcimsCompanySeed): Promise<Normali
     : undefined;
 
   if (company.categoryName && !categoryValue) {
-    console.warn(`[icims] ${company.name}: catégorie "${company.categoryName}" introuvable, skipping`);
-    return [];
+    // Some shared tenants expose job functions, not employer divisions, under
+    // searchCategory. Fall back to the explicit Company label on each listing.
+    console.log(`[icims] ${company.name}: no division category; filtering listing Company fields`);
   }
+  const expectedEmployer = company.employerName || (company.categoryName && !categoryValue ? company.categoryName : undefined);
+  const employerNames = expectedEmployer ? [expectedEmployer, ...(company.employerAliases || [])] : [];
 
   const jobs = new Map<string, IcimsListJob>();
   for (let page = 0; page < 100; page++) {
@@ -86,7 +103,9 @@ export async function fetchIcimsJobs(company: IcimsCompanySeed): Promise<Normali
     url.searchParams.set('ss', '1');
     url.searchParams.set('in_iframe', '1');
     if (categoryValue) url.searchParams.set('searchCategory', categoryValue);
-    if (company.employerName) url.searchParams.set('searchKeyword', `"${company.employerName}"`);
+    // Company labels are not reliably part of the board's keyword index.
+    if (company.searchKeyword) url.searchParams.set('searchKeyword', company.searchKeyword);
+    else if (company.categoryName && !categoryValue && !company.employerAliases?.length) url.searchParams.set('searchKeyword', `"${company.categoryName}"`);
     url.searchParams.set('pr', String(page));
 
     const $ = cheerio.load(await fetchHtml(url.toString()));
@@ -96,10 +115,12 @@ export async function fetchIcimsJobs(company: IcimsCompanySeed): Promise<Normali
       if (!href || !match || jobs.has(match[1])) return;
       const title = cleanTitle($(anchor).text());
       if (!title) return;
-      if (company.employerName && !icimsEmployerMatches($, $(anchor), company.employerName)) return;
+      const employer = icimsListingEmployer($, $(anchor));
+      if (expectedEmployer && employer && !employerNames.some(name => icimsEmployerMatches($, $(anchor), name))) return;
+      if (!isSolarInstallerRole(title) && !isGenericInstallerTitle(title)) return;
       const detailUrl = new URL(href, baseUrl);
       detailUrl.searchParams.set('in_iframe', '1');
-      jobs.set(match[1], { id: match[1], title, url: detailUrl.toString() });
+      jobs.set(match[1], { id: match[1], title, url: detailUrl.toString(), checkEmployer: Boolean(expectedEmployer && !employer) });
     });
 
     const hasNextPage = $(`a[href*="pr=${page + 1}"]`).length > 0;
@@ -112,6 +133,7 @@ export async function fetchIcimsJobs(company: IcimsCompanySeed): Promise<Normali
   for (const job of jobs.values()) {
     try {
       const detail = parseIcimsDetail(await fetchHtml(job.url), job.title, job.url);
+      if (job.checkEmployer && !icimsDescriptionEmployerMatches(detail.description, employerNames)) continue;
       if (!isSolarInstallerRole(detail.title, detail.description)) continue;
       results.push({
         source: 'icims',
@@ -134,12 +156,20 @@ export async function fetchIcimsJobs(company: IcimsCompanySeed): Promise<Normali
   return results;
 }
 
-export function icimsEmployerMatches($: cheerio.CheerioAPI, anchor: cheerio.Cheerio<any>, expected: string): boolean {
+export function icimsListingEmployer($: cheerio.CheerioAPI, anchor: cheerio.Cheerio<any>): string {
   const row = anchor.closest('.iCIMS_JobListingRow, .iCIMS_JobCardItem');
-  const normalize = (value: string) => value.toLowerCase().replace(/\b(?:llc|inc|ltd)\b/g, '').replace(/[^a-z0-9]/g, '');
   let employer = '';
   row.find('dt, .iCIMS_JobHeaderField, .field-label').each((_, label) => {
     if ($(label).text().trim() === 'Company') employer = $(label).next().text().trim();
   });
+  return employer;
+}
+export function icimsEmployerMatches($: cheerio.CheerioAPI, anchor: cheerio.Cheerio<any>, expected: string): boolean {
+  const normalize = (value: string) => value.toLowerCase().replace(/\b(?:llc|inc|ltd)\b/g, '').replace(/[^a-z0-9]/g, '');
+  const employer = icimsListingEmployer($, anchor);
   return Boolean(employer) && normalize(employer) === normalize(expected);
+}
+export function icimsDescriptionEmployerMatches(description: string, names: string[]): boolean {
+  const text = ` ${description.slice(0, 2500).toLowerCase().replace(/[^a-z0-9]+/g, ' ')} `;
+  return names.some(name => text.includes(` ${name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()} `));
 }

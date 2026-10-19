@@ -116,6 +116,8 @@ model SeoRewriteTask {
 }
 
 model SeoRewriteControl {
+  consecutiveRateLimits Int @default(0)
+  lastProviderError String?
   id             String    @id
   leaseOwner     String?
   leaseUntil     DateTime?

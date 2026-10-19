@@ -790,7 +790,11 @@ export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page,
       if (!postings.length) { cursor = { version: 1, offset: 0, completed: [] }; break; }
       const completed = new Set(cursor.completed);
       for (const posting of postings) {
-        if (!posting.externalPath) throw new Error('Workday posting missing externalPath');
+        if (typeof posting.externalPath !== 'string' || !posting.externalPath.startsWith('/job/')) {
+          // One malformed listing must not pin this board's durable cursor.
+          console.warn(`[workday] ${company.tenant}/${company.site}: invalid externalPath; listing skipped at offset ${cursor.offset}`);
+          continue;
+        }
         if (completed.has(posting.externalPath)) continue;
         if (!hasTime()) { run.checkpoint(cursor); return results; }
         const url = `${careerPageUrl(company)}${posting.externalPath}`;

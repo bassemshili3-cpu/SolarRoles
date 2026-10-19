@@ -47,6 +47,28 @@ export function parseOracleJobPosting(raw: string): OracleJobPosting | undefined
   }
 }
 
+/** Public Oracle job-detail API used by the employer's candidate page. */
+export async function fetchOracleNativePosting(url: string): Promise<OracleJobPosting | undefined> {
+  const target = new URL(url);
+  const id = target.pathname.match(/\/job\/(\d+)(?:\/|$)/)?.[1];
+  if (!id || !target.hostname.endsWith('.oraclecloud.com')) return;
+  const endpoint = new URL('/hcmRestApi/resources/latest/recruitingCEJobRequisitionDetails', target.origin);
+  endpoint.searchParams.set('onlyData', 'true');
+  endpoint.searchParams.set('expand', 'all');
+  endpoint.searchParams.set('finder', `ById;Id=${id}`);
+  const response = await fetch(endpoint, { signal: AbortSignal.timeout(20_000), headers: { accept: 'application/json', 'User-Agent': USER_AGENT } });
+  if (!response.ok) { await response.body?.cancel(); return; }
+  const data = await response.json();
+  const item = data.items?.find((entry: any) => String(entry.Id) === id);
+  if (!item?.Title || !item.ExternalDescriptionStr) return;
+  return {
+    '@type': 'JobPosting', title: item.Title, datePosted: item.ExternalPostedStartDate,
+    description: [...new Set([item.ExternalDescriptionStr, item.ExternalResponsibilitiesStr, item.ExternalQualificationsStr].filter((value): value is string => typeof value === 'string' && Boolean(value.trim())))].join('\n'),
+    employmentType: item.JobSchedule || undefined, url,
+    jobLocation: { address: { addressLocality: item.PrimaryLocation, addressCountry: item.PrimaryLocationCountry } },
+  };
+}
+
 function normalizeLocation(job: OracleJobPosting): string {
   const locations = Array.isArray(job.jobLocation)
     ? job.jobLocation
@@ -113,13 +135,17 @@ export async function fetchOracleCloudJobs(company: OracleCloudCompanySeed): Pro
       // when it belongs to the bounded generic-title fallback list.
       if (!isSolarInstallerRole(listingTitle) && !isGenericInstallerTitle(listingTitle)) continue;
       try {
+        let posting: OracleJobPosting | undefined;
+        try { posting = await fetchOracleNativePosting(url); } catch { /* Rendered metadata remains a fallback. */ }
+        if (!posting) {
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
         await page.locator('script[type="application/ld+json"]').first().waitFor({
           state: 'attached',
           timeout: 5_000,
         });
         const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
-        const posting = scripts.map(parseOracleJobPosting).find(Boolean);
+        posting = scripts.map(parseOracleJobPosting).find(Boolean);
+        }
         if (!posting?.title) continue;
 
         const description = stripHtml(posting.description ?? '');

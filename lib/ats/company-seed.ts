@@ -677,6 +677,7 @@ export const ICIMS_COMPANIES: IcimsCompanySeed[] = [
     baseUrl: 'https://ceisvcareers-mastec.icims.com',
     name: 'MasTec Renewables / IEA',
     categoryName: 'MasTec Renewables / IEA',
+    employerAliases: ['MasTec Renewables', 'Infrastructure and Energy Alternatives', 'IEA', 'Wanzek'],
     verified: false,
   },
   {
@@ -746,6 +747,7 @@ export const ICIMS_COMPANIES: IcimsCompanySeed[] = [
     baseUrl: 'https://ceisvcareers-mastec.icims.com',
     name: 'William Charles Electric',
     categoryName: 'William Charles Electric',
+    searchKeyword: '"William Charles"',
     verified: false,
   },
   // September 17, 2026 — active taxonomy-matching boards.

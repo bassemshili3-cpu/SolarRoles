@@ -106,3 +106,12 @@ test('iCIMS uses exact employer fields on shared boards and reads prefixed absol
   const parsed = parseIcimsDetail('<h1>Solar Installer</h1><p>Posted Date 2 days ago(10/15/2026 11:11 AM)</p>', 'Solar Installer');
   assert.equal(parsed.postedAt?.toISOString(), '2026-10-15T00:00:00.000Z');
 });
+
+test('Workday malformed listing cannot block valid following postings or pin the cursor', async () => {
+  let checkpoint: any;
+  const page = { url: () => origin, evaluate: async (_fn: unknown, request: {url:string}) => request.url.endsWith('/jobs')
+    ? {ok:true,data:{total:2,jobPostings:[{title:'Broken listing'},postings[0]]}}
+    : {ok:true,data:detail} };
+  const jobs = await fetchWorkdayBatch(company,page as any,origin,{deadline:Date.now()+480000,isKnown:()=>false,checkpoint:cursor=>{checkpoint=cursor;}});
+  assert.equal(jobs.length,1); assert.equal(checkpoint.offset,0);
+});

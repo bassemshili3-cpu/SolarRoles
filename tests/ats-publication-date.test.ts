@@ -42,7 +42,7 @@ function provider(file: string, fetch: (url: string) => Promise<unknown>) {
     throw Error(`Unexpected dependency ${id}`);
   };
   const expose = file.endsWith('workday.ts') ? '\nexports.detailForTest = fetchJobDetail; exports.normalizeForTest = normalize;' : '';
-  vm.runInNewContext('(function(require,exports){' + compiled + expose + '\n})', { fetch, URL, console })(require, exports);
+  vm.runInNewContext('(function(require,exports){' + compiled + expose + '\n})', { fetch, URL, console, AbortSignal })(require, exports);
   return exports;
 }
 

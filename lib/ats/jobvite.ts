@@ -61,8 +61,9 @@ const DETAIL_LOCATION_SELECTORS = [
 ];
 
 async function fetchHtml(url: string): Promise<string> {
-  const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } });
+  const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT }, signal: AbortSignal.timeout(20_000) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (new URL(res.url || url).hostname !== new URL(url).hostname || /[?&]invalid=1/.test(res.url)) throw new Error(`Source unavailable: employer board redirected away (${new URL(res.url).hostname})`);
   return res.text();
 }
 
@@ -227,9 +228,31 @@ export async function fetchJobviteJobs(company: AtsCompanySeed): Promise<Normali
   let explicitlyEmpty = false;
 
   try {
-    const html = await fetchHtml(LIST_URL(company.slug));
+    let html: string;
+    try { html = await fetchHtml(LIST_URL(company.slug)); }
+    catch { html = await fetchHtml(`https://jobs.jobvite.com/${company.slug}/search?nl=1&fr=false`); }
     rows = parseJobRows(html);
     explicitlyEmpty = /there are currently no open jobs|there are no (?:open|current) (?:jobs|positions)/i.test(cheerio.load(html).text());
+    if (!rows.length && !explicitlyEmpty) {
+      // Some career templates render only filters at /jobs, while /search
+      // serves the real server-rendered list. Keep the old route as fallback.
+      const search = await fetchHtml(`https://jobs.jobvite.com/${company.slug}/search?nl=1&fr=false`);
+      const found = new Map<string, ScrapedJobRow>();
+      let next: string | undefined = `https://jobs.jobvite.com/${company.slug}/search?nl=1&fr=false`;
+      const seen = new Set<string>();
+      for (let page = 0; next && page < 20 && !seen.has(next); page++) {
+        seen.add(next);
+        const content = page === 0 ? search : await fetchHtml(next);
+        for (const row of parseJobRows(content)) found.set(row.href, row);
+        const $ = cheerio.load(content);
+        const href = $('a[rel="next"], .jv-pagination-next a, a.jv-pagination-next').first().attr('href');
+        const candidate: URL | undefined = href ? new URL(href, next) : undefined;
+        if (candidate) { candidate.searchParams.set('nl', '1'); candidate.searchParams.set('fr', 'false'); }
+        next = candidate?.origin === 'https://jobs.jobvite.com' && candidate.pathname.startsWith(`/${company.slug}/`) ? candidate.href : undefined;
+        explicitlyEmpty ||= /there are currently no open jobs|there are no (?:open|current) (?:jobs|positions)/i.test($.text());
+      }
+      rows = [...found.values()];
+    }
   } catch (err) {
     console.warn(`[jobvite] ${company.slug}: fetch/parse échoué, skipping — ${(err as Error).message}`);
     return [];

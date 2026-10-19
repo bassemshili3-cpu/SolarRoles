@@ -70,6 +70,7 @@ import { pathToFileURL } from 'node:url';
 import type { AtsSeedSummary } from '../lib/ats/sync-summary';
 import type { AtsCheckpoints, AtsFetchContext } from '../lib/ats/fetch-context';
 import { enqueueSeedRewrite } from '../lib/seo/enqueue-seed-rewrite';
+import { recoverAtsSource } from '../lib/ats/source-recovery';
 
 
 const EXPIRES_IN_DAYS = 45;
@@ -90,7 +91,8 @@ function provider<T>(
   fetch: (company: T, context?: AtsFetchContext) => Promise<NormalizedJob[]>,
   label: (company: T) => string,
 ): AtsProvider<T> {
-  return { name, companies, fetch, label };
+  return { name, companies, fetch: async (company, context) =>
+    await recoverAtsSource(name, company as { name: string; slug?: string }, context) ?? await fetch(company, context), label };
 }
 
 const PROVIDERS: AtsProvider<any>[] = [

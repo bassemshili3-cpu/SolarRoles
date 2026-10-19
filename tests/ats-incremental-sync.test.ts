@@ -44,6 +44,7 @@ function seedHarness({ known = false, raced = false, dryRun = false, postedAt = 
     if (id === '@prisma/client') return { PrismaClient };
     if (id.endsWith('company-seed')) return registry;
     if (id.endsWith('enqueue-seed-rewrite')) return { enqueueSeedRewrite };
+    if (id.endsWith('source-recovery')) return { recoverAtsSource: async () => undefined };
     if (id.endsWith('custom-scrape/config')) return { CUSTOM_SCRAPE_COMPANIES: [] };
     if (id.endsWith('jobRetention')) return { isJobTooOld, sourcePostedAt };
     if (id.endsWith('normalizeSourceFields')) return { normalizeSourceFields };
