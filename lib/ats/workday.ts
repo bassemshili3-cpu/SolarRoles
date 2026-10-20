@@ -778,6 +778,7 @@ export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page,
   }
   // Leave room for one bounded request (3 x 20s), processing and audit persistence.
   const hasTime = () => Date.now() + 75_000 < run.deadline;
+  const seenPages = new Set<string>();
   try {
     while (hasTime()) {
       assertOnExpectedOrigin(company, page, origin);
@@ -788,6 +789,9 @@ export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page,
       if (!Array.isArray(response.data.jobPostings)) throw new Error('Missing Workday jobPostings array');
       const postings = response.data.jobPostings;
       if (!postings.length) { cursor = { version: 1, offset: 0, completed: [] }; break; }
+      const signature = JSON.stringify(postings.map(posting => posting.externalPath));
+      if (seenPages.has(signature)) throw new Error('Pagination repeated an already scanned page');
+      seenPages.add(signature);
       const completed = new Set(cursor.completed);
       for (const posting of postings) {
         if (typeof posting.externalPath !== 'string' || !posting.externalPath.startsWith('/job/')) {
@@ -809,7 +813,10 @@ export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page,
         cursor.completed = [...completed];
       }
       cursor = { version: 1, offset: cursor.offset + postings.length, completed: [] };
-      if (response.data.total !== undefined && cursor.offset >= response.data.total) {
+      // CXS often reports total=0 after its first page despite returning jobs.
+      // Only a positive total can end a non-empty page; otherwise read onward
+      // until the API returns an empty page or the durable time budget expires.
+      if (Number.isFinite(response.data.total) && response.data.total > 0 && cursor.offset >= response.data.total) {
         cursor.offset = 0; break;
       }
       if (headOnly) break;

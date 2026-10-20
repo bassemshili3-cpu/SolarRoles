@@ -173,6 +173,9 @@ export async function fetchPaylocityJobs(company: PaylocityCompanySeed, run?: At
     try {
       const response = await page.goto(company.boardUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
       if (response && !response.ok()) throw new Error(`HTTP ${response.status()} for board`);
+      if (/\/jobs\/JobNotFound\b/i.test(new URL(page.url()).pathname)) {
+        throw new Error('Board redirected to JobNotFound; source unavailable, not an empty board');
+      }
       await page.locator('a[href*="/Details/" i], a[href*="/details/"], .no-jobs, [class*="noJobs"]').first()
         .waitFor({ state: 'attached', timeout: 15_000 }).catch(() => {});
       links = [...new Set(await page.locator('a[href]').evaluateAll((anchors) =>

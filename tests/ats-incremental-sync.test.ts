@@ -45,6 +45,7 @@ function seedHarness({ known = false, raced = false, dryRun = false, postedAt = 
     if (id.endsWith('company-seed')) return registry;
     if (id.endsWith('enqueue-seed-rewrite')) return { enqueueSeedRewrite };
     if (id.endsWith('source-recovery')) return { recoverAtsSource: async () => undefined };
+    if (id.endsWith('source-migrations')) return { recoverConfiguredAtsSource: async () => undefined };
     if (id.endsWith('custom-scrape/config')) return { CUSTOM_SCRAPE_COMPANIES: [] };
     if (id.endsWith('jobRetention')) return { isJobTooOld, sourcePostedAt };
     if (id.endsWith('normalizeSourceFields')) return { normalizeSourceFields };
@@ -180,19 +181,21 @@ test('sitemap includes fourteen days and puts jobs newest first before static pa
   assert.equal(where.OR, undefined);
 });
 
-test('hourly Netlify dispatcher launches only its slot and authenticates background requests', async () => {
+test('Cloudflare-authenticated hourly dispatcher launches only its slot and deduplicates it', async () => {
   const calls: any[] = [];
   const tasks = Array.from({ length: 12 }, (_, companyIndex) => ({ providerName: 'lever', companyIndex, label: 'solar-' + companyIndex }));
   const stored = new Map();
   let storageDown = false;
-  const store = { setJSON: async (key: string, data: unknown) => { if (storageDown) throw Error('Storage unavailable'); stored.set(key, data); } };
+  const store = { setJSON: async (key: string, data: unknown, options?: { onlyIfNew?: boolean }) => { if (storageDown) throw Error('Storage unavailable'); if (options?.onlyIfNew && stored.has(key)) return { modified: false }; stored.set(key, data); return { modified: true }; } };
   class SlotDate extends Date { getUTCHours() { return 8; } }
   const api = load('netlify/functions/sync-ats.ts', (id) => id.endsWith('sync-monitor') ? monitor : id.endsWith('ats-sync-store') ? { atsSyncStore: () => store } : ({ getAtsSyncTasks: () => tasks }), {
     process: { env: { CRON_SECRET: 'test', URL: 'https://solarroles.netlify.app' } },
-    Date: SlotDate, URL, AbortSignal,
+    Date: SlotDate, URL, AbortSignal, Response,
     fetch: async (url: URL, options: any) => { calls.push({ url, options }); return { status: 202 }; },
   });
-  await api.default();
+  const request = () => new Request('https://solarroles.netlify.app/.netlify/functions/sync-ats', { method: 'POST', headers: { authorization: 'Bearer test', 'x-scheduled-time': String(Date.now()) } });
+  assert.equal((await api.default(new Request('https://example.test', { method: 'POST' }))).status, 401);
+  await api.default(request());
   assert.deepEqual(calls.map((c) => JSON.parse(c.options.body).companyIndex), [2, 8]);
   for (const call of calls) {
     assert.equal(call.url.pathname, '/.netlify/functions/sync-ats-background');
@@ -201,8 +204,10 @@ test('hourly Netlify dispatcher launches only its slot and authenticates backgro
   }
   assert.equal([...stored.keys()].filter(k => k.endsWith('/manifest')).length, 1);
   assert.equal([...stored.values()].find(v => v.outcomes)?.outcomes.length, 2);
+  assert.equal((await (await api.default(request())).json()).decision, 'duplicate');
+  assert.equal(calls.length, 2);
   storageDown = true; calls.length = 0;
-  await assert.rejects(api.default(), /Storage unavailable/);
+  await assert.rejects(api.default(request()), /Storage unavailable/);
   assert.equal(calls.length, 0, 'never dispatch tasks without an expected-employer manifest');
 });
 

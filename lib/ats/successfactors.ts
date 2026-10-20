@@ -54,6 +54,9 @@ export function parseSuccessFactorsRss(
   company: SuccessFactorsCompanySeed,
 ): NormalizedJob[] {
   const dom = cheerio.load(xml, { xmlMode: true });
+  if (!dom.root().children('rss').children('channel').length) {
+    throw new Error('Expected an RSS channel; received an unrecognized or HTML page, not an empty job feed');
+  }
   const jobs = new Map<string, NormalizedJob>();
 
   dom('item').each((_, element) => {
@@ -99,6 +102,7 @@ export async function fetchSuccessFactorsJobs(
           'User-Agent': USER_AGENT,
           Accept: 'application/rss+xml,application/xml,text/xml',
         },
+        signal: AbortSignal.timeout(20_000),
       });
       if (!response.ok) {
         console.warn(`[successfactors] ${company.name} "${keyword}": HTTP ${response.status}, skipping`);

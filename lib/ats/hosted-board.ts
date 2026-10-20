@@ -18,7 +18,7 @@ export const boardUrl = (source: HostedBoard, slug: string) => source === 'jazzh
 function jobId(source: HostedBoard, url: URL): string | undefined {
   return source === 'jazzhr'
     ? url.pathname.match(/^\/apply\/([a-zA-Z0-9]{10})\/[^/]+\/?$/)?.[1]
-    : url.pathname.match(/^\/p\/([a-f0-9]{12})-[^/]+\/?$/)?.[1];
+    : url.pathname.match(/^\/p\/((?:[a-f0-9]{12}|[a-f0-9]{14}))-[^/]+\/?$/)?.[1];
 }
 
 function approved(company: AtsCompanySeed, title: string): boolean {

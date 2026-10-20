@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-20",
+  "replacements": [
+    {
+      "provider": "breezy",
+      "sourceSlug": "planted-solar-inc",
+      "target": { "provider": "ashby", "slug": "plantedsolar" },
+      "evidence": "https://www.plantedsolar.com/careers",
+      "embeddedBoard": "https://jobs.ashbyhq.com/plantedsolar/embed?version=2"
+    }
+  ]
+}

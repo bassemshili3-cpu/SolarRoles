@@ -71,6 +71,7 @@ import type { AtsSeedSummary } from '../lib/ats/sync-summary';
 import type { AtsCheckpoints, AtsFetchContext } from '../lib/ats/fetch-context';
 import { enqueueSeedRewrite } from '../lib/seo/enqueue-seed-rewrite';
 import { recoverAtsSource } from '../lib/ats/source-recovery';
+import { recoverConfiguredAtsSource } from '../lib/ats/source-migrations';
 
 
 const EXPIRES_IN_DAYS = 45;
@@ -92,7 +93,8 @@ function provider<T>(
   label: (company: T) => string,
 ): AtsProvider<T> {
   return { name, companies, fetch: async (company, context) =>
-    await recoverAtsSource(name, company as { name: string; slug?: string }, context) ?? await fetch(company, context), label };
+    await recoverConfiguredAtsSource(name, company as { name: string; slug?: string })
+      ?? await recoverAtsSource(name, company as { name: string; slug?: string }, context) ?? await fetch(company, context), label };
 }
 
 const PROVIDERS: AtsProvider<any>[] = [

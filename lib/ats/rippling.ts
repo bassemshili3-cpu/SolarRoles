@@ -4,6 +4,7 @@ import { isSolarInstallerRole } from './solar-taxonomy';
 import type { NormalizedJob } from './types';
 import { sourcePublicationDate } from './publicationDate';
 import { textBaseSalary } from './salaryFields';
+import type { AtsFetchContext } from './fetch-context';
 
 const USER_AGENT = 'solarroles.com job aggregator (contact: hello@solarroles.com)';
 
@@ -84,7 +85,7 @@ function nextData(html: string): unknown | undefined {
 
 async function fetchHtml(url: string): Promise<string | undefined> {
   try {
-    const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT, Accept: 'text/html,application/xhtml+xml' } });
+    const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT, Accept: 'text/html,application/xhtml+xml' }, signal: AbortSignal.timeout(20_000) });
     if (!response.ok) {
       console.warn(`[rippling] ${url}: HTTP ${response.status}, skipping`);
       return undefined;
@@ -96,25 +97,33 @@ async function fetchHtml(url: string): Promise<string | undefined> {
   }
 }
 
-export async function fetchRipplingJobs(company: RipplingCompanySeed): Promise<NormalizedJob[]> {
+export async function fetchRipplingJobs(company: RipplingCompanySeed, run?: AtsFetchContext): Promise<NormalizedJob[]> {
   const boardUrl = `https://ats.rippling.com/${company.slug}/jobs`;
   const boardHtml = await fetchHtml(boardUrl);
   if (!boardHtml) return [];
 
   // A single Rippling requisition can be repeated once per work location.
   // We retain one canonical job URL; its detail payload carries all locations.
-  const listings = [...new Map(findListings(nextData(boardHtml)).map((listing) => [listing.id, listing])).values()];
+  let listings = [...new Map(findListings(nextData(boardHtml)).map((listing) => [listing.id, listing])).values()];
   if (!listings.length) {
     console.warn(`[rippling] ${company.slug}: no jobs found in the public board payload`);
     return [];
   }
 
   const results: NormalizedJob[] = [];
+  const pendingId = (run?.cursor as { pendingId?: string } | undefined)?.pendingId;
+  const start = listings.findIndex(listing => listing.id === pendingId);
+  if (start > 0) listings = [...listings.slice(start), ...listings.slice(0, start)];
   for (const listing of listings) {
-    if (!matchesRoleFilter(company.roleFilter, listing.name)) continue;
+    // Generic taxonomy needs the description. Explicit, narrower employer
+    // scopes remain title based and keep their existing role boundaries.
+    if (company.roleFilter !== 'solar_taxonomy' && !matchesRoleFilter(company.roleFilter, listing.name)) continue;
     const detailUrl = listing.url || `${boardUrl}/${listing.id}`;
+    if (run?.isKnown('rippling', detailUrl)) continue;
+    run?.checkpoint({ pendingId: listing.id });
+    if (Date.now() + 25_000 >= (run?.deadline ?? Infinity)) return results;
     const detailHtml = await fetchHtml(detailUrl);
-    if (!detailHtml) continue;
+    if (!detailHtml) { if (run) return results; continue; }
     const apiData = (nextData(detailHtml) as { props?: { pageProps?: { apiData?: { jobPost?: RipplingDetail } } } })?.props?.pageProps?.apiData;
     const detail = apiData?.jobPost;
     if (!detail?.name || !detail.description?.company) {
@@ -139,5 +148,6 @@ export async function fetchRipplingJobs(company: RipplingCompanySeed): Promise<N
       ...textBaseSalary(description),
     });
   }
+  run?.checkpoint({ pendingId: null });
   return results;
 }
