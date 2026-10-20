@@ -4,7 +4,7 @@ export async function dispatch(kind, time, env, fetcher = fetch) {
   if (env.CRONS_ENABLED !== 'true') return { decision: 'disabled', kind };
   const response = await fetcher(new URL('/.netlify/functions/' + routes[kind], env.APP_ORIGIN), {
     method: 'POST', redirect: 'manual', signal: AbortSignal.timeout(90_000),
-    headers: { authorization: `Bearer ${env.CRON_SECRET}`, 'x-scheduled-time': String(time) },
+    headers: { authorization: `Bearer ${env.CRON_SECRET}`, 'x-scheduled-time': String(time), 'user-agent': 'SolarRoles-Cron/1.0 (+https://solarroles.com)'  },
   });
   if (!response.ok) { await response.body?.cancel(); throw Error(`${kind} dispatch HTTP ${response.status}`); }
   const result = await response.json();

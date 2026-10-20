@@ -1,0 +1,9 @@
+{
+  "name": "solarroles-cloudflare-cli",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Isolated Cloudflare tooling for SolarRoles cron operations",
+  "dependencies": {
+    "wrangler": "4.151.2"
+  }
+}

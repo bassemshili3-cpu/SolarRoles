@@ -9,7 +9,7 @@
   "vars": {
     "APP_ORIGIN": "https://solarroles.com",
     "GROQ_MODEL": "openai/gpt-oss-120b",
-    "CRONS_ENABLED": "false"
+    "CRONS_ENABLED": "true"
   },
   "secrets_store_secrets": [{ "binding": "GROQ_API_KEY", "store_id": "38a0611f258e4f8999aa3acaa55e6492", "secret_name": "GROQ_API_KEY" }]
 }

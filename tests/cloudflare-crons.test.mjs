@@ -7,7 +7,7 @@ test('disabled cron sends no requests', async () => {
 });
 test('dispatch carries authentication and scheduled time and rejects errors', async () => {
   const time = Date.now();
-  const mock = async (url, options) => { assert.equal(url.pathname, '/.netlify/functions/sync-ats'); assert.equal(options.headers.authorization, 'Bearer test'); assert.equal(options.headers['x-scheduled-time'], String(time)); return Response.json({ dispatched: 53 }); };
+  const mock = async (url, options) => { assert.equal(url.pathname, '/.netlify/functions/sync-ats'); assert.equal(options.headers.authorization, 'Bearer test'); assert.equal(options.headers['x-scheduled-time'], String(time)); assert.equal(options.redirect, 'manual'); assert.match(options.headers['user-agent'], /^SolarRoles-Cron\/1\.0/); return Response.json({ dispatched: 53 }); };
   assert.equal((await dispatch('seed', time, env, mock)).dispatched, 53);
   await assert.rejects(dispatch('rewrite', time, env, async () => new Response('private', { status: 500 })), /HTTP 500/);
 });
