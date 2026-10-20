@@ -4,7 +4,7 @@ Les corrections ciblent 30 sources associées à 115 des 389 exécutions vides d
 
 | Cause | Comportement corrigé |
 | --- | --- |
-| Workday annonce `total: 0` après sa première page | Une page non vide ne termine plus le parcours sur ce zéro. Les pages suivantes sont lues ; les échéances et checkpoints sont conservés. Une page répétée est signalée. |
+| Workday annonce `total: 0` après sa première page | Une page non vide ne termine plus le parcours sur ce zéro. Le total positif initial est conservé dans le checkpoint et rafraîchi en tête de catalogue. Il permet de reconnaître la dernière page même si le serveur la répète. Les échéances restent respectées ; les autres répétitions sont signalées. |
 | Workable affiche des instructions de recherche | Le connecteur passe à l’API publique complète et suit ses tokens de continuation, au lieu de conclure à zéro ou de se limiter aux 30 résultats d’une recherche Markdown. |
 | Les identifiants Breezy comportent 14 caractères | Les deux formats observés, 12 et 14 caractères hexadécimaux, sont reconnus dans les listes et les détails. Les URLs étrangères ou mal formées restent exclues. |
 | SmartRecruiters ne lit que 100 annonces | Les pages suivantes sont parcourues. Les grands catalogues reprennent à leur offset durable ; un détail momentanément indisponible conserve la reprise, une annonce supprimée en 404/410 ne bloque pas les suivantes. |
@@ -32,6 +32,6 @@ La découverte du remplacement est appuyée par l’iframe Ashby présente sur [
 
 Le filtre solaire, les critères US, les publications authentiques de moins de quatorze jours, les URLs déjà présentes et l’insertion sans modification des offres existantes restent les règles du seed. Les indicateurs `verified` ne sont pas réintroduits comme condition d’ingestion. Seules les nouvelles insertions alimentent la file de réécriture Groq.
 
-Les 70 tests ciblés passent dans la copie isolée de livraison. Ils couvrent les pages après les limites antérieures, les continuations, les reprises après erreur et après échéance, les annonces retirées, les IDs Breezy, les descriptions Rippling, les tableaux indisponibles, les publications et l’insertion idempotente. Le contrôle TypeScript des connecteurs et du script seed ne signale aucune erreur. Le protocole de comparaison V20 ne s’applique pas à cette livraison, conformément à la précision de l’utilisateur.
+Les 70 tests ciblés de la première livraison passent dans la copie isolée. Deux tests supplémentaires couvrent ensuite le total Workday durable et le rafraîchissement des anciens curseurs au-delà de la fin du catalogue, soit 72 tests au total. Ils couvrent les pages après les limites antérieures, les continuations, les reprises après erreur et après échéance, les annonces retirées, les IDs Breezy, les descriptions Rippling, les tableaux indisponibles, les publications et l’insertion idempotente. Le contrôle TypeScript des connecteurs et du script seed ne signale aucune erreur. Le protocole de comparaison V20 ne s’applique pas à cette livraison, conformément à la précision de l’utilisateur.
 
 Les preuves locales sont conservées sous `.temp/ats-empty-fix-validation-20261020/` : `live-comparison.json`, les réponses enregistrées, `typecheck.json`, `target-sources.json` et les reçus de la passe ciblée après déploiement.

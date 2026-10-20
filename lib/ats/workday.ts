@@ -755,26 +755,33 @@ export async function fetchWorkdayJobs(company: WorkdayCompanySeed, run?: AtsFet
   return results;
 }
 
-export interface WorkdayCursor { version: 1; offset: number; completed: string[] }
+export interface WorkdayCursor { version: 1; offset: number; completed: string[]; total?: number }
 export function workdayCursor(value: unknown): WorkdayCursor {
   const cursor = value as Partial<WorkdayCursor> | null;
   if (cursor?.version !== 1 || !Number.isSafeInteger(cursor.offset) || cursor.offset! < 0
     || !Array.isArray(cursor.completed) || !cursor.completed.every(path => typeof path === 'string')) {
     return { version: 1, offset: 0, completed: [] };
   }
-  return { version: 1, offset: cursor.offset!, completed: [...cursor.completed] };
+  return { version: 1, offset: cursor.offset!, completed: [...cursor.completed],
+    ...(Number.isSafeInteger(cursor.total) && cursor.total! > 0 ? { total: cursor.total } : {}) };
 }
 
 /** Resume a bounded scan instead of losing a large board at the function timeout. */
 export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page, origin: string, run: AtsFetchContext, headOnly = false) {
   let cursor = workdayCursor(run.cursor);
+  let knownTotal = cursor.total ?? 0;
   const results: NormalizedJob[] = [];
   if (cursor.offset > 0 && !headOnly) {
     // Recheck the first page for new postings while the durable full scan moves
     // through a large catalogue. Reserve the rest of the budget for continuation.
     results.push(...await fetchWorkdayBatch(company, page, origin, {
-      ...run, cursor: undefined, deadline: Math.min(run.deadline, Date.now() + 150_000), checkpoint: () => {},
+      ...run, cursor: undefined, deadline: Math.min(run.deadline, Date.now() + 150_000), checkpoint: value => {
+        const head = workdayCursor(value); if (head.total) knownTotal = head.total;
+      },
     }, true));
+    if (knownTotal > 0 && cursor.offset >= knownTotal) {
+      run.checkpoint({ version: 1, offset: 0, completed: [] }); return results;
+    }
   }
   // Leave room for one bounded request (3 x 20s), processing and audit persistence.
   const hasTime = () => Date.now() + 75_000 < run.deadline;
@@ -787,6 +794,10 @@ export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page,
       });
       if (!response.ok) throw new Error(`HTTP ${response.status} at offset ${cursor.offset}`);
       if (!Array.isArray(response.data.jobPostings)) throw new Error('Missing Workday jobPostings array');
+      if (Number.isSafeInteger(response.data.total) && response.data.total > 0) {
+        knownTotal = response.data.total;
+        if (headOnly) run.checkpoint({ ...cursor, total: knownTotal });
+      }
       const postings = response.data.jobPostings;
       if (!postings.length) { cursor = { version: 1, offset: 0, completed: [] }; break; }
       const signature = JSON.stringify(postings.map(posting => posting.externalPath));
@@ -812,12 +823,12 @@ export async function fetchWorkdayBatch(company: WorkdayCompanySeed, page: Page,
         completed.add(posting.externalPath);
         cursor.completed = [...completed];
       }
-      cursor = { version: 1, offset: cursor.offset + postings.length, completed: [] };
+      cursor = { version: 1, offset: cursor.offset + postings.length, completed: [], ...(knownTotal > 0 ? { total: knownTotal } : {}) };
       // CXS often reports total=0 after its first page despite returning jobs.
       // Only a positive total can end a non-empty page; otherwise read onward
       // until the API returns an empty page or the durable time budget expires.
-      if (Number.isFinite(response.data.total) && response.data.total > 0 && cursor.offset >= response.data.total) {
-        cursor.offset = 0; break;
+      if (knownTotal > 0 && cursor.offset >= knownTotal) {
+        cursor = { version: 1, offset: 0, completed: [] }; break;
       }
       if (headOnly) break;
       console.log(`[workday] ${company.tenant}/${company.site}: next offset ${cursor.offset}, ${results.length} matches`);

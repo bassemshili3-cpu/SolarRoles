@@ -36,7 +36,7 @@ test('Workday passes offset 40 when subsequent nonempty pages report total zero'
     return { ok: true, data: { jobPostingInfo: { jobDescription: description, location: 'Austin, TX', startDate: '2026-10-19' } } };
   } };
   const jobs = await fetchWorkdayBatch({ tenant: 'test', host: 'wd5', site: 'Careers', name: 'Test', verified: false }, page as any, origin, run);
-  assert.deepEqual(offsets, [0, 20, 40, 41]); assert.equal(jobs.length, 1);
+  assert.deepEqual(offsets, [0, 20, 40]); assert.equal(jobs.length, 1);
   assert.deepEqual(state.cursor, { version: 1, offset: 0, completed: [] });
 });
 
@@ -47,6 +47,35 @@ test('Breezy accepts 12/14 hexadecimal IDs, deduplicates links and rejects forei
   const url = 'https://test-solar.breezy.hr/p/0123456789abcd-solar-installer';
   const detail = `<script type="application/ld+json">${JSON.stringify({ '@type': 'JobPosting', title: 'Solar Installer', description, datePosted: '2026-10-19', jobLocation: { '@type': 'Place', address: { addressLocality: 'Austin', addressRegion: 'TX', addressCountry: 'US' } }, url })}</script>`;
   assert.equal(parseHostedDetail(detail, url, 'breezy', company)?.externalId, 'test-solar:0123456789abcd');
+});
+
+test('Workday persists its initial total across a time-budget pause and zero-total continuation pages', async () => {
+  const origin = 'https://test.wd5.myworkdayjobs.com';
+  const { run, state } = context(); const offsets: number[] = [];
+  run.isKnown = (_source, url) => { if (url.endsWith('/job/19')) run.deadline = Date.now() + 70_000; return true; };
+  const page = { url: () => origin, evaluate: async (_: unknown, request: any) => {
+    const offset = request.body.offset; offsets.push(offset);
+    return { ok: true, data: { total: offset === 0 ? 41 : 0, jobPostings: Array.from({ length: Math.max(0, Math.min(20, 41 - offset)) }, (_, i) => ({ title: 'Solar Installer', externalPath: `/job/${offset + i}` })) } };
+  } };
+  const seed = { tenant: 'test', host: 'wd5', site: 'Careers', name: 'Test', verified: false };
+  await fetchWorkdayBatch(seed, page as any, origin, run);
+  assert.deepEqual(state.cursor, { version: 1, offset: 20, completed: [], total: 41 });
+  run.cursor = state.cursor; run.deadline = Date.now() + 480_000; run.isKnown = () => true;
+  await fetchWorkdayBatch(seed, page as any, origin, run);
+  assert.deepEqual(offsets, [0, 0, 20, 40]);
+  assert.deepEqual(state.cursor, { version: 1, offset: 0, completed: [] });
+});
+
+test('Workday refreshes the total before resuming an old cursor already beyond the catalogue end', async () => {
+  const origin = 'https://test.wd5.myworkdayjobs.com';
+  const { run, state } = context({ version: 1, offset: 4, completed: [] });
+  run.isKnown = () => true; const offsets: number[] = [];
+  const page = { url: () => origin, evaluate: async (_: unknown, request: any) => {
+    offsets.push(request.body.offset); assert.equal(request.body.offset, 0);
+    return { ok: true, data: { total: 4, jobPostings: [{ title: 'Solar Installer', externalPath: '/job/1' }, { title: 'Solar Installer', externalPath: '/job/2' }] } };
+  } };
+  await fetchWorkdayBatch({ tenant: 'test', host: 'wd5', site: 'Careers', name: 'Test', verified: false }, page as any, origin, run);
+  assert.deepEqual(offsets, [0]); assert.deepEqual(state.cursor, { version: 1, offset: 0, completed: [] });
 });
 
 test('Workable instruction pages use API token pagination and retain real publication dates', async () => {
