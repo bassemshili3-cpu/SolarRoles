@@ -2,8 +2,16 @@
 import assert from 'node:assert/strict';
 import { rewriteJobDescriptionForSeo, RewriteApiError } from '../lib/seo/rewrite-description';
 import { retryPolicy } from '../lib/seo/seed-rewrite-worker';
+import { seedRewriteDatabaseUrl } from '../lib/seo/seed-rewrite-prisma';
 const job = { title: 'PV Installer', company: 'Solar', location: 'Austin, TX', description: 'Install PV modules. OSHA 10 required.' };
 const html = '<p>Solar hires a PV installer in Austin, TX.</p><h3>Responsibilities</h3><ul><li>Install PV modules.</li></ul><h3>Requirements</h3><ul><li>OSHA 10.</li></ul>';
+test('rewrite pool disables prepared statement caching without changing credentials or existing URL options', () => {
+  const url = new URL(seedRewriteDatabaseUrl('postgresql://user:password@example.test/db?sslmode=require&statement_cache_size=100&connection_limit=15'));
+  assert.equal(url.username, 'user'); assert.equal(url.password, 'password');
+  assert.equal(url.searchParams.get('sslmode'), 'require');
+  assert.deepEqual(url.searchParams.getAll('statement_cache_size'), ['0']);
+  assert.deepEqual(url.searchParams.getAll('connection_limit'), ['2']);
+});
 async function mockApi(response: () => Response, callback: () => Promise<void>) {
   const fetchBefore = globalThis.fetch, key = process.env.GROQ_API_KEY;
   process.env.GROQ_API_KEY = 'test-key';
