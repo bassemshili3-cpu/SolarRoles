@@ -5,24 +5,24 @@ import { retryPolicy } from '../lib/seo/seed-rewrite-worker';
 const job = { title: 'PV Installer', company: 'Solar', location: 'Austin, TX', description: 'Install PV modules. OSHA 10 required.' };
 const html = '<p>Solar hires a PV installer in Austin, TX.</p><h3>Responsibilities</h3><ul><li>Install PV modules.</li></ul><h3>Requirements</h3><ul><li>OSHA 10.</li></ul>';
 async function mockApi(response: () => Response, callback: () => Promise<void>) {
-  const fetchBefore = globalThis.fetch, key = process.env.GEMINI_API_KEY;
-  process.env.GEMINI_API_KEY = 'test-key';
+  const fetchBefore = globalThis.fetch, key = process.env.GROQ_API_KEY;
+  process.env.GROQ_API_KEY = 'test-key';
   globalThis.fetch = async (url, init) => {
-    assert.equal(url, 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent');
+    assert.equal(url, 'https://api.groq.com/openai/v1/chat/completions');
     const body = JSON.parse(init?.body as string);
-    assert.equal((init?.headers as Record<string,string>)['x-goog-api-key'], 'test-key');
-    assert.match(body.systemInstruction.parts[0].text, /no more than 3000 characters/);
-    assert.equal(body.generationConfig.maxOutputTokens, 2000);
+    assert.equal((init?.headers as Record<string,string>).authorization, 'Bearer test-key');
+    assert.match(body.messages[0].content, /no more than 3000 characters/);
+    assert.equal(body.max_completion_tokens, 2000);
     return response();
   };
-  try { await callback(); } finally { globalThis.fetch = fetchBefore; if (key === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = key; }
+  try { await callback(); } finally { globalThis.fetch = fetchBefore; if (key === undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY = key; }
 }
-test('Gemini request preserves the prompt and cleans fenced HTML', async () => {
-  await mockApi(() => Response.json({ candidates: [{ finishReason: 'STOP', content: { parts: [{ text: '```html\n' + html + '\n```' }] } }] }), async () => assert.equal(await rewriteJobDescriptionForSeo(job), html));
+test('Groq request preserves the prompt and cleans fenced HTML', async () => {
+  await mockApi(() => Response.json({ choices: [{ finish_reason: 'stop', message: { content: '```html\n' + html + '\n```' } }] }), async () => assert.equal(await rewriteJobDescriptionForSeo(job), html));
 });
 test('empty, truncated, unsafe and oversized output cannot be saved', async () => {
-  for (const [content, finish_reason] of [['', 'STOP'], [html, 'MAX_TOKENS'], [html, 'SAFETY'], [html + '<script>alert(1)</script>', 'STOP'], [html + 'x'.repeat(3000), 'STOP']]) {
-    await mockApi(() => Response.json({ candidates: [{ finishReason: finish_reason, content: { parts: [{ text: content }] } }] }), async () => { await assert.rejects(rewriteJobDescriptionForSeo(job)); });
+  for (const [content, finish_reason] of [['', 'stop'], [html, 'MAX_TOKENS'], [html, 'SAFETY'], [html + '<script>alert(1)</script>', 'stop'], [html + 'x'.repeat(3000), 'stop']]) {
+    await mockApi(() => Response.json({ choices: [{ finish_reason, message: { content } }] }), async () => { await assert.rejects(rewriteJobDescriptionForSeo(job)); });
   }
 });
 test('429 is surfaced once with Retry-After and no sensitive error body', async () => {
@@ -43,11 +43,21 @@ test('quota and credential errors refund attempts and honor provider dates', () 
   assert.equal(retryPolicy(new Error('contains secret'), 1, now).error.includes('secret'), false);
 });
 
-test('Gemini RetryInfo cooldown is respected without exposing the provider body', async () => {
-  await mockApi(() => Response.json({error:{message:'private provider payload',details:[{'@type':'type.googleapis.com/google.rpc.RetryInfo',retryDelay:'900.5s'}]}},{status:429}), async () => {
-    await assert.rejects(rewriteJobDescriptionForSeo(job), error => error instanceof RewriteApiError && error.retryAfter === '900.5' && !error.message.includes('private'));
-  });
-});
-test('Gemini thought parts are excluded from saved HTML', async () => {
-  await mockApi(() => Response.json({candidates:[{finishReason:'STOP',content:{parts:[{thought:true,text:'internal thinking'},{text:html}]}}]}),async()=>assert.equal(await rewriteJobDescriptionForSeo(job),html));
+test('429 without Retry-After uses durable exponential backoff', () => { assert.equal(retryPolicy(new RewriteApiError(429, null), 1, 0).nextAttemptAt.getTime(), 300000); });
+
+test('Cloudflare proxy uses cron authentication without sending the Groq key', async () => {
+  const previous = { fetch: globalThis.fetch, proxy: process.env.GROQ_PROXY_URL, secret: process.env.CRON_SECRET, key: process.env.GROQ_API_KEY };
+  process.env.GROQ_PROXY_URL = 'https://example.workers.dev/internal/groq';
+  process.env.CRON_SECRET = 'cron-test'; process.env.GROQ_API_KEY = 'must-remain-private';
+  globalThis.fetch = async (url, options) => {
+    assert.equal(url, process.env.GROQ_PROXY_URL);
+    assert.equal((options?.headers as Record<string, string>).authorization, 'Bearer cron-test');
+    assert.ok(!JSON.stringify(options).includes('must-remain-private'));
+    return Response.json({ choices: [{ finish_reason: 'stop', message: { content: html } }] });
+  };
+  try { assert.equal(await rewriteJobDescriptionForSeo(job), html); }
+  finally {
+    globalThis.fetch = previous.fetch;
+    for (const [key, value] of Object.entries({ GROQ_PROXY_URL: previous.proxy, CRON_SECRET: previous.secret, GROQ_API_KEY: previous.key })) { if (value === undefined) delete process.env[key]; else process.env[key] = value; }
+  }
 });

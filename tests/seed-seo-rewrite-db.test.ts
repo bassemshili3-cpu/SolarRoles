@@ -14,8 +14,8 @@ async function scenario(check: (db: any, tx: any, job: any) => Promise<void>) {
   url.searchParams.set('statement_cache_size', '0');
   const p = new PrismaClient({ datasources: { db: { url: url.href } } });
   const rollback = new Error('test rollback');
-  const beforeKey = process.env.GEMINI_API_KEY;
-  process.env.GEMINI_API_KEY = 'test-only';
+  const beforeKey = process.env.GROQ_API_KEY;
+  process.env.GROQ_API_KEY = 'test-only';
   try {
     await assert.rejects(p.$transaction(async tx => {
       await tx.$executeRawUnsafe('CREATE TEMP TABLE "SeoRewriteTask" ("jobId" TEXT PRIMARY KEY, status TEXT DEFAULT \'pending\', attempts INT DEFAULT 0, "nextAttemptAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "lastError" TEXT, "completedAt" TIMESTAMP, "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ON COMMIT DROP');
@@ -29,7 +29,7 @@ async function scenario(check: (db: any, tx: any, job: any) => Promise<void>) {
       await check(db, tx, job);
       throw rollback;
     }, { timeout: 30000 }), error => error === rollback);
-  } finally { if (beforeKey === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = beforeKey; await p.$disconnect(); }
+  } finally { if (beforeKey === undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY = beforeKey; await p.$disconnect(); }
 }
 test('database: deduplicated queue, atomic SEO save, raw description preserved', { skip: !enabled }, async () => {
   await scenario(async (db, tx, job) => {

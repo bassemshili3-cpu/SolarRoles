@@ -3,19 +3,24 @@ import { createManifest, saveManifest, saveDispatch, taskKey, safeDiagnostic, ty
 import { atsSyncStore } from '../lib/ats-sync-store';
 
 // Six hourly slots cover every configured ATS employer once per six hours.
-export const config = { schedule: '17 * * * *' };
+// Scheduling is owned by Cloudflare.
 
-export default async function syncAts() {
+export default async function syncAts(request: Request) {
+  if (request.method !== 'POST' || !process.env.CRON_SECRET || request.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) return new Response('Unauthorized', { status: 401 });
+  const scheduledAt = Number(request.headers.get('x-scheduled-time'));
+  if (!scheduledAt || Math.abs(Date.now() - scheduledAt) > 5 * 60_000) return new Response('Stale schedule', { status: 400 });
   const secret = process.env.CRON_SECRET;
   if (!secret) throw new Error('CRON_SECRET is required for ATS sync.');
   const origin = process.env.URL || process.env.NEXT_PUBLIC_SITE_URL;
   if (!origin) throw new Error('A Netlify site URL is required for ATS sync.');
-  const slot = new Date().getUTCHours() % 6;
+  const slot = new Date(scheduledAt).getUTCHours() % 6;
   const tasks = getAtsSyncTasks().filter((_, index) => index % 6 === slot);
   const failures: string[] = [];
   const outcomes: DispatchOutcome[] = [];
   const store = atsSyncStore();
-  const manifest = createManifest(tasks);
+  const manifest = createManifest(tasks, 'scheduled', new Date(scheduledAt));
+  const claim = await store.setJSON(`cloudflare-slots/${new Date(scheduledAt).toISOString().slice(0, 13)}`, { runId: manifest.runId }, { onlyIfNew: true });
+  if (!claim.modified) return Response.json({ decision: 'duplicate' });
   // Persist expected employers before sending anything: missing workers stay visible.
   await saveManifest(store, manifest);
   const queue = [...tasks];
@@ -43,5 +48,6 @@ export default async function syncAts() {
 
   await saveDispatch(store, manifest, { finishedAt: new Date().toISOString(), outcomes });
   console.log(JSON.stringify({ runId: manifest.runId, slot, dispatched: tasks.length - failures.length, failures }));
-  if (failures.length > 0) throw new Error(`${failures.length} ATS background dispatch(es) failed`);
+  if (failures.length > 0) return Response.json({ runId: manifest.runId, failures: failures.length }, { status: 502 });
+  return Response.json({ runId: manifest.runId, dispatched: tasks.length });
 }

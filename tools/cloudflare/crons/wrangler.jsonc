@@ -1,0 +1,15 @@
+{
+  "name": "solarroles-crons",
+  "main": "worker.mjs",
+  "account_id": "de91aa3e3ca5a28bf3fdd6c1de5657ab",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "triggers": { "crons": ["17 * * * *", "* * * * *"] },
+  "vars": {
+    "APP_ORIGIN": "https://solarroles.com",
+    "GROQ_MODEL": "openai/gpt-oss-120b",
+    "CRONS_ENABLED": "false"
+  },
+  "secrets_store_secrets": [{ "binding": "GROQ_API_KEY", "store_id": "38a0611f258e4f8999aa3acaa55e6492", "secret_name": "GROQ_API_KEY" }]
+}

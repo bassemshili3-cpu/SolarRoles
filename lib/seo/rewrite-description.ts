@@ -1,8 +1,8 @@
 import { validateBoundedRewrite } from './rewrite-validation';
 
-// Gemini GenerateContent; no fallback to another provider.
+// Groq Chat Completions; no fallback to another provider.
 // Keep the model configurable for cost/quality tuning without a code change.
-export const SEO_REWRITE_MODEL = process.env.SEO_REWRITE_GEMINI_MODEL ?? 'gemini-3.5-flash-lite';
+export const SEO_REWRITE_MODEL = process.env.SEO_REWRITE_GROQ_MODEL ?? 'openai/gpt-oss-120b';
 const MAX_OUTPUT_TOKENS = 2000;
 
 // Bump this whenever the prompt/logic below changes meaningfully — any job
@@ -39,43 +39,33 @@ export function rewriteTokenReservation(job: RewritableJob): number {
 }
 
 export async function rewriteJobDescriptionForSeo(job: RewritableJob, options: { maxCharacters?: number; attempt?: number } = {}): Promise<string> {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error('GEMINI_API_KEY is required to rewrite job descriptions');
-  }
-  if (!/^[a-zA-Z0-9._-]+$/.test(SEO_REWRITE_MODEL)) throw new Error('Invalid SEO_REWRITE_GEMINI_MODEL');
+  const proxy = process.env.GROQ_PROXY_URL;
+  const key = proxy ? process.env.CRON_SECRET : process.env.GROQ_API_KEY;
+  if (!key) throw new Error('Groq credentials are required');
+  if (!/^[a-zA-Z0-9._/-]+$/.test(SEO_REWRITE_MODEL)) throw new Error('Invalid SEO_REWRITE_GROQ_MODEL');
   const maxCharacters = Math.min(options.maxCharacters ?? 3000, 3000);
   if (!Number.isInteger(maxCharacters) || maxCharacters < 1) throw new Error('maxCharacters must be a positive integer');
 
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${SEO_REWRITE_MODEL}:generateContent`, {
-    method: 'POST',
-    headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'content-type': 'application/json' },
+  const response = await fetch(proxy || 'https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST', redirect: 'error',
+    headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
     signal: AbortSignal.timeout(120_000),
-    body: JSON.stringify({
-      generationConfig: { maxOutputTokens: MAX_OUTPUT_TOKENS, temperature: 0.2 },
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT + `\n- Hard length limit: the entire HTML output, including tags, spaces and punctuation, must contain no more than ${maxCharacters} characters. Aim for ${Math.floor(maxCharacters * (options.attempt ? 0.8 : 0.9))}. Use concise sentences and compact list items. Combine related facts without deleting objective details. Do not truncate sentences or HTML. ${options.attempt ? 'The previous attempt was too long or invalid; make this version more concise.' : ''}` }] },
-      contents: [{ role: 'user', parts: [{ text: rewritePrompt(job) }] }],
+    body: JSON.stringify({ model: SEO_REWRITE_MODEL, max_completion_tokens: MAX_OUTPUT_TOKENS, temperature: 0.2, ...(SEO_REWRITE_MODEL.startsWith('openai/gpt-oss-') ? { reasoning_effort: 'low' } : {}),
+      messages: [{ role: 'system', content: SYSTEM_PROMPT + `\n- Hard length limit: the entire HTML output, including tags, spaces and punctuation, must contain no more than ${maxCharacters} characters. Aim for ${Math.floor(maxCharacters * (options.attempt ? 0.8 : 0.9))}. Use concise sentences and compact list items. Combine related facts without deleting objective details. Do not truncate sentences or HTML. ${options.attempt ? 'The previous attempt was too long or invalid; make this version more concise.' : ''}` }, { role: 'user', content: rewritePrompt(job) }],
     }),
   });
   if (!response.ok) {
-    let retryAfter = response.headers.get('retry-after');
-    // Google can return its cooldown in google.rpc.RetryInfo instead of a header.
-    if (!retryAfter && response.status === 429) {
-      try {
-        const error = await response.json() as { error?: { details?: { '@type'?: string; retryDelay?: string }[] } };
-        const delay = error.error?.details?.find(detail => detail['@type'] === 'type.googleapis.com/google.rpc.RetryInfo')?.retryDelay;
-        if (delay && /^\d+(?:\.\d+)?s$/.test(delay)) retryAfter = delay.slice(0, -1);
-      } catch { /* A missing or malformed cooldown uses the durable backoff. */ }
-    } else await response.body?.cancel();
+    const retryAfter = response.headers.get('retry-after');
+    await response.body?.cancel();
     throw new RewriteApiError(response.status, retryAfter);
   }
-  const result = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] }; finishReason?: string }[] };
-  const choice = result.candidates?.[0];
-  const text = (choice?.content?.parts ?? []).filter(part => !part.thought && typeof part.text === 'string').map(part => part.text).join('');
-
-  if (choice?.finishReason !== 'STOP') throw new Error('Gemini output was incomplete or blocked; description was not saved');
+  const result = await response.json() as { choices?: { message?: { content?: string }; finish_reason?: string }[] };
+  const choice = result.choices?.[0];
+  const text = choice?.message?.content;
+  if (choice?.finish_reason !== 'stop' || typeof text !== 'string') throw new Error('Groq output was incomplete or blocked; description was not saved');
 
   if (!text.trim()) {
-    throw new Error('Gemini returned no text content for this job description');
+    throw new Error('Groq returned no text content for this job description');
   }
 
   const cleaned = text
@@ -85,7 +75,7 @@ export async function rewriteJobDescriptionForSeo(job: RewritableJob, options: {
     .trim();
 
   if (cleaned.length > maxCharacters) {
-    throw new Error(`Gemini output exceeds ${maxCharacters} characters; description was not saved`);
+    throw new Error(`Groq output exceeds ${maxCharacters} characters; description was not saved`);
   }
   validateBoundedRewrite(cleaned, maxCharacters);
   return cleaned;
@@ -94,7 +84,7 @@ export async function rewriteJobDescriptionForSeo(job: RewritableJob, options: {
 // No provider bodies or source content are exposed to operational logs.
 export class RewriteApiError extends Error {
   constructor(public readonly status: number, public readonly retryAfter: string | null) {
-    super(`Gemini HTTP ${status}`);
+    super(`Groq HTTP ${status}`);
     this.name = 'RewriteApiError';
   }
 }
