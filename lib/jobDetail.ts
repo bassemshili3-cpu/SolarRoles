@@ -2,6 +2,7 @@
 import { prisma } from '@/lib/prisma'
 import { resolveJobSalary } from '@/lib/resolveJobSalary'
 import { cache } from 'react'
+import { buildJobPostingBaseSalary, type JobPostingBaseSalary } from './jobPostingSalary'
 import { isJobAvailable } from './job-availability'
 
 export type JobDetail = {
@@ -19,6 +20,7 @@ export type JobDetail = {
   salaryPeriod?: string
   salary_min?: number
   salary_max?: number
+  schemaBaseSalary?: JobPostingBaseSalary
   description?: string
   experienceLevel?: string | null
    seoDescription?: string | null
@@ -55,6 +57,11 @@ export const getJobDetail = cache(async (id: string): Promise<JobDetail | null> 
       seoDescription: dbJob.seoDescription || null, // ← priorité au rewrite
       salary_min: dbJob.salaryMin || undefined,
       salary_max: dbJob.salaryMax || undefined,
+      schemaBaseSalary: buildJobPostingBaseSalary({
+        source: dbJob.source, salary: dbJob.salary, salary_min: dbJob.salaryMin,
+        salary_max: dbJob.salaryMax, salaryPeriod: dbJob.salaryPeriod,
+        compensationType: dbJob.compensationType, description: dbJob.description,
+      }),
       salary: dbJob.salary || undefined,
       compensationType: dbJob.compensationType,
       commissionDetails: dbJob.commissionDetails,

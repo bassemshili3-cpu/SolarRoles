@@ -36,6 +36,8 @@ import SaveJobButton from '@/components/SaveJobButton'
 import { formatJobDescription, sanitizeStructuredHtml } from '@/lib/formatJobDescription'
 
 import { buildSchemaDescription } from '@/lib/buildSchemaDescription'
+import { buildJobPostingLocation } from '@/lib/jobPostingLocation'
+import { buildJobPostingRequirements } from '@/lib/jobPostingRequirements'
 
 import ShareBar from '@/components/ShareBar'
 
@@ -234,36 +236,13 @@ function parseLocationForSchema(location: string, _stateCode: string) {
 }
 
 
-function inferExperienceRequirements(title: string): string | undefined {
 
-  const t = title.toLowerCase()
-
-  if (/\b(senior|sr\.|lead|principal|staff)\b/.test(t)) return 'SENIOR_LEVEL'
-
-  if (/\b(junior|jr\.|entry|associate|intern)\b/.test(t)) return 'ENTRY_LEVEL'
-
-  if (/\b(mid|intermediate)\b/.test(t)) return 'MID_LEVEL'
-
-  return undefined
-
-}
 
 // Convertit le niveau interne (SENIOR_LEVEL/MID_LEVEL/ENTRY_LEVEL, tel que
 // renvoyé par inferExperienceRequirements) en texte libre valide pour
 // schema.org JobPosting. Google rejette un enum brut type "SENIOR_LEVEL"
 // dans experienceRequirements — ce champ attend du texte, pas un enum.
-function toSchemaExperienceRequirements(level: string) {
-  switch (level) {
-    case 'ENTRY_LEVEL':
-      return { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: 0 }
-    case 'MID_LEVEL':
-      return { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: 24 }
-    case 'SENIOR_LEVEL':
-      return { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: 60 }
-    default:
-      return undefined
-  }
-}
+
 
 // ─── Schema ─────────────────────────────────────────────────────────────────
 function buildJobPostingSchema(
@@ -286,28 +265,11 @@ function buildJobPostingSchema(
 
 ) {
 
-  const { city, isRemote } = parseLocationForSchema(job.location || '', job.addressRegion || '')
+  const { isRemote } = parseLocationForSchema(job.location || '', job.addressRegion || '')
+  const { city, stateCode, locationRegions, jobLocation } = buildJobPostingLocation(job)
 
   const employmentType = resolveEmploymentType(job)
 
-  const stateCode = job.addressRegion || ''
-  const locationRegions = [...new Set([stateCode, ...(job.locationRegions ?? [])].filter(Boolean))]
-  const inferredSalaryPeriod = /(?:\/|per\s+)(?:hour|hr)\b|\bhourly\b/i.test(job.salary || '') ? 'HOUR'
-    : /(?:\/|per\s+)(?:week|wk)\b|\bweekly\b/i.test(job.salary || '') ? 'WEEK'
-    : /(?:\/|per\s+)(?:month|mo)\b|\bmonthly\b/i.test(job.salary || '') ? 'MONTH'
-    : 'YEAR'
-  const salaryUnitText = ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'].includes((job.salaryPeriod || '').toUpperCase())
-    ? (job.salaryPeriod || '').toUpperCase()
-    : inferredSalaryPeriod
-  const jobLocations = locationRegions.map((region) => ({
-    '@type': 'Place',
-    address: (() => {
-      const addr: Record<string, unknown> = { '@type': 'PostalAddress', addressCountry: 'US', addressRegion: region }
-      if (region === stateCode && city) addr.addressLocality = city
-      if (region === stateCode && job.postalCode) addr.postalCode = job.postalCode
-      return addr
-    })(),
-  }))
 
 
   // ── hiringOrganization: always set logo + sameAs when we can derive a domain ──
@@ -371,7 +333,7 @@ function buildJobPostingSchema(
 
     hiringOrganization,
 
-    jobLocation: jobLocations.length === 1 ? jobLocations[0] : jobLocations,
+    jobLocation,
 
     url: getCanonicalJobUrl(job),
 
@@ -417,29 +379,7 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
   // ── baseSalary ──
 
-  if (job.compensationType !== 'COMMISSION_ONLY' && job.salary_min && job.salary_max) {
-
-    schema.baseSalary = {
-
-      '@type': 'MonetaryAmount',
-
-      currency: 'USD',
-
-      value: {
-
-        '@type': 'QuantitativeValue',
-
-        minValue: job.source === 'employer' && salaryUnitText === 'HOUR' ? job.salary_min / 2080 : job.salary_min,
-
-        maxValue: job.source === 'employer' && salaryUnitText === 'HOUR' ? job.salary_max / 2080 : job.salary_max,
-
-        unitText: salaryUnitText,
-
-      },
-
-    }
-
-  }
+  if (job.schemaBaseSalary) schema.baseSalary = job.schemaBaseSalary
 
 
   // ── remote handling ──
@@ -469,15 +409,8 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
   if (context.occupationalCategory) schema.occupationalCategory = context.occupationalCategory
 
 
-// ── experienceRequirements (inferred from title) ──
-
-  const expReq = inferExperienceRequirements(job.title)
-
-  if (expReq) {
-
-    schema.experienceRequirements = toSchemaExperienceRequirements(expReq)
-
-  }
+  // Only employer requirements corroborated by the visible description.
+  Object.assign(schema, buildJobPostingRequirements(job.description || '', job.seoDescription || job.description || ''))
 
 
   // ── skills (when you have extraction) ──
