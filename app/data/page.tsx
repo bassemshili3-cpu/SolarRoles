@@ -58,6 +58,12 @@ type SnapshotRow = {
 
 const REPORTS = [
   {
+    href: '/data/solar-operations-maintenance-workforce',
+    title: 'Who keeps solar running?',
+    description:
+      'An exploratory look at tasks and working conditions in archived solar operations and maintenance postings.',
+  },
+  {
     href: '/data/remote-solar-jobs-travel-requirements',
     title: 'Remote solar jobs can still require 90% travel',
     description:
