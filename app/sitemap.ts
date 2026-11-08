@@ -33,6 +33,7 @@ const dataPages: string[] = [
   '/data/solar-desk-job-illusion',
   '/data/remote-solar-jobs-travel-requirements',
   '/data/battery-storage-leads-segment-specific-solar-hiring',
+  '/data/solar-operations-maintenance-workforce',
 ]
 
 const dataSalaryPages: string[] = [

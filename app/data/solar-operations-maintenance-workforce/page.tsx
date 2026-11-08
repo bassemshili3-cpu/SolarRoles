@@ -1,137 +1,106 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
-import styles from './report.module.css'
+import { ArrowLeft, ArrowUpRight } from 'lucide-react'
+import styles from './report-press.module.css'
+import ChartTools from './ChartTools'
+import { conditions, periods, profiles } from './chart-data'
 
 export const metadata: Metadata = {
-  title: 'The People Who Keep Solar Running | Solar Roles Research',
+  title: 'Solar Maintenance Jobs: More Than Fixing Panels | Solar Roles Research',
   description: 'An exploratory look at the skills, tasks and working conditions described in archived U.S. solar operations and maintenance postings.',
-  alternates: { canonical: 'https://www.solarroles.com/data/solar-operations-maintenance-workforce' },
+  robots: { index: true, follow: true },
 }
 
-const domains = [
-  { name: 'Diagnosis & repair', description: 'Troubleshooting faults and corrective repairs' },
-  { name: 'Electrical work', description: 'Electrical systems, testing or knowledge' },
-  { name: 'Inverters', description: 'Inverter equipment and systems' },
-  { name: 'Inspection', description: 'Equipment or site inspections' },
-  { name: 'Safety procedures', description: 'Specific rules such as OSHA or lockout/tagout' },
-  { name: 'Preventive maintenance', description: 'Explicit preventive maintenance duties' },
-  { name: 'Documentation', description: 'Work orders, reports or maintenance software' },
-] as const
+const categories = [
+  'Diagnosis and repair', 'Electrical work or knowledge', 'Inverters', 'Inspection',
+  'Safety procedures', 'Preventive maintenance', 'Documentation',
+]
 
-const periods = [
-  { label: '2020–2022', value: '5.8%', count: '103 / 1,767', width: '36.4%' },
-  { label: '2023', value: '2.8%', count: '16 / 576', width: '17.4%' },
-  { label: '2024–2026', value: '12.1%', count: '271 / 2,234', width: '75.8%' },
-] as const
-
-const archive = {
-  palmetto: 'https://job-boards.greenhouse.io/palmettocleantech/jobs/5044833008',
-  onward: 'https://web.archive.org/web/20250731224525/https://southwestgen.hrmdirect.com/employment/view.php?req=3474307',
-  schneider: 'https://web.archive.org/web/20210227133854/https://jobs.jobvite.com/careers/schneider-electric/job/oHkBefwA',
-} as const
 
 export default function SolarOperationsMaintenanceWorkforce() {
   return (
     <main className={styles.report}>
-      <div className={styles.preview}><span className={styles.previewDot} /> SOLAR ROLES RESEARCH <span className={styles.previewRule}>/</span> U.S. solar workforce</div>
+      <div className={styles.width}>
+        <header className={styles.header}>
+          <Link href="/data" className={styles.back}><ArrowLeft size={15} /> All research</Link>
+          <span className={styles.brand}>SOLAR ROLES <span>RESEARCH</span></span>
+        </header>
 
-      <header className={styles.hero}>
-        <div className={styles.heroTop}>
-          <Link href="/data" className={styles.back}><ArrowLeft size={15} /> ALL RESEARCH</Link>
-          <span>SOLAR ROLES <span className={styles.heroSlash}>/</span> RESEARCH</span>
+        <section className={styles.hero}>
+          <h1>Solar maintenance jobs: <span>more than fixing panels</span></h1>
+          <p>We analysed 13,254 observations of archived U.S. solar job postings, grouped into 4,525 posting-text groups.</p>
+          <div className={styles.meta}>387 operations &amp; maintenance groups · Captured 2020–2026 · 80 identified employers</div>
+          <Link href="/data/solar-operations-maintenance-workforce/methodology" className={styles.methodCta}>View methodology <ArrowUpRight size={15} /></Link>
+        </section>
+
+        <div className={styles.summary}>
+          <p>Repair, electrical work and travel recur across this collection of U.S. solar O&amp;M postings. Explicit preventive maintenance is mentioned far less often than fixing faults.</p>
         </div>
-        <div className={styles.heroBody}>
-          <div className={styles.heroCopy}>
-            <div className={styles.eyebrowLight}><span className={styles.eyebrowDot} /> THE SOLAR WORKFORCE <span className={styles.eyebrowLine} /> UNITED STATES</div>
-            <h1>Who keeps solar <em>running?</em></h1>
-            <p className={styles.heroLead}>What 390 groups of archived U.S. job postings tell us about the work of keeping solar installations running.</p>
-            <div className={styles.heroMeta}><span>OPERATIONS &amp; MAINTENANCE</span><span>2020–2026</span><span>ARCHIVED POSTINGS</span></div>
-            <a href="#the-work" className={styles.heroButton}>Explore the report <ArrowDown size={16} /></a>
+        <nav className={styles.nav} aria-label="Report sections">
+          <a href="#the-archive">The archive</a><a href="#findings">Key findings</a><a href="#the-work">Tasks and conditions</a><a href="#the-skills">The seven categories</a><a href="#role-profiles">Role comparison</a>
+        </nav>
+
+        <section className={styles.section} id="the-archive">
+          <h2>O&amp;M rises from 5.8% to 12.2% of groups in the archive</h2>
+          <p className={styles.sectionIntro}>A change within our archive, not a measure of national hiring: about half of the increase reflects which employers the archive contains.</p>
+          <div className={styles.twoColumns}>
+            <figure className={styles.figure}>
+              <figcaption><h3>12.2% of groups captured in 2024–26 were classified as O&amp;M</h3><p>Share of selected solar posting-text groups, by capture period.</p></figcaption>
+              <div className={styles.chart}>{periods.map(item => <div className={`${styles.barRow} ${styles.periodRow}`} key={item.label}><span>{item.label}<small>{item.count} groups</small></span><div className={styles.track}><div className={styles.fill} style={{ width: `${item.value / 15 * 100}%` }} /></div><strong>{item.value}%</strong></div>)}</div>
+              <div className={styles.periodScale}><span>0%</span><span>5%</span><span>10%</span><span>15%</span></div>
+              <p className={styles.note}>Groups are dated by capture. 2026 is partial, through October 10. These shares describe the archive, not national hiring.</p>
+              <ChartTools id="om-share" />
+            </figure>
+            <div className={styles.prose}><p>O&amp;M rose from 102 of 1,751 groups to 269 of 2,209. About half of the 6.4-point increase reflects the net change in which employers appeared in the archive; most of the remainder comes from employers present in both periods, including unknown or intermediary employers.</p><p>The share was also higher without the three largest O&amp;M advertisers (7.4% to 11.1%) and when comparing complete years 2021–22 with 2024–25 (5.8% to 11.0%).</p></div>
           </div>
-          <div className={styles.heroArtwork} aria-hidden="true">
-            <div className={styles.artOrbit} /><div className={styles.artOrbitTwo} />
-            <div className={styles.artTop}><span>FIELD NOTES</span><span>01 — 03</span></div>
-            <div className={styles.solarMark}><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /></div>
-            <div className={styles.artBottom}><span>SOLAR ASSETS<br /><strong>IN OPERATION</strong></span><span className={styles.artCoordinate}>WORKFORCE<br />RESEARCH</span></div>
-            <div className={styles.artCaption}><span>01</span><p>A closer look at<br />the work after installation.</p></div>
+        </section>
+
+        <section className={styles.section} id="findings">
+          <h2>71.1% of O&amp;M text groups mention at least four of seven task and knowledge categories</h2>
+          <div className={styles.highlights}>
+            <div><strong>71.1%</strong><p>mention at least four of seven task and knowledge categories.</p><small>Unadjusted automatic detection</small></div>
+            <div><strong>64%</strong><p>mention travel.</p><small>Estimate · adjusted for detector precision</small></div>
+            <div><strong>About 4 in 10</strong><p>mention explicit preventive maintenance, against an estimated 90% for diagnosis or repair.</p><small>Estimate · strict blind reading of 40 sampled groups</small></div>
           </div>
-        </div>
-      </header>
+          <p className={styles.note}>Based on 387 O&amp;M posting-text groups. Estimated shares use precision checks on small samples. The 71.1% is an automatic detection result; the categories overlap and include duties, requirements and preferred qualifications. Preventive maintenance counts only explicit preventive wording: a strict blind reading of 40 sampled groups gives an estimated 44% (16 of 40 before weighting, 95% interval 26% to 55%), and our detector finds 39.5% of the 387 groups.</p>
+        </section>
 
-      <nav className={styles.chapterNav} aria-label="Report sections">
-        <div className={styles.chapterNavInner}><span>IN THIS REPORT</span><ol><li><a href="#the-work"><small>01</small> The work</a></li><li><a href="#the-skills"><small>02</small> The categories</a></li><li><a href="#role-profiles">The roles</a></li><li><a href="#the-archive"><small>03</small> The archive</a></li><li><a href="#methods"><small>04</small> Methods</a></li></ol></div>
-      </nav>
-
-      <section className={styles.scope} aria-label="Study at a glance">
-        <div className={styles.width}><div className={styles.scopeGrid}>
-          <div><strong>390</strong><span>O&amp;M text groups analysed</span></div>
-          <div><strong>80</strong><span>identified employers in those groups</span></div>
-          <div><strong>4,577</strong><span>total solar posting groups in the archive</span></div>
-          <p>Captured between 2020 and 2026. Groups of similar texts are analytical units; they are not necessarily distinct openings or people hired.</p>
-        </div></div>
-      </section>
-
-      <section className={styles.intro} id="the-work">
-        <div className={styles.width}>
-          <div className={styles.sectionLead}><div className={styles.chapterNumber}><span>CHAPTER</span><strong>01</strong></div><div><p className={styles.eyebrow}>AFTER THE PANELS ARE INSTALLED</p><h2>A service visit can start <em>with a fault on an inverter.</em></h2></div></div>
-          <div className={styles.introGrid}>
-            <div className={styles.introCopy}><p className={styles.largeCopy}>A fault on an inverter. A damaged wire. A system that isn’t producing as expected.</p><p>Solar installations need inspections, repairs and maintenance throughout their working lives. Some people work across large project sites; others return to systems on homes and businesses.</p><p>We examined archived U.S. job postings to see how employers describe the work. A posting captures what was written for a role, not everything a technician does.</p></div>
-            <aside className={styles.contextCard}><span className={styles.cardKicker}>THE SOLAR O&amp;M WORKFORCE</span><div className={`${styles.contextStat} ${styles.workforceStat}`}>21,833</div><p>Solar operations and maintenance jobs counted in 2024. The figure covers the O&amp;M sector, including roles beyond technicians.</p><div className={styles.contextFoot}><span>IREC · 2024</span><a href="https://irecusa.org/census-solar-job-trends/" target="_blank" rel="noreferrer">Source <ArrowUpRight size={14} /></a></div></aside>
+        <section className={styles.section} id="the-work">
+          <h2>An estimated 64% of O&amp;M text groups mention travel</h2>
+          <div className={styles.twoColumns}>
+            <figure className={styles.figure}>
+              <figcaption><h3>Fixing faults is near-universal; physical demands are common</h3><p>Estimated shares across 387 groups, adjusted for detector precision.</p></figcaption>
+              <div className={styles.chart}>{conditions.map(item => <div className={styles.barRow} key={item.label}><span>{item.label}</span><div className={styles.track}><div className={styles.fill} style={{ width: `${item.value}%` }} /></div><strong>{item.value}%</strong></div>)}</div>
+              <div className={styles.scale}><span>0%</span><span>50%</span><span>100%</span></div>
+              <p className={styles.note}>A mention may be required, preferred or state-dependent. These estimates are based on small precision-check samples.</p>
+              <ChartTools id="conditions" />
+            </figure>
+            <figure className={styles.figure} id="role-profiles">
+              <figcaption><h3>75% of service groups mention lifting or work at height</h3><p>Unadjusted automatic detections, including preferred qualifications.</p></figcaption>
+              <div className={styles.legend}><span><i className={styles.maintenanceSwatch} /> Maintenance · 167 groups</span><span><i className={styles.serviceSwatch} /> Service · 179 groups</span></div>
+              {profiles.map(item => <div className={styles.pair} key={item.label}><div className={styles.pairLabel}>{item.label}</div><div className={styles.pairLine}><div className={styles.track}><div className={styles.fill} style={{ width: `${item.maintenance}%` }} /></div><strong>{item.maintenance}%</strong></div><div className={styles.pairLine}><div className={styles.track}><div className={styles.serviceFill} style={{ width: `${item.service}%` }} /></div><strong>{item.service}%</strong></div></div>)}
+              <p className={styles.note}>Many maintenance postings concern large sites; service includes work on customer systems and equipment-maker support. Another 41 groups cover operations and monitoring.</p>
+              <ChartTools id="role-profiles" />
+            </figure>
           </div>
-          <div className={styles.readingLine}><span>01 / A POSTING FROM THE ARCHIVE</span><p>Palmetto · Solar Field Service Technician · captured January 2026</p></div>
-          <figure className={styles.postingQuote}>
-            <div className={styles.quoteMark}>“</div><blockquote>Provide onsite troubleshooting and repair of solar systems.</blockquote>
-            <figcaption><span>A responsibility listed in the saved description</span><a href={archive.palmetto} target="_blank" rel="noreferrer">Original posting (may be unavailable) <ArrowUpRight size={14} /></a></figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section className={styles.skills} id="the-skills">
-        <div className={styles.width}>
-          <div className={styles.sectionLead}><div className={styles.chapterNumber}><span>CHAPTER</span><strong>02</strong></div><div><p className={styles.eyebrow}>A CLOSER LOOK AT THE WORK</p><h2>Seven categories. <em>Often together.</em></h2><p className={styles.sectionDescription}>Diagnosis, electrical work, safety and documentation can appear in the same description. We looked for seven overlapping categories of tasks and knowledge.</p></div></div>
-          <div className={styles.skillLayout}>
-            <div className={styles.skillHeadline}><span className={styles.labelLight}>AUTOMATIC DETECTION · 390 GROUPS</span><div className={styles.bigPercent}>70.5<span>%</span></div><p>mention four or more of the seven categories we studied.</p><div className={styles.headlineDivider} /><span className={styles.headlineSmall}>62.2% WHEN COUNTING ONE POSTING<br />PER EMPLOYER AND NORMALIZED TITLE</span></div>
-            <div className={styles.domainChart}><div className={styles.categoryHeading}><span className={styles.chartKicker}>THE SEVEN CATEGORIES</span><h3>What we looked for</h3><p>Each category can appear as a duty, requirement or preferred qualification.</p></div>
-              <ol className={styles.categoryList}>{domains.map((item, index) => <li key={item.name}><span className={styles.categoryNumber}>{String(index + 1).padStart(2, '0')}</span><div><strong>{item.name}</strong><small>{item.description}</small></div></li>)}</ol>
-              <p className={styles.chartNote}>Categories overlap: a sentence about troubleshooting an inverter can count in both categories. A missing mention does not mean the work is absent.</p>
-            </div>
+          <p className={styles.note}>Across all 387 groups, an estimated 46% mention inverters and 43% mention a driver’s licence. A licence can be required, preferred or depend on the state.</p>
+          <div className={styles.evidence}>
+            <blockquote>“Provide onsite troubleshooting and repair of solar systems.”</blockquote>
+            <p>Palmetto · Solar Field Service Technician · captured January 2026 · <a href="https://job-boards.greenhouse.io/palmettocleantech/jobs/5044833008" target="_blank" rel="noreferrer">Original posting <ArrowUpRight size={13} /></a></p>
+            <p>More examples: <a href="https://web.archive.org/web/20250731224525/https://southwestgen.hrmdirect.com/employment/view.php?req=3474307" target="_blank" rel="noreferrer">Onward Energy, captured 2025</a> · <a href="https://web.archive.org/web/20210227133854/https://jobs.jobvite.com/careers/schneider-electric/job/oHkBefwA" target="_blank" rel="noreferrer">Schneider Electric, captured 2021</a>.</p>
           </div>
-          <div className={styles.verification}><span>HOW TO READ THIS FIGURE</span><p>The 70.5% is an automated detection result, not a count of workers or a guaranteed minimum. Grouping by employer and normalized title gives 62.2%; those groups are not necessarily identical job ads.</p><p>In two targeted reading rounds, all 20 groups detected at four or more categories were confirmed, including 10 at exactly four. The final round showed the detected passages to the reader. These checks support the result but do not measure its accuracy across the full collection.</p></div>
-        </div>
-      </section>
+        </section>
 
-      <section className={styles.profiles} id="role-profiles"><div className={styles.width}>
-        <div className={styles.profileIntro}><p className={styles.eyebrow}>TWO PROFILES IN THE ARCHIVE</p><h2>What maintenance and service postings <em>mention.</em></h2><p>Our classification separates 167 maintenance groups and 181 service groups. Many maintenance postings concern large sites; service includes work on customer systems and equipment-maker support. Another 42 groups cover operations and monitoring.</p></div>
-        <div className={styles.profileGrid}>
-          <article><span>MAINTENANCE · 167 GROUPS</span><h3>At the site</h3><p>Automatic detection found mentions of electrical work or knowledge in <strong>95%</strong>, travel in <strong>73%</strong>, and lifting or work at height in <strong>43%</strong>.</p><div className={styles.fieldEvidence}><span>ONWARD ENERGY · CAPTURED 2025</span><blockquote>“Must be available for night, overtime, weekend, and holiday work as required.”</blockquote></div><a className={styles.profileLink} href={archive.onward} target="_blank" rel="noreferrer">View archived posting <ArrowUpRight size={15} /></a></article>
-          <article><span>SERVICE · 181 GROUPS</span><h3>In the field</h3><p>Automatic detection found mentions of electrical work or knowledge in <strong>81%</strong>, travel in <strong>61%</strong>, and lifting or work at height in <strong>74%</strong>.</p><div className={styles.fieldEvidence}><span>SCHNEIDER ELECTRIC · CAPTURED 2021</span><blockquote>“Commission, troubleshoot, repair and analyze solar (PV) inverters.”</blockquote></div><a className={styles.profileLink} href={archive.schneider} target="_blank" rel="noreferrer">View archived posting <ArrowUpRight size={15} /></a></article>
-        </div><p className={styles.profileNote}>Unadjusted automated detections of mentions, including preferred qualifications. Lifting and height are combined in the figures above; a mention does not establish a worker’s exposure or what every technician does. Individual examples do not represent every role.</p>
-        <div className={styles.conditions}><span>ACROSS ALL 390 GROUPS</span><p>Estimated shares after adjustment for detector precision: <strong>89%</strong> mention diagnosis or repair and <strong>46%</strong> inverters. <strong>64%</strong> mention travel, <strong>47%</strong> lifting, <strong>39%</strong> work at height and <strong>43%</strong> a driver’s licence. An electrician’s licence appears in an estimated <strong>29%</strong>; it can be required, preferred or depend on the state. These are estimates of mentions in this archive.</p></div>
-      </div></section>
+        <section className={styles.section} id="the-skills">
+          <h2>Seven overlapping categories of tasks and knowledge</h2>
+          <p className={styles.sectionIntro}>Automatic detection across 387 groups. Each category can appear as a duty, requirement or preferred qualification.</p>
+          <ol className={styles.categories}>{categories.map(item => <li key={item}>{item}</li>)}</ol>
+          <p className={styles.note}>Categories overlap: troubleshooting an inverter can count in both. Counting one posting per employer and normalized title gives 62.8%.</p>
+        </section>
 
-      <section className={styles.archiveSection} id="the-archive">
-        <div className={styles.width}>
-          <div className={`${styles.sectionLead} ${styles.sectionLeadDark}`}><div className={styles.chapterNumber}><span>CHAPTER</span><strong>03</strong></div><div><p className={styles.eyebrowLight}>WHAT CHANGED IN OUR COLLECTION</p><h2>Maintenance takes a larger share <em>of the archive.</em></h2><p className={styles.sectionDescription}>The share of selected posting groups classified as operations and maintenance was higher in 2024–2026 than in 2020–2022.</p></div></div>
-          <div className={styles.archiveGrid}>
-            <figure className={styles.trendCard}><figcaption><span>O&amp;M SHARE · SELECTED POSTING GROUPS</span><h3>Two periods, one archive</h3><p>Percentage of grouped posting texts classified as O&amp;M</p></figcaption><div className={styles.trendRows}>{periods.map(item => <div className={styles.trendRow} key={item.label}><div className={styles.trendText}><strong>{item.label}</strong><span>{item.count} groups</span></div><div className={styles.trendTrack}><span style={{ width: item.width }} /></div><b>{item.value}</b></div>)}</div><p className={styles.trendNote}>The 2023 dip is not yet explained; coverage and classification require further investigation. 2026 is partial, through October 10. Groups are counted by capture year, not necessarily the posting date.</p></figure>
-            <div className={styles.archiveCopy}><span className={styles.archiveIndex}>THE READING</span><h3>5.8% <span>to</span> 12.1%</h3><p>O&amp;M rose from 103 of 1,767 groups to 271 of 2,234. About half of the 6.3-point increase reflects the net change in which employers appeared in the archive; most of the remainder comes from employers present in both periods, including unknown or intermediary employers.</p><p>The share was also higher without the three largest O&amp;M advertisers (7.4% to 11.1%) and when comparing complete years 2021–22 with 2024–25 (5.8% to 11.0%). These are changes in the collection, not estimates of national hiring.</p><div className={styles.archiveAside}><span>WHAT THE FIGURES MEASURE</span><p>Archived posting text, grouped by similarity and year of capture. The remaining roughly 2.9 points reflect changes among employers present in both periods and the pooled group of unidentified employers.</p></div></div>
-          </div>
-        </div>
-      </section>
 
-      <section className={styles.queueSection}>
-        <div className={styles.width}><div className={styles.queueGrid}><div><p className={styles.eyebrow}>THE BIGGER PICTURE</p><h2>773 GW of proposed solar capacity <em>are waiting for a grid connection.</em></h2></div><div className={styles.queueCopy}><p>At the end of 2025, proposed solar projects represented 773 GW in U.S. transmission interconnection queues, according to Berkeley Lab. These are projects seeking a connection, not operating installations.</p><p>Historically, many queued projects have not reached operation. The postings in this report describe work on systems already in service.</p><a href="https://eta.lbl.gov/publications/queued-2026-edition-characteristics" target="_blank" rel="noreferrer">Explore Berkeley Lab’s queue data <ArrowUpRight size={15} /></a></div></div></div>
-      </section>
-
-      <section className={styles.methodSection} id="methods">
-        <div className={styles.width}><div className={styles.methodHeader}><div className={styles.chapterNumber}><span>ABOUT THE STUDY</span><strong>04</strong></div><div><p className={styles.eyebrow}>DATA &amp; METHODS</p><h2>How we read <em>the postings.</em></h2></div></div>
-          <div className={styles.methodGrid}><div><span>01 / THE COLLECTION</span><p>We analysed 13,335 observations grouped into 4,577 solar posting text groups, including pages preserved by the Internet Archive. Dates refer to capture, not necessarily the date the job was posted.</p></div><div><span>02 / THE UNIT</span><p>Repeated and similar texts were grouped within an employer and year. The 390 O&amp;M groups correspond to about 225 employer–title combinations. Neither measure counts distinct openings reliably.</p></div><div><span>03 / THE CHECKS</span><p>Python scripts applied classification and detection rules. Targeted checks included three rounds of human reading across 47 distinct groups. The review did not cover every posting or estimate; the final threshold reading showed the detected passages.</p></div><div><span>04 / THE LIMITS</span><p>The employers, pages and sources available to us vary over time. Classification misses some O&amp;M postings, but their share could not be estimated reliably. The collection is not representative of the U.S. labor market, and postings do not measure people hired.</p></div></div>
-          <div className={styles.sourceRow}><span>SOURCES &amp; METHODS</span><div><a href="/reports/solar-om-method.md">Full method note <ArrowUpRight size={14} /></a><a href="https://irecusa.org/census-solar-job-trends/" target="_blank" rel="noreferrer">IREC · National Solar Jobs Census <ArrowUpRight size={14} /></a><a href="https://eta.lbl.gov/publications/queued-2026-edition-characteristics" target="_blank" rel="noreferrer">Berkeley Lab · Interconnection queues <ArrowUpRight size={14} /></a></div></div>
-        </div>
-      </section>
-
-      <footer className={styles.closing}><div className={styles.width}><p>SOLAR ROLES RESEARCH <span> / </span> WORKFORCE</p><h2>Explore more <em>solar research.</em></h2><p>Read the rest of our work on solar jobs.</p><Link href="/data">Explore all research <ArrowRight size={16} /></Link></div></footer>
+        <footer className={styles.footer} id="methods"><Link href="/data/solar-operations-maintenance-workforce/methodology">Methodology and sources <ArrowUpRight size={14} /></Link><Link href="/data">Explore more solar research <ArrowUpRight size={14} /></Link></footer>
+      </div>
     </main>
   )
 }
