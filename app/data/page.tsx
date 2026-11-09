@@ -59,9 +59,9 @@ type SnapshotRow = {
 const REPORTS = [
   {
     href: '/data/solar-operations-maintenance-workforce',
-    title: 'Who keeps solar running?',
+    title: 'What solar maintenance jobs ask for',
     description:
-      'An exploratory look at tasks and working conditions in archived solar operations and maintenance postings.',
+      'Skills, the electrician licence and working conditions in 387 archived U.S. solar operations and maintenance postings: electrical skills in 84%, a required licence in 9%.',
   },
   {
     href: '/data/remote-solar-jobs-travel-requirements',

@@ -1,90 +1,86 @@
 # Method note
 
-*Accompanies [Who keeps solar running?](/data/solar-operations-maintenance-workforce)*
+*Accompanies [What solar maintenance jobs ask for](/data/solar-operations-maintenance-workforce)*
+
+## What we built and checked
+
+We built an archive of U.S. solar job postings captured between 2020 and 2026 and kept 4,525 distinct posting texts. From them, our classification rules identified 387 operations and maintenance postings. In each one, we measured seven skill areas, travel and physical demands, and the status of the electrician licence.
+
+Every licence sentence in those postings was extracted and classified, text by text, in two independent automated coding passes. The skill-area detectors were checked in two rounds of independent automated coding, and the author reviewed selected cases in four rounds. These checks improved the results along the way: 19 misclassified postings were removed, company presentations and keyword lists are now set aside more reliably, and the licence classification corrected a first rule-based count of required licences from 44 groups to 36.
 
 ## Data
 
-- **Source.** Solar job postings preserved in public web archives and in our own collection, dated by the date they were captured, not by the date an employer or data provider reports.
-- **Grouping.** Postings are grouped by near-identical text. The unit of analysis is a group of near-identical posting texts: it is not a hire, a filled position or a count of jobs on the market. The same text posted for several locations is not always merged: the 387 O&M groups correspond to about 223 employer and job-title combinations.
-- **Coverage.** The archive does not cover all postings. Its composition changes over time as employers enter or leave it.
+- **Source.** Solar job postings preserved in public web archives and in our own collection, dated by the date they were captured, which can differ from the date an employer or data provider reports. 2026 is partial, through October 10.
+- **Grouping.** Postings are grouped by near-identical text. The unit of analysis is a group of near-identical posting texts, an approximation of openings; hires and filled positions are outside its scope. The same text posted for several locations is sometimes kept as separate groups: the 387 O&M groups correspond to about 223 employer and job-title combinations.
+- **Coverage.** The archive holds part of the postings published, and its composition changes over time as employers enter or leave it.
+- **Tools.** Postings and their texts are kept in a SQLite catalogue and read with SQL queries. All classification, detection and counting is done by Python scripts applying explicit, documented rules; the scripts and their intermediate files are kept.
 
 ## Processing
 
-- **Classification and detection.** Python scripts classify postings as operations and maintenance (O&M) with explicit rules, then detect mentions of tasks, knowledge and working conditions in the job description. Company presentations, benefits, legal text and recruiters' keyword lists are excluded.
-- **The 7 categories.** Diagnosis and repair; electrical work or knowledge (including an electrician licence); inverters; inspection; specific safety rules; preventive maintenance; documentation such as work orders or maintenance software.
-- **Monitoring software.** It is not counted, because its detection was not reliable enough.
-- **Estimated shares.** For conditions and qualifications (travel, lifting, heights, driver's licence, electrician licence), for inverters, and for repair, the share is an estimate: detected mentions corrected for the precision of the detection, measured on verified samples. These corrections rest on small samples. Other shares are direct detection results. Every share is labelled as such in the draft.
+- **Text cleaning.** Before detection, company presentations, benefits, legal text and recruiters' keyword lists are set aside, so that mentions come from the part of the description that concerns the job.
+- **O&M classification.** Rules on the job title and duties classify a posting as maintenance, service, operations or monitoring (167, 179, 22 and 19 groups). Installers, factory jobs and commissioning crews are excluded.
+- **The seven skill areas.** Electrical work or knowledge (wiring, electrical testing, schematics, the National Electrical Code, an electrician licence or a PV certification); safety procedures (OSHA training, NFPA 70E, arc flash, lockout/tagout, protective equipment, written safety rules); digital tools and software (computers, office software, tablets and field apps, maintenance or customer software, monitoring systems and SCADA); inverters; mechanical systems (trackers, racking, motors, gearboxes, hydraulics, torque, mechanical repair); batteries and storage; high and medium voltage (switchgear, transformers, substations). A mention can be a duty, a requirement or a preferred qualification. The areas overlap. Their shares are direct detection results.
+- **Electrician licence.** Every sentence mentioning a licence was extracted from the 387 groups, with a broader search than the detection rules so as to catch missed mentions, and each distinct text was classified as required, a plus, depending on the state, an equivalent accepted, unstated, or not an electrician licence. "Required" means the posting makes the licence a condition of the job, including a licence of the state or city where the job is. The wider search brought in 15 groups the rules had missed, and this text-by-text classification replaced a first rule-based one that counted 44 groups as requiring a licence (36 after classification).
+- **Travel and physical demands.** Travel, lifting, work at height and driver's licence are estimates: detected mentions corrected for the precision of the detection, measured on verified samples. These corrections rest on small samples.
 
 ## Checks
 
-- **Automated checks.** Samples of postings were independently re-coded, blind, by automated coding procedures. This was used to measure the precision of the classification and of the detection, and to look for O&M postings the classifier missed (their share could not be estimated reliably; see Limits). Disagreements between automated codings were resolved through an additional automated review of the posting.
-- **Targeted human reading by the author.** Three rounds, 47 distinct postings in all (one posting read in two rounds), chosen among difficult or influential cases, postings at the threshold of the 7-category figure, and a few controls. The reader did not see the codes assigned by the automated checks. In the first round, the sentences found by the detection were highlighted; in the second, nothing was highlighted; in the third, the sentences found for each detected category were shown, and the reader judged whether each category really concerned the person hired.
-  - **What it led to.** Two detection rules were corrected: company text without a heading, and recruiters' keyword lists. Estimates built on the automated re-coding of the 7 categories, which over-counted some categories, were not used.
-  - **The figure kept.** The 7-category figure is the automated detection result, presented as such. The third round checked 15 postings around the threshold (10 detected at exactly four categories, 5 above, 15 employers), with a decision rule fixed before reading: all 15 were confirmed. Over the second and third rounds, all 20 postings read that were detected at four or more were confirmed, and 4 of the 9 read that were detected below four in fact had four or more. In the third round the reader saw the detected sentences, which may favour confirmation. This supports the figure but does not measure it.
-  - **Its limits.** This reading covers a targeted selection, not all postings. It does not validate every estimate.
-- **Reproducibility.** Internal figures are calculated by script. A registry links them to their populations and records external sources; checks compare the source draft with that registry.
+- **Automated checks.** Samples were re-coded by independent automated coding passes, blind to the detection results; disagreements between passes were settled by reading the posting.
+  - O&M classification: precision 87% on an independent sample, weighted for how it was drawn (38 of 47 sampled O&M postings correct unweighted, 81%, 95% interval 68% to 90%), before 19 misclassified postings were removed (12 factory jobs, 6 installation foremen, 1 IT role). Precision after that correction has not been measured independently.
+  - Seven skill areas: 48 sampled postings read in full (one per employer and title, at most two per employer), then 140 further detections (20 per area) checked for false positives. Precision 0.94 to 1.00 across the seven areas, recall 0.79 to 1.00. Mechanical systems has the lowest recall (0.79).
+  - Electrician licence: the two passes agreed on 72 of 75 distinct licence texts; the three disagreements were settled by reading.
+- **Targeted human reading by the author.** Four rounds of selected cases: difficult or influential cases, threshold cases and controls.
+  - Rounds 1 to 3 (47 distinct postings) checked an earlier set of task categories, since replaced. They led to two corrections of the text cleaning that still apply: company text without a heading, and recruiters' keyword lists.
+  - Round 4, with decision rules fixed before reading: 12 licence texts read without seeing the automated classification, 10 matched; the two others ("Must have a Chicago or Chicago suburb Journeyman's License", "Valid Electrical license in the state of MA") were read as depending on the place, whereas the classification counts a licence required in the state or city of the job as required. As the rule required, the whole "required" class was re-read: 12 of its 36 groups name the state or city of the job. The required share is reported with this definition (9.3%), and without these 12 groups (6.2%).
+  - Round 4 also covered 10 postings detected at exactly four skill areas, with the triggering sentence of each area shown to the reader: 36 of 40 areas confirmed, 1 unsure. Two postings had an area the shown sentence did not support; on the full text, one of them still falls below four (its storage sentences describe the company). Because this reading focused on possible false detections at the threshold, it is reported as an observation; under the rule fixed beforehand, the 61.5% is kept as the automatic result.
+- **What the checks changed.** The classification check led to the removal of 19 misclassified postings. The human readings led to better handling of company presentations without a heading and of recruiters' keyword lists, which had inflated some counts. The licence classification corrected the first rule-based count, from 44 required groups to 36, and the wider search added 15 groups the rules had missed.
+- **Reproducibility.** Every figure is calculated by script from the archived postings, and each can be traced to its population and intermediate files.
 
 ## Limits
 
-- **Postings are not jobs.** A mention is not proof that a task is or is not done.
-- **The trend describes our archive.** The rise of the O&M share is an evolution within our archive. About half of it (net 3.4 of 6.4 points) reflects which employers the archive contains in each period: employers absent in 2020-22 (not necessarily new after 2023) add 6.0 points, employers absent in 2024-26 remove 2.6. It is not evidence of a national rise in hiring or of a shortage.
+- **Postings describe what employers ask for.** The work actually done can differ from what a posting mentions.
+- **The trend describes our archive.** The rise of the O&M share is an evolution within our archive. About half of it (net 3.4 of 6.4 points) reflects which employers the archive contains in each period: employers absent in 2020-22 (some of them already active earlier) add 6.0 points, employers absent in 2024-26 remove 2.6. The other 2.9 points come from employers present in both periods, including postings whose employer could not be identified, pooled as one. Reading it as a national rise in hiring or as a shortage would go beyond what the archive shows.
 - **Classifier recall.** The classifier misses some O&M postings. Their number could not be estimated reliably enough to correct the shares, so the shares describe the postings identified.
-- **Repeated postings and sources.** Some large employers post near-identical templates in many locations. Counting the first posting per employer and normalized job title (a sensitivity test: postings sharing an employer and a title are not necessarily the same template), 63% of O&M postings mention at least four of the seven categories (71.1% on all postings); without the largest such employer, 69%; on the main archive series alone, 72%. Travel is mentioned in 61-66% of postings under these readings, troubleshooting or repair in 90-93% (detection before precision correction). The gap between SERVICE and MAINTENANCE postings in mentions of lifting or heights holds in each reading (71-75% against 37-51%); it describes postings in our archive, as classified automatically.
-- **Electrician licence.** It can be required, a plus, or state-dependent within the same set of postings. The draft therefore describes it qualitatively, beyond the estimated share that mentions it.
+- **Repeated postings.** Some large employers post near-identical templates in many locations. Counting the first posting per employer and normalized job title (a sensitivity test: postings sharing an employer and a title can still differ), 52.5% of O&M postings mention at least four of the seven skill areas (61.5% on all groups), and 9.4% require an electrician licence (9.3%).
+- **Licence definition.** A licence can be required, a plus, or state-dependent within the same set of postings. 12 of the 36 "required" groups name the state or city of the job.
 
-## Figures used in the draft
+## Figures used in the report
 
 | Figure | What it measures | Population |
 |---|---|---|
 | 13,254 | Archived posting observations in the solar series | all observations |
 | 4,525 | Distinct posting texts after grouping near-duplicates | all solar postings |
 | 387 | Postings classified as operations and maintenance (O&M) | posting-text groups |
-| 87% | Precision of the O&M classification, estimated on an independent sample, before 19 corrections | sample of 83 postings, weighted |
-| 64% mention travel | Postings mentioning travel: estimate from automated detection corrected for its measured precision | O&M postings (387 posting-text groups) |
-| 48% mention lifting | Postings mentioning lifting: estimate as above | O&M postings (387 posting-text groups) |
-| 40% mention work at heights | Postings mentioning work at heights: estimate as above | O&M postings (387 posting-text groups) |
-| 43% require or mention a driver's licence | Postings requiring or mentioning a driver's licence: estimate as above | O&M postings (387 posting-text groups) |
-| by our estimate, it appears in 30% of the postings | Postings mentioning an electrician's licence: estimate as above | O&M postings (387 posting-text groups) |
-| About 90% of the O&M postings | Postings mentioning troubleshooting, diagnosis or corrective repair: estimate as above | O&M postings (387 posting-text groups) |
-| 46% mention inverters | Postings mentioning inverters: estimate as above | O&M postings (387 posting-text groups) |
-| 73% of MAINTENANCE postings mention travel | MAINTENANCE postings mentioning travel (automated detection) | MAINTENANCE postings (167) |
-| Travel appears in 62% | SERVICE postings mentioning travel (automated detection) | SERVICE postings (179) |
-| 75% of SERVICE postings mention lifting or heights | SERVICE postings mentioning lifting or heights (automated detection) | SERVICE postings (179) |
-| against 43% of MAINTENANCE postings | MAINTENANCE postings mentioning lifting or heights (automated detection) | MAINTENANCE postings (167) |
-| 167 MAINTENANCE and 179 SERVICE | Postings in the MAINTENANCE and SERVICE classes | O&M postings (387 posting-text groups) |
-| 80 | Identified employers posting O&M roles | O&M postings (387 posting-text groups), identified employers |
-| about 20% of the identified postings | Share of identified O&M postings from the three largest employers | O&M postings with an identified employer |
-| 5.8% | O&M share of solar posting texts, 2020-22 | solar posting texts, 2020-22, dated by archive capture |
-| 12.2% | O&M share of solar posting texts, 2024-26 | solar posting texts, 2024-26, dated by archive capture |
-| add 6.0 points | Contribution of employers absent from the archive in 2020-22 (gross entry term of a shift-share decomposition) | solar posting texts, 2020-22 vs 2024-26 |
-| remove 2.6 | Contribution of employers absent from the archive in 2024-26 (gross exit term) | same |
-| a net of about 3.4 points | Net contribution of employer turnover in the archive (entries + exits) | same |
-| The other 2.9 points come from employers present in both periods | Contribution of employers present in both periods (change within them + shifts in their weight; postings with an unidentified employer pooled as one) | same |
-| of the 6.4-point change | Change in the O&M share between the two periods, in percentage points | same |
-| 3.3% to 9.4% | O&M share among the 17 employers with at least 3 postings in both periods | their posting-text groups |
-| 2.8% to 3.6% | Same, without Enphase, Recurrent Energy and PosiGen | the 14 other employers |
-| Among the 17 employers with at least three postings in both periods | Identified employers with at least 3 postings in both 2020-22 and 2024-26 | identified employers |
-| about seven in ten postings (71.1%) | Postings mentioning at least 4 of the 7 categories of tasks and knowledge: automated detection, 275 of 387. The 66–75% Wilson interval assumes independent observations; it does not measure classification, coverage or detection errors | O&M postings (387 posting-text groups) |
-| 95% mention electrical work or knowledge | MAINTENANCE postings mentioning electrical work or knowledge (automated detection) | MAINTENANCE postings (167) |
-| electrical skills in 82% | SERVICE postings mentioning electrical work or knowledge (automated detection) | SERVICE postings (179) |
-| 19 postings | Postings removed from the O&M group after review (12 factory jobs, 6 installation foremen, 1 IT role) | initial O&M group |
-| about 223 employer and normalized job-title groups | Groups formed from employer and normalized title; the first posting in each group is retained, even where texts within a group differ | O&M posting groups, including intermediaries and records with unknown employers |
-| about six in ten when counting one posting per employer and normalized job title (62.8%) | Same 7-category measure, counting one posting per employer and normalized job title (the first listed). A sensitivity test: postings sharing an employer and a title are not necessarily the same template | about 223 employer and normalized job-title combinations |
-| the share went from 4.3% to 12.7% | O&M share among the same 17 employers, each employer given the same weight (9 up, 1 down, 7 stable) | the 17 employers |
-| fell to 2.8% in 2023 | O&M share of solar posting texts in 2023, the year left out of the comparison (16 of 565) | solar posting texts, 2023, dated by archive capture |
-| 81% unweighted, 95% interval 68% to 90% | Precision of the O&M classification on the same sample without weighting (38 of 47 correct), with its 95% interval | sample of 47 postings classified O&M |
-| 1,312 GW of generation and about 749 GW of storage | external source | Berkeley Lab, Queued Up: 2026 Edition (transmission interconnection queues, end of 2025) |
-| some 2,061 GW in all | external source | sum of the two components published by Berkeley Lab (not stated as such on the page) |
-| 773 GW | external source | Berkeley Lab, Queued Up: 2026 Edition (end of 2025) |
-| 8,200 projects | external source | Berkeley Lab, Queued Up: 2026 Edition (end of 2025) |
-| down 19% | external source | Berkeley Lab, Queued Up: 2026 Edition (end of 2025) |
-| 13% | external source | Berkeley Lab, Queued Up: 2026 Edition (end of 2025) |
-| over five years | external source | Berkeley Lab, Queued Up: 2026 Edition (end of 2025) |
-| 21,833 | external source | IREC, National Solar Jobs Census (2024 data), irecusa.org |
+| 167 maintenance, 179 service, 22 operations, 19 monitoring | O&M classes | O&M groups |
+| 80 | Identified employers posting O&M roles | O&M groups with an identified employer |
+| about 223 | Employer and normalized job-title combinations | O&M groups |
+| 87% | Precision of the O&M classification, weighted, before 19 corrections | independent sample |
+| 81%, 95% interval 68% to 90% | Same, unweighted (38 of 47) | sampled postings classified O&M |
+| 5.8% (102 of 1,751) | O&M share of solar posting texts, 2020-22 | solar posting texts, dated by capture |
+| 2.8% (16 of 565) | O&M share in 2023, the year left out of the comparison | same |
+| 12.2% (269 of 2,209) | O&M share of solar posting texts, 2024-26 | same |
+| 6.4 points; entry +6.0, exit -2.6, net 3.4, common employers 2.9 | Shift-share decomposition of the change between 2020-22 and 2024-26 | same |
+| 7.4% to 11.1% | O&M share without the three largest O&M advertisers | same |
+| 5.8% to 11.0% | O&M share, complete years 2021-22 vs 2024-25 | same |
+| 84% (326) | Electrical work or knowledge, automatic detection | 387 O&M groups |
+| 68% (264) | Safety procedures, automatic detection | same |
+| 63% (245) | Digital tools and software, automatic detection | same |
+| 56% (216) | Inverters, automatic detection | same |
+| 44% (169) | Mechanical systems, automatic detection | same |
+| 43% (166) | Batteries and storage, automatic detection | same |
+| 26% (99) | High and medium voltage, automatic detection | same |
+| 61.5% (238 of 387) | At least four of the seven skill areas detected | same |
+| 52.5% | Same, one posting per employer and normalized title | about 223 combinations |
+| three in four (75.7%, 293) | At least three of the seven skill areas | 387 O&M groups |
+| 70% vs 22%; 41% vs 11% | Mechanical systems; high or medium voltage: maintenance vs service | 167 maintenance, 179 service groups |
+| 69% vs 53%; 55% vs 30% | Digital tools; batteries: service vs maintenance | same |
+| 38% (148) | Groups asking for an electrician licence in any form | 387 O&M groups |
+| 9.3% (36), 95% interval 6.8% to 12.6% | Licence a condition of the job, including 12 groups naming the job's state or city | same |
+| 6.2% (24) | Same, without the 12 groups naming the job's state or city | same |
+| 72; 36; 4 | Licence a plus; depending on the state; equivalent accepted or unstated | same |
+| 9.4%; 10.2%; 10.6% | Required share: one posting per employer and title; maintenance; service | as stated |
+| 64%, 48%, 43%, 40% | Travel, lifting, driver's licence, work at height: estimates corrected for detection precision | 387 O&M groups |
 
-External sources were checked against the pages linked below. Secondary capacity figures (installations, capacity additions) and historical job comparisons were left out of the draft because published versions differ.
+## External source
 
-## External sources
-
-- [Lawrence Berkeley National Laboratory, Queued Up: 2026 Edition](https://eta.lbl.gov/publications/queued-2026-edition-characteristics).
-- [Interstate Renewable Energy Council, National Solar Jobs Census: Solar Job Trends](https://irecusa.org/census-solar-job-trends/).
+- Interstate Renewable Energy Council (IREC), National Solar Jobs Census (2024 data), [irecusa.org/census-workforce-development](https://irecusa.org/census-workforce-development/): operations and maintenance was the only solar sector where hiring difficulty increased in 2024, with 23% of O&M employers finding it very difficult to find qualified workers; across all sectors, the reason employers cite most often is a lack of experience, training or technical skills. Accessed November 2026. This context comes from IREC’s survey of employers.
