@@ -59,7 +59,7 @@ export default function SolarOperationsMaintenanceWorkforce() {
             <OmChart chart={CHARTS.licence}><ChartTools id="licence" /></OmChart>
             <div className={styles.prose}>
               <p>An electrician licence appears in <strong>{LICENCE_COUNTS.mentioned}</strong> of 387 groups. In most of them it is a plus ({LICENCE_COUNTS.preferred} groups) or depends on the state where the work is done ({LICENCE_COUNTS.stateDependent}). Only {LICENCE_COUNTS.required} make it a condition of the job, {LICENCE_COUNTS.requiredNamedPlace} of them naming the job’s state or city; {LICENCE_COUNTS.other} accept an equivalent or do not say. The share changes little when keeping one posting per employer and job title (9.4%), and it is similar in maintenance and service postings (10% and 11%).</p>
-              <p>The work is also mobile and physical. By our estimates, 64% of groups mention travel, 48% lifting, 43% a driver’s licence and 40% work at height.</p>
+              <p>The work is also mobile and physical. By our estimates, 64% of groups mention travel, 48% lifting, 69% a driver’s licence and 40% work at height.</p>
             </div>
           </div>
           <div className={styles.evidence}>

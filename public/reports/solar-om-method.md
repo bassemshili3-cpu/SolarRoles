@@ -79,8 +79,12 @@ Every licence sentence in those postings was extracted and classified, text by t
 | 6.2% (24) | Same, without the 12 groups naming the job's state or city | same |
 | 72; 36; 4 | Licence a plus; depending on the state; equivalent accepted or unstated | same |
 | 9.4%; 10.2%; 10.6% | Required share: one posting per employer and title; maintenance; service | as stated |
-| 64%, 48%, 43%, 40% | Travel, lifting, driver's licence, work at height: estimates corrected for detection precision | 387 O&M groups |
+| 64%, 48%, 69%, 40% | Travel, lifting, driver's licence, work at height: estimates corrected for detection precision | 387 O&M groups |
 
 ## External source
 
 - Interstate Renewable Energy Council (IREC), National Solar Jobs Census (2024 data), [irecusa.org/census-workforce-development](https://irecusa.org/census-workforce-development/): operations and maintenance was the only solar sector where hiring difficulty increased in 2024, with 23% of O&M employers finding it very difficult to find qualified workers; across all sectors, the reason employers cite most often is a lack of experience, training or technical skills. Accessed November 2026. This context comes from IREC’s survey of employers.
+
+## Correction
+
+- 11 November 2026: the driver's licence estimate was revised from 43% to 69%. The detection rule did not read typographic apostrophes ("Driver’s License"); no other figure changed.
