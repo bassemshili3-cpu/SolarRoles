@@ -189,6 +189,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export default function SearchHero() {
   const [what, setWhat] = useState('')
+  const [titleSelected, setTitleSelected] = useState(false)
   const [where, setWhere] = useState('')
   const [attempted, setAttempted] = useState(false)
 
@@ -206,6 +207,7 @@ export default function SearchHero() {
 
   // Job title filter — matches against the solar taxonomy list
   useEffect(() => {
+    if (titleSelected) { setShowTitleSuggestions(false); return }
     if (what.trim().length < 1) {
       setTitleSuggestions([])
       setShowTitleSuggestions(false)
@@ -217,7 +219,7 @@ export default function SearchHero() {
       .slice(0, 7)
     setTitleSuggestions(matches)
     setShowTitleSuggestions(matches.length > 0)
-  }, [what])
+  }, [what, titleSelected])
 
   // Location autocomplete via Nominatim (unchanged)
   useEffect(() => {
@@ -268,16 +270,15 @@ export default function SearchHero() {
 
   const handleSearch = () => {
     setAttempted(true)
-    if (!what.trim() || !where.trim()) return
+    if (!what.trim()) return
     const params = new URLSearchParams()
     params.set('what', what.trim())
-    params.set('where', where.trim())
+    if (where.trim()) params.set('where', where.trim())
     router.push(`/jobs?${params.toString()}`)
   }
 
-  const canSearch = what.trim().length > 0 && where.trim().length > 0
+  const canSearch = what.trim().length > 0
   const showWhatError = attempted && !what.trim()
-  const showWhereError = attempted && !where.trim()
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-3 rounded-3xl shadow-2xl border border-gray-200">
@@ -289,8 +290,8 @@ export default function SearchHero() {
           <Input
             placeholder="Solar job title or keyword"
             value={what}
-            onChange={e => setWhat(e.target.value)}
-            onFocus={() => titleSuggestions.length > 0 && setShowTitleSuggestions(true)}
+            onChange={e => { setTitleSelected(false); setWhat(e.target.value) }}
+            onFocus={() => !titleSelected && titleSuggestions.length > 0 && setShowTitleSuggestions(true)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
             className={`pl-12 h-14 text-base border-0 focus-visible:ring-0 bg-white text-[#0B1A2E] placeholder:text-[#0B1A2E]/40 ${showWhatError ? 'ring-2 ring-red-400 rounded-xl' : ''}`}
           />
@@ -304,7 +305,7 @@ export default function SearchHero() {
                 return (
                   <button
                     key={i}
-                    onMouseDown={() => { setWhat(job.title); setShowTitleSuggestions(false) }}
+                    onClick={() => { setTitleSelected(true); setWhat(job.title); setShowTitleSuggestions(false) }}
                     className="w-full text-left px-4 py-2.5 text-sm text-[#0B1A2E] hover:bg-[#F5B819]/10 hover:text-[#0B1A2E] flex items-center gap-3 transition-colors border-b border-gray-100 last:border-0"
                   >
                     <Icon size={14} className="text-[#F5B819] flex-shrink-0" />
@@ -323,16 +324,13 @@ export default function SearchHero() {
         <div className="flex-1 relative" ref={locationRef}>
           <MapPin className="absolute left-4 top-4 text-[#0B1A2E]/40 z-10" size={20} />
           <Input
-            placeholder="City, state or ZIP"
+            placeholder="City, state or ZIP (optional)"
             value={where}
             onChange={e => { setWhere(e.target.value); if (e.target.value.length < 2) setShowLocationSuggestions(false) }}
             onFocus={() => locationSuggestions.length > 0 && setShowLocationSuggestions(true)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
-            className={`pl-12 h-14 text-base border-0 focus-visible:ring-0 bg-white text-[#0B1A2E] placeholder:text-[#0B1A2E]/40 ${showWhereError ? 'ring-2 ring-red-400 rounded-xl' : ''}`}
+            className={`pl-12 h-14 text-base border-0 focus-visible:ring-0 bg-white text-[#0B1A2E] placeholder:text-[#0B1A2E]/40`}
           />
-          {showWhereError && (
-            <p className="mt-1 px-1 text-xs font-medium leading-4 text-red-500">Please enter a city, state or ZIP</p>
-          )}
           {showLocationSuggestions && (locationSuggestions.length > 0 || locationLoading) && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
               {locationLoading && <div className="px-4 py-3 text-sm text-[#0B1A2E]/40">Searching...</div>}

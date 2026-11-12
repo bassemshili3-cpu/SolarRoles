@@ -1,0 +1,164 @@
+.ranking{margin:0;border-top:3px solid #1e2924;border-bottom:1px solid #bbc8bf;padding:20px 0 18px}.rankingCaption{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px}.rankingCaption h3{font-size:23px;line-height:1.2;letter-spacing:-.03em;margin:7px 0 0}.eyebrow,.captionPeriod{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5a6c61}.tableScroll{overflow-x:auto}.table{border-collapse:collapse;width:100%;text-align:left;font-variant-numeric:tabular-nums}.table th,.table td{padding:16px 12px;border-top:1px solid #dce4de}.table thead th{font-size:11px;color:#53625a;text-transform:uppercase;letter-spacing:.06em}.table tbody th{font-size:15px;font-weight:700}.table tbody td{font-size:19px;font-weight:700}.table th:first-child{padding-left:0}.table th:not(:first-child),.table td{text-align:right;white-space:nowrap}.table td:last-child{font-size:14px;color:#657069;font-weight:400;padding-right:0}.table thead th:last-child{padding-right:0}.figureNote{font-size:12px;line-height:1.6;color:#59655e;margin:17px 0 0;max-width:840px}.downloads{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px}.downloads a{display:inline-flex;align-items:center;gap:6px;color:#176456;font-weight:700;font-size:12px}.numberPair{display:grid;grid-template-columns:1fr 1fr;gap:18px}.numberPair>div{border-top:3px solid #366a58;padding-top:16px}.numberPair strong{display:block;font-size:clamp(48px,5vw,64px);line-height:1;letter-spacing:-.06em}.numberPair span{display:block;margin-top:12px;font-size:14px;font-weight:700}.numberPair p{grid-column:1/-1;color:#59655e;font-size:12px;margin:0}.comparison{margin:0;min-width:0}.comparison h3{font-size:20px;letter-spacing:-.025em;margin:0 0 8px;line-height:1.25}.comparison figcaption p{font-size:13px;color:#59655e;margin:0 0 26px}.compareRow{display:grid;grid-template-columns:90px 1fr 45px;gap:12px;align-items:center;font-size:13px;margin:18px 0}.compareRow small{display:block;font-size:10px;color:#69756e;margin-top:3px}.compareRow strong{text-align:right}.barTrack{height:12px;background:#e9eeea}.barTrack div{height:100%;background:#366a58}@media(max-width:600px){.rankingCaption{align-items:start}.rankingCaption h3{font-size:19px}.captionPeriod{font-size:10px;white-space:nowrap}.table th,.table td{padding:13px 8px}.table tbody th{font-size:13px;min-width:140px}.table tbody td{font-size:16px}.table thead th{font-size:10px}}
+
+/* A compact, self-contained table that can be shared on its own. */
+.ranking{max-width:880px;padding:0;border:1px solid #d9e5e1;background:#fff;box-shadow:0 8px 30px rgba(20,62,56,.06)}
+.rankingCaption{margin:0;padding:20px 24px;align-items:flex-end;background:#173e3b;color:#fff}
+.rankingCaption h3{margin:5px 0 0;font-size:22px;letter-spacing:-.035em}
+.rankingCaption p{margin:5px 0 0;font-size:12px;color:#c5d8d2}
+.eyebrow{color:#a6d6c4;font-size:10px;letter-spacing:.1em}
+.captionPeriod{color:#e3f0e9;background:#315b54;padding:6px 9px;font-size:10px;white-space:nowrap}
+.table{table-layout:fixed}
+.table th,.table td{border-top:1px solid #e8efeb;padding:11px 16px}
+.table th:first-child{padding-left:24px;width:49%}
+.table th:not(:first-child),.table td{width:17%;text-align:right}
+.table thead th{background:#f1f6f3;color:#5b6f66;font-size:10px;letter-spacing:.06em;border:0}
+.table thead th:last-child,.table tbody td:last-child{padding-right:24px}
+.table tbody tr:nth-child(even){background:#fbfcfb}
+.table tbody th{font-size:14px;line-height:1.25;font-weight:600;color:#223934}
+.table tbody td{font-size:17px;color:#364e46;font-weight:600}
+.table tbody .primaryValue{font-size:19px;color:#14705a;font-weight:750;background:#edf7f1}
+.table tbody td:last-child{font-size:13px;color:#718179;font-weight:400}
+.rankingNote{margin:0;padding:14px 24px 0;color:#65756c;font-size:11px;line-height:1.5}
+.rankingNote strong{color:#38554a}
+.downloads{margin:0;padding:12px 24px 17px;gap:18px}
+.downloads a{color:#176456}
+@media(max-width:600px){
+ .rankingCaption{padding:17px 16px;align-items:flex-start;gap:10px}
+ .rankingCaption h3{font-size:18px}
+ .captionPeriod{font-size:9px;padding:5px 7px}
+ .table th,.table td{padding:10px 6px}
+ .table th:first-child{width:46%;min-width:0;padding-left:12px}
+ .table th:not(:first-child),.table td{width:18%}
+ .table thead th:last-child,.table tbody td:last-child{padding-right:12px}
+ .table thead th{font-size:9px;letter-spacing:0}
+ .table tbody th{font-size:12px}
+ .table tbody td{font-size:14px}
+ .table tbody .primaryValue{font-size:16px}
+ .table tbody td:last-child{font-size:12px}
+ .rankingNote{padding:12px 16px 0}
+ .downloads{padding:12px 16px 16px}
+}
+
+/* Annual table: keep every year visible on desktop; scroll on smaller screens. */
+.annualRanking{max-width:none}
+.annualTable{min-width:960px;table-layout:fixed}
+.annualTable th:first-child{width:22%;padding-left:20px}
+.annualTable th:not(:first-child),.annualTable td{width:9%;text-align:center;padding:11px 5px}
+.annualTable th.changeCol,.annualTable td.changeCell{width:15%}
+.annualTable thead th:last-child,.annualTable tbody td:last-child{padding-right:5px}
+.annualTable tbody td{font-size:15px;color:#175c4e;font-weight:600}
+.annualTable tbody td:nth-child(even){background:#edf7f1}
+.annualTable tbody td:last-child{font-size:15px;color:#175c4e;font-weight:600}
+.annualTable tbody td strong,.annualTable tbody td small{display:block}
+.annualTable tbody td small{font-size:10px;color:#6d8075;font-weight:400;margin-top:2px;white-space:nowrap}
+.tableScroll:focus-visible{outline:3px solid #176456;outline-offset:2px}
+@media(max-width:760px){
+ .annualTable th:first-child{position:sticky;left:0;z-index:1;background:#fff;box-shadow:3px 0 5px rgba(20,62,56,.08);padding-left:12px}
+ .annualTable thead th:first-child{background:#f1f6f3}
+ .annualTable tbody tr:nth-child(even) th:first-child{background:#fbfcfb}
+}
+.scrollHint{display:none}
+@media(max-width:760px){
+ .scrollHint{display:block;margin:0;padding:7px 12px;background:#f1f6f3;color:#526d60;font-size:11px}
+ .annualTable{min-width:935px}
+ .annualTable th:first-child{width:175px}
+ .annualTable th:not(:first-child),.annualTable td{width:90px}
+ .annualTable th.changeCol,.annualTable td.changeCell{width:130px}
+}
+/* Cells with fewer than 30 groups: the share keeps its normal style; only the group count is coloured and starred. */
+.annualTable tbody td small.smallN,.smallN{color:#b45309;font-weight:700}
+/* Period comparison: the only change signal, following the report's checks. */
+.annualTable tbody td.changeCell{background:#ffffff;border-left:2px solid #dce4de;font-size:13px;color:#364e46;font-weight:600}
+.annualTable tbody td.changeCell span{display:block;white-space:nowrap}
+.badgeRise{display:inline-block;margin-top:4px;padding:2px 7px;font-size:10px;font-style:normal;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.badgeRise{background:#dff0e6;color:#176456}
+/* Table key: one line per sign. */
+.changeKey{display:grid;gap:4px;margin:0;padding:13px 24px 0;color:#596d63;font-size:11px;line-height:1.5}
+.changeKey p{display:flex;align-items:baseline;gap:8px;margin:0}
+.changeKey em{margin-top:0;flex:none}
+.changeKey a{color:#176456;font-weight:700}
+.keyMark{flex:none;font-size:13px;font-weight:700;color:#364e46}
+.changeKey p>:first-child{width:44px;box-sizing:border-box;text-align:center}
+.keyMark.smallN{color:#b45309}
+@media(max-width:600px){.changeKey{padding:12px 16px 0}}
+
+/* Hero: the headline contrast as two large figures, right under the title. */
+.heroStats{display:grid;grid-template-columns:repeat(2,minmax(0,290px));gap:28px;margin-top:28px}
+.heroStats>div{border-top:4px solid #176456;padding-top:12px}
+.heroStats>div:last-child{border-top-color:#a94628}
+.heroStats strong{display:block;font-size:clamp(54px,7vw,86px);line-height:1;letter-spacing:-.05em;color:#176456}
+.heroStats>div:last-child strong{color:#a94628}
+.heroStats span{display:block;margin-top:10px;font-size:16px;line-height:1.3;font-weight:700;color:#1e2924}
+.heroStats small{display:block;margin-top:4px;font-size:13px;color:#59655e}
+@media(max-width:600px){
+ .heroTitle.heroTitle{font-size:34px}
+ .heroStats{gap:16px;margin-top:22px}
+ .heroStats strong{font-size:52px}
+ .heroStats span{font-size:14px}
+ .heroStats small{font-size:12px}
+}
+
+/* Hero: sizes of the groups compared. */
+.heroGroups{max-width:760px;margin-top:16px;font-size:14px;line-height:1.5;font-weight:700;color:#2f4a42}
+
+/* Electricians: three ways to count the same archive. */
+.countWays{margin:34px 0 0;padding:20px 24px;border:1px solid #d9e5e1;background:#f7faf8}
+.countWays h3{margin:0;font-size:18px;line-height:1.25;letter-spacing:-.02em}
+.countWays figcaption p{margin:4px 0 0;font-size:12px;color:#59655e}
+.countWaysGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.countWaysGrid>div{border-top:3px solid #366a58;padding-top:12px}
+.countWaysGrid>div:not(:first-child){border-top-color:#9fc3b3}
+.countWaysGrid strong{display:block;font-size:clamp(32px,4vw,44px);line-height:1;letter-spacing:-.05em;color:#173b3c}
+.countWaysGrid span{display:block;margin-top:8px;font-size:13px;font-weight:700;color:#394b40}
+.countWaysGrid small{display:block;margin-top:4px;font-size:12px;color:#59655e}
+@media(max-width:600px){.countWays{padding:16px}.countWaysGrid{grid-template-columns:1fr;gap:12px}}
+
+/* Download links under a figure that is not in the table frame. */
+.figureDownloads{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px}
+.figureDownloads a{display:inline-flex;align-items:center;gap:6px;color:#176456;font-weight:700;font-size:12px}
+
+/* Records → groups → groups in the table. */
+.dataFlow{display:flex;flex-wrap:wrap;gap:12px 40px;list-style:none;margin:0 0 30px;padding:0}
+.dataFlow li{position:relative;flex:1 1 170px;border-top:3px solid #366a58;padding-top:12px}
+.dataFlow li:not(:last-child)::after{content:'→';position:absolute;right:-30px;top:16px;font-size:22px;color:#7d9a8e}
+.dataFlow strong{display:block;font-size:clamp(30px,3.6vw,42px);line-height:1;letter-spacing:-.05em;color:#173b3c}
+.dataFlow span{display:block;margin-top:8px;font-size:13px;line-height:1.4;font-weight:700;color:#394b40}
+.dataFlowHero{max-width:920px;margin:28px 0 0}
+@media(max-width:600px){.dataFlow{flex-direction:column;gap:20px}.dataFlow li{flex:none}.dataFlow li:not(:last-child)::after{content:'↓';right:0;top:14px;font-size:18px}}
+
+/* Years stated: blue stacked bars, two periods per occupation. */
+.distCaption{background:#16365c}
+.distCaption .eyebrow{color:#a9c8ea}
+.distCaption p{color:#c9dbef}
+.distCaption .captionPeriod{background:#2a5182;color:#e6eef8}
+.band_none{background:#dde7f0;color:#2c4a66}
+.band_under3{background:#9ec5e8;color:#12324f}
+.band_b34{background:#2f74b5;color:#fff}
+.band_b5{background:#1b4a80;color:#fff}
+.distLegend{display:flex;flex-wrap:wrap;gap:8px 20px;padding:14px 24px 4px;font-size:12px;font-weight:600;color:#2c4a66}
+.distLegend span{display:inline-flex;align-items:center;gap:7px}
+.distLegend i{display:inline-block;width:14px;height:14px;border-radius:2px}
+.distRows{padding:6px 24px 0}
+.distRow{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:center;padding:12px 0;border-top:1px solid #e3ebf3}
+.distRow:first-child{border-top:0}
+.distLabel{font-size:14px;font-weight:600;line-height:1.25;color:#1d3550}
+.distLine{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:center;margin:3px 0}
+.distPeriod{font-size:12px;font-weight:700;color:#2c4a66;white-space:nowrap}
+.distPeriod small{display:block;font-size:10px;font-weight:400;color:#5d7389}
+.distBar{display:flex;height:28px;overflow:hidden;border-radius:2px}
+.distBar span{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;font-size:12px;font-weight:700;white-space:nowrap}
+.distProse{max-width:830px;margin-top:24px}
+@media(max-width:600px){
+ .distLegend{padding:12px 16px 4px;font-size:11px}
+ .distRows{padding:4px 16px 0}
+ .distRow{grid-template-columns:1fr;gap:6px}
+ .distLine{grid-template-columns:62px 1fr;gap:8px}
+ .distBar{height:24px}
+ .distBar span{font-size:10px}
+ .distBar span.distSmall{font-size:0}
+}
+
+/* Methodology: sub-headings and step lists. */
+.methodH3{margin:22px 0 8px;font-size:17px;line-height:1.3;letter-spacing:-.01em;color:#223934}
+.methodList{margin:0 0 14px;padding-left:22px;color:#394640;font-size:15px;line-height:1.75}
+.methodList li{margin:0 0 4px}

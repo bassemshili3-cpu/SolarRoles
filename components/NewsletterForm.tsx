@@ -40,37 +40,40 @@ export default function NewsletterForm() {
 
   if (status === 'success') {
     return (
-      <div className="flex flex-col items-center gap-2 py-2">
-        <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-          <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <div role="status" className="flex flex-col items-start gap-2 py-2">
+        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+          <svg className="w-5 h-5 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <p className="text-white font-medium text-sm">You're in. First article coming Tuesday.</p>
-        <p className="text-white/50 text-xs">Check your spam folder if you don't see it.</p>
+        <p className="text-[#0B1A2E] font-medium text-sm">You're subscribed to Solar Crew.</p>
+        <p className="text-slate-500 text-xs">Check your spam folder if you don't see it.</p>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-md flex-col gap-3 sm:mx-auto sm:flex-row sm:flex-wrap">
+    <form onSubmit={handleSubmit} className="flex w-full max-w-md flex-col gap-3 sm:flex-row sm:flex-wrap">
       <input
+        id="solar-crew-email"
+        aria-label="Email address"
+        autoComplete="email"
         type="email"
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
         placeholder="your@email.com"
-        className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-white/50 text-sm transition-colors"
+        className="min-w-0 flex-1 px-4 py-3 rounded-md bg-white border border-slate-300 text-[#0B1A2E] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#B45309] text-sm transition-colors"
       />
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="px-6 py-3 bg-white text-[#1a2340] font-semibold rounded-xl text-sm hover:bg-white/90 active:scale-95 transition-all disabled:opacity-60"
+        className="px-5 py-3 bg-[#0B1A2E] text-white font-semibold rounded-md text-sm hover:bg-[#1E3A5F] active:scale-95 transition-all disabled:opacity-60"
       >
-        {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+        {status === 'loading' ? 'Subscribing...' : 'Sign me up'}
       </button>
       {status === 'error' && (
-        <p className="basis-full text-xs text-red-300">{errorMsg}</p>
+        <p role="alert" className="basis-full text-xs text-red-700">{errorMsg}</p>
       )}
     </form>
   )

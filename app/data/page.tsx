@@ -58,6 +58,12 @@ type SnapshotRow = {
 
 const REPORTS = [
   {
+    href: '/data/solar-experience-requirements',
+    title: 'Solar job postings show a wide experience gap between occupations',
+    description:
+      'Three or more years of experience detected in 68% of project and construction manager postings and 4% of installer postings in 2024–2026, from 7,116 distinct U.S. solar postings analyzed since 2020.',
+  },
+  {
     href: '/data/solar-operations-maintenance-workforce',
     title: 'What solar maintenance jobs ask for',
     description:

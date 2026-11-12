@@ -1,4 +1,3 @@
-import { getCanonicalJobPath } from '@/lib/job-url'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
@@ -7,6 +6,7 @@ import SearchHero from '@/components/SearchHero'
 import NewsletterForm from '@/components/NewsletterForm'
 
 import { prisma } from '@/lib/prisma'
+import { retainedJobWhere } from '@/lib/jobRetention'
 
 import Link from 'next/link'
 
@@ -14,9 +14,7 @@ import { DollarSign, Search, ShieldCheck, Award, Users, Briefcase, MapPin, HardH
 
 import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
 
-import { matchRoleCategory } from '@/lib/roleCategories'
 
-import CompanyLogo from '@/components/CompanyLogo'
 import HeroTagline from '@/components/HeroTagline'
 
 
@@ -63,6 +61,9 @@ async function getTopStates() {
       addressRegion: { not: '' },
 
       source: { notIn: EXCLUDED_SOURCES },
+      active: true,
+      expiresAt: { gt: new Date() },
+      ...retainedJobWhere(),
 
     },
 
@@ -162,137 +163,6 @@ const categories = [
 ]
 
 
-const CATEGORY_BADGE_COLORS: Record<string, { bg: string; color: string }> = {
-
-  'Career Advice': { bg: '#EAF1F1', color: '#1E3A5F' },
-
-  'Interview Tips': { bg: '#F0FDF4', color: '#16A34A' },
-
-  'Salary Insights': { bg: '#FDEEE3', color: '#B45309' },
-
-  'Remote Work': { bg: '#F0F9FF', color: '#0369A1' },
-
-  'Tech Jobs': { bg: '#FAF5FF', color: '#7C3AED' },
-
-  'Industry Trends': { bg: '#FDF2F8', color: '#BE185D' },
-
-  'Solar Careers': { bg: '#FEF3C7', color: '#B45309' },
-
-}
-
-
-const FEATURED_ARTICLE = {
-
-  category: 'Solar Careers',
-
-  title: 'How to Land Your First Solar Job in 2026 (Even Without Experience)',
-
-  subtitle:
-
-    'Breaking into solar doesn\u2019t require a 4-year degree, a NABCEP cert, or years of rooftop experience. Here\u2019s the playbook for landing your first PV installer role \u2014 from the apprenticeship route to the direct-hire path.',
-
-  author: 'Solar Roles Editorial Team',
-
-  date: 'July 2026',
-
-  readTime: '8 min read',
-
-  url: '/blog/how-to-land-first-solar-job',
-
-  image: '/solar-featured.jpg',
-
-}
-
-
-
-async function getLatestJobs() {
-
-  const jobs = await prisma.job.findMany({
-
-    where: { active: true, expiresAt: { gt: new Date() }, source: { notIn: EXCLUDED_SOURCES } },
-
-    orderBy: { postedAt: 'desc' },
-
-    take: 50,
-
-    select: {
-
-      id: true,
-
-      title: true,
-      canonicalSlug: true,
-      location: true,
-
-      description: true,
-
-      company: true,
-
-      addressRegion: true,
-
-      postedAt: true,
-
-    },
-
-  })
-
-
-  return jobs
-
-    .filter(job => matchRoleCategory(job.title, job.description || '') !== null)
-
-    .slice(0, 6)
-
-    .map(({ description, ...job }) => job)
-
-}
-
-
-function timeAgo(date: Date | null) {
-
-  if (!date) return 'Recently'
-
-  const days = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
-
-  if (days <= 0) return 'Today'
-
-  if (days === 1) return '1d ago'
-
-  return `${days}d ago`
-
-}
-
-async function LatestJobsContent() {
-  const latestJobs = await getLatestJobs()
-  return latestJobs.length > 0 ? (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {latestJobs.map(job => (
-        <Link
-          key={job.id}
-          href={getCanonicalJobPath(job)}
-          className="flex items-start gap-4 p-5 rounded-2xl border border-gray-200 hover:border-[#F5B819]/50 hover:shadow-sm transition-all bg-white"
-        >
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden">
-            <CompanyLogo company={job.company} size={40} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-[#0B1A2E] text-sm leading-snug mb-1 truncate">{job.title}</h3>
-            <p className="text-sm text-gray-600 mb-2 truncate">
-              {job.company}{job.addressRegion ? ` \u00b7 ${job.addressRegion}` : ''}
-            </p>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">Full-time</span>
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">On-site</span>
-              <span className="text-xs text-gray-500 ml-auto">{timeAgo(job.postedAt)}</span>
-            </div>
-          </div>
-        </Link>
-      ))}
-    </div>
-  ) : (
-    <p className="text-center text-gray-400 text-sm">No listings yet \u2014 check back soon.</p>
-  )
-}
-
 async function TopStatesContent() {
   const topStates = await getTopStates()
   return topStates.map(({ state, count }) => (
@@ -313,7 +183,7 @@ async function TopStatesContent() {
 
 export default function Home() {
 
-  const badge = CATEGORY_BADGE_COLORS[FEATURED_ARTICLE.category] || { bg: '#FEF3C7', color: '#B45309' }
+
 
 
   return (
@@ -362,19 +232,53 @@ export default function Home() {
 </section>
 
 
-      <section className="bg-white py-16 px-6">
+      <section className="bg-gray-50 py-20 px-6">
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
 
-          <div className="flex items-end justify-between mb-8">
+          <div className="text-center mb-12">
 
-            <h2 className="text-2xl font-bold text-[#0B1A2E]">Latest jobs</h2>
+            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Browse by category</h2>
+
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+
+            {categories.map(({ label, icon: Icon, bg, href }) => (
+
+              <Link
+
+                key={label}
+
+                href={href}
+
+                className={`relative overflow-hidden rounded-2xl h-32 flex flex-col items-start p-5 group ${bg}`}
+
+              >
+
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+
+                <div className="relative z-10 flex flex-col gap-2.5">
+
+                  <Icon className="text-white drop-shadow" size={22} />
+
+                  <span className="text-sm font-bold text-white drop-shadow">{label}</span>
+
+                </div>
+
+              </Link>
+
+            ))}
+
+          </div>
+
+          <div className="text-center mt-4">
 
             <Link
 
               href="/jobs"
 
-              className="text-sm font-semibold text-[#1E3A5F] hover:text-[#0B1A2E] inline-flex items-center gap-1"
+              className="border border-[#0B1A2E] text-[#0B1A2E] rounded-full px-6 py-2.5 text-sm font-semibold hover:bg-[#0B1A2E] hover:text-white transition-colors inline-block"
 
             >
 
@@ -383,10 +287,6 @@ export default function Home() {
             </Link>
 
           </div>
-
-          <Suspense fallback={<div className="h-24" aria-hidden="true" />}>
-            <LatestJobsContent />
-          </Suspense>
 
         </div>
 
@@ -424,46 +324,23 @@ export default function Home() {
       </section>
 
 <section className="bg-white py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">
-                Why now
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1A2E] leading-tight tracking-tight mb-5">
-                Solar is short on hands, right when demand is spiking.
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Federal tax-credit deadlines are pulling installation
-                timelines forward across the country, and the workforce
-                hasn&apos;t caught up. That means faster hiring, real
-                urgency behind job postings, and more room to move up
-                without waiting years for the &ldquo;next opening.&rdquo;
-              </p>
-              <p className="text-gray-500 text-sm">
-                Source: 2025 U.S. Energy &amp; Employment Report (USEER) &amp;
-                IREC National Solar Jobs Census
-              </p>
+        <div className="max-w-5xl mx-auto grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">Put your skills to work</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#0B1A2E] leading-tight tracking-tight mb-5">Solar runs on skilled hands.</h2>
+            <p className="text-gray-600 leading-relaxed mb-6">4,200 PV installer openings a year are projected across the US. Build the systems. Keep them running. Find your place in the workforce powering solar.</p>
+            <Link href="/jobs" className="text-sm font-semibold text-[#1E3A5F] underline underline-offset-4">Find your next solar role</Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-[#FEF3C7] rounded-2xl p-6 border border-[#F5B819]/20">
+              <p className="text-4xl font-bold text-[#0B1A2E] tracking-tight mb-2">37%</p>
+              <p className="text-sm text-[#B45309] font-semibold leading-snug">Projected growth in PV installer employment, 2025–35</p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-[#FEF3C7] rounded-2xl p-6 border border-[#F5B819]/20">
-                <p className="text-4xl font-bold text-[#0B1A2E] tracking-tight mb-1">
-                  53,000
-                </p>
-                <p className="text-sm text-[#B45309] font-semibold leading-snug">
-                  worker shortfall projected by late 2026
-                </p>
-              </div>
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <p className="text-4xl font-bold text-[#0B1A2E] tracking-tight mb-1">
-                  86%
-                </p>
-                <p className="text-sm text-gray-600 font-semibold leading-snug">
-                  of solar employers say hiring is difficult right now
-                </p>
-              </div>
+            <div className="rounded-2xl p-6 border border-gray-200">
+              <p className="text-4xl font-bold text-[#0B1A2E] tracking-tight mb-2">4,200</p>
+              <p className="text-sm text-gray-600 font-semibold leading-snug">Projected PV installer openings per year, including replacement hiring</p>
             </div>
+            <a href="https://www.bls.gov/ooh/construction-and-extraction/solar-photovoltaic-installers.htm" target="_blank" rel="noopener noreferrer" className="col-span-2 text-xs text-gray-500 underline underline-offset-2">Source: US Bureau of Labor Statistics, 2025–35 projections</a>
           </div>
         </div>
       </section>
@@ -474,26 +351,11 @@ export default function Home() {
           <div className="max-w-3xl mb-14">
             <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-4">Who we are</p>
             <h2 className="text-4xl md:text-5xl font-bold text-[#0B1A2E] leading-tight mb-8 tracking-tight">
-              A job board built and maintained for the US solar workforce.
+              Solar work. A place of its own.
             </h2>
-            <div className="space-y-5 text-gray-600 text-lg leading-relaxed">
-             <p>
-  Solar Roles tracks installer, electrician, service, and sales
-  openings across all 50 states &mdash; every listing is
-  solar-specific, not a generic &ldquo;renewable energy&rdquo; tag
-  pulled from a multi-industry board. Sign in with Google to save
-  searches and apply faster &mdash; we only use your name and email
-  to set up your profile, nothing more.
-</p>
-<p>
-  We also publish independent guides on how these roles connect:
-  which certifications are legally required versus which ones just
-  help you get hired, how NABCEP compares to ETA International and
-  state electrician licenses, and how apprenticeship paths stack up
-  against paying for training up front. The goal is the same one
-  that got us building the job board in the first place: help you
-  find the right entry point into solar, and the next step after it.
-              </p>
+            <div className="space-y-4 text-gray-600 text-lg leading-relaxed">
+              <p>Installer, electrician, technician, engineer and sales openings, gathered in one place. Solar Roles connects the people who build and maintain solar with the employers hiring them.</p>
+              <p>Find an opening. Check the requirements. Plan your next step with our certification guides and career tools.</p>
             </div>
           </div>
 
@@ -575,7 +437,7 @@ export default function Home() {
                 For educators and workforce programs
               </p>
               <h2 id="workforce-resources-heading" className="text-4xl font-bold text-white leading-tight mb-6 tracking-tight">
-                Eight public tools connect solar training to current hiring.
+                Public tools connect solar training to current hiring.
               </h2>
               <p className="text-gray-300 leading-relaxed mb-5">
                 Community colleges, workforce boards, apprenticeship programs and career counselors can compare local demand, explain occupational pathways and show students the requirements employers are publishing now.
@@ -618,37 +480,7 @@ export default function Home() {
 
         <div className="max-w-5xl mx-auto">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-
-              <div className="w-12 h-12 rounded-2xl bg-[#1E3A5F]/10 flex items-center justify-center mb-5">
-
-                <Users className="text-[#1E3A5F]" size={24} />
-
-              </div>
-
-              <h3 className="text-xl font-bold text-[#0B1A2E] mb-3">For Solar Job Seekers</h3>
-
-              <p className="text-gray-500 leading-relaxed mb-5">
-
-                Apprentices, journeymen, lead installers, electricians moving into PV. Browse free, apply when ready.
-
-              </p>
-
-              <Link
-
-                href="/jobs"
-
-                className="text-[#1E3A5F] font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
-
-              >
-
-                Browse jobs
-
-              </Link>
-
-            </div>
+          <div className="grid grid-cols-1 gap-6">
 
             <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
 
@@ -687,65 +519,7 @@ export default function Home() {
       </section>
 
 
-      <section className="bg-gray-50 py-20 px-6">
 
-        <div className="max-w-5xl mx-auto">
-
-          <div className="text-center mb-12">
-
-            <h2 className="text-4xl font-bold text-[#0B1A2E] tracking-tight">Browse by category</h2>
-
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
-
-            {categories.map(({ label, icon: Icon, bg, href }) => (
-
-              <Link
-
-                key={label}
-
-                href={href}
-
-                className={`relative overflow-hidden rounded-2xl h-32 flex flex-col items-start p-5 group ${bg}`}
-
-              >
-
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-
-                <div className="relative z-10 flex flex-col gap-2.5">
-
-                  <Icon className="text-white drop-shadow" size={22} />
-
-                  <span className="text-sm font-bold text-white drop-shadow">{label}</span>
-
-                </div>
-
-              </Link>
-
-            ))}
-
-          </div>
-
-          <div className="text-center mt-4">
-
-            <Link
-
-              href="/jobs"
-
-              className="border border-[#0B1A2E] text-[#0B1A2E] rounded-full px-6 py-2.5 text-sm font-semibold hover:bg-[#0B1A2E] hover:text-white transition-colors inline-block"
-
-            >
-
-              View all jobs
-
-            </Link>
-
-          </div>
-
-        </div>
-
-      </section>
 
 
       <section className="bg-white py-20 px-6">
@@ -789,131 +563,24 @@ export default function Home() {
       </section>
 
 
-      <section className="bg-gray-50 py-20 px-6">
 
-        <div className="max-w-5xl mx-auto">
 
-          <div className="flex items-end justify-between mb-10">
 
+      <section className="bg-[#F3F1EB] px-6 py-16 md:py-20">
+        <div className="mx-auto max-w-5xl border-t-4 border-[#0B1A2E] pt-8">
+          <div className="grid gap-10 md:grid-cols-[1.1fr_1fr] md:items-center">
             <div>
-
-              <p className="text-xs font-bold tracking-widest text-[#B45309] uppercase mb-2">From the blog</p>
-
-              <h2 className="text-3xl font-bold text-[#0B1A2E] tracking-tight">Career resources</h2>
-
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#B45309]">The Solar Roles newsletter</p>
+              <h2 className="mb-5 text-5xl font-bold tracking-tighter text-[#0B1A2E] md:text-6xl">Solar Crew<span className="text-[#B45309]">.</span></h2>
+              <p className="max-w-md text-base leading-7 text-slate-700">Solar careers, training and industry news. One email every Tuesday, written for the people doing the work.</p>
             </div>
-
-            <Link
-
-              href="/blog"
-
-              className="text-sm font-semibold text-[#1E3A5F] hover:text-[#0B1A2E] inline-flex items-center gap-1 transition-colors"
-
-            >
-
-              All articles
-
-            </Link>
-
+            <div className="border-t border-[#0B1A2E]/20 pt-6 md:border-l md:border-t-0 md:pl-10 md:pt-0">
+              <p className="mb-4 text-sm font-semibold text-[#0B1A2E]">Get the next edition</p>
+              <NewsletterForm />
+              <p className="mt-4 text-xs text-slate-500">Free to subscribe. Unsubscribe anytime. <Link href="/privacy" className="underline underline-offset-2">Privacy policy</Link></p>
+            </div>
           </div>
-
-          <Link
-
-            href={FEATURED_ARTICLE.url}
-
-            className="group block bg-white rounded-2xl border border-gray-100 hover:border-[#F5B819] hover:shadow-md transition-all overflow-hidden"
-
-          >
-
-            <div className="grid grid-cols-1 md:grid-cols-5">
-
-              <div className="md:col-span-2 bg-gradient-to-br from-[#0B1A2E] via-[#0F2440] to-[#1E3A5F] min-h-[240px] md:min-h-[320px] flex items-center justify-center">
-
-                {/* Replace with: <img src={FEATURED_ARTICLE.image} alt={FEATURED_ARTICLE.title} className="w-full h-full object-cover" /> */}
-
-                <span className="text-[#F5B819]/30 text-xs font-bold tracking-[0.3em] uppercase">Cover</span>
-
-              </div>
-
-              <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
-
-                <div className="flex items-center gap-3 mb-4">
-
-                  <span className="text-[11px] font-bold tracking-widest uppercase text-[#B45309]">Featured</span>
-
-                  <span
-
-                    style={{ background: badge.bg, color: badge.color }}
-
-                    className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md"
-
-                  >
-
-                    {FEATURED_ARTICLE.category}
-
-                  </span>
-
-                </div>
-
-                <h3 className="text-2xl md:text-[26px] font-bold text-[#0B1A2E] leading-tight mb-3 group-hover:text-[#B45309] transition-colors">
-
-                  {FEATURED_ARTICLE.title}
-
-                </h3>
-
-                <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-4">
-
-                  {FEATURED_ARTICLE.subtitle}
-
-                </p>
-
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-
-                  <strong className="text-gray-700 font-semibold">{FEATURED_ARTICLE.author}</strong>
-
-                  <span className="text-gray-300">&middot;</span>
-
-                  <span>{FEATURED_ARTICLE.date}</span>
-
-                  <span className="text-gray-300">&middot;</span>
-
-                  <span>{FEATURED_ARTICLE.readTime}</span>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </Link>
-
         </div>
-
-      </section>
-
-
-      <section className="bg-gradient-to-br from-[#0B1A2E] to-[#1E3A5F] py-20 px-6">
-
-        <div className="max-w-2xl mx-auto text-center">
-
-          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
-
-            Solar Crew
-
-          </h2>
-
-          <p className="text-[#F5B819]/80 leading-relaxed mb-8 text-base">
-
-            One email every Tuesday. Receive guides, resources, and news in the solar field.
-
-          </p>
-
-          <NewsletterForm />
-
-          <p className="text-[#F5B819]/60 text-xs mt-5">Unsubscribe anytime.</p>
-
-        </div>
-
       </section>
 
     </>
