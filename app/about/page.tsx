@@ -98,7 +98,11 @@ export default function AboutPage() {
           <div className="grid sm:grid-cols-[160px_1fr] gap-8 sm:gap-12 items-start">
             <Link href="/about/bassem-shili" className="flex-shrink-0 group">
             <img
-             src="/profile_pic.png" alt=" Bassem SHILI, founder of Solar Roles" width={160} height={160}
+             src="/img/profile-320-v1.webp"
+             srcSet="/img/profile-160-v1.webp 160w, /img/profile-320-v1.webp 320w, /img/profile-640-v1.webp 640w"
+             sizes="(min-width: 640px) 160px, 100vw"
+             decoding="async"
+             alt=" Bassem SHILI, founder of Solar Roles" width={160} height={160}
                       className="w-full h-full object-contain"
                        style={{ transform: 'scale(0.85)' }} />
                </Link>     

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Calendar, Clock, User } from 'lucide-react'
 import { EditorialInfographic } from '@/components/EditorialInfographic'
+import { highFetchPriority } from '@/lib/fetch-priority'
 
 export const metadata: Metadata = {
   title: 'The 14-Day Plan to Land Your First Solar Job in 2026 | Solar Roles',
@@ -174,8 +175,15 @@ export default function ArticlePage() {
         </header>
 
         <div className="mb-12 rounded-2xl overflow-hidden bg-gray-100 aspect-[16/10]">
+          {/* Article cover = LCP: resized WebP (13–91 KB) instead of the 1 MB, 4032 px JPEG. */}
           <img
-            src="/solar-featured.jpg"
+            src="/img/solar-featured-1200-v1.webp"
+            srcSet="/img/solar-featured-480-v1.webp 480w, /img/solar-featured-768-v1.webp 768w, /img/solar-featured-1200-v1.webp 1200w, /img/solar-featured-1440-v1.webp 1440w"
+            sizes="(min-width: 768px) 720px, calc(100vw - 48px)"
+            width={1200}
+            height={900}
+            decoding="async"
+            {...highFetchPriority}
             alt="Solar installer working on a rooftop"
             className="w-full h-full object-cover"
           />

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { highFetchPriority } from '@/lib/fetch-priority'
 
 const CATEGORIES = [
   'All',
@@ -22,6 +23,9 @@ const FEATURED_ARTICLE = {
   readTime: '8 min read',
   url: '/blog/how-to-land-first-solar-job',
   image: '/solar-featured.jpg', // ← ajoute la cover de l’article ici (1200x800 min, format 16:10)
+  // Versions WebP redimensionnées affichées à la place du JPEG de 1 Mo (public/img).
+  imageSrc: '/img/solar-featured-768-v1.webp',
+  imageSrcSet: '/img/solar-featured-480-v1.webp 480w, /img/solar-featured-768-v1.webp 768w, /img/solar-featured-1200-v1.webp 1200w',
 }
 
 const ARTICLES: Array<{
@@ -190,7 +194,17 @@ export default function BlogPage() {
         <div className="featured-wrap">
           <a href={FEATURED_ARTICLE.url} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="featured-card">
-              <img className="featured-img" src={FEATURED_ARTICLE.image} alt={FEATURED_ARTICLE.title} />
+              <img
+                className="featured-img"
+                src={FEATURED_ARTICLE.imageSrc}
+                srcSet={FEATURED_ARTICLE.imageSrcSet}
+                sizes="(min-width: 768px) 560px, 100vw"
+                width={768}
+                height={576}
+                decoding="async"
+                {...highFetchPriority}
+                alt={FEATURED_ARTICLE.title}
+              />
               <div className="featured-body">
                 <div className="featured-label">Featured</div>
                 <CategoryBadge category={FEATURED_ARTICLE.category} />

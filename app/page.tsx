@@ -16,6 +16,7 @@ import { STATE_CODE_TO_NAME, codeToSlug } from '@/lib/usStates'
 
 
 import HeroTagline from '@/components/HeroTagline'
+import HeroBackground from '@/components/HeroBackground'
 
 
 // Sources we no longer aggregate from. Any job in the DB with one of these
@@ -195,21 +196,9 @@ export default function Home() {
 
      <section className="relative bg-[#0B1A2E] text-white pt-24 pb-40 overflow-hidden">
 
-  {/* Vidéo de fond en boucle, zoomée pour créer de la marge horizontale,
-      sujet cadré plus à droite */}
-  <div className="absolute inset-0 overflow-hidden">
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      poster="/solar-hero-poster.png"
-      className="absolute inset-0 w-full h-full object-cover scale-100"
-      style={{ objectPosition: '100% center' }}
-    >
-      <source src="/solar-hero.mp4" type="video/mp4" />
-    </video>
-  </div>
+  {/* Fond : image WebP légère partout (LCP), vidéo en boucle ajoutée
+      seulement sur écran large après le chargement ; sujet cadré à droite */}
+  <HeroBackground />
 
   {/* Un seul voile : dégradé gauche→droite, fort à gauche pour la lisibilité
       du texte, quasi nul à droite pour laisser respirer le sujet */}

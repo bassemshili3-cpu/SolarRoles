@@ -67,6 +67,13 @@ import Breadcrumb from '@/components/Breadcrumb'
 
 export const revalidate = 3600
 
+// No job page is built ahead of time: each one is rendered on its first visit, then
+// served from the cache and refreshed hourly (revalidate). Without this export,
+// Next 14 renders a dynamic route like this one on every request.
+export async function generateStaticParams() {
+  return []
+}
+
 async function Resolved<T>({
   value,
   children,
@@ -432,9 +439,8 @@ validThrough: new Date(job.expiresAt).toISOString().split('T')[0],
 
 export async function generateMetadata(
 
-  { params, searchParams }: {
+  { params }: {
     params: Promise<{ id: string; slug: string }>
-    searchParams: Promise<Record<string, string | string[] | undefined>>
   }
 
 ): Promise<Metadata> {
@@ -450,8 +456,9 @@ export async function generateMetadata(
   const job = getJobDetailWithSalary(raw)
   // Next 14 resolves metadata before flushing the document. Resolve both
   // redirects and 404s here, outside the page's loading/Suspense boundaries.
-  const query = await searchParams
-  if (slug !== getCanonicalJobSlug(job) || query.from !== undefined) {
+  // Legacy `?from=` links are redirected in middleware.ts: reading searchParams
+  // here would make every job page dynamic and bypass the revalidate cache.
+  if (slug !== getCanonicalJobSlug(job)) {
     permanentRedirect(getCanonicalJobPath(job))
   }
 

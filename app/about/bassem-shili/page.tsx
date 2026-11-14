@@ -111,7 +111,10 @@ export default function BassemShiliPage() {
         </p>
         <div className="flex items-center gap-5 mb-6">
      <img
-  src="/profile_pic.png"
+  src="/img/profile-160-v1.webp"
+  srcSet="/img/profile-160-v1.webp 160w, /img/profile-320-v1.webp 320w"
+  sizes="56px"
+  decoding="async"
   alt="Bassem Shili"
   width={82}
   height={82}

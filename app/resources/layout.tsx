@@ -23,7 +23,10 @@ export default function ResourcesLayout({ children }: { children: React.ReactNod
             </p>
             <Link href="/about/bassem-shili" className="flex items-center gap-4 group">
               <img
-                src="/profile_pic.png"
+                src="/img/profile-160-v1.webp"
+                srcSet="/img/profile-160-v1.webp 160w, /img/profile-320-v1.webp 320w"
+                sizes="56px"
+                decoding="async"
                 alt="Bassem Shili"
                 width={56}
                 height={56}

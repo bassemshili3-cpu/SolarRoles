@@ -4,6 +4,19 @@
   functions = "netlify/functions"
   publish = ".next"
 
+# Optimised images in public/img carry a version in their name (-v1, -v2...):
+# a new name ships with every change, so browsers may keep them for a year.
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The home hero video keeps its file name: one week of browser cache.
+[[headers]]
+  for = "/solar-hero.mp4"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
 [functions.sync-ats]
   node_bundler = "esbuild"
   external_node_modules = ["@prisma/client", "playwright", "@sparticuz/chromium", "jsdom"]
